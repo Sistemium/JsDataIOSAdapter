@@ -13,10 +13,12 @@
 
     function iosCallback(data, req) {
 
-      var request = requests [req.options.requestId];
+      var id = req && req.options && req.options.requestId;
+      var request = id && requests [id];
 
       if (request) {
         request.resolve(data);
+        delete requests [id];
       }
 
     }
