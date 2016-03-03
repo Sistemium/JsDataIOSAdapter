@@ -6,7 +6,7 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController($timeout, $scope, $window, models, webDevTec, toastr) {
+  function MainController($timeout, $scope, $window, $log, models, webDevTec, toastr) {
     var vm = this;
 
     vm.awesomeThings = [];
@@ -15,9 +15,17 @@
     vm.showToastr = showToastr;
     vm.barCodes = [];
 
-    models.Article.bindAll({}, $scope, 'vm.data');
+    models.Article.bindAll({}, $scope, 'vm.articles');
+    models.ArticleGroup.bindAll({}, $scope, 'vm.articleGroups');
 
-    models.Article.findAll();
+    models.Article.findAll(false,{
+      pageSize: 5
+    }).then(function(articles){
+      articles.forEach(function(article){
+        $log.log (article);
+        models.Article.loadRelations(article);
+      })
+    });
 
     activate();
 
