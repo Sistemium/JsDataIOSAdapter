@@ -7,18 +7,39 @@
 
       DS.registerAdapter('ios', new IosAdapter(), {default: true});
 
-      var Article = DS.defineResource('Article');
+      var Article = DS.defineResource({
+        name: 'Article',
+        relations: {
+          belongsTo: {
+            ArticleGroup: {
+              localField: 'ArticleGroup',
+              localKey: 'articleGroup'
+            }
+          }
+        }
+      });
 
-      $log.log (Article);
+      var ArticleGroup = DS.defineResource({
+        name: 'ArticleGroup',
+        relations: {
+          hasMany: {
+            Article: {
+              localField: 'Articles',
+              foreignKey: 'articleGroup'
+            }
+          }
+        }
+      });
 
-      return {
-        Article: Article
+      var schema = {
+        Article: Article,
+        ArticleGroup: ArticleGroup
       };
 
-    }).run (function (models,$log){
-      models.Article.findAll().then(function () {
-        $log.log('findAll resolved');
-      });
+      $log.log (schema);
+
+      return schema;
+
     });
 
 }());
