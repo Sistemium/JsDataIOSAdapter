@@ -2,68 +2,77 @@
 
 (function () {
 
-  angular.module('webPage').service('iosAdapter', function ($window, DSUtils) {
+  angular.module('webPage').service('IosAdapter', function ($window, DSUtils, $log) {
 
-    if (!$window.webkit) {
-      //todo mock somehow
-    }
+    var ios = $window.webkit;
 
-    function IosAdapter() {}
-    var queue = [];
-    var taskInProcess = false;
+    var IosAdapter = function () {
+    };
+    var requests = {};
+    var counter = 1;
 
-    function queueTask (task) {
-      if (!queue.length) {
-        enqueue(task);
-        dequeue();
-      } else {
-        enqueue(task);
+    function iosCallback(data, req) {
+
+      var request = requests [req.options.requestId];
+
+      if (request) {
+        request.resolve(data);
       }
+
     }
 
-    function enqueue (task) {
-      queue.push(task);
-    }
+    $window.iSistemiumIOSCallback = iosCallback;
 
-    function dequeue () {
-      if (queue.length && !taskInProcess) {
-        taskInProcess = true;
-        queue[0]();
-      }
-    }
+    function requestFromIOS(type, entity, options) {
 
-    IosAdapter.prototype.findAll = function (entity, options) {
-      // Must return a promise that resolves with the found items
-      return new DSUtils.Promise(function (resolve) {
+      var id = counter ++;
 
-        $window.webkit.messageHandlers.findAll.postMessage({
+      options.requestId = id;
+
+      var promise = new DSUtils.Promise(function (resolve, reject) {
+
+        requests[id] = {
+          promise: promise,
+          resolve: resolve,
+          reject: reject
+        };
+
+        ios.messageHandlers[type].postMessage({
           entity: entity,
           options: options
         });
 
-        resolve();
       });
+
+      return promise;
+    }
+
+    if (!ios) {
+      ios = {
+        messageHandlers: {
+          findAll: {
+            postMessage: function (req) {
+              $log.log(req);
+            }
+          }
+        }
+      }
+    }
+
+    IosAdapter.prototype.findAll = function (resource, options) {
+      return requestFromIOS('findAll', resource.name, angular.extend({
+        pageSize: 10,
+        startPage: 1
+      }, options || {}));
     };
 
-    IosAdapter.prototype.find = function (entity, id, options) {
-      return new DSUtils.Promise(function (resolve) {
-
-        $window.webkit.messageHandlers.find.postMessage({
-          entity: entity,
-          id: id,
-          options: options
-        });
-
-        resolve();
-      });
+    IosAdapter.prototype.find = function (resource, id, options) {
+      return requestFromIOS('find', resource.name, angular.extend(options, {id: id}));
     };
 
-    var id = 1;
-
-    IosAdapter.prototype.create = function (definition, attrs) {
-      return new DSUtils.Promise(function (resolve) {
-        attrs.id = id++;
-        resolve(attrs);
+    IosAdapter.prototype.create = function (resource, attrs) {
+      return requestFromIOS('create', resource.name, {
+        data: attrs
       });
     };
 
