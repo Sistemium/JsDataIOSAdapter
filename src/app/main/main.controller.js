@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -6,21 +6,35 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController($timeout, webDevTec, toastr) {
+  function MainController($timeout, $scope, $window, models, webDevTec, toastr) {
     var vm = this;
 
     vm.awesomeThings = [];
     vm.classAnimation = '';
     vm.creationDate = 1456997822714;
     vm.showToastr = showToastr;
+    vm.barCodes = [];
+
+    models.bindAll({}, $scope, 'vm.data');
 
     activate();
 
     function activate() {
       getWebDevTec();
-      $timeout(function() {
+      $timeout(function () {
         vm.classAnimation = 'rubberBand';
       }, 4000);
+    }
+
+    $window.onBarcodeScan = function (code, type) {
+      models.create({
+        code: code,
+        type: type
+      });
+    };
+
+    if ($window.webkit) {
+      $window.webkit.messageHandlers.barCodeScannerOn.postMessage('onBarcodeScan');
     }
 
     function showToastr() {
@@ -31,7 +45,7 @@
     function getWebDevTec() {
       vm.awesomeThings = webDevTec.getTec();
 
-      angular.forEach(vm.awesomeThings, function(awesomeThing) {
+      angular.forEach(vm.awesomeThings, function (awesomeThing) {
         awesomeThing.rank = Math.random();
       });
     }
