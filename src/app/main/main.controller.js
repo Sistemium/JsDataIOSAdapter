@@ -15,7 +15,9 @@
     vm.showToastr = showToastr;
     vm.barCodes = [];
 
-    models.bindAll({}, $scope, 'vm.data');
+    models.Article.bindAll({}, $scope, 'vm.data');
+
+    models.Article.findAll();
 
     activate();
 
@@ -27,10 +29,11 @@
     }
 
     $window.onBarcodeScan = function (code, type) {
-      models.create({
+      vm.barCodes.push({
         code: code,
         type: type
       });
+      $scope.$apply();
     };
 
     if ($window.webkit) {
