@@ -25,9 +25,9 @@
 
     $window.iSistemiumIOSCallback = iosCallback;
 
-    function requestFromIOS(type, entity, options) {
+    function requestFromIOS(type, entity, params, options) {
 
-      var id = counter ++;
+      var id = counter++;
 
       options.requestId = id;
 
@@ -39,10 +39,10 @@
           reject: reject
         };
 
-        ios.messageHandlers[type].postMessage({
+        ios.messageHandlers[type].postMessage(angular.extend({
           entity: entity,
           options: options
-        });
+        },params));
 
       });
 
@@ -50,30 +50,35 @@
     }
 
     if (!ios) {
+
+      var mock = {
+        postMessage: function (req) {
+          $log.log(req);
+        }
+      };
+
       ios = {
         messageHandlers: {
-          findAll: {
-            postMessage: function (req) {
-              $log.log(req);
-            }
-          }
+          findAll: mock,
+          find: mock
         }
       }
     }
 
-    IosAdapter.prototype.findAll = function (resource, options) {
-      return requestFromIOS('findAll', resource.name, angular.extend({
-        pageSize: 10,
-        startPage: 1
-      }, options || {}));
+    IosAdapter.prototype.findAll = function (resource, params, options) {
+      return requestFromIOS('findAll', resource.endpoint, params, angular.extend({
+          pageSize: 10,
+          startPage: 1
+        }, options || {})
+      );
     };
 
     IosAdapter.prototype.find = function (resource, id, options) {
-      return requestFromIOS('find', resource.name, angular.extend(options, {id: id}));
+      return requestFromIOS('find', resource.endpoint, {id: id}, options || {});
     };
 
     IosAdapter.prototype.create = function (resource, attrs) {
-      return requestFromIOS('create', resource.name, {
+      return requestFromIOS('create', resource.endpoint, {
         data: attrs
       });
     };
