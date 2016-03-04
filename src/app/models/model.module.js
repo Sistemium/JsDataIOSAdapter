@@ -4,8 +4,12 @@
 
   angular.module('webPage')
     .config(function (DSProvider, DSHttpAdapterProvider) {
+
+      var basePath = window.localStorage.getItem('JSData.BasePath')
+        || 'https://api.sistemium.com/v4d/dev/';
+
       angular.extend(DSHttpAdapterProvider.defaults, {
-        basePath: 'http://localhost:9000/api/dev/',
+        basePath: basePath,
         httpConfig: {
           headers: {
             'X-Return-Post': 'true',
