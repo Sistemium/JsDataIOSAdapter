@@ -19,7 +19,6 @@
         });
       });
 
-
       angular.extend(vm, {
 
         toggleSelect: function (item) {
