@@ -69,7 +69,7 @@
         relations: {
           hasMany: {
             PickingOrderPosition: {
-              localField: 'PickingOrderPositions',
+              localField: 'positions',
               foreignKey: 'pickingOrder'
             }
           }

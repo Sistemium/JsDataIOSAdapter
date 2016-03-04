@@ -11,7 +11,7 @@
       if ($scope.vm.selectedItems) {
         $scope.vm.selectedItems.forEach(function (i) {
           console.log(i);
-          i.PickingOrderPositions.forEach(function (p) {
+          i.positions.forEach(function (p) {
             models.PickingOrderPosition.loadRelations(p).then(function (a) {
               console.log(a);
               vm.articles.push(a.Article);

@@ -13,7 +13,7 @@
       vm.total = 0;
       vm.selectedItems = $scope.vm.selectedItems;
       vm.selectedItems.forEach(function (i) {
-        vm.total += i.PickingOrderPositions.length;
+        vm.total += i.positions.length;
       });
 
     })

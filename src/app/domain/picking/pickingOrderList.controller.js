@@ -10,10 +10,11 @@
       vm.total = 0;
 
       models.PickingOrder.bindAll({}, $scope, 'vm.pickingOrders');
+
       models.PickingOrder.findAll({}).then(function (res) {
         res.forEach(function (i) {
           models.PickingOrder.loadRelations(i).then(function (r) {
-            vm.total += r.PickingOrderPositions.length;
+            vm.total += r.positions.length;
           });
         });
       });
