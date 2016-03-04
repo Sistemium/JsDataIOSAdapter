@@ -1,0 +1,10 @@
+div(ui-view='')
+  h1 Selected orders
+  h3.pull-right Total: {{vm.total}}
+
+  h3 TODO: sortable list
+  ul(data-as-sortable data-ng-model='vm.selectedItems')
+    li(data-ng-repeat='item in vm.selectedItems track by item.id' data-as-sortable-item)
+      div(data-as-sortable-item-handle)
+
+  button.btn.btn-primary(ui-sref='.articleList') Continue
