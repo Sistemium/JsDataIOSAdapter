@@ -22,7 +22,7 @@
 
     var pageSize = 3000;
 
-    function getArticles(startPage) {
+    vm.getArticles = function (startPage) {
       models.Article.findAll({
         offset: (startPage - 1) * pageSize,
         limit: pageSize
@@ -37,16 +37,16 @@
         $log.log(articles.length);
 
         if (articles.length === pageSize && startPage * pageSize < 10000) {
-          getArticles(startPage + 1);
+          vm.getArticles(startPage + 1);
         }
 
       });
-    }
+    };
 
     //models.StockBatch.findAll({
     //  limit: pageSize
     //}).then(function () {
-    //  //getArticles(1);
+    //  //vm.getArticles(1);
     //
     //});
 
