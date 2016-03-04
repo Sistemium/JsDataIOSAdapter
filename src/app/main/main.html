@@ -4,8 +4,15 @@
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
 
-  <pre>{{vm.articles | json}}</pre>
-  <pre>{{vm.articleGroups | json}}</pre>
+  <pre>{{vm.articles.length | json}}</pre>
+  <pre>{{vm.articleGroups.length | json}}</pre>
   <pre>{{vm.barCodes | json}}</pre>
+  <pre>{{vm.stockBatches | json}}</pre>
+  <ul>
+    <li ng-repeat="sb in vm.stockBatches track by sb.id">
+      {{sb.Article.name}}
+    </li>
+  </ul>
+
 
 </div>

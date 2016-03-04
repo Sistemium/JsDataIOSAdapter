@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('IosAdapter', function ($window, DSUtils, $log) {
+  angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log) {
 
     var ios = $window.webkit;
 
@@ -23,7 +23,20 @@
 
     }
 
+    function iosErrorCallback(err, req) {
+
+      var id = req && req.options && req.options.requestId;
+      var request = id && requests [id];
+
+      if (request) {
+        request.reject(err);
+        delete requests [id];
+      }
+
+    }
+
     $window.iSistemiumIOSCallback = iosCallback;
+    $window.iSistemiumIOSErrorCallback = iosErrorCallback;
 
     function requestFromIOS(type, entity, params, options) {
 
