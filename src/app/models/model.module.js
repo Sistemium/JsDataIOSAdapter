@@ -20,7 +20,7 @@
           var res = {};
 
           if (params.offset) {
-            res['x-start-page:'] = Math.ceil(params.offset/params.limit);
+            res['x-start-page:'] = Math.ceil(params.offset / params.limit);
           }
           if (params.limit) {
             res['x-page-size:'] = params.limit;
@@ -29,11 +29,12 @@
           delete params.limit;
           delete params.offset;
 
-          return angular.extend (res, params);
+          return angular.extend(res, params);
         }
       });
     })
-    .service('models',function(DS, IosAdapter, $window, $log){
+
+    .service('models', function (DS, IosAdapter, $window, $log) {
 
       if ($window.webkit) {
         DS.registerAdapter('ios', new IosAdapter(), {default: true});
@@ -132,7 +133,7 @@
         StockBatchBarCode: StockBatchBarCode
       };
 
-      $log.log (schema);
+      $log.log(schema);
 
       return schema;
 
