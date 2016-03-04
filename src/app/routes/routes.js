@@ -18,9 +18,9 @@
         .state({
           name: 'picking',
           abstract: true,
-          template: '<div class="container"><acme-navbar></acme-navbar><div ui-view=""></div></div>',
+          template: '<div ui-view=""></div>',
           children: [
-            { name:'pickingOrderList',
+            { name:'orderList',
               url: '/orders',
               templateUrl: 'app/domain/picking/pickingOrderList.html',
               controller: 'PickingOrderListController',
