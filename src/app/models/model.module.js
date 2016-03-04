@@ -73,6 +73,13 @@
               foreignKey: 'pickingOrder'
             }
           }
+        },
+        methods: {
+          totalVolume: function () {
+            return _.reduce(this.positions,function(sum,p){
+              return sum + p.volume;
+            },0);
+          }
         }
       });
 

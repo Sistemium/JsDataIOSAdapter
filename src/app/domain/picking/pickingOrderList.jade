@@ -3,13 +3,21 @@ div(ui-view='')
   h3.pull-right Total: {{vm.total}}
   table.table
     thead
-    th Ndoc
-    th Processing
-    th Date
+      th Номер
+      th Статус
+      th Дата
+      th Позиций
+      th Бутылок
     tbody
-      tr(ng-repeat='order in vm.pickingOrders track by order.id' ng-click='vm.toggleSelect(order)' ng-class='{selected: order.selected}')
+      tr(
+        ng-repeat='order in vm.pickingOrders track by order.id'
+        ng-click='vm.toggleSelect(order)'
+        ng-class='{selected: order.selected}'
+      )
         td {{order.ndoc}}
         td {{order.processing}}
         td {{order.date}}
+        td {{order.positions.length}}
+        td {{order.totalVolume()}}
 
   button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders') Select
