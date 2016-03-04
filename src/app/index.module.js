@@ -9,6 +9,7 @@
       'ngMessages',
       'ngAria',
       'ui.router',
+      'ui.router.stateHelper',
       'ui.bootstrap',
       'toastr',
       'js-data',
