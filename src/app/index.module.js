@@ -13,7 +13,7 @@
       'toastr',
       'js-data',
       'LocalStorageModule',
-      'ui.sortable'
+      'as.sortable'
     ]);
 
 })();
