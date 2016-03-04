@@ -1,0 +1,15 @@
+div(ui-view='')
+  h1 Order List
+  h3.pull-right Total: {{vm.total}}
+  table.table
+    thead
+    th Ndoc
+    th Processing
+    th Date
+    tbody
+      tr(ng-repeat='order in vm.pickingOrders track by order.id' ng-click='vm.toggleSelect(order)' ng-class='{selected: order.selected}')
+        td {{order.ndoc}}
+        td {{order.processing}}
+        td {{order.date}}
+
+  button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders') Select
