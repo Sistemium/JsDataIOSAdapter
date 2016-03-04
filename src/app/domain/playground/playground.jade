@@ -1,0 +1,10 @@
+section
+
+  pre {{vm.articles.length | json}}
+  pre {{vm.articleGroups.length | json}}
+  pre {{vm.barCodes | json}}
+  pre {{vm.stockBatches | json}}
+
+  ul
+    li(ng-repeat="sb in vm.stockBatches track by sb.id")
+    | {{sb.Article.name}}

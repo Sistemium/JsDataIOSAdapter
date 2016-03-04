@@ -6,6 +6,15 @@
     .config(function (stateHelperProvider) {
 
       stateHelperProvider
+
+        .state({
+          name: 'playground',
+          url: '/playground',
+          templateUrl: 'app/domain/playground/playground.html',
+          controller: 'PlayGroundController',
+          controllerAs: 'vm'
+        })
+
         .state({
           name: 'picking',
           abstract: true,
