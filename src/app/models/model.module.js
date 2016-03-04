@@ -64,8 +64,8 @@
         relations: {
           hasMany: {
             PickingOrderPosition: {
-              localField: 'PickingOrders',
-              foreignKey: 'pickingOrderPosition'
+              localField: 'PickingOrderPositions',
+              foreignKey: 'pickingOrder'
             }
           }
         }
@@ -100,15 +100,15 @@
           },
           hasMany: {
             StockBatchBarcode: {
-              localField: 'StockBatchBarcode',
-              localKey: 'stockBatchBarcode'
+              localField: 'StockBatchBarCodes',
+              foreignKey: 'stockBatch'
             }
           }
         }
       });
 
-      var StockBatchBarcode = DS.defineResource({
-        name: 'StockBatchBarcode',
+      var StockBatchBarCode = DS.defineResource({
+        name: 'StockBatchBarCode',
         relations: {
           belongsTo: {
             StockBatch: {
@@ -125,7 +125,7 @@
         PickingOrder: PickingOrder,
         PickingOrderPosition: PickingOrderPosition,
         StockBatch: StockBatch,
-        StockBatchBarcode: StockBatchBarcode
+        StockBatchBarCode: StockBatchBarCode
       };
 
       $log.log (schema);
