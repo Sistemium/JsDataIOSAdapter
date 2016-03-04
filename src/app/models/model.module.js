@@ -9,7 +9,7 @@
         httpConfig: {
           headers: {
             'X-Return-Post': 'true',
-            'authorization': '9c32b54d43f12d9ef65a58193d0e98d2@pha'
+            'authorization': window.localStorage.getItem('authorization')
           }
         },
         queryTransform: function queryTransform(resourceConfig, params) {

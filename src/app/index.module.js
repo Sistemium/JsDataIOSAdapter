@@ -11,7 +11,9 @@
       'ui.router',
       'ui.bootstrap',
       'toastr',
-      'js-data'
+      'js-data',
+      'LocalStorageModule',
+      'ui.sortable'
     ]);
 
 })();

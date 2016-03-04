@@ -10,6 +10,7 @@
     "module": true,
     "inject": true,
     "window": true,
-    "console": true
+    "console": true,
+    "_": true
   }
 }
