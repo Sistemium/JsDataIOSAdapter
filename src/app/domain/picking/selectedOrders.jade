@@ -4,13 +4,13 @@ div(ui-view='')
     p Выбранные требования
     small.lead.pull-right
       span Коробок:
-      label {{ vm.totals.boxVolume () | number:1 }}
+      label {{ vm.totals.totalBoxVolume () | number:1 }}
       = ' '
       span Позиций:
       label {{ vm.totals.positionsCount () }}
       = ' '
       span Бутылок:
-      label {{ vm.totals.volume () }}
+      label {{ vm.totals.totalVolume () }}
 
   section
     ul.list-group(as-sortable ng-model='vm.selectedItems')
