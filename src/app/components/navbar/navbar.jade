@@ -9,19 +9,19 @@ div.navbar.navbar-default
         span.icon-bar
       a.navbar-brand(href='/') Sistemium
 
+    ul.nav.navbar-nav.navbar-right.float-right
+
+      li(ng-hide='vm.auth.isLoggedIn()', ui-sref-active='active')
+        a(ui-sref='login') Login
+
+      li(ng-show='vm.auth.isLoggedIn()', ui-sref-active='active')
+        a(ui-sref='settings')
+          span.glyphicon.glyphicon-cog
+
+      li(ng-show='vm.auth.isLoggedIn()')
+        a(href='' ng-click='vm.auth.logout()') Logout
+
     div#navbar-main.navbar-collapse.collapse(uib-collapse='vm.isCollapsed')
       ul.nav.navbar-nav
         li(ng-repeat='item in vm.menu', ui-sref-active='active')
           a(ui-sref='{{item.state}}') {{item.title}}
-
-      ul.nav.navbar-nav.navbar-right
-
-        li(ng-hide='vm.auth.isLoggedIn()', ui-sref-active='active')
-          a(ui-sref='login') Login
-
-        li(ng-show='vm.auth.isLoggedIn()', ui-sref-active='active')
-          a(ui-sref='settings')
-            span.glyphicon.glyphicon-cog
-
-        li(ng-show='vm.auth.isLoggedIn()')
-          a(href='' ng-click='vm.auth.logout()') Logout
