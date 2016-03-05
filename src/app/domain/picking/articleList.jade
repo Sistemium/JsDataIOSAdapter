@@ -6,7 +6,7 @@ section
     li.list-group-item.display-flex(ng-repeat='item in vm.articles track by item.id' as-sortable-item)
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
-        h4.list-group-item-heading {{item.article.name}}
+        h5.list-group-item-heading {{item.article.name}}
         small.list-group-item-text
           span Фасовка:
           label {{item.article.packageRel}}
