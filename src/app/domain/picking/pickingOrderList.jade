@@ -9,7 +9,7 @@ div(ui-view='')
       span Бутылок:
       label {{vm.totals.volume()}}
 
-  table.table
+  table.table.table-hover
     thead
       th Номер
       th Позиций
@@ -19,7 +19,7 @@ div(ui-view='')
       tr(
         ng-repeat='order in vm.pickingOrders track by order.id'
         ng-click='vm.toggleSelect(order)'
-        ng-class='{selected: order.selected}'
+        ng-class='{active: order.selected}'
       )
         td {{order.ndoc}}
         td {{order.positions.length}}

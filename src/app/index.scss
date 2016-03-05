@@ -19,8 +19,8 @@ $icon-font-path: "../../bower_components/bootstrap-sass/assets/fonts/bootstrap/"
   padding: 0.2em 0;
 }
 
-.selected {
-  color: #00b3ee;
+tr:focus {
+  outline-style: none;
 }
 
 body {

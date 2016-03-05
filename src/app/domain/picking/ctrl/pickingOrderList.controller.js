@@ -10,6 +10,9 @@
       vm.total = 0;
 
       models.PickingOrder.bindAll({}, $scope, 'vm.pickingOrders');
+      models.PickingOrder.bindAll({
+        selected: true
+      }, $scope, 'vm.selectedItems');
 
       models.PickingOrder.findAll({}).then(function (res) {
         res.forEach(function (i) {
@@ -26,11 +29,6 @@
 
         toggleSelect: function (item) {
           item.selected = !item.selected;
-          if (item.selected) {
-            vm.selectedItems.push(item);
-          } else {
-            _.remove(vm.selectedItems, item);
-          }
         },
 
         totals: {
