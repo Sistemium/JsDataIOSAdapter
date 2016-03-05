@@ -1,0 +1,23 @@
+.display-flex {
+  display: flex;
+  display: -webkit-flex;
+}
+
+.flex-1 {
+  flex: 1;
+  -webkit-flex: 1;
+}
+
+.flex-right {
+
+  min-width: 4em;
+  text-align: right;
+
+  p {
+    margin-bottom: 0;
+    margin-top: 4px;
+  }
+
+  margin-left: 15px;
+
+}

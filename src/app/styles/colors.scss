@@ -1,0 +1,74 @@
+.white {
+  color: white;
+}
+
+.blue {
+  color: blue;
+}
+
+.red {
+  color: red;
+}
+
+
+.gray {
+  color: gray;
+}
+
+
+.yellow {
+  color: yellow;
+}
+
+.green {
+  color: green;
+}
+
+.darkred {
+  color: darkred;
+}
+
+$primary-color-active: rgba(56,144,208,0.5);
+$primary-color-hover: rgba(56,144,208,0.2);
+$primary-color: #4290d0;
+$primary-color-border: #258fbf;
+
+.btn-primary {
+  background-color: $primary-color;
+  border-color: $primary-color-border;
+}
+
+.table-hover > tbody {
+
+  tr:hover > td,
+  tr:hover > th {
+    background: $primary-color-hover;
+  }
+
+  tr > td.active,
+  tr > th.active,
+  tr > .active,
+  tr.active > td,
+  tr.active > th {
+    background-color: $primary-color-active;
+  }
+
+  tr > td.active:hover,
+  tr > th.active:hover,
+  tr.active:hover > td,
+  tr:hover > .active,
+  tr.active:hover > th {
+    background-color: $primary-color-active;
+  }
+
+}
+
+a {
+  color: $primary-color;
+}
+
+a:hover, a:focus {
+  color: #3a7496;
+}
+
+//#2a6496;
