@@ -31,7 +31,30 @@
             },0.0);
           }
 
+        },
+
+        agg: {
+
+          totalVolume: function (items) {
+            return _.reduce(items,function(sum,p){
+              return sum + p.totalVolume();
+            },0);
+          },
+
+          totalBoxVolume: function (items) {
+            return _.reduce(items,function(sum,p){
+              return sum + p.totalBoxVolume();
+            },0.0);
+          },
+
+          totalPositionsCount: function (items) {
+            return _.reduce(items, function(sum,order){
+              return sum + order.positions.length;
+            },0);
+          }
+
         }
+
       });
 
     });

@@ -4,13 +4,13 @@ div(ui-view='')
     p.clear-both Требования на сборку
     small.lead.pull-right
       span Коробок:
-      label {{ vm.totals.boxVolume() | number:1 }}
+      label {{ vm.totals.boxVolume () | number:1 }}
       = ' '
       span Позиций:
-      label {{ vm.totals.positionsCount() }}
+      label {{ vm.totals.positionsCount () }}
       = ' '
       span Бутылок:
-      label {{ vm.totals.volume() }}
+      label {{ vm.totals.volume () }}
 
   table.table.table-hover
     thead
@@ -24,9 +24,9 @@ div(ui-view='')
         ng-click='vm.toggleSelect(order)'
         ng-class='{active: order.selected}'
       )
-        td {{order.ndoc}}
-        td {{order.totalVolume()}}
-        td {{order.positions.length}}
-        td {{order.totalBoxVolume() | number: 1}}
+        td {{ order.ndoc }}
+        td {{ order.totalVolume () }}
+        td {{ order.positions.length }}
+        td {{ order.totalBoxVolume () | number: 1}}
 
   button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders') Select

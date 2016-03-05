@@ -19,7 +19,7 @@
             'authorization': window.localStorage.getItem('authorization')
           }
         },
-        
+
         queryTransform: function queryTransform(resourceConfig, params) {
 
           var res = {};

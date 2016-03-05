@@ -34,15 +34,19 @@
         var boxPcs = article && article.boxPcs (totalVolume);
 
         return {
+
           id: key,
           article: val[0].Article,
           positions: val,
           volume: boxPcs,
+
           orderVolume: function (order) {
             var p = _.find (val, ['pickingOrder', order.id]);
             return p && p.volume || 0;
           }
+
         }
+
       }),'article.name');
 
     })

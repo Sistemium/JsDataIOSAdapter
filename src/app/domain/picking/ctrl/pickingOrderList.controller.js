@@ -6,6 +6,8 @@
     .controller('PickingOrderListController', function ($scope, models) {
 
       var vm = this;
+      var PO = models.PickingOrder;
+
       vm.selectedItems = [];
       vm.total = 0;
 
@@ -14,9 +16,9 @@
         selected: true
       }, $scope, 'vm.selectedItems');
 
-      models.PickingOrder.findAll({}).then(function (res) {
+      PO.findAll({}).then(function (res) {
         res.forEach(function (i) {
-          models.PickingOrder.loadRelations(i).then(function (r) {
+          PO.loadRelations(i).then(function (r) {
             vm.total += r.positions.length;
             _.each (r.positions, function (pos) {
               models.PickingOrderPosition.loadRelations (pos);
@@ -34,21 +36,15 @@
         totals: {
 
           volume: function () {
-            return _.reduce(vm.pickingOrders, function(sum,order){
-              return sum + order.totalVolume();
-            },0);
+            return PO.agg.totalVolume (vm.pickingOrders);
           },
 
           boxVolume: function () {
-            return _.reduce(vm.pickingOrders, function(sum,order){
-              return sum + order.totalBoxVolume();
-            },0);
+            return PO.agg.totalBoxVolume (vm.pickingOrders);
           },
 
           positionsCount: function () {
-            return _.reduce(vm.pickingOrders, function(sum,order){
-              return sum + order.positions.length;
-            },0);
+            return PO.agg.totalPositionsCount (vm.pickingOrders);
           }
 
         }

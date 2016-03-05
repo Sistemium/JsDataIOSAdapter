@@ -26,21 +26,15 @@
 
       vm.totals = {
         volume: function () {
-          return _.reduce(vm.selectedItems,function(sum,order){
-            return sum + order.totalVolume();
-          },0);
+          return PO.agg.totalVolume (vm.selectedItems);
         },
 
         boxVolume: function () {
-          return _.reduce(vm.selectedItems,function(sum,order){
-            return sum + order.totalBoxVolume();
-          },0);
+          return PO.agg.totalBoxVolume (vm.selectedItems);
         },
 
         positions: function () {
-          return _.reduce(vm.selectedItems,function(sum,order){
-            return sum + order.positions.length;
-          },0);
+          return PO.agg.totalPositionsCount (vm.selectedItems);
         }
       };
 
