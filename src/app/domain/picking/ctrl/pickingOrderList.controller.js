@@ -33,21 +33,7 @@
           item.selected = !item.selected;
         },
 
-        totals: {
-
-          volume: function () {
-            return PO.agg.volume (vm.pickingOrders);
-          },
-
-          boxVolume: function () {
-            return PO.agg.boxVolume (vm.pickingOrders);
-          },
-
-          positionsCount: function () {
-            return PO.agg.positionsCount (vm.pickingOrders);
-          }
-
-        }
+        totals: PO.agg (vm, 'pickingOrders')
 
       });
 

@@ -2,51 +2,41 @@
 
 (function () {
 
-    angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema) {
 
-      Schema.register ({
+    Schema.register({
 
-        name: 'PickingOrder',
+      name: 'PickingOrder',
 
-        relations: {
-          hasMany: {
-            PickingOrderPosition: {
-              localField: 'positions',
-              foreignKey: 'pickingOrder'
-            }
+      relations: {
+        hasMany: {
+          PickingOrderPosition: {
+            localField: 'positions',
+            foreignKey: 'pickingOrder'
           }
+        }
+      },
+
+      methods: {
+
+        totalVolume: function () {
+          return Schema.aggregate('volume').sum(this.positions);
         },
 
-        methods: {
-
-          totalVolume: function () {
-            return Schema.aggregate('volume').sum (this.positions);
-          },
-
-          totalBoxVolume: function () {
-            return _.reduce(this.positions,function(sum,p){
-              return sum + (p.Article ? p.volume / p.Article.packageRel : 0);
-            },0.0);
-          },
-
-          positionsCount: function () {
-            return this.positions.length;
-          }
-
+        totalBoxVolume: function () {
+          return _.reduce(this.positions, function (sum, p) {
+            return sum + (p.Article ? p.volume / p.Article.packageRel : 0);
+          }, 0.0);
         },
 
-        agg: {
-
-          volume: Schema.aggregate('totalVolume').sumFn ,
-
-          boxVolume: Schema.aggregate('totalBoxVolume').sumFn,
-
-          positionsCount: Schema.aggregate('positionsCount').sumFn
-
+        positionsCount: function () {
+          return this.positions.length;
         }
 
-      });
+      }
 
     });
+
+  });
 
 })();
