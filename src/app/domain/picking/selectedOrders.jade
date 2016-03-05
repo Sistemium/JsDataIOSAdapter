@@ -1,10 +1,24 @@
 div(ui-view='')
-  h1 Selected orders
-  h3.pull-right Total: {{vm.total}}
 
-  h3 TODO: sortable list
-  ul(data-as-sortable data-ng-model='vm.selectedItems')
-    li(data-ng-repeat='item in vm.selectedItems track by item.id' data-as-sortable-item)
-      div(data-as-sortable-item-handle)
+  h2.clearfix
+    p Выбранные требования
+    small.lead.pull-right
+      span Позиций:
+      label {{vm.totals.positions()}}
+      = ' '
+      span Бутылок:
+      label {{vm.totals.volume()}}
 
-  button.btn.btn-primary(ui-sref='.articleList') Continue
+  section
+    ul.list-group(as-sortable ng-model='vm.data')
+      li.list-group-item(ng-repeat='item in vm.data track by item.id' as-sortable-item)
+        div(as-sortable-item-handle)
+          h4.list-group-item-heading {{item.ndoc}}
+          p.list-group-item-text
+            span Бутылок:
+            label {{item.totalVolume()}}
+            = ' '
+            span Позиций:
+            label {{item.positions.length}}
+
+    button.btn.btn-primary(ui-sref='.articleList') Continue

@@ -1,6 +1,14 @@
 div(ui-view='')
-  h1 Order List
-  h3.pull-right Total: {{vm.total}}
+
+  h2
+    p.clear-both Требования на сборку
+    small.lead.pull-right
+      span Позиций:
+      label {{vm.total}}
+      = ' '
+      span Бутылок:
+      label {{vm.totals.volume()}}
+
   table.table
     thead
       th Номер
@@ -8,6 +16,7 @@ div(ui-view='')
       th Дата
       th Позиций
       th Бутылок
+      th Коробок
     tbody
       tr(
         ng-repeat='order in vm.pickingOrders track by order.id'
@@ -19,5 +28,6 @@ div(ui-view='')
         td {{order.date}}
         td {{order.positions.length}}
         td {{order.totalVolume()}}
+        td {{order.totalVolumePacks() | number: 1}}
 
   button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders') Select

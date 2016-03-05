@@ -15,6 +15,9 @@
         res.forEach(function (i) {
           models.PickingOrder.loadRelations(i).then(function (r) {
             vm.total += r.positions.length;
+            _.each (r.positions, function (pos) {
+              models.PickingOrderPosition.loadRelations (pos);
+            });
           });
         });
       });
@@ -27,6 +30,19 @@
             vm.selectedItems.push(item);
           } else {
             _.remove(vm.selectedItems, item);
+          }
+        },
+
+        totals: {
+          volume: function () {
+            return _.reduce(vm.pickingOrders,function(sum,order){
+              return sum + order.totalVolume();
+            },0);
+          },
+          volumePacks: function () {
+            return _.reduce(vm.pickingOrders,function(sum,order){
+              return sum + order.totalVolumePacks();
+            },0);
           }
         }
 

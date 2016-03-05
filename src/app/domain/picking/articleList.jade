@@ -1,3 +1,14 @@
-h1 Article list
+h2.clearfix Article list
+  .lead
 
-pre {{vm.articles | json}}
+section
+  ul.list-group(as-sortable ng-model='vm.articles')
+    li.list-group-item(ng-repeat='item in vm.articles track by item.id' as-sortable-item)
+      div(as-sortable-item-handle)
+        h4.list-group-item-heading {{item.article.name}}
+        p.list-group-item-text
+          span Фасовка:
+          label {{item.article.packageRel}}
+          = ' '
+          span Объем:
+          label {{item.article.pieceVolume}}
