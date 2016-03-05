@@ -24,7 +24,7 @@
         orders: $scope.vm.selectedItems
       });
 
-      vm.articles = _.map (vm.articleIndex, function (val, key) {
+      vm.articles = _.orderBy (_.map (vm.articleIndex, function (val, key) {
 
         var totalVolume = _.reduce (val,function (sum,pos) {
           return sum + pos.volume;
@@ -43,7 +43,7 @@
             return p && p.volume || 0;
           }
         }
-      })
+      }),'article.name');
 
     })
   ;
