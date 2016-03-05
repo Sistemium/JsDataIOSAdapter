@@ -3,11 +3,14 @@ div(ui-view='')
   h3.clearfix
     p Выбранные требования
     small.lead.pull-right
+      span Коробок:
+      label {{ vm.totals.boxVolume() | number:1 }}
+      = ' '
       span Позиций:
-      label {{vm.totals.positions()}}
+      label {{ vm.totals.positions() }}
       = ' '
       span Бутылок:
-      label {{vm.totals.volume()}}
+      label {{ vm.totals.volume() }}
 
   section
     ul.list-group(as-sortable ng-model='vm.selectedItems')
@@ -16,10 +19,13 @@ div(ui-view='')
         .flex-1
           h4.list-group-item-heading {{item.ndoc}}
           p.list-group-item-text
-            span Бутылок:
-            label {{item.totalVolume()}}
+            span Коробок:
+            label {{ item.totalBoxVolume() | number:1 }}
             = ' '
             span Позиций:
-            label {{item.positions.length}}
+            label {{ item.positions.length }}
+            = ' '
+            span Бутылок:
+            label {{ item.totalVolume() }}
 
     button.btn.btn-primary(ui-sref='.articleList') Continue

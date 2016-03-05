@@ -7,7 +7,7 @@
 
       var PO = models.PickingOrder;
       var vm = this;
-      
+
       PO.findAll().then(function () {
 
         PO.bindAll({
@@ -30,6 +30,13 @@
             return sum + order.totalVolume();
           },0);
         },
+
+        boxVolume: function () {
+          return _.reduce(vm.selectedItems,function(sum,order){
+            return sum + order.totalBoxVolume();
+          },0);
+        },
+
         positions: function () {
           return _.reduce(vm.selectedItems,function(sum,order){
             return sum + order.positions.length;

@@ -12,9 +12,9 @@
       'ui.router.stateHelper',
       'ui.bootstrap',
       'toastr',
-      'js-data',
       'LocalStorageModule',
-      'as.sortable'
+      'as.sortable',
+      'Models'
     ]);
 
 })();

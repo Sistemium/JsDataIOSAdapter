@@ -32,16 +32,25 @@
         },
 
         totals: {
+
           volume: function () {
-            return _.reduce(vm.pickingOrders,function(sum,order){
+            return _.reduce(vm.pickingOrders, function(sum,order){
               return sum + order.totalVolume();
             },0);
           },
-          volumePacks: function () {
-            return _.reduce(vm.pickingOrders,function(sum,order){
-              return sum + order.totalVolumePacks();
+
+          boxVolume: function () {
+            return _.reduce(vm.pickingOrders, function(sum,order){
+              return sum + order.totalBoxVolume();
+            },0);
+          },
+
+          positionsCount: function () {
+            return _.reduce(vm.pickingOrders, function(sum,order){
+              return sum + order.positions.length;
             },0);
           }
+
         }
 
       });
