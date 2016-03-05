@@ -6,13 +6,14 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController($timeout, webDevTec, toastr, Auth) {
+  function MainController($timeout, webDevTec, toastr, Auth, Menu) {
     var vm = this;
 
-    vm.awesomeThings = [];
+    vm.Auth = Auth;
+    vm.data = Menu.root();
+
     vm.classAnimation = '';
     vm.showToastr = showToastr;
-    vm.Auth = Auth;
 
     activate();
 

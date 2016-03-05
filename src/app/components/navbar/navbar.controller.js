@@ -1,22 +1,13 @@
 'use strict';
 
 (function () {
-  function NavbarController(Auth) {
+  function NavbarController(Auth,Menu) {
 
     var vm = this;
 
     angular.extend(vm, {
 
-      menu: [{
-        title: 'Home',
-        state: 'home'
-      },{
-        title: 'Playground',
-        state: 'playground'
-      },{
-        title: 'Picking',
-        state: 'picking.orderList'
-      }],
+      menu: Menu.root (),
 
       isCollapsed: true
 

@@ -1,0 +1,8 @@
+.page-header(ng-if='header')
+  h2
+    div {{header.title}}
+    small {{header.small}}
+.row
+  .col-sm-6.col-md-4(ng-repeat='item in items')
+    button.btn.btn-default.btn-block.thumbnail.btn-lg(ui-sref='{{item.state}}')
+      .caption {{item.title}}

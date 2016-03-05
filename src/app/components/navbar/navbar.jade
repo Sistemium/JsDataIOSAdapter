@@ -1,4 +1,5 @@
 div.navbar.navbar-default
+  // TODO: .navbar-fixed-top
   div.container-fluid
 
     div.navbar-header
@@ -23,5 +24,8 @@ div.navbar.navbar-default
 
     div#navbar-main.navbar-collapse.collapse(uib-collapse='vm.isCollapsed')
       ul.nav.navbar-nav
-        li(ng-repeat='item in vm.menu', ui-sref-active='active')
+        li(ui-sref-active='active')
+          a(ui-sref='{{vm.menu.state}}') {{vm.menu.title}}
+        li.divider(role="separator")
+        li(ng-repeat='item in vm.menu.items', ui-sref-active='active')
           a(ui-sref='{{item.state}}') {{item.title}}
