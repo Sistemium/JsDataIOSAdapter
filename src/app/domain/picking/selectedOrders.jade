@@ -28,4 +28,5 @@ div(ui-view='')
             span Бутылок:
             label {{ item.totalVolume() }}
 
-    button.btn.btn-primary(ui-sref='.articleList') Continue
+    button.btn.btn-primary.pull-right(ui-sref='.articleList')
+      | Начать сборку

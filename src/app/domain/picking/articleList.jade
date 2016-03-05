@@ -19,4 +19,4 @@ section
         p
           span.gray(ng-repeat='order in vm.orders track by order.id')
             span(ng-if='$index') &nbsp;+
-            label {{item.orderVolume(order) | number:0}}
+            label {{ item.orderVolume(order).full || '0' }}

@@ -42,7 +42,7 @@
 
           orderVolume: function (order) {
             var p = _.find (val, ['pickingOrder', order.id]);
-            return p && p.volume || 0;
+            return article.boxPcs (p && p.volume || 0);
           }
 
         }

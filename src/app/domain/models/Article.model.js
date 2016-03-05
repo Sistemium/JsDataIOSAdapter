@@ -31,9 +31,9 @@
             return {
               box: box,
               pcs: pcs,
-              full: (box ? box + ' к.' : '')
+              full: (box ? box + ' к' : '')
               + (box && pcs && ' ' || '')
-              + (pcs ? pcs + ' б.' : '')
+              + (pcs ? pcs + ' б' : '')
             }
           }
         }

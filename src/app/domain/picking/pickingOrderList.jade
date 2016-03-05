@@ -29,4 +29,5 @@ div(ui-view='')
         td {{ order.positions.length }}
         td {{ order.totalBoxVolume () | number: 1}}
 
-  button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders') Select
+  button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders')
+    | Собирать отмеченные
