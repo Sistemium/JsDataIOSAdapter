@@ -18,7 +18,7 @@
         .state({
           name: 'picking',
           abstract: true,
-          template: '<div ui-view=""></div>',
+          templateUrl: 'app/domain/ui-view.html',
           children: [
             { name:'orderList',
               url: '/orders',
