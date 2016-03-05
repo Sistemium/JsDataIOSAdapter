@@ -1,14 +1,15 @@
-h2.clearfix Article list
+h2.clearfix Товары для сборки
   .lead
 
 section
   ul.list-group(as-sortable ng-model='vm.articles')
     li.list-group-item(ng-repeat='item in vm.articles track by item.id' as-sortable-item)
       div(as-sortable-item-handle)
+        .badge.pull-right {{item.totalVolume}}
         h4.list-group-item-heading {{item.article.name}}
-        p.list-group-item-text
+        small.list-group-item-text
           span Фасовка:
           label {{item.article.packageRel}}
           = ' '
           span Объем:
-          label {{item.article.pieceVolume}}
+          label {{item.article.pieceVolume | number}}

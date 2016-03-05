@@ -27,7 +27,10 @@
         return {
           id: key,
           article: val[0].Article,
-          positions: val
+          positions: val,
+          totalVolume: _.reduce (val,function (sum,pos) {
+            return sum + pos.volume;
+          },0)
         }
       })
 
