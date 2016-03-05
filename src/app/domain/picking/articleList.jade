@@ -4,7 +4,8 @@ h2.clearfix Товары для сборки
 section
   ul.list-group(as-sortable ng-model='vm.articles')
     li.list-group-item.display-flex(ng-repeat='item in vm.articles track by item.id' as-sortable-item)
-      div.flex-1(as-sortable-item-handle)
+      .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
+      .flex-1
         h4.list-group-item-heading {{item.article.name}}
         small.list-group-item-text
           span Фасовка:
@@ -12,7 +13,7 @@ section
           = ' '
           span Объем:
           label {{item.article.pieceVolume | number}}
-      div.flex-right
+      .flex-right
         p
           label {{item.volume.full}}
         p

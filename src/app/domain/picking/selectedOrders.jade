@@ -1,6 +1,6 @@
 div(ui-view='')
 
-  h2.clearfix
+  h3.clearfix
     p Выбранные требования
     small.lead.pull-right
       span Позиций:
@@ -11,8 +11,9 @@ div(ui-view='')
 
   section
     ul.list-group(as-sortable ng-model='vm.selectedItems')
-      li.list-group-item(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
-        div(as-sortable-item-handle)
+      li.list-group-item.display-flex(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
+        .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
+        .flex-1
           h4.list-group-item-heading {{item.ndoc}}
           p.list-group-item-text
             span Бутылок:

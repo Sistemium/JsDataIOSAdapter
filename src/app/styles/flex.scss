@@ -21,3 +21,11 @@
   margin-left: 15px;
 
 }
+
+.sorter-handle {
+  min-width: 40px;
+  margin: -10px 10px -10px -15px;
+  border-right: solid 1px #ddd;
+  padding: 10px;
+  text-align: center;
+}
