@@ -79,6 +79,11 @@
             return _.reduce(this.positions,function(sum,p){
               return sum + p.volume;
             },0);
+          },
+          totalVolumePacks: function () {
+            return _.reduce(this.positions,function(sum,p){
+              return sum + (p.Article ? p.volume / p.Article.packageRel : 0);
+            },0);
           }
         }
       });
