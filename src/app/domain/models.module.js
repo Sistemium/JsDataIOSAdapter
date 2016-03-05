@@ -10,14 +10,18 @@
         || 'https://api.sistemium.com/v4d/dev/';
 
       angular.extend(DSHttpAdapterProvider.defaults, {
+
         basePath: basePath,
+
         httpConfig: {
           headers: {
             'X-Return-Post': 'true',
             'authorization': window.localStorage.getItem('authorization')
           }
         },
+        
         queryTransform: function queryTransform(resourceConfig, params) {
+
           var res = {};
 
           if (params.offset) {
@@ -31,7 +35,9 @@
           delete params.offset;
 
           return angular.extend(res, params);
+
         }
+
       });
 
     })
