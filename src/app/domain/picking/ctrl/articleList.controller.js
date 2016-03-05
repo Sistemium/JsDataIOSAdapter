@@ -19,18 +19,29 @@
         }
       });
 
-      vm.articles = [];
-
-      vm.articleIndex = _.groupBy(positions, 'article');
+      angular.extend (vm, {
+        articleIndex: _.groupBy(positions, 'article'),
+        orders: $scope.vm.selectedItems
+      });
 
       vm.articles = _.map (vm.articleIndex, function (val, key) {
+
+        var totalVolume = _.reduce (val,function (sum,pos) {
+          return sum + pos.volume;
+        },0);
+
+        var article = val[0].Article;
+        var boxPcs = article && article.boxPcs (totalVolume);
+
         return {
           id: key,
           article: val[0].Article,
           positions: val,
-          totalVolume: _.reduce (val,function (sum,pos) {
-            return sum + pos.volume;
-          },0)
+          volume: boxPcs,
+          orderVolume: function (order) {
+            var p = _.find (val, ['pickingOrder', order.id]);
+            return p && p.volume || 0;
+          }
         }
       })
 

@@ -10,8 +10,8 @@ div(ui-view='')
       label {{vm.totals.volume()}}
 
   section
-    ul.list-group(as-sortable ng-model='vm.data')
-      li.list-group-item(ng-repeat='item in vm.data track by item.id' as-sortable-item)
+    ul.list-group(as-sortable ng-model='vm.selectedItems')
+      li.list-group-item(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
         div(as-sortable-item-handle)
           h4.list-group-item-heading {{item.ndoc}}
           p.list-group-item-text

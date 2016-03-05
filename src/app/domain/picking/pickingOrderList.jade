@@ -12,8 +12,6 @@ div(ui-view='')
   table.table
     thead
       th Номер
-      th Статус
-      th Дата
       th Позиций
       th Бутылок
       th Коробок
@@ -24,8 +22,6 @@ div(ui-view='')
         ng-class='{selected: order.selected}'
       )
         td {{order.ndoc}}
-        td {{order.processing}}
-        td {{order.date}}
         td {{order.positions.length}}
         td {{order.totalVolume()}}
         td {{order.totalVolumePacks() | number: 1}}
