@@ -18,6 +18,11 @@
         },
 
         methods: {
+
+          boxVolume: function (volume) {
+            return volume / this.packageRel;
+          },
+
           boxPcs: function (volume) {
             var rel = this.packageRel;
 

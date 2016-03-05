@@ -24,9 +24,7 @@
         },
 
         totalBoxVolume: function () {
-          return _.reduce(this.positions, function (sum, p) {
-            return sum + (p.Article ? p.volume / p.Article.packageRel : 0);
-          }, 0.0);
+          return Schema.aggregate('boxVolume').sumFn(this.positions);
         },
 
         positionsCount: function () {

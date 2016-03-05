@@ -21,6 +21,12 @@
               localKey: 'article'
             }
           }
+        },
+
+        methods: {
+          boxVolume: function () {
+            return this.Article && this.Article.boxVolume (this.volume) || 0;
+          }
         }
 
       });
