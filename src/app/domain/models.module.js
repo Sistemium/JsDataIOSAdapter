@@ -64,6 +64,26 @@
 
         models: function () {
           return models;
+        },
+
+        aggregate: function (field) {
+
+          return {
+
+            sumFn: function (items) {
+              return _.reduce(items, function (sum, item) {
+                return sum + item [field] ();
+              }, 0);
+            },
+
+            sum: function (items) {
+              return _.reduce(items, function (sum, item) {
+                return sum + item [field];
+              }, 0);
+            }
+
+          };
+
         }
 
       }

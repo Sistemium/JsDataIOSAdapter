@@ -20,38 +20,28 @@
         methods: {
 
           totalVolume: function () {
-            return _.reduce(this.positions,function(sum,p){
-              return sum + p.volume;
-            },0);
+            return Schema.aggregate('volume').sum (this.positions);
           },
 
           totalBoxVolume: function () {
             return _.reduce(this.positions,function(sum,p){
               return sum + (p.Article ? p.volume / p.Article.packageRel : 0);
             },0.0);
+          },
+
+          positionsCount: function () {
+            return this.positions.length;
           }
 
         },
 
         agg: {
 
-          totalVolume: function (items) {
-            return _.reduce(items,function(sum,p){
-              return sum + p.totalVolume();
-            },0);
-          },
+          volume: Schema.aggregate('totalVolume').sumFn ,
 
-          totalBoxVolume: function (items) {
-            return _.reduce(items,function(sum,p){
-              return sum + p.totalBoxVolume();
-            },0.0);
-          },
+          boxVolume: Schema.aggregate('totalBoxVolume').sumFn,
 
-          totalPositionsCount: function (items) {
-            return _.reduce(items, function(sum,order){
-              return sum + order.positions.length;
-            },0);
-          }
+          positionsCount: Schema.aggregate('positionsCount').sumFn
 
         }
 

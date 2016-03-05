@@ -26,15 +26,15 @@
 
       vm.totals = {
         volume: function () {
-          return PO.agg.totalVolume (vm.selectedItems);
+          return PO.agg.volume (vm.selectedItems);
         },
 
         boxVolume: function () {
-          return PO.agg.totalBoxVolume (vm.selectedItems);
+          return PO.agg.boxVolume (vm.selectedItems);
         },
 
-        positions: function () {
-          return PO.agg.totalPositionsCount (vm.selectedItems);
+        positionsCount: function () {
+          return PO.agg.positionsCount (vm.selectedItems);
         }
       };
 

@@ -36,15 +36,15 @@
         totals: {
 
           volume: function () {
-            return PO.agg.totalVolume (vm.pickingOrders);
+            return PO.agg.volume (vm.pickingOrders);
           },
 
           boxVolume: function () {
-            return PO.agg.totalBoxVolume (vm.pickingOrders);
+            return PO.agg.boxVolume (vm.pickingOrders);
           },
 
           positionsCount: function () {
-            return PO.agg.totalPositionsCount (vm.pickingOrders);
+            return PO.agg.positionsCount (vm.pickingOrders);
           }
 
         }
