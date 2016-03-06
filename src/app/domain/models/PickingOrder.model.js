@@ -28,7 +28,7 @@
         },
 
         positionsCount: function () {
-          return this.positions.length;
+          return this.positions.length || 0;
         }
 
       }

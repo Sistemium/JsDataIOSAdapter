@@ -7,9 +7,9 @@
 
       var vm = this;
       var PO = models.PickingOrder;
+      var POP = models.PickingOrderPosition;
 
       vm.selectedItems = [];
-      vm.total = 0;
 
       models.PickingOrder.bindAll({}, $scope, 'vm.pickingOrders');
       models.PickingOrder.bindAll({
@@ -19,9 +19,8 @@
       PO.findAll({}).then(function (res) {
         res.forEach(function (i) {
           PO.loadRelations(i).then(function (r) {
-            vm.total += r.positions.length;
             _.each (r.positions, function (pos) {
-              models.PickingOrderPosition.loadRelations (pos);
+              POP.loadRelations (pos,'Article');
             });
           });
         });

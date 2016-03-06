@@ -7,10 +7,10 @@ div(ui-view='')
       label {{ vm.currentTotals().totalBoxVolume () | number:1 }}
       = ' '
       span Позиций:
-      label {{ vm.currentTotals().positionsCount () }}
+      label {{ vm.currentTotals().positionsCount () | number:0 }}
       = ' '
       span Бутылок:
-      label {{ vm.currentTotals().totalVolume () }}
+      label {{ vm.currentTotals().totalVolume () | number:0 }}
 
   table.table.table-hover
     thead
@@ -25,8 +25,8 @@ div(ui-view='')
         ng-class='{active: order.selected}'
       )
         td {{ order.ndoc }}
-        td {{ order.totalVolume () }}
-        td {{ order.positions.length }}
+        td {{ order.totalVolume () | number:0 }}
+        td {{ order.positionsCount () | number:0 }}
         td {{ order.totalBoxVolume () | number: 1}}
 
   button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders')

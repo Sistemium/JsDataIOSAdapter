@@ -7,10 +7,10 @@ div(ui-view='')
       label {{ vm.totals.totalBoxVolume () | number:1 }}
       = ' '
       span Позиций:
-      label {{ vm.totals.positionsCount () }}
+      label {{ vm.totals.positionsCount () | number:0 }}
       = ' '
       span Бутылок:
-      label {{ vm.totals.totalVolume () }}
+      label {{ vm.totals.totalVolume () | number:0 }}
 
   section
     ul.list-group(as-sortable ng-model='vm.selectedItems')
@@ -23,10 +23,10 @@ div(ui-view='')
             label {{ item.totalBoxVolume() | number:1 }}
             = ' '
             span Позиций:
-            label {{ item.positions.length }}
+            label {{ item.positionsCount () | number:0 }}
             = ' '
             span Бутылок:
-            label {{ item.totalVolume() }}
+            label {{ item.totalVolume() | number:0 }}
 
     button.btn.btn-primary.pull-right(ui-sref='.articleList')
       | Начать сборку
