@@ -7,7 +7,7 @@
     .config(function (DSProvider, DSHttpAdapterProvider) {
 
       var basePath = window.localStorage.getItem('JSData.BasePath')
-        || location.protocol === 'https:' && '/v4d/dev/'
+        || location.protocol === 'https:' && '/api/dev/'
         || 'https://api.sistemium.com/v4d/dev/';
 
       angular.extend(DSHttpAdapterProvider.defaults, {
