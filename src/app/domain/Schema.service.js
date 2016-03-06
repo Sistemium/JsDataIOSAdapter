@@ -59,6 +59,10 @@ angular.module('Models')
         return models;
       },
 
+      model: function (name) {
+        return models [name]
+      },
+
       aggregate: aggregate
 
     }
