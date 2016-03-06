@@ -3,17 +3,17 @@
 (function () {
 
   angular.module('webPage')
-    .controller('ArticleListController', function ($scope, models, Errors) {
+    .controller('ArticleListController', function ($scope, models, Errors, $window) {
 
       var vm = this;
       var POP = models.PickingOrderPosition;
       var orders = $scope.vm.selectedItems;
 
-      var scanFn = function () {
+      var scanFn = function (code) {
 
         Errors.clear();
 
-        return models.StockBatch.someBy.barCode(vm.barCodeInput).then (function (sbs) {
+        return models.StockBatch.someBy.barCode(code || vm.barCodeInput).then (function (sbs) {
 
           if (sbs.length) {
             sbs.forEach(function (sb){
@@ -26,6 +26,13 @@
         }).catch (Errors.ru.add);
 
       };
+
+
+      $window.onBarcodeScan = scanFn;
+
+      if ($window.webkit) {
+        $window.webkit.messageHandlers.barCodeScannerOn.postMessage('onBarcodeScan');
+      }
 
       var positions = POP.filter ({
         where: {
