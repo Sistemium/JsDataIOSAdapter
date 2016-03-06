@@ -25,7 +25,7 @@ section
             span(ng-if='$index') &nbsp;+
             label {{ item.orderVolume(order).full || '0' }}
 
-nav.navbar.navbar-default.navbar-fixed-bottom
+nav.navbar.navbar-default.navbar-fixed-bottom.hidden-iOS
   .container
     form.navbar-form.navbar-left.only(role='search' ng-submit="vm.onBarCode()")
       .form-group
