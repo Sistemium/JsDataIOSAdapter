@@ -1,0 +1,15 @@
+.iOS .table-hover > tbody {
+
+  tr:hover {
+    background: none;
+  }
+
+  tr:hover > td {
+    background: none;
+  }
+
+}
+
+.iOS .table-hover > tbody > tr:active {
+  background: none;
+}
