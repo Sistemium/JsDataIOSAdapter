@@ -1,6 +1,8 @@
 h3.clearfix Товары для сборки
   .lead
 
+section.error-widget
+
 section
   ul.list-group(as-sortable ng-model='vm.articles')
     li.list-group-item.display-flex(ng-repeat='item in vm.articles track by item.id' as-sortable-item)
@@ -22,3 +24,9 @@ section
           span.gray(ng-if="vm.orders.length>1" ng-repeat='order in vm.orders track by order.id')
             span(ng-if='$index') &nbsp;+
             label {{ item.orderVolume(order).full || '0' }}
+
+nav.navbar.navbar-default.navbar-fixed-bottom
+  .container
+    form.navbar-form.navbar-left.only(role='search' ng-submit="vm.onBarCode()")
+      .form-group
+        input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')

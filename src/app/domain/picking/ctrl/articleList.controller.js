@@ -3,11 +3,31 @@
 (function () {
 
   angular.module('webPage')
-    .controller('ArticleListController', function ($scope, models) {
+    .controller('ArticleListController', function ($scope, models, Errors) {
 
       var vm = this;
       var POP = models.PickingOrderPosition;
       var orders = $scope.vm.selectedItems;
+
+      var scanFn = function () {
+
+        Errors.clear();
+
+        return models.StockBatch.someBy.barCode(vm.barCodeInput).then (function (sbs) {
+
+          if (sbs.length) {
+            sbs.forEach(function (sb){
+              Errors.addError(sb.Article.name);
+            });
+          } else {
+            Errors.addError('Неизвестный штрих-код');
+          }
+
+        }).catch (function (e){
+          Errors.addError(typeof e === 'string' && e || e.message || 'Неизвестная ошибка');
+        });
+
+      };
 
       var positions = POP.filter ({
         where: {
@@ -20,8 +40,14 @@
       });
 
       angular.extend (vm, {
+
         articleIndex: _.groupBy(positions, 'article'),
-        orders: $scope.vm.selectedItems
+        orders: $scope.vm.selectedItems,
+
+        barCodeInput: '',
+
+        onBarCode: scanFn
+
       });
 
       vm.articles = _.orderBy (_.map (vm.articleIndex, function (val, key) {
