@@ -24,7 +24,7 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <section class="container" ng-controller="BodyController" ng-class="cls">
+    <section class="container" ng-controller="BodyController as vm" ng-class="vm.cls">
       <navbar></navbar>
       <div class="domain-ui-view" ui-view></div>
     </section>

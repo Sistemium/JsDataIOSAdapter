@@ -14,6 +14,7 @@
       'toastr',
       'LocalStorageModule',
       'as.sortable',
+      'core.services',
       'Models'
     ]);
 
