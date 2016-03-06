@@ -19,6 +19,6 @@ section
         p
           label {{item.volume.full}}
         p
-          span.gray(ng-repeat='order in vm.orders track by order.id')
+          span.gray(ng-if="vm.orders.length>1" ng-repeat='order in vm.orders track by order.id')
             span(ng-if='$index') &nbsp;+
             label {{ item.orderVolume(order).full || '0' }}

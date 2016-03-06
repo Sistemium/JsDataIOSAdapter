@@ -2,8 +2,7 @@ div(ui-view='')
 
   h3
     p.clear-both Требования на сборку
-    small.lead.pull-right
-      span(ng-show='vm.selectedItems.length') Выбрано:&nbsp;
+    small.lead.pull-right(ng-class='{darkgray: vm.selectedItems.length}')
       span Коробок:
       label {{ vm.currentTotals().totalBoxVolume () | number:1 }}
       = ' '
