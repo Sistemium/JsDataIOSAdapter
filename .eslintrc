@@ -11,7 +11,8 @@
     "inject": true,
     "window": true,
     "console": true,
-    "_": true
+    "_": true,
+    "UAParser": true
   },
   "rules": {
     "no-console": 0,
