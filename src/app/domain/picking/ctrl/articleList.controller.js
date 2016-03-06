@@ -23,9 +23,7 @@
             Errors.addError('Неизвестный штрих-код');
           }
 
-        }).catch (function (e){
-          Errors.addError(typeof e === 'string' && e || e.message || 'Неизвестная ошибка');
-        });
+        }).catch (Errors.ru.add);
 
       };
 

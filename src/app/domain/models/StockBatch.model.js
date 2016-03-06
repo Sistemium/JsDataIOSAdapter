@@ -2,7 +2,7 @@
 
 (function () {
 
-    angular.module('Models').run(function (Schema, $q, $timeout) {
+    angular.module('Models').run(function (Schema, $q) {
 
       Schema.register ({
 
