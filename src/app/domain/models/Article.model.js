@@ -24,10 +24,11 @@
           },
 
           boxPcs: function (volume) {
-            var rel = this.packageRel;
 
+            var rel = this.packageRel;
             var box = Math.floor (volume / rel) || 0;
             var pcs = volume - box * rel;
+
             return {
               box: box,
               pcs: pcs,
@@ -35,7 +36,9 @@
               + (box && pcs && ' ' || '')
               + (pcs ? pcs + ' б' : '')
             }
+
           }
+
         }
 
       });

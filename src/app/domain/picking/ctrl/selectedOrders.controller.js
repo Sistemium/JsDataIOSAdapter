@@ -10,10 +10,6 @@
 
       PO.findAll().then(function () {
 
-        PO.bindAll({
-          selected: true
-        }, $scope, 'vm.d');
-
         vm.selectedItems = $scope.vm.selectedItems || PO.filter({
             selected: true
         });

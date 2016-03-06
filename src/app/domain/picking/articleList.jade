@@ -8,11 +8,13 @@ section
       .flex-1
         h5.list-group-item-heading {{item.article.name}}
         small.list-group-item-text
-          span.gray Объем:
-          label {{item.article.pieceVolume | number}}
+          span
+            span.gray Объем:
+            label {{item.article.pieceVolume | number}} л
           = ' '
-          span.gray Фасовка:
-          label {{item.article.packageRel}}
+          span
+            span.gray Фасовка:
+            label {{item.article.packageRel}}
       .flex-right
         p
           label {{item.volume.full}}
