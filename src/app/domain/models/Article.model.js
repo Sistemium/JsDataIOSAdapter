@@ -14,6 +14,16 @@
               localField: 'ArticleGroup',
               localKey: 'articleGroup'
             }
+          },
+          hasMany: {
+            StockBatch: {
+              localField: 'stockBatches',
+              foreignKey: 'article'
+            },
+            PickingOrderPosition: {
+              localField: 'pickingOrderPositions',
+              foreignKey: 'article'
+            }
           }
         },
 
