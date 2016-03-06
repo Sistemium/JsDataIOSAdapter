@@ -1,4 +1,4 @@
-.navbar{
+.navbar {
   .navbar-toggle {
     float: left;
     margin-left: 15px;
@@ -7,8 +7,23 @@
 
 }
 
+@media (min-width: 768px) {
 
-@media (max-width: 768px) {
+  .navbar {
+    form.only {
+      display: block;
+      width: 100%;
+
+      .form-group, .form-group .form-control {
+        display: block;
+        width: 100%;
+      }
+
+    }
+  }
+}
+
+@media (max-width: 767px) {
   .navbar {
 
     .navbar-header:after {
@@ -26,6 +41,12 @@
       margin: 9px 0;
       overflow: hidden;
       background-color: #e5e5e5
+    }
+
+    form.only {
+      padding-top: 0;
+      padding-bottom: 0;
+      border: none;
     }
 
   }
