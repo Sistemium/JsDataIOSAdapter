@@ -11,16 +11,18 @@
     var requests = {};
     var counter = 1;
 
-    function iosCallback(data, req) {
+    function iosCallback (name) {
+      return function (data, req) {
 
-      var id = req && req.options && req.options.requestId;
-      var request = id && requests [id];
+        var id = req && req.options && req.options.requestId;
+        var request = id && requests [id];
 
-      if (request) {
-        request.resolve(data);
-        delete requests [id];
+        if (request) {
+          request [name] (data);
+          delete requests [id];
+        }
+
       }
-
     }
 
     function iosErrorCallback(err, req) {
@@ -35,8 +37,8 @@
 
     }
 
-    $window.iSistemiumIOSCallback = iosCallback;
-    $window.iSistemiumIOSErrorCallback = iosErrorCallback;
+    $window.iSistemiumIOSCallback = iosCallback ('resolve');
+    $window.iSistemiumIOSErrorCallback = iosCallback ('reject');
 
     function requestFromIOS(type, entity, params, options) {
 
