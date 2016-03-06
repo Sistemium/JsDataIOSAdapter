@@ -2,12 +2,13 @@
 
 (function () {
 
-    angular.module('webPage').controller('BodyController', function ($scope) {
+    angular.module('webPage').controller('BodyController', function () {
 
+      var vm = this;
       var ua = new UAParser();
       var deviceInfo = ua.getOS();
 
-      $scope.cls = deviceInfo.name ? deviceInfo.name.replace (' ','') : '';
+      vm.cls = deviceInfo.name ? deviceInfo.name.replace (' ','') : '';
 
     });
 
