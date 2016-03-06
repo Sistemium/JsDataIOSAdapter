@@ -23,6 +23,11 @@
           }
         },
 
+        fieldTypes: {
+          volume: 'int',
+          ord: 'int'
+        },
+
         methods: {
           boxVolume: function () {
             return this.Article && this.Article.boxVolume (this.volume) || 0;

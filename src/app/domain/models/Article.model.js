@@ -27,6 +27,11 @@
           }
         },
 
+        fieldTypes: {
+          packageRel: 'int',
+          pieceVolume: 'decimal'
+        },
+
         methods: {
 
           boxVolume: function (volume) {

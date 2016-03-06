@@ -5,40 +5,60 @@
   angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log) {
 
     var ios = $window.webkit;
-
-    var IosAdapter = function () {
-    };
     var requests = {};
     var counter = 1;
 
-    function iosCallback (name) {
-      return function (data, req) {
+    var IosAdapter = function (schema) {
 
-        var id = req && req.options && req.options.requestId;
-        var request = id && requests [id];
+      function iosCallback (name, parser) {
+        return function (data, req) {
 
-        if (request) {
-          request [name] (data);
-          delete requests [id];
+          var id = req && req.options && req.options.requestId;
+          var request = id && requests [id];
+
+          if (request) {
+
+            if (parser) {
+              parser (data, request.message.entity);
+            }
+
+            request [name] (data);
+            delete requests [id];
+          }
+
         }
-
-      }
-    }
-
-    function iosErrorCallback(err, req) {
-
-      var id = req && req.options && req.options.requestId;
-      var request = id && requests [id];
-
-      if (request) {
-        request.reject(err);
-        delete requests [id];
       }
 
-    }
+      function iosParser (data, entity) {
 
-    $window.iSistemiumIOSCallback = iosCallback ('resolve');
-    $window.iSistemiumIOSErrorCallback = iosCallback ('reject');
+        var model = schema.model (entity);
+        var fieldTypes = model && model.fieldTypes;
+
+
+        _.each (data, function (row) {
+
+          _.each (fieldTypes, function (type,field){
+
+            row [field] = (function (v) {
+              switch (type) {
+                case 'int':
+                  return parseInt (v) || 0;
+                case 'decimal':
+                  return parseFloat (v) || 0;
+              }
+            }) (row[field]);
+
+          });
+
+        });
+
+      }
+
+      $window.iSistemiumIOSCallback = iosCallback ('resolve', iosParser);
+      $window.iSistemiumIOSErrorCallback = iosCallback ('reject');
+
+    };
+
 
     function requestFromIOS(type, entity, params, options) {
 
@@ -46,23 +66,35 @@
 
       options.requestId = id;
 
+      var message = {
+
+        entity: entity,
+        options: options
+
+      };
+
+      if (angular.isString (params)) {
+        message.id = params;
+      } else if (params) {
+        message.where = _.mapValues (params,function (val) {
+          return {
+            '==': val
+          }
+        });
+      }
+
       var promise = new DSUtils.Promise(function (resolve, reject) {
 
         requests [id] = {
 
           promise: promise,
+          message: message,
           resolve: resolve,
           reject: reject
 
         };
 
-        ios.messageHandlers[type].postMessage ({
-
-          entity: entity,
-          filter: params,
-          options: options
-
-        });
+        ios.messageHandlers[type].postMessage (message);
 
       });
 
@@ -94,7 +126,7 @@
     };
 
     IosAdapter.prototype.find = function (resource, id, options) {
-      return requestFromIOS('find', resource.endpoint, {id: id}, options || {});
+      return requestFromIOS('find', resource.endpoint, angular.isObject (id) && id.id || id, options || {});
     };
 
     IosAdapter.prototype.create = function (resource, attrs) {

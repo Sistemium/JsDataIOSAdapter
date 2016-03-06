@@ -3,10 +3,6 @@ angular.module('Models')
 
     var models = {};
 
-    if ($window.webkit) {
-      DS.registerAdapter('ios', new IosAdapter(), {default: true});
-    }
-
     var aggregate = function (field) {
 
       return {
@@ -46,7 +42,7 @@ angular.module('Models')
 
     };
 
-    return {
+    var schema = {
 
       register: function (def) {
         models [def.name] = DS.defineResource(def);
@@ -65,6 +61,12 @@ angular.module('Models')
 
       aggregate: aggregate
 
+    };
+
+    if ($window.webkit) {
+      DS.registerAdapter('ios', new IosAdapter (schema), {default: true});
     }
+
+    return schema;
 
   });
