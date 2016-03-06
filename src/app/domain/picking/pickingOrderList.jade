@@ -3,14 +3,15 @@ div(ui-view='')
   h3
     p.clear-both Требования на сборку
     small.lead.pull-right
+      span(ng-show='vm.selectedItems.length') Выбрано:&nbsp;
       span Коробок:
-      label {{ vm.totals.totalBoxVolume () | number:1 }}
+      label {{ vm.currentTotals().totalBoxVolume () | number:1 }}
       = ' '
       span Позиций:
-      label {{ vm.totals.positionsCount () }}
+      label {{ vm.currentTotals().positionsCount () }}
       = ' '
       span Бутылок:
-      label {{ vm.totals.totalVolume () }}
+      label {{ vm.currentTotals().totalVolume () }}
 
   table.table.table-hover
     thead

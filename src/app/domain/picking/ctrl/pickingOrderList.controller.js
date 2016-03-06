@@ -33,7 +33,12 @@
           item.selected = !item.selected;
         },
 
-        totals: PO.agg (vm, 'pickingOrders')
+        totals: PO.agg (vm, 'pickingOrders'),
+        selectedTotals: PO.agg (vm, 'selectedItems'),
+
+        currentTotals: function () {
+          return vm.selectedItems.length ? vm.selectedTotals : vm.totals
+        }
 
       });
 
