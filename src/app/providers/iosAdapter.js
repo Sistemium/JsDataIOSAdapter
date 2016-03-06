@@ -46,16 +46,21 @@
 
       var promise = new DSUtils.Promise(function (resolve, reject) {
 
-        requests[id] = {
+        requests [id] = {
+
           promise: promise,
           resolve: resolve,
           reject: reject
+
         };
 
-        ios.messageHandlers[type].postMessage(angular.extend({
+        ios.messageHandlers[type].postMessage ({
+
           entity: entity,
+          filter: params,
           options: options
-        },params));
+
+        });
 
       });
 
@@ -80,7 +85,7 @@
 
     IosAdapter.prototype.findAll = function (resource, params, options) {
       return requestFromIOS('findAll', resource.endpoint, params, angular.extend({
-          pageSize: 10,
+          pageSize: 300,
           startPage: 1
         }, options || {})
       );
