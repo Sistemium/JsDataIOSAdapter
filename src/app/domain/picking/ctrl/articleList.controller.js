@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('ArticleListController', function ($scope, models, Errors, $window) {
+    .controller('ArticleListController', function ($scope, models, Errors, BarCodeScanner) {
 
       var vm = this;
       var POP = models.PickingOrderPosition;
@@ -27,12 +27,7 @@
 
       };
 
-
-      $window.onBarcodeScan = scanFn;
-
-      if ($window.webkit) {
-        $window.webkit.messageHandlers.barCodeScannerOn.postMessage('onBarcodeScan');
-      }
+      BarCodeScanner.bind (scanFn);
 
       var positions = POP.filter ({
         where: {
