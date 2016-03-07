@@ -13,7 +13,7 @@
 
         Errors.clear();
 
-        return models.StockBatch.someBy.barCode(code || vm.barCodeInput).then (function (sbs) {
+        return models.StockBatch.someBy.barCode (code || vm.barCodeInput).then (function (sbs) {
 
           if (sbs.length) {
             sbs.forEach(function (sb){

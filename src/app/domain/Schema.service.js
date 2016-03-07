@@ -32,7 +32,7 @@ angular.module('Models')
         _.each(names, function (name) {
 
           res [name] = function () {
-            return aggregate(name) [type](owner[items]);
+            return aggregate(name) [type] (owner[items]);
           };
 
         });
@@ -45,10 +45,14 @@ angular.module('Models')
     var schema = {
 
       register: function (def) {
-        models [def.name] = DS.defineResource(def);
+
+        var resource = (models [def.name] = DS.defineResource(def));
+
         if (def.methods) {
-          models [def.name].agg = aggregator(Object.keys(def.methods), 'sumFn')
+          resource.agg = aggregator (Object.keys(def.methods), 'sumFn')
         }
+
+        return resource;
       },
 
       models: function () {

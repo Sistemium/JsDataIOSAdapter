@@ -27,8 +27,8 @@
 
           barCode: function (code) {
 
-            var SBBC = Schema.model('StockBatchBarCode');
-            var SB = Schema.model('StockBatch');
+            var SBBC = Schema.model ('StockBatchBarCode');
+            var SB = Schema.model ('StockBatch');
 
             return $q (function (resolve,reject){
 
