@@ -12,8 +12,11 @@
     vm.barCodes = [];
     vm.stockBatches = [];
 
-    models.Article.bindAll({}, $scope, 'vm.articles');
-    models.ArticleGroup.bindAll({}, $scope, 'vm.articleGroups');
+    models.PickingOrder.bindAll({}, $scope, 'vm.articles');
+    models.PickingOrderPosition.bindAll({}, $scope, 'vm.articleGroups');
+
+    models.PickingOrder.findAll();
+    models.PickingOrderPosition.findAll();
 
     var pageSize = 3000;
 
@@ -60,7 +63,7 @@
 
         res.forEach(function (i) {
           models.StockBatchBarCode.loadRelations(i).then(function (sbbc){
-            models.StockBatch.loadRelations(sbbc.StockBatch);
+            models.StockBatch.loadRelations(sbbc.StockBatch, 'Article');
             vm.stockBatches.push (sbbc.StockBatch);
           });
         });
