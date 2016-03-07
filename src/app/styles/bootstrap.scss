@@ -17,3 +17,9 @@
 .iOS .hidden-iOS {
   display: none;;
 }
+
+
+.iOS * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
