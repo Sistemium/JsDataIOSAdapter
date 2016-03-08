@@ -1,0 +1,12 @@
+.animate-show {
+  opacity: 1;
+}
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  background-color: #cccccc;
+  transition: all ease-out 1.2s;
+}
+
+.animate-show.ng-hide {
+  opacity: 0;
+}
