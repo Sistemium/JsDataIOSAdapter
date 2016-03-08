@@ -39,6 +39,7 @@ gulp.task('html', ['inject', 'partials'], function () {
   var assets;
 
   return gulp.src(path.join(conf.paths.tmp, '/serve/*.html'))
+    .pipe($.replace('data-manifest=', 'manifest='))
     .pipe($.inject(partialsInjectFile, partialsInjectOptions))
     .pipe(assets = $.useref.assets())
     .pipe($.rev())
@@ -95,4 +96,20 @@ gulp.task('clean', function () {
   return $.del([path.join(conf.paths.dist, '/'), path.join(conf.paths.tmp, '/')]);
 });
 
-gulp.task('build', ['html', 'fonts', 'other']);
+gulp.task('manifest', function(){
+
+  gulp.src([path.join(conf.paths.dist, '/**/*')], { base: './' })
+    .pipe($.manifest({
+      hash: true,
+      preferOnline: true,
+      network: ['*'],
+      filename: 'app.manifest',
+      exclude: 'app.manifest'
+    }))
+    .pipe(gulp.dest(conf.paths.dist));
+
+});
+
+gulp.task('build', [
+  'html',
+  'fonts', 'manifest', 'other']);
