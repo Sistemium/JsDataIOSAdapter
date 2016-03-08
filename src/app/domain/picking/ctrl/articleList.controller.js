@@ -3,29 +3,63 @@
 (function () {
 
   angular.module('webPage')
-    .controller('ArticleListController', function ($scope, models, Errors, BarCodeScanner) {
+    .controller('ArticleListController', function ($scope, $uiViewScroll, toastr, models, Errors, BarCodeScanner) {
 
       var vm = this;
       var POP = models.PickingOrderPosition;
+      var SB = models.StockBatch;
+      var SBBC = models.StockBatchBarCode;
       var orders = $scope.vm.selectedItems;
+      vm.scroll = $uiViewScroll;
 
-      var scanFn = function (code) {
+      function showToastr (msg,title) {
+        toastr.success (msg,title);
+      }
+
+      function processArticle (a) {
+
+        if (!vm.articleIndex [a.id]) {
+          return;
+        }
+
+        var pa = _.find(vm.articles,{id: a.id});
+
+        pa.isPicked = true;
+        vm.pickedIndex [a.id] = true;
+
+        return {
+          id: a.id,
+          name: a.name,
+          volume: pa.volume.full,
+          message: a.name + ': ' + pa.volume.full
+        };
+
+      }
+
+      function scanFn (code) {
 
         Errors.clear();
 
-        return models.StockBatch.someBy.barCode (code || vm.barCodeInput).then (function (sbs) {
+        return SB.someBy.barCode (code || vm.barCodeInput).then (function (sbs) {
 
-          if (sbs.length) {
-            sbs.forEach(function (sb){
-              Errors.addError(sb.Article.name);
-            });
+          var found = 'Неизвестный штрих-код';
+
+          _.each (sbs, function (sb){
+            found = processArticle (sb.Article);
+            return !found;
+          });
+
+          if (found && found.id && !found.isPicked){
+            showToastr (found.name, found.volume);
+            //$uiViewScroll (angular.element (document.getElementById(found.id)));
           } else {
-            Errors.addError('Неизвестный штрих-код');
+            Errors.ru.add (found || 'Этого товара нет в требовании');
           }
+
 
         }).catch (Errors.ru.add);
 
-      };
+      }
 
       BarCodeScanner.bind (scanFn);
 
@@ -43,6 +77,8 @@
 
         articleIndex: _.groupBy(positions, 'article'),
         orders: $scope.vm.selectedItems,
+        sbbcs: [],
+        pickedIndex: {},
 
         barCodeInput: '',
 
@@ -58,6 +94,13 @@
 
         var article = val[0].Article;
         var boxPcs = article && article.boxPcs (totalVolume);
+
+        SBBC.someBy.article (article.id).then (function (sbbcs){
+          vm.sbbcs.push ({
+            id: article.id,
+            sbbcs: sbbcs
+          });
+        });
 
         return {
 
