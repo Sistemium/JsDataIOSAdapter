@@ -117,11 +117,32 @@
       }
     }
 
+    function paramsToOptions (params) {
+
+      var parsed = {};
+
+      if (params.limit) {
+        parsed.pageSize = params.limit;
+      }
+
+      if (params.offset) {
+        parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
+      }
+
+      delete params.limit;
+      delete params.offset;
+
+      return parsed;
+    }
+
     IosAdapter.prototype.findAll = function (resource, params, options) {
+
+      options = angular.extend (options, paramsToOptions (params));
+
       return requestFromIOS('findAll', resource.endpoint, params, angular.extend({
           pageSize: 300,
           startPage: 1
-        }, options || {})
+        }, options)
       );
     };
 
