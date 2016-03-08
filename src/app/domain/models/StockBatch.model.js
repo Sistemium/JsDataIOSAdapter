@@ -16,7 +16,7 @@
             }
           },
           hasMany: {
-            StockBatchBarcode: {
+            StockBatchBarCode: {
               localField: 'StockBatchBarCodes',
               foreignKey: 'stockBatch'
             }
@@ -33,7 +33,7 @@
             return $q (function (resolve,reject){
 
               if (!code) {
-                reject ('Укажите штрих-код');
+                return reject ('Укажите штрих-код');
               }
 
               SBBC.findAll({
