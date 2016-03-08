@@ -3,6 +3,7 @@
 var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
+var runSequence = require ('run-sequence');
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
@@ -98,18 +99,23 @@ gulp.task('clean', function () {
 
 gulp.task('manifest', function(){
 
-  gulp.src([path.join(conf.paths.dist, '/**/*')], { base: './' })
+  gulp.src([path.join(conf.paths.dist, '/**/*')], { base: './dist/' })
     .pipe($.manifest({
       hash: true,
-      preferOnline: true,
+      preferOnline: false,
       network: ['*'],
       filename: 'app.manifest',
-      exclude: 'app.manifest'
+      exclude: ['app.manifest', 'images/*']
     }))
     .pipe(gulp.dest(conf.paths.dist));
 
 });
 
-gulp.task('build', [
-  'html',
-  'fonts', 'manifest', 'other']);
+gulp.task('build', function(callback) {
+  runSequence(
+    'clean',
+    ['html','fonts','other'],
+    'manifest',
+    callback
+  );
+});
