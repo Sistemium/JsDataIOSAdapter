@@ -9,6 +9,10 @@ $shadow-hover: 0 0 $shadow-width+2 $shadow-color-hover;
 
 #toast-container {
 
+  .toast-title {
+    margin-bottom: 5px;
+  }
+
   .alert {
     background-image: none !important;
   }
