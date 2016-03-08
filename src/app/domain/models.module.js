@@ -17,7 +17,8 @@
         httpConfig: {
           headers: {
             'X-Return-Post': 'true',
-            'authorization': window.localStorage.getItem('authorization')
+            'authorization': window.localStorage.getItem('authorization'),
+            'X-Page-Size': 300
           }
         },
 
