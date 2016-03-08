@@ -1,0 +1,33 @@
+.iOS {
+
+  .table-hover > tbody {
+
+    tr:hover {
+      background: none;
+    }
+
+    tr:hover > td {
+      background: none;
+    }
+
+  }
+
+  .table-hover > tbody > tr:active {
+    background: none;
+  }
+
+  .hidden-iOS {
+    display: none;;
+  }
+
+  * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
+
+}
+
+body.iOS {
+  padding-top: 0px;
+  margin-bottom: 20px;
+}
