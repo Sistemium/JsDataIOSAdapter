@@ -15,7 +15,8 @@
       'LocalStorageModule',
       'as.sortable',
       'core.services',
-      'Models'
+      'Models',
+      'ng-appcache'
     ]);
 
 })();
