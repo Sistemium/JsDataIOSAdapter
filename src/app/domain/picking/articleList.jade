@@ -20,7 +20,7 @@ section
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
         h5.list-group-item-heading
-          span {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | number}}
+          span {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | stnumber:1}}
         small.list-group-item-text
           span {{ item.article.lastName }}
           = ' '
