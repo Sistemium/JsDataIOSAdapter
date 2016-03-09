@@ -3,7 +3,7 @@ h3.clearfix Товары для сборки
 
 section.error-widget
 
-ul
+ul.hidden-iOS
   li(ng-repeat="sb in vm.sbbcs track by sb.id" ng-hide="vm.pickedIndex[sb.id]")
     label(ng-repeat="sbbc in sb.sbbcs track by sbbc.id")
       a(href="" ng-click="vm.onBarCode(sbbc.code)") {{ sbbc.code }}
@@ -19,15 +19,19 @@ section
     )
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
-        h5.list-group-item-heading {{item.article.name}}
+        h5.list-group-item-heading
+          span {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | number}}
         small.list-group-item-text
-          span
-            span.gray Объем:
-            label {{item.article.pieceVolume | number}} л
+          span {{ item.article.lastName }}
+          = ' '
+          span.gray {{ item.article.category }}
+          = ' '
+          label {{ item.article.factory }}
           = ' '
           span
-            span.gray Фасовка:
+            span.gray 1&nbsp;x&nbsp;
             label {{item.article.packageRel}}
+
       .flex-right
         p
           label {{item.volume.full}}
