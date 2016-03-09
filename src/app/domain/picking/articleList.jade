@@ -24,13 +24,11 @@ section
         small.list-group-item-text
           span {{ item.article.lastName }}
           = ' '
+          span (1&nbsp;x&nbsp;{{item.article.packageRel}})
+          = ' '
           span.gray {{ item.article.category }}
           = ' '
-          label {{ item.article.factory }}
-          = ' '
-          span
-            span.gray 1&nbsp;x&nbsp;
-            label {{item.article.packageRel}}
+          span {{ item.article.factory }}
 
       .flex-right
         p

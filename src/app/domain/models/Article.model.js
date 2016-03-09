@@ -42,7 +42,8 @@
           }],
           lastName: ['name', function (name) {
             var m = name.match(/"[^"]+" ([^,]*)/);
-            return (m && m.length > 1) ? m[1] : null;
+            m = (m && m.length > 1) ? m[1] : '';
+            return m.replace (/\(.*[xх]+[ ]*[0-9]+[ ]*\)/,'') ;
           }]
         },
 
