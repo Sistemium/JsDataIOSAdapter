@@ -27,6 +27,25 @@
           }
         },
 
+        computed: {
+          firstName: ['name', function (name) {
+            var m = name.match(/"[^"]+"/);
+            return (m && m.length) ? m[0] : null;
+          }],
+          category: ['name', function (name) {
+            var m = name.match(/^[^ ]*/);
+            return (m && m.length) ? m[0].replace (/[^а-яa-z]/ig,' ') : null;
+          }],
+          factory: ['name', function (name) {
+            var m = name.match(/[ ][^ ]+[ ]/);
+            return (m && m.length) ? m[0].replace (/[^а-яa-z]/ig,' ') : null;
+          }],
+          lastName: ['name', function (name) {
+            var m = name.match(/"[^"]+" ([^,]*)/);
+            return (m && m.length > 1) ? m[1] : null;
+          }]
+        },
+
         fieldTypes: {
           packageRel: 'int',
           pieceVolume: 'decimal'
