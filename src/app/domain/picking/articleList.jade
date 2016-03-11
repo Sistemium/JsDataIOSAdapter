@@ -17,17 +17,17 @@ section
       ng-hide="item.isPicked"
       ng-attr-id="{{item.id}}"
     )
-      .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
+      //.sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
         h5.list-group-item-heading
           span {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | stnumber:1}}
         small.list-group-item-text
           span {{ item.article.lastName }}
-          = ' '
+          = &nbsp;
           span (1&nbsp;x&nbsp;{{item.article.packageRel}})
           = ' '
-          span.gray {{ item.article.category }}
-          = ' '
+          //span.gray {{ item.article.category }}
+          //= ' '
           span {{ item.article.factory }}
 
       .flex-right
