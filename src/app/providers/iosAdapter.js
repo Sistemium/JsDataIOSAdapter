@@ -18,8 +18,15 @@
 
           if (request) {
 
-            if (parser) {
-              parser (data, request.message.entity);
+            if (name === 'resolve') {
+
+              if (parser) {
+                parser(data, request.message.entity);
+              }
+
+              if (_.get(request, 'message.options.oneObject') && angular.isArray(data)) {
+                data = data.length ? data[0] : undefined;
+              }
             }
 
             request [name] (data);
@@ -55,6 +62,7 @@
       }
 
       $window.iSistemiumIOSCallback = iosCallback ('resolve', iosParser);
+
       $window.iSistemiumIOSErrorCallback = iosCallback ('reject');
 
     };
@@ -75,6 +83,10 @@
 
       if (angular.isString (params)) {
         message.id = params;
+      } else if (type === 'update') {
+        message.data = params;
+      } else if (type === 'updateAll') {
+        message.data = params;
       } else if (params) {
         message.where = _.mapValues (params,function (val) {
           return {
@@ -112,7 +124,8 @@
       ios = {
         messageHandlers: {
           findAll: mock,
-          find: mock
+          find: mock,
+          updateAll: mock
         }
       }
     }
@@ -151,10 +164,22 @@
     };
 
     IosAdapter.prototype.create = function (resource, attrs) {
-      return requestFromIOS('create', resource.endpoint, {
-        data: attrs
+      return requestFromIOS('update', resource.endpoint, attrs, {
+        oneObject: true
       });
     };
+
+    IosAdapter.prototype.update = function (resource, id, attrs, options) {
+      return requestFromIOS('update', resource.endpoint, attrs, {
+        oneObject: true
+      });
+    };
+
+    //IosAdapter.prototype.updateAll = function (resource, attrs, params, options) {
+    //  return requestFromIOS('updateAll', resource.endpoint, {}, {
+    //    data: attrs
+    //  });
+    //};
 
     return IosAdapter;
   });
