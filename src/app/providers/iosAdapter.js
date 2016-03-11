@@ -85,8 +85,6 @@
         message.id = params;
       } else if (type === 'update') {
         message.data = params;
-      } else if (type === 'updateAll') {
-        message.data = params;
       } else if (params) {
         message.where = _.mapValues (params,function (val) {
           return {
@@ -173,6 +171,10 @@
       return requestFromIOS('update', resource.endpoint, attrs, {
         oneObject: true
       });
+    };
+
+    IosAdapter.prototype.destroy = function (resource, id, options) {
+      return requestFromIOS('destroy', resource.endpoint, id, options || {});
     };
 
     //IosAdapter.prototype.updateAll = function (resource, attrs, params, options) {
