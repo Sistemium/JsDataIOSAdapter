@@ -8,7 +8,7 @@
       var vm = this;
       var POP = models.PickingOrderPosition;
       var SB = models.StockBatch;
-      var SBBC = models.StockBatchBarCode;
+      //var SBBC = models.StockBatchBarCode;
       var orders = $scope.vm.selectedItems;
       vm.scroll = $uiViewScroll;
 
@@ -95,12 +95,12 @@
         var article = val[0].Article;
         var boxPcs = article && article.boxPcs (totalVolume);
 
-        SBBC.someBy.article (article.id).then (function (sbbcs){
-          vm.sbbcs.push ({
-            id: article.id,
-            sbbcs: sbbcs
-          });
-        });
+        //SBBC.someBy.article (article.id).then (function (sbbcs){
+        //  vm.sbbcs.push ({
+        //    id: article.id,
+        //    sbbcs: sbbcs
+        //  });
+        //});
 
         return {
 
