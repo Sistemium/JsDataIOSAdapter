@@ -85,14 +85,20 @@
       //});
       models.LogMessage.create({
         text: 11,
-        type: 'error'
-        //source: 'jsdata'
+        type: 'error',
+        source: 'jsdata'
       }).then (function(lm){
 
         //lm.type = 'important';
         //models.LogMessage.save(lm.id).then (function(lm2) {
         //  vm.articleGroups = lm2;
         //});
+
+        models.LogMessage.destroy (lm.id).then (function (res){
+          vm.barCodes = {succ: res};
+        },function (res){
+          vm.barCodes = {err: res};
+        });
 
         vm.articleGroups = {success: lm};
       }, function (err) {
