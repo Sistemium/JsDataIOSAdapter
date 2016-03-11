@@ -12,11 +12,11 @@
     vm.barCodes = [];
     vm.stockBatches = [];
 
-    models.PickingOrder.bindAll({}, $scope, 'vm.articles');
-    models.PickingOrderPosition.bindAll({}, $scope, 'vm.articleGroups');
+    models.LogMessage.bindAll({}, $scope, 'vm.articles');
+    //models.PickingOrderPosition.bindAll({}, $scope, 'vm.articleGroups');
 
-    models.PickingOrder.findAll();
-    models.PickingOrderPosition.findAll();
+    //models.PickingOrder.findAll();
+    //models.PickingOrderPosition.findAll();
 
     var pageSize = 3000;
 
@@ -76,9 +76,29 @@
 
     $window.models = models;
 
-    if ($window.webkit) {
-      $window.webkit.messageHandlers.barCodeScannerOn.postMessage('onBarcodeScan');
-    }
+    //if ($window.webkit) {
+      //$window.webkit.messageHandlers.barCodeScannerOn.postMessage('onBarcodeScan');
+      //$window.webkit.messageHandlers.sound.postMessage({
+      //  text: 'Стужа мягкая 0 375',
+      //  rate: 0.45,
+      //  pitch: 1
+      //});
+      models.LogMessage.create({
+        text: 11,
+        type: 'error'
+        //source: 'jsdata'
+      }).then (function(lm){
+
+        //lm.type = 'important';
+        //models.LogMessage.save(lm.id).then (function(lm2) {
+        //  vm.articleGroups = lm2;
+        //});
+
+        vm.articleGroups = {success: lm};
+      }, function (err) {
+        vm.articleGroups = {error: err};
+      });
+    //}
 
   }
 })();
