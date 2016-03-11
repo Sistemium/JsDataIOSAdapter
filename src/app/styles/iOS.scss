@@ -25,9 +25,20 @@
     -webkit-user-select: none;
   }
 
+  .list-group-item, .container {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .sorter-handle {
+    margin-left: -10px;
+  }
+
 }
 
 body.iOS {
   padding-top: 0;
   margin-bottom: 0;
+  //overflow-y: scroll;
+  //-webkit-overflow-scrolling: touch;
 }
