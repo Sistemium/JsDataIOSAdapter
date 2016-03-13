@@ -1,0 +1,37 @@
+h4.clearfix
+  //span.gray {{ vm.article.category }}
+  //= ' '
+  span {{ vm.article.firstName }}&nbsp;{{vm.article.pieceVolume | stnumber:1}}
+h5.clearfix
+  span {{ vm.article.lastName }}
+  = ' '
+  span.gray (1&nbsp;x&nbsp;{{vm.article.packageRel}})
+  = ' '
+  span {{ vm.article.factory }}
+
+section.ui-view
+
+  h4.pull-right
+    span.gray Требуется:
+    = ' '
+    label {{ vm.picking.volume.full }}
+    = ' '
+    span.gray ({{ vm.picking.totalVolume | bottles }})
+
+  ul.clear-both.list-group.clearfix
+    li.list-group-item.display-flex(ng-repeat='order in vm.orders track by order.id' ng-class='{ gray: !order.volume.full}')
+      .flex-1
+        h4(ng-if='order.volume.full') {{ order.volume.full }}
+        div
+          span.gray № {{ order.ndoc }}
+      button.btn.btn-default(ng-repeat='picked in order.position.pickedPositions track by picked.id')
+        {{ picked.volume }}
+      button.flex-right.btn.btn-default(
+        ng-if='order.volume.full'
+        type='button'
+        ui-sref='.pick({ positionId: vm.picking.position(order).id })'
+      )
+        i.glyphicon.glyphicon-plus
+
+  button.btn.btn-primary.pull-right(ui-sref='^')
+    | К списку

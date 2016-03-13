@@ -29,7 +29,25 @@
                   url: '/articleList',
                   templateUrl: 'app/domain/picking/articleList.html',
                   controller: 'ArticleListController',
-                  controllerAs: 'vm'
+                  controllerAs: 'vm',
+                  children: [
+                    {
+                      name: 'article',
+                      url: '/:id',
+                      templateUrl: 'app/domain/picking/pickingArticle.html',
+                      controller: 'PickingArticleController',
+                      controllerAs: 'vm',
+                      children: [
+                        {
+                          name: 'pick',
+                          url: '/:positionId',
+                          templateUrl: 'app/domain/picking/pickPosition.html',
+                          controller: 'PickPositionController',
+                          controllerAs: 'vm'
+                        }
+                      ]
+                    }
+                  ]
                 },{
                   name: 'picked',
                   url: '/picked',

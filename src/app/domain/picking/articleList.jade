@@ -1,4 +1,4 @@
-h3.clearfix {{vm.title()}}
+h3.clearfix(ng-show='vm.title') {{ vm.title }}
   .lead
 
 section.error-widget
@@ -9,20 +9,26 @@ ul.hidden-iOS
       a(href="" ng-click="vm.onBarCode(sbbc.code)") {{ sbbc.code }}
       span &nbsp;
 
-section
-  ul.list-group(as-sortable ng-model='vm.articles')
+//section(ng-repeat='order in vm.orders track by order.id')
+  div {{ order | json }}
+
+section.ui-view
+  ul.list-group(s-sortable ng-model='vm.articles')
     li.list-group-item.display-flex.animate-show(
       ng-repeat='item in vm.articles track by item.id'
-      as-sortable-item
+      s-sortable-item
       ng-hide="item.isPicked"
       ng-attr-id="{{item.id}}"
     )
       //.sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
         h5.list-group-item-heading
-          span {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | stnumber:1}}
+          a(ui-sref='.article({id:item.id})')
+            | {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | stnumber:1}}
         small.list-group-item-text
-          span {{ item.article.lastName }}&nbsp;(1&nbsp;x&nbsp;{{item.article.packageRel}})
+          span {{ item.article.lastName }}
+          = ' '
+          span.gray (1&nbsp;x&nbsp;{{item.article.packageRel}})
           = ' '
           //span.gray {{ item.article.category }}
           //= ' '

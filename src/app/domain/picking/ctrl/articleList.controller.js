@@ -68,16 +68,16 @@
 
           barCodeInput: '',
 
-          title: function () {
-            return $state.$current.name.match(/picked$/) ?
-              'Собранные товары' : 'Товары для сборки';
-          }
+          title: ''
 
         });
 
-        vm.articles = POP.etc.pivotPositionsByArticle (vm.articleIndex);
+        $scope.$on('$stateChangeSuccess', function (e, to) {
+          vm.title = to.name.match(/picked$/) && 'Собранные товары'
+            || to.name.match(/articleList$/) && 'Товары для сборки';
+        });
 
-        console.log ($state.current.name);
+        vm.articles = POP.etc.pivotPositionsByArticle (vm.articleIndex);
 
       }
     );

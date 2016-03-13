@@ -1,0 +1,16 @@
+h4
+  span.gray Требование:
+  = ' '
+  label {{ vm.position.boxPcs().full }}
+  = ' '
+  span.gray ({{ vm.position.volume | bottles }})
+
+h4.text-right
+  span.gray Собрано:
+  = ' '
+  label {{ vm.volume || 'введите' }}
+
+section.clear-both.volume-pad(model='vm.volume' box-rel='vm.position.Article.packageRel')
+
+button.btn.btn-primary.pull-right(ng-click='vm.save()')
+  | Готово

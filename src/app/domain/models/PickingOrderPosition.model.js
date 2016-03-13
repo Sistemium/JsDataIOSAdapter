@@ -40,13 +40,17 @@
             return this.Article && this.Article.boxVolume (this.volume) || 0;
           },
 
+          boxPcs: function () {
+            return this.Article && this.Article.boxPcs (this.volume) || {};
+          },
+
           linkStockBatch: function (sb, volume, productionInfo) {
 
             var POPP = Schema.models.PickingOrderPositionPicked;
 
             return POPP.create({
               sb: sb,
-              parent: this.id,
+              pickingOrderPosition: this.id,
               volume: volume || this.volume,
               productionInfo: productionInfo
             });
@@ -79,10 +83,15 @@
                 article: val[0].Article,
                 positions: val,
                 volume: boxPcs,
+                totalVolume: totalVolume,
 
                 orderVolume: function (order) {
                   var p = _.find(val, ['pickingOrder', order.id]);
                   return article.boxPcs(p && p.volume || 0);
+                },
+
+                position: function (order) {
+                  return _.find(val, ['pickingOrder', order.id]);
                 }
 
               }
