@@ -3,6 +3,10 @@
 }
 
 .animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  transition: all ease-out 0.8s;
+}
+
+li.animate-show.ng-hide-add, li.animate-show.ng-hide-remove {
   background-color: #cccccc;
   transition: all ease-out 1.2s;
 }
