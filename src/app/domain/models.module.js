@@ -6,6 +6,14 @@
 
     .config(function (DSProvider, DSHttpAdapterProvider) {
 
+      angular.extend(DSProvider.defaults, {
+        beforeInject: function (resource, instance) {
+          if (!instance.id) {
+            instance.id = uuid.v4();
+          }
+        }
+      });
+
       var basePath = window.localStorage.getItem('JSData.BasePath')
         || location.protocol === 'https:' && '/api/dev/'
         || 'https://api.sistemium.com/v4d/dev/';
