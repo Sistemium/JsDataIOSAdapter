@@ -24,6 +24,12 @@
   }
 }
 
+.navbar.navbar-fixed-bottom {
+  ul.float-right {
+    margin-right: 5px;
+  }
+}
+
 @media (max-width: 767px) {
   .navbar {
 
@@ -36,6 +42,21 @@
       margin-top: 5px;
       margin-bottom: 5px;
     }
+
+    //ul.float-right {
+    //  margin-right: 5px;
+    //}
+
+    .float-left {
+      float: left;
+    }
+
+    .nav.float-left {
+      float: left;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
 
     li.divider {
       height: 1px;
