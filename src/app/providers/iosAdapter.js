@@ -167,7 +167,7 @@
       });
     };
 
-    IosAdapter.prototype.update = function (resource, id, attrs, options) {
+    IosAdapter.prototype.update = function (resource, id, attrs) {
       return requestFromIOS('update', resource.endpoint, attrs, {
         oneObject: true
       });
