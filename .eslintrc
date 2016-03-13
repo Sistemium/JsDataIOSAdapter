@@ -12,7 +12,8 @@
     "window": true,
     "console": true,
     "_": true,
-    "UAParser": true
+    "UAParser": true,
+    "uuid": true
   },
   "rules": {
     "no-console": 0,
