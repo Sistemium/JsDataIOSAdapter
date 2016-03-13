@@ -76,15 +76,6 @@
 
     $window.models = models;
 
-    if ($window.webkit) {
-      $window.webkit.messageHandlers.tabbar.postMessage({
-        action: 'hide',
-        options: {
-          requestId: 1
-        }
-      });
-    }
-
     //if ($window.webkit) {
       //$window.webkit.messageHandlers.barCodeScannerOn.postMessage('onBarcodeScan');
       //$window.webkit.messageHandlers.sound.postMessage({
