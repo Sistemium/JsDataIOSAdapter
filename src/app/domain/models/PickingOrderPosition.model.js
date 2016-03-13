@@ -20,6 +20,12 @@
               localField: 'Article',
               localKey: 'article'
             }
+          },
+          hasMany: {
+            PickingOrderPositionPicked: {
+              localField: 'pickedPositions',
+              foreignKey: 'pickingOrderPosition'
+            }
           }
         },
 
@@ -29,9 +35,62 @@
         },
 
         methods: {
+
           boxVolume: function () {
             return this.Article && this.Article.boxVolume (this.volume) || 0;
+          },
+
+          linkStockBatch: function (sb, volume, productionInfo) {
+
+            var POPP = Schema.models.PickingOrderPositionPicked;
+
+            return POPP.create({
+              sb: sb,
+              parent: this.id,
+              volume: volume || this.volume,
+              productionInfo: productionInfo
+            });
+
           }
+        },
+
+        etc: {
+
+          pivotPositionsByArticle:  function (articleIndex) {
+            return _.orderBy(_.map(articleIndex, function (val, key) {
+
+              var totalVolume = _.reduce(val, function (sum, pos) {
+                return sum + pos.volume;
+              }, 0);
+
+              var article = val[0].Article;
+              var boxPcs = article && article.boxPcs(totalVolume);
+
+              //SBBC.someBy.article (article.id).then (function (sbbcs){
+              //  vm.sbbcs.push ({
+              //    id: article.id,
+              //    sbbcs: sbbcs
+              //  });
+              //});
+
+              return {
+
+                id: key,
+                article: val[0].Article,
+                positions: val,
+                volume: boxPcs,
+
+                orderVolume: function (order) {
+                  var p = _.find(val, ['pickingOrder', order.id]);
+                  return article.boxPcs(p && p.volume || 0);
+                }
+
+              }
+
+            }), 'article.name');
+
+          }
+
         }
 
       });
