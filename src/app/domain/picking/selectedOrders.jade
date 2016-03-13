@@ -1,32 +1,32 @@
-div(ui-view='')
+section.error-widget
 
-  h3.clearfix
-    p Выбранные требования
-    small.lead.pull-right
-      span Коробок:
-      label {{ vm.totals.totalBoxVolume () | number:1 }}
-      = ' '
-      span Позиций:
-      label {{ vm.totals.positionsCount () | number:0 }}
-      = ' '
-      span Бутылок:
-      label {{ vm.totals.totalVolume () | number:0 }}
+h3.clearfix
+  p Выбранные требования
+  small.lead.pull-right
+    span Коробок:
+    label {{ vm.totals.totalBoxVolume () | number:1 }}
+    = ' '
+    span Позиций:
+    label {{ vm.totals.positionsCount () | number:0 }}
+    = ' '
+    span Бутылок:
+    label {{ vm.totals.totalVolume () | number:0 }}
 
-  section
-    ul.list-group(as-sortable ng-model='vm.selectedItems')
-      li.list-group-item.display-flex(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
-        .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
-        .flex-1
-          h4.list-group-item-heading {{item.ndoc}}
-          p.list-group-item-text
-            span Коробок:
-            label {{ item.totalBoxVolume() | number:1 }}
-            = ' '
-            span Позиций:
-            label {{ item.positionsCount () | number:0 }}
-            = ' '
-            span Бутылок:
-            label {{ item.totalVolume() | number:0 }}
+section
+  ul.list-group(as-sortable ng-model='vm.selectedItems')
+    li.list-group-item.display-flex(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
+      .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
+      .flex-1
+        h4.list-group-item-heading {{item.ndoc}}
+        p.list-group-item-text
+          span Коробок:
+          label {{ item.totalBoxVolume() | number:1 }}
+          = ' '
+          span Позиций:
+          label {{ item.positionsCount () | number:0 }}
+          = ' '
+          span Бутылок:
+          label {{ item.totalVolume() | number:0 }}
 
-    button.btn.btn-primary.pull-right(ui-sref='.articleList')
-      | Начать сборку
+  button.btn.btn-primary.pull-right(ui-sref='^.articleList')
+    | Начать сборку

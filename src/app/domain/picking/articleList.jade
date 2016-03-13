@@ -1,4 +1,4 @@
-h3.clearfix Товары для сборки
+h3.clearfix {{vm.title()}}
   .lead
 
 section.error-widget
@@ -22,9 +22,7 @@ section
         h5.list-group-item-heading
           span {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | stnumber:1}}
         small.list-group-item-text
-          span {{ item.article.lastName }}
-          = &nbsp;
-          span (1&nbsp;x&nbsp;{{item.article.packageRel}})
+          span {{ item.article.lastName }}&nbsp;(1&nbsp;x&nbsp;{{item.article.packageRel}})
           = ' '
           //span.gray {{ item.article.category }}
           //= ' '
@@ -37,9 +35,3 @@ section
           span.gray(ng-if="vm.orders.length>1" ng-repeat='order in vm.orders track by order.id')
             span(ng-if='$index') &nbsp;+
             label {{ item.orderVolume(order).full || '0' }}
-
-nav.navbar.navbar-default.navbar-fixed-bottom.hidden-iOS
-  .container
-    form.navbar-form.navbar-left.only(role='search' ng-submit="vm.onBarCode()")
-      .form-group
-        input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')

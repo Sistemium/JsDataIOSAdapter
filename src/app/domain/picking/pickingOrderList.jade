@@ -31,3 +31,18 @@ div(ui-view='')
 
   button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders')
     | Собирать отмеченные
+
+nav.navbar.navbar-default.navbar-fixed-bottom
+  .container
+    form.navbar-form.navbar-left.float-left.flat-on-small.hidden-xs(role='search' ng-submit="vm.onBarCode()")
+      .form-group
+        input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')
+    ul.nav.navbar-nav.navbar-right.float-right.animate-show.flat-on-small(ng-show='vm.selectedItems.length')
+      li(ui-sref-active='active')
+        a(ui-sref='.selectedOrders') Сводка
+
+      li(ui-sref-active='active')
+        a(ui-sref='.articleList') Задачи
+
+      li(ui-sref-active='active')
+        a(ui-sref='.picked') Собрано

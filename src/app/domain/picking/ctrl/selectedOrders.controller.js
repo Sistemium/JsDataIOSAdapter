@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('SelectedOrdersController', function (models, $state, $scope) {
+    .controller('SelectedOrdersController', function (models, $scope) {
 
       var PO = models.PickingOrder;
       var vm = this;
@@ -13,10 +13,6 @@
         vm.selectedItems = $scope.vm.selectedItems || PO.filter({
             selected: true
         });
-
-        if (!vm.selectedItems.length) {
-          $state.go ('picking.orderList');
-        }
 
       });
 
