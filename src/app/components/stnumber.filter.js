@@ -6,7 +6,7 @@ angular.module('core.services')
 
       var out = $filter('number') (input);
 
-      if (minDecimals) {
+      if (out && minDecimals) {
         var decimals = out.match(/.*(\.{1})([0-9]+)/) || [0, '', ''];
 
         if (!decimals[1]) {
