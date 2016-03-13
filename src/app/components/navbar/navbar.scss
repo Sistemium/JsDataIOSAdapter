@@ -24,13 +24,23 @@
   }
 }
 
-.navbar.navbar-fixed-bottom {
-  ul.float-right {
-    margin-right: 5px;
+
+@media (min-width: 768px) {
+  .navbar.navbar-fixed-bottom {
+    .float-right {
+      margin-right: 5px;
+    }
   }
 }
 
 @media (max-width: 767px) {
+
+  .navbar.navbar-fixed-bottom {
+    .nav.float-right {
+      margin-right: -5px;
+    }
+  }
+
   .navbar {
 
     .navbar-header:after {
@@ -41,11 +51,8 @@
       float: right;
       margin-top: 5px;
       margin-bottom: 5px;
+      margin-right: -15px;
     }
-
-    //ul.float-right {
-    //  margin-right: 5px;
-    //}
 
     .float-left {
       float: left;

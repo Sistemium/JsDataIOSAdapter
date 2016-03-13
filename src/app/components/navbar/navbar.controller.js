@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  function NavbarController(Auth,Menu) {
+  function NavbarController(Auth,Menu,$window) {
 
     var vm = this;
 
@@ -9,10 +9,25 @@
 
       menu: Menu.root (),
 
-      isCollapsed: true
+      isCollapsed: true,
+
+      toggleFullScreen: function () {
+
+        if ($window.webkit) {
+          $window.webkit.messageHandlers.tabbar.postMessage({
+            action: vm.isFullScreen ? 'show' : 'hide',
+            options: {
+              requestId: 1
+            }
+          });
+          vm.isFullScreen = !vm.isFullScreen;
+        }
+
+      }
 
     }, Auth);
 
+    vm.toggleFullScreen();
 
   }
 

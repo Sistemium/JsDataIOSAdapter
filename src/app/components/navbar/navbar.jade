@@ -29,3 +29,7 @@ div.navbar.navbar-default
         li.divider(role="separator")
         li(ng-repeat='item in vm.menu.items', ui-sref-active='active')
           a(ui-sref='{{item.state}}') {{item.title}}
+        li.divider.visible-xs(role="separator")
+        li.visible-xs
+          a(href='' ng-click='vm.toggleFullScreen()')
+            i.glyphicon.glyphicon-fullscreen

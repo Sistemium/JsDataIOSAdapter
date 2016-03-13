@@ -23,15 +23,6 @@
         });
       },true);
 
-      if ($window.webkit) {
-        $window.webkit.messageHandlers.tabbar.postMessage({
-          action: 'hide',
-          options: {
-            requestId: 1
-          }
-        });
-      }
-
     });
 
 })();
