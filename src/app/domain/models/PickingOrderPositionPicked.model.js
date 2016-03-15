@@ -26,6 +26,12 @@
         fieldTypes: {
           // code, productionInfo
           volume: 'int'
+        },
+
+        methods: {
+          boxPcs: function () {
+            return this.parent && this.parent.Article && this.parent.Article.boxPcs (this.volume) || {};
+          }
         }
 
       });

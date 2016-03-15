@@ -28,7 +28,8 @@ section.ui-view
         ng-repeat='picked in order.position.pickedPositions track by picked.id'
         ui-sref='.pickedPosition({ positionId: picked.id })'
       )
-        div {{ picked.volume }}
+        div
+          strong {{ picked.boxPcs().full }}
         small {{ picked.productionInfo }}
       button.flex-right.btn.btn-default(
         ng-if='order.volume.full'

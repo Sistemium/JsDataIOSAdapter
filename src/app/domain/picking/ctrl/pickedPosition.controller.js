@@ -12,19 +12,40 @@
 
       var states = [
         {
-          input: 'volume'
-        },{
-          input: 'productionInfo'
+          input: 'volume',
+          label: 'Собрано',
+          validate: function (val) {
+            return !! val;
+          },
+          value: pickedPosition && angular.copy (pickedPosition.boxPcs().full),
+          exportValue: pickedPosition && angular.copy (pickedPosition.volume)
         }
       ];
+
+      if (position.Article.productionInfoType) {
+        states.push ({
+          input: 'productionInfo',
+          label: 'Дата розлива',
+          validate: function (val) {
+            return !! /\d{2}\/\d{2}\/\d{4}/.test (val);
+          },
+          value: pickedPosition.productionInfo
+        });
+      }
 
       angular.extend(vm, {
 
         position: position,
         pickedPosition: pickedPosition,
+        states: states,
 
-        volume: pickedPosition.volume,
-        productionInfo: pickedPosition.productionInfo,
+        notDone: function () {
+
+          if (vm.step>=0) {
+            return ! states [vm.step].validate(states [vm.step].value);
+          }
+
+        },
 
         done: function () {
 
@@ -32,9 +53,7 @@
             return vm.save();
           }
 
-          if ( ++ vm.step === states.length ) {
-            vm.step = undefined;
-          }
+          vm.step = undefined;
 
         },
 
@@ -46,8 +65,8 @@
 
         save: function () {
 
-          pickedPosition.volume = vm.volume;
-          pickedPosition.productionInfo = vm.productionInfo;
+          pickedPosition.volume = states[0].exportValue;
+          pickedPosition.productionInfo = states.length > 1 ? states[1].value : null;
 
           $state.go('^');
 

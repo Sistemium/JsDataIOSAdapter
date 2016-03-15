@@ -7,25 +7,25 @@ h4
 
 hr
 
-h4.text-right
-  span.editable(ng-click='vm.edit(0)' ng-class='{"focused": vm.step === 0}')
-    span.gray Собрано:
+h4.text-right(ng-repeat='state in vm.states track by state.input')
+  span.editable(ng-click='vm.edit($index)' ng-class='{"focused": vm.step === $index}')
+    span.gray {{ state.label }}:
     = ' '
-    label(ng-class='{"blink-underline": vm.step === 0}') {{ vm.volume }}
-
-h4.text-right
-  span.editable(ng-click='vm.edit(1)' ng-class='{"focused": vm.step === 1}')
-    span.gray Дата розлива:
-    = ' '
-    label(ng-class='{"blink-underline": vm.step === 1}') {{ vm.productionInfo }}
+    label(ng-class='{"blink-underline": vm.step === $index}') {{ state.value }}
 
 hr
 
 section(ng-switch='vm.step')
-  .volume-pad(ng-switch-when='0' model='vm.volume' box-rel='vm.position.Article.packageRel')
+  .volume-pad(
+    ng-switch-when='0'
+    model='vm.states[0].value'
+    box-rel='vm.position.Article.packageRel'
+    datatype='boxPcs'
+    export-model='vm.states[0].exportValue'
+  )
   .volume-pad(
     ng-switch-when='1'
-    model='vm.productionInfo'
+    model='vm.states[1].value'
     datatype='date'
   )
 
@@ -36,4 +36,4 @@ section.text-right
   = ' '
   button.btn.btn-warning(ui-sref='^') Отмена
   = ' '
-  button.btn.btn-primary(ng-click='vm.done()') Готово
+  button.btn.btn-primary(ng-click='vm.done()' ng-disabled='vm.notDone()') Готово

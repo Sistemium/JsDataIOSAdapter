@@ -17,6 +17,7 @@
   ];
 
   var formatters = {
+
     date: {
       formatSymbols: function (str) {
         var re = /(\d{2})(\d{0,2})(\d{0,4})/;
@@ -48,7 +49,30 @@
         return ! re.test ((data||'') + button.label);
 
       }
+    },
+
+    boxPcs: {
+      formatSymbols: function (str) {
+        var re = /(\d*)(К|^)(\d*)/;
+
+        return (str || '').replace(re,function (match, box, k, pcs){
+          return (box ? box + ' к': '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
+        });
+      },
+      importModel: function (str) {
+        var re = /(\d*)( к[ ]{0,1}|^)(\d*)($| б)/;
+
+        return re.test(str) ? str.replace(re,function (match, box, b, pcs){
+          return (box ? box+'К' : '') +pcs;
+        }) : '';
+      },
+      exportSymbols: function (str,boxRel) {
+        var re = /(\d*)(К|^)(\d*)/;
+        var m = (str || '').match(re);
+        return parseInt (m[1] || '0') * boxRel + parseInt (m[3] || '0');
+      }
     }
+
   };
 
 
@@ -63,7 +87,8 @@
       scope: {
         model: '=',
         boxRel: '=',
-        datatype: '@'
+        datatype: '@',
+        exportModel: '='
       },
 
       link: function (scope) {
@@ -73,6 +98,7 @@
         var importFn = scope.datatype && formatters [scope.datatype] .importModel;
         var formatFn = scope.datatype && formatters [scope.datatype] .formatSymbols;
         var disableFn = scope.datatype && formatters [scope.datatype] .disableButton;
+        var exportFn = scope.datatype && formatters [scope.datatype] .exportSymbols;
 
         scope.symbols = angular.isFunction (importFn) ? importFn(scope.model) : scope.model;
 
@@ -124,7 +150,11 @@
 
           clicked = true;
 
-          scope.model = angular.isFunction(formatFn) ? formatFn (scope.symbols) : scope.symbols;
+          scope.model = angular.isFunction (formatFn) ? formatFn (scope.symbols) : scope.symbols;
+
+          if (exportFn) {
+            scope.exportModel = exportFn (scope.symbols, scope.boxRel);
+          }
 
         };
 
