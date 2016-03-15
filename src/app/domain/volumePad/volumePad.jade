@@ -1,4 +1,4 @@
 .display-flex(ng-repeat='row in buttons track by $index')
   .num-pad-button.flex-1(ng-repeat='b in row track by $index')
-    button.btn.btn-default.btn-block(ng-click='onClick(b)') {{ b.label }}
+    button.btn.btn-default.btn-block(ng-click='onClick(b)' ng-if='b.label || b.i' ng-disabled='isDisabled(b)') {{ b.label }}
       i(ng-if='b.i' ng-class='b.i')

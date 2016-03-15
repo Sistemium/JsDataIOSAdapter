@@ -23,9 +23,13 @@ hr
 
 section(ng-switch='vm.step')
   .volume-pad(ng-switch-when='0' model='vm.volume' box-rel='vm.position.Article.packageRel')
-  .volume-pad(ng-switch-when='1' model='vm.productionInfo')
+  .volume-pad(
+    ng-switch-when='1'
+    model='vm.productionInfo'
+    datatype='date'
+  )
 
-hr
+hr(ng-if='vm.step >= 0')
 
 section.text-right
   button.btn.btn-danger(ng-click='vm.remove()' ng-if='vm.pickedPosition') Удалить
