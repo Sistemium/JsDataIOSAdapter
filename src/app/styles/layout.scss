@@ -12,7 +12,7 @@ span.editable {
   outline: none;
   padding-bottom: 1px;
   border-bottom: 1px;
-  &:active, &:focus, &.focused {
+  &.focused {
     border-bottom: solid 1px gray;
   }
   label {
@@ -20,6 +20,7 @@ span.editable {
     padding-right: 1px;
     box-sizing: content-box;
     min-height: 0.9em;
+    cursor: pointer;
   }
 }
 
