@@ -1,16 +1,35 @@
 h4
-  span.gray Требование:
+  span.gray Требуется:
   = ' '
   label {{ vm.position.boxPcs().full }}
   = ' '
   span.gray ({{ vm.position.volume | bottles }})
 
+hr
+
 h4.text-right
-  span.gray Собрано:
+  span.editable(ng-click='vm.edit(0)' ng-class='{"focused": vm.step === 0}')
+    span.gray Собрано:
+    = ' '
+    label(ng-class='{"blink-underline": vm.step === 0}') {{ vm.volume }}
+
+h4.text-right
+  span.editable(ng-click='vm.edit(1)' ng-class='{"focused": vm.step === 1}')
+    span.gray Дата розлива:
+    = ' '
+    label(ng-class='{"blink-underline": vm.step === 1}') {{ vm.productionInfo }}
+
+hr
+
+section(ng-switch='vm.step')
+  .volume-pad(ng-switch-when='0' model='vm.volume' box-rel='vm.position.Article.packageRel')
+  .volume-pad(ng-switch-when='1' model='vm.productionInfo')
+
+hr
+
+section.text-right
+  button.btn.btn-danger(ng-click='vm.remove()' ng-if='vm.pickedPosition') Удалить
   = ' '
-  label {{ vm.volume || 'введите' }}
-
-section.clear-both.volume-pad(model='vm.volume' box-rel='vm.position.Article.packageRel')
-
-button.btn.btn-primary.pull-right(ng-click='vm.save()')
-  | Готово
+  button.btn.btn-warning(ui-sref='^') Отмена
+  = ' '
+  button.btn.btn-primary(ng-click='vm.done()') Готово

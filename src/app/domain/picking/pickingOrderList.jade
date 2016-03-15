@@ -32,7 +32,7 @@ div.has-navbar-fixed-bottom(ui-view='')
   button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders')
     | Собирать отмеченные
 
-nav.navbar.navbar-default.navbar-fixed-bottom
+nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')
   .container
     form.navbar-form.navbar-left.float-left.flat-on-small.hidden-xs(role='search' ng-submit="vm.onBarCode()")
       .form-group

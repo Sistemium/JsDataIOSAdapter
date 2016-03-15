@@ -8,20 +8,38 @@
       var vm = this;
       var position = models.PickingOrderPosition.get ($state.params.positionId);
 
+      var states = [
+        {
+          input: 'volume'
+        },{
+          input: 'productionInfo'
+        }
+      ];
+
       angular.extend(vm, {
 
         position: position,
         volume: position && position.volume,
+        productionInfo: '',
+
+        step: 0,
+
+        done: function () {
+
+          if ( ++ vm.step === states.length ) {
+            return vm.save();
+          }
+
+        },
 
         save: function () {
           var POPP = models.PickingOrderPositionPicked;
 
-          var popp = POPP.inject({
+          POPP.inject({
             pickingOrderPosition: vm.position.id,
-            volume: vm.volume
+            volume: vm.volume,
+            productionInfo: vm.productionInfo || null
           });
-
-          console.log (popp);
 
           $state.go('^');
         }

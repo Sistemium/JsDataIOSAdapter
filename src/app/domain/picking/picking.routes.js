@@ -37,13 +37,28 @@
                       templateUrl: 'app/domain/picking/pickingArticle.html',
                       controller: 'PickingArticleController',
                       controllerAs: 'vm',
+                      data: {
+                        hideBottomBar: true
+                      },
                       children: [
                         {
                           name: 'pick',
-                          url: '/:positionId',
+                          url: '/pick/:positionId',
                           templateUrl: 'app/domain/picking/pickPosition.html',
                           controller: 'PickPositionController',
-                          controllerAs: 'vm'
+                          controllerAs: 'vm',
+                          data: {
+                            hideTopBar: true
+                          }
+                        },{
+                          name: 'pickedPosition',
+                          url: '/picked/:positionId',
+                          templateUrl: 'app/domain/picking/pickPosition.html',
+                          controller: 'PickedPositionController',
+                          controllerAs: 'vm',
+                          data: {
+                            hideTopBar: true
+                          }
                         }
                       ]
                     }
