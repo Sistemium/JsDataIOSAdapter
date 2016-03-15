@@ -10,7 +10,7 @@
     color: gray;
 
     i {
-      top: 4px;
+      top: 3px;
     }
 
   }
@@ -18,5 +18,15 @@
 }
 
 .volume-pad {
-  margin: 20px 0px;
+  margin: 15px 0;
 }
+
+@media (min-width: 510px) {
+
+  .volume-pad {
+    margin: 20px 0 20px auto;
+    max-width: 290px;
+  }
+
+}
+

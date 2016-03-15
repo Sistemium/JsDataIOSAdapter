@@ -1,0 +1,29 @@
+h1, h2, h3, h4, h5, h6 {
+  label {
+    margin-bottom: 0;
+  }
+
+  &:active, &:focus {
+    outline: none;
+  }
+}
+
+span.editable {
+  outline: none;
+  padding-bottom: 1px;
+  border-bottom: 1px;
+  &:active, &:focus, &.focused {
+    border-bottom: solid 1px gray;
+  }
+  label {
+    border-right: solid 1px transparent;
+    padding-right: 1px;
+    box-sizing: content-box;
+    min-height: 0.9em;
+  }
+}
+
+hr {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

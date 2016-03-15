@@ -14,3 +14,37 @@ li.animate-show.ng-hide-add, li.animate-show.ng-hide-remove {
 .animate-show.ng-hide {
   opacity: 0;
 }
+
+$blink-duration: 1s;
+$blink-color: blue;
+
+.blink-underline {
+
+  border-right: solid 1px $blink-color !important;
+
+  -webkit-animation: blink $blink-duration linear 0s infinite;
+  -moz-animation: blink $blink-duration linear 0s infinite;
+  -ms-animation: blink $blink-duration linear 0s infinite;
+  -o-animation: blink $blink-duration linear 0s infinite;
+
+}
+
+@-webkit-keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: $blink-color }
+}
+
+@-moz-keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: $blink-color }
+}
+
+@-ms-keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: $blink-color }
+}
+
+@-o-keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: $blink-color }
+}
