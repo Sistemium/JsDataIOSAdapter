@@ -28,7 +28,7 @@
 
         done: function () {
 
-          if (vm.step === undefined) {
+          if (angular.isUndefined (vm.step)) {
             return vm.save();
           }
 
