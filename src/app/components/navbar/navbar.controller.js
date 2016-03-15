@@ -15,10 +15,7 @@
 
         if ($window.webkit) {
           $window.webkit.messageHandlers.tabbar.postMessage({
-            action: vm.isFullScreen ? 'show' : 'hide',
-            options: {
-              requestId: 1
-            }
+            action: vm.isFullScreen ? 'show' : 'hide'
           });
           vm.isFullScreen = !vm.isFullScreen;
         }
