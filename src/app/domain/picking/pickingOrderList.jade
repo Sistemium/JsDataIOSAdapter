@@ -3,13 +3,13 @@ div.has-navbar-fixed-bottom(ui-view='')
   h3
     p.clear-both Требования на сборку
     small.lead.pull-right(ng-class='{darkgray: vm.selectedItems.length}')
-      span Коробок:
+      span Кор.:
       label {{ vm.currentTotals().totalBoxVolume () | number:1 }}
       = ' '
-      span Позиций:
+      span Поз.:
       label {{ vm.currentTotals().positionsCount () | number:0 }}
       = ' '
-      span Бутылок:
+      span Бут.:
       label {{ vm.currentTotals().totalVolume () | number:0 }}
 
   table.table.table-hover
