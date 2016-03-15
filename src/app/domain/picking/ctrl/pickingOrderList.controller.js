@@ -77,6 +77,11 @@
       BarCodeScanner.bind(scanFn);
       vm.onBarCode = scanFn;
 
+      $scope.$on('$stateChangeSuccess', function (e, to) {
+        vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
+      });
+
+
     })
   ;
 

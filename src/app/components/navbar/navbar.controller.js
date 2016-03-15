@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  function NavbarController(Auth,Menu,$window) {
+  function NavbarController(Auth,Menu,$window,$scope) {
 
     var vm = this;
 
@@ -28,6 +28,10 @@
     }, Auth);
 
     vm.toggleFullScreen();
+
+    $scope.$on('$stateChangeSuccess', function (e, to) {
+      vm.hide = !! _.get(to, 'data.hideTopBar');
+    });
 
   }
 
