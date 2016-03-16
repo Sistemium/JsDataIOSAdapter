@@ -4,6 +4,12 @@ h4
   label {{ vm.position.boxPcs().full }}
   = ' '
   span.gray ({{ vm.position.volume | bottles }})
+  = ' '
+
+h4
+  span.gray Осталось собрать:
+  = ' '
+  label {{ vm.position.unPickedBoxPcs().full }}
 
 hr
 

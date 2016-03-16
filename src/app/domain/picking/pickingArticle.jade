@@ -33,6 +33,7 @@ section.ui-view
         small {{ picked.productionInfo }}
       button.flex-right.btn.btn-default(
         ng-if='order.volume.full'
+        ng-disabled='!order.position.unPickedVolume()'
         type='button'
         ui-sref='.pick({ positionId: order.position.id })'
       )

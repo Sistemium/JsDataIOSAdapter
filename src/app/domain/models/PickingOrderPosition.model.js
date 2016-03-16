@@ -4,6 +4,9 @@
 
     angular.module('Models').run(function (Schema) {
 
+      var POPP = Schema.models.PickingOrderPositionPicked;
+      var totalVolume = Schema.aggregate('volume').sum;
+
       Schema.register ({
 
         name: 'PickingOrderPosition',
@@ -40,13 +43,11 @@
             return this.Article && this.Article.boxVolume (this.volume) || 0;
           },
 
-          boxPcs: function () {
-            return this.Article && this.Article.boxPcs (this.volume) || {};
+          boxPcs: function (volume) {
+            return this.Article && this.Article.boxPcs (angular.isUndefined(volume) ? this.volume : volume) || {};
           },
 
           linkStockBatch: function (sb, volume, productionInfo) {
-
-            var POPP = Schema.models.PickingOrderPositionPicked;
 
             return POPP.create({
               sb: sb,
@@ -55,7 +56,16 @@
               productionInfo: productionInfo
             });
 
+          },
+
+          unPickedVolume: function () {
+            return this.volume - totalVolume (this.pickedPositions);
+          },
+
+          unPickedBoxPcs: function () {
+            return this.boxPcs (this.unPickedVolume());
           }
+
         },
 
         etc: {

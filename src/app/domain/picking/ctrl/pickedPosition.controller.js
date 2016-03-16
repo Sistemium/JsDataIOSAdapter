@@ -15,7 +15,15 @@
 
       var position = pickedPosition && pickedPosition.parent || POP.get ($state.params.positionId);
 
-      var srcPosition = pickedPosition || position;
+      var initVolume, initExport;
+
+      if (pickedPosition) {
+        initVolume = pickedPosition.boxPcs().full;
+        initExport = pickedPosition.volume;
+      } else if (position) {
+        initVolume = position.unPickedBoxPcs().full;
+        initExport = position.unPickedVolume();
+      }
 
       var states = [
         {
@@ -24,8 +32,8 @@
           validate: function (val) {
             return !! val;
           },
-          value: srcPosition && angular.copy (srcPosition.boxPcs().full),
-          exportValue: srcPosition && angular.copy (srcPosition.volume)
+          value: initVolume,
+          exportValue: initExport
         }
       ];
 
