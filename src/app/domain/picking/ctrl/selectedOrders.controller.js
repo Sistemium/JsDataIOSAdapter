@@ -10,7 +10,7 @@
 
       PO.findAll().then(function () {
 
-        vm.selectedItems = $scope.vm.selectedItems || PO.filter({
+        vm.selectedItems = $scope.$parent.vm.selectedItems || PO.filter({
             selected: true
         });
 
