@@ -46,4 +46,8 @@ body.iOS {
   margin-bottom: 0;
   //overflow-y: scroll;
   //-webkit-overflow-scrolling: touch;
+  .has-navbar-fixed-bottom {
+    margin-bottom: 120px;
+  }
+
 }
