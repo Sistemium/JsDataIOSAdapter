@@ -78,6 +78,8 @@
         });
 
         vm.articles = POP.etc.pivotPositionsByArticle (vm.articleIndex);
+        vm.currentFilter = $state.$current.name.match(/picked$/) ? {isPicked: 'true'} : {isPicked: '!true'};
+        vm.orderBy = $state.$current.name.match(/picked$/) ? '-ts' : 'article.name';
 
       }
     );

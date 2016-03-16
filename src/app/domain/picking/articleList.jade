@@ -15,9 +15,8 @@ ul.hidden-iOS
 section.ui-view
   ul.list-group(s-sortable ng-model='vm.articles')
     li.list-group-item.display-flex.animate-show(
-      ng-repeat='item in vm.articles track by item.id'
+      ng-repeat='item in vm.articles | filter: vm.currentFilter | orderBy: vm.orderBy as filteredResult track by item.id'
       s-sortable-item
-      ng-hide="item.isPicked"
       ng-attr-id="{{item.id}}"
     )
       //.sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}

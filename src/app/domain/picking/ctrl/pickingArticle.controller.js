@@ -23,7 +23,14 @@
             volume: picking.orderVolume (order)
           };
 
-        })
+        }),
+
+        done: function () {
+
+          picking.updatePicked ();
+
+          $state.go ('^');
+        }
 
       });
 

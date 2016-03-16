@@ -4,7 +4,7 @@
 
     angular.module('Models').run(function (Schema) {
 
-      var POPP = Schema.models.PickingOrderPositionPicked;
+      var POPP = Schema.models().PickingOrderPositionPicked;
       var totalVolume = Schema.aggregate('volume').sum;
 
       Schema.register ({
@@ -80,6 +80,26 @@
               var article = val[0].Article;
               var boxPcs = article && article.boxPcs(totalVolume);
 
+              function isPicked (positions) {
+                return _.reduce (positions,function (res,pos){
+                  return res && !pos.unPickedVolume()
+                },true);
+              }
+
+              function maxTs (positions) {
+                return _.reduce (positions,function (res,pos){
+                  var lastPos = _.maxBy (pos.pickedPositions, function (pp) {
+                    return POPP.lastModified (pp.id);
+                  });
+                  return Math.max (lastPos && POPP.lastModified (lastPos) || 0, res);
+                },0);
+              }
+
+              var updatePicked = function () {
+                this.isPicked = isPicked(val);
+                this.ts = maxTs(val);
+              };
+
               //SBBC.someBy.article (article.id).then (function (sbbcs){
               //  vm.sbbcs.push ({
               //    id: article.id,
@@ -94,6 +114,8 @@
                 positions: val,
                 volume: boxPcs,
                 totalVolume: totalVolume,
+                isPicked: isPicked(val),
+                ts: maxTs(val),
 
                 orderVolume: function (order) {
                   var p = _.find(val, ['pickingOrder', order.id]);
@@ -102,7 +124,9 @@
 
                 position: function (order) {
                   return _.find(val, ['pickingOrder', order.id]);
-                }
+                },
+
+                updatePicked: updatePicked
 
               }
 

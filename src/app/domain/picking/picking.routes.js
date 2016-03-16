@@ -5,6 +5,40 @@
   angular.module('webPage')
     .config(function (stateHelperProvider) {
 
+      var articleChildren = [
+        {
+          name: 'article',
+          url: '/:id',
+          templateUrl: 'app/domain/picking/pickingArticle.html',
+          controller: 'PickingArticleController',
+          controllerAs: 'vm',
+          data: {
+            hideBottomBar: true
+          },
+          children: [
+            {
+              name: 'pick',
+              url: '/pick/:positionId',
+              templateUrl: 'app/domain/picking/pickPosition.html',
+              controller: 'PickedPositionController',
+              controllerAs: 'vm',
+              data: {
+                hideTopBar: true
+              }
+            },{
+              name: 'pickedPosition',
+              url: '/picked/:pickedPositionId',
+              templateUrl: 'app/domain/picking/pickPosition.html',
+              controller: 'PickedPositionController',
+              controllerAs: 'vm',
+              data: {
+                hideTopBar: true
+              }
+            }
+          ]
+        }
+      ];
+
       stateHelperProvider
 
         .state({
@@ -30,45 +64,14 @@
                   templateUrl: 'app/domain/picking/articleList.html',
                   controller: 'ArticleListController',
                   controllerAs: 'vm',
-                  children: [
-                    {
-                      name: 'article',
-                      url: '/:id',
-                      templateUrl: 'app/domain/picking/pickingArticle.html',
-                      controller: 'PickingArticleController',
-                      controllerAs: 'vm',
-                      data: {
-                        hideBottomBar: true
-                      },
-                      children: [
-                        {
-                          name: 'pick',
-                          url: '/pick/:positionId',
-                          templateUrl: 'app/domain/picking/pickPosition.html',
-                          controller: 'PickedPositionController',
-                          controllerAs: 'vm',
-                          data: {
-                            hideTopBar: true
-                          }
-                        },{
-                          name: 'pickedPosition',
-                          url: '/picked/:pickedPositionId',
-                          templateUrl: 'app/domain/picking/pickPosition.html',
-                          controller: 'PickedPositionController',
-                          controllerAs: 'vm',
-                          data: {
-                            hideTopBar: true
-                          }
-                        }
-                      ]
-                    }
-                  ]
+                  children: angular.copy (articleChildren)
                 },{
                   name: 'picked',
                   url: '/picked',
                   templateUrl: 'app/domain/picking/articleList.html',
                   controller: 'ArticleListController',
-                  controllerAs: 'vm'
+                  controllerAs: 'vm',
+                  children: angular.copy (articleChildren)
                 }
               ]
             }
