@@ -47,13 +47,13 @@
             return this.Article && this.Article.boxPcs (angular.isUndefined(volume) ? this.volume : volume) || {};
           },
 
-          linkStockBatch: function (sb, volume, productionInfo) {
+          linkStockBatch: function (sb, code, volume) {
 
-            return POPP.create({
+            return POPP.inject({
               sb: sb,
               pickingOrderPosition: this.id,
               volume: volume || this.volume,
-              productionInfo: productionInfo
+              code: code
             });
 
           },

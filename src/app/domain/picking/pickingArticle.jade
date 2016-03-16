@@ -31,6 +31,7 @@ section.ui-view
         div
           strong {{ picked.boxPcs().full }}
         small {{ picked.productionInfo }}
+        small {{ picked.code }}
       button.flex-right.btn.btn-default(
         ng-if='order.volume.full'
         ng-disabled='!order.position.unPickedVolume()'

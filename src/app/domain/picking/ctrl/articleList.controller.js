@@ -12,7 +12,7 @@
         var orders = $scope.vm.selectedItems;
         vm.scroll = $uiViewScroll;
 
-        function processArticle(a, sb) {
+        function processArticle(a, sb, code) {
 
           if (!vm.articleIndex [a.id]) {
             return;
@@ -23,8 +23,8 @@
           pa.isPicked = true;
           vm.pickedIndex [a.id] = true;
 
-          _.each(a.positions, function (pop) {
-            pop.linkStockBatch(sb);
+          _.each(pa.positions, function (pop) {
+            pop.linkStockBatch(sb, code);
           });
 
           return {
@@ -38,7 +38,7 @@
 
         $scope.$on ('stockBatchBarCodeScan',function (e,options) {
 
-          var found = processArticle(options.stockBatch.Article, options.stockBatch);
+          var found = processArticle(options.stockBatch.Article, options.stockBatch, options.code);
 
           if (found && found.id && !found.isPicked) {
             toastr.success (found.name, found.volume);

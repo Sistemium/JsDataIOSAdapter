@@ -52,7 +52,9 @@
 
         Errors.clear();
 
-        return models.StockBatch.someBy.barCode(code || vm.barCodeInput).then(function (sbs) {
+        code = code || vm.barCodeInput;
+
+        return models.StockBatch.someBy.barCode(code).then(function (sbs) {
 
           var notFound = 'Неизвестный штрих-код';
 
