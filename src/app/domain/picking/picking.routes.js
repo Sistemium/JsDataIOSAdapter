@@ -45,14 +45,14 @@
                           name: 'pick',
                           url: '/pick/:positionId',
                           templateUrl: 'app/domain/picking/pickPosition.html',
-                          controller: 'PickPositionController',
+                          controller: 'PickedPositionController',
                           controllerAs: 'vm',
                           data: {
                             hideTopBar: true
                           }
                         },{
                           name: 'pickedPosition',
-                          url: '/picked/:positionId',
+                          url: '/picked/:pickedPositionId',
                           templateUrl: 'app/domain/picking/pickPosition.html',
                           controller: 'PickedPositionController',
                           controllerAs: 'vm',

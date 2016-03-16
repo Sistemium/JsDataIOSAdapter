@@ -7,8 +7,15 @@
 
       var vm = this;
       var POPP = models.PickingOrderPositionPicked;
-      var pickedPosition = POPP.get ($state.params.positionId);
-      var position = pickedPosition.parent;
+      var POP = models.PickingOrderPosition;
+
+      var mode = $state.params.positionId ? 'pick' : 'picked';
+
+      var pickedPosition = mode === 'picked' && POPP.get ($state.params.pickedPositionId);
+
+      var position = pickedPosition && pickedPosition.parent || POP.get ($state.params.positionId);
+
+      var srcPosition = pickedPosition || position;
 
       var states = [
         {
@@ -17,19 +24,19 @@
           validate: function (val) {
             return !! val;
           },
-          value: pickedPosition && angular.copy (pickedPosition.boxPcs().full),
-          exportValue: pickedPosition && angular.copy (pickedPosition.volume)
+          value: srcPosition && angular.copy (srcPosition.boxPcs().full),
+          exportValue: srcPosition && angular.copy (srcPosition.volume)
         }
       ];
 
-      if (position.Article.productionInfoType) {
+      if (position && position.Article.productionInfoType) {
         states.push ({
           input: 'productionInfo',
           label: 'Дата розлива',
           validate: function (val) {
             return !! /\d{2}\/\d{2}\/\d{4}/.test (val);
           },
-          value: pickedPosition.productionInfo
+          value: pickedPosition && pickedPosition.productionInfo || ''
         });
       }
 
@@ -38,6 +45,7 @@
         position: position,
         pickedPosition: pickedPosition,
         states: states,
+        step: pickedPosition ? undefined : 0,
 
         notDone: function () {
 
@@ -53,7 +61,15 @@
             return vm.save();
           }
 
-          vm.step = undefined;
+          if (!pickedPosition){
+            if (vm.step + 1 === states.length ) {
+              return vm.save();
+            } else {
+              vm.step ++;
+            }
+          } else {
+            vm.step = undefined;
+          }
 
         },
 
@@ -65,8 +81,16 @@
 
         save: function () {
 
-          pickedPosition.volume = states[0].exportValue;
-          pickedPosition.productionInfo = states.length > 1 ? states[1].value : null;
+          if (!pickedPosition) {
+            POPP.inject ({
+              pickingOrderPosition: position.id,
+              volume: states[0].exportValue,
+              productionInfo: states.length > 1 ? states[1].value : null
+            });
+          } else {
+            pickedPosition.volume = states[0].exportValue;
+            pickedPosition.productionInfo = states.length > 1 ? states[1].value : null;
+          }
 
           $state.go('^');
 
