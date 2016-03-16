@@ -1,15 +1,13 @@
 h4
-  span.gray Требуется:
+  span.gray(ng-show='vm.position.pickedPositions.length') Осталось собрать:
+  span.gray(ng-hide='vm.position.pickedPositions.length') Требуется:
   = ' '
-  label {{ vm.position.boxPcs().full }}
+  label {{ vm.position.unPickedBoxPcs().full || 0 }}
   = ' '
-  span.gray ({{ vm.position.volume | bottles }})
-  = ' '
-
-h4
-  span.gray Осталось собрать:
-  = ' '
-  label {{ vm.position.unPickedBoxPcs().full }}
+  span(ng-if='vm.position.pickedPositions.length')
+    span.gray из
+    = ' '
+    label {{ vm.position.boxPcs().full }}
 
 hr
 
