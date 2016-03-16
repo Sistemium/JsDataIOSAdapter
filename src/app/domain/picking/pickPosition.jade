@@ -11,6 +11,9 @@ h4
 
 hr
 
+h4.text-right(ng-if='vm.barCode')
+  span.gray Партия:
+  label {{ vm.barCode }}
 h4.text-right(ng-repeat='state in vm.states track by state.input')
   span.editable(ng-click='vm.edit($index)' ng-class='{"focused": vm.step === $index}')
     span.gray {{ state.label }}:

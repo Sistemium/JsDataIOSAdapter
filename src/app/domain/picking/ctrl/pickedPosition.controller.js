@@ -37,7 +37,13 @@
         }
       ];
 
-      if (position && position.Article.productionInfoType) {
+      var barCode = pickedPosition && pickedPosition.code;
+
+      if (barCode) {
+
+        vm.barCode = barCode;
+
+      } else if (position && position.Article.productionInfoType) {
         states.push ({
           input: 'productionInfo',
           label: 'Дата розлива',

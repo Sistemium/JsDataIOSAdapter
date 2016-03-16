@@ -23,15 +23,18 @@
           pa.isPicked = true;
           vm.pickedIndex [a.id] = true;
 
-          _.each(pa.positions, function (pop) {
-            pop.linkStockBatch(sb, code);
-          });
+          var pickedVolume = _.reduce(pa.positions, function (res,pop) {
+            var unp = pop.unPickedVolume();
+            if (unp) {
+              pop.linkStockBatch(sb, code, unp);
+            }
+            return res + unp;
+          },0);
 
           return {
             id: a.id,
             name: a.name,
-            volume: pa.volume.full,
-            message: a.name + ': ' + pa.volume.full
+            volume: pickedVolume ? a.boxPcs(pickedVolume).full : 'Товар уже собран'
           };
 
         }
@@ -40,7 +43,7 @@
 
           var found = processArticle(options.stockBatch.Article, options.stockBatch, options.code);
 
-          if (found && found.id && !found.isPicked) {
+          if (found && found.id) {
             toastr.success (found.name, found.volume);
             //$uiViewScroll (angular.element (document.getElementById(found.id)));
           } else {

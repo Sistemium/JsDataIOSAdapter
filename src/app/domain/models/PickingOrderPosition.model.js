@@ -6,6 +6,20 @@
 
       var POPP = Schema.models().PickingOrderPositionPicked;
       var totalVolume = Schema.aggregate('volume').sum;
+      var totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
+
+      function isPicked (positions) {
+        return !totalUnPickedVolume (positions);
+      }
+
+      function maxTs (positions) {
+        return _.reduce (positions,function (res,pos){
+          var lastPos = _.maxBy (pos.pickedPositions, function (pp) {
+            return POPP.lastModified (pp.id);
+          });
+          return Math.max (lastPos && POPP.lastModified (lastPos) || 0, res);
+        },0);
+      }
 
       Schema.register ({
 
@@ -71,34 +85,14 @@
         etc: {
 
           pivotPositionsByArticle:  function (articleIndex) {
-            return _.orderBy(_.map(articleIndex, function (val, key) {
+            return _.orderBy(_.map(articleIndex, function (positions, key) {
 
-              var totalVolume = _.reduce(val, function (sum, pos) {
+              var totalVolume = _.reduce(positions, function (sum, pos) {
                 return sum + pos.volume;
               }, 0);
 
-              var article = val[0].Article;
+              var article = positions[0].Article;
               var boxPcs = article && article.boxPcs(totalVolume);
-
-              function isPicked (positions) {
-                return _.reduce (positions,function (res,pos){
-                  return res && !pos.unPickedVolume()
-                },true);
-              }
-
-              function maxTs (positions) {
-                return _.reduce (positions,function (res,pos){
-                  var lastPos = _.maxBy (pos.pickedPositions, function (pp) {
-                    return POPP.lastModified (pp.id);
-                  });
-                  return Math.max (lastPos && POPP.lastModified (lastPos) || 0, res);
-                },0);
-              }
-
-              var updatePicked = function () {
-                this.isPicked = isPicked(val);
-                this.ts = maxTs(val);
-              };
 
               //SBBC.someBy.article (article.id).then (function (sbbcs){
               //  vm.sbbcs.push ({
@@ -110,23 +104,28 @@
               return {
 
                 id: key,
-                article: val[0].Article,
-                positions: val,
+                article: positions[0].Article,
+                positions: positions,
                 volume: boxPcs,
                 totalVolume: totalVolume,
-                isPicked: isPicked(val),
-                ts: maxTs(val),
+                isPicked: isPicked(positions),
+                totalUnPickedVolume: totalUnPickedVolume (positions),
+                ts: maxTs(positions),
 
                 orderVolume: function (order) {
-                  var p = _.find(val, ['pickingOrder', order.id]);
+                  var p = _.find(positions, ['pickingOrder', order.id]);
                   return article.boxPcs(p && p.volume || 0);
                 },
 
                 position: function (order) {
-                  return _.find(val, ['pickingOrder', order.id]);
+                  return _.find(positions, ['pickingOrder', order.id]);
                 },
 
-                updatePicked: updatePicked
+                updatePicked: function () {
+                  this.isPicked = isPicked(positions);
+                  this.ts = maxTs(positions);
+                  this.totalUnPickedVolume = totalUnPickedVolume(positions);
+                }
 
               }
 
