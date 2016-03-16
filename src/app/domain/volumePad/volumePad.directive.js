@@ -70,6 +70,15 @@
         var re = /(\d*)(К|^)(\d*)/;
         var m = (str || '').match(re);
         return parseInt (m[1] || '0') * boxRel + parseInt (m[3] || '0');
+      },
+      disableButton: function (button, data) {
+
+        if (button.label === 'К') {
+          if (/К/g.test (data)) {
+            return true;
+          }
+        }
+
       }
     }
 
