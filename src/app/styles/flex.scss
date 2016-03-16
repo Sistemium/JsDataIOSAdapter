@@ -33,8 +33,11 @@ li.display-flex:last-child > button:last-child {
   text-align: right;
 
   p {
+    margin-bottom: 4px;
+  }
+
+  p:last-child {
     margin-bottom: 0;
-    margin-top: 4px;
   }
 
   margin-left: 15px;

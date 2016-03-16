@@ -30,6 +30,11 @@
     padding-left: 10px;
   }
 
+  .list-group-item {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
   .sorter-handle {
     margin-left: -10px;
   }
@@ -37,6 +42,13 @@
   .btn.btn-default:hover {
     background: none;
     border-color: #ccc;
+  }
+
+  .display-flex {
+    > button {
+      margin-top: -9px;
+      margin-bottom: -9px;
+    }
   }
 
 }
