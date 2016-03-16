@@ -17,26 +17,26 @@ section.ui-view
     li.list-group-item.display-flex.animate-show(
       ng-repeat='item in vm.articles | filter: vm.currentFilter | orderBy: vm.orderBy as filteredResult track by item.id'
       s-sortable-item
-      ng-attr-id="{{item.id}}"
+      ng-attr-id="{{ ::item.id }}"
     )
       //.sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
         h5.list-group-item-heading
           a(ui-sref='.article({id:item.id})')
-            | {{ item.article.firstName }}&nbsp;{{item.article.pieceVolume | stnumber:1}}
+            | {{ ::item.article.firstName }}&nbsp;{{ ::item.article.pieceVolume | stnumber:1 }}
         small.list-group-item-text
-          span {{ item.article.lastName }}
+          span {{ ::item.article.lastName }}
           = ' '
-          span.gray (1&nbsp;x&nbsp;{{item.article.packageRel}})
+          span.gray (1&nbsp;x&nbsp;{{ ::item.article.packageRel }})
           = ' '
           //span.gray {{ item.article.category }}
           //= ' '
-          span {{ item.article.factory }}
+          span {{ ::item.article.factory }}
 
       .flex-right
         p
-          label {{item.volume.full}}
+          label {{ ::item.volume.full }}
         p
           span.gray(ng-if="vm.orders.length>1" ng-repeat='order in vm.orders track by order.id')
             span(ng-if='$index') &nbsp;+
-            label {{ item.orderVolume(order).full || '0' }}
+            label {{ ::item.orderVolume(order).full || '0' }}
