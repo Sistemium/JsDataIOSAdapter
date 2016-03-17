@@ -1,11 +1,11 @@
 angular.module('core.services')
-  .filter('bottles', function(Language) {
-    return function bottlesFilter (volume) {
+  .filter('boxes', function(Language) {
+    return function boxesFilter (volume) {
 
       var dict = {
-        w1: 'бутылка',
-        w24: 'бутылки',
-        w50: 'бутылок'
+        w1: 'коробка',
+        w24: 'коробки',
+        w50: 'коробок'
       };
 
       volume = parseInt(volume) || 0;
