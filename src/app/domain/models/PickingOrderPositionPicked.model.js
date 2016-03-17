@@ -31,6 +31,11 @@
         methods: {
           boxPcs: function () {
             return this.parent && this.parent.Article && this.parent.Article.boxPcs (this.volume) || {};
+          },
+          codeLabel: function () {
+            var res = (this.code||'').match (/\d[0]*(.*)/) || [];
+
+            return res.length > 1 ? res [1] : this.code;
           }
         }
 
