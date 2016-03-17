@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('ArticleListController', function ($scope, $uiViewScroll, $state, toastr, models, Errors) {
+    .controller('ArticleListController', function ($scope, $uiViewScroll, $state, toastr, models, SoundSynth, Language) {
 
         var vm = this;
         var POP = models.PickingOrderPosition;
@@ -34,7 +34,10 @@
           return {
             id: a.id,
             name: a.name,
-            volume: pickedVolume ? a.boxPcs(pickedVolume).full : 'Товар уже собран'
+            volume: pickedVolume ?
+              Language.speakableBoxPcs (a.boxPcs(pickedVolume))
+              //$filter('bottles')(pickedVolume)
+              : 'Товар уже собран'
           };
 
         }
@@ -47,7 +50,7 @@
             toastr.success (found.name, found.volume);
             //$uiViewScroll (angular.element (document.getElementById(found.id)));
           } else {
-            Errors.ru.add ('Этого товара нет в требовании');
+            SoundSynth.say ('Этого товара нет в требовании');
           }
 
         });
