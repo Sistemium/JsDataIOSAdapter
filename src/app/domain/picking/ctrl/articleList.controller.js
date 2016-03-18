@@ -20,23 +20,48 @@
 
           var pa = _.find(vm.articles, {id: a.id});
 
-          pa.isPicked = true;
+          //pa.isPicked = true;
           vm.pickedIndex [a.id] = true;
+
+          var pickedOrders = [];
 
           var pickedVolume = _.reduce(pa.positions, function (res,pop) {
             var unp = pop.unPickedVolume();
-            if (unp) {
-              pop.linkStockBatch(sb, code, unp);
+            if (unp > 0) {
+              pickedOrders.push ({
+                volume: Language.speakableBoxPcs (a.boxPcs(unp)),
+                num: orders.indexOf(pop.PickingOrder) + 1
+              });
+              pop.linkStockBatch(sb, code, unp).then (function (){
+                pa.updatePicked ();
+              });
+            } else {
+              unp = 0;
             }
             return res + unp;
           },0);
 
+          var say = _.reduce (pickedOrders, function (res,o, idx) {
+            return res
+              + (idx ? ' и ' : '')
+              + o.volume
+              + (orders.length >1
+                  ? (o.num === 2 ? ' во ' : ' в ')
+                    + Language.orderRu(o.num)
+                  : ''
+              );
+          },'');
+
+          if (!say) {
+            say = 'Товар уже собран';
+          }
+
           return {
             id: a.id,
             name: a.name,
-            volume: pickedVolume ?
-              Language.speakableBoxPcs (a.boxPcs(pickedVolume))
-              //$filter('bottles')(pickedVolume)
+            speakable: _.trim (say),
+            volume: pickedVolume
+              ? a.boxPcs(pickedVolume).full
               : 'Товар уже собран'
           };
 
@@ -48,6 +73,9 @@
 
           if (found && found.id) {
             toastr.success (found.name, found.volume);
+            if (found.speakable) {
+              SoundSynth.say (found.speakable);
+            }
             //$uiViewScroll (angular.element (document.getElementById(found.id)));
           } else {
             SoundSynth.say ('Этого товара нет в требовании');

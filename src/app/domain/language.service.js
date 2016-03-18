@@ -78,12 +78,32 @@
     );
   }
 
+  function orderRu (num) {
+
+    var dict = [
+      'первый',
+      'второй',
+      'третий',
+      'четвертый',
+      'пятый',
+      'шестой',
+      'седьмой',
+      'восьмой',
+      'девятый',
+      'десятый'
+    ];
+
+    return num ? dict [num - 1] : '';
+
+  }
+
   angular.module('core.services').service('Language', function () {
 
     return {
       countableState: countableState,
       speakableCountFemale: speakableCountFemale,
-      speakableBoxPcs: speakableBoxPcs
+      speakableBoxPcs: speakableBoxPcs,
+      orderRu: orderRu
     }
 
   });
