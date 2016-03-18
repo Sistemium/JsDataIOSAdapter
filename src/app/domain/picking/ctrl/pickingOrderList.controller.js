@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('PickingOrderListController', function ($scope, models, $state, toastr, Errors, BarCodeScanner) {
+    .controller('PickingOrderListController', function ($scope, models, $state, toastr, Errors, BarCodeScanner, SoundSynth) {
 
       var vm = this;
       var PO = models.PickingOrder;
@@ -21,7 +21,7 @@
         res.forEach(function (i) {
           PO.loadRelations(i).then(function (r) {
             _.each (r.positions, function (pos) {
-              POP.loadRelations (pos,'Article');
+              POP.loadRelations (pos,['Article','PickingOrderPositionPicked']);
             });
           });
         });
@@ -69,7 +69,7 @@
           });
 
           if (notFound) {
-            Errors.ru.add(notFound);
+            SoundSynth.say(notFound);
           }
 
         }).catch(Errors.ru.add);

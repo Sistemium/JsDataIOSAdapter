@@ -8,8 +8,9 @@
       var pitch = 1;
 
       var speaker = function (text) {
+
         $window.webkit.messageHandlers.sound.postMessage({
-          text: text,
+          text: text.replace(/[^а-я0-9]/ig,' '),
           rate: rate,
           pitch: pitch
         });
