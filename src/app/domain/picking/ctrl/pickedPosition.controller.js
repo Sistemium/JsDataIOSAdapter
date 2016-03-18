@@ -48,7 +48,7 @@
           input: 'productionInfo',
           label: 'Дата розлива',
           validate: function (val) {
-            return !! /\d{2}\/\d{2}\/\d{4}/.test (val);
+            return !! /\d{2}\/\d{2}\/\d{2,4}/.test (val);
           },
           value: pickedPosition && pickedPosition.productionInfo || ''
         });
