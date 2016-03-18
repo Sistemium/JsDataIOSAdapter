@@ -63,7 +63,7 @@
 
           linkStockBatch: function (sb, code, volume) {
 
-            return POPP.inject({
+            return POPP.create({
               sb: sb,
               pickingOrderPosition: this.id,
               volume: volume || this.volume,

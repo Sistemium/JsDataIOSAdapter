@@ -11,6 +11,12 @@
           if (!instance.id) {
             instance.id = uuid.v4();
           }
+        },
+        beforeCreate: function (resource, instance, cb) {
+          if (!instance.id) {
+            instance.id = uuid.v4();
+          }
+          cb(null, instance);
         }
       });
 

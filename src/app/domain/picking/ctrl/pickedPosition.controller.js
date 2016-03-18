@@ -96,22 +96,25 @@
         save: function () {
 
           if (!pickedPosition) {
-            POPP.inject ({
+            POPP.create ({
               pickingOrderPosition: position.id,
               volume: states[0].exportValue,
               productionInfo: states.length > 1 ? states[1].value : null
+            }).then (function (){
+              $state.go('^');
             });
           } else {
             pickedPosition.volume = states[0].exportValue;
             pickedPosition.productionInfo = states.length > 1 ? states[1].value : null;
+            POPP.save(pickedPosition.id).then (function (){
+              $state.go('^');
+            });
           }
-
-          $state.go('^');
 
         },
 
         remove: function () {
-          POPP.eject (pickedPosition);
+          POPP.destroy (pickedPosition);
           $state.go('^');
         }
 
