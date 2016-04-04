@@ -19,6 +19,13 @@
           }
         },
 
+        computed: {
+          shortName: ['name', function (name) {
+            var names = name.match (/(^[^ ]*) (.*$)/);
+            return names[1] + ' ' + names[2][0] + '.';
+          }]
+        },
+
         getCurrent: function () {
           return currentPicker;
         },
