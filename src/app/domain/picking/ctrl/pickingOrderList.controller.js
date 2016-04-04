@@ -27,7 +27,7 @@
         selected: true
       }, $scope, 'vm.selectedItems');
 
-      PO.findAll({ picker: picker.id }).then(function (res) {
+      PO.findAll({ picker: picker.id }, { bypassCache: true }).then(function (res) {
 
         res.forEach(function (i) {
           PO.loadRelations(i).then(function (r) {
