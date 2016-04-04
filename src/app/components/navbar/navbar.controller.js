@@ -20,9 +20,11 @@
           vm.isFullScreen = !vm.isFullScreen;
         }
 
-      }
+      },
 
-    }, Auth);
+      auth: Auth
+
+    });
 
     vm.toggleFullScreen();
 

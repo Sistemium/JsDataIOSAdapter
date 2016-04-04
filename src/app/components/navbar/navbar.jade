@@ -13,14 +13,10 @@ div.navbar.navbar-default(ng-hide='vm.hide')
     ul.nav.navbar-nav.navbar-right.float-right
 
       li(ng-hide='vm.auth.isLoggedIn()', ui-sref-active='active')
-        a(ui-sref='login') Login
+        a(ui-sref='login') Вход
 
-      li(ng-show='vm.auth.isLoggedIn()', ui-sref-active='active')
-        a(ui-sref='settings')
-          span.glyphicon.glyphicon-cog
-
-      li(ng-show='vm.auth.isLoggedIn()')
-        a(href='' ng-click='vm.auth.logout()') Logout
+      li(ng-if='vm.auth.isLoggedIn()')
+        a(href='' ng-click='vm.auth.logout()') {{ vm.auth.getCurrentUser().name }}
 
     div#navbar-main.navbar-collapse.collapse(uib-collapse='vm.isCollapsed')
       ul.nav.navbar-nav

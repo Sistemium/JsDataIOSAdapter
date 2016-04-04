@@ -1,0 +1,14 @@
+section.row-fluid
+
+  form.form-horizontal(ng-submit="vm.submit()" name="loginForm")
+    .form-group
+      label.col-sm-3.control-label(for="inputCode") Код
+      .col-sm-9
+        input#inputCode.form-control(type="text" name="code" ng-required="true" placeholder="Номер наборщика" ng-model="vm.code")
+    .form-group
+      label.col-sm-3.control-label(for="inputPassword") Пароль
+      .col-sm-9
+        input#inputPassword.form-control(type="password" name="password" ng-required="true" placeholder="4 цифры" ng-model="vm.password")
+    .form-group
+      .col-sm-offset-3.col-sm-9
+        button.btn.btn-primary.pull-right(type="submit" ng-disabled="loginForm.$invalid") Войти

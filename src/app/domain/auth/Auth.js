@@ -2,18 +2,18 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function () {
+  angular.module('webPage').service('Auth', function ($rootScope) {
 
-    var user;
+    var currentUser;
 
     return {
 
       getCurrentUser: function () {
-        return user;
+        return currentUser;
       },
 
       isLoggedIn: function () {
-        return !!user;
+        return !!currentUser;
       },
 
       isAdmin: function () {
@@ -21,7 +21,13 @@
       },
 
       logout: function () {
-        user = undefined;
+        currentUser = undefined;
+        $rootScope.$broadcast('auth-logout');
+      },
+      
+      login: function (user) {
+        currentUser = user;
+        $rootScope.$broadcast('auth-login',currentUser);
       }
 
     }

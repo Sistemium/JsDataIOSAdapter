@@ -3,20 +3,31 @@
 (function () {
 
   angular.module('webPage')
-    .controller('PickingOrderListController', function ($scope, models, $state, toastr, Errors, BarCodeScanner, SoundSynth) {
+    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth) {
+
+      var picker = Schema.model ('Picker').getCurrent();
+
+      if (!picker) {
+        return $state.go ('login');
+      }
 
       var vm = this;
-      var PO = models.PickingOrder;
-      var POP = models.PickingOrderPosition;
+      var PO = Schema.model ('PickingOrder');
+      var POP = Schema.model ('PickingOrderPosition');
+      var SB = Schema.model ('StockBatch');
 
       vm.selectedItems = [];
 
-      models.PickingOrder.bindAll({}, $scope, 'vm.pickingOrders');
-      models.PickingOrder.bindAll({
+      PO.bindAll({
+        picker: picker.id
+      }, $scope, 'vm.pickingOrders');
+
+      PO.bindAll({
+        picker: picker.id,
         selected: true
       }, $scope, 'vm.selectedItems');
 
-      PO.findAll({}).then(function (res) {
+      PO.findAll({ picker: picker.id }).then(function (res) {
 
         res.forEach(function (i) {
           PO.loadRelations(i).then(function (r) {
@@ -54,7 +65,7 @@
 
         code = code || vm.barCodeInput;
 
-        return models.StockBatch.someBy.barCode(code).then(function (sbs) {
+        return SB.someBy.barCode(code).then(function (sbs) {
 
           var notFound = 'Неизвестный штрих-код';
 

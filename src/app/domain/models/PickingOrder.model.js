@@ -14,6 +14,12 @@
             localField: 'positions',
             foreignKey: 'pickingOrder'
           }
+        },
+        hasOne: {
+          Picker: {
+            localField: 'pickedBy',
+            localKey: 'picker'
+          }
         }
       },
 
