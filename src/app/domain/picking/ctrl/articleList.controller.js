@@ -30,7 +30,7 @@
             if (unp > 0) {
               pickedOrders.push ({
                 volume: Language.speakableBoxPcs (a.boxPcs(unp)),
-                num: orders.indexOf(pop.PickingOrder) + 1
+                num: $scope.vm.selectedItems.indexOf(pop.PickingOrder) + 1
               });
               pop.linkStockBatch(sb, code, unp).then (function (){
                 pa.updatePicked ();
@@ -45,7 +45,7 @@
             return res
               + (idx ? ' и ' : '')
               + o.volume
-              + (orders.length >1
+              + ($scope.vm.selectedItems.length >1
                   ? (o.num === 2 ? ' во ' : ' в ')
                     + Language.orderRu(o.num)
                   : ''
