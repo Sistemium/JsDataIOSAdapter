@@ -8,14 +8,14 @@
         root: function () {
           return {
 
-            title: 'Home',
+            title: 'Начало',
             state: 'home',
 
             items: [{
-              title: 'Playground',
+              title: 'Тестовый раздел',
               state: 'playground'
             },{
-              title: 'Picking',
+              title: 'Наборка',
               state: 'picking.orderList'
             }]
 
