@@ -21,7 +21,16 @@
           templateUrl: 'app/domain/picker/auth.html',
           controller: 'PickerAuthController',
           controllerAs: 'vm'
-        });
+        })
+
+        .state({
+          name: 'profile',
+          url: '/profile',
+          templateUrl: 'app/domain/picker/info.html',
+          controller: 'PickerInfoController',
+          controllerAs: 'vm'
+        })
+      ;
 
     })
   ;

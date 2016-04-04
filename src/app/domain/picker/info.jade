@@ -1,0 +1,22 @@
+section.row-fluid
+
+  form.form-horizontal(ng-submit="vm.submit()" name="pickerForm")
+    .form-group
+      label.col-sm-3.control-label(for="inputName") Фамилия и имя
+      .col-sm-9
+        input#inputCode.form-control(type="text" name="name" ng-required="true" placeholder="Фамилия и имя" ng-model="vm.data.name")
+    .form-group
+      label.col-sm-3.control-label(for="inputCode") Код
+      .col-sm-9
+        input#inputCode.form-control(type="text" name="code" ng-required="true" readonly placeholder="Номер наборщика" ng-model="vm.data.code")
+    .form-group
+      label.col-sm-3.control-label(for="inputPassword") Пароль
+      .col-sm-9
+        input#inputPassword.form-control(type="password" name="password" ng-required="true" placeholder="4 цифры" ng-model="vm.data.password")
+
+.pull-right
+  button.btn.btn-info(type="button" ng-if="pickerForm.$pristine" ng-click="vm.logout()") Завершить работу
+  = " "
+  button.btn.btn-primary(type="submit" ng-hide="pickerForm.$pristine" ng-disabled="pickerForm.$invalid") Сохранить
+  = " "
+  button.btn.btn-warning(type="button" ng-hide="pickerForm.$pristine" ng-click="vm.cancel()") Отменить изменения
