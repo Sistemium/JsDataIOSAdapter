@@ -30,3 +30,13 @@ form.flat-on-small {
 .has-navbar-fixed-bottom {
   margin-bottom: 60px;
 }
+
+@media (max-width: 767px) {
+
+  .navbar {
+    .nav.float-right.navbar-right {
+      margin-right: -10px;
+    }
+  }
+
+}
