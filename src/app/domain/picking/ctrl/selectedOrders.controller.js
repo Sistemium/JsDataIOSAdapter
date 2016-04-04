@@ -8,13 +8,7 @@
       var PO = models.PickingOrder;
       var vm = this;
 
-      PO.findAll().then(function () {
-
-        vm.selectedItems = $scope.$parent.vm.selectedItems || PO.filter({
-            selected: true
-        });
-
-      });
+      vm.selectedItems = $scope.$parent.vm.selectedItems;
 
       vm.totals = PO.agg (vm, 'selectedItems');
 
