@@ -1,3 +1,9 @@
+h3
+  p Текущий пользователь:
+  small
+
+hr
+
 section.row-fluid
 
   form.form-horizontal(ng-submit="vm.submit()" name="pickerForm")
@@ -13,10 +19,11 @@ section.row-fluid
       label.col-sm-3.control-label(for="inputPassword") Пароль
       .col-sm-9
         input#inputPassword.form-control(type="password" name="password" ng-required="true" placeholder="4 цифры" ng-model="vm.data.password")
+    hr
 
-.pull-right
-  button.btn.btn-info(type="button" ng-if="pickerForm.$pristine" ng-click="vm.logout()") Завершить работу
-  = " "
-  button.btn.btn-primary(type="submit" ng-hide="pickerForm.$pristine" ng-disabled="pickerForm.$invalid") Сохранить
-  = " "
-  button.btn.btn-warning(type="button" ng-hide="pickerForm.$pristine" ng-click="vm.cancel()") Отменить изменения
+    .pull-right
+      button.btn.btn-danger(type="button" ng-if="pickerForm.$pristine" ng-click="vm.logout()") Завершить работу
+      = " "
+      button.btn.btn-primary(type="submit" ng-hide="pickerForm.$pristine" ng-disabled="pickerForm.$invalid") Сохранить
+      = " "
+      button.btn.btn-warning(type="button" ng-hide="pickerForm.$pristine" ng-click="vm.cancel()") Отменить изменения

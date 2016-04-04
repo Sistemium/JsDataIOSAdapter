@@ -29,6 +29,7 @@
 
     vm.logout = function () {
       Auth.logout();
+      Picker.logout();
       $state.go ('login');
     }
 

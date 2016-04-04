@@ -30,6 +30,12 @@
           return currentPicker;
         },
 
+        logout: function () {
+          currentPicker = undefined;
+          Schema.model ('PickingOrder').ejectAll();
+          Picker.ejectAll();
+        },
+
         login: function (code, password) {
 
           return Picker.findAll({

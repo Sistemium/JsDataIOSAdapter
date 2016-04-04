@@ -45,6 +45,9 @@
           name: 'picking',
           abstract: true,
           templateUrl: 'app/domain/ui-view.html',
+          data: {
+            auth: true
+          },
           children: [
             { name:'orderList',
               url: '/orders',
