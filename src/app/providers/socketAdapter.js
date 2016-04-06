@@ -27,34 +27,23 @@
     //}
 
     SocketAdapter.prototype.findAll = function (resource, params, options) {
-      return new Promise(function (resolve) {
-        Sockets.emit('jsData', {
-          method: 'findAll',
-          //TODO rename models with pool or set basePath for adapter or leave as it is now
-          resource: 'dev/' + resource.name,
-          params: params,
-          options: options
-        });
-
-        Sockets.on('eventFromServer', function (data) {
-          resolve(data);
-        });
+      return Sockets.emitQ('jsData', {
+        method: 'findAll',
+        //TODO rename models with pool or set basePath for adapter or leave as it is now
+        resource: 'dev/' + resource.name,
+        params: params,
+        options: options
       });
     };
 
     SocketAdapter.prototype.find = function (resource, id, options) {
-      return new Promise(function (resolve) {
-        Sockets.emit('jsData', {
-          method: 'find',
-          //TODO rename models with pool or set basePath for adapter or leave as it is now
-          resource: 'dev/' + resource.name,
-          options: options
-        });
-
-        Sockets.on('eventFromServer', function (data) {
-          resolve(data);
-        })
-      })
+      return Sockets.emitQ('jsData', {
+        method: 'find',
+        //TODO rename models with pool or set basePath for adapter or leave as it is now
+        resource: 'dev/' + resource.name,
+        id: id,
+        options: options
+      });
     };
 
     SocketAdapter.prototype.create = function (resource, attrs) {
