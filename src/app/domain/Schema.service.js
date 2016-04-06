@@ -69,8 +69,9 @@ angular.module('Models')
 
     if ($window.webkit) {
       DS.registerAdapter('ios', new IosAdapter (schema), {default: true});
+    } else {
+      DS.registerAdapter('socket', new SocketAdapter(), {default: true});
     }
-    DS.registerAdapter('socket', new SocketAdapter());
 
     return schema;
 
