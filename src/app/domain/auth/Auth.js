@@ -6,7 +6,7 @@
 
     var currentUser;
 
-    $rootScope.$on('$stateChangeStart', function (event, next) {
+    var needAuth = $rootScope.$on('$stateChangeStart', function (event, next) {
 
       var needRoles = next.data && next.data.auth;
 
@@ -16,6 +16,8 @@
       }
 
     });
+
+    $rootScope.$on('$destroy', needAuth);
 
     var sockAuth = function () {
       var accessToken = window.localStorage.getItem('authorization');
