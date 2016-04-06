@@ -45,11 +45,11 @@ angular.module('webPage')
 
         var q = $q.defer();
 
-        svc.emit(eventName, data, function (data){
-          if (data) {
-            q.resolve (data);
+        svc.emit(eventName, data, function (reply){
+          if (reply.data) {
+            q.resolve (reply.data);
           } else {
-            q.reject ();
+            q.reject (reply);
           }
         });
 
