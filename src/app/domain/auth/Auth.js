@@ -2,11 +2,11 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope,$state) {
+  angular.module('webPage').service('Auth', function ($rootScope,$state, Sockets, localStorageService) {
 
     var currentUser;
 
-    $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
+    $rootScope.$on('$stateChangeStart', function (event, next) {
 
       var needRoles = next.data && next.data.auth;
 
@@ -16,6 +16,20 @@
       }
 
     });
+
+    var sockAuth = function () {
+      Sockets.emit('authorization', {accessToken: localStorageService.get('authorization')}, function (ack) {
+
+        if (ack.isAuthorized) {
+          Sockets.emit('sockData:register', function (dack) {
+            $rootScope.$broadcast('socket:authorized',dack);
+          });
+        }
+
+      });
+    };
+
+    sockAuth();
 
     return {
 
@@ -41,7 +55,7 @@
         $rootScope.$broadcast('auth-login',currentUser);
       }
 
-    }
+    };
 
   });
 
