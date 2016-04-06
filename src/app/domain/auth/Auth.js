@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope,$state, Sockets, localStorageService) {
+  angular.module('webPage').service('Auth', function ($rootScope,$state, Sockets) {
 
     var currentUser;
 
@@ -18,7 +18,8 @@
     });
 
     var sockAuth = function () {
-      Sockets.emit('authorization', {accessToken: localStorageService.get('authorization')}, function (ack) {
+      var accessToken = window.localStorage.getItem('authorization');
+      Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
 
         if (ack.isAuthorized) {
           Sockets.emit('sockData:register', function (dack) {
