@@ -64,12 +64,20 @@
     };
 
     SocketAdapter.prototype.destroy = function (resource, id, options) {
-      return Sockets.emitQ('jsData', {
+      var q = Sockets.emitQ('jsData', {
         method: 'destroy',
         resource: 'dev/' + resource.name,
         id: id,
         options: options
-      })
+      });
+
+      q.catch (function(err){
+        if (err && err.error === 404) {
+          resource.eject(id);
+        }
+      });
+
+      return q;
     };
 
     return SocketAdapter;
