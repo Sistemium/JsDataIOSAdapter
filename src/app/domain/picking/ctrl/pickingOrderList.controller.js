@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth) {
+    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets) {
 
       var picker = Schema.model ('Picker').getCurrent();
 
@@ -17,6 +17,21 @@
       var SB = Schema.model ('StockBatch');
 
       vm.selectedItems = [];
+
+      var onJSData = function (data) {
+        var resource = data.resource.match(/[^\/]+$/);
+        if (resource[0] === 'PickingRequest') {
+          console.log ('refresh');
+          refresh();
+        }
+      };
+
+      var unsubscribeUpdate = Sockets.on('jsData:update', onJSData);
+
+      $scope.$on('$destroy',function(){
+        console.log ('$destroy');
+        unsubscribeUpdate();
+      });
 
       function refresh() {
         var lastModified = PO.lastModified();
