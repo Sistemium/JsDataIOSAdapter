@@ -30,6 +30,14 @@
           controller: 'PickerInfoController',
           controllerAs: 'vm'
         })
+
+        .state({
+          name: 'auth',
+          url: '/auth',
+          templateUrl: 'app/domain/auth/views/phaAuth.html',
+          controller: 'PhaAuthController',
+          controllerAs: 'vm'
+        })
       ;
 
     })

@@ -2,11 +2,20 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope,$state, Sockets) {
+  angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets) {
 
     var currentUser;
 
+    function getAccessToken () {
+      return window.localStorage.getItem('authorization');
+    }
+
     var needAuth = $rootScope.$on('$stateChangeStart', function (event, next) {
+
+      if (!getAccessToken() && next.name !== 'auth') {
+        event.preventDefault();
+        return $state.go('auth');
+      }
 
       var needRoles = next.data && next.data.auth;
 
@@ -17,10 +26,21 @@
 
     });
 
-    $rootScope.$on('$destroy', needAuth);
+    var onAuthenticated = $rootScope.$on('authenticated', function (event, res) {
+      window.localStorage.setItem('authorization',res.accessToken);
+      sockAuth();
+    });
+
+    $rootScope.$on('$destroy', function(){
+      needAuth();
+      onAuthenticated();
+    });
 
     var sockAuth = function () {
-      var accessToken = window.localStorage.getItem('authorization');
+      var accessToken = getAccessToken();
+      if (!accessToken) {
+        return;
+      }
       Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
 
         if (ack.isAuthorized) {
