@@ -21,7 +21,6 @@
       var onJSData = function (data) {
         var resource = data.resource.match(/[^\/]+$/);
         if (resource[0] === 'PickingRequest') {
-          console.log ('refresh');
           refresh();
         }
       };
@@ -29,7 +28,6 @@
       var unsubscribeUpdate = Sockets.on('jsData:update', onJSData);
 
       $scope.$on('$destroy',function(){
-        console.log ('$destroy');
         unsubscribeUpdate();
       });
 
