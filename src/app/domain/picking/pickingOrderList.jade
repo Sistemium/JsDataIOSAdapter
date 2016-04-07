@@ -30,9 +30,9 @@ section.has-navbar-fixed-bottom.ui-view
         td {{ order.totalBoxVolume () | number: 1}}
 
   .pull-right
-    button.btn.btn-primary(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders')
+    button.btn.btn-primary.animate-show(ng-show='vm.selectedItems.length' ui-sref='.selectedOrders')
       | Собирать отмеченные
-    button.btn.btn-primary(ng-hide='vm.selectedItems.length' ng-click='vm.refresh()')
+    button.btn.btn-primary(ng-show='!vm.selectedItems.length' ng-click='vm.refresh()' ng-disabled='vm.busy.$$state.status==0')
       | Обновить
 
 nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')

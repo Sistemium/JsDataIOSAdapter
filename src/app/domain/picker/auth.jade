@@ -17,4 +17,4 @@ section.row-fluid
     hr
 
     .pull-right
-      button.btn.btn-primary(type="submit" ng-disabled="loginForm.$invalid") Начать работу
+      button.btn.btn-primary(type="submit" ng-disabled="loginForm.$invalid || vm.busy && !vm.busy.$$state.status") Начать работу

@@ -20,7 +20,7 @@
 
       function refresh() {
         var lastModified = PO.lastModified();
-        PO.findAll({picker: picker.id}, {bypassCache: true})
+        vm.busy = PO.findAll({picker: picker.id}, {bypassCache: true})
           .then(function (res) {
 
             res.forEach(function (i) {
