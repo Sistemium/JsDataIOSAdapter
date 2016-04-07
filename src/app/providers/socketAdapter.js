@@ -47,11 +47,20 @@
     };
 
     SocketAdapter.prototype.create = function (resource, attrs) {
-      throw new Error('Not implemented yet!!', attrs);
+      return Sockets.emitQ('jsData', {
+        method: 'create',
+        resource: 'dev/' + resource.name,
+        attrs: attrs
+      });
     };
 
     SocketAdapter.prototype.update = function (resource, id, attrs) {
-      throw new Error('Not implemented yet!!', attrs);
+      return Sockets.emitQ('jsData', {
+        methdo: 'update',
+        resource: 'dev/' + resource.name,
+        id: id,
+        attrs: attrs
+      });
     };
 
     SocketAdapter.prototype.destroy = function (resource, id, options) {
