@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('webPage')
+angular.module('core.services')
   .factory('Sockets', function($rootScope, $q) {
 
     var url = 'http://localhost:8000/';
@@ -56,9 +56,11 @@ angular.module('webPage')
         var q = $q.defer();
 
         svc.emit(eventName, data, function (reply){
-          if (reply.data) {
+          if (!reply) {
+            q.resolve();
+          } else if (reply.data) {
             q.resolve (reply.data);
-          } else {
+          } else if (reply.error) {
             q.reject (reply);
           }
         });
