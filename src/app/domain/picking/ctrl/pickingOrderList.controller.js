@@ -18,6 +18,36 @@
 
       vm.selectedItems = [];
 
+      function refresh() {
+        var lastModified = PO.lastModified();
+        PO.findAll({picker: picker.id}, {bypassCache: true})
+          .then(function (res) {
+
+            res.forEach(function (i) {
+              PO.loadRelations(i).then(function (r) {
+                _.each(r.positions, function (pos) {
+                  POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+                });
+              });
+            });
+
+            if (!vm.selectedItems.length) {
+              $state.go('picking.orderList');
+            }
+
+          })
+          .then(function (){
+            if (!lastModified) {
+              return;
+            }
+            _.each (vm.pickingOrders, function (po) {
+              if (po.DSLastModified() < lastModified) {
+                PO.eject(po);
+              }
+            });
+          });
+      }
+
       PO.bindAll({
         picker: picker.id
       }, $scope, 'vm.pickingOrders');
@@ -26,22 +56,6 @@
         picker: picker.id,
         selected: true
       }, $scope, 'vm.selectedItems');
-
-      PO.findAll({ picker: picker.id }, { bypassCache: true }).then(function (res) {
-
-        res.forEach(function (i) {
-          PO.loadRelations(i).then(function (r) {
-            _.each (r.positions, function (pos) {
-              POP.loadRelations (pos,['Article','PickingOrderPositionPicked']);
-            });
-          });
-        });
-
-        if (!vm.selectedItems.length) {
-          $state.go ('picking.orderList');
-        }
-
-      });
 
       angular.extend(vm, {
 
@@ -54,10 +68,13 @@
 
         currentTotals: function () {
           return vm.selectedItems.length ? vm.selectedTotals : vm.totals
-        }
+        },
+
+        refresh: refresh
 
       });
 
+      refresh();
 
       function scanFn(code) {
 
