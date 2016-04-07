@@ -56,7 +56,7 @@
 
     SocketAdapter.prototype.update = function (resource, id, attrs) {
       return Sockets.emitQ('jsData', {
-        methdo: 'update',
+        method: 'update',
         resource: 'dev/' + resource.name,
         id: id,
         attrs: attrs
@@ -64,7 +64,12 @@
     };
 
     SocketAdapter.prototype.destroy = function (resource, id, options) {
-      throw new Error('Not implemented yet!!', options);
+      return Sockets.emitQ('jsData', {
+        method: 'destroy',
+        resource: 'dev/' + resource.name,
+        id: id,
+        options: options
+      })
     };
 
     return SocketAdapter;
