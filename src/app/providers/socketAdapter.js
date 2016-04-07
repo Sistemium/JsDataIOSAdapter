@@ -4,9 +4,15 @@
 
   angular.module('webPage').service('SocketAdapter', function (Sockets) {
 
-    var SocketAdapter = function () {
-    };
+    var Defaults = function () {};
+    var defaultsPrototype = Defaults.prototype;
+    defaultsPrototype.basePath = '';
 
+    var SocketAdapter = function (options) {
+      options || (options = {});
+      this.defaults = new Defaults();
+      _.assign(this.defaults, options);
+    };
 
     //function paramsToOptions (params) {
     //
