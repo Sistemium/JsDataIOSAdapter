@@ -32,7 +32,8 @@
       });
     };
 
-    sockAuth();
+    //sockAuth();
+    Sockets.on('connect',sockAuth);
 
     return {
 

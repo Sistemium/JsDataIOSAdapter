@@ -22,6 +22,11 @@ angular.module('webPage')
       emit: function (eventName, data, callback) {
 
         if ((angular.isFunction(data)) && !callback) {
+          if (!socket.connected) {
+            return data.apply(socket, [{
+              error: 'Нет подключения к серверу'
+            }]);
+          }
           socket.emit(eventName, function () {
             var args = arguments;
             $rootScope.$apply(function () {
@@ -31,6 +36,11 @@ angular.module('webPage')
             });
           });
         } else {
+          if (!socket.connected) {
+            return callback.apply(socket, [{
+              error: 'Нет подключения к серверу'
+            }]);
+          }
           socket.emit(eventName, data, function () {
             var args = arguments;
             $rootScope.$apply(function () {
