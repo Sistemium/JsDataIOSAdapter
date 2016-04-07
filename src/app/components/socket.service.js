@@ -12,12 +12,16 @@ angular.module('core.services')
     var svc = {
       io: socket,
       on: function (eventName, callback) {
-        socket.on(eventName, function () {
+        var wrappedCallback = function () {
           var args = arguments;
           $rootScope.$apply(function () {
             callback.apply(socket, args);
           });
-        });
+        };
+        socket.on(eventName, wrappedCallback);
+        return function unSubscribe () {
+          socket.removeListener(eventName, wrappedCallback);
+        }
       },
       emit: function (eventName, data, callback) {
 
@@ -67,8 +71,12 @@ angular.module('core.services')
 
         return q.promise;
       },
-      removeAllListeners: socket.removeAllListeners,
-      removeListener: socket.removeListener
+      removeAllListeners: function () {
+        socket.removeAllListeners();
+      },
+      removeListener: function (event, fn) {
+        socket.removeListener(event, fn);
+      }
     };
 
     return svc;
