@@ -42,17 +42,10 @@
         return;
       }
       Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
-
-        if (ack.isAuthorized) {
-          Sockets.emit('sockData:register', function (dack) {
-            $rootScope.$broadcast('socket:authorized',dack);
-          });
-        }
-
+        console.log ('Socket authorization:', ack);
       });
     };
 
-    //sockAuth();
     Sockets.on('connect',sockAuth);
 
     return {
