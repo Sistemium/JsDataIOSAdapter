@@ -18,9 +18,8 @@
 
       vm.selectedItems = [];
 
-      var onJSData = function (data) {
-        var resource = data.resource.match(/[^\/]+$/);
-        if (resource[0] === 'PickingRequest') {
+      var onJSData = function (event) {
+        if (event.resource === 'dev/PickingRequest') {
           refresh();
         }
       };
