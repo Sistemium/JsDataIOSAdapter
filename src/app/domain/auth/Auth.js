@@ -45,7 +45,7 @@
         console.log ('Socket authorization:', ack);
         InitService.init();
         // TODO: entity subscription should do a controller, but we need to repeat it after reconect/auth
-        Sockets.emitQ('jsData:subscribe', Sockets.subscriptions);
+        Sockets.emitQ('jsData:subscribe', ['dev/PickingRequest']);
       });
     };
 

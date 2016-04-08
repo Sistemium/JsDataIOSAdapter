@@ -3,7 +3,7 @@
 angular.module('core.services')
   .factory('Sockets', function($rootScope, $q) {
 
-    var url = 'http://localhost:8000/';
+    var url = location.port1 ? 'http://localhost:8000' : 'https://socket2.sistemium.com';
 
     var socket = io(url, {
       path: '/socket.io-client'
