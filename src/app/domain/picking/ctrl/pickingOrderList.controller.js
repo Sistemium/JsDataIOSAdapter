@@ -25,11 +25,7 @@
         }
       };
 
-      var unsubscribeUpdate = Sockets.on('jsData:update', onJSData);
-
-      $scope.$on('$destroy',function(){
-        unsubscribeUpdate();
-      });
+      $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
 
       function refresh() {
         var lastModified = PO.lastModified();
