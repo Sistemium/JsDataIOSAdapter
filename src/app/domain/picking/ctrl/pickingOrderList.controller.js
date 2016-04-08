@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth) {
+    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets) {
 
       var picker = Schema.model ('Picker').getCurrent();
 
@@ -18,6 +18,44 @@
 
       vm.selectedItems = [];
 
+      var onJSData = function (event) {
+        if (event.resource === 'dev/PickingRequest') {
+          refresh();
+        }
+      };
+
+      $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
+
+      function refresh() {
+        var lastModified = PO.lastModified();
+        vm.busy = PO.findAll({picker: picker.id}, {bypassCache: true})
+          .then(function (res) {
+
+            res.forEach(function (i) {
+              PO.loadRelations(i).then(function (r) {
+                _.each(r.positions, function (pos) {
+                  POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+                });
+              });
+            });
+
+            if (!vm.selectedItems.length) {
+              $state.go('picking.orderList');
+            }
+
+          })
+          .then(function (){
+            if (!lastModified) {
+              return;
+            }
+            _.each (vm.pickingOrders, function (po) {
+              if (po.DSLastModified() < lastModified) {
+                PO.eject(po);
+              }
+            });
+          });
+      }
+
       PO.bindAll({
         picker: picker.id
       }, $scope, 'vm.pickingOrders');
@@ -26,22 +64,6 @@
         picker: picker.id,
         selected: true
       }, $scope, 'vm.selectedItems');
-
-      PO.findAll({ picker: picker.id }, { bypassCache: true }).then(function (res) {
-
-        res.forEach(function (i) {
-          PO.loadRelations(i).then(function (r) {
-            _.each (r.positions, function (pos) {
-              POP.loadRelations (pos,['Article','PickingOrderPositionPicked']);
-            });
-          });
-        });
-
-        if (!vm.selectedItems.length) {
-          $state.go ('picking.orderList');
-        }
-
-      });
 
       angular.extend(vm, {
 
@@ -54,10 +76,13 @@
 
         currentTotals: function () {
           return vm.selectedItems.length ? vm.selectedTotals : vm.totals
-        }
+        },
+
+        refresh: refresh
 
       });
 
+      refresh();
 
       function scanFn(code) {
 

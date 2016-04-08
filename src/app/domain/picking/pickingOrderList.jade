@@ -29,8 +29,11 @@ section.has-navbar-fixed-bottom.ui-view
         td {{ order.positionsCount () | number:0 }}
         td {{ order.totalBoxVolume () | number: 1}}
 
-  button.btn.btn-primary.pull-right(ng-show='vm.selectedItems.length > 0' ui-sref='.selectedOrders')
-    | Собирать отмеченные
+  .pull-right
+    button.btn.btn-primary.animate-show(ng-show='vm.selectedItems.length' ui-sref='.selectedOrders')
+      | Собирать отмеченные
+    button.btn.btn-primary(ng-show='!vm.selectedItems.length' ng-click='vm.refresh()' ng-disabled='vm.busy.$$state.status==0')
+      | Обновить
 
 nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')
   .container

@@ -1,5 +1,5 @@
 angular.module('Models')
-  .service('Schema', function ($window, DS, IosAdapter) {
+  .service('Schema', function ($window, DS, IosAdapter, SocketAdapter) {
 
     var models = {};
 
@@ -69,6 +69,8 @@ angular.module('Models')
 
     if ($window.webkit) {
       DS.registerAdapter('ios', new IosAdapter (schema), {default: true});
+    } else {
+      DS.registerAdapter('socket', new SocketAdapter(), {default: true});
     }
 
     return schema;

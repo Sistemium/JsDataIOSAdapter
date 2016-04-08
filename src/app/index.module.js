@@ -16,7 +16,11 @@
       'as.sortable',
       'core.services',
       'Models',
-      'ng-appcache'
-    ]);
+      'ng-appcache',
+      'ui.mask'
+    ])
+    .run(function(Auth){
+      console.log (Auth);
+    });
 
 })();

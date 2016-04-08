@@ -9,7 +9,14 @@ section.row-fluid
     .form-group
       label.col-sm-3.control-label(for="inputCode") Личный номер
       .col-sm-9
-        input#inputCode.form-control(type="text" next-on-enter="inputPassword" name="code" ng-required="true" placeholder="Номер наборщика" ng-model="vm.code")
+        input#inputCode.form-control(
+          type="text"
+          next-on-enter="inputPassword"
+          name="code"
+          ng-required="true"
+          placeholder="Номер наборщика"
+          ng-model="vm.code"
+        )
     .form-group
       label.col-sm-3.control-label(for="inputPassword") Пароль
       .col-sm-9
@@ -17,4 +24,4 @@ section.row-fluid
     hr
 
     .pull-right
-      button.btn.btn-primary(type="submit" ng-disabled="loginForm.$invalid") Начать работу
+      button.btn.btn-primary(type="submit" ng-disabled="loginForm.$invalid || vm.busy && !vm.busy.$$state.status") Начать работу

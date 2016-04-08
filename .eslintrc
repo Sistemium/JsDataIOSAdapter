@@ -13,7 +13,8 @@
     "console": true,
     "_": true,
     "UAParser": true,
-    "uuid": true
+    "uuid": true,
+    "io": true
   },
   "rules": {
     "no-console": 0,

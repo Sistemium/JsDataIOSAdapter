@@ -1,0 +1,37 @@
+h3
+  p Авторизация
+  small Укажите номер сотового телефона и получите СМС с паролем
+
+hr
+
+section.row-fluid
+  form.form-horizontal(ng-submit="vm.submit()" name="loginForm")
+    .form-group
+      label.col-sm-3.control-label(for="inputMobileNumber") Сотовый номер
+      .col-sm-9
+        input#inputMobileNumber.form-control(
+          type="text"
+          ng-disabled="vm.state==='code'"
+          ui-mask="{{vm.mobileNumberMask}}"
+          name="mobileNumber"
+          ng-required="true"
+          ng-model="vm.mobileNumber"
+          autocomplete="off"
+          auto-focus="{{vm.state==='mobileNumber'}}"
+        )
+    .form-group(ng-if="vm.state==='code'")
+      label.col-sm-3.control-label(for="inputCode") Пароль из СМС
+      .col-sm-9
+        input#inputCode.form-control(
+          type="text"
+          name="code"
+          ng-required="true"
+          placeholder="4-6 цифр"
+          ng-model="vm.code"
+          autocomplete="off"
+          auto-focus="true"
+        )
+    hr
+
+    .pull-right
+      button.btn.btn-primary(type="submit" ng-disabled="loginForm.$invalid || vm.busy && !vm.busy.$$state.status") Отправить

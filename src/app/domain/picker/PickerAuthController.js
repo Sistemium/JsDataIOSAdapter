@@ -15,7 +15,7 @@
 
       submit: function () {
 
-        vm.login (vm.code, vm.password);
+        vm.busy = vm.login (vm.code, vm.password);
 
       },
 
@@ -32,7 +32,6 @@
 
           })
           .catch (function (res){
-            console.error (res.data.text);
             toastr.error (_.get(res,'data.text') || 'Ошибка связи');
           })
         ;
