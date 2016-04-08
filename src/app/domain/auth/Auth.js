@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets) {
+  angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets, InitService) {
 
     var currentUser;
 
@@ -43,8 +43,9 @@
       }
       Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
         console.log ('Socket authorization:', ack);
+        InitService.init();
         // TODO: entity subscription should do a controller, but we need to repeat it after reconect/auth
-        Sockets.emitQ('jsData:subscribe', ['PickingOrder']);
+        Sockets.emitQ('jsData:subscribe', Sockets.subscriptions);
       });
     };
 

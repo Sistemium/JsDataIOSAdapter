@@ -10,13 +10,11 @@
           console.log ('jsData:update', data);
         });
       }
-      
+
       return {
         init: init
       };
-      
-    }).run(function (InitService) {
-      InitService.init();
+
     })
   ;
 

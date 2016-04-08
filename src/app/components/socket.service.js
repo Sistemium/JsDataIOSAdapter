@@ -11,6 +11,7 @@ angular.module('core.services')
 
     var svc = {
       io: socket,
+      subscriptions: [],
       on: function (eventName, callback) {
         var wrappedCallback = function () {
           var args = arguments;

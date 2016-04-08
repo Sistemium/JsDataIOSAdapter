@@ -25,6 +25,10 @@
         }
       };
 
+      Sockets.subscriptions.push('PickingOrder');
+      Sockets.emit('jsData:subscribe', Sockets.subscriptions, function (id) {
+        //TODO use id for unsubscribe
+      });
       $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
 
       function refresh() {
