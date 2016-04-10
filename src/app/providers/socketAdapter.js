@@ -4,6 +4,7 @@
 
   angular.module('webPage').service('SocketAdapter', function (Sockets) {
 
+    var DEBUG = debug ('stg:SocketAdapter');
     var Defaults = function () {};
     var defaultsPrototype = Defaults.prototype;
     defaultsPrototype.basePath = '';
@@ -13,6 +14,11 @@
       this.defaults = new Defaults();
       _.assign(this.defaults, options);
     };
+
+    function emit (data) {
+      DEBUG ('emit', data);
+      return Sockets.emitQ('jsData',data);
+    }
 
     //function paramsToOptions (params) {
     //
@@ -33,17 +39,21 @@
     //}
 
     SocketAdapter.prototype.findAll = function (resource, params, options) {
-      return Sockets.emitQ('jsData', {
+      return emit({
         method: 'findAll',
         //TODO rename models with pool or set basePath for adapter or leave as it is now
         resource: 'dev/' + resource.name,
         params: params,
-        options: options
+        options: angular.extend({
+          headers: {
+            'x-page-size': 300
+          }
+        },options)
       });
     };
 
     SocketAdapter.prototype.find = function (resource, id, options) {
-      return Sockets.emitQ('jsData', {
+      return emit({
         method: 'find',
         //TODO rename models with pool or set basePath for adapter or leave as it is now
         resource: 'dev/' + resource.name,
@@ -53,7 +63,7 @@
     };
 
     SocketAdapter.prototype.create = function (resource, attrs) {
-      return Sockets.emitQ('jsData', {
+      return emit({
         method: 'create',
         resource: 'dev/' + resource.name,
         attrs: attrs
@@ -61,7 +71,7 @@
     };
 
     SocketAdapter.prototype.update = function (resource, id, attrs) {
-      return Sockets.emitQ('jsData', {
+      return emit({
         method: 'update',
         resource: 'dev/' + resource.name,
         id: id,
@@ -70,7 +80,7 @@
     };
 
     SocketAdapter.prototype.destroy = function (resource, id, options) {
-      var q = Sockets.emitQ('jsData', {
+      var q = emit({
         method: 'destroy',
         resource: 'dev/' + resource.name,
         id: id,
