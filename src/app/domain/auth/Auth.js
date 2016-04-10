@@ -5,9 +5,14 @@
   angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets) {
 
     var currentUser;
+    var DEBUG = debug ('stg:Auth');
 
-    function getAccessToken () {
+    function getAccessToken() {
       return window.localStorage.getItem('authorization');
+    }
+
+    function init() {
+
     }
 
     var needAuth = $rootScope.$on('$stateChangeStart', function (event, next) {
@@ -27,11 +32,11 @@
     });
 
     var onAuthenticated = $rootScope.$on('authenticated', function (event, res) {
-      window.localStorage.setItem('authorization',res.accessToken);
+      window.localStorage.setItem('authorization', res.accessToken);
       sockAuth();
     });
 
-    $rootScope.$on('$destroy', function(){
+    $rootScope.$on('$destroy', function () {
       needAuth();
       onAuthenticated();
     });
@@ -48,7 +53,7 @@
       });
     };
 
-    Sockets.on('connect',sockAuth);
+    Sockets.on('connect', sockAuth);
 
     return {
 
@@ -71,8 +76,10 @@
 
       login: function (user) {
         currentUser = user;
-        $rootScope.$broadcast('auth-login',currentUser);
-      }
+        $rootScope.$broadcast('auth-login', currentUser);
+      },
+
+      init: init
 
     };
 
