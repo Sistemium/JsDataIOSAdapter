@@ -4,6 +4,7 @@
 
   angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets) {
 
+    var me = this;
     var currentUser;
     var DEBUG = debug ('stg:Auth');
 
@@ -15,7 +16,7 @@
 
     }
 
-    var needAuth = $rootScope.$on('$stateChangeStart', function (event, next) {
+    var needAuth = $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
       if (!getAccessToken() && next.name !== 'auth') {
         event.preventDefault();
@@ -26,6 +27,10 @@
 
       if (needRoles && !currentUser) {
         event.preventDefault();
+        me.redirectTo = {
+          state: next,
+          params: nextParams
+        };
         $state.go('login');
       }
 
@@ -77,6 +82,12 @@
       login: function (user) {
         currentUser = user;
         $rootScope.$broadcast('auth-login', currentUser);
+        if (me.redirectTo) {
+          $state.go(me.redirectTo.state, me.redirectTo.params);
+          me.redirectTo = false;
+        } else {
+          $state.go('home');
+        }
       },
 
       init: init

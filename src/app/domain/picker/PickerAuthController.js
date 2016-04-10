@@ -25,7 +25,6 @@
 
             if (picker) {
               Auth.login (picker);
-              $state.go('home');
             } else {
               toastr.error('Неверный код или пароль');
             }
