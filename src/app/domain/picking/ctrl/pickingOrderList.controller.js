@@ -16,8 +16,6 @@
       var POP = Schema.model ('PickingOrderPosition');
       var SB = Schema.model ('StockBatch');
 
-      vm.selectedItems = [];
-
       var onJSData = function (event) {
         if (event.resource === 'dev/PickingRequest') {
           refresh();
@@ -69,12 +67,11 @@
 
         toggleSelect: function (item) {
           item.selected = !item.selected;
+          vm.hasSelected = item.selected || vm.selectedItems.length > 1;
         },
 
         rowClass: function (order) {
-
           return (order.selected ? 'active ' : '') + order.cls;
-
         },
 
         totals: PO.agg (vm, 'pickingOrders'),
