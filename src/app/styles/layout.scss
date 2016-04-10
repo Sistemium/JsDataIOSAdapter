@@ -34,3 +34,16 @@ hr {
   margin-top: 17px;
   margin-bottom: 17px;
 }
+
+.em6 {
+  min-width: 6em;
+}
+
+p.list-group-item-text {
+  label {
+    margin-right: 0.25em;
+  }
+  span+label{
+    margin-left: 0.5em;
+  }
+}

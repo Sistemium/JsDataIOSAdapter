@@ -67,14 +67,20 @@
                   templateUrl: 'app/domain/picking/articleList.html',
                   controller: 'ArticleListController',
                   controllerAs: 'vm',
-                  children: angular.copy (articleChildren)
+                  children: angular.copy (articleChildren),
+                  data: {
+                    needBarcode: true
+                  }
                 },{
                   name: 'picked',
                   url: '/picked',
                   templateUrl: 'app/domain/picking/articleList.html',
                   controller: 'ArticleListController',
                   controllerAs: 'vm',
-                  children: angular.copy (articleChildren)
+                  children: angular.copy (articleChildren),
+                  data: {
+                    needBarcode: true
+                  }
                 }
               ]
             }

@@ -14,6 +14,7 @@ section.has-navbar-fixed-bottom.ui-view
 
   table.table.table-hover
     thead
+      th.hidden-xs Статус
       th Номер
       th Бутылок
       th Позиций
@@ -22,8 +23,10 @@ section.has-navbar-fixed-bottom.ui-view
       tr(
         ng-repeat='order in vm.pickingOrders track by order.id'
         ng-click='vm.toggleSelect(order)'
-        ng-class='{active: order.selected}'
+        ng-class='vm.rowClass(order)'
       )
+        td.hidden-xs
+          i(ng-class="order.processingClass")
         td {{ order.ndoc }}
         td {{ order.totalVolume () | number:0 }}
         td {{ order.positionsCount () | number:0 }}
@@ -32,12 +35,10 @@ section.has-navbar-fixed-bottom.ui-view
   .pull-right
     button.btn.btn-primary.animate-show(ng-show='vm.selectedItems.length' ui-sref='.selectedOrders')
       | Собирать отмеченные
-    button.btn.btn-primary(ng-show='!vm.selectedItems.length' ng-click='vm.refresh()' ng-disabled='vm.busy.$$state.status==0')
-      | Обновить
 
 nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')
   .container
-    form.navbar-form.navbar-left.float-left.flat-on-small.hidden-xs(role='search' ng-submit="vm.onBarCode()")
+    form.navbar-form.navbar-left.float-left.flat-on-small.hidden-xs(role='search' ng-submit="vm.onBarCode()" ng-if="vm.onBarCode")
       .form-group
         input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')
     ul.nav.navbar-nav.navbar-right.float-right.animate-show.flat-on-small(ng-show='vm.selectedItems.length')

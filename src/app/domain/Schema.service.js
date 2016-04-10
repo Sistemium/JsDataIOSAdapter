@@ -17,6 +17,12 @@ angular.module('Models')
           return _.reduce(items, function (sum, item) {
             return sum + item [field];
           }, 0);
+        },
+
+        custom: function (items, fn, starter) {
+          return _.reduce(items, function (res, item) {
+            return fn (res, item [field] ());
+          },starter);
         }
 
       };

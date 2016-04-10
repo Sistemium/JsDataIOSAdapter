@@ -71,6 +71,12 @@
           item.selected = !item.selected;
         },
 
+        rowClass: function (order) {
+
+          return (order.selected ? 'active ' : '') + order.cls;
+
+        },
+
         totals: PO.agg (vm, 'pickingOrders'),
         selectedTotals: PO.agg (vm, 'selectedItems'),
 
@@ -113,12 +119,14 @@
       }
 
       BarCodeScanner.bind(scanFn);
-      vm.onBarCode = scanFn;
 
       $scope.$on('$stateChangeSuccess', function (e, to) {
         vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
       });
 
+      $scope.$on('$stateChangeSuccess', function (e, to) {
+        vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
+      });
 
     })
   ;
