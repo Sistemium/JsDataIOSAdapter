@@ -25,7 +25,9 @@
       isInitialized = true;
 
       if (angular.isFunction(fn)) {
-        angular.extend(state, fn(state));
+        angular.merge(state, fn(state));
+      } else {
+        angular.merge(state, fn);
       }
 
       $rootScope.$broadcast(me.initializedEvent, state);

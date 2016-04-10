@@ -26,8 +26,12 @@
   }
 
   function run(Sockets,InitService) {
-    var DEBUG = debug ('stg:run')
-    InitService.init();
+    var DEBUG = debug ('stg:run');
+    InitService.init(InitService.localDevMode ? {} : {
+      url:{
+        socket: 'https://socket2.sistemium.com'
+      }
+    });
     Sockets.on('jsData:update',function(data){
       DEBUG ('jsData:update', data);
     });
