@@ -7,10 +7,6 @@
 
   /** @ngInject */
   function config($logProvider, toastrConfig) {
-    // Enable log
-    $logProvider.debugEnabled(true);
-
-    // Set options third-party lib
 
     angular.extend (toastrConfig,{
       allowHtml: true,
