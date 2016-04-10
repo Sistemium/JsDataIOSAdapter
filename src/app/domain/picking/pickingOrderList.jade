@@ -2,15 +2,15 @@ section.has-navbar-fixed-bottom.ui-view
 
   h3
     p.clear-both Требования на сборку
-    small.lead.pull-right(ng-class='{darkgray: vm.selectedItems.length}')
+    small.lead.pull-right(ng-class='{darkgray: vm.hasSelected}')
       span Кор.:
-      label {{ vm.currentTotals().totalBoxVolume () | number:1 }}
+      label {{ vm.currentTotals.totalBoxVolume () | number:1 }}
       = ' '
       span Поз.:
-      label {{ vm.currentTotals().positionsCount () | number:0 }}
+      label {{ vm.currentTotals.positionsCount () | number:0 }}
       = ' '
       span Бут.:
-      label {{ vm.currentTotals().totalVolume () | number:0 }}
+      label {{ vm.currentTotals.totalVolume () | number:0 }}
 
   table.table.table-hover
     thead

@@ -22,6 +22,14 @@
         }
       };
 
+      function setSelected () {
+        vm.selectedItems = PO.filter({
+          picker: picker.id,
+          selected: true
+        });
+        vm.hasSelected = !!vm.selectedItems.length;
+      }
+
       $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
 
       function refresh() {
@@ -41,6 +49,8 @@
               $state.go('picking.orderList');
             }
 
+            setSelected();
+
           })
           .then(function (){
             if (!lastModified) {
@@ -54,20 +64,20 @@
           });
       }
 
-      PO.bindAll({
+      $scope.$on('$destroy',PO.bindAll({
         picker: picker.id
-      }, $scope, 'vm.pickingOrders');
+      }, $scope, 'vm.pickingOrders'));
 
-      PO.bindAll({
+      $scope.$on('$destroy',PO.bindAll({
         picker: picker.id,
         selected: true
-      }, $scope, 'vm.selectedItems');
+      }, $scope, 'vm.selectedItems'));
 
       angular.extend(vm, {
 
         toggleSelect: function (item) {
           item.selected = !item.selected;
-          vm.hasSelected = item.selected || vm.selectedItems.length > 1;
+          setSelected();
         },
 
         rowClass: function (order) {
@@ -76,10 +86,6 @@
 
         totals: PO.agg (vm, 'pickingOrders'),
         selectedTotals: PO.agg (vm, 'selectedItems'),
-
-        currentTotals: function () {
-          return vm.selectedItems.length ? vm.selectedTotals : vm.totals
-        },
 
         refresh: refresh
 
@@ -123,6 +129,10 @@
 
       $scope.$on('$stateChangeSuccess', function (e, to) {
         vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
+      });
+
+      $scope.$watch('vm.hasSelected',function (n){
+        vm.currentTotals = n ? vm.selectedTotals : vm.totals;
       });
 
     })
