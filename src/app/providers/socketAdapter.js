@@ -16,8 +16,13 @@
     };
 
     function emit (data) {
-      DEBUG ('emit', data);
-      return Sockets.emitQ('jsData',data);
+      var q = Sockets.emitQ('jsData',data);
+      q.then(function(){
+        DEBUG ('emit:success', data);
+      },function(){
+        DEBUG ('emit:catch', data);
+      });
+      return q;
     }
 
     //function paramsToOptions (params) {
