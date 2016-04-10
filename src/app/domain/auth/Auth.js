@@ -81,6 +81,7 @@
 
       login: function (user) {
         currentUser = user;
+        window.localStorage.setItem('currentPickerId',user.id);
         $rootScope.$broadcast('auth-login', currentUser);
         if (me.redirectTo) {
           $state.go(me.redirectTo.state, me.redirectTo.params);

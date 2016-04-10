@@ -30,6 +30,12 @@
           return currentPicker;
         },
 
+        setCurrentById: function (id) {
+          return Picker.find(id).then(function(p){
+            return (currentPicker = p);
+          })
+        },
+
         logout: function () {
           currentPicker = undefined;
           Schema.model ('PickingOrder').ejectAll();
