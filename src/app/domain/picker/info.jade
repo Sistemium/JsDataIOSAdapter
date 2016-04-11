@@ -10,15 +10,37 @@ section.row-fluid
     .form-group
       label.col-sm-3.control-label(for="inputName") Фамилия и имя
       .col-sm-9
-        input#inputCode.form-control(type="text" name="name" ng-required="true" placeholder="Фамилия и имя" ng-model="vm.data.name")
+        input#inputCode.form-control(
+          type="text"
+          name="name"
+          ng-required="true"
+          placeholder="Фамилия и имя"
+          ng-model="vm.data.name"
+          autocomplete="off"
+        )
     .form-group
       label.col-sm-3.control-label(for="inputCode") Личный номер
       .col-sm-9
-        input#inputCode.form-control(type="text" name="code" ng-required="true" readonly placeholder="Номер наборщика" ng-model="vm.data.code")
+        input#inputCode.form-control(
+          type="text"
+          name="code"
+          ng-required="true"
+          readonly
+          placeholder="Номер наборщика"
+          ng-model="vm.data.code"
+          autocomplete="off"
+        )
     .form-group
       label.col-sm-3.control-label(for="inputPassword") Пароль
       .col-sm-9
-        input#inputPassword.form-control(type="password" name="password" ng-required="true" placeholder="4 цифры" ng-model="vm.data.password")
+        input#inputPassword.form-control(
+          type="password"
+          name="password"
+          ng-required="true"
+          placeholder="4 цифры"
+          ng-model="vm.data.password"
+          autocomplete="off"
+        )
     hr
 
     .pull-right
