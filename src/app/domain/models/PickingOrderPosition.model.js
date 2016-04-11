@@ -12,6 +12,12 @@
         return !totalUnPickedVolume (positions);
       }
 
+      function hasPicked (positions) {
+        return !!_.filter(positions,function(pos){
+          return !!pos.pickedPositions.length;
+        }).length;
+      }
+
       function maxTs (positions) {
         return _.reduce (positions,function (res,pos){
           var lastPos = _.maxBy (pos.pickedPositions, function (pp) {
@@ -107,9 +113,6 @@
 
               var picked = isPicked(positions);
               var totalUnPicked = totalUnPickedVolume (positions);
-              var hasPicked = !!_.filter(positions,function(pos){
-                return !!pos.pickedPositions.length;
-              }).length;
 
               return {
 
@@ -119,7 +122,7 @@
                 volume: boxPcs,
                 totalVolume: totalVolume,
                 isPicked: picked,
-                hasPicked: hasPicked,
+                hasPicked: hasPicked(positions),
                 totalUnPickedVolume: totalUnPicked,
                 ts: maxTs(positions),
 
@@ -136,6 +139,7 @@
                   this.isPicked = isPicked(positions);
                   this.ts = maxTs(positions);
                   this.totalUnPickedVolume = totalUnPickedVolume(positions);
+                  this.hasPicked = hasPicked(positions);
                 }
 
               }
