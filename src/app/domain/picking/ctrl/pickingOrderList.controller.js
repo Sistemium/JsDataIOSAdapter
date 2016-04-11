@@ -129,6 +129,9 @@
 
       $scope.$on('$stateChangeSuccess', function (e, to) {
         vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
+        if (to.name === 'picking.orderList') {
+          setSelected();
+        }
       });
 
       $scope.$watch('vm.hasSelected',function (n){
