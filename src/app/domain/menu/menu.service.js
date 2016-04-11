@@ -12,10 +12,10 @@
             state: 'home',
 
             items: [{
-              title: 'Тестовый раздел',
+              title: 'Тесты',
               state: 'playground'
             },{
-              title: 'Наборка',
+              title: 'Сборка',
               state: 'picking.orderList'
             }]
 
