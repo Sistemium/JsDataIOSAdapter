@@ -15,9 +15,10 @@
       'LocalStorageModule',
       'as.sortable',
       'core.services',
-      'Models',
       'ng-appcache',
-      'ui.mask'
+      'ui.mask',
+      'sistemium',
+      'Models'
     ])
     .run(function(Auth){
       console.log (Auth);
