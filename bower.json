@@ -1,5 +1,5 @@
 {
-  "name": "webPage",
+  "name": "j-sistemium",
   "version": "0.0.0",
   "dependencies": {
     "angular-animate": "~1.4.2",
@@ -19,7 +19,7 @@
     "ng-appcache": "^2.0.1",
     "socket.io-client": "~1.4.5",
     "angular-ui-mask": "^1.8.3",
-    "sistemium-angular": "~0.x",
+    "sistemium-angular": ">=0.1.5",
     "visionmedia-debug": "^2.2.0"
   },
   "devDependencies": {

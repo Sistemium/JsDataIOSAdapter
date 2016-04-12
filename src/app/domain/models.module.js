@@ -14,10 +14,23 @@
       });
     })
 
-    .service('models', function (Schema) {
+    .service('models', function (Schema, $window, DS, IosAdapter, SocketAdapter) {
+
+
+      if ($window.webkit) {
+        DS.registerAdapter('ios', new IosAdapter (Schema), {default: true});
+      } else {
+        DS.registerAdapter('socket', new SocketAdapter(), {default: true});
+      }
 
       return Schema.models();
 
-    });
+    })
+
+    .service('Schema', function(saSchema) {
+      return saSchema;
+    })
+
+  ;
 
 }());
