@@ -1,17 +1,24 @@
 'use strict';
 
 angular.module('core.services')
-  .factory('Sockets', function($rootScope, $q) {
+  .service('Sockets', function (InitService, $rootScope, $q) {
 
-    var url = location.port1 ? 'http://localhost:8000' : 'https://socket2.sistemium.com';
-
-    var socket = io(url, {
+    var socket = io({
+      autoConnect: false,
       path: '/socket.io-client'
     });
+
+    function init(app) {
+      socket.io.uri = app.url.socket;
+      socket.open();
+    }
+
+    InitService.then(init);
 
     var svc = {
       io: socket,
       subscriptions: [],
+      init: init,
       on: function (eventName, callback) {
         var wrappedCallback = function () {
           var args = arguments;
@@ -20,9 +27,9 @@ angular.module('core.services')
           });
         };
         socket.on(eventName, wrappedCallback);
-        return function unSubscribe () {
+        return function unSubscribe() {
           socket.removeListener(eventName, wrappedCallback);
-        }
+        };
       },
       emit: function (eventName, data, callback) {
 
@@ -41,11 +48,11 @@ angular.module('core.services')
             });
           });
         } else {
-          if (!socket.connected) {
-            return callback.apply(socket, [{
-              error: 'Нет подключения к серверу'
-            }]);
-          }
+          // if (!socket.connected) {
+          //   return callback && callback.apply(socket, [{
+          //     error: 'Нет подключения к серверу'
+          //   }]);
+          // }
           socket.emit(eventName, data, function () {
             var args = arguments;
             $rootScope.$apply(function () {
@@ -60,13 +67,13 @@ angular.module('core.services')
 
         var q = $q.defer();
 
-        svc.emit(eventName, data, function (reply){
+        svc.emit(eventName, data, function (reply) {
           if (!reply) {
             q.resolve();
           } else if (reply.data) {
-            q.resolve (reply.data);
+            q.resolve(reply.data);
           } else if (reply.error) {
-            q.reject (reply);
+            q.reject(reply);
           }
         });
 

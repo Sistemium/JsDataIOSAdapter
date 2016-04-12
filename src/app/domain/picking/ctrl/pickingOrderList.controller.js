@@ -16,18 +16,25 @@
       var POP = Schema.model ('PickingOrderPosition');
       var SB = Schema.model ('StockBatch');
 
-      vm.selectedItems = [];
-
       var onJSData = function (event) {
         if (event.resource === 'dev/PickingRequest') {
           refresh();
         }
       };
 
-      Sockets.subscriptions.push('PickingOrder');
-      Sockets.emit('jsData:subscribe', Sockets.subscriptions, function (id) {
-        //TODO use id for unsubscribe
-      });
+      //Sockets.subscriptions.push('PickingOrder');
+      //Sockets.emit('jsData:subscribe', Sockets.subscriptions, function (id) {
+      //  //TODO use id for unsubscribe
+      //});
+
+      function setSelected () {
+        vm.selectedItems = PO.filter({
+          picker: picker.id,
+          selected: true
+        });
+        vm.hasSelected = !!vm.selectedItems.length;
+      }
+
       $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
 
       function refresh() {
@@ -47,6 +54,8 @@
               $state.go('picking.orderList');
             }
 
+            setSelected();
+
           })
           .then(function (){
             if (!lastModified) {
@@ -60,27 +69,28 @@
           });
       }
 
-      PO.bindAll({
+      $scope.$on('$destroy',PO.bindAll({
         picker: picker.id
-      }, $scope, 'vm.pickingOrders');
+      }, $scope, 'vm.pickingOrders'));
 
-      PO.bindAll({
+      $scope.$on('$destroy',PO.bindAll({
         picker: picker.id,
         selected: true
-      }, $scope, 'vm.selectedItems');
+      }, $scope, 'vm.selectedItems'));
 
       angular.extend(vm, {
 
         toggleSelect: function (item) {
           item.selected = !item.selected;
+          setSelected();
+        },
+
+        rowClass: function (order) {
+          return (order.selected ? 'active ' : '') + order.cls;
         },
 
         totals: PO.agg (vm, 'pickingOrders'),
         selectedTotals: PO.agg (vm, 'selectedItems'),
-
-        currentTotals: function () {
-          return vm.selectedItems.length ? vm.selectedTotals : vm.totals
-        },
 
         refresh: refresh
 
@@ -117,12 +127,21 @@
       }
 
       BarCodeScanner.bind(scanFn);
-      vm.onBarCode = scanFn;
 
       $scope.$on('$stateChangeSuccess', function (e, to) {
         vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
       });
 
+      $scope.$on('$stateChangeSuccess', function (e, to) {
+        vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
+        if (to.name === 'picking.orderList') {
+          setSelected();
+        }
+      });
+
+      $scope.$watch('vm.hasSelected',function (n){
+        vm.currentTotals = n ? vm.selectedTotals : vm.totals;
+      });
 
     })
   ;

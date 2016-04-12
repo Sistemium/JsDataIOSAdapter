@@ -13,7 +13,8 @@
           controller: 'PickingArticleController',
           controllerAs: 'vm',
           data: {
-            hideBottomBar: true
+            hideBottomBar: true,
+            hideTopBar: true
           },
           children: [
             {
@@ -21,19 +22,13 @@
               url: '/pick/:positionId',
               templateUrl: 'app/domain/picking/pickPosition.html',
               controller: 'PickedPositionController',
-              controllerAs: 'vm',
-              data: {
-                hideTopBar: true
-              }
+              controllerAs: 'vm'
             },{
               name: 'pickedPosition',
               url: '/picked/:pickedPositionId',
               templateUrl: 'app/domain/picking/pickPosition.html',
               controller: 'PickedPositionController',
-              controllerAs: 'vm',
-              data: {
-                hideTopBar: true
-              }
+              controllerAs: 'vm'
             }
           ]
         }
@@ -67,14 +62,20 @@
                   templateUrl: 'app/domain/picking/articleList.html',
                   controller: 'ArticleListController',
                   controllerAs: 'vm',
-                  children: angular.copy (articleChildren)
+                  children: angular.copy (articleChildren),
+                  data: {
+                    needBarcode: true
+                  }
                 },{
                   name: 'picked',
                   url: '/picked',
                   templateUrl: 'app/domain/picking/articleList.html',
                   controller: 'ArticleListController',
                   controllerAs: 'vm',
-                  children: angular.copy (articleChildren)
+                  children: angular.copy (articleChildren),
+                  data: {
+                    needBarcode: true
+                  }
                 }
               ]
             }

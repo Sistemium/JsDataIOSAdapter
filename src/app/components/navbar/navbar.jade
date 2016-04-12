@@ -8,7 +8,8 @@ div.navbar.navbar-default(ng-hide='vm.hide')
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(href='/') Sistemium
+      a.navbar-brand.hidden-xs(href='/') Sistemium
+      a.navbar-brand.visible-xs(href='' ng-click='vm.onBrandClick()' ng-if='vm.currentItem') {{vm.currentItem.title}}
 
     ul.nav.navbar-nav.navbar-right.float-right
 
@@ -25,7 +26,7 @@ div.navbar.navbar-default(ng-hide='vm.hide')
         li.divider(role="separator")
         li(ng-repeat='item in vm.menu.items', ui-sref-active='active')
           a(ui-sref='{{item.state}}') {{item.title}}
-        li.divider.visible-xs(role="separator")
-        li.visible-xs
+        li.divider.visible-xs(role="separator" ng-if='vm.toggleFullScreen')
+        li(ng-if='vm.toggleFullScreen')
           a(href='' ng-click='vm.toggleFullScreen()')
             i.glyphicon.glyphicon-fullscreen

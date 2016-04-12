@@ -30,7 +30,7 @@
             if (unp > 0) {
               pickedOrders.push ({
                 volume: Language.speakableBoxPcs (a.boxPcs(unp)),
-                num: $scope.vm.selectedItems.indexOf(pop.PickingOrder) + 1
+                num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1
               });
               pop.linkStockBatch(sb, code, unp).then (function (){
                 pa.updatePicked ();
@@ -45,7 +45,7 @@
             return res
               + (idx ? ' и ' : '')
               + o.volume
-              + ($scope.vm.selectedItems.length >1
+              + ($scope.vm.orders.length >1
                   ? (o.num === 2 ? ' во ' : ' в ')
                     + Language.orderRu(o.num)
                   : ''
@@ -112,7 +112,7 @@
         });
 
         vm.articles = POP.etc.pivotPositionsByArticle (vm.articleIndex);
-        vm.currentFilter = $state.$current.name.match(/picked$/) ? {isPicked: 'true'} : {isPicked: '!true'};
+        vm.currentFilter = $state.$current.name.match(/picked$/) ? {hasPicked: 'true'} : {isPicked: '!true'};
         vm.orderBy = $state.$current.name.match(/picked$/) ? '-ts' : 'article.name';
 
       }

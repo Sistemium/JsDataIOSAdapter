@@ -1,4 +1,4 @@
-h3
+h4
   p Авторизация
   small Укажите ваш код и пароль
 
@@ -16,11 +16,19 @@ section.row-fluid
           ng-required="true"
           placeholder="Номер наборщика"
           ng-model="vm.code"
+          autocomplete="off"
         )
     .form-group
       label.col-sm-3.control-label(for="inputPassword") Пароль
       .col-sm-9
-        input#inputPassword.form-control(type="password" name="password" ng-required="true" placeholder="4 цифры" ng-model="vm.password")
+        input#inputPassword.form-control(
+          type="password"
+          name="password"
+          ng-required="true"
+          placeholder="4 цифры"
+          ng-model="vm.password"
+          autocomplete="off"
+        )
     hr
 
     .pull-right

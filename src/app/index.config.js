@@ -3,14 +3,12 @@
 
   angular
     .module('webPage')
-    .config(config);
+    .config(config)
+    .run(run)
+  ;
 
   /** @ngInject */
-  function config($logProvider, toastrConfig) {
-    // Enable log
-    $logProvider.debugEnabled(true);
-
-    // Set options third-party lib
+  function config(toastrConfig) {
 
     angular.extend (toastrConfig,{
       allowHtml: true,
@@ -25,6 +23,30 @@
         warning: 'alert alert-warning'
       }
     });
+  }
+
+  function run(Sockets,InitService,Auth,Schema) {
+
+    var DEBUG = debug ('stg:run');
+
+    InitService.init(InitService.localDevMode ? {} : {
+      url:{
+        socket: 'https://socket2.sistemium.com'
+      }
+    });
+
+    Sockets.on('jsData:update',function(data){
+      DEBUG ('jsData:update', data);
+    });
+
+    var lastPicker = window.localStorage.getItem('currentPickerId');
+    
+    if (lastPicker) {
+      Schema.model('Picker').setCurrentById(lastPicker).then(function(p){
+        Auth.login(p);
+      });
+    }
+
   }
 
 })();

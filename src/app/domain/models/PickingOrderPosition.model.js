@@ -12,6 +12,12 @@
         return !totalUnPickedVolume (positions);
       }
 
+      function hasPicked (positions) {
+        return !!_.filter(positions,function(pos){
+          return !!pos.pickedPositions.length;
+        }).length;
+      }
+
       function maxTs (positions) {
         return _.reduce (positions,function (res,pos){
           var lastPos = _.maxBy (pos.pickedPositions, function (pp) {
@@ -72,8 +78,12 @@
 
           },
 
+          unPickedBoxVolume: function () {
+            return this.Article && this.Article.boxVolume (this.unPickedVolume()) || 0;
+          },
+
           unPickedVolume: function () {
-            return this.volume - totalVolume (this.pickedPositions);
+            return this.volume - (totalVolume (this.pickedPositions) || 0);
           },
 
           unPickedBoxPcs: function () {
@@ -101,6 +111,9 @@
               //  });
               //});
 
+              var picked = isPicked(positions);
+              var totalUnPicked = totalUnPickedVolume (positions);
+
               return {
 
                 id: key,
@@ -108,8 +121,9 @@
                 positions: positions,
                 volume: boxPcs,
                 totalVolume: totalVolume,
-                isPicked: isPicked(positions),
-                totalUnPickedVolume: totalUnPickedVolume (positions),
+                isPicked: picked,
+                hasPicked: hasPicked(positions),
+                totalUnPickedVolume: totalUnPicked,
                 ts: maxTs(positions),
 
                 orderVolume: function (order) {
@@ -125,6 +139,7 @@
                   this.isPicked = isPicked(positions);
                   this.ts = maxTs(positions);
                   this.totalUnPickedVolume = totalUnPickedVolume(positions);
+                  this.hasPicked = hasPicked(positions);
                 }
 
               }

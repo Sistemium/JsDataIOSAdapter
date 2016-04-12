@@ -4,13 +4,19 @@
 
   angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets, InitService) {
 
+    var me = this;
     var currentUser;
+    var DEBUG = debug ('stg:Auth');
 
-    function getAccessToken () {
+    function getAccessToken() {
       return window.localStorage.getItem('authorization');
     }
 
-    var needAuth = $rootScope.$on('$stateChangeStart', function (event, next) {
+    function init() {
+
+    }
+
+    var needAuth = $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
       if (!getAccessToken() && next.name !== 'auth') {
         event.preventDefault();
@@ -21,17 +27,21 @@
 
       if (needRoles && !currentUser) {
         event.preventDefault();
+        me.redirectTo = {
+          state: next,
+          params: nextParams
+        };
         $state.go('login');
       }
 
     });
 
     var onAuthenticated = $rootScope.$on('authenticated', function (event, res) {
-      window.localStorage.setItem('authorization',res.accessToken);
+      window.localStorage.setItem('authorization', res.accessToken);
       sockAuth();
     });
 
-    $rootScope.$on('$destroy', function(){
+    $rootScope.$on('$destroy', function () {
       needAuth();
       onAuthenticated();
     });
@@ -42,14 +52,13 @@
         return;
       }
       Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
-        console.log ('Socket authorization:', ack);
-        InitService.init();
+        DEBUG('Socket authorization:', ack);
         // TODO: entity subscription should do a controller, but we need to repeat it after reconect/auth
         Sockets.emitQ('jsData:subscribe', ['dev/PickingRequest']);
       });
     };
 
-    Sockets.on('connect',sockAuth);
+    Sockets.on('connect', sockAuth);
 
     return {
 
@@ -72,8 +81,17 @@
 
       login: function (user) {
         currentUser = user;
-        $rootScope.$broadcast('auth-login',currentUser);
-      }
+        window.localStorage.setItem('currentPickerId',user.id);
+        $rootScope.$broadcast('auth-login', currentUser);
+        if (me.redirectTo) {
+          $state.go(me.redirectTo.state, me.redirectTo.params);
+          me.redirectTo = false;
+        } else {
+          $state.go('home');
+        }
+      },
+
+      init: init
 
     };
 

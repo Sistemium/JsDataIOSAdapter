@@ -18,15 +18,30 @@ section
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
         h4.list-group-item-heading {{item.ndoc}}
-        p.list-group-item-text
-          span Коробок:
+        p.list-group-item-text.gray.display-flex
+          label.flex-1.text-right Требуется:
+          span
           label {{ item.totalBoxVolume() | number:1 }}
-          = ' '
-          span Позиций:
+          span К.
           label {{ item.positionsCount () | number:0 }}
-          = ' '
-          span Бутылок:
+          span П.
           label {{ item.totalVolume() | number:0 }}
+          span Б.
+        p.list-group-item-text.display-flex
+          label.flex-1.text-right Осталось:
+          span
+          label {{ item.totalUnPickedBoxVolume() | number:1 }}
+          span К.
+          label {{ item.totalUnPickedPositionsCount () | number:0 }}
+          span П.
+          label {{ item.totalUnPickedVolume() | number:0 }}
+          span Б.
 
-  button.btn.btn-primary.pull-right(ui-sref='^.articleList')
-    | Начать сборку
+
+  .pull-right
+    button.btn.btn-default(ng-click='vm.pausePicking()')
+      | Отложить
+    button.btn.btn-warning(ng-click='vm.finishPicking()')
+      | Завершить
+    button.btn.btn-primary(ng-click='vm.startPicking()')
+      | Собирать

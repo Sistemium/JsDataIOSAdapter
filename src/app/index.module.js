@@ -21,7 +21,7 @@
       'Models'
     ])
     .run(function(Auth){
-      console.log (Auth);
+      Auth.init();
     });
 
 })();

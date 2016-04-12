@@ -114,8 +114,9 @@
         },
 
         remove: function () {
-          POPP.destroy (pickedPosition);
-          $state.go('^');
+          POPP.destroy (pickedPosition).then(function() {
+            $state.go('^');
+          });
         }
 
       });
