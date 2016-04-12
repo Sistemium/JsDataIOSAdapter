@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets, InitService) {
+  angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets) {
 
     var me = this;
     var currentUser;
