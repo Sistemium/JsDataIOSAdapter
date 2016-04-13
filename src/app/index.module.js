@@ -11,13 +11,12 @@
       'ui.router',
       'ui.router.stateHelper',
       'ui.bootstrap',
-      'toastr',
       'LocalStorageModule',
       'as.sortable',
       'core.services',
       'ng-appcache',
       'ui.mask',
-      'sistemium',
+      'sistemiumBootstrap',
       'Models'
     ])
     .run(function(Auth){
