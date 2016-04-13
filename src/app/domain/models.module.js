@@ -23,8 +23,8 @@
     .service('Schema', function(saSchema) {
       return saSchema;
     })
-  
-    .run(function($window, DS, IosAdapter, SocketAdapter){
+
+    .run(function($window, DS, IosAdapter, SocketAdapter, Schema){
 
       if ($window.webkit) {
         DS.registerAdapter('ios', new IosAdapter (Schema), {default: true});
