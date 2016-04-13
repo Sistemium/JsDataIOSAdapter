@@ -22,6 +22,11 @@
         }
       };
 
+      //Sockets.subscriptions.push('PickingOrder');
+      //Sockets.emit('jsData:subscribe', Sockets.subscriptions, function (id) {
+      //  //TODO use id for unsubscribe
+      //});
+
       function setSelected () {
         vm.selectedItems = PO.filter({
           picker: picker.id,

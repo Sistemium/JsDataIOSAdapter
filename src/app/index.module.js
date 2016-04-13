@@ -11,13 +11,13 @@
       'ui.router',
       'ui.router.stateHelper',
       'ui.bootstrap',
-      'toastr',
       'LocalStorageModule',
       'as.sortable',
       'core.services',
-      'Models',
       'ng-appcache',
-      'ui.mask'
+      'ui.mask',
+      'sistemiumBootstrap',
+      'Models'
     ])
     .run(function(Auth){
       Auth.init();

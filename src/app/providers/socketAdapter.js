@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('SocketAdapter', function (Sockets) {
+  angular.module('Models').service('SocketAdapter', function (Sockets) {
 
     var DEBUG = debug ('stg:SocketAdapter');
     var Defaults = function () {};
