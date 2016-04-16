@@ -4,11 +4,14 @@
   angular
     .module('webPage')
     .run(run)
+    .service('DEBUG',debugService)
   ;
 
-  function run(Sockets,InitService,Auth,Schema) {
+  function debugService (saDebug) {
+    return saDebug.log('stg:log');
+  }
 
-    var DEBUG = debug ('stg:run');
+  function run(Sockets,InitService,Auth,Schema,DEBUG) {
 
     InitService.init(InitService.localDevMode ? {} : {
       url:{
