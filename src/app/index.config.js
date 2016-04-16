@@ -18,6 +18,8 @@
         socket: 'https://socket2.sistemium.com'
       }
     });
+    
+    Sockets.init(InitService);
 
     Sockets.on('jsData:update',function(data){
       DEBUG ('jsData:update', data);
