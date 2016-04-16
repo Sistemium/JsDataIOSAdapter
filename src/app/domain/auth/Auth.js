@@ -53,8 +53,7 @@
       }
       Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
         DEBUG('Socket authorization:', ack);
-        // TODO: entity subscription should do a controller, but we need to repeat it after reconect/auth
-        Sockets.emitQ('jsData:subscribe', ['dev/PickingRequest']);
+        $rootScope.$broadcast ('socket:authorized');
       });
     };
 
