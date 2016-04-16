@@ -17,7 +17,7 @@
     "ng-appcache": "^2.0.1",
     "socket.io-client": "~1.4.5",
     "angular-ui-mask": "^1.8.3",
-    "sistemium-angular": "^0.1.6",
+    "sistemium-angular": "^0.1.9",
     "sistemium-angular-bootstrap": "^0.1.4"
   },
   "devDependencies": {
