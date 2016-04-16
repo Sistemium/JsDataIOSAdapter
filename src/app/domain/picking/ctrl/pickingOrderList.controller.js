@@ -22,11 +22,6 @@
         }
       };
 
-      //Sockets.subscriptions.push('PickingOrder');
-      //Sockets.emit('jsData:subscribe', Sockets.subscriptions, function (id) {
-      //  //TODO use id for unsubscribe
-      //});
-
       function setSelected () {
         vm.selectedItems = PO.filter({
           picker: picker.id,
@@ -35,6 +30,7 @@
         vm.hasSelected = !!vm.selectedItems.length;
       }
 
+      $scope.$on('$destroy',Sockets.jsDataSubscribe(['dev/PickingRequest']));
       $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
 
       function refresh() {
@@ -62,7 +58,7 @@
               return;
             }
             _.each (vm.pickingOrders, function (po) {
-              if (po.DSLastModified() < lastModified) {
+              if (po.DSLastModified() <= lastModified) {
                 PO.eject(po);
               }
             });
