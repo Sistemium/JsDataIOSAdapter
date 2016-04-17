@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets) {
+    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, DEBUG) {
 
       var picker = Schema.model ('Picker').getCurrent();
 
@@ -16,9 +16,27 @@
       var POP = Schema.model ('PickingOrderPosition');
       var SB = Schema.model ('StockBatch');
 
+      function onFindPO (i) {
+        return PO.loadRelations(i).then(function (r) {
+          _.each(r.positions, function (pos) {
+            POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+          });
+        });
+      }
+
       var onJSData = function (event) {
-        if (event.resource === 'dev/PickingRequest') {
-          refresh();
+        if (event.resource === 'dev/PickingOrder') {
+          var id = _.get(event, 'data.id');
+          if (id) {
+            PO.find(event.data.id, {bypassCache: true})
+              .then(onFindPO)
+              .catch (function (err) {
+                if (err.error === 404) {
+                  DEBUG ('PickingOrderListController:eject',id);
+                  PO.eject (id);
+                }
+              });
+          }
         }
       };
 
@@ -30,7 +48,7 @@
         vm.hasSelected = !!vm.selectedItems.length;
       }
 
-      $scope.$on('$destroy',Sockets.jsDataSubscribe(['dev/PickingRequest']));
+      $scope.$on('$destroy',Sockets.jsDataSubscribe(['dev/PickingOrder']));
       $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
 
       function refresh() {
@@ -38,13 +56,7 @@
         vm.busy = PO.findAll({picker: picker.id}, {bypassCache: true})
           .then(function (res) {
 
-            res.forEach(function (i) {
-              PO.loadRelations(i).then(function (r) {
-                _.each(r.positions, function (pos) {
-                  POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
-                });
-              });
-            });
+            res.forEach(onFindPO);
 
             if (!vm.selectedItems.length) {
               $state.go('picking.orderList');
