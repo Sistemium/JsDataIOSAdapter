@@ -19,7 +19,7 @@
       function onFindPO (i) {
         return PO.loadRelations(i).then(function (r) {
           _.each(r.positions, function (pos) {
-            POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+            POP.loadRelations(pos, ['Outlet','Article', 'PickingOrderPositionPicked']);
           });
         });
       }
