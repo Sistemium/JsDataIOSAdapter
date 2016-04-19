@@ -17,20 +17,24 @@
 
       var initVolume, initExport;
 
+      var unPickedVolume;
+
       if (pickedPosition) {
         initVolume = pickedPosition.boxPcs().full;
-        initExport = pickedPosition.volume;
+        unPickedVolume = pickedPosition.volume;
       } else if (position) {
         initVolume = position.unPickedBoxPcs().full;
-        initExport = position.unPickedVolume();
+        unPickedVolume = position.unPickedVolume();
       }
+
+      initExport = unPickedVolume;
 
       var states = [
         {
           input: 'volume',
           label: 'Собрано',
           validate: function (val) {
-            return !! val;
+            return !!parseInt(val) && (parseInt(val) <= unPickedVolume);
           },
           value: initVolume,
           exportValue: initExport
