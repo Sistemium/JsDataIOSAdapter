@@ -2,7 +2,7 @@
 
 (function () {
 
-    angular.module('Models').run(function (Schema) {
+    angular.module('Models').service('Picker', function (Schema, SoundSynth, toastr) {
 
       var currentPicker;
 
@@ -32,8 +32,11 @@
 
         setCurrentById: function (id) {
           return Picker.find(id).then(function(p){
+            //SoundSynth.say(p.name);
             return (currentPicker = p);
-          })
+          },function (res) {
+            toastr.info(res);
+          });
         },
 
         logout: function () {
@@ -60,6 +63,8 @@
         }
 
       });
+
+      return Picker;
 
     });
 
