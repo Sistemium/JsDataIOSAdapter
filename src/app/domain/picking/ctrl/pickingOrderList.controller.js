@@ -106,31 +106,37 @@
 
       refresh();
 
-      function scanFn(code) {
+      function scanFn(code,type,object) {
 
         Errors.clear();
 
         code = code || vm.barCodeInput;
 
-        return SB.someBy.barCode(code).then(function (sbs) {
+        var q;
 
-          var notFound = 'Неизвестный штрих-код';
-
-          _.each(sbs, function (sb) {
-
-            $scope.$broadcast ('stockBatchBarCodeScan',{
-              stockBatch: sb,
-              code: code
-            });
-
-            notFound = false;
+        if (object) {
+          SB.inject(object);
+          //toastr.info (object.id,'scanFn object.id');
+          q = SB.find(object.id);
+        } else {
+          q = SB.someBy.barCode(code).then(function (sbs) {
+            return _.head(sbs);
           });
+        }
 
-          if (notFound) {
-            SoundSynth.say(notFound);
+        var notFound = 'Неизвестный штрих-код';
+
+        q.then(function(sb){
+          if (!sb) {
+            return SoundSynth.say(notFound);
           }
-
-        }).catch(Errors.ru.add);
+          $scope.$broadcast ('stockBatchBarCodeScan',{
+            stockBatch: sb,
+            code: code
+          });
+        },function (){
+          SoundSynth.say(notFound);
+        });
 
       }
 
