@@ -76,11 +76,12 @@
       logout: function () {
         currentUser = undefined;
         $rootScope.$broadcast('auth-logout');
+        window.localStorage.removeItem('currentPickerId');
       },
 
       login: function (user) {
         if (!user || !user.id) {
-          $window.localStorage.deleteItem('currentPickerId');
+          $window.localStorage.removeItem('currentPickerId');
           return $state.go('login');
         }
         currentUser = user;
