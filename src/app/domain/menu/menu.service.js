@@ -2,24 +2,30 @@
 
 (function () {
 
-    angular.module('webPage').service('Menu', function () {
+    angular.module('webPage').service('Menu', function (InitService) {
 
       return {
         root: function () {
-          return {
+          var menu = {
 
             title: 'Начало',
             state: 'home',
 
             items: [{
-              title: 'Тесты',
-              state: 'playground'
-            },{
               title: 'Сборка',
               state: 'picking.orderList'
             }]
 
           };
+
+          if (InitService.localDevMode) {
+            menu.items.push({
+              title: 'Тесты',
+              state: 'playground'
+            });
+          }
+
+          return menu;
         }
       }
 
