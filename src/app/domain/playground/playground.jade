@@ -4,10 +4,7 @@ section
     .lead v0.0.2
 
   pre {{ vm.display | json }}
-  pre {{vm.articles | json}}
-  pre {{vm.articleGroups | json}}
-  pre {{vm.barCodes | json}}
-  pre {{vm.stockBatches | json}}
+  pre {{ vm.currentUser | json}}
 
   ul
     li(ng-repeat="sb in vm.stockBatches track by sb.id")

@@ -6,7 +6,7 @@
     .controller('PlayGroundController', PlayGroundController);
 
   /** @ngInject */
-  function PlayGroundController($scope, $window, $log, models, $filter, Language, SoundSynth) {
+  function PlayGroundController($scope, $window, $log, models, $filter, Language, SoundSynth, Auth) {
     var vm = this;
 
     vm.barCodes = [];
@@ -31,7 +31,12 @@
       speakableBoxPcs: Language.speakableBoxPcs (boxPcs)
     };
 
-    SoundSynth.say (Language.speakableBoxPcs (boxPcs));
+    vm.currentUser = {
+      user: Auth.getCurrentUser(),
+      id: $window.localStorage.getItem('currentPickerId')
+    };
+
+    //SoundSynth.say (Language.speakableBoxPcs (boxPcs));
 
     var pageSize = 3000;
 
