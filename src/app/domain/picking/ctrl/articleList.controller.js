@@ -69,7 +69,7 @@
 
         $scope.$on ('stockBatchBarCodeScan',function (e,options) {
 
-          var found = processArticle(options.stockBatch.Article, options.stockBatch, options.code);
+          var found = options.stockBatch.Article && processArticle(options.stockBatch.Article, options.stockBatch, options.code);
 
           if (found && found.id) {
             toastr.success (found.name, found.volume);
