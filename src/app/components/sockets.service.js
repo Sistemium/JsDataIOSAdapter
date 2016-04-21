@@ -10,7 +10,6 @@ angular.module('core.services')
     var ons = [];
 
     var ios = $window.webkit;
-    var resources = {};
 
     function subscribeDataCallback (data) {
       _.each(data,function (e){
@@ -22,7 +21,7 @@ angular.module('core.services')
         _.each (ons,function(subscription){
           if (subscription.event === 'jsData:update') {
             subscription.callback ({
-              resource: resources [e.entity],
+              resource: e.entity,
               data: {
                 id: e.xid
               }
@@ -40,34 +39,31 @@ angular.module('core.services')
     $window[DATACALLBACK] = subscribeDataCallback;
     $window[CALLBACK] = subscribeCallback;
 
+    function onFn (event,callback) {
+
+      var subscription = {
+        event: event,
+        callback: callback
+      };
+
+      ons.push(subscription);
+
+      return function () {
+        ons.splice(ons.indexOf(subscription),1);
+      };
+
+    }
+
     return {
       init: function () {
 
       },
-      on: function (event,callback) {
-
-        var subscription = {
-          event: event,
-          callback: callback
-        };
-
-        ons.push(subscription);
-
-        return function () {
-          ons.splice(ons.indexOf(subscription),1);
-        };
-
-      },
+      on: onFn,
+      onJsData: onFn,
       jsDataSubscribe: function (filter) {
 
-        var entities = _.map(filter,function(resource){
-          var e = resource.match(/[^\/]*$/)[0];
-          resources [e] = resource;
-          return e;
-        });
-
         ios.messageHandlers[SUBSCRIBE].postMessage ({
-          entities: entities,
+          entities: filter,
           callback: CALLBACK,
           dataCallback: DATACALLBACK
         });

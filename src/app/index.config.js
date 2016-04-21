@@ -13,13 +13,18 @@
 
   function run(Sockets,InitService,Auth,IosAdapter,Schema,Picker,DEBUG) {
 
-    InitService.init(InitService.localDevMode ? {} : {
-      url:{
-        socket: 'https://socket2.sistemium.com'
-      }
-    });
+    InitService.then(Sockets.init);
 
-    Sockets.init(InitService);
+    InitService.init(
+      //InitService.localDevMode ? {} :
+      {
+        url:{
+          socket: 'https://socket2.sistemium.com'
+        },
+        jsDataPrefix: 'dev/'
+      }
+
+    );
 
     Sockets.on('jsData:update',function(data){
       DEBUG ('jsData:update', data);

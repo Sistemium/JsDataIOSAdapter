@@ -31,7 +31,7 @@
         if (!id) {
           return;
         }
-        if (event.resource === 'dev/PickingOrder') {
+        if (event.resource === 'PickingOrder') {
           PO.find(id, {bypassCache: true})
             .then(onFindPO)
             .catch (function (err) {
@@ -40,7 +40,7 @@
                 PO.eject (id);
               }
             });
-        } else if (event.resource === 'dev/PickingOrderPosition') {
+        } else if (event.resource === 'PickingOrderPosition') {
           POP.find(id)
             .then(function(pos){
               POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
@@ -56,8 +56,8 @@
         vm.hasSelected = !!vm.selectedItems.length;
       }
 
-      $scope.$on('$destroy',Sockets.jsDataSubscribe(['dev/PickingOrder','dev/PickingOrderPosition']));
-      $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
+      $scope.$on('$destroy',Sockets.jsDataSubscribe(['PickingOrder','PickingOrderPosition']));
+      $scope.$on('$destroy',Sockets.onJsData('jsData:update', onJSData));
 
       function refresh() {
         var lastModified = PO.lastModified();

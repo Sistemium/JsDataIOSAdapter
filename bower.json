@@ -15,7 +15,7 @@
     "ua-parser-js": "^0.7.10",
     "ng-appcache": "^2.0.1",
     "angular-ui-mask": "^1.8.3",
-    "sistemium-angular": "^0.3.0",
+    "sistemium-angular": "^0.4.0",
     "sistemium-angular-bootstrap": "^0.1.4"
   },
   "devDependencies": {
