@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, DEBUG) {
+    .controller('PickingOrderListController', function ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, toastr, DEBUG) {
 
       var picker = Schema.model ('Picker').getCurrent();
 
@@ -16,27 +16,35 @@
       var POP = Schema.model ('PickingOrderPosition');
       var SB = Schema.model ('StockBatch');
 
-      function onFindPO (i) {
+      function onFindPO (data) {
+        var i = (data && data.length) ? data[0] : data;
+        //toastr.info(angular.toJson({picker: i.picker}),'PickingOrder');
         return PO.loadRelations(i).then(function (r) {
           _.each(r.positions, function (pos) {
-            POP.loadRelations(pos, ['Outlet','Article', 'PickingOrderPositionPicked']);
+            POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
           });
         });
       }
 
       var onJSData = function (event) {
+        var id = _.get(event, 'data.id');
+        if (!id) {
+          return;
+        }
         if (event.resource === 'dev/PickingOrder') {
-          var id = _.get(event, 'data.id');
-          if (id) {
-            PO.find(event.data.id, {bypassCache: true})
-              .then(onFindPO)
-              .catch (function (err) {
-                if (err.error === 404) {
-                  DEBUG ('PickingOrderListController:eject',id);
-                  PO.eject (id);
-                }
-              });
-          }
+          PO.find(id, {bypassCache: true})
+            .then(onFindPO)
+            .catch (function (err) {
+              if (err.error === 404) {
+                DEBUG ('PickingOrderListController:eject',id);
+                PO.eject (id);
+              }
+            });
+        } else if (event.resource === 'dev/PickingOrderPosition') {
+          POP.find(id)
+            .then(function(pos){
+              POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+            });
         }
       };
 
@@ -48,7 +56,7 @@
         vm.hasSelected = !!vm.selectedItems.length;
       }
 
-      $scope.$on('$destroy',Sockets.jsDataSubscribe(['dev/PickingOrder']));
+      $scope.$on('$destroy',Sockets.jsDataSubscribe(['dev/PickingOrder','dev/PickingOrderPosition']));
       $scope.$on('$destroy',Sockets.on('jsData:update', onJSData));
 
       function refresh() {
