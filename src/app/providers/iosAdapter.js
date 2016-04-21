@@ -8,6 +8,7 @@
     var requests = {};
     var counter = 1;
 
+
     var IosAdapter = function (schema) {
 
       function iosCallback (name, parser) {
@@ -158,7 +159,11 @@
     };
 
     IosAdapter.prototype.find = function (resource, id, options) {
-      return requestFromIOS('find', resource.endpoint, angular.isObject (id) && id.id || id, options || {});
+      return requestFromIOS('find',
+        resource.endpoint,
+        angular.isObject (id) && id.id || id,
+         angular.extend (options || {}, {oneObject: true})
+      );
     };
 
     IosAdapter.prototype.create = function (resource, attrs) {
