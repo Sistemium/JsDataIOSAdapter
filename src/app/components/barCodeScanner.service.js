@@ -10,9 +10,6 @@
         bind: function (scanFn) {
 
           function scanProcessor (code, type, obj) {
-            if (obj && type) {
-              obj.type = type;
-            }
             scanFn (code, type, obj);
           }
 
