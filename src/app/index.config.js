@@ -11,14 +11,14 @@
     return saDebug.log('stg:log');
   }
 
-  function run(Sockets,InitService,Auth,Schema,DEBUG) {
+  function run(Sockets,InitService,Auth,IosAdapter,Schema,Picker,DEBUG) {
 
     InitService.init(InitService.localDevMode ? {} : {
       url:{
         socket: 'https://socket2.sistemium.com'
       }
     });
-    
+
     Sockets.init(InitService);
 
     Sockets.on('jsData:update',function(data){
@@ -28,7 +28,7 @@
     var lastPicker = window.localStorage.getItem('currentPickerId');
 
     if (lastPicker) {
-      Schema.model('Picker').setCurrentById(lastPicker).then(function(p){
+      Picker.setCurrentById(lastPicker).then(function(p){
         Auth.login(p);
       });
     }
