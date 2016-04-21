@@ -2,14 +2,14 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets) {
+  angular.module('webPage').service('Auth', function ($rootScope, $state, Sockets, $window) {
 
     var me = this;
     var currentUser;
     var DEBUG = debug ('stg:Auth');
 
     function getAccessToken() {
-      return window.localStorage.getItem('authorization');
+      return !!$window.webkit || $window.localStorage.getItem('authorization');
     }
 
     function init() {
@@ -37,7 +37,7 @@
     });
 
     var onAuthenticated = $rootScope.$on('authenticated', function (event, res) {
-      window.localStorage.setItem('authorization', res.accessToken);
+      $window.localStorage.setItem('authorization', res.accessToken);
       sockAuth();
     });
 
@@ -79,8 +79,12 @@
       },
 
       login: function (user) {
+        if (!user || !user.id) {
+          $window.localStorage.deleteItem('currentPickerId');
+          return $state.go('login');
+        }
         currentUser = user;
-        window.localStorage.setItem('currentPickerId',user.id);
+        $window.localStorage.setItem('currentPickerId',user.id);
         $rootScope.$broadcast('auth-login', currentUser);
         if (me.redirectTo) {
           $state.go(me.redirectTo.state, me.redirectTo.params);
