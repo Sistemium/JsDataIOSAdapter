@@ -7,24 +7,32 @@
       var rate = 0.45;
       var pitch = 1;
 
-      var speaker = function (text) {
+      var lastSpeech = false;
 
+      function speaker (text) {
         $window.webkit.messageHandlers.sound.postMessage({
           text: text.replace(/[^а-я0-9]/ig,' '),
           rate: rate,
           pitch: pitch
         });
-      };
+      }
 
-      if (!$window.webkit) {
-        speaker = function (text) {
-          toastr.success (text);
-        };
+      function mockSpeaker (text) {
+        toastr.success (text);
+      }
+
+      function say (text) {
+        var sp = $window.webkit ? speaker : mockSpeaker;
+        lastSpeech = text;
+        sp (text);
       }
 
       return {
 
-        say: speaker
+        say: say,
+        repeat: function () {
+          say (lastSpeech);
+        }
 
       };
 
