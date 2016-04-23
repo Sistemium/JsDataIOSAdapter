@@ -5,7 +5,7 @@
   angular.module('webPage')
     .controller('ArticleListController', ArticleListController);
 
-  function ArticleListController ($scope, $filter, $state, toastr, models, SoundSynth, Language) {
+  function ArticleListController ($scope, $filter, $state, toastr, models, SoundSynth, Language, $q) {
 
     var vm = this;
     var POP = models.PickingOrderPosition;
@@ -39,20 +39,23 @@
 
       pickablePositions = _.orderBy(pickablePositions ,'num');
 
+      var qs = [];
+
       var pickedVolume = _.reduce(pickablePositions, function (res, pp) {
-        pp.pop.linkStockBatch(sb, code, pp.unp).then(function () {
-          pa.updatePicked();
-        });
+        qs.push (pp.pop.linkStockBatch(sb, code, pp.unp));
         return res + pp.unp;
       }, 0);
 
       if (pickedVolume) {
-        setGroups(vm.articles);
+        $q.all (qs).then(function () {
+          pa.updatePicked();
+          setGroups(vm.articles);
+        })
       }
 
       var say = _.reduce(pickablePositions, function (res, pp, idx) {
         return res
-          + (idx ? ' и ' : '')
+          + (idx ? ' плюс ' : '')
           + pp.volume
           + ($scope.vm.orders.length > 1
               ? (pp.num === 2 ? ' во ' : ' в ')
