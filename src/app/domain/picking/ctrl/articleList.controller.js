@@ -112,15 +112,16 @@
     });
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.title = to.name.match(/picked$/) && 'Собранные товары'
-        || to.name.match(/articleList$/) && 'Товары для сборки';
 
-      if (to.name.match(/picked$/)) {
-        vm.mode = 'picked';
-      } else {
-        vm.mode = 'unpicked';
+      vm.mode = to.name.match(/[^\.]*$/)[0];
+
+      vm.title = (vm.mode === 'picked' && 'Собранные товары')
+        || (vm.mode === 'articleList' && 'Товары для сборки')
+      ;
+
+      if (/^(picked|articleList)$/.test(vm.mode)){
+        setGroups (vm.articles);
       }
-      setGroups (vm.articles);
     });
 
     function setGroups(articlesArray) {
