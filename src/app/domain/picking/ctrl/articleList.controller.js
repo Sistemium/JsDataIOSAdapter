@@ -5,14 +5,13 @@
   angular.module('webPage')
     .controller('ArticleListController', ArticleListController);
 
-  function ArticleListController ($scope, $uiViewScroll, $filter, $state, toastr, models, SoundSynth, Language) {
+  function ArticleListController ($scope, $filter, $state, toastr, models, SoundSynth, Language) {
 
     var vm = this;
     var POP = models.PickingOrderPosition;
     //var SB = models.StockBatch;
     //var SBBC = models.StockBatchBarCode;
     var orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
-    vm.scroll = $uiViewScroll;
 
     function processArticle(a, sb, code) {
 
@@ -22,7 +21,6 @@
 
       var pa = _.find(vm.articles, {id: a.id});
 
-      //pa.isPicked = true;
       vm.pickedIndex [a.id] = true;
 
       var pickedOrders = [];
@@ -81,7 +79,6 @@
         if (found.speakable) {
           SoundSynth.say(found.speakable);
         }
-        //$uiViewScroll (angular.element (document.getElementById(found.id)));
       } else {
         SoundSynth.say('Этого товара нет в требовании');
       }
@@ -102,11 +99,8 @@
 
       articleIndex: _.groupBy(positions, 'article'),
       orders: orders,
-      sbbcs: [],
       pickedIndex: {},
-
       barCodeInput: '',
-
       title: ''
 
     });
