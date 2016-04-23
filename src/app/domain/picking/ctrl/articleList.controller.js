@@ -23,34 +23,40 @@
 
       vm.pickedIndex [a.id] = true;
 
-      var pickedOrders = [];
+      var pickablePositions = [];
 
-      var pickedVolume = _.reduce(pa.positions, function (res, pop) {
+      _.each (pa.positions,function (pop){
         var unp = pop.unPickedVolume();
         if (unp > 0) {
-          pickedOrders.push({
-            volume: Language.speakableBoxPcs(a.boxPcs(unp)),
-            num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1
+          pickablePositions.push ({
+            pop: pop,
+            unp: unp,
+            num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,
+            volume: Language.speakableBoxPcs(a.boxPcs(unp))
           });
-          pop.linkStockBatch(sb, code, unp).then(function () {
-            pa.updatePicked();
-            setGroups(vm.articles);
-          });
-        } else {
-          unp = 0;
         }
-        return res + unp;
+      });
+
+      pickablePositions = _.orderBy(pickablePositions ,'num');
+
+      var pickedVolume = _.reduce(pickablePositions, function (res, pp) {
+        pp.pop.linkStockBatch(sb, code, pp.unp).then(function () {
+          pa.updatePicked();
+        });
+        return res + pp.unp;
       }, 0);
 
-      pickedOrders = _.orderBy(pickedOrders, 'num');
+      if (pickedVolume) {
+        setGroups(vm.articles);
+      }
 
-      var say = _.reduce(pickedOrders, function (res, o, idx) {
+      var say = _.reduce(pickablePositions, function (res, pp, idx) {
         return res
           + (idx ? ' и ' : '')
-          + o.volume
+          + pp.volume
           + ($scope.vm.orders.length > 1
-              ? (o.num === 2 ? ' во ' : ' в ')
-            + Language.orderRu(o.num)
+              ? (pp.num === 2 ? ' во ' : ' в ')
+            + Language.orderRu(pp.num)
               : ''
           );
       }, '');
