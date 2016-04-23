@@ -3,21 +3,11 @@ h3.clearfix(ng-show='vm.title') {{ vm.title }}
 
 section.sa-error-widget
 
-ul.hidden-iOS
-  li(ng-repeat="sb in vm.sbbcs track by sb.id" ng-hide="vm.pickedIndex[sb.id]")
-    label(ng-repeat="sbbc in sb.sbbcs track by sbbc.id")
-      a(href="" ng-click="vm.onBarCode(sbbc.code)") {{ sbbc.code }}
-      span &nbsp;
-
-//section(ng-repeat='order in vm.orders track by order.id')
-  div {{ order | json }}
-
 section.ui-view
-  ul.list-group(s-sortable ng-model='vm.articles')
+  h4(ng-repeat-start='group in vm.groups track by group.name') {{ ::group.name }}
+  ul.list-group(ng-repeat-end)
     li.list-group-item.display-flex.animate-show(
-      ng-repeat='item in vm.articles | filter: vm.currentFilter | orderBy: vm.orderBy as filteredResult track by item.id'
-      s-sortable-item
-      ng-attr-id="{{ ::item.id }}"
+      ng-repeat='item in group.articles | orderBy: vm.orderBy as filteredResult track by item.id'
     )
       //.sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
