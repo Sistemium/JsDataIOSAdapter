@@ -13,8 +13,7 @@
           controller: 'PickingArticleController',
           controllerAs: 'vm',
           data: {
-            hideBottomBar: true,
-            hideTopBar: true
+            hideBottomBar: true
           },
           children: [
             {
@@ -55,7 +54,10 @@
                   url: '/selected',
                   templateUrl: 'app/domain/picking/selectedOrders.html',
                   controller: 'SelectedOrdersController',
-                  controllerAs: 'vm'
+                  controllerAs: 'vm',
+                  data: {
+                    hideTopBar: true
+                  }
                 },{
                   name: 'articleList',
                   url: '/articleList',
@@ -64,7 +66,8 @@
                   controllerAs: 'vm',
                   children: angular.copy (articleChildren),
                   data: {
-                    needBarcode: true
+                    needBarcode: true,
+                    hideTopBar: true
                   }
                 },{
                   name: 'picked',
@@ -74,7 +77,8 @@
                   controllerAs: 'vm',
                   children: angular.copy (articleChildren),
                   data: {
-                    needBarcode: true
+                    needBarcode: true,
+                    hideTopBar: true
                   }
                 }
               ]
