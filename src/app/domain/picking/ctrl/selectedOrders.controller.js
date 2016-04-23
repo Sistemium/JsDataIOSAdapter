@@ -10,14 +10,16 @@
 
       angular.extend(vm,{
 
-        selectedItems: $scope.$parent.vm.selectedItems,
+        selectedItems: $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems,
         totals: PO.agg (vm, 'selectedItems'),
 
         startPicking: function () {
-          _.each(vm.selectedItems,function(po){
+          vm.selectedItems = _.map(vm.selectedItems,function(po){
             po.processing = 'picking';
             PO.save(po);
+            return po;
           });
+          $scope.$parent.vm.pickingItems = vm.selectedItems;
           $state.go('^.articleList');
         },
 
@@ -27,6 +29,7 @@
             po.selected = undefined;
             PO.save(po);
           });
+          $scope.$parent.vm.pickingItems = false;
           $state.go('^');
         },
 
@@ -36,6 +39,7 @@
             po.selected = undefined;
             PO.save(po);
           });
+          $scope.$parent.vm.pickingItems = false;
           $state.go('^');
         }
 
