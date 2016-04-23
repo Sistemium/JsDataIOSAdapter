@@ -4,7 +4,8 @@
 
     angular.module('core.services').service('SoundSynth', function ($window, toastr) {
 
-      var rate = 0.45;
+      // TODO rate depending on device
+      var rate = 0.40;
       var pitch = 1;
 
       var lastSpeech = false;
