@@ -6,35 +6,40 @@
     .controller('PlayGroundController', PlayGroundController);
 
   /** @ngInject */
-  function PlayGroundController($scope, $window, $log, models, $filter, Language, SoundSynth, Auth) {
+  function PlayGroundController($scope, $window, $log, $filter, Language, SoundSynth, Auth, models) {
     var vm = this;
 
     vm.barCodes = [];
     vm.stockBatches = [];
 
-    models.LogMessage.bindAll({}, $scope, 'vm.articles');
+    models.Setting.bindAll({}, $scope, 'vm.display');
+    models.Setting.findAll({
+      group: 'domain',
+      name: 'picking.date'
+    });
+
     //models.PickingOrderPosition.bindAll({}, $scope, 'vm.articleGroups');
 
     //models.PickingOrder.findAll();
     //models.PickingOrderPosition.findAll();
 
-    var boxPcs = {
-      box: 101,
-      pcs: 312
-    };
-
-    vm.display = {
-      boxes: $filter ('boxes') (22),
-      bottles: $filter ('bottles') (21),
-      full: $filter ('boxPcs') ({box: 21, pcs: 0}),
-      speakableCountFemale: Language.speakableCountFemale (3),
-      speakableBoxPcs: Language.speakableBoxPcs (boxPcs)
-    };
-
-    vm.currentUser = {
-      user: Auth.getCurrentUser(),
-      id: $window.localStorage.getItem('currentPickerId')
-    };
+    // var boxPcs = {
+    //   box: 101,
+    //   pcs: 312
+    // };
+    //
+    // vm.display = {
+    //   boxes: $filter ('boxes') (22),
+    //   bottles: $filter ('bottles') (21),
+    //   full: $filter ('boxPcs') ({box: 21, pcs: 0}),
+    //   speakableCountFemale: Language.speakableCountFemale (3),
+    //   speakableBoxPcs: Language.speakableBoxPcs (boxPcs)
+    // };
+    //
+    // vm.currentUser = {
+    //   user: Auth.getCurrentUser(),
+    //   id: $window.localStorage.getItem('currentPickerId')
+    // };
 
     //SoundSynth.say (Language.speakableBoxPcs (boxPcs));
 

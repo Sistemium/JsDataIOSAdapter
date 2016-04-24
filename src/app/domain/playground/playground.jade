@@ -4,7 +4,6 @@ section
     .lead v0.0.2
 
   pre {{ vm.display | json }}
-  pre {{ vm.currentUser | json}}
 
   ul
     li(ng-repeat="sb in vm.stockBatches track by sb.id")
