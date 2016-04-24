@@ -39,6 +39,10 @@
 
       pickablePositions = _.orderBy(pickablePositions ,'num');
 
+      if (vm.mode === 'article') {
+        pickablePositions = _.take(pickablePositions);
+      }
+
       var qs = [];
 
       var pickedVolume = _.reduce(pickablePositions, function (res, pp) {
@@ -81,7 +85,8 @@
 
     $scope.$on('stockBatchBarCodeScan', function (e, options) {
 
-      var found = options.stockBatch.Article && processArticle(options.stockBatch.Article, options.stockBatch, options.code);
+      var found = options.stockBatch.Article && 
+        processArticle(options.stockBatch.Article, options.stockBatch, options.code);
 
       if (found && found.id) {
         toastr.success(found.name, found.volume);
@@ -131,15 +136,23 @@
 
       var filtered = $filter('filter')(articlesArray, vm.currentFilter);
 
-      vm.groups = (vm.mode === 'picked') ? [{
-        name: '',
-        articles: filtered
-      }] : _.map(
-        _.groupBy(filtered, 'article.category'),
-        function (val, key) {
-          return {name: key, articles: val};
-        }
-      );
+      if (vm.mode === 'picked'){
+
+        vm.groups = [{
+          name: '',
+          articles: filtered
+        }];
+
+      } else if (vm.mode === 'articleList') {
+
+        vm.groups = _.map(
+          _.groupBy(filtered, 'article.category'),
+          function (val, key) {
+            return {name: key, articles: val};
+          }
+        );
+
+      }
 
     }
 
@@ -148,7 +161,6 @@
     vm.orderBy = $state.$current.name.match(/picked$/) ? '-ts' : 'article.name';
 
     setGroups (vm.articles);
-//    $scope.$watch('vm.articles', setGroups);
 
   }
 
