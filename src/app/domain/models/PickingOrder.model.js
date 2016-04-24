@@ -27,6 +27,10 @@
         }
       },
 
+      fieldTypes: {
+        date: 'date'
+      },
+
       computed: {
         processingClass: ['processing',function(processing){
           return 'glyphicon glyphicon-' + (function() {

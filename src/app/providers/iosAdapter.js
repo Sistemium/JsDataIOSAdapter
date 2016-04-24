@@ -53,6 +53,8 @@
                   return parseInt (v) || 0;
                 case 'decimal':
                   return parseFloat (v) || 0;
+                case 'date':
+                  return v ? v.substr(0,10) : null;
               }
             }) (row[field]);
 
