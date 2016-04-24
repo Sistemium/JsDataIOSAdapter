@@ -21,13 +21,13 @@
 
       if (pickedPosition) {
         initVolume = pickedPosition.boxPcs().full;
-        unPickedVolume = pickedPosition.volume;
+        initExport = pickedPosition.volume;
+        unPickedVolume = position.unPickedVolume() + initExport;
       } else if (position) {
         initVolume = position.unPickedBoxPcs().full;
+        initExport = position.unPickedVolume();
         unPickedVolume = position.unPickedVolume();
       }
-
-      initExport = unPickedVolume;
 
       var states = [
         {
