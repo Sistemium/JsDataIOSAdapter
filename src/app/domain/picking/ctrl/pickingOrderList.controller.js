@@ -169,6 +169,7 @@
 
       $scope.$on('$stateChangeSuccess', function (e, to) {
         vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
+        vm.mode = to.name.match(/[^\.]*$/)[0];
       });
 
       $scope.$on('$stateChangeSuccess', function (e, to) {

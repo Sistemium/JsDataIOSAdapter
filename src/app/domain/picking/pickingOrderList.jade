@@ -32,16 +32,16 @@ section.has-navbar-fixed-bottom.ui-view
         td {{ order.positionsCount () | number:0 }}
         td {{ order.totalBoxVolume () | number: 1}}
 
-  .pull-right
-    button.btn.btn-primary.animate-show(ng-show='vm.hasSelected' ui-sref='.selectedOrders')
-      | Собирать отмеченные
-
 nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')
   .container
     form.navbar-form.navbar-left.float-left.flat-on-small.hidden-xs(role='search' ng-submit="vm.onBarCode()" ng-if="vm.onBarCode")
       .form-group
         input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')
-    ul.nav.navbar-nav.navbar-right.float-right.animate-show.flat-on-small(ng-show='vm.hasSelected')
+
+    .buttons.animate-show.navbar-right(ng-if="vm.mode==='orderList'")
+      button.btn.btn-primary.navbar-btn(ng-show='vm.hasSelected' ui-sref='.selectedOrders') Собирать отмеченные
+
+    ul.nav.navbar-nav.navbar-right.float-right.animate-show.flat-on-small(ng-if="vm.mode!=='orderList'" ng-show='vm.pickingItems')
       li(ui-sref-active='active')
         a(ui-sref='.selectedOrders') Сводка
 
