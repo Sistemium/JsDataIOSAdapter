@@ -33,7 +33,7 @@ section(ng-switch='vm.step')
   .volume-pad(
     ng-switch-when='1'
     model='vm.states[1].value'
-    datatype='date'
+    datatype='{{vm.states[1].datatype}}'
   )
 
 hr(ng-if='vm.step >= 0')

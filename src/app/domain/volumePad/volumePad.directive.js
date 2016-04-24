@@ -9,7 +9,7 @@
     /[0123]/,
     /3[01]|[12]\d|[0][1-9]/,
     /\d{2}[01]/,
-    /3[01](0[13578]|1[02])|[012]\d(0[1-9]|1[0-2])/,
+    /3[01](0[13578]|1[012])|[012]\d(0[1-9]|1[0-2])/,
     ///\d{4}[12]/,
     ///\d{4}(19|20)/,
     /\d{4}[01]/,
@@ -78,6 +78,44 @@
             return true;
           }
         }
+
+      }
+    },
+
+    exciseStamp: {
+      formatSymbols: function (str) {
+        var re = /^(\d{3})(\d{0,9})/;
+
+        return (str || '').replace(re,function (match, prefix, body){
+          return prefix + (prefix ? '-' + body : '');
+        });
+      },
+      importModel: function  (str) {
+        var re = /^(\d{3})-(\d{9})/;
+
+        str = str || '';
+
+        return re.test(str) ? str.replace(re,function (match, prefix, body){
+          return prefix + body;
+        }) : '';
+      },
+      disableButton: function (button, data) {
+
+        if (!button.label) {
+          return;
+        }
+
+        if (data.length === 12) {
+          return true;
+        }
+
+        // if (!data.length && button.label !== '2') {
+        //   return true;
+        // }
+        //
+        // if (data.length === 1 && button.label.match (/[4-9]/) ) {
+        //   return true;
+        // }
 
       }
     }

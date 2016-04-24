@@ -51,8 +51,19 @@
         states.push ({
           input: 'productionInfo',
           label: 'Дата розлива',
+          datatype: 'date',
           validate: function (val) {
             return !! /\d{2}\/\d{2}\/\d{2,4}/.test (val);
+          },
+          value: pickedPosition && pickedPosition.productionInfo || ''
+        });
+      } else if (position) {
+        states.push ({
+          input: 'productionInfo',
+          label: 'Марка',
+          datatype: 'exciseStamp',
+          validate: function (val) {
+            return !! /^\d{3}-\d{9}/.test (val);
           },
           value: pickedPosition && pickedPosition.productionInfo || ''
         });
