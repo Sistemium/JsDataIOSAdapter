@@ -59,7 +59,7 @@
 
       var say = _.reduce(pickablePositions, function (res, pp, idx) {
         return res
-          + (idx ? ' плюс ' : '')
+          + (idx ? ', плюс ' : '')
           + pp.volume
           + ($scope.vm.orders.length > 1
               ? (pp.num === 2 ? ' во ' : ' в ')
@@ -85,7 +85,7 @@
 
     $scope.$on('stockBatchBarCodeScan', function (e, options) {
 
-      var found = options.stockBatch.Article && 
+      var found = options.stockBatch.Article &&
         processArticle(options.stockBatch.Article, options.stockBatch, options.code);
 
       if (found && found.id) {
