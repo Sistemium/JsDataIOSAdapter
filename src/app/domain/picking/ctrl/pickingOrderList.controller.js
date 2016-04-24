@@ -11,6 +11,8 @@
         return $state.go ('login');
       }
 
+      var date;
+
       var vm = this;
       var PO = Schema.model ('PickingOrder');
       var POP = Schema.model ('PickingOrderPosition');
@@ -51,6 +53,7 @@
       function setSelected () {
         vm.selectedItems = PO.filter({
           picker: picker.id,
+          date: date,
           selected: true
         });
         vm.hasSelected = !!vm.selectedItems.length;
@@ -61,12 +64,15 @@
 
       function refresh() {
         var lastModified = PO.lastModified();
-        vm.busy = PO.findAll({picker: picker.id}, {bypassCache: true})
+        vm.busy = PO.findAll({
+          picker: picker.id,
+          date: date
+        }, {bypassCache: true})
           .then(function (res) {
 
             res.forEach(onFindPO);
 
-            if (!vm.selectedItems.length) {
+            if (!vm.selectedItems.length && vm.mode !== 'orderList') {
               $state.go('picking.orderList');
             }
 
@@ -107,12 +113,23 @@
 
         totals: PO.agg (vm, 'pickingOrders'),
         selectedTotals: PO.agg (vm, 'selectedItems'),
+        hasSelected: false,
 
         refresh: refresh
 
       });
 
-      refresh();
+      Schema.model('Setting').findAll({
+        group: 'domain',
+        name: 'picking.date'
+      }).then (function(res){
+        if (res.length) {
+          date = res[0].value;
+        } else {
+          date = null;
+        }
+        refresh();
+      });
 
       function scanFn(code,type,object) {
 
