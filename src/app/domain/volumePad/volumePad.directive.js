@@ -91,7 +91,7 @@
         });
       },
       importModel: function  (str) {
-        var re = /^(\d{3})-(\d{9})/;
+        var re = /^(\d{3})-(\d{8,9})/;
 
         str = str || '';
 
@@ -105,7 +105,7 @@
           return;
         }
 
-        if (data.length === 12) {
+        if (data.length >= 12) {
           return true;
         }
 

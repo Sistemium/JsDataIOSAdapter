@@ -63,7 +63,7 @@
           label: 'Марка',
           datatype: 'exciseStamp',
           validate: function (val) {
-            return !! /^\d{3}-\d{9}/.test (val);
+            return !! /^\d{3}-\d{8,9}/.test (val);
           },
           value: pickedPosition && pickedPosition.productionInfo || ''
         });
