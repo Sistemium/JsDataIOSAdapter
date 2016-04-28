@@ -83,7 +83,15 @@
 
     }
 
+    var lockScanProcessor;
+
     $scope.$on('stockBatchBarCodeScan', function (e, options) {
+
+      if (lockScanProcessor) {
+        return;
+      }
+
+      lockScanProcessor = true;
 
       var found = options.stockBatch.Article &&
         processArticle(options.stockBatch.Article, options.stockBatch, options.code);
@@ -96,6 +104,8 @@
       } else {
         SoundSynth.say('Этого товара нет в требовании');
       }
+
+      lockScanProcessor = false;
 
     });
 
