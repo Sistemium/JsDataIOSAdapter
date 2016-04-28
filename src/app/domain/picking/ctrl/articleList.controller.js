@@ -5,7 +5,7 @@
   angular.module('webPage')
     .controller('ArticleListController', ArticleListController);
 
-  function ArticleListController ($scope, $filter, $state, toastr, models, SoundSynth, Language, $q) {
+  function ArticleListController ($scope, $filter, $state, toastr, models, $timeout, SoundSynth, Language, $q) {
 
     var vm = this;
     var POP = models.PickingOrderPosition;
@@ -93,19 +93,23 @@
 
       lockScanProcessor = true;
 
-      var found = options.stockBatch.Article &&
-        processArticle(options.stockBatch.Article, options.stockBatch, options.code);
+      $timeout(function(){
 
-      if (found && found.id) {
-        toastr.success(found.name, found.volume);
-        if (found.speakable) {
-          SoundSynth.say(found.speakable);
+        var found = options.stockBatch.Article &&
+          processArticle(options.stockBatch.Article, options.stockBatch, options.code);
+
+        if (found && found.id) {
+          toastr.success(found.name, found.volume);
+          if (found.speakable) {
+            SoundSynth.say(found.speakable);
+          }
+        } else {
+          SoundSynth.say('Этого товара нет в требовании');
         }
-      } else {
-        SoundSynth.say('Этого товара нет в требовании');
-      }
 
-      lockScanProcessor = false;
+        lockScanProcessor = false;
+
+      },10);
 
     });
 
