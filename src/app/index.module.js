@@ -19,8 +19,9 @@
       'sistemiumBootstrap',
       'Models'
     ])
-    .run(function(Auth){
+    .run(function(Auth,saApp){
       Auth.init();
+      saApp.init();
     });
 
 })();
