@@ -154,7 +154,7 @@
       options = angular.extend (options, paramsToOptions (params));
 
       return requestFromIOS('findAll', resource.endpoint, params, angular.extend({
-          pageSize: 300,
+          pageSize: 1000,
           startPage: 1
         }, options)
       );

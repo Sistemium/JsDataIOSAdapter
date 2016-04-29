@@ -51,7 +51,7 @@
         params: params,
         options: angular.extend({
           headers: {
-            'x-page-size': 300
+            'x-page-size': 1000
           }
         },options)
       });
