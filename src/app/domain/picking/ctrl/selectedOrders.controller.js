@@ -3,14 +3,28 @@
 (function () {
 
   angular.module('webPage')
-    .controller('SelectedOrdersController', function (models, $scope, $state) {
+    .controller('SelectedOrdersController', function (Schema, $scope, $state) {
 
-      var PO = models.PickingOrder;
+      var PO = Schema.model('PickingOrder');
+      var POP = Schema.model('PickingOrderPosition');
       var vm = this;
+
+      function ejectOthers () {
+        Schema.model ('PickingOrderPositionPicked').ejectAll();
+        Schema.model ('StockBatch').ejectAll();
+      }
+
+      var selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
+
+      _.each(selected,function(po){
+        _.each (po.positions,function(pop) {
+          POP.loadRelations(pop,['PickingOrderPositionPicked']);
+        });
+      });
 
       angular.extend(vm,{
 
-        selectedItems: $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems,
+        selectedItems: selected,
         totals: PO.agg (vm, 'selectedItems'),
 
         startPicking: function () {
@@ -30,6 +44,7 @@
             PO.save(po);
           });
           $scope.$parent.vm.pickingItems = false;
+          ejectOthers();
           $state.go('^');
         },
 
@@ -40,6 +55,7 @@
             PO.save(po);
           });
           $scope.$parent.vm.pickingItems = false;
+          ejectOthers();
           $state.go('^');
         }
 

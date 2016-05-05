@@ -26,7 +26,7 @@
       //toastr.info(angular.toJson({picker: i.picker}),'PickingOrder');
       return PO.loadRelations(i).then(function (r) {
         _.each(r.positions, function (pos) {
-          POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+          POP.loadRelations(pos, ['Article']);
         });
       });
     }
