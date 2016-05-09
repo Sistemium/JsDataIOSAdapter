@@ -38,14 +38,12 @@ nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBotto
       .form-group
         input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')
 
-    .buttons.animate-show.navbar-right(ng-if="vm.mode==='orderList'")
-      button.btn.btn-primary.navbar-btn(ng-show='vm.hasSelected' ui-sref='.selectedOrders') Собирать отмеченные
-
-    ul.nav.navbar-nav.navbar-right.float-right.animate-show.flat-on-small(ng-if="vm.mode==='orderList' && !vm.hasSelected")
-      li(ui-sref-active='active')
+    ul.nav.navbar-nav.navbar-right.float-right.animate-show.flat-on-small(ng-if="vm.mode==='orderList'")
+      button.btn.btn-primary.navbar-btn(ng-if='vm.hasSelected' ui-sref='.selectedOrders') Собирать отмеченные
+      li(ui-sref-active='active' ng-if='!vm.hasSelected')
         a(ui-sref='.({state: "notdone"})') Несобранные
 
-      li(ui-sref-active='active')
+      li(ui-sref-active='active' ng-if='!vm.hasSelected')
         a(ui-sref='.({state: "done"})') Собранные
 
     ul.nav.navbar-nav.navbar-right.float-right.animate-show.flat-on-small(ng-if="vm.mode!=='orderList'" ng-show='vm.pickingItems')
