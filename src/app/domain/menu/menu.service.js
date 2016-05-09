@@ -13,7 +13,7 @@
 
             items: [{
               title: 'Сборка',
-              state: 'picking.orderList'
+              state: 'picking.orderList({state:"notdone"})'
             }]
 
           };

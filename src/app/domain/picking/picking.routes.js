@@ -44,7 +44,7 @@
           },
           children: [
             { name:'orderList',
-              url: '/orders',
+              url: '/orders?state',
               templateUrl: 'app/domain/picking/pickingOrderList.html',
               controller: 'PickingOrderListController',
               controllerAs: 'vm',

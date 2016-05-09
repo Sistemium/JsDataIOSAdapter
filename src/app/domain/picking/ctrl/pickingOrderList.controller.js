@@ -6,7 +6,7 @@
     .controller('PickingOrderListController', ctrl)
   ;
 
-  function ctrl ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, toastr, DEBUG) {
+  function ctrl ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, DEBUG) {
 
     var picker = Schema.model ('Picker').getCurrent();
 
@@ -15,6 +15,19 @@
     }
 
     var date;
+    var stateFilterYes = {
+      picker: picker.id
+    };
+
+    var stateFilterNo = {
+      processing: false
+    };
+
+    if ($state.params.state === 'done') {
+      stateFilterYes.processing = 'picked';
+    } else {
+      stateFilterNo.processing = 'picked';
+    }
 
     var vm = this;
     var PO = Schema.model ('PickingOrder');
@@ -23,12 +36,17 @@
 
     function onFindPO (data) {
       var i = (data && data.length) ? data[0] : data;
-      //toastr.info(angular.toJson({picker: i.picker}),'PickingOrder');
-      return PO.loadRelations(i).then(function (r) {
-        _.each(r.positions, function (pos) {
-          POP.loadRelations(pos, ['Article']);
+      if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
+        PO.inject(i);
+        return PO.loadRelations(i).then(function (r) {
+          _.each(r.positions, function (pos) {
+            POP.loadRelations(pos, ['Article']);
+          });
         });
-      });
+      } else {
+        PO.eject(i.id);
+        return false;
+      }
     }
 
     var onJSData = function (event) {
@@ -37,7 +55,7 @@
         return;
       }
       if (event.resource === 'PickingOrder') {
-        PO.find(id, {bypassCache: true})
+        PO.find(id, {bypassCache: true, cacheResponse: false})
           .then(onFindPO)
           .catch (function (err) {
             if (err.error === 404) {
@@ -46,9 +64,12 @@
             }
           });
       } else if (event.resource === 'PickingOrderPosition') {
-        POP.find(id)
+        POP.find(id, {cacheResponse: false})
           .then(function(pos){
-            POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+            if (pos.PickingOrder) {
+              POP.inject(pos);
+              POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
+            }
           });
       }
     };
@@ -70,7 +91,7 @@
       vm.busy = PO.findAll({
           picker: picker.id,
           date: date
-        }, {bypassCache: true})
+        }, {bypassCache: true, cacheResponse: false})
         .then(function (res) {
 
           res.forEach(onFindPO);
