@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('SelectedOrdersController', function (Schema, $scope, $state) {
+    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync) {
 
       var PO = Schema.model('PickingOrder');
       var POP = Schema.model('PickingOrderPosition');
@@ -16,13 +16,24 @@
 
       var selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
 
+      function loadRelationsPOP (pop) {
+        return POP.loadRelations(pop,['PickingOrderPositionPicked']);
+      }
+
+      var allPositions = [];
+
       _.each(selected,function(po){
-        _.each (po.positions,function(pop) {
-          POP.loadRelations(pop,['PickingOrderPositionPicked']);
-        });
+        Array.prototype.push.apply(allPositions,po.positions);
       });
 
+      var progress = {
+        max: allPositions.length,
+        value: 0
+      };
+
       angular.extend(vm,{
+
+        progress: progress,
 
         selectedItems: selected,
         totals: PO.agg (vm, 'selectedItems'),
@@ -59,6 +70,14 @@
           $state.go('^');
         }
 
+      });
+
+      vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, function(chunk){
+        progress.value += chunk.length;
+      }, _.noop);
+
+      vm.busy.then(function(){
+        vm.progress = false;
       });
 
     })

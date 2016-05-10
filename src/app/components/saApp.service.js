@@ -20,7 +20,7 @@
         event: 'appInit',
         appName: 'j-sistemium',
         appId: appId,
-        version: '0.2.5'
+        version: '0.2.7'
       };
 
       LogMessage.create({

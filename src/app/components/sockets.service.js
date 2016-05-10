@@ -32,8 +32,11 @@ angular.module('core.services')
       });
     }
 
-    function subscribeCallback (data) {
-      console.info(angular.toJson(data),'subscribeCallback');
+    var subscribed = [];
+
+    function subscribeCallback (msg,data) {
+      subscribed = data.entities;
+      //toastr.info(angular.toJson(data),'subscribeCallback');
     }
 
     $window[DATACALLBACK] = subscribeDataCallback;
@@ -54,6 +57,10 @@ angular.module('core.services')
 
     }
 
+    var subscriptions = {
+
+    };
+
     return {
       init: function () {
 
@@ -62,6 +69,13 @@ angular.module('core.services')
       onJsData: onFn,
       jsDataSubscribe: function (filter) {
 
+        var id = uuid.v4();
+
+        subscriptions[id] = {
+          id: id,
+          filter: filter
+        };
+
         ios.messageHandlers[SUBSCRIBE].postMessage ({
           entities: filter,
           callback: CALLBACK,
@@ -69,11 +83,19 @@ angular.module('core.services')
         });
 
         return function(){
-          ios.messageHandlers[SUBSCRIBE].postMessage ({
-            entities: [],
-            callback: CALLBACK,
-            dataCallback: DATACALLBACK
+          delete subscriptions[id];
+          var unsub = [];
+          _.each(subscriptions,function(val){
+            Array.prototype.push.apply(unsub,val.filter);
           });
+
+          if (_.difference(subscribed, unsub)) {
+            ios.messageHandlers[SUBSCRIBE].postMessage({
+              entities: unsub,
+              callback: CALLBACK,
+              dataCallback: DATACALLBACK
+            });
+          }
         };
       },
       emitQ: function() {

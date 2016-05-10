@@ -6,7 +6,7 @@
     .controller('PickingOrderListController', ctrl)
   ;
 
-  function ctrl ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, DEBUG) {
+  function ctrl ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, saAsync, DEBUG) {
 
     var picker = Schema.model ('Picker').getCurrent();
 
@@ -38,9 +38,12 @@
       var i = (data && data.length) ? data[0] : data;
       if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
         PO.inject(i);
-        return PO.loadRelations(i).then(function (r) {
-          _.each(r.positions, function (pos) {
-            POP.loadRelations(pos, ['Article']);
+        return PO.loadRelations(i,['PickingOrderPosition']).then(function (r) {
+          saAsync.eachSeries(r.positions, function (pos,done) {
+            POP.loadRelations(pos, ['Article'])
+              .then(function(res){
+                done(null,res);
+              });
           });
         });
       } else {
@@ -66,7 +69,7 @@
       } else if (event.resource === 'PickingOrderPosition') {
         POP.find(id, {cacheResponse: false})
           .then(function(pos){
-            if (pos.PickingOrder) {
+            if (PO.get(pos.pickingOrder)) {
               POP.inject(pos);
               POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
             }
@@ -86,15 +89,45 @@
     $scope.$on('$destroy',Sockets.jsDataSubscribe(['PickingOrder','PickingOrderPosition']));
     $scope.$on('$destroy',Sockets.onJsData('jsData:update', onJSData));
 
+    PO.ejectAll();
+    POP.ejectAll();
+
     function refresh() {
       var lastModified = PO.lastModified();
+      // var progress = {
+      //   max: allPositions.length,
+      //   value: 0
+      // };
+
       vm.busy = PO.findAll({
           picker: picker.id,
           date: date
         }, {bypassCache: true, cacheResponse: false})
         .then(function (res) {
 
-          res.forEach(onFindPO);
+          saAsync.series(_.map(res,function(po){
+            return function(done) {
+              var res = onFindPO(po);
+
+              if (res) {
+                res.then(function(){
+                  done();
+                });
+              } else {
+                done();
+              }
+
+            };
+          }),function () {
+            if (!lastModified) {
+              return;
+            }
+            _.each (res, function (po) {
+              if (po.DSLastModified() <= lastModified) {
+                PO.eject(po);
+              }
+            });
+          });
 
           if (!vm.selectedItems.length && vm.mode !== 'orderList') {
             $state.go('picking.orderList');
@@ -102,16 +135,6 @@
 
           setSelected();
 
-        })
-        .then(function (){
-          if (!lastModified) {
-            return;
-          }
-          _.each (vm.pickingOrders, function (po) {
-            if (po.DSLastModified() <= lastModified) {
-              PO.eject(po);
-            }
-          });
         });
     }
 

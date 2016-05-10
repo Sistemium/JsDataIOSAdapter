@@ -12,6 +12,9 @@ section.has-navbar-fixed-bottom.ui-view
       span Бут.:
       label {{ vm.currentTotals.totalVolume () | number:0 }}
 
+  .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
+    i {{ vm.progress.value }} / {{ vm.progress.max }}
+
   table.table.table-hover
     thead
       th.hidden-xs Статус

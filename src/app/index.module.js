@@ -17,7 +17,8 @@
       'ng-appcache',
       'ui.mask',
       'sistemiumBootstrap',
-      'Models'
+      'Models',
+      'cgBusy'
     ])
     .run(function(Auth,saApp){
       Auth.init();

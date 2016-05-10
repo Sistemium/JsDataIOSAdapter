@@ -4,6 +4,9 @@
 
   angular
     .module('webPage')
-    .constant('moment', moment);
+    .constant('moment', moment)
+    .value('cgBusyDefaults',{
+      message:'Идет загрузка'
+    });
 
 })();

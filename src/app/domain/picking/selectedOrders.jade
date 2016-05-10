@@ -12,7 +12,7 @@ h3.clearfix
     span Бут.:
     label {{ vm.totals.totalVolume () | number:0 }}
 
-section
+section(cg-busy='vm.busy')
   ul.list-group(as-sortable ng-model='vm.selectedItems')
     li.list-group-item.display-flex(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
@@ -43,8 +43,10 @@ section
           label {{ item.totalUnPickedVolume() | number:0 }}
           span Б.
 
+  .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
+    i {{ vm.progress.value }} / {{ vm.progress.max }}
 
-  .pull-right
+  .pull-right(ng-hide='vm.progress')
     button.btn.btn-default(ng-click='vm.pausePicking()')
       | Отложить
     button.btn.btn-warning(ng-click='vm.finishPicking()')
