@@ -35,7 +35,7 @@
             //SoundSynth.say(p.name);
             return (currentPicker = p);
           },function (res) {
-            toastr.info(res);
+            toastr.error(angular.toJson(res),'Ошибка регистрации сборщика');
           });
         },
 
