@@ -19,10 +19,6 @@
           Picker: {
             localField: 'pickedBy',
             localKey: 'picker'
-          },
-          Outlet: {
-            localField: 'shipTo',
-            localKey: 'outlet'
           }
         }
       },
