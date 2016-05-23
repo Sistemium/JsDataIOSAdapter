@@ -9,8 +9,11 @@
     var
       url = 'https://api.sistemium.com/pha/auth',
       logoffUrl = 'https://api.sistemium.com/pha/logoff',
+      rolesUrl = 'https://api.sistemium.com/pha/roles',
       ID
     ;
+
+    var me = {};
 
     function auth (mobileNumber) {
       return $http
@@ -38,16 +41,40 @@
       return $http
         .post(url, null, {params: {ID: ID, smsCode: code}})
         .success(function (res) {
-          $rootScope.$broadcast('authenticated',res);
+          console.log (res);
+          getRoles(res.accessToken);
         })
       ;
     }
 
-    return {
+    function getRoles (token) {
+      return $http
+        .get(rolesUrl, {
+          headers: {
+            Authorization: token
+          },
+          timeout: 15000
+        })
+        .success(function(res){
+          var response = {
+            accessToken: token,
+            roles: res.roles,
+            account: res.account
+          };
+          me.roles = res.roles;
+          me.account = res.account;
+          $rootScope.$broadcast('authenticated',response);
+          return response;
+        })
+      ;
+    }
+
+    return angular.extend(me,{
       auth: auth,
       logoff: logoff,
-      confirm: confirm
-    }
+      confirm: confirm,
+      getRoles: getRoles
+    });
 
   }
 
