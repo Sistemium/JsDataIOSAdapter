@@ -18,11 +18,8 @@
       'ui.mask',
       'sistemiumBootstrap',
       'Models',
-      'cgBusy'
-    ])
-    .run(function(Auth,saApp){
-      Auth.init();
-      saApp.init();
-    });
+      'cgBusy',
+      'vs-repeat'
+    ]);
 
 })();
