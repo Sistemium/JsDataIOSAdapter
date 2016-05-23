@@ -15,12 +15,12 @@
       _.assign(this.defaults, options);
     };
 
-    function emit (data) {
-      var q = Sockets.emitQ('jsData',data);
-      q.then(function(){
-        DEBUG ('emit:success', data);
-      },function(){
-        DEBUG ('emit:catch', data);
+    function emit (options) {
+      var q = Sockets.emitQ('jsData',options);
+      q.then(function(data){
+        DEBUG ('emit:success', data, options);
+      },function(err){
+        DEBUG ('emit:catch', err, options);
       });
       return q;
     }
@@ -47,11 +47,11 @@
       return emit({
         method: 'findAll',
         //TODO rename models with pool or set basePath for adapter or leave as it is now
-        resource: 'dev/' + resource.name,
+        resource: (this.defaults.pool || options.pool) + '/' + resource.name,
         params: params,
         options: angular.extend({
           headers: {
-            'x-page-size': 1000
+            'x-page-size': options.limit || 1000
           }
         },options)
       });
@@ -61,24 +61,24 @@
       return emit({
         method: 'find',
         //TODO rename models with pool or set basePath for adapter or leave as it is now
-        resource: 'dev/' + resource.name,
+        resource: (this.defaults.pool || options.pool) + '/' + resource.name,
         id: id,
         options: options
       });
     };
 
-    SocketAdapter.prototype.create = function (resource, attrs) {
+    SocketAdapter.prototype.create = function (resource, attrs, options) {
       return emit({
         method: 'create',
-        resource: 'dev/' + resource.name,
+        resource: (this.defaults.pool || options.pool) + '/' + resource.name,
         attrs: attrs
       });
     };
 
-    SocketAdapter.prototype.update = function (resource, id, attrs) {
+    SocketAdapter.prototype.update = function (resource, id, attrs, options) {
       return emit({
         method: 'update',
-        resource: 'dev/' + resource.name,
+        resource: (this.defaults.pool || options.pool) + '/' + resource.name,
         id: id,
         attrs: attrs
       });
@@ -87,7 +87,7 @@
     SocketAdapter.prototype.destroy = function (resource, id, options) {
       var q = emit({
         method: 'destroy',
-        resource: 'dev/' + resource.name,
+        resource: (this.defaults.pool || options.pool) + '/' + resource.name,
         id: id,
         options: options
       });
