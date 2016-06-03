@@ -48,12 +48,14 @@
     });
   }
 
-  function registerAdapters ($window, DS, IosAdapter, SocketAdapter, Schema) {
+  function registerAdapters ($window, DS, IosAdapter, SocketAdapter, Schema, InitService) {
 
     if ($window.webkit) {
       DS.registerAdapter('ios', new IosAdapter (Schema), {default: true});
     } else {
-      DS.registerAdapter('socket', new SocketAdapter(), {default: true});
+      InitService.then (function(app){
+        DS.registerAdapter('socket', new SocketAdapter({pool: app.org}), {default: true});
+      });
     }
 
   }
