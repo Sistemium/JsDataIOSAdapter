@@ -20,16 +20,17 @@
     Auth.init().success(function(res) {
 
       console.log ('Auth', res);
-      InitService.init(
-        //InitService.localDevMode ? {} :
+      InitService.init(angular.extend(
+        InitService.localDevMode ? {} :
         {
           url: {
             socket: 'https://socket2.sistemium.com'
-          },
+          }
+        },{
           jsDataPrefix: res.account.org + '/',
           org: res.account.org
         }
-      );
+      ));
 
       Sockets.on('jsData:update', function (data) {
         DEBUG('jsData:update', data);
