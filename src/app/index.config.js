@@ -1,36 +1,55 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('webPage')
     .run(run)
-    .service('DEBUG',debugService)
+    .service('DEBUG', debugService)
   ;
 
-  function debugService (saDebug) {
+  function debugService(saDebug) {
     return saDebug.log('stg:log');
   }
 
-  function run(Sockets,InitService,Auth,IosAdapter,Schema,Picker,DEBUG, saApp) {
+  function run(Sockets, InitService, Auth, IosAdapter, Schema, Picker, DEBUG, saApp, $window, phaService, $q) {
+
+    var ios = !!$window.$webkit;
+
+    var iosAuth = {
+      getRoles: function () {
+        return $q(function (resolve){
+          resolve({
+            roles: {}
+          });
+        });
+      }
+    };
 
     InitService
       .then(Sockets.init)
       .then(saApp.init);
 
-    Auth.init().success(function(res) {
+    Auth.init(ios ? iosAuth : phaService).then(function (res) {
 
-      console.log ('Auth', res);
-      InitService.init(angular.extend(
+      console.log('Auth', res);
+
+      var appConfig =
         InitService.localDevMode ? {} :
         {
           url: {
             socket: 'https://socket2.sistemium.com'
           }
-        },{
+        }
+      ;
+
+      if (!ios) {
+        angular.extend(appConfig,{
           jsDataPrefix: res.account.org + '/',
           org: res.account.org
-        }
-      ));
+        });
+      }
+
+      InitService.init(appConfig);
 
       Sockets.on('jsData:update', function (data) {
         DEBUG('jsData:update', data);

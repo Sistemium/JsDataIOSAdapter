@@ -55,7 +55,8 @@
           },
           timeout: 15000
         })
-        .success(function(res){
+        .then(function(httpResponse){
+          var res = httpResponse.data;
           var response = {
             accessToken: token,
             roles: res.roles,
