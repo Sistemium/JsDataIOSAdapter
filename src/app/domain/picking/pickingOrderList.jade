@@ -12,16 +12,18 @@ section.has-navbar-fixed-bottom.ui-view
       span Бут.:
       label {{ vm.currentTotals.totalVolume () | number:0 }}
 
-  .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
-    i {{ vm.progress.value }} / {{ vm.progress.max }}
-
   table.table.table-hover
     thead
-      th.hidden-xs Статус
-      th Номер
-      th Бутылок
-      th Позиций
-      th Коробок
+      tr
+        th(colspan='5')
+          .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
+            i {{ vm.progress.value }} / {{ vm.progress.max }}
+      tr
+        th.hidden-xs Статус
+        th Номер
+        th Бутылок
+        th Позиций
+        th Коробок
     tbody
       tr(
         ng-repeat='order in vm.pickingOrders track by order.id'
