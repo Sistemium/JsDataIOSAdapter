@@ -28,6 +28,10 @@
       
       isIos: function () {
         return !!$window.webkit;
+      },
+      
+      handler: function (name) {
+        return $window.webkit.messageHandlers[name];
       }
       
     };

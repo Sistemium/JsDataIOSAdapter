@@ -9,8 +9,6 @@ angular.module('core.services')
 
     var ons = [];
 
-    var ios = IOS.isIos();
-
     function subscribeDataCallback (data) {
       _.each(data,function (e){
 
@@ -76,7 +74,7 @@ angular.module('core.services')
           filter: filter
         };
 
-        ios.messageHandlers[SUBSCRIBE].postMessage ({
+        IOS.handler(SUBSCRIBE).postMessage ({
           entities: filter,
           callback: CALLBACK,
           dataCallback: DATACALLBACK
@@ -90,7 +88,7 @@ angular.module('core.services')
           });
 
           if (_.difference(subscribed, unsub)) {
-            ios.messageHandlers[SUBSCRIBE].postMessage({
+            IOS.handler(SUBSCRIBE).postMessage({
               entities: unsub,
               callback: CALLBACK,
               dataCallback: DATACALLBACK
