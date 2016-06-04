@@ -103,14 +103,6 @@
 
               var article = positions[0].Article;
               var boxPcs = article && article.boxPcs(totalVolume);
-
-              //SBBC.someBy.article (article.id).then (function (sbbcs){
-              //  vm.sbbcs.push ({
-              //    id: article.id,
-              //    sbbcs: sbbcs
-              //  });
-              //});
-
               var picked = isPicked(positions);
               var totalUnPicked = totalUnPickedVolume (positions);
 
