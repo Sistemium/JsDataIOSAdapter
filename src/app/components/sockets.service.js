@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('core.services')
-  .service('iosSockets', function($window,toastr,$q) {
+  .service('iosSockets', function($window,toastr,$q,IOS) {
 
     var SUBSCRIBE = 'subscribe';
     var CALLBACK = 'iosSocketsJsDataSubscribe';
@@ -9,7 +9,7 @@ angular.module('core.services')
 
     var ons = [];
 
-    var ios = $window.webkit;
+    var ios = IOS.isIos();
 
     function subscribeDataCallback (data) {
       _.each(data,function (e){
@@ -111,6 +111,7 @@ angular.module('core.services')
     if ($window.webkit) {
       return iosSockets;
     } else {
+      $window.saSockets = saSockets;
       return saSockets;
     }
 
