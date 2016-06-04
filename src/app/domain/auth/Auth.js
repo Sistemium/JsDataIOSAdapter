@@ -45,11 +45,9 @@
 
       } else {
 
-        var rolesPromise1 = $q(function(resolve){
+        return $q(function(resolve){
           resolveRoles = resolve;
         });
-
-        return rolesPromise1;
 
       }
 
