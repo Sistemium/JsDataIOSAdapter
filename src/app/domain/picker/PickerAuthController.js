@@ -5,7 +5,7 @@
   angular.module('webPage')
     .controller('PickerAuthController', PickerAuthController);
 
-  function PickerAuthController($scope, $state, Auth, Schema, toastr) {
+  function PickerAuthController($scope, $state, PickerAuth, Schema, toastr) {
 
     var vm = this;
 
@@ -24,7 +24,7 @@
           .then(function (picker) {
 
             if (picker) {
-              Auth.login (picker);
+              PickerAuth.login (picker);
             } else {
               toastr.error('Неверный код или пароль');
             }

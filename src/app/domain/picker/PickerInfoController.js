@@ -5,7 +5,7 @@
   angular.module('webPage')
     .controller('PickerInfoController', PickerInfoController);
 
-  function PickerInfoController ($scope, $state, Schema, Auth) {
+  function PickerInfoController ($scope, $state, Schema, PickerAuth) {
 
     var vm = this;
     var Picker = Schema.model('Picker');
@@ -28,7 +28,7 @@
     };
 
     vm.logout = function () {
-      Auth.logout();
+      PickerAuth.logout();
       Picker.logout();
       $state.go ('login');
     }

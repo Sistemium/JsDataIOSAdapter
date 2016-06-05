@@ -2,24 +2,37 @@
 
 (function () {
 
-  angular.module('core.services').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS) {
+  angular.module('core.services').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS, PickerAuth) {
+
+    var DEBUG = debug ('stg:Auth');
 
     var me = this;
-    var currentUser;
-    var DEBUG = debug ('stg:Auth');
+
     var roles;
     var rolesArray;
     var rolesPromise;
-    var ios = IOS.isIos();
     var resolveRoles;
+    var currentUser;
+
+    var ios = IOS.isIos();
 
     function getAccessToken() {
       return ios || $window.localStorage.getItem('authorization');
     }
 
+    function clearAccessToken() {
+      return ios || $window.localStorage.removeItem('authorization');
+    }
+
     function setRoles(newRoles) {
 
       roles = newRoles || {};
+      currentUser = roles.account || {};
+
+      currentUser.shortName = (function (name) {
+        var names = name.match (/(^[^ ]*) (.*$)/);
+        return names[1] + ' ' + names[2][0] + '.';
+      })(currentUser.name);
 
       rolesArray = _.map(roles.roles, function(val,key) {
         return key;
@@ -79,22 +92,10 @@
           }
 
           $state.go('auth');
-          return;
 
-        } else {
-          return;
         }
-      }
-
-      var needRoles = next.data && next.data.auth;
-
-      if (needRoles && !currentUser) {
-        event.preventDefault();
-        me.redirectTo = {
-          state: next,
-          params: nextParams
-        };
-        $state.go('login');
+      } else {
+        me.profileState = 'profile';
       }
 
     });
@@ -127,10 +128,10 @@
 
     Sockets.on('connect', sockAuth);
 
-    return {
+    return angular.extend(me, {
 
       getCurrentUser: function () {
-        return currentUser;
+        return PickerAuth.getCurrentUser() || currentUser;
       },
 
       isLoggedIn: function () {
@@ -142,25 +143,10 @@
       },
 
       logout: function () {
-        currentUser = undefined;
+        currentUser = roles = undefined;
+        clearAccessToken();
         $rootScope.$broadcast('auth-logout');
-        window.localStorage.removeItem('currentPickerId');
-      },
-
-      login: function (user) {
-        if (!user || !user.id) {
-          $window.localStorage.removeItem('currentPickerId');
-          return $state.go('login');
-        }
-        currentUser = user;
-        $window.localStorage.setItem('currentPickerId',user.id);
-        $rootScope.$broadcast('auth-login', currentUser);
-        if (me.redirectTo) {
-          $state.go(me.redirectTo.state, me.redirectTo.params);
-          me.redirectTo = false;
-        } else {
-          $state.go('home');
-        }
+        $state.go('home');
       },
 
       init: init,
@@ -178,7 +164,7 @@
         ;
       }
 
-    };
+    });
 
   });
 

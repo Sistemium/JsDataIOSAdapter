@@ -16,7 +16,7 @@ div.navbar.navbar-default(ng-hide='vm.hide')
         a(ui-sref='login') Вход
 
       li(ng-if='vm.auth.isLoggedIn()' ui-sref-active='active')
-        a(ui-sref='profile') {{ vm.auth.getCurrentUser().shortName || 'Введите имя' }}
+        a(ui-sref='{{vm.auth.profileState}}') {{ vm.auth.getCurrentUser().shortName || 'Введите имя' }}
 
     div#navbar-main.navbar-collapse.collapse(uib-collapse='vm.isCollapsed')
       ul.nav.navbar-nav

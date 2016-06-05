@@ -11,7 +11,9 @@
     return saDebug.log('stg:log');
   }
 
-  function run(Sockets, InitService, Auth, Picker, DEBUG, saApp, phaService, IOS) {
+  function run(Sockets, InitService, Auth, Picker, DEBUG, saApp, phaService, IOS, PickerAuth) {
+
+    PickerAuth.init();
 
     InitService
       .then(Sockets.init)
@@ -47,7 +49,7 @@
 
       if (lastPicker) {
         Picker.setCurrentById(lastPicker).then(function (p) {
-          Auth.login(p);
+          PickerAuth.login(p);
         });
       }
 
