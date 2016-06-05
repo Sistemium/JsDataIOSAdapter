@@ -2,7 +2,7 @@
 
 (function () {
 
-    angular.module('webPage').service('Menu', function (InitService) {
+    angular.module('webPage').service('Menu', function (InitService,Auth) {
 
       return {
         root: function () {
@@ -13,17 +13,27 @@
 
             items: [{
               title: 'Сборка',
-              state: 'picking.orderList({state:"notdone"})'
+              state: 'picking.orderList({state:"notdone"})',
+              needRoles: 'picker'
+            },{
+              title: 'Территория продаж',
+              state: 'sales.territory',
+              needRoles: 'salesman'
+            },{
+              title: 'Предзаказы',
+              state: 'sales.prePreOrders',
+              needRoles: 'salesman'
+            },{
+              title: 'Тесты',
+              state: 'playground',
+              needRoles: ['admin','tester']
             }]
 
           };
 
-          if (InitService.localDevMode) {
-            menu.items.push({
-              title: 'Тесты',
-              state: 'playground'
-            });
-          }
+          _.remove(menu.items,function(option){
+            return !Auth.isAuthorized(option.needRoles);
+          });
 
           return menu;
         }

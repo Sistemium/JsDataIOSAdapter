@@ -2,18 +2,31 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS) {
+  angular.module('core.services').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS) {
 
     var me = this;
     var currentUser;
     var DEBUG = debug ('stg:Auth');
     var roles;
+    var rolesArray;
     var rolesPromise;
     var ios = IOS.isIos();
     var resolveRoles;
 
     function getAccessToken() {
       return ios || $window.localStorage.getItem('authorization');
+    }
+
+    function setRoles(newRoles) {
+
+      roles = newRoles || {};
+
+      rolesArray = _.map(roles.roles, function(val,key) {
+        return key;
+      });
+
+      return roles;
+
     }
 
     function init(authProtocol) {
@@ -28,9 +41,8 @@
 
         rolesPromise = authProtocol.getRoles(token)
           .then(function(res){
-            roles = res;
             console.log ('Auth.init',res);
-            return res;
+            return setRoles(res);
           });
 
         return rolesPromise;
@@ -89,7 +101,7 @@
 
     var onAuthenticated = $rootScope.$on('authenticated', function (event, res) {
       console.log ('authenticated', res);
-      roles = res;
+      setRoles(res);
       if (resolveRoles) {
         resolveRoles (roles);
       }
@@ -151,7 +163,20 @@
         }
       },
 
-      init: init
+      init: init,
+
+      roles: function() {
+        return roles && roles.roles;
+      },
+
+      isAuthorized: function (anyRoles) {
+        if (anyRoles && !angular.isArray(anyRoles)) {
+          anyRoles = [anyRoles];
+        }
+        return roles && !anyRoles ||
+          !!_.intersection (anyRoles,rolesArray).length
+        ;
+      }
 
     };
 
