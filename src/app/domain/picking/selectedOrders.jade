@@ -12,10 +12,10 @@ h3.clearfix
     span Бут.:
     label {{ vm.totals.totalVolume () | number:0 }}
 
-.progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
-  i {{ vm.progress.value }} / {{ vm.progress.max }}
-
 section(cg-busy='vm.busy')
+  .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
+    i {{ vm.progress.value }} / {{ vm.progress.max }}
+
   ul.list-group(as-sortable ng-model='vm.selectedItems')
     li.list-group-item.display-flex(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}

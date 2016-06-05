@@ -3,25 +3,23 @@ section.has-navbar-fixed-bottom.ui-view
   h3
     p.clear-both Требования на сборку
     small.lead.pull-right(ng-class='{darkgray: vm.hasSelected}')
-      span Кор.:
-      label {{ vm.currentTotals.totalBoxVolume () | number:1 }}
+      span Коробок:
+      label {{ vm.currentTotals.totalBoxVolume () | number:0 }}
       = ' '
-      span Поз.:
+      span Позиций:
       label {{ vm.currentTotals.positionsCount () | number:0 }}
-      = ' '
-      span Бут.:
-      label {{ vm.currentTotals.totalVolume () | number:0 }}
-
-  .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
-    i {{ vm.progress.value }} / {{ vm.progress.max }}
 
   table.table.table-hover
     thead
-      th.hidden-xs Статус
-      th Номер
-      th Бутылок
-      th Позиций
-      th Коробок
+      tr
+        th(colspan='5')
+          .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
+            i {{ vm.progress.value }} / {{ vm.progress.max }}
+      tr
+        th.hidden-xs Статус
+        th Номер
+        th.number Позиций
+        th.number Коробок
     tbody
       tr(
         ng-repeat='order in vm.pickingOrders track by order.id'
@@ -31,9 +29,8 @@ section.has-navbar-fixed-bottom.ui-view
         td.hidden-xs
           i(ng-class="order.processingClass")
         td {{ order.ndoc }}
-        td {{ order.totalVolume () | number:0 }}
-        td {{ order.positionsCount () | number:0 }}
-        td {{ order.totalBoxVolume () | number: 1}}
+        td.number {{ order.positionsCount() | number:0 }}
+        td.number {{ order.totalBoxVolume() | number:0 }}
 
 nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')
   .container

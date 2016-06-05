@@ -4,7 +4,7 @@
 
   angular.module('core.services').service('phaService', phaService);
 
-  function phaService ($http,$rootScope) {
+  function phaService ($http,$rootScope,$q) {
 
     var
       url = 'https://api.sistemium.com/pha/auth',
@@ -38,13 +38,17 @@
     }
 
     function confirm (code) {
-      return $http
-        .post(url, null, {params: {ID: ID, smsCode: code}})
-        .success(function (res) {
-          console.log (res);
-          getRoles(res.accessToken);
-        })
-      ;
+
+      return $q(function(resolve,reject) {
+        $http
+          .post(url, null, {params: {ID: ID, smsCode: code}})
+          .then(function (res) {
+            getRoles(res.data.accessToken)
+              .then(resolve,reject);
+          },reject)
+        ;
+      });
+
     }
 
     function getRoles (token) {

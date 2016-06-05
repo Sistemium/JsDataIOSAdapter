@@ -11,40 +11,28 @@
     return saDebug.log('stg:log');
   }
 
-  function run(Sockets, InitService, Auth, IosAdapter, Schema, Picker, DEBUG, saApp, $window, phaService, $q) {
-
-    var ios = !!$window.$webkit;
-
-    var iosAuth = {
-      getRoles: function () {
-        return $q(function (resolve){
-          resolve({
-            roles: {}
-          });
-        });
-      }
-    };
+  function run(Sockets, InitService, Auth, Picker, DEBUG, saApp, phaService, IOS) {
 
     InitService
       .then(Sockets.init)
       .then(saApp.init);
 
-    Auth.init(ios ? iosAuth : phaService).then(function (res) {
+    Auth.init(IOS.isIos() ? IOS.init() : phaService).then(function (res) {
 
       console.log('Auth', res);
 
       var appConfig =
-        InitService.localDevMode ? {} :
-        {
-          url: {
-            socket: 'https://socket2.sistemium.com'
+          InitService.localDevMode ? {} :
+          {
+            url: {
+              socket: 'https://socket2.sistemium.com'
+            }
           }
-        }
-      ;
+        ;
 
-      if (!ios) {
-        angular.extend(appConfig,{
-          jsDataPrefix: res.account.org + '/',
+      if (!IOS.isIos()) {
+        angular.extend(appConfig, {
+          // jsDataPrefix: res.account.org + '/'
           org: res.account.org
         });
       }

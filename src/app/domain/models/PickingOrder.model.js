@@ -75,14 +75,17 @@
         },
 
         totalUnPickedBoxVolume: function () {
-          var res = Schema.aggregate('unPickedBoxVolume').sumFn(this.positions);
-          return res;
+          return Schema.aggregate('unPickedBoxVolume').sumFn(this.positions);
         },
 
         totalUnPickedPositionsCount: function () {
           return Schema.aggregate('unPickedVolume').custom(this.positions,function(sum,unPickedVolume){
             return sum + (unPickedVolume ? 1 : 0);
           },0);
+        },
+
+        totalPickedPercent: function () {
+          return Math.floor(this.totalUnPickedVolume() / (this.totalVolume()||1) * 100);
         }
 
       }

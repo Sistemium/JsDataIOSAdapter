@@ -1,15 +1,13 @@
 'use strict';
 
 angular.module('core.services')
-  .service('iosSockets', function($window,toastr,$q) {
+  .service('iosSockets', function($window,toastr,$q,IOS) {
 
     var SUBSCRIBE = 'subscribe';
     var CALLBACK = 'iosSocketsJsDataSubscribe';
     var DATACALLBACK = 'iosSocketsJsDataSubscribeData';
 
     var ons = [];
-
-    var ios = $window.webkit;
 
     function subscribeDataCallback (data) {
       _.each(data,function (e){
@@ -76,7 +74,7 @@ angular.module('core.services')
           filter: filter
         };
 
-        ios.messageHandlers[SUBSCRIBE].postMessage ({
+        IOS.handler(SUBSCRIBE).postMessage ({
           entities: filter,
           callback: CALLBACK,
           dataCallback: DATACALLBACK
@@ -90,7 +88,7 @@ angular.module('core.services')
           });
 
           if (_.difference(subscribed, unsub)) {
-            ios.messageHandlers[SUBSCRIBE].postMessage({
+            IOS.handler(SUBSCRIBE).postMessage({
               entities: unsub,
               callback: CALLBACK,
               dataCallback: DATACALLBACK
@@ -111,6 +109,7 @@ angular.module('core.services')
     if ($window.webkit) {
       return iosSockets;
     } else {
+      $window.saSockets = saSockets;
       return saSockets;
     }
 

@@ -38,14 +38,7 @@
       var i = (data && data.length) ? data[0] : data;
       if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
         PO.inject(i);
-        return PO.loadRelations(i,['PickingOrderPosition']).then(function (r) {
-          saAsync.eachSeries(r.positions, function (pos,done) {
-            POP.loadRelations(pos, ['Article'])
-              .then(function(res){
-                done(null,res);
-              });
-          });
-        });
+        return POP.findAllWithRelations({ pickingOrder: i.id })('Article')
       } else {
         PO.eject(i.id);
         return false;
@@ -93,11 +86,8 @@
     POP.ejectAll();
 
     function refresh() {
+
       var lastModified = PO.lastModified();
-      // var progress = {
-      //   max: allPositions.length,
-      //   value: 0
-      // };
 
       vm.busy = PO.findAll({
           picker: picker.id,
@@ -105,20 +95,30 @@
         }, {bypassCache: true, cacheResponse: false})
         .then(function (res) {
 
+          var progress = {
+            max: res.length,
+            value: 0
+          };
+
+          vm.progress = progress;
+
           saAsync.series(_.map(res,function(po){
             return function(done) {
               var res = onFindPO(po);
 
               if (res) {
                 res.then(function(){
+                  progress.value ++;
                   done();
                 });
               } else {
+                progress.value ++;
                 done();
               }
 
             };
           }),function () {
+            vm.progress = false;
             if (!lastModified) {
               return;
             }
