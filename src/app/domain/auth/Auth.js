@@ -31,15 +31,26 @@
 
       currentUser.shortName = (function (name) {
         var names = name.match (/(^[^ ]*) (.*$)/);
-        return names[1] + ' ' + names[2][0] + '.';
+        return names ? names[1] + ' ' + names[2][0] + '.' : name;
       })(currentUser.name);
 
       rolesArray = _.map(roles.roles, function(val,key) {
         return key;
       });
+      
+      if (!ios) {
+        me.logout = logout
+      }
 
       return roles;
 
+    }
+
+    function logout() {
+      currentUser = roles = undefined;
+      clearAccessToken();
+      $rootScope.$broadcast('auth-logout');
+      $state.go('home');
     }
 
     function init(authProtocol) {
@@ -50,7 +61,7 @@
 
       var token = getAccessToken();
 
-      if (token && !roles || ios) {
+      if (!roles && (token || ios)) {
 
         rolesPromise = authProtocol.getRoles(token)
           .then(function(res){
@@ -96,6 +107,9 @@
         }
       } else {
         me.profileState = 'profile';
+        if (_.get(next,'data.auth') === 'pickerAuth') {
+          me.profileState = 'picker';
+        }
       }
 
     });
@@ -131,7 +145,11 @@
     return angular.extend(me, {
 
       getCurrentUser: function () {
-        return PickerAuth.getCurrentUser() || currentUser;
+        return me.profileState === 'picker' && PickerAuth.getCurrentUser() || currentUser;
+      },
+
+      getAccount: function () {
+        return currentUser;
       },
 
       isLoggedIn: function () {
@@ -140,13 +158,6 @@
 
       isAdmin: function () {
         return true;
-      },
-
-      logout: function () {
-        currentUser = roles = undefined;
-        clearAccessToken();
-        $rootScope.$broadcast('auth-logout');
-        $state.go('home');
       },
 
       init: init,
