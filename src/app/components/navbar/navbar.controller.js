@@ -31,6 +31,10 @@
         if (vm.currentItem) {
           $state.go(vm.currentItem.state);
         }
+      },
+
+      onProfileClick: function () {
+        $state.go(Auth.profileState);
       }
 
     });

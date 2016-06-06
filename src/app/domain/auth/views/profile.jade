@@ -1,0 +1,40 @@
+h3 Учетная запись авторизации
+
+hr
+
+section.row-fluid
+
+  form.form-horizontal(ng-submit="vm.submit()" name="accountForm")
+    .form-group
+      label.col-sm-4.control-label(for="inputName") Фамилия и имя
+      .col-sm-8
+        input#inputName.form-control(
+        type="text"
+        name="name"
+        readonly
+        ng-required="true"
+        placeholder="Имя"
+        ng-model="vm.data.name"
+        autocomplete="off"
+        )
+    .form-group(ng-if='vm.data["mobile-number"]')
+      label.col-sm-4.control-label(for="inputCode") Телефон
+      .col-sm-8
+        input#inputCode.form-control(
+        type="text"
+        name="mobileNumber"
+        ng-required="true"
+        readonly
+        ng-model="vm.data['mobile-number']"
+        autocomplete="off"
+        )
+
+
+hr
+
+.pull-right
+  button.btn.btn-danger(type="button" ng-if="accountForm.$pristine && vm.logout" ng-click="vm.logout()") Завершить работу
+  = " "
+  button.btn.btn-primary(type="submit" ng-hide="accountForm.$pristine" ng-disabled="accountForm.$invalid") Сохранить
+  = " "
+  button.btn.btn-warning(type="button" ng-hide="accountForm.$pristine" ng-click="vm.cancel()") Отменить изменения
