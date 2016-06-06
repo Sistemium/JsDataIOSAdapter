@@ -37,7 +37,7 @@
       rolesArray = _.map(roles.roles, function(val,key) {
         return key;
       });
-      
+
       if (!ios) {
         me.logout = logout
       }
@@ -47,7 +47,7 @@
     }
 
     function logout() {
-      currentUser = roles = undefined;
+      currentUser = rolesArray = roles = rolesPromise = false;
       clearAccessToken();
       $rootScope.$broadcast('auth-logout');
       $state.go('home');
