@@ -19,7 +19,10 @@
       'sistemiumBootstrap',
       'Models',
       'cgBusy',
-      'vs-repeat'
+      'vs-repeat',
+      'jsd',
+      'toggle-switch',
+      'angularMoment'
     ]);
 
 })();
