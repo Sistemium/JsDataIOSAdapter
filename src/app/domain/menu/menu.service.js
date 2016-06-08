@@ -22,7 +22,7 @@
             },{
               title: 'Предзаказы',
               state: 'sales.prePreOrders',
-              needRoles: 'salesman'
+              needRoles: 'pre-ordering'
             },{
               title: 'Тесты',
               state: 'playground',

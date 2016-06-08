@@ -25,4 +25,7 @@
       'angularMoment'
     ]);
 
+  angular.module('jsd', ['sistemiumBootstrap','Sales']);
+
+
 })();

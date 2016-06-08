@@ -1,0 +1,30 @@
+h4
+  a(hreh ui-sref='sales.territory') Территория продаж
+  = ' '
+  span {{ vm.salesman.shortName }}
+
+hr
+
+.ui-view
+
+  section.text-center
+    button.btn.btn-default.margin(
+    ng-repeat-start='btn in vm.hashButtons track by btn.label'
+    ng-click='vm.hashClick(btn)'
+    ng-class='{"btn-primary": btn.match.test(vm.currentHash)}'
+    ) {{ btn.label }}
+    button.btn.btn-default.margin.btn-xs(
+    ng-repeat-end
+    ng-repeat='subbtn in btn.buttons track by subbtn.label'
+    ng-click='vm.hashClick(subbtn)'
+    ng-if='btn.match.test(vm.currentHash) && btn.buttons.length > 1'
+    ng-class='{"btn-primary": subbtn.label === vm.currentHash}'
+    ) {{ subbtn.label }}
+  hr
+
+  section(ng-repeat='p in vm.partners | orderBy:"shortName" | filter:vm.filter track by p.id')
+    h5
+      .lead {{ p.shortName }}
+
+    p.text-right(ng-repeat='o in p.outlets track by o.id')
+      a(href='' ng-click='vm.outletClick(o)') {{ o.address }}

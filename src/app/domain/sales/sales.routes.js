@@ -28,7 +28,47 @@
           }
         ]
       };
-      
+
+      var territory = {
+        name: 'territory',
+        url: '/territory',
+
+        templateUrl: 'app/domain/sales/views/territory.html',
+        controller: 'SalesTerritoryController',
+        controllerAs: 'vm',
+
+        data: {
+          needCurrent: 'Salesman',
+          needRole: 'salesman'
+        },
+
+        children: [
+          {
+            name: 'outlet',
+            url: '/outlet/:id',
+            templateUrl: 'app/domain/sales/views/outlet.html',
+            controller: 'OutletController',
+            controllerAs: 'vm',
+
+            children: [{
+              name: 'visit',
+              url: '/visit?visitId',
+
+              templateUrl: 'app/domain/sales/views/VisitCreate.html',
+              controller: 'VisitCreateController',
+              controllerAs: 'vm',
+
+              data: {
+                needCurrent: 'Salesman',
+                needRole: 'salesman'
+              }
+
+            }]
+          }
+        ]
+
+      };
+
       stateHelperProvider
         .state({
 
@@ -36,8 +76,12 @@
           abstract: true,
           templateUrl: 'app/domain/ui-view.html',
           
-          children: [prePreOrders]
-          
+          data: {
+            auth: 'SalesmanAuth'
+          },
+
+          children: [territory,prePreOrders]
+
         })
       ;
 

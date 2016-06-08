@@ -1,0 +1,16 @@
+h4 {{ vm.outlet.partner.name }}
+  p
+    a(href ui-sref='.') {{ vm.outlet.address }}
+
+section.ui-view
+  .buttons.pull-right
+    button.btn.btn-success(ng-click='vm.newVisitClick()') Новый визит
+
+  table.table.table-striped.clear-both
+    thead
+      th Дата
+      th.number Кол-во ответов
+    tbody
+      tr.clickable(ng-repeat='visit in vm.visits track by visit.id' ng-click='vm.visitClick(visit)')
+        td {{ visit.date | amDateFormat:'DD/MM/YYYY ddd' }}
+        td.number {{ visit.answers.length | number: 0}}
