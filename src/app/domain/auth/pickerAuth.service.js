@@ -17,9 +17,9 @@
 
       $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
-        var needRoles = next.data && next.data.auth;
+        var needRoles = _.get(next, 'data.auth');
 
-        if (needRoles && !currentPicker) {
+        if (needRoles === 'pickerAuth' && !currentPicker) {
           event.preventDefault();
           redirectTo = {
             state: next,
