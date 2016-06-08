@@ -6,11 +6,14 @@ section.ui-view
   .buttons.pull-right
     button.btn.btn-success(ng-click='vm.newVisitClick()') Новый визит
 
-  table.table.table-striped.clear-both
+  table.table.table-striped.clear-both(ng-if='vm.visits.length')
     thead
-      th Дата
-      th.number Кол-во ответов
+      tr
+        th(colspan='2') Прошлые визиты
+      tr
+        th Дата
+        th.number Кол-во ответов
     tbody
       tr.clickable(ng-repeat='visit in vm.visits track by visit.id' ng-click='vm.visitClick(visit)')
-        td {{ visit.date | amDateFormat:'DD/MM/YYYY ddd' }}
+        td {{ visit.date | amDateFormat:'DD/MM/YYYY (dddd)' }}
         td.number {{ visit.answers.length | number: 0}}
