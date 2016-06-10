@@ -2,19 +2,23 @@
 
 (function () {
 
-  function IOS ($window, $q) {
+  function IOS($window, $q) {
 
     var MSG = 'roles';
-    var CALLBACK = 'iosRolesCallback';
+    var CHECKIN = 'checkin';
+    var ROLES_CALLBACK = 'iosRolesCallback';
+    var CHECKIN_CALLBACK = 'iosCheckInCallback';
 
     var messages = {};
     var id = 0;
 
-    function handler (name) {
+    var checkInMsg;
+
+    function handler(name) {
       return $window.webkit.messageHandlers[name];
     }
 
-    $window[CALLBACK] = function(res,req) {
+    $window[ROLES_CALLBACK] = function (res, req) {
       var msg = messages[req.requestId];
       if (msg) {
         if (res.length) {
@@ -26,6 +30,43 @@
       }
     };
 
+    $window[CHECKIN_CALLBACK] = function (res) {
+      var msg = checkInMsg;
+
+      if (msg) {
+        if (res.length) {
+          msg.resolve(res[0]);
+        } else {
+          msg.reject('Response is not array');
+        }
+        checkInMsg = false;
+      }
+    };
+
+    function checkIn(accuracy) {
+
+      return $q(function (resolve, reject) {
+
+        var msg = {
+          callback: CHECKIN_CALLBACK,
+          accuracy: accuracy,
+          options: {
+            requestId: ++id
+          }
+        };
+
+        checkInMsg = {
+          resolve: resolve,
+          reject: reject,
+          msg: msg
+        };
+
+        handler(CHECKIN).postMessage(msg);
+
+      });
+
+    }
+
     var me = {
 
       getRoles: function () {
@@ -34,7 +75,7 @@
 
           var msg = {
             requestId: ++id,
-            callback: CALLBACK
+            callback: ROLES_CALLBACK
           };
 
           messages[id] = {
@@ -51,7 +92,7 @@
 
     };
 
-    function init () {
+    function init() {
       return me;
     }
 
@@ -63,7 +104,8 @@
         return !!$window.webkit;
       },
 
-      handler: handler
+      handler: handler,
+      checkIn: checkIn
 
     };
 
