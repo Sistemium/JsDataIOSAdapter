@@ -1,8 +1,4 @@
 h3
-  .lead(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
-  .lead(ng-if='vm.visit.deviceCts') Визит {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
-
-section.mt(cg-busy='vm.busy')
   .buttons.pull-right.with-map
     button.btn.navbar-btn.btn-default(
     ng-disabled='!vm.visit.checkInLocation'
@@ -20,8 +16,15 @@ section.mt(cg-busy='vm.busy')
     ng-repeat='b in vm.buttons track by b.label'
     ng-click='vm[b.clickFn]()'
     ) {{ b.label }}
+  .lead(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
+  .lead(ng-if='vm.visit.deviceCts') Визит {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
 
-  uib-tabset.clear-both-xs(active="active")
+hr.clear-both
+
+
+section.mt(cg-busy='vm.busy')
+
+  uib-tabset.nav-tabs-right(active="active")
     uib-tab(
     index="$index + 1"
     ng-repeat="qs in vm.questionSets | orderBy:['ord','name'] track by qs.id"

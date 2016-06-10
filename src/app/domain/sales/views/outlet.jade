@@ -10,11 +10,11 @@ section.ui-view
     thead
       tr
         th(colspan='2')
-          h4 Прошлые визиты
+          h4 Недавние визиты
       tr
         th Дата
         th.number Кол-во ответов
     tbody
-      tr.clickable(ng-repeat='visit in vm.visits track by visit.id' ng-click='vm.visitClick(visit)')
+      tr.clickable(ng-repeat='visit in vm.visits | orderBy:"-deviceCts" track by visit.id' ng-click='vm.visitClick(visit)')
         td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
         td.number {{ visit.answers.length | number: 0}}
