@@ -56,3 +56,26 @@ li.display-flex:last-child > button:last-child {
 .iOS button.flex-right {
   margin-right: -11px;
 }
+
+// TODO: move to sistemium-bootstrap
+
+.flex {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+
+  > button {
+    margin: -11px 0;
+    text-align: center;
+    border-radius: 0;
+  }
+
+  > button:last-child {
+    margin-right: -16px;
+  }
+
+  .flex-1 {
+    flex: 1;
+    -webkit-flex: 1;
+  }
+}
