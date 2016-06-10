@@ -20,10 +20,10 @@ div.navbar.navbar-default(ng-hide='vm.hide')
 
     div#navbar-main.navbar-collapse.collapse(uib-collapse='vm.isCollapsed')
       ul.nav.navbar-nav
-        li(ui-sref-active='active')
+        li.hidden-ios(ui-sref-active='active')
           a(ui-sref='{{vm.menu.state}}') {{vm.menu.title}}
-        li.divider(role="separator")
-        li(ng-repeat='item in vm.menu.items', ui-sref-active='active')
+        li.hidden-ios.divider(role="separator")
+        li.hidden-ios(ng-repeat='item in vm.menu.items', ui-sref-active='active')
           a(ui-sref='{{item.state}}') {{item.title}}
         li.divider.visible-xs(role="separator" ng-if='vm.toggleFullScreen')
         li(ng-if='vm.toggleFullScreen')
