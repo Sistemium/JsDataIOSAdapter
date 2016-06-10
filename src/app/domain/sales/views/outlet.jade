@@ -1,6 +1,6 @@
-h4 {{ vm.outlet.partner.name }}
+h3 {{ vm.outlet.partner.name }}
   = ' '
-  span.gray ({{ vm.outlet.address }})
+  small.gray ({{ vm.outlet.address }})
 
 section.ui-view
   .buttons.pull-right
@@ -16,5 +16,5 @@ section.ui-view
         th.number Кол-во ответов
     tbody
       tr.clickable(ng-repeat='visit in vm.visits track by visit.id' ng-click='vm.visitClick(visit)')
-        td {{ visit.date | amDateFormat:'DD/MM/YYYY (dddd)' }}
+        td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
         td.number {{ visit.answers.length | number: 0}}

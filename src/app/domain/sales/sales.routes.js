@@ -39,7 +39,8 @@
 
         data: {
           needCurrent: 'Salesman',
-          needRole: 'salesman'
+          needRole: 'salesman',
+          hideTopBar: true
         },
 
         children: [
@@ -75,7 +76,7 @@
           name: 'sales',
           abstract: true,
           templateUrl: 'app/domain/ui-view.html',
-          
+
           data: {
             auth: 'SalesmanAuth'
           },

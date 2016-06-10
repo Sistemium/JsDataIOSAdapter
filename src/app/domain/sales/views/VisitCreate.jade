@@ -1,3 +1,7 @@
+h3
+  .lead(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
+  .lead(ng-if='vm.visit.deviceCts') Визит {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+
 section.mt(cg-busy='vm.busy')
   .buttons.pull-right
     button.btn.navbar-btn.btn-default(
