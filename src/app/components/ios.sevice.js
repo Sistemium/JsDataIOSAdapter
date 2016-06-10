@@ -4,20 +4,47 @@
 
   function IOS ($window, $q) {
 
+    var MSG = 'roles';
+    var CALLBACK = 'iosRolesCallback';
+
+    var messages = {};
+    var id = 0;
+
+    function handler (name) {
+      return $window.webkit.messageHandlers[name];
+    }
+
+    $window[CALLBACK] = function(res,req) {
+      var msg = messages[req.requestId];
+      if (msg) {
+        if (res.length) {
+          msg.resolve(res[0]);
+        } else {
+          msg.reject('Response is not array');
+        }
+        delete messages[req.requestId];
+      }
+    };
+
     var me = {
 
       getRoles: function () {
 
-        return $q(function (resolve) {
-          resolve({
-            roles: {
-              picker: true,
-              salesman: true
-            },
-            account: {
-              name: 'Авторизован'
-            }
-          });
+        return $q(function (resolve, reject) {
+
+          var msg = {
+            requestId: ++id,
+            callback: CALLBACK
+          };
+
+          messages[id] = {
+            resolve: resolve,
+            reject: reject,
+            msg: msg
+          };
+
+          handler(MSG).postMessage(msg);
+
         });
 
       }
@@ -36,9 +63,7 @@
         return !!$window.webkit;
       },
 
-      handler: function (name) {
-        return $window.webkit.messageHandlers[name];
-      }
+      handler: handler
 
     };
 
