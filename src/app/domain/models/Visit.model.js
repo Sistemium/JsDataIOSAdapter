@@ -15,6 +15,13 @@
 
       relations: {
         hasOne: {
+          Location: [{
+            localField: 'checkInLocation',
+            localKey: 'checkInLocationId'
+          },{
+            localField: 'checkOutLocation',
+            localKey: 'checkOutLocationId'
+          }],
           Account: {
             localField: 'account',
             localKey: 'author'
@@ -22,10 +29,6 @@
           Outlet: {
             localField: 'outlet',
             localKey: 'outletId'
-          },
-          Location: {
-            localField: 'checkInLocation',
-            localKey: 'checkInLocationId'
           },
           Salesman: {
             localField: 'salesman',

@@ -2,12 +2,13 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
     var VQ = Schema.model('VisitQuestion');
     var VA = Schema.model('VisitAnswer');
+    var Location = Schema.model('Location');
 
     var date = moment().format('YYYY-MM-DD');
     var id = $state.params.visitId;
@@ -22,7 +23,7 @@
 
       buttons: [
         {label: id ? 'Отмена' : 'Отменить', clickFn: 'goBack'},
-        {label: id ? 'Готово' : 'Завершить', clickFn: 'save', class: 'btn-success'}
+        {label: id ? 'Сохранить' : 'Завершить', clickFn: 'save', class: 'btn-success'}
       ],
 
       goBack: function () {
@@ -91,6 +92,14 @@
             });
           });
       } else {
+
+        if (IOS.isIos()) {
+          IOS.checkIn(100).then(function(res){
+            Location.inject(res);
+            vm.visit.checkInLocationId = res.id;
+          });
+        }
+
         vm.answers = {};
         vm.visit = Visit.inject({
           date: date,

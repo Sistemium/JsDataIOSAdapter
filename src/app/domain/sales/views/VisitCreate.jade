@@ -1,5 +1,11 @@
 section.mt(cg-busy='vm.busy')
   .buttons.pull-right
+    button.btn.navbar-btn.btn-default(
+    type='button'
+    ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation}'
+    )
+      i.glyphicon.glyphicon-map-marker.animate-show(ng-hide='!vm.visit.deviceCts && !vm.visit.checkInLocation')
+      span.animate-show(ng-if='!vm.visit.deviceCts' ng-hide='vm.visit.checkInLocation') Чекин ...
     button.btn.navbar-btn.ml-10(
     type='button'
     ng-class='b.class || "btn-default"'
