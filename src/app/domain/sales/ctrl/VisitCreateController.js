@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
@@ -19,12 +19,44 @@
 
     var vm = this;
 
+    var yaLatLng = mapsHelper.yLatLng;
+
+    function initMap (location) {
+
+      var checkIn = vm.visit.checkInLocation || location;
+
+      if (!checkIn) {
+        return;
+      }
+
+      vm.map = {
+        yaCenter: yaLatLng(checkIn),
+        afterMapInit: function () {
+
+          vm.startMarker = mapsHelper.yMarkerConfig({
+            id: 'checkIn',
+            location: checkIn,
+            content: 'Начало визита',
+            hintContent: moment(checkIn.deviceCts + ' Z').format('HH:mm')
+          });
+
+        }
+      };
+
+    }
+
     angular.extend(vm, {
 
       buttons: [
         {label: id ? 'Отмена' : 'Отменить', clickFn: 'goBack'},
         {label: id ? 'Сохранить' : 'Завершить', clickFn: 'save', class: 'btn-success'}
       ],
+
+      mapOptions: {
+        avoidFractionalZoom: false,
+        margin: 0,
+        balloonAutoPanMargin: 300
+      },
 
       goBack: function () {
         $state.go('^');
@@ -97,6 +129,7 @@
           IOS.checkIn(100).then(function(res){
             Location.inject(res);
             vm.visit.checkInLocationId = res.id;
+            initMap(res);
           });
         }
 

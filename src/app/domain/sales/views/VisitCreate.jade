@@ -3,8 +3,12 @@ h3
   .lead(ng-if='vm.visit.deviceCts') Визит {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
 
 section.mt(cg-busy='vm.busy')
-  .buttons.pull-right
+  .buttons.pull-right.with-map
     button.btn.navbar-btn.btn-default(
+    ng-disabled='!vm.visit.checkInLocation'
+    popover-placement="bottom"
+    popover-trigger='outsideClick'
+    uib-popover-template="'app/domain/sales/views/location.html'"
     type='button'
     ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation}'
     )
