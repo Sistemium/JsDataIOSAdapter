@@ -1,6 +1,6 @@
 h4 {{ vm.outlet.partner.name }}
-  p
-    a(href ui-sref='.') {{ vm.outlet.address }}
+  = ' '
+  span.gray ({{ vm.outlet.address }})
 
 section.ui-view
   .buttons.pull-right
@@ -9,7 +9,8 @@ section.ui-view
   table.table.table-striped.clear-both(ng-if='vm.visits.length')
     thead
       tr
-        th(colspan='2') Прошлые визиты
+        th(colspan='2')
+          h4 Прошлые визиты
       tr
         th Дата
         th.number Кол-во ответов

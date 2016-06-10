@@ -15,14 +15,27 @@
   }
 
   .btn.btn-default:hover {
-    background: none;
-    border-color: #ccc;
+    // TODO: fix hover styles
+    //background: none;
+    //border-color: #ccc;
   }
 
   .display-flex {
     > button {
       margin-top: -9px;
       margin-bottom: -9px;
+    }
+  }
+
+  @media (min-width: 992px){
+    .container {
+      width: 1016px;
+    }
+  }
+
+  @media (max-width: 768px){
+    .container {
+      width: 768px;
     }
   }
 
