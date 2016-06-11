@@ -7,10 +7,9 @@ section.ui-view
     button.btn.btn-success(ng-click='vm.newVisitClick()') Новый визит
 
   table.table.table-striped.clear-both(ng-if='vm.visits.length')
+    caption
+      h4 Недавние визиты
     thead
-      tr
-        th(colspan='2')
-          h4 Недавние визиты
       tr
         th Дата
         th.number Кол-во ответов

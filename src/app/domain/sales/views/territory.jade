@@ -1,8 +1,10 @@
 h2.flex
   a(hreh ui-sref='sales.territory') Визиты
   span.flex-1
-  small.gray
-    a(href='' ui-sref='home') {{ vm.salesman.shortName }}
+  small.gray {{ vm.salesman.shortName }}
+  small.gray.ml-10
+    a.p-6(href='' ui-sref='home')
+      i.glyphicon.glyphicon-home
 
 hr
 
