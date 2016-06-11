@@ -2,22 +2,24 @@ h3
   .buttons.pull-right.with-map
     button.btn.navbar-btn.btn-default(
     ng-disabled='!vm.visit.checkInLocation'
-    popover-placement="bottom"
+    popover-placement="auto bottom-left"
     popover-trigger='outsideClick'
     uib-popover-template="'app/domain/sales/views/location.html'"
     type='button'
     ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation}'
     )
       i.glyphicon.glyphicon-map-marker.animate-show(ng-hide='!vm.visit.deviceCts && !vm.visit.checkInLocation')
-      span.animate-show(ng-if='!vm.visit.deviceCts' ng-hide='vm.visit.checkInLocation') Чекин ...
+      span.animate-show(ng-if='!vm.visit.deviceCts' ng-hide='vm.visit.checkInLocation')
+        span.hidden-xs Чек-ин ...
     button.btn.navbar-btn.ml-10(
     type='button'
     ng-class='b.class || "btn-default"'
     ng-repeat='b in vm.buttons track by b.label'
     ng-click='vm[b.clickFn]()'
     ) {{ b.label }}
-  .lead(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
-  .lead(ng-if='vm.visit.deviceCts') Визит {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+  .text
+    span.text-danger(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
+    span.gray(ng-if='vm.visit.deviceCts') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
 
 hr.clear-both
 

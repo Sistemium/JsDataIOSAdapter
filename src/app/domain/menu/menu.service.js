@@ -16,7 +16,7 @@
               state: 'picking.orderList({state:"notdone"})',
               needRoles: 'picker'
             },{
-              title: 'Территория продаж',
+              title: 'Визиты',
               state: 'sales.territory',
               needRoles: 'salesman'
             },{

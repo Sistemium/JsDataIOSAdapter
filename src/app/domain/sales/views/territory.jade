@@ -1,5 +1,5 @@
 h2.flex
-  a(hreh ui-sref='sales.territory') Территория продаж
+  a(hreh ui-sref='sales.territory') Визиты
   span.flex-1
   small.gray
     a(href='' ui-sref='home') {{ vm.salesman.shortName }}
@@ -9,17 +9,17 @@ hr
 .ui-view
 
   section.text-center
-    button.btn.btn-default.margin(
+    button.btn.margin(
     ng-repeat-start='btn in vm.hashButtons track by btn.label'
     ng-click='vm.hashClick(btn)'
-    ng-class='{"btn-primary": btn.match.test(vm.currentHash)}'
+    ng-class='btn.match.test(vm.currentHash) ? "btn-primary" : "btn-default"'
     ) {{ btn.label }}
-    button.btn.btn-default.margin.btn-xs(
+    button.btn.margin(
     ng-repeat-end
     ng-repeat='subbtn in btn.buttons track by subbtn.label'
+    ng-class='{"btn-primary": subbtn.label === vm.currentHash}'
     ng-click='vm.hashClick(subbtn)'
     ng-if='btn.match.test(vm.currentHash) && btn.buttons.length > 1'
-    ng-class='{"btn-primary": subbtn.label === vm.currentHash}'
     ) {{ subbtn.label }}
   hr
 

@@ -22,3 +22,14 @@
   }
 
 }
+
+@media (max-width: 320px){
+  .with-map .popover{
+    max-width: 250px;
+    min-width: 100px;
+  }
+  .popover-map {
+    width: 220px;
+    height: 270px;
+  }
+}

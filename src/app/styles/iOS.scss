@@ -31,15 +31,23 @@
     }
   }
 
-  @media (min-width: 992px){
+  @media (min-width: 320px){
     .container {
-      width: 1014px;
+      width: 310px;
     }
   }
 
-  @media (max-width: 768px){
+
+
+  @media (min-width: 768px){
     .container {
       width: 758px;
+    }
+  }
+
+  @media (min-width: 992px){
+    .container {
+      width: 1014px;
     }
   }
 
