@@ -21,9 +21,9 @@
 
     var yaLatLng = mapsHelper.yLatLng;
 
-    function initMap (location) {
+    function initMap (visit) {
 
-      var checkIn = vm.visit.checkInLocation || location;
+      var checkIn = _.get(visit,'checkInLocation') || _.get(vm, 'visit.checkInLocation');
 
       if (!checkIn) {
         return;
@@ -106,6 +106,11 @@
       if (id) {
         vm.busy = Visit.find(id)
           .then(vm.importData('visit'))
+          .then(function(v){
+            Visit.loadRelations(v,'Location')
+              .then(initMap);
+            return v;
+          })
           .then(function (visit) {
             VA.findAll({
               visitId: visit.id
