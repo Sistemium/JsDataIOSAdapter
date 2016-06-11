@@ -1,6 +1,5 @@
 .popover-map
-  ya-map.ya-map-container(
-  ng-if='vm.map'
+  ya-map.ya-map-container(ng-if='vm.map'
   ya-behaviors='-DblClickZoom -Ruler -Drag -ScrollZoom'
   ya-options='{{vm.mapOptions}}'
   ya-controls=''
@@ -8,18 +7,17 @@
   ya-center='{{vm.map.yaCenter}}'
   ya-after-init='vm.map.afterMapInit($target)'
   )
-    ya-collection(ng-if='vm.markers' ya-options='{preset:"islands#blueStretchyIcon"}')
-      ya-geo-object(
-      ng-repeat='point in vm.markers track by point.id'
+    ya-collection(ng-if='vm.markers'
+    ya-options='{preset:"islands#blueStretchyIcon"}'
+    )
+      ya-geo-object(ng-repeat='point in vm.markers track by point.id'
       ya-source='point'
       )
-    ya-geo-object(
+    ya-geo-object(ng-if='vm.startMarker'
     ya-options='{preset:"islands#brownStretchyIcon"}'
-    ng-if='vm.startMarker'
     ya-source='vm.startMarker'
     )
-    ya-geo-object(
-    ng-if='vm.track'
+    ya-geo-object(ng-if='vm.track'
     ya-source='vm.track'
     ya-options='{balloonHasCloseButton:false,strokeColor:"#000000",strokeWidth:2,strokeOpacity:1}'
     )
