@@ -8,7 +8,7 @@ hr
 
 .ui-view
 
-  section.text-center
+  section.text-center.scroll-horizontal
     button.btn.margin(
     ng-repeat-start='btn in vm.hashButtons track by btn.label'
     ng-click='vm.hashClick(btn)'
@@ -23,9 +23,10 @@ hr
     ) {{ subbtn.label }}
   hr
 
-  section(ng-repeat='p in vm.partners | orderBy:"shortName" | filter:vm.filter track by p.id')
-    h5
-      .lead {{ p.shortName }}
+  section
+    section(ng-repeat='p in vm.partners | orderBy:"shortName" | filter:vm.filter track by p.id')
+      h5
+        .lead {{ p.shortName }}
 
-    p.text-right(ng-repeat='o in p.outlets track by o.id')
-      a(href='' ng-click='vm.outletClick(o)') {{ o.address }}
+      p.text-right(ng-repeat='o in p.outlets track by o.id')
+        a(href='' ng-click='vm.outletClick(o)') {{ o.address }}
