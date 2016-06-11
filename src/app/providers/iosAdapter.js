@@ -7,11 +7,12 @@
     var ios = $window.webkit;
     var requests = {};
     var counter = 1;
+    var deb = $window.debug('stg:IosAdapter');
 
 
     var IosAdapter = function (schema) {
 
-      function iosCallback (name, parser) {
+      function iosCallback(name, parser) {
         return function (data, req) {
 
           var id = req && req.options && req.options.requestId;
@@ -30,33 +31,35 @@
               }
             }
 
-            request [name] (data);
+            deb(name, req.entity, data);
+
+            request [name](data);
             delete requests [id];
           }
 
         }
       }
 
-      function iosParser (data, entity) {
+      function iosParser(data, entity) {
 
-        var model = schema.model (entity);
+        var model = schema.model(entity);
         var fieldTypes = model && model.fieldTypes;
 
 
-        _.each (data, function (row) {
+        _.each(data, function (row) {
 
-          _.each (fieldTypes, function (type,field){
+          _.each(fieldTypes, function (type, field) {
 
             row [field] = (function (v) {
               switch (type) {
                 case 'int':
-                  return parseInt (v) || 0;
+                  return parseInt(v) || 0;
                 case 'decimal':
-                  return parseFloat (v) || 0;
+                  return parseFloat(v) || 0;
                 case 'date':
-                  return v ? v.substr(0,10) : null;
+                  return v ? v.substr(0, 10) : null;
               }
-            }) (row[field]);
+            })(row[field]);
 
           });
 
@@ -64,9 +67,9 @@
 
       }
 
-      $window.iSistemiumIOSCallback = iosCallback ('resolve', iosParser);
+      $window.iSistemiumIOSCallback = iosCallback('resolve', iosParser);
 
-      $window.iSistemiumIOSErrorCallback = iosCallback ('reject');
+      $window.iSistemiumIOSErrorCallback = iosCallback('reject');
 
     };
 
@@ -84,12 +87,12 @@
 
       };
 
-      if (angular.isString (params)) {
+      if (angular.isString(params)) {
         message.id = params;
       } else if (type === 'update') {
         message.data = params;
       } else if (params) {
-        message.where = _.mapValues (params,function (val) {
+        message.where = _.mapValues(params, function (val) {
           return {
             '==': val
           }
@@ -107,7 +110,7 @@
 
         };
 
-        ios.messageHandlers[type].postMessage (message);
+        ios.messageHandlers[type].postMessage(message);
 
       });
 
@@ -131,7 +134,7 @@
       }
     }
 
-    function paramsToOptions (params) {
+    function paramsToOptions(params) {
 
       var parsed = {};
 
@@ -151,7 +154,7 @@
 
     IosAdapter.prototype.findAll = function (resource, params, options) {
 
-      options = angular.extend (options, paramsToOptions (params));
+      options = angular.extend(options, paramsToOptions(params));
 
       return requestFromIOS('findAll', resource.endpoint, params, angular.extend({
           pageSize: 1000,
@@ -163,8 +166,8 @@
     IosAdapter.prototype.find = function (resource, id, options) {
       return requestFromIOS('find',
         resource.endpoint,
-        angular.isObject (id) && id.id || id,
-         angular.extend (options || {}, {oneObject: true})
+        angular.isObject(id) && id.id || id,
+        angular.extend(options || {}, {oneObject: true})
       );
     };
 

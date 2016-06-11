@@ -18,7 +18,7 @@
     function emit (options) {
       var q = Sockets.emitQ('jsData',options);
       q.then(function(data){
-        DEBUG ('emit:success', data, options);
+        DEBUG ('emit:success', options.resource, data, options);
       },function(err){
         DEBUG ('emit:catch', err, options);
       });
