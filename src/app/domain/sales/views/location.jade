@@ -1,5 +1,5 @@
 .popover-map
-  ya-map.ya-map-container(ng-if='vm.map'
+  ya-map.ya-map-container(ng-if='vm.map' ng-click='vm.mapClick()'
   ya-behaviors='-DblClickZoom -Ruler -Drag -ScrollZoom'
   ya-options='{{vm.mapOptions}}'
   ya-controls=''

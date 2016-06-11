@@ -5,6 +5,7 @@ h3
     popover-placement="auto bottom-left"
     popover-trigger='outsideClick'
     uib-popover-template="'app/domain/sales/views/location.html'"
+    popover-is-open='vm.popover'
     type='button'
     ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
     )

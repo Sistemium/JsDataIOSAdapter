@@ -87,6 +87,10 @@
                 }, reject);
             }, reject);
         });
+      },
+
+      mapClick: function() {
+        vm.popover = false;
       }
 
     });
