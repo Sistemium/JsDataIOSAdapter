@@ -6,11 +6,9 @@ h3
     popover-trigger='outsideClick'
     uib-popover-template="'app/domain/sales/views/location.html'"
     type='button'
-    ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation}'
+    ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
     )
-      i.glyphicon.glyphicon-map-marker.animate-show(ng-hide='!vm.visit.deviceCts && !vm.visit.checkInLocation')
-      span.animate-show(ng-if='!vm.visit.deviceCts' ng-hide='vm.visit.checkInLocation')
-        span.hidden-xs Чек-ин ...
+      i.glyphicon.glyphicon-map-marker
     button.btn.navbar-btn.ml-10(
     type='button'
     ng-class='b.class || "btn-default"'

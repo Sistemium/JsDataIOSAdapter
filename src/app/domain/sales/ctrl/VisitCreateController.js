@@ -126,10 +126,12 @@
       } else {
 
         if (IOS.isIos()) {
-          IOS.checkIn(100).then(function(res){
+          vm.locating = true;
+          IOS.checkIn(1000).then(function(res){
             Location.inject(res);
             vm.visit.checkInLocationId = res.id;
             initMap(res);
+            vm.locating = false;
           });
         }
 
