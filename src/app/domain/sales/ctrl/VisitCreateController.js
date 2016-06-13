@@ -18,6 +18,7 @@
     var salesman = SalesmanAuth.getCurrentUser();
 
     var vm = this;
+    var creatingMode = !id;
 
     var yaLatLng = mapsHelper.yLatLng;
 
@@ -43,6 +44,34 @@
         }
       };
 
+    }
+
+    function getLocation () {
+      vm.locating = true;
+      return IOS.checkIn(100,{
+        target: _.get(vm, 'visit.id')
+      }).then(function(res){
+        vm.locating = false;
+        return Location.inject(res);
+      });
+    }
+
+    function saveVisit (visit, resolve, reject) {
+
+      return Visit.save(visit)
+        .then(function () {
+
+          var promises = _.map(answersByQuestion, function (ans) {
+            return VA.save(ans);
+          });
+
+          $q.all(promises)
+            .then(function () {
+              resolve();
+              $state.go('^');
+            }, reject);
+
+        }, reject);
     }
 
     angular.extend(vm, {
@@ -76,16 +105,21 @@
 
       save: function () {
         vm.busy = $q(function (resolve, reject) {
-          Visit.save(vm.visit)
-            .then(function () {
-              $q.all(_.map(answersByQuestion, function (ans) {
-                return VA.save(ans);
-              }))
-                .then(function () {
-                  resolve();
-                  $state.go('^');
-                }, reject);
-            }, reject);
+
+          if (creatingMode && IOS.isIos()) {
+
+            getLocation().then(function(res){
+              vm.visit.checkOutLocationId = res.id;
+              saveVisit(vm.visit,resolve,reject);
+            },function(err){
+              console.error(err);
+              saveVisit(vm.visit,resolve,reject);
+            });
+
+          } else {
+            saveVisit(vm.visit,resolve,reject);
+          }
+
         });
       },
 
@@ -134,22 +168,23 @@
           });
       } else {
 
-        if (IOS.isIos()) {
-          vm.locating = true;
-          IOS.checkIn(1000).then(function(res){
-            Location.inject(res);
-            vm.visit.checkInLocationId = res.id;
-            initMap(res);
-            vm.locating = false;
-          });
-        }
-
         vm.answers = {};
         vm.visit = Visit.inject({
           date: date,
           outletId: outletId,
           salesmanId: salesman.id
         });
+
+        if (IOS.isIos()) {
+          getLocation().then(function(res){
+            vm.visit.checkInLocationId = res.id;
+            initMap(res);
+          },function(err){
+            console.error(err);
+            vm.locating = false;
+          });
+        }
+
       }
 
     });
