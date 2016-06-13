@@ -2,7 +2,7 @@
 
 (function () {
 
-  function IOS($window, $q) {
+  function IOS($window, $q, $rootScope) {
 
     var MSG = 'roles';
     var CHECKIN = 'checkin';
@@ -11,8 +11,6 @@
 
     var messages = {};
     var id = 0;
-
-    var checkInMsg;
 
     function handler(name) {
       return $window.webkit.messageHandlers[name];
@@ -30,18 +28,7 @@
       }
     };
 
-    $window[CHECKIN_CALLBACK] = function (res) {
-      var msg = checkInMsg;
-
-      if (msg) {
-        if (res.length) {
-          msg.resolve(res[0]);
-        } else {
-          msg.reject('Response is not array');
-        }
-        checkInMsg = false;
-      }
-    };
+    $window[CHECKIN_CALLBACK] = $window[ROLES_CALLBACK];
 
     function checkIn(accuracy) {
 
@@ -55,7 +42,9 @@
           }
         };
 
-        checkInMsg = {
+        msg.requestId = id;
+
+        messages[id] = {
           resolve: resolve,
           reject: reject,
           msg: msg
