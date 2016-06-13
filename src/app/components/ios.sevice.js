@@ -2,7 +2,7 @@
 
 (function () {
 
-  function IOS($window, $q, $rootScope) {
+  function IOS($window, $q, $timeout) {
 
     var MSG = 'roles';
     var CHECKIN = 'checkin';
@@ -20,9 +20,13 @@
       var msg = messages[req.requestId];
       if (msg) {
         if (res.length) {
-          msg.resolve(res[0]);
+          $timeout(function(){
+            msg.resolve(res[0]);
+          });
         } else {
-          msg.reject('Response is not array');
+          $timeout(function() {
+            msg.reject('Response is not array');
+          });
         }
         delete messages[req.requestId];
       }
@@ -30,27 +34,34 @@
 
     $window[CHECKIN_CALLBACK] = $window[ROLES_CALLBACK];
 
-    function checkIn(accuracy) {
+    function checkIn(accuracy, data) {
 
       return $q(function (resolve, reject) {
 
+        var requestId = ++id;
+
         var msg = {
           callback: CHECKIN_CALLBACK,
-          accuracy: accuracy,
+          requestId: requestId,
           options: {
-            requestId: ++id
-          }
+            requestId: requestId
+          },
+          accuracy: accuracy,
+          data: data
         };
 
-        msg.requestId = id;
-
-        messages[id] = {
+        messages[requestId] = {
           resolve: resolve,
           reject: reject,
           msg: msg
         };
 
         handler(CHECKIN).postMessage(msg);
+
+        $timeout(function(){
+          delete messages[requestId];
+          reject({ error: 'Location request timeout' });
+        },20000);
 
       });
 
