@@ -10,7 +10,6 @@
       'ngAria',
       'ui.router',
       'ui.router.stateHelper',
-      'ui.bootstrap',
       'LocalStorageModule',
       'as.sortable',
       'core.services',
