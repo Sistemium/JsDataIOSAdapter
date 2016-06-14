@@ -49,7 +49,8 @@
     function getLocation () {
       vm.locating = true;
       return IOS.checkIn(100,{
-        target: _.get(vm, 'visit.id')
+        ownerXid: _.get(vm, 'visit.id'),
+        target: 'Visit'
       }).then(function(res){
         vm.locating = false;
         return Location.inject(res);
