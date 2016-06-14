@@ -16,9 +16,11 @@ h3
     ng-repeat='b in vm.buttons track by b.label'
     ng-click='vm[b.clickFn]()'
     ) {{ b.label }}
-  .text
+  .text.clear-xs
     span.text-danger(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
     span.gray(ng-if='vm.visit.deviceCts') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+    a.ml-5(href ng-click='vm.deleteVisit()' ng-if='vm.visit.deviceCts')
+      i.glyphicon.glyphicon-trash
 
 hr.clear-both
 

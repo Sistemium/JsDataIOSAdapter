@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
@@ -126,6 +126,19 @@
 
       mapClick: function() {
         vm.popover = false;
+      },
+
+      deleteVisit: function () {
+        ConfirmModal.show({
+          text: 'Действительно удалить запись об этом визите?'
+        })
+          .then(function(){
+            Visit.destroy(vm.visit)
+              .then(function () {
+                $state.go('^');
+              });
+          })
+        ;
       }
 
     });
