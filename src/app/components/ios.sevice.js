@@ -112,6 +112,9 @@
   }
 
   angular.module('sistemium')
-    .service('IOS', IOS);
+    .service('IOS', IOS)
+    .run(function($window,IOS){
+      $window.saIOS = IOS;
+    });
 
 })();
