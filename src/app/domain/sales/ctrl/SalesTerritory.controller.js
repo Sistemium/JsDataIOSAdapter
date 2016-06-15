@@ -52,7 +52,7 @@
           label: key,
           match: new RegExp('^'+_.escapeRegExp(key),'i')
         };
-        if (val.length > 1) {
+        if (val.length > 1 && !hash) {
           b.buttons = hashButtons(key);
         }
         return b;
