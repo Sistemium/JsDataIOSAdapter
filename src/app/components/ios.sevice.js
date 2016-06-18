@@ -4,51 +4,31 @@
 
   function IOS($window, $q, $timeout) {
 
-    var MSG = 'roles';
     var CHECKIN = 'checkin';
-    var ROLES_CALLBACK = 'iosRolesCallback';
-    var CHECKIN_CALLBACK = 'iosCheckInCallback';
+
+    var CALLBACK = 'iosPhotoCallback';
 
     var messages = {};
     var id = 0;
+
+    var deb = $window.debug('stg:IOS');
 
     function handler(name) {
       return $window.webkit.messageHandlers[name];
     }
 
-    $window[ROLES_CALLBACK] = function (res, req) {
-      var msg = messages[req.requestId];
-      if (msg) {
-        if (res.length) {
-          $timeout(function(){
-            msg.resolve(res[0]);
-          });
-        } else {
-          $timeout(function() {
-            msg.reject('Response is not array');
-          });
-        }
-        delete messages[req.requestId];
-      }
-    };
-
-    $window[CHECKIN_CALLBACK] = $window[ROLES_CALLBACK];
-
-    function checkIn(accuracy, data) {
+    function message(handlerName, cfg) {
 
       return $q(function (resolve, reject) {
-
         var requestId = ++id;
 
-        var msg = {
-          callback: CHECKIN_CALLBACK,
+        var msg = angular.extend({
+          callback: CALLBACK,
           requestId: requestId,
           options: {
             requestId: requestId
-          },
-          accuracy: accuracy,
-          data: data
-        };
+          }
+        }, cfg);
 
         messages[requestId] = {
           resolve: resolve,
@@ -56,13 +36,60 @@
           msg: msg
         };
 
-        handler(CHECKIN).postMessage(msg);
+        handler(handlerName).postMessage(msg);
 
-        $timeout(function(){
-          delete messages[requestId];
-          reject({ error: 'Location request timeout' });
-        },20000);
+        if (cfg && cfg.timeout) {
+          $timeout(function () {
+            delete messages[requestId];
+            reject({error: handlerName + ' request timeout'});
+          }, cfg.timeout);
+        }
 
+      });
+
+    }
+
+    $window[CALLBACK] = function (res, req) {
+
+      var msg = messages[req.requestId];
+
+      if (msg) {
+        if (angular.isArray(res)) {
+          $timeout(function () {
+            deb('resolve', req, res);
+            msg.resolve(res[0]);
+          });
+        } else {
+          $timeout(function () {
+            deb('reject', req, res);
+            msg.reject(res || 'Response is not array');
+          });
+        }
+        delete messages[req.requestId];
+      }
+
+    };
+
+    function getPicture(id, size) {
+      return message('getPicture', {
+        id: id,
+        size: size || 'thumbnail'
+      });
+    }
+
+    function takePhoto(entity, data) {
+      return message('takePhoto', {
+        entityName: entity,
+        data: data
+      });
+    }
+
+    function checkIn(accuracy, data) {
+
+      return message(CHECKIN, {
+        accuracy: accuracy,
+        data: data,
+        timeout: 20000
       });
 
     }
@@ -70,24 +97,7 @@
     var me = {
 
       getRoles: function () {
-
-        return $q(function (resolve, reject) {
-
-          var msg = {
-            requestId: ++id,
-            callback: ROLES_CALLBACK
-          };
-
-          messages[id] = {
-            resolve: resolve,
-            reject: reject,
-            msg: msg
-          };
-
-          handler(MSG).postMessage(msg);
-
-        });
-
+        return message('roles');
       }
 
     };
@@ -105,7 +115,9 @@
       },
 
       handler: handler,
-      checkIn: checkIn
+      checkIn: checkIn,
+      getPicture: getPicture,
+      takePhoto: takePhoto
 
     };
 
@@ -113,7 +125,7 @@
 
   angular.module('sistemium')
     .service('IOS', IOS)
-    .run(function($window,IOS){
+    .run(function ($window, IOS) {
       $window.saIOS = IOS;
     });
 
