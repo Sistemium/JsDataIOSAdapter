@@ -4,9 +4,9 @@
 
   function ConfirmModal ($uibModal) {
 
-    function show(config) {
+    function show(config,modalConfig) {
 
-      var modalInstance = $uibModal.open({
+      var modalInstance = $uibModal.open(angular.extend({
 
         templateUrl: 'app/components/modal/ConfirmModal.html',
         controllerAs: 'vm',
@@ -40,7 +40,7 @@
 
         }
 
-      });
+      },modalConfig));
 
       return modalInstance.result;
 
