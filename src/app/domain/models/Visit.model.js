@@ -36,6 +36,10 @@
           }
         },
         hasMany: {
+          VisitPhoto: {
+            localField: 'photos',
+            foreignKey: 'visitId'
+          },
           VisitAnswer: {
             localField: 'answers',
             foreignKey: 'visitId'
