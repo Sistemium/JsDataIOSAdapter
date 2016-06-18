@@ -9,6 +9,7 @@
     var VQ = Schema.model('VisitQuestion');
     var VA = Schema.model('VisitAnswer');
     var Location = Schema.model('Location');
+    var VisitPhoto = Schema.model('VisitPhoto');
 
     var date = moment().format('YYYY-MM-DD');
     var id = $state.params.visitId;
@@ -21,6 +22,53 @@
     var creatingMode = !id;
 
     var yaLatLng = mapsHelper.yLatLng;
+
+
+    function importThumbnail (vp) {
+
+      if (vm.thumbnails[vp.id]) {
+        return vp;
+      }
+
+      return vp.getImageSrc('thumbnail').then(function (src) {
+        vm.thumbnails[vp.id] = src;
+        return vp;
+      });
+
+    }
+
+
+    function thumbnailClick (pic) {
+      pic.getImageSrc('resized').then(function (src) {
+
+        ConfirmModal.show({
+          src: src,
+          text: false,
+          title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')'
+        }, {
+          templateUrl: 'app/components/modal/PictureModal.html',
+          size: 'lg'
+        });
+
+      });
+    }
+
+
+    function takePhoto () {
+      var q = IOS.takePhoto('VisitPhoto', {
+        visitId: vm.visit.id
+      });
+
+      q.then(function (res) {
+
+        importThumbnail(VisitPhoto.inject(res));
+
+      }).catch(function (res) {
+        vm.photo = false;
+        vm.error = res;
+      })
+    }
+
 
     function initMap (visit) {
 
@@ -46,6 +94,7 @@
 
     }
 
+
     function getLocation () {
       vm.locating = true;
       return IOS.checkIn(100,{
@@ -56,6 +105,7 @@
         return Location.inject(res);
       });
     }
+
 
     function saveVisit (visit, resolve, reject) {
 
@@ -75,6 +125,7 @@
         }, reject);
     }
 
+
     angular.extend(vm, {
 
       buttons: [
@@ -87,6 +138,11 @@
         margin: 0,
         balloonAutoPanMargin: 300
       },
+
+      takePhoto: takePhoto,
+      thumbnailClick: thumbnailClick,
+      
+      thumbnails: {},
 
       goBack: function () {
         $state.go('^');
@@ -159,7 +215,11 @@
         vm.busy = Visit.find(id)
           .then(vm.importData('visit'))
           .then(function(v){
-            Visit.loadRelations(v,'Location')
+            Visit.loadRelations(v,['Location','VisitPhoto'])
+              .then(function(visit){
+                _.each(visit.photos,importThumbnail);
+                return visit;
+              })
               .then(initMap);
             return v;
           })

@@ -12,6 +12,7 @@
     var salesman = SalesmanAuth.getCurrentUser();
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet');
+
     Visit.bindAll({
       outletId: stateFilter,
       salesmanId: salesman.id
@@ -22,7 +23,7 @@
         Visit.findAllWithRelations({
           outletId: stateFilter,
           salesmanId: salesman.id
-        })('VisitAnswer')
+        })(['VisitAnswer','VisitPhoto'])
       ]);
     }
 

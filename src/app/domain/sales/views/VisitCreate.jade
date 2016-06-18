@@ -1,6 +1,8 @@
 h3
   .buttons.pull-right.with-map
-    button.btn.navbar-btn.btn-default.mr--8(
+    button.btn.navbar-btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit')
+      i.glyphicon.glyphicon-camera
+    button.btn.navbar-btn.btn-default.mr--8.ml-5(
     ng-disabled='!vm.visit.checkInLocation'
     popover-placement="auto bottom-left"
     popover-trigger='outsideClick'
@@ -19,13 +21,19 @@ h3
   .text.clear-xs
     span.text-danger(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
     span.gray(ng-if='vm.visit.deviceCts') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
-    a.ml-5(href ng-click='vm.deleteVisit()' ng-if='vm.visit.deviceCts')
-      i.glyphicon.glyphicon-trash
+    small
+      a.ml-5(href ng-click='vm.deleteVisit()' ng-if='vm.visit.deviceCts')
+        i.glyphicon.glyphicon-trash
 
 hr.clear-both
+section.mt(ng-if='vm.visit.photos.length')
+  .container-fluid
+    .row
+      .col-xs-2.thumbnail(ng-repeat='pic in vm.visit.photos track by pic.id')
+        a(ng-click='vm.thumbnailClick(pic)')
+          img(ng-src='{{vm.thumbnails[pic.id]}}')
 
-
-section.mt(cg-busy='vm.busy')
+section(cg-busy='vm.busy' ng-class='{mt: !vm.visit.photos.length}')
 
   uib-tabset.nav-tabs-right(active="active")
     uib-tab(
