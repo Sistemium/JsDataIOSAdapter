@@ -1,10 +1,21 @@
 section
 
   h2 Playground
-    .lead v0.0.2
+    .lead v{{ vm.version }}
 
-  pre {{ vm.display | json }}
+  pre(ng-if='vm.visit') Visit.id: {{ vm.visit.id }}
 
-  ul
-    li(ng-repeat="sb in vm.stockBatches track by sb.id")
-    | {{sb.Article.name}}
+  p.text-right
+    button.btn.btn-primary(ng-click='vm.takePhoto()' ng-disabled='!vm.visit')
+      i.glyphicon.glyphicon-camera
+
+  .container-fluid
+    .row
+      .col-xs-2.thumbnail(ng-repeat='pic in vm.pictures track by pic.id')
+        a(ng-click='vm.thumbnailClick(pic)')
+          img(ng-src='{{::pic.srcThumbnail}}')
+
+
+  pre(ng-if='vm.photo') {{ vm.photo | json }}
+  pre.red(ng-if='vm.error') {{ vm.error | json }}
+  pre(ng-if='vm.jsData') {{ vm.jsData | json }}

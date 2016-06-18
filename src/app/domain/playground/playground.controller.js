@@ -5,132 +5,75 @@
     .module('webPage')
     .controller('PlayGroundController', PlayGroundController);
 
-  /** @ngInject */
-  function PlayGroundController($scope, $window, $log, $filter, Language, SoundSynth, Auth, models) {
+  function PlayGroundController($scope, IOS, Schema, saApp, Sockets, ConfirmModal) {
+
     var vm = this;
+    var Visit = Schema.model('Visit');
+    var Outlet = Schema.model('Outlet');
+    var Partner = Schema.model('Partner');
+    var VisitPhoto = Schema.model('VisitPhoto');
 
-    vm.barCodes = [];
-    vm.stockBatches = [];
+    vm.jsData = [];
 
-    models.Setting.bindAll({}, $scope, 'vm.display');
-    models.Setting.findAll({
-      group: 'domain',
-      name: 'picking.date'
-    });
+    function onJSData(res) {
+      vm.jsData.push(res);
+    }
 
-    //models.PickingOrderPosition.bindAll({}, $scope, 'vm.articleGroups');
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['VisitPhoto']));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
-    //models.PickingOrder.findAll();
-    //models.PickingOrderPosition.findAll();
+    vm.version = saApp.version();
 
-    // var boxPcs = {
-    //   box: 101,
-    //   pcs: 312
-    // };
-    //
-    // vm.display = {
-    //   boxes: $filter ('boxes') (22),
-    //   bottles: $filter ('bottles') (21),
-    //   full: $filter ('boxPcs') ({box: 21, pcs: 0}),
-    //   speakableCountFemale: Language.speakableCountFemale (3),
-    //   speakableBoxPcs: Language.speakableBoxPcs (boxPcs)
-    // };
-    //
-    // vm.currentUser = {
-    //   user: Auth.getCurrentUser(),
-    //   id: $window.localStorage.getItem('currentPickerId')
-    // };
+    Visit.findAll()
+      .then(function (res) {
+        vm.visit = res [0];
+      });
 
-    //SoundSynth.say (Language.speakableBoxPcs (boxPcs));
-
-    var pageSize = 3000;
-
-    vm.getArticles = function (startPage) {
-      models.Article.findAll({
-        offset: (startPage - 1) * pageSize,
-        limit: pageSize
-      }, {
-        bypassCache: true
-      }).then(function (articles) {
-
-        articles.forEach(function (article) {
-          models.Article.loadRelations(article);
+    VisitPhoto.findAll()
+      .then(function (photos) {
+        vm.pictures = _.orderBy(photos, 'deviceCts', 'desc');
+        _.each(photos, function (photo) {
+          photo.getImageSrc().then(function (src) {
+            photo.srcThumbnail = src;
+          });
         });
+      });
 
-        $log.log(articles.length);
-
-        if (articles.length === pageSize && startPage * pageSize < 10000) {
-          vm.getArticles(startPage + 1);
-        }
-
+    vm.thumbnailClick = function (pic) {
+      pic.getImageSrc('resized').then(function (src) {
+        Outlet.find(pic.visit.outletId).then(function (o) {
+          Partner.find(o.partnerId).then(function (p) {
+            ConfirmModal.show({
+              src: src,
+              text: false,
+              title: p.shortName + ' (' + o.address + ')'
+            }, {
+              templateUrl: 'app/components/modal/PictureModal.html',
+              size: 'lg'
+            });
+          });
+        });
       });
     };
 
-    //models.StockBatch.findAll({
-    //  limit: pageSize
-    //}).then(function () {
-    //  //vm.getArticles(1);
-    //
-    //});
-
-    function scanner(code, type) {
-
-      vm.stockBatches = [];
-
-      vm.barCodes.push({
-        code: code,
-        type: type
+    vm.takePhoto = function () {
+      var q = IOS.takePhoto('VisitPhoto', {
+        visitId: vm.visit.id
       });
 
-      models.StockBatchBarCode.findAll({
-        code: code
-      }).then(function (res) {
+      q.then(function (res) {
 
-        res.forEach(function (i) {
-          models.StockBatchBarCode.loadRelations(i).then(function (sbbc) {
-            models.StockBatch.loadRelations(sbbc.StockBatch, 'Article');
-            vm.stockBatches.push(sbbc.StockBatch);
-          });
-        });
+        vm.pictures.splice(0,0,vm.photo = VisitPhoto.inject(res));
 
-      });
+        vm.photo.getImageSrc('thumbnail').then(function (src) {
+          vm.photo.srcThumbnail = src;
+        })
 
-    }
-
-    $window.onBarcodeScan = scanner;
-
-    $window.models = models;
-
-    //if ($window.webkit) {
-    //  //$window.webkit.messageHandlers.barCodeScannerOn.postMessage('onBarcodeScan');
-    //  $window.webkit.messageHandlers.sound.postMessage({
-    //    text: 'Стужа мягкая 0 375',
-    //    rate: 0.45,
-    //    pitch: 1
-    //  });
-    //}
-
-    //models.LogMessage.create({
-    //  text: 11,
-    //  type: 'error',
-    //  source: 'jsdata'
-    //}).then (function(lm){
-    //
-    //  //lm.type = 'important';
-    //  //models.LogMessage.save(lm.id).then (function(lm2) {
-    //  //  vm.articleGroups = lm2;
-    //  //});
-    //
-    //  models.LogMessage.destroy (lm.id).then (function (res){
-    //    vm.barCodes = {succ: res};
-    //  },function (res){
-    //    vm.barCodes = {err: res};
-    //  });
-    //
-    //  vm.articleGroups = {success: lm};
-    //}, function (err) {
-    //  vm.articleGroups = {error: err};
-    //});
+      }).catch(function (res) {
+        vm.photo = false;
+        vm.error = res;
+      })
+    };
 
   }
 })();
