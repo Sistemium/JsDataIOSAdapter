@@ -32,6 +32,11 @@
 
             cancel: function () {
               $uibModalInstance.dismiss();
+            },
+            
+            deleteItem: function () {
+              me.deleteDelegate()
+                .then(me.cancel);
             }
 
           },config));
