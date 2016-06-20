@@ -1,6 +1,6 @@
 h3
   .buttons.pull-right.with-map
-    button.btn.navbar-btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit')
+    button.btn.navbar-btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
       i.glyphicon.glyphicon-camera
     button.btn.navbar-btn.btn-default.mr--8.ml-5(
     ng-disabled='!vm.visit.checkInLocation'
@@ -15,12 +15,13 @@ h3
     button.btn.navbar-btn.ml-10(
     type='button'
     ng-class='b.class || "btn-default"'
+    ng-disabled='b.isDisabled()'
     ng-repeat='b in vm.buttons track by b.label'
     ng-click='vm[b.clickFn]()'
     ) {{ b.label }}
   .text.clear-xs
-    span.text-danger(ng-if='vm.visit && !vm.visit.deviceCts') Новый визит
-    span.gray(ng-if='vm.visit.deviceCts') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+    span.text-danger(ng-if='vm.creatingMode') Новый визит
+    span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
     small
       a.ml-5(href ng-click='vm.deleteVisit()' ng-if='vm.visit.deviceCts')
         i.glyphicon.glyphicon-trash

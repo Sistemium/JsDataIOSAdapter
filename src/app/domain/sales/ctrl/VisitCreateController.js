@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal, toastr) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
@@ -44,7 +44,10 @@
         ConfirmModal.show({
           src: src,
           text: false,
-          title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')'
+          title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')',
+          deleteDelegate: function() {
+            return VisitPhoto.destroy(pic);
+          }
         }, {
           templateUrl: 'app/components/modal/PictureModal.html',
           size: 'lg'
@@ -129,9 +132,13 @@
     angular.extend(vm, {
 
       buttons: [
-        {label: id ? 'Отмена' : 'Отменить', clickFn: 'goBack'},
-        {label: id ? 'Сохранить' : 'Завершить', clickFn: 'save', class: 'btn-success'}
+        {label: !creatingMode ? 'Закрыть' : 'Отменить', clickFn: creatingMode ? 'deleteVisit' : 'goBack'},
+        {label: !creatingMode ? 'Сохранить' : 'Завершить', clickFn: 'save', class: 'btn-success', isDisabled: function () {
+          return !_.get(vm,'visit.checkInLocationId');
+        }}
       ],
+
+      creatingMode: creatingMode,
 
       mapOptions: {
         avoidFractionalZoom: false,
@@ -141,7 +148,7 @@
 
       takePhoto: takePhoto,
       thumbnailClick: thumbnailClick,
-      
+
       thumbnails: {},
 
       goBack: function () {
@@ -250,12 +257,28 @@
         });
 
         if (IOS.isIos()) {
-          getLocation().then(function(res){
+          vm.busy = getLocation();
+
+          vm.busy.then(function(res){
+
+            if ($scope['$$destroyed']) {
+              return;
+            }
+
             vm.visit.checkInLocationId = res.id;
             initMap(res);
+            Visit.save(vm.visit);
+
           },function(err){
+
+            if ($scope['$$destroyed']) {
+              return;
+            }
+
             console.error(err);
-            vm.locating = false;
+            toastr.error('Не удалось определить местоположение');
+            $state.go('^');
+
           });
         }
 
@@ -265,11 +288,13 @@
 
     $scope.$on('$destroy', function () {
 
-      if (!Visit.lastSaved(vm.visit)) {
-        Visit.eject(vm.visit);
-        _.each(answersByQuestion, function (ans) {
-          VA.eject(ans);
-        });
+      if (creatingMode) {
+        if (!Visit.lastSaved(vm.visit)) {
+          Visit.eject(vm.visit);
+          _.each(answersByQuestion, function (ans) {
+            VA.eject(ans);
+          });
+        }
       }
 
     });
