@@ -33,10 +33,14 @@
             cancel: function () {
               $uibModalInstance.dismiss();
             },
-            
+
             deleteItem: function () {
-              me.deleteDelegate()
-                .then(me.cancel);
+              if (!me.confirmationMode) {
+                me.confirmationMode = true;
+              } else {
+                me.busy = me.deleteDelegate()
+                  .then(me.cancel);
+              }
             }
 
           },config));

@@ -3,12 +3,14 @@
     span {{vm.title}}
     a(href='' ng-click='vm.cancel()')
       i.pull-right.glyphicon.glyphicon-remove
-.modal-body
+.modal-body(cg-busy='vm.busy')
   p(ng-if='vm.text') {{ ::vm.text }}
   .text-center
     img(ng-if='vm.src' ng-src='{{ ::vm.src }}' style='max-width: 100%; max-height: 500px;')
 .modal-footer
 
-  button.btn.btn-danger(ng-click='vm.deleteItem()' ng-if='vm.deleteDelegate') Удалить
+  button.btn.btn-danger.animate-show(ng-click='vm.deleteItem()' ng-if='vm.deleteDelegate' ng-show='vm.confirmationMode') Подтвердить удаление
+  = ' '
+  button.btn.btn-warning(ng-click='vm.deleteItem()' ng-if='vm.deleteDelegate' ng-disabled='vm.confirmationMode') Удалить
   = ' '
   button.btn.btn-primary(ng-click='vm.submit()') Закрыть
