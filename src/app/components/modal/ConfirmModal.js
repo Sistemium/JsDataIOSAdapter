@@ -12,7 +12,7 @@
         controllerAs: 'vm',
         size: 'sm',
 
-        controller: function ConfirmModalController ($uibModalInstance) {
+        controller: ['$uibModalInstance', function ConfirmModalController ($uibModalInstance) {
 
           var me = this;
 
@@ -47,7 +47,7 @@
 
           return me;
 
-        }
+        }]
 
       },modalConfig));
 
