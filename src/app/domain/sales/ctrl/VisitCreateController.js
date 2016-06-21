@@ -24,7 +24,7 @@
     var yaLatLng = mapsHelper.yLatLng;
 
 
-    function importThumbnail (vp) {
+    function importThumbnail(vp) {
 
       if (vm.thumbnails[vp.id]) {
         return vp;
@@ -45,7 +45,7 @@
           src: src,
           text: false,
           title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')',
-          deleteDelegate: function() {
+          deleteDelegate: function () {
             return VisitPhoto.destroy(pic);
           }
         }, {
@@ -60,7 +60,7 @@
     }
 
 
-    function takePhoto () {
+    function takePhoto() {
       var q = IOS.takePhoto('VisitPhoto', {
         visitId: vm.visit.id
       });
@@ -76,9 +76,9 @@
     }
 
 
-    function initMap (visit) {
+    function initMap(visit) {
 
-      var checkIn = _.get(visit,'checkInLocation') || _.get(vm, 'visit.checkInLocation');
+      var checkIn = _.get(visit, 'checkInLocation') || _.get(vm, 'visit.checkInLocation');
 
       if (!checkIn) {
         return;
@@ -101,19 +101,19 @@
     }
 
 
-    function getLocation () {
+    function getLocation() {
       vm.locating = true;
-      return IOS.checkIn(100,{
+      return IOS.checkIn(100, {
         ownerXid: _.get(vm, 'visit.id'),
         target: 'Visit'
-      }).then(function(res){
+      }).then(function (res) {
         vm.locating = false;
         return Location.inject(res);
       });
     }
 
 
-    function saveVisit (visit, resolve, reject) {
+    function saveVisit(visit, resolve, reject) {
 
       return Visit.save(visit)
         .then(function () {
@@ -136,9 +136,14 @@
 
       buttons: [
         {label: !creatingMode ? 'Закрыть' : 'Отменить', clickFn: creatingMode ? 'deleteVisit' : 'goBack'},
-        {label: !creatingMode ? 'Сохранить' : 'Завершить', clickFn: 'save', class: 'btn-success', isDisabled: function () {
-          return !_.get(vm,'visit.checkInLocationId');
-        }}
+        {
+          label: !creatingMode ? 'Сохранить' : 'Завершить',
+          clickFn: 'save',
+          class: 'btn-success',
+          isDisabled: function () {
+            return !_.get(vm, 'visit.checkInLocationId');
+          }
+        }
       ],
 
       creatingMode: creatingMode,
@@ -175,22 +180,22 @@
 
           if (creatingMode && IOS.isIos()) {
 
-            getLocation().then(function(res){
+            getLocation().then(function (res) {
               vm.visit.checkOutLocationId = res.id;
-              saveVisit(vm.visit,resolve,reject);
-            },function(err){
+              saveVisit(vm.visit, resolve, reject);
+            }, function (err) {
               console.error(err);
-              saveVisit(vm.visit,resolve,reject);
+              saveVisit(vm.visit, resolve, reject);
             });
 
           } else {
-            saveVisit(vm.visit,resolve,reject);
+            saveVisit(vm.visit, resolve, reject);
           }
 
         });
       },
 
-      mapClick: function() {
+      mapClick: function () {
         vm.popover = false;
       },
 
@@ -198,7 +203,7 @@
         ConfirmModal.show({
           text: 'Действительно удалить запись об этом визите?'
         })
-          .then(function(){
+          .then(function () {
             Visit.destroy(vm.visit)
               .then(function () {
                 $state.go('^');
@@ -224,10 +229,10 @@
       if (id) {
         vm.busy = Visit.find(id)
           .then(vm.importData('visit'))
-          .then(function(v){
-            Visit.loadRelations(v,['Location','VisitPhoto'])
-              .then(function(visit){
-                _.each(visit.photos,importThumbnail);
+          .then(function (v) {
+            Visit.loadRelations(v, ['Location', 'VisitPhoto'])
+              .then(function (visit) {
+                _.each(visit.photos, importThumbnail);
                 return visit;
               })
               .then(initMap);
@@ -244,7 +249,7 @@
               });
 
               vm.answers = _.mapValues(answersByQuestion, function (ans) {
-                return _.get(ans,'question.dataType.code') === 'date' && ans.data ?
+                return _.get(ans, 'question.dataType.code') === 'date' && ans.data ?
                   moment(ans.data, 'YYYY-MM-DD').toDate() : ans.data;
               });
 
@@ -262,7 +267,7 @@
         if (IOS.isIos()) {
           vm.busy = getLocation();
 
-          vm.busy.then(function(res){
+          vm.busy.then(function (res) {
 
             if ($scope['$$destroyed']) {
               return;
@@ -272,7 +277,7 @@
             initMap(res);
             Visit.save(vm.visit);
 
-          },function(err){
+          }, function (err) {
 
             if ($scope['$$destroyed']) {
               return;
