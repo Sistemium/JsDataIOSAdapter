@@ -43,10 +43,6 @@
           VisitAnswer: {
             localField: 'answers',
             foreignKey: 'visitId'
-          },
-          VisitPicture: {
-            localField: 'pictures',
-            foreignKey: 'visitId'
           }
         }
       },
