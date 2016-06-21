@@ -38,8 +38,8 @@
     }
 
 
-    function thumbnailClick (pic) {
-      pic.getImageSrc('resized').then(function (src) {
+    function thumbnailClick(pic) {
+      vm.busy = pic.getImageSrc('resized').then(function (src) {
 
         ConfirmModal.show({
           src: src,
@@ -53,6 +53,9 @@
           size: 'lg'
         });
 
+      },function(err){
+        console.log(err);
+        toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
       });
     }
 
@@ -276,7 +279,7 @@
             }
 
             console.error(err);
-            toastr.error('Не удалось определить местоположение');
+            toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
             $state.go('^');
 
           });
