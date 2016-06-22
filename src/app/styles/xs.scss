@@ -1,5 +1,30 @@
 @media (max-width: 767px) {
+
   h3, .h3 {
-    font-size: 20px;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    font-size: 17px;
+
   }
+
+  h2, .h2 {
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    font-size: 21px;
+
+  }
+
+  .clear-both-xs {
+    clear: both;
+  }
+
+  hr {
+    margin-top: 7px;
+    margin-bottom: 7px;
+  }
+
 }

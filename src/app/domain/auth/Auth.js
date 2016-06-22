@@ -2,18 +2,55 @@
 
 (function () {
 
-  angular.module('webPage').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS) {
+  angular.module('core.services').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS, PickerAuth) {
+
+    var DEBUG = debug ('stg:Auth');
 
     var me = this;
-    var currentUser;
-    var DEBUG = debug ('stg:Auth');
+
     var roles;
+    var rolesArray;
     var rolesPromise;
-    var ios = IOS.isIos();
     var resolveRoles;
+    var currentUser;
+
+    var ios = IOS.isIos();
 
     function getAccessToken() {
       return ios || $window.localStorage.getItem('authorization');
+    }
+
+    function clearAccessToken() {
+      return ios || $window.localStorage.removeItem('authorization');
+    }
+
+    function setRoles(newRoles) {
+
+      roles = newRoles || {};
+      currentUser = roles.account || {};
+
+      currentUser.shortName = (function (name) {
+        var names = name.match (/(^[^ ]*) (.*$)/);
+        return names ? names[1] + ' ' + names[2][0] + '.' : name;
+      })(currentUser.name);
+
+      rolesArray = _.map(roles.roles, function(val,key) {
+        return key;
+      });
+
+      if (!ios) {
+        me.logout = logout
+      }
+
+      return roles;
+
+    }
+
+    function logout() {
+      currentUser = rolesArray = roles = rolesPromise = false;
+      clearAccessToken();
+      $rootScope.$broadcast('auth-logout');
+      $state.go('home');
     }
 
     function init(authProtocol) {
@@ -24,13 +61,12 @@
 
       var token = getAccessToken();
 
-      if (token && !roles || ios) {
+      if (!roles && (token || ios)) {
 
         rolesPromise = authProtocol.getRoles(token)
           .then(function(res){
-            roles = res;
             console.log ('Auth.init',res);
-            return res;
+            return setRoles(res);
           });
 
         return rolesPromise;
@@ -67,29 +103,20 @@
           }
 
           $state.go('auth');
-          return;
 
-        } else {
-          return;
         }
-      }
-
-      var needRoles = next.data && next.data.auth;
-
-      if (needRoles && !currentUser) {
-        event.preventDefault();
-        me.redirectTo = {
-          state: next,
-          params: nextParams
-        };
-        $state.go('login');
+      } else {
+        me.profileState = 'profile';
+        if (_.get(next,'data.auth') === 'pickerAuth') {
+          me.profileState = 'picker';
+        }
       }
 
     });
 
     var onAuthenticated = $rootScope.$on('authenticated', function (event, res) {
       console.log ('authenticated', res);
-      roles = res;
+      setRoles(res);
       if (resolveRoles) {
         resolveRoles (roles);
       }
@@ -115,9 +142,13 @@
 
     Sockets.on('connect', sockAuth);
 
-    return {
+    return angular.extend(me, {
 
       getCurrentUser: function () {
+        return me.profileState === 'picker' && PickerAuth.getCurrentUser() || currentUser;
+      },
+
+      getAccount: function () {
         return currentUser;
       },
 
@@ -129,31 +160,22 @@
         return true;
       },
 
-      logout: function () {
-        currentUser = undefined;
-        $rootScope.$broadcast('auth-logout');
-        window.localStorage.removeItem('currentPickerId');
+      init: init,
+
+      roles: function() {
+        return roles && roles.roles;
       },
 
-      login: function (user) {
-        if (!user || !user.id) {
-          $window.localStorage.removeItem('currentPickerId');
-          return $state.go('login');
+      isAuthorized: function (anyRoles) {
+        if (anyRoles && !angular.isArray(anyRoles)) {
+          anyRoles = [anyRoles];
         }
-        currentUser = user;
-        $window.localStorage.setItem('currentPickerId',user.id);
-        $rootScope.$broadcast('auth-login', currentUser);
-        if (me.redirectTo) {
-          $state.go(me.redirectTo.state, me.redirectTo.params);
-          me.redirectTo = false;
-        } else {
-          $state.go('home');
-        }
-      },
+        return roles && !anyRoles ||
+          !!_.intersection (anyRoles,rolesArray).length
+        ;
+      }
 
-      init: init
-
-    };
+    });
 
   });
 

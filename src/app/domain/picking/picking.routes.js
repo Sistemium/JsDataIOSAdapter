@@ -5,6 +5,14 @@
   angular.module('webPage')
     .config(function (stateHelperProvider) {
 
+      stateHelperProvider.state({
+        name: 'picker',
+        url: '/picker',
+        templateUrl: 'app/domain/picker/info.html',
+        controller: 'PickerInfoController',
+        controllerAs: 'vm'
+      });
+
       var articleChildren = [
         {
           name: 'article',
@@ -40,7 +48,7 @@
           abstract: true,
           templateUrl: 'app/domain/ui-view.html',
           data: {
-            auth: true
+            auth: 'pickerAuth'
           },
           children: [
             { name:'orderList',

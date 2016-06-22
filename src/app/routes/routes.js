@@ -26,8 +26,8 @@
         .state({
           name: 'profile',
           url: '/profile',
-          templateUrl: 'app/domain/picker/info.html',
-          controller: 'PickerInfoController',
+          templateUrl: 'app/domain/auth/views/profile.html',
+          controller: 'AccountController',
           controllerAs: 'vm'
         })
 

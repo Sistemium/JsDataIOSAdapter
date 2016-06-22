@@ -14,11 +14,17 @@
       },
 
       relations: {
-        hasMany: {
-          PickingRequest: {
-            localField: 'pickingOrders',
-            foreignKey: 'outlet'
+        hasOne: {
+          Partner: {
+            localField: 'partner',
+            localKey: 'partnerId'
           }
+        },
+        hasMany: {
+          // PickingRequest: {
+          //   localField: 'pickingOrders',
+          //   foreignKey: 'outlet'
+          // }
         }
       }
 

@@ -10,7 +10,6 @@
       'ngAria',
       'ui.router',
       'ui.router.stateHelper',
-      'ui.bootstrap',
       'LocalStorageModule',
       'as.sortable',
       'core.services',
@@ -19,7 +18,13 @@
       'sistemiumBootstrap',
       'Models',
       'cgBusy',
-      'vs-repeat'
+      'vs-repeat',
+      'jsd',
+      'toggle-switch',
+      'angularMoment'
     ]);
+
+  angular.module('jsd', ['sistemiumBootstrap','Sales']);
+
 
 })();

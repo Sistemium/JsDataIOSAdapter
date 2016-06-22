@@ -18,7 +18,7 @@
     function emit (options) {
       var q = Sockets.emitQ('jsData',options);
       q.then(function(data){
-        DEBUG ('emit:success', data, options);
+        DEBUG ('emit:success', options.resource, data, options);
       },function(err){
         DEBUG ('emit:catch', err, options);
       });
@@ -71,11 +71,15 @@
       return emit({
         method: 'create',
         resource: (this.defaults.pool || options.pool) + '/' + resource.name,
-        attrs: attrs
+        attrs: angular.extend(attrs||{}, { deviceCts: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS') })
       });
     };
 
     SocketAdapter.prototype.update = function (resource, id, attrs, options) {
+      var deviceCts = _.get(attrs,'deviceCts');
+      if (!deviceCts) {
+        attrs = angular.extend(attrs||{}, { deviceCts: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS') });
+      }
       return emit({
         method: 'update',
         resource: (this.defaults.pool || options.pool) + '/' + resource.name,

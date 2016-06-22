@@ -1,0 +1,10 @@
+.modal-header
+  h4.modal-title
+    span {{vm.title}}
+    a(href='' ng-click='vm.cancel()')
+      i.pull-right.glyphicon.glyphicon-remove
+.modal-body
+  p {{vm.text}}
+.modal-footer
+  button.btn.btn-primary(ng-click='vm.submit()') {{vm.buttons.yes}}
+  button.btn.btn-warning(ng-click='vm.cancel()') {{vm.buttons.no}}

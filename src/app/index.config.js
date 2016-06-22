@@ -5,13 +5,18 @@
     .module('webPage')
     .run(run)
     .service('DEBUG', debugService)
+    .config(function(localStorageServiceProvider){
+      localStorageServiceProvider.setPrefix('stg');
+    })
   ;
 
   function debugService(saDebug) {
     return saDebug.log('stg:log');
   }
 
-  function run(Sockets, InitService, Auth, Picker, DEBUG, saApp, phaService, IOS) {
+  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
+
+    PickerAuth.init();
 
     InitService
       .then(Sockets.init)
@@ -47,10 +52,25 @@
 
       if (lastPicker) {
         Picker.setCurrentById(lastPicker).then(function (p) {
-          Auth.login(p);
+          PickerAuth.login(p);
         });
       }
 
+      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess', function (e, to, params) {
+
+        localStorageService.set('lastState', {
+          name: to.name,
+          params: params
+        });
+
+      }));
+
+      var lastState = localStorageService.get('lastState');
+
+      if (lastState) {
+        $state.go(lastState.name,lastState.params);
+      }
+      
     });
 
   }

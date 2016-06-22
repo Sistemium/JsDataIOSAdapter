@@ -14,7 +14,8 @@
     "_": true,
     "UAParser": true,
     "uuid": true,
-    "debug": true
+    "debug": true,
+    "moment": true
   },
   "rules": {
     "no-console": 0,

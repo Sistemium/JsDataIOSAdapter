@@ -1,5 +1,9 @@
 .iOS {
 
+  .hidden-ios {
+    display: none;
+  }
+
   .list-group-item, .container {
     padding-right: 10px;
     padding-left: 10px;
@@ -23,6 +27,26 @@
     > button {
       margin-top: -9px;
       margin-bottom: -9px;
+    }
+  }
+
+  @media (min-width: 760px){
+    .container {
+      width: 310px;
+    }
+  }
+
+
+
+  @media (min-width: 768px){
+    .container {
+      width: 758px;
+    }
+  }
+
+  @media (min-width: 992px){
+    .container {
+      width: 1014px;
     }
   }
 

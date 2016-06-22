@@ -31,6 +31,10 @@
         if (vm.currentItem) {
           $state.go(vm.currentItem.state);
         }
+      },
+
+      onProfileClick: function () {
+        $state.go(Auth.profileState);
       }
 
     });
@@ -38,7 +42,9 @@
     toggleFullScreen();
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
+
       vm.hide = !! _.get(to, 'data.hideTopBar');
+
       var item = _.find(vm.menu.items,function (item) {
         return to.name && _.startsWith(to.name,item.state);
       });
