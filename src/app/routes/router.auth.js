@@ -10,7 +10,7 @@
 
         var needRoles = _.get(next, 'data.needRoles');
 
-        if (needRoles && Auth.isAuthorized(needRoles)) {
+        if (needRoles && !Auth.isAuthorized(needRoles)) {
           event.preventDefault();
         }
 
