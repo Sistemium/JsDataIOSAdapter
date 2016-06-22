@@ -53,7 +53,7 @@
           size: 'lg'
         });
 
-      },function(err){
+      }, function (err) {
         console.log(err);
         toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
       });
@@ -113,24 +113,9 @@
     }
 
 
-    function saveVisit(visit, resolve, reject) {
-
-      return Visit.save(visit)
-        .then(function () {
-
-          var promises = _.map(answersByQuestion, function (ans) {
-            return VA.save(ans);
-          });
-
-          $q.all(promises)
-            .then(function () {
-              resolve();
-              $state.go('^');
-            }, reject);
-
-        }, reject);
+    function quit () {
+      return $scope['$$destroyed'] || $state.go('^');
     }
-
 
     angular.extend(vm, {
 
@@ -178,18 +163,32 @@
       save: function () {
         vm.busy = $q(function (resolve, reject) {
 
+          var saveAnswers = $q.all(_.map(answersByQuestion, function (ans) {
+            return VA.save(ans);
+          }));
+
           if (creatingMode && IOS.isIos()) {
 
-            getLocation().then(function (res) {
-              vm.visit.checkOutLocationId = res.id;
-              saveVisit(vm.visit, resolve, reject);
-            }, function (err) {
-              console.error(err);
-              saveVisit(vm.visit, resolve, reject);
-            });
+            saveAnswers.then(function () {
+
+              getLocation().then(function (res) {
+                vm.visit.checkOutLocationId = res.id;
+                Visit.save(vm.visit)
+                  .then(resolve, reject)
+                  .then(quit);
+              }, function (err) {
+                reject(err);
+                toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
+              });
+
+            }, reject);
 
           } else {
-            saveVisit(vm.visit, resolve, reject);
+            saveAnswers.then(function(){
+              Visit.save(vm.visit)
+                .then(resolve, reject)
+                .then(quit);
+            });
           }
 
         });
@@ -200,14 +199,15 @@
       },
 
       deleteVisit: function () {
+        if (!Visit.lastSaved(vm.visit)) {
+          return quit();
+        }
         ConfirmModal.show({
           text: 'Действительно удалить запись об этом визите?'
         })
           .then(function () {
             Visit.destroy(vm.visit)
-              .then(function () {
-                $state.go('^');
-              });
+              .then(quit);
           })
         ;
       }
@@ -284,7 +284,7 @@
             }
 
             console.error(err);
-            toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
+            toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
             $state.go('^');
 
           });
