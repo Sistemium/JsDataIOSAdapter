@@ -57,12 +57,15 @@
 
               templateUrl: 'app/domain/sales/views/VisitCreate.html',
               controller: 'VisitCreateController',
-              controllerAs: 'vm',
+              controllerAs: 'vm'
 
-              data: {
-                needCurrent: 'Salesman',
-                needRole: 'salesman'
-              }
+            },{
+              name: 'visitCreate',
+              url: '/visitCreate?visitId',
+
+              templateUrl: 'app/domain/sales/views/VisitCreate.html',
+              controller: 'VisitCreateController',
+              controllerAs: 'vm'
 
             }]
           }

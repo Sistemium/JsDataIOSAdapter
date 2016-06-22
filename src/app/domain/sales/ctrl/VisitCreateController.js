@@ -19,7 +19,7 @@
     var salesman = SalesmanAuth.getCurrentUser();
 
     var vm = this;
-    var creatingMode = !id;
+    var creatingMode = _.get($state,'current.name').match(/\.visitCreate$/);
 
     var yaLatLng = mapsHelper.yLatLng;
 
@@ -158,37 +158,28 @@
           ans.data = data;
         }
         answersByQuestion[qst.id] = ans;
+        VA.save(ans);
       },
 
       save: function () {
         vm.busy = $q(function (resolve, reject) {
 
-          var saveAnswers = $q.all(_.map(answersByQuestion, function (ans) {
-            return VA.save(ans);
-          }));
-
           if (creatingMode && IOS.isIos()) {
 
-            saveAnswers.then(function () {
-
-              getLocation().then(function (res) {
-                vm.visit.checkOutLocationId = res.id;
-                Visit.save(vm.visit)
-                  .then(resolve, reject)
-                  .then(quit);
-              }, function (err) {
-                reject(err);
-                toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
-              });
-
-            }, reject);
-
-          } else {
-            saveAnswers.then(function(){
+            getLocation().then(function (res) {
+              vm.visit.checkOutLocationId = res.id;
               Visit.save(vm.visit)
                 .then(resolve, reject)
                 .then(quit);
+            }, function (err) {
+              reject(err);
+              toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
             });
+
+          } else {
+            Visit.save(vm.visit)
+              .then(resolve, reject)
+              .then(quit);
           }
 
         });
@@ -275,7 +266,9 @@
 
             vm.visit.checkInLocationId = res.id;
             initMap(res);
-            Visit.save(vm.visit);
+            Visit.save(vm.visit).then(function(visit){
+              $state.go('.',{visitId: visit.id});
+            });
 
           }, function (err) {
 

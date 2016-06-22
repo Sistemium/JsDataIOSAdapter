@@ -28,7 +28,7 @@
     }
 
     function newVisitClick() {
-      $state.go('.visit');
+      $state.go('.visitCreate');
     }
 
     angular.extend(vm, {
