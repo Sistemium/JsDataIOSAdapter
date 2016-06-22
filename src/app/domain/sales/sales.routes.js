@@ -54,6 +54,10 @@
             children: [{
               name: 'visit',
               url: '/visit?visitId',
+              
+              data: {
+                hideNavs: true
+              },
 
               templateUrl: 'app/domain/sales/views/VisitCreate.html',
               controller: 'VisitCreateController',
@@ -62,6 +66,10 @@
             },{
               name: 'visitCreate',
               url: '/visitCreate?visitId',
+
+              data: {
+                hideNavs: true
+              },
 
               templateUrl: 'app/domain/sales/views/VisitCreate.html',
               controller: 'VisitCreateController',

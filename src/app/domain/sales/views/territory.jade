@@ -1,9 +1,9 @@
 h2.flex
-  a(hreh ui-sref='sales.territory') Клиенты
+  a(href ui-sref='sales.territory' ng-class='{disabled: vm.hideNavs}') Клиенты
   span.flex-1
   small.gray {{ vm.salesman.shortName }}
   small.gray.ml-10
-    a.p-6(href='' ui-sref='home')
+    a.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
       i.glyphicon.glyphicon-home
 
 hr

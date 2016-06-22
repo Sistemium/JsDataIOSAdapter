@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SalesTerritoryController(Schema, $q, $state, SalesmanAuth) {
+  function SalesTerritoryController(Schema, $q, $state, SalesmanAuth, $scope) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
@@ -90,6 +90,12 @@
     });
 
     vm.refresh();
+
+    $scope.$on('$stateChangeSuccess', function (e, to) {
+
+      vm.hideNavs = !! _.get(to, 'data.hideNavs');
+
+    });
 
   }
 
