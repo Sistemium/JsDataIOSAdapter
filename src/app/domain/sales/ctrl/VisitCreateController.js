@@ -117,19 +117,24 @@
       return $scope['$$destroyed'] || $state.go('^');
     }
 
+    var buttons = [];
+
+    if (creatingMode) {
+      buttons.push({label: 'Отменить', clickFn: 'deleteVisit' })
+    }
+
+    buttons.push({
+      label: !creatingMode ? 'Готово' : 'Завершить',
+      clickFn: 'save',
+      class: 'btn-success',
+      isDisabled: function () {
+        return creatingMode && !_.get(vm, 'visit.checkInLocationId');
+      }
+    });
+
     angular.extend(vm, {
 
-      buttons: [
-        {label: !creatingMode ? 'Закрыть' : 'Отменить', clickFn: creatingMode ? 'deleteVisit' : 'goBack'},
-        {
-          label: !creatingMode ? 'Сохранить' : 'Завершить',
-          clickFn: 'save',
-          class: 'btn-success',
-          isDisabled: function () {
-            return !_.get(vm, 'visit.checkInLocationId');
-          }
-        }
-      ],
+      buttons: buttons,
 
       creatingMode: creatingMode,
 
