@@ -19,7 +19,7 @@
     var salesman = SalesmanAuth.getCurrentUser();
 
     var vm = this;
-    var creatingMode = _.get($state,'current.name').match(/\.visitCreate$/);
+    var creatingMode = !!_.get($state,'current.name').match(/\.visitCreate$/);
 
     var yaLatLng = mapsHelper.yLatLng;
 
