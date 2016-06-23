@@ -55,7 +55,7 @@
     function refresh() {
 
       vm.busy =
-        VisitPhoto.findAll()
+        VisitPhoto.findAll({},{bypassCache: true})
           .then(function (res) {
             vm.photos = _.orderBy(res,'deviceCts','desc');
           });
