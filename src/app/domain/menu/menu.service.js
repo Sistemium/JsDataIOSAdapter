@@ -20,6 +20,10 @@
               state: 'sales.territory',
               needRoles: 'salesman'
             },{
+              title: 'Фотопоток',
+              state: 'photos.stream',
+              needRoles: 'salesman'
+            },{
               title: 'Предзаказы',
               state: 'sales.prePreOrders',
               needRoles: 'pre-ordering'

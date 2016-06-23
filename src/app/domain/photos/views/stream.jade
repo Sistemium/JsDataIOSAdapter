@@ -1,0 +1,16 @@
+h2.flex
+  a(href ui-sref='photos.stream' ng-class='{disabled: vm.hideNavs}') Фото-поток
+  span.flex-1
+  small.gray.ml-10
+    a.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
+      i.glyphicon.glyphicon-home
+
+hr.clear-both
+
+.ui-view
+  section(ng-if='vm.photos.length' cg-busy='vm.busy')
+    .container-fluid
+      .row
+        .col-xs-6.col-sm-4.col-md-3(ng-repeat='pic in vm.photos track by pic.id')
+          a.thumbnail.mh-120(ng-click='vm.thumbnailClick(pic)')
+            img(ng-src='{{vm.thumbnails[pic.id]}}')

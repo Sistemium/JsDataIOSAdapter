@@ -31,7 +31,7 @@ section.mt(ng-if='vm.visit.photos.length')
   .container-fluid
     .row
       .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
-        a.thumbnail.mh-100(ng-click='vm.thumbnailClick(pic)')
+        a.thumbnail.mh-80(ng-click='vm.thumbnailClick(pic)')
           img(ng-src='{{vm.thumbnails[pic.id]}}')
 
 section(cg-busy='vm.busy' ng-class='{mt: !vm.visit.photos.length}')
