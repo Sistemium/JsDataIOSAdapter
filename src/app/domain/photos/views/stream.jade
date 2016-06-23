@@ -1,5 +1,5 @@
 h2.flex
-  a(href ui-sref='photos.stream' ng-class='{disabled: vm.hideNavs}') Фото-поток
+  a(href ui-sref='photos.stream' ng-class='{disabled: vm.hideNavs}') Фотопоток
   span.flex-1
   small.gray.ml-10
     a.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
@@ -7,10 +7,16 @@ h2.flex
 
 hr.clear-both
 
-.ui-view
-  section(ng-if='vm.photos.length' cg-busy='vm.busy')
-    .container-fluid
-      .row
-        .col-xs-6.col-sm-4.col-md-3(ng-repeat='pic in vm.photos track by pic.id')
-          a.thumbnail.mh-120(ng-click='vm.thumbnailClick(pic)')
-            img(ng-src='{{vm.thumbnails[pic.id]}}')
+.ui-view(resize)
+  section#scroll-main(style='height: {{windowHeight - 8 -38 }}px' cg-busy='vm.busy')
+    .vr-parent(vs-repeat='340' vs-scroll-parent="#scroll-main")
+      .stream-photo.text-center(ng-repeat='pic in vm.photos track by pic.id')
+        h4.text-left
+          .lead
+            .pull-right
+              small {{ vm.pics(pic).visit.deviceCts | amUtc | amLocal | amCalendar }}
+            span {{ vm.pics(pic).visit.outlet.partner.shortName }}
+            = ' '
+            .small.darkgray {{ vm.pics(pic).visit.outlet.address }}
+        a.thumbnail(ng-click='vm.thumbnailClick(pic)')
+          img(ng-src='{{vm.pics(pic).src}}')

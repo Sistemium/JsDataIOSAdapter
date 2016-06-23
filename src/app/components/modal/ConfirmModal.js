@@ -44,6 +44,10 @@
             }
 
           },config));
+          
+          if (config.resolve) {
+            config.resolve(me);
+          }
 
           return me;
 

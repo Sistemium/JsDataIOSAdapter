@@ -1,6 +1,8 @@
 .modal-header
   h4.modal-title
     span {{vm.title}}
+    = ' '
+    small {{ vm.titleSmall }}
     a(href='' ng-click='vm.cancel()')
       i.pull-right.glyphicon.glyphicon-remove
 .modal-body(cg-busy='vm.busy')

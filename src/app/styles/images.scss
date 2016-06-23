@@ -10,3 +10,19 @@
 .mh-80 img {
   max-height: 80px;
 }
+
+.stream-photo {
+
+  a.thumbnail {
+    width: auto;
+    margin: 0 auto;
+    display: inline-block;
+    img {
+      max-height: 240px;
+    }
+  }
+
+  min-height: 320px;
+  max-height: 320px;
+  padding-bottom: 20px;
+}
