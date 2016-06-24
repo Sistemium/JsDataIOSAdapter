@@ -8,7 +8,7 @@ h2.flex
 
 hr
 
-.ui-view
+.ui-view(resize)
 
   section.text-center.scroll-horizontal
     button.btn.margin(
@@ -25,7 +25,9 @@ hr
     ) {{ subbtn.label }}
   hr
 
-  section
+  section#scroll-main(
+  style='height: {{windowHeight - 98 }}px;'
+  )
     section(ng-repeat='p in vm.partners | orderBy:"shortName" | filter:vm.filter track by p.id')
       h5
         .lead {{ p.shortName }}
