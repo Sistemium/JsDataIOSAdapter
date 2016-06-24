@@ -1,5 +1,5 @@
 h2.flex
-  a(href ui-sref='photos.stream' ng-class='{disabled: vm.hideNavs}') Фотопоток
+  a.inherit-colors(href='' ng-click='vm.rootClick()' ng-class='{disabled: vm.hideNavs}') Фотопоток
   span.flex-1
   small.gray.ml-10
     a.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
@@ -14,14 +14,14 @@ resize
 style='height: {{windowHeight - 8 -38 }}px; max-width: {{ vm.hideStream ? "0" : "100%" }};'
 cg-busy='vm.busy'
 )
-  .vr-parent(vs-repeat='340' vs-scroll-parent="#scroll-main")
+  .vr-parent(vs-repeat='340' vs-scroll-parent="#scroll-main" ng-if='vm.photos.length')
     .stream-photo.text-center(ng-repeat='pic in vm.photos track by pic.id')
       h4.text-left
         .lead
-          .pull-right
-            small {{ vm.pics(pic).visit.deviceCts | amUtc | amLocal | amCalendar }}
-          span {{ vm.pics(pic).visit.outlet.partner.shortName || 'Неизвестный визит' }}
+          .clear-both {{ vm.pics(pic).visit.outlet.partner.shortName || 'Неизвестный визит' }}
           = ' '
-          .small.darkgray {{ ::vm.pics(pic).visit.outlet.address }}
+          .small.darkgray
+            .ml-em.pull-right.black {{ vm.pics(pic).visit.deviceCts | amUtc | amLocal | amCalendar }}
+            span {{ ::vm.pics(pic).visit.outlet.address }}
       a.thumbnail.pull-right(ng-click='vm.thumbnailClick(pic)')
         img(ng-src='{{ ::vm.pics(pic).src }}')
