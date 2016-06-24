@@ -76,37 +76,14 @@
 
     function thumbnailClick(pic) {
 
-      ConfirmModal.show({
 
-        text: false,
-        title: 'Загрузка ...',
+      $state.go('.photo', {id: pic.id});
 
-        deleteDelegate: function () {
-          return VisitPhoto.destroy(pic)
-            .then(function () {
-              delete thumbnails[pic.id];
-            });
-        },
-
-        resolve: function (ctrl) {
-          pic.getImageSrc('resized')
-            .then(function (src) {
-              ctrl.title = pic.visit.outlet.partner.shortName;
-              ctrl.titleSmall = pic.visit.outlet.address;
-              ctrl.src = src;
-            }, function (err) {
-              console.log(err);
-              ctrl.cancel();
-              toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
-            });
-        }
-
-      }, {
-        templateUrl: 'app/components/modal/PictureModal.html',
-        size: 'lg'
-      });
-
+      // ConfirmModal.show(cfg, {
+      //   templateUrl: 'app/components/modal/PictureModal.html',
+      //   size: 'lg'
       // });
+
     }
 
     angular.extend(vm, {
@@ -130,6 +107,10 @@
       },
       $scope, 'vm.photos'
     );
+
+    $scope.$on('$stateChangeSuccess', function (e, to) {
+      vm.hideStream = !! _.get(to, 'data.hideNavs');
+    });
 
   }
 

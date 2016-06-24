@@ -18,6 +18,19 @@
         },
 
         children: [
+          {
+            name: 'photo',
+            url: '/:id',
+
+            templateUrl: 'app/domain/photos/views/photo.html',
+            controller: 'PhotoController',
+            controllerAs: 'vm',
+
+            data: {
+              hideNavs: true
+            }
+
+          }
         ]
 
       };
