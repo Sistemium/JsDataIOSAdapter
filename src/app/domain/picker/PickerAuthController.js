@@ -20,7 +20,7 @@
       },
 
       login: function (code, password) {
-        Picker.login(code, password)
+        return Picker.login(code, password)
           .then(function (picker) {
 
             if (picker) {

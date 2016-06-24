@@ -2,7 +2,7 @@
   h2
     div {{header.title}}
     small {{header.small}}
-.row
+.row(style='margin-top: 17px')
   .col-sm-6.col-md-4(ng-repeat='item in items')
     button.btn.btn-default.btn-block.thumbnail.btn-lg(ui-sref='{{item.state}}')
       .caption {{item.title}}

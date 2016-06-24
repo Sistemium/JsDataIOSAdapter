@@ -130,7 +130,7 @@
           });
 
           if (!vm.selectedItems.length && vm.mode !== 'orderList') {
-            $state.go('picking.orderList');
+            $state.go('picking.orderList',{state: 'notdone'});
           }
 
           setSelected();

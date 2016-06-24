@@ -87,12 +87,11 @@
     }
 
     function rootClick () {
-      if (vm.hideStream) {
-        $state.go('^');
-      }
-      else {
+      if ($state.current.name === 'photos.stream') {
         VisitPhoto.ejectAll();
         refresh();
+      } else {
+        $state.go('^');
       }
     }
 

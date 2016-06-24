@@ -14,7 +14,9 @@
     return saDebug.log('stg:log');
   }
 
-  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
+  function run($rootScope, $q, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
+
+    var lastState = localStorageService.get('lastState');
 
     PickerAuth.init();
 
@@ -51,9 +53,12 @@
       var lastPicker = window.localStorage.getItem('currentPickerId');
 
       if (lastPicker) {
-        Picker.setCurrentById(lastPicker).then(function (p) {
-          PickerAuth.login(p);
-        });
+        Picker.setCurrentById(lastPicker)
+          .then(function (p) {
+            PickerAuth.login(p, lastState);
+          });
+      } else if (lastState) {
+        $state.go(lastState.name,lastState.params);
       }
 
       $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess', function (e, to, params) {
@@ -65,12 +70,6 @@
 
       }));
 
-      var lastState = localStorageService.get('lastState');
-
-      if (lastState) {
-        $state.go(lastState.name,lastState.params);
-      }
-      
     });
 
   }

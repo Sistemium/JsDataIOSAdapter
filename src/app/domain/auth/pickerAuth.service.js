@@ -52,7 +52,9 @@
 
       logout: logout,
 
-      login: function (user) {
+      login: function (user,to) {
+        
+        var redirect = to || redirectTo;
 
         if (!user || !user.id) {
           $window.localStorage.removeItem('currentPickerId');
@@ -64,8 +66,8 @@
         $window.localStorage.setItem('currentPickerId', user.id);
         $rootScope.$broadcast('picker-login', currentPicker);
 
-        if (redirectTo) {
-          $state.go(redirectTo.state, redirectTo.params);
+        if (redirect) {
+          $state.go(redirect.state || redirect.name, redirect.params);
           redirectTo = false;
         } else {
           $state.go('home');
