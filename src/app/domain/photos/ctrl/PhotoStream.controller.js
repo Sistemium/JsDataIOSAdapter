@@ -2,7 +2,7 @@
 
 (function () {
 
-  function PhotoStreamController(Schema, $q, $state, ConfirmModal, $scope, toastr, SalesmanAuth) {
+  function PhotoStreamController(Schema, $q, $state, ConfirmModal, $scope, toastr, SalesmanAuth, $uiViewScroll) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
@@ -86,13 +86,24 @@
 
     }
 
+    function rootClick () {
+      if (vm.hideStream) {
+        $state.go('^');
+      }
+      else {
+        VisitPhoto.ejectAll();
+        refresh();
+      }
+    }
+
     angular.extend(vm, {
 
       thumbnails: [],
       refresh: refresh,
       outletClick: outletClick,
       thumbnailClick: thumbnailClick,
-      pics: pics
+      pics: pics,
+      rootClick: rootClick
 
     });
 
