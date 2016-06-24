@@ -10,7 +10,7 @@
     return {
 
       restrict: 'E',
-      templateUrl: 'app/components/navbar/navbar.html',
+      templateUrl: 'app/components/navbar/root-navbar.html',
       scope: {
       },
       controller: 'NavbarController',

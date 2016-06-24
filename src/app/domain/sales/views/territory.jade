@@ -1,16 +1,14 @@
-h2.flex
-  a.inherit-colors(href ui-sref='sales.territory' ng-class='{disabled: vm.hideNavs}') Клиенты
-  span.flex-1
-  small.gray {{ vm.salesman.shortName }}
-  small.gray.ml-10
-    a.inherit-colors.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
-      i.glyphicon.glyphicon-home
-
-hr
+//h2.flex
+//  a.inherit-colors(href ui-sref='sales.territory' ng-class='{disabled: vm.hideNavs}') Клиенты
+//  span.flex-1
+//  small.gray {{ vm.salesman.shortName }}
+//  small.gray.ml-10
+//    a.inherit-colors.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
+//      i.glyphicon.glyphicon-home
 
 .ui-view(resize)
 
-  section.text-center.scroll-horizontal
+  section.text-center.scroll-horizontal(style='min-height: 37px;')
     button.btn.margin(
     ng-repeat-start='btn in vm.hashButtons track by btn.label'
     ng-click='vm.hashClick(btn)'

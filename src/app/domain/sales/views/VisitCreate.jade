@@ -14,7 +14,7 @@
     i.glyphicon.glyphicon-map-marker
 
 h3.clear-left
-  .text.pull-left
+  small.lead.pull-left(style='max-width: 60%')
     span.text-danger(ng-if='vm.creatingMode') Новый визит
     span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
     small
@@ -22,7 +22,6 @@ h3.clear-left
         i.glyphicon.glyphicon-trash
   .buttons.pull-right.clear-right
     button.btn.navbar-btn.ml-10(
-    style='margin-top: 0'
     type='button'
     ng-class='b.class || "btn-default"'
     ng-disabled='b.isDisabled()'

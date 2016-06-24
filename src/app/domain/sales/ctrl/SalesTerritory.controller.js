@@ -91,10 +91,8 @@
 
     vm.refresh();
 
-    $scope.$on('$stateChangeSuccess', function (e, to) {
-
-      vm.hideNavs = !! _.get(to, 'data.hideNavs');
-
+    $scope.$on('rootClick', function(){
+      $state.go('sales.territory');
     });
 
   }

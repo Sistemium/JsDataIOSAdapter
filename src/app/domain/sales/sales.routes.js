@@ -40,7 +40,8 @@
         data: {
           needCurrent: 'Salesman',
           needRole: 'salesman',
-          hideTopBar: true
+          // hideTopBar: true,
+          title: 'Клиенты'
         },
 
         children: [
@@ -54,7 +55,7 @@
             children: [{
               name: 'visit',
               url: '/visit?visitId',
-              
+
               data: {
                 hideNavs: true
               },

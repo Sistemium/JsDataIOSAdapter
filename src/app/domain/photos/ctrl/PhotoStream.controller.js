@@ -102,8 +102,7 @@
       refresh: refresh,
       outletClick: outletClick,
       thumbnailClick: thumbnailClick,
-      pics: pics,
-      rootClick: rootClick
+      pics: pics
 
     });
 
@@ -120,7 +119,11 @@
     );
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.hideStream = !! _.get(to, 'data.hideNavs');
+      vm.hideStream = !! _.get(to, 'params.id');
+    });
+
+    $scope.$on('rootClick', function(){
+      rootClick();
     });
 
   }

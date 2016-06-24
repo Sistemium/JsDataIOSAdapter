@@ -14,7 +14,7 @@
         controllerAs: 'vm',
 
         data: {
-
+          title: 'Фотопоток'
         },
 
         children: [
@@ -27,7 +27,7 @@
             controllerAs: 'vm',
 
             data: {
-              hideNavs: true
+              // hideNavs: true
             }
 
           }
