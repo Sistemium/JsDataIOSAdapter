@@ -2,7 +2,7 @@
 
 (function () {
 
-  function PhotoStreamController(Schema, $q, $state, ConfirmModal, $scope, toastr, SalesmanAuth, $uiViewScroll) {
+  function PhotoStreamController(Schema, $q, $state, $scope, SalesmanAuth) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
