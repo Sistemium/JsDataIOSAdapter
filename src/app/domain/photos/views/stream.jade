@@ -20,7 +20,7 @@ cg-busy='vm.busy'
         .lead
           .pull-right
             small {{ vm.pics(pic).visit.deviceCts | amUtc | amLocal | amCalendar }}
-          span {{ vm.pics(pic).visit.outlet.partner.shortName }}
+          span {{ vm.pics(pic).visit.outlet.partner.shortName || 'Неизвестный визит' }}
           = ' '
           .small.darkgray {{ ::vm.pics(pic).visit.outlet.address }}
       a.thumbnail(ng-click='vm.thumbnailClick(pic)')

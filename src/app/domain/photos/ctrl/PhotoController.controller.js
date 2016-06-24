@@ -12,11 +12,14 @@
 
     VisitPhoto.find(id)
       .then(function (pic) {
+
         vm.photo = pic;
 
-        vm.src = pic.thumbnaiHref;
-
-        $q.all([
+        vm.busy = $q.all([
+          pic.getImageSrc('thumbnail')
+            .then(function (res) {
+              vm.thumbnailSrc = res;
+            }),
           Visit.findAllWithRelations({
             id: pic.visitId
           })('Outlet')

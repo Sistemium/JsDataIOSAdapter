@@ -1,4 +1,4 @@
-.text-center
+.text-center(cg-busy='{delay: 100, promise: vm.busy}')
   h4.text-left
     .lead
       .pull-right
@@ -7,4 +7,4 @@
       = ' '
       .small.darkgray {{ ::vm.photo.visit.outlet.address }}
   a.thumbnail(ng-click='vm.photoClick()')
-    img(ng-src='{{ ::vm.src }}')
+    img(ng-src='{{ vm.src || vm.thumbnailSrc }}')
