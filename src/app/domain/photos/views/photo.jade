@@ -7,4 +7,5 @@
       = ' '
       .small.darkgray {{ ::vm.photo.visit.outlet.address }}
   a.thumbnail(ng-click='vm.photoClick()')
-    img(ng-src='{{ vm.src || vm.thumbnailSrc }}')
+    img(ng-show='vm.src' ng-src='{{ ::vm.src }}')
+    img(ng-hide='vm.src' ng-src='{{ ::vm.thumbnailSrc }}' style="min-width: 100%")
