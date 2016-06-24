@@ -37,26 +37,33 @@
 
     }
 
-
     function thumbnailClick(pic) {
-      vm.busy = pic.getImageSrc('resized').then(function (src) {
 
-        ConfirmModal.show({
-          src: src,
-          text: false,
-          title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')',
-          deleteDelegate: function () {
-            return VisitPhoto.destroy(pic);
-          }
-        }, {
-          templateUrl: 'app/components/modal/PictureModal.html',
-          size: 'lg'
-        });
+      ConfirmModal.show({
 
-      }, function (err) {
-        console.log(err);
-        toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
+        text: false,
+        src: vm.thumbnails[pic.id],
+        title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')',
+
+        deleteDelegate: function () {
+          return VisitPhoto.destroy(pic);
+        },
+
+        resolve: function (ctrl) {
+          ctrl.busy = pic.getImageSrc('resized').then(function (src) {
+            ctrl.src = src;
+          }, function (err) {
+            console.log(err);
+            ctrl.cancel();
+            toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
+          });
+        }
+
+      }, {
+        templateUrl: 'app/components/modal/PictureModal.html',
+        size: 'lg'
       });
+
     }
 
 
