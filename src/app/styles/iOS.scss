@@ -68,4 +68,9 @@ body.iOS {
     margin-bottom: 120px;
   }
 
+  -webkit-overflow-scrolling: touch;
+
+  section {
+    -webkit-overflow-scrolling: touch;
+  }
 }

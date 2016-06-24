@@ -1,17 +1,26 @@
-h3
-  .buttons.pull-right.with-map
-    button.btn.navbar-btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
-      i.glyphicon.glyphicon-camera
-    button.btn.navbar-btn.btn-default.mr--8.ml-5(
-    ng-disabled='!vm.visit.checkInLocation'
-    popover-placement="auto bottom-left"
-    popover-trigger='outsideClick'
-    uib-popover-template="'app/domain/sales/views/location.html'"
-    popover-is-open='vm.popover'
-    type='button'
-    ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
-    )
-      i.glyphicon.glyphicon-map-marker
+.pull-right.with-map
+  button.btn.ml-em.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
+    i.glyphicon.glyphicon-camera
+  = ' '
+  button.btn.btn-default.ml-5(
+  ng-disabled='!vm.visit.checkInLocation'
+  popover-placement="bottom-left auto"
+  popover-trigger='outsideClick'
+  uib-popover-template="'app/domain/sales/views/location.html'"
+  popover-is-open='vm.popover'
+  type='button'
+  ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
+  )
+    i.glyphicon.glyphicon-map-marker
+
+h3.clear-both
+  .text.pull-left
+    span.text-danger(ng-if='vm.creatingMode') Новый визит
+    span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+    small
+      a.ml-5(href ng-click='vm.deleteVisit()' ng-if='vm.visit.deviceCts')
+        i.glyphicon.glyphicon-trash
+  .buttons.pull-right
     button.btn.navbar-btn.ml-10(
     type='button'
     ng-class='b.class || "btn-default"'
@@ -19,12 +28,6 @@ h3
     ng-repeat='b in vm.buttons track by b.label'
     ng-click='vm[b.clickFn]()'
     ) {{ b.label }}
-  .text.clear-xs
-    span.text-danger(ng-if='vm.creatingMode') Новый визит
-    span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
-    small
-      a.ml-5(href ng-click='vm.deleteVisit()' ng-if='vm.visit.deviceCts')
-        i.glyphicon.glyphicon-trash
 
 hr.clear-both
 section.mt(ng-if='vm.visit.photos.length')
