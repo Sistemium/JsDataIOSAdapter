@@ -2,7 +2,7 @@
 
 (function () {
 
-  function PhotoStreamController(Schema, $q, $state, ConfirmModal, toastr, SalesmanAuth) {
+  function PhotoStreamController(Schema, $q, $state, ConfirmModal, $scope, toastr, SalesmanAuth) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
@@ -29,8 +29,8 @@
 
       thumbnails[pic.id] = $q(function (resolve, reject) {
 
-        VisitPhoto.loadRelations(pic,'Visit')
-          .then(function(){
+        VisitPhoto.loadRelations(pic, 'Visit')
+          .then(function () {
 
             var p = {
               visit: pic.visit
@@ -40,25 +40,21 @@
 
             importThumbnail(pic);
 
-            Visit.loadRelations(pic.visit,'Outlet')
-              .then(function(){
-                Outlet.loadRelations(pic.visit.outlet,'Partner');
+            Visit.loadRelations(pic.visit, 'Outlet')
+              .then(function () {
+                Outlet.loadRelations(pic.visit.outlet, 'Partner');
                 resolve(p);
-              },reject);
+              }, reject);
 
-          },reject);
+          }, reject);
 
       });
 
     }
 
     function refresh() {
-
       vm.busy =
-        VisitPhoto.findAll({},{bypassCache: true})
-          .then(function (res) {
-            vm.photos = _.orderBy(res,'deviceCts','desc');
-          });
+        VisitPhoto.findAll({}, {bypassCache: true});
     }
 
     function outletClick(outlet) {
@@ -86,10 +82,13 @@
         title: 'Загрузка ...',
 
         deleteDelegate: function () {
-          return VisitPhoto.destroy(pic);
+          return VisitPhoto.destroy(pic)
+            .then(function () {
+              delete thumbnails[pic.id];
+            });
         },
 
-        resolve: function(ctrl) {
+        resolve: function (ctrl) {
           pic.getImageSrc('resized')
             .then(function (src) {
               ctrl.title = pic.visit.outlet.partner.shortName;
@@ -121,6 +120,16 @@
     });
 
     vm.refresh();
+
+    VisitPhoto.bindAll(
+      {
+        orderBy: [
+          ['deviceCts', 'DESC']
+
+        ]
+      },
+      $scope, 'vm.photos'
+    );
 
   }
 
