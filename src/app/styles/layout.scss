@@ -97,6 +97,7 @@ p.list-group-item-text {
 .scroll-horizontal {
   white-space: nowrap;
   overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .p-6 {
