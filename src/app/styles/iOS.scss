@@ -50,6 +50,13 @@
     }
   }
 
+  a.thummbnail{
+    outline: none;
+    &:focus, &:hover, &:active{
+      outline: none;
+    }
+  }
+
 }
 
 body.iOS {
