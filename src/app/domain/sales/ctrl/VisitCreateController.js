@@ -119,6 +119,13 @@
 
     var buttons = [];
 
+    if (creatingMode) {
+      buttons.push({
+        fa: 'glyphicon glyphicon-trash',
+        clickFn: 'deleteVisit'
+      })
+    }
+
     buttons.push({
       label: !creatingMode ? 'Готово' : 'Завершить',
       clickFn: 'save',
@@ -127,10 +134,6 @@
         return creatingMode && !_.get(vm, 'visit.checkInLocationId');
       }
     });
-
-    if (creatingMode) {
-      buttons.push({label: 'Отменить', clickFn: 'deleteVisit' })
-    }
 
     angular.extend(vm, {
 

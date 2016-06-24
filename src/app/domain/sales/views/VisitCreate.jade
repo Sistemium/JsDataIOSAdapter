@@ -13,29 +13,31 @@
   )
     i.glyphicon.glyphicon-map-marker
 
-h3.clear-both
+h3.clear-left
   .text.pull-left
     span.text-danger(ng-if='vm.creatingMode') Новый визит
     span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
     small
-      a.ml-5(href ng-click='vm.deleteVisit()' ng-if='vm.visit.deviceCts')
+      a.ml-5(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
         i.glyphicon.glyphicon-trash
-  .buttons.pull-right
+  .buttons.pull-right.clear-right
     button.btn.navbar-btn.ml-10(
+    style='margin-top: 0'
     type='button'
     ng-class='b.class || "btn-default"'
     ng-disabled='b.isDisabled()'
     ng-repeat='b in vm.buttons track by b.label'
     ng-click='vm[b.clickFn]()'
-    ) {{ b.label }}
+    )
+      i(ng-class='b.fa')
+      span {{ b.label }}
+
 
 hr.clear-both
-section.mt(ng-if='vm.visit.photos.length')
-  .container-fluid
-    .row
-      .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
-        a.thumbnail.mh-80(ng-click='vm.thumbnailClick(pic)')
-          img(ng-src='{{vm.thumbnails[pic.id]}}')
+section.fow-fluid.mt(ng-if='vm.visit.photos.length')
+  .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
+    a.thumbnail.mh-80(ng-click='vm.thumbnailClick(pic)')
+      img(ng-src='{{vm.thumbnails[pic.id]}}')
 
 section(cg-busy='vm.busy' ng-class='{mt: !vm.visit.photos.length}')
 
@@ -50,7 +52,7 @@ section(cg-busy='vm.busy' ng-class='{mt: !vm.visit.photos.length}')
         h3
           .lead {{ grp.name }}
         .form.form-horizontal
-          .form-group(ng-repeat='qst in grp.questions | orderBy:"name" track by qst.id')
+          .form-group.row-fluid(ng-repeat='qst in grp.questions | orderBy:"name" track by qst.id')
             label.control-label.col-xs-6.col-sm-9.col-md-10 {{ qst.name }}
             .col-xs-6.col-sm-3.col-md-2(ng-switch="qst.dataType.code")
               sa-number-spinner(
