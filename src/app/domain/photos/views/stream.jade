@@ -17,6 +17,6 @@ hr.clear-both
               small {{ vm.pics(pic).visit.deviceCts | amUtc | amLocal | amCalendar }}
             span {{ vm.pics(pic).visit.outlet.partner.shortName }}
             = ' '
-            .small.darkgray {{ vm.pics(pic).visit.outlet.address }}
+            .small.darkgray {{ ::vm.pics(pic).visit.outlet.address }}
         a.thumbnail(ng-click='vm.thumbnailClick(pic)')
-          img(ng-src='{{vm.pics(pic).src}}')
+          img(ng-src='{{ ::vm.pics(pic).src }}')
