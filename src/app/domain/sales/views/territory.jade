@@ -6,22 +6,24 @@
 //    a.inherit-colors.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
 //      i.glyphicon.glyphicon-home
 
-.ui-view(resize)
 
-  section.text-center.scroll-horizontal(style='min-height: 37px;')
-    button.btn.margin(
-    ng-repeat-start='btn in vm.hashButtons track by btn.label'
-    ng-click='vm.hashClick(btn)'
-    ng-class='btn.match.test(vm.currentHash) ? "btn-primary" : "btn-default"'
-    ) {{ btn.label }}
-    button.btn.margin(
-    ng-repeat-end
-    ng-repeat='subbtn in btn.buttons track by subbtn.label'
-    ng-class='{"btn-primary": subbtn.label === vm.currentHash}'
-    ng-click='vm.hashClick(subbtn)'
-    ng-if='btn.match.test(vm.currentHash) && btn.buttons.length > 1'
-    ) {{ subbtn.label }}
-  hr
+section.text-center.scroll-horizontal(style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}')
+  button.btn.margin(
+  ng-repeat-start='btn in vm.hashButtons track by btn.label'
+  ng-click='vm.hashClick(btn)'
+  ng-class='btn.match.test(vm.currentHash) ? "btn-primary" : "btn-default"'
+  ) {{ btn.label }}
+  button.btn.margin(
+  ng-repeat-end
+  ng-repeat='subbtn in btn.buttons track by subbtn.label'
+  ng-class='{"btn-primary": subbtn.label === vm.currentHash}'
+  ng-click='vm.hashClick(subbtn)'
+  ng-if='btn.match.test(vm.currentHash) && btn.buttons.length > 1'
+  ) {{ subbtn.label }}
+
+hr(ng-hide='vm.hideHashes')
+
+.ui-view(resize)
 
   section#scroll-main(
   style='height: {{windowHeight - 98 }}px;'

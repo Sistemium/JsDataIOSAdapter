@@ -1,12 +1,14 @@
-h2.flex
-  a.inherit-colors(href='' ng-click='vm.rootClick()' ng-class='{disabled: vm.hideNavs}') {{ vm.title }}
-  span.flex-1
-  small.gray.ml-10(ng-if='vm.isRootState && vm.toggleFullScreen')
-    a.p-6(href ng-click='vm.toggleFullScreen()' ng-class='{disabled: vm.hideNavs}')
-      i.glyphicon.glyphicon-fullscreen
+section(ng-hide='vm.hide')
 
-  small.gray.ml-10
-    a.p-6(href ui-sref='home' ng-class='{disabled: vm.hideNavs}')
-      i.glyphicon.glyphicon-home
+  h2.flex
+    a.inherit-colors(href='' ng-click='vm.rootClick()' ng-class='{disabled: vm.hideNavs}') {{ vm.title }}
+    span.flex-1
+    small.gray.ml-10(ng-if='vm.isRootState && vm.toggleFullScreen')
+      a.p-6(href ng-click='vm.toggleFullScreen()' ng-class='{disabled: vm.hideNavs}')
+        i.glyphicon.glyphicon-fullscreen
 
-hr
+    small.gray.ml-10
+      a.p-6(href ui-sref='home' ng-class='{disabled: vm.hideNavs}')
+        i.glyphicon.glyphicon-home
+
+  hr

@@ -128,19 +128,21 @@
 
     if (creatingMode) {
       buttons.push({
+        // label: 'Отмена',
+        // class: 'btn-default',
         fa: 'glyphicon glyphicon-trash',
         clickFn: 'deleteVisit'
-      })
+      });
+      buttons.push({
+        label: !creatingMode ? 'Готово' : 'Завершить',
+        clickFn: 'save',
+        class: 'btn-success',
+        isDisabled: function () {
+          return creatingMode && !_.get(vm, 'visit.checkInLocationId');
+        }
+      });
     }
 
-    buttons.push({
-      label: !creatingMode ? 'Готово' : 'Завершить',
-      clickFn: 'save',
-      class: 'btn-success',
-      isDisabled: function () {
-        return creatingMode && !_.get(vm, 'visit.checkInLocationId');
-      }
-    });
 
     angular.extend(vm, {
 

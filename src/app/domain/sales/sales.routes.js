@@ -51,13 +51,13 @@
             templateUrl: 'app/domain/sales/views/outlet.html',
             controller: 'OutletController',
             controllerAs: 'vm',
-
+            
             children: [{
               name: 'visit',
               url: '/visit?visitId',
 
               data: {
-                hideNavs: true
+                // hideNavs: true
               },
 
               templateUrl: 'app/domain/sales/views/VisitCreate.html',
@@ -69,7 +69,8 @@
               url: '/visitCreate?visitId',
 
               data: {
-                hideNavs: true
+                hideTopBar: true,
+                disableNavs: true
               },
 
               templateUrl: 'app/domain/sales/views/VisitCreate.html',

@@ -1,7 +1,8 @@
-h3.pull-left(style='max-width: 60%')
+h3.pull-left(style='max-width: 63%')
   span {{ vm.outlet.partner.shortName }}
   = ' '
-  small.gray {{ vm.outlet.address }}
+  small
+    a.inherit-colors(href ng-click='vm.outletClick()' ng-class='{disabled: vm.disableNavs}') {{ vm.outlet.address }}
 
 section.ui-view
   .buttons.pull-right

@@ -10,6 +10,8 @@
     var SM = Schema.model('Salesman');
     var stateFilter = {};
 
+    var rootState = 'sales.territory';
+
     vm.salesman = SalesmanAuth.getCurrentUser();
 
     if (vm.salesman) {
@@ -93,6 +95,10 @@
 
     $scope.$on('rootClick', function(){
       $state.go('sales.territory');
+    });
+
+    $scope.$on('$stateChangeSuccess', function (e, to) {
+      vm.hideHashes = (to.name !== rootState);
     });
 
   }

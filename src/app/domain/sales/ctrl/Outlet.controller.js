@@ -7,6 +7,7 @@
     var vm = this;
     var Outlet = Schema.model('Outlet');
     var Visit = Schema.model('Visit');
+    var rootState = 'sales.territory.outlet';
 
     var stateFilter = $state.params.id;
     var salesman = SalesmanAuth.getCurrentUser();
@@ -23,7 +24,7 @@
         Visit.findAllWithRelations({
           outletId: stateFilter,
           salesmanId: salesman.id
-        })(['VisitAnswer','VisitPhoto'])
+        })(['VisitAnswer', 'VisitPhoto'])
       ]);
     }
 
@@ -31,17 +32,32 @@
       $state.go('.visitCreate');
     }
 
+    function outletClick() {
+      if ($state.current.name === rootState) {
+        // return;
+      } else {
+        $state.go('^', {id: $state.params.id});
+      }
+    }
+
     angular.extend(vm, {
 
       refresh: refresh,
       newVisitClick: newVisitClick,
-      visitClick: function(visit) {
-        $state.go('.visit',{visitId: visit.id});
-      }
+
+      visitClick: function (visit) {
+        $state.go('.visit', {visitId: visit.id});
+      },
+
+      outletClick: outletClick
 
     });
 
     refresh();
+
+    $scope.$on('$stateChangeSuccess', function (e, to) {
+      vm.disableNavs = !!_.get(to,'data.disableNavs') || to.name === rootState;
+    });
 
   }
 

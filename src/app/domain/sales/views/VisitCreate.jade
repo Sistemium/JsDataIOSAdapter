@@ -1,4 +1,4 @@
-.pull-right.with-map
+h3.pull-right.with-map
   button.btn.ml-em.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
     i.glyphicon.glyphicon-camera
   = ' '
@@ -13,23 +13,24 @@
   )
     i.glyphicon.glyphicon-map-marker
 
-h3.clear-left
-  small.lead.pull-left(style='max-width: 60%')
-    span.text-danger(ng-if='vm.creatingMode') Новый визит
-    span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
-    small
-      a.ml-5(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
-        i.glyphicon.glyphicon-trash
-  .buttons.pull-right.clear-right
-    button.btn.navbar-btn.ml-10(
-    type='button'
-    ng-class='b.class || "btn-default"'
-    ng-disabled='b.isDisabled()'
-    ng-repeat='b in vm.buttons track by b.label'
-    ng-click='vm[b.clickFn]()'
-    )
-      i(ng-class='b.fa')
-      span {{ b.label }}
+h3.clear-left.pull-left
+
+  span.text-danger(ng-if='vm.creatingMode') Новый визит
+  span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+  small
+    a.ml-5(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
+      i.glyphicon.glyphicon-trash
+
+h3.pull-right.clear-right
+  button.btn.ml-10(
+  type='button'
+  ng-class='b.class || "btn-default"'
+  ng-disabled='b.isDisabled()'
+  ng-repeat='b in vm.buttons track by b.label'
+  ng-click='vm[b.clickFn]()'
+  )
+    i(ng-class='b.fa')
+    span {{ b.label }}
 
 
 hr.clear-both
