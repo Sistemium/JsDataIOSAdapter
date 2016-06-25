@@ -45,7 +45,6 @@
           data: {
             auth: 'SalesmanAuth',
             needRole: 'salesman',
-            hideTopBar: true,
             needCurrent: 'Salesman'
           },
 
