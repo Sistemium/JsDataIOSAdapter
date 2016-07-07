@@ -23,7 +23,6 @@
 
     var yaLatLng = mapsHelper.yLatLng;
 
-
     function importThumbnail(vp) {
 
       if (vm.thumbnails[vp.id]) {
@@ -138,7 +137,7 @@
         clickFn: 'save',
         class: 'btn-success',
         isDisabled: function () {
-          return creatingMode && !_.get(vm, 'visit.checkInLocationId');
+          return creatingMode && !_.get(vm, 'visit.checkInLocationId') || vm.saving;
         }
       });
     }
@@ -179,15 +178,30 @@
       },
 
       save: function () {
+
+        vm.saving = true;
+
+        var done = function(){
+          vm.saving = false;
+        };
+
         vm.busy = $q(function (resolve, reject) {
 
           if (creatingMode && IOS.isIos()) {
 
-            getLocation().then(function (res) {
-              vm.visit.checkOutLocationId = res.id;
+            getLocation().then(function (checkOutLocation) {
+              vm.visit.checkOutLocationId = checkOutLocation.id;
               Visit.save(vm.visit)
-                .then(resolve, reject)
-                .then(quit);
+                .then(function (visit) {
+                  var cts = _.get(visit,'checkInLocation.deviceCts') || visit.deviceCts;
+                  var diff = moment(visit.checkOutLocation.deviceCts).diff(cts,'seconds');
+                  toastr.info(diff > 60 ? Math.round(diff/60) + ' мин' : diff + ' сек', 'Визит завершен');
+                  resolve (visit);
+                  quit();
+                }, function (err) {
+                  reject(err);
+                  toastr.error(angular.toJson(err), 'Не удалось сохранить визит');
+                });
             }, function (err) {
               reject(err);
               toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
@@ -199,7 +213,7 @@
               .then(quit);
           }
 
-        });
+        }).then(done,done);
       },
 
       mapClick: function () {
