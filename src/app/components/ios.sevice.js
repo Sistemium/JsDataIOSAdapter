@@ -14,7 +14,24 @@
     var deb = $window.debug('stg:IOS');
 
     function handler(name) {
-      return $window.webkit.messageHandlers[name];
+      return $window.webkit.messageHandlers[name] || {
+          postMessage: function(options){
+
+            if (name === 'roles') {
+              $window[options.callback] ([{
+                account: {
+                  name: 'Error'
+                },
+                roles: {
+                  picker: true
+                }
+              }],options);
+            } else {
+              console.error ('IOS handler undefined call', name, options);
+            }
+
+          }
+        };
     }
 
     function message(handlerName, cfg) {
