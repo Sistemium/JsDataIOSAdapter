@@ -14,7 +14,7 @@ angular.module('core.services')
         }
 
         if (decimals[2].length < minDecimals) {
-          out += '0'.repeat(minDecimals - decimals[2].length);
+          out += _.repeat('0',minDecimals - decimals[2].length);
         }
       }
 
