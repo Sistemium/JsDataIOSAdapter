@@ -109,7 +109,8 @@
               return {
 
                 id: key,
-                article: positions[0].Article,
+                sameId: article.sameId, 
+                article: article,
                 positions: positions,
                 volume: boxPcs,
                 totalVolume: totalVolume,

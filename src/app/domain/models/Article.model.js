@@ -40,6 +40,9 @@
             var m = name.match(/"[^"]+" ([^,]*)/);
             m = (m && m.length > 1) ? m[1] : '';
             return m.replace (/\(.*[xх]+[ ]*[0-9]+[ ]*\)/,'') ;
+          }],
+          sameId: ['articleSame', 'id', function (articleSame, id) {
+            return articleSame || id;
           }]
         },
 

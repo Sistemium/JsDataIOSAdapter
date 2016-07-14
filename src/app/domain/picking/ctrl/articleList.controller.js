@@ -12,16 +12,17 @@
     //var SB = models.StockBatch;
     //var SBBC = models.StockBatchBarCode;
     var orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
+    var Article = models.Article;
 
     function processArticle(a, sb, code) {
 
-      if (!vm.articleIndex [a.id]) {
+      var pa = _.find(vm.articles, {sameId: a.sameId});
+
+      if (!pa) {
         return;
       }
 
-      var pa = _.find(vm.articles, {id: a.id});
-
-      vm.pickedIndex [a.id] = true;
+      vm.pickedIndex [pa.id] = true;
 
       var pickablePositions = [];
 
@@ -32,6 +33,7 @@
             pop: pop,
             unp: unp,
             num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,
+            // TODO: check packageRels
             volume: Language.speakableBoxPcs(a.boxPcs(unp))
           });
         }
@@ -93,7 +95,7 @@
 
       lockScanProcessor = true;
 
-      $timeout(function(){
+      var fn = function(){
 
         var found = options.stockBatch.Article &&
           processArticle(options.stockBatch.Article, options.stockBatch, options.code);
@@ -109,7 +111,15 @@
 
         lockScanProcessor = false;
 
-      },10);
+      };
+
+      Article.find(options.stockBatch.article)
+        .then(function(){
+          $timeout(fn,10);
+        })
+        .catch(function(){
+          lockScanProcessor = false;
+        })
 
     });
 
