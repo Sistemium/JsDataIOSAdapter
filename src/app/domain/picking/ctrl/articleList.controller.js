@@ -25,9 +25,16 @@
       vm.pickedIndex [pa.id] = true;
 
       var pickablePositions = [];
+      var maxVolume = _.result(sb,'spareVolume') || 0;
+      var totalUnpicked = pa.totalUnPickedVolume;
 
       _.each (pa.positions,function (pop){
-        var unp = pop.unPickedVolume();
+
+        var unp = _.min([pop.unPickedVolume(), maxVolume]);
+
+        maxVolume -= unp;
+        totalUnpicked -= unp;
+
         if (unp > 0) {
           pickablePositions.push ({
             pop: pop,
@@ -37,6 +44,7 @@
             volume: Language.speakableBoxPcs(a.boxPcs(unp))
           });
         }
+
       });
 
       pickablePositions = _.orderBy(pickablePositions ,'num');
@@ -70,8 +78,14 @@
           );
       }, '');
 
-      if (!say) {
+      if (!say && !totalUnpicked) {
         say = 'Товар уже собран';
+      } else if (!say) {
+        say = 'В этой партии уже нет товара';
+      }
+
+      if (totalUnpicked) {
+        say += '. Требуется товар из другой партии';
       }
 
       return {
@@ -80,7 +94,7 @@
         speakable: _.trim(say),
         volume: pickedVolume
           ? a.boxPcs(pickedVolume).full
-          : 'Товар уже собран'
+          : say
       };
 
     }
