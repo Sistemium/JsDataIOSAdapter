@@ -2,12 +2,10 @@
 
 (function () {
 
-    angular.module('core.services').service('SoundSynth', function ($window, toastr, $q) {
+    angular.module('core.services').service('SoundSynth', function ($window, toastr, $q, IOS) {
 
-      // TODO rate depending on device
-      var rate = 0.40;
+      var rate = 0.4;
       var pitch = 1;
-
       var lastSpeech = false;
       var speakerCallBackFn = 'speakerCallBack';
       var promises = {};
@@ -21,6 +19,12 @@
       }
 
       $window[speakerCallBackFn] = speakerCallBack;
+
+      IOS.getDevicePlatform().then(function (devicePlatform) {
+        if (/iPhone/.test(devicePlatform)) {
+          rate = 0.2;
+        }
+      });
 
       function speaker (text) {
         return $q(function(resolve){
