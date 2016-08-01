@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($scope, $state, $q, ConfirmModal, Schema, toastr) {
+  function AddOutletController($scope, $state, $q, ConfirmModal, Schema, toastr, $window) {
 
     var vm = this;
     var Partner = Schema.model('Partner');
@@ -19,6 +19,8 @@
 
     function submit() {
 
+      _.result($window.document, 'activeElement.blur');
+
       ConfirmModal.show({
         text: 'Сохранить точку?'
       })
@@ -32,47 +34,40 @@
 
         if (!vm.selectedPartner) {
 
-          var newPartner = Partner.inject({
+          var newPartner = Partner.createInstance({
             name: vm.name
           });
 
-          Partner.save(newPartner)
+          Partner.create(newPartner)
             .then(function(partner){
-              saveOutlet(vm.name, partner, resolve, reject);
+              saveOutlet(vm.name, partner)
+                .then(resolve, reject);
             }, function (err) {
               reject(err);
               toastr.error(angular.toJson(err), 'Не удалось сохранить партнёра');
             });
 
         } else {
-          saveOutlet(vm.name, vm.selectedPartner, resolve, reject);
+          saveOutlet(vm.name, vm.selectedPartner)
+            .then(resolve, reject);
         }
 
       }).then(quit);
 
     }
 
-    function saveOutlet(name, partner, resolve, reject) {
+    function saveOutlet(name, partner) {
 
-      var newOutlet = Outlet.inject({
+      var newOutlet = Outlet.createInstance({
         address: vm.address,
         name: name,
         partnerId: partner.id
       });
 
-      Outlet.save(newOutlet)
-        .then(function(outlet){
-
-          resolve(outlet);
-          quit();
-
-        }, function (err) {
-
-          reject(err);
+      return Outlet.create(newOutlet)
+        .catch(function (err) {
           toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
-
-        })
-      ;
+        });
 
     }
 
@@ -91,6 +86,7 @@
     }
 
     angular.extend(vm, {
+      selectedPartner: null,
       refresh: refresh,
       submit: submit,
       cancel: cancel

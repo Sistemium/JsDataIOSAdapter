@@ -2,13 +2,13 @@ h3 Добавить точку
 
 hr
 
-section.row-fluid
+section.row-fluid(cg-busy='vm.busy')
   form.form-horizontal(name="addOutletForm")
 
     .form-group
       label.col-sm-4.control-label(for="selectedPartner") Партнёр
       .col-sm-8
-        select(
+        select#selectedPartner(
         ng-options='partner as partner.shortName for partner in vm.partners | orderBy:"shortName"'
         name='selectedPartner'
         ng-required='!vm.name'
@@ -31,7 +31,7 @@ section.row-fluid
     .form-group
       label.col-sm-4.control-label(for="inputAddress") Адрес
       .col-sm-8
-        input#inputCode.form-control(
+        input#inputAddress.form-control(
         type="text"
         name="address"
         ng-required='true'
