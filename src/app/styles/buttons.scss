@@ -1,3 +1,9 @@
-button.margin {
-  margin: 2px;
+button {
+  &.margin{
+    margin: 2px;
+  }
+  .glyphicon {
+    top: 2px;
+    left: 1px;
+  }
 }
