@@ -1,0 +1,48 @@
+h3 Добавить точку
+
+hr
+
+section.row-fluid
+  form.form-horizontal(ng-submit="vm.submit()" name="addOutletForm")
+  .form-group
+    label.col-sm-4.control-label(for="inputName") Полное название
+    .col-sm-8
+      input#inputName.form-control(
+        type="text"
+        name="name"
+        readonly
+        ng-required="true"
+        placeholder="Полное название"
+        ng-model="vm.data.name"
+        autocomplete="off"
+      )
+  .form-group
+    label.col-sm-4.control-label(for="inputShortName") Краткое название
+    .col-sm-8
+      input#inputName.form-control(
+        type="text"
+        name="shortName"
+        readonly
+        ng-required="true"
+        placeholder="Краткое название"
+        ng-model="vm.data.shortName"
+        autocomplete="off"
+      )
+  .form-group
+    label.col-sm-4.control-label(for="inputAddress") Адрес
+    .col-sm-8
+      input#inputCode.form-control(
+        type="text"
+        name="address"
+        ng-required="true"
+        readonly
+        placeholder="Адрес"
+        ng-model="vm.data.address"
+        autocomplete="off"
+      )
+
+hr
+.pull-right
+  button.btn.btn-primary(type="submit" ng-disabled="addOutletForm.$invalid") Сохранить
+  = " "
+  button.btn.btn-warning(type="button" ng-click="vm.cancel()") Отменить
