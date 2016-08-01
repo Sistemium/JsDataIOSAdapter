@@ -25,7 +25,7 @@
       vm.busy = $q.all([
         Partner.findAll(false,{bypassCache: true}),
         SM.findAll(),
-        Outlet.findAll(stateFilter, {limit: 1000})
+        Outlet.findAll(stateFilter, {limit: 1000, bypassCache: true})
       ]);
     }
 
