@@ -2,9 +2,19 @@
 
 (function () {
 
-  function AddOutletController($scope, $state, ConfirmModal) {
+  function AddOutletController($scope, $state, ConfirmModal, Schema) {
 
     var vm = this;
+    var Partner = Schema.model('Partner');
+
+    function refresh() {
+
+      Partner.findAll()
+        .then(function (res) {
+          vm.partners = res;
+        });
+
+    }
 
     function submit() {
 
@@ -31,9 +41,12 @@
     }
 
     angular.extend(vm, {
+      refresh: refresh,
       submit: submit,
       cancel: cancel
     });
+
+    vm.refresh();
 
   }
 

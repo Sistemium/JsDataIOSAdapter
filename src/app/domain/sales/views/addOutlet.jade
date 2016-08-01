@@ -4,30 +4,39 @@ hr
 
 section.row-fluid
   form.form-horizontal(ng-submit="vm.submit()" name="addOutletForm")
+
   .form-group
+    label.col-sm-4.control-label(for="selectedPartner") Партнёр
+    .col-sm-8
+      select(
+        ng-options='partner as partner.shortName for partner in vm.partners | orderBy:"shortName"'
+        name='selectedPartner'
+        ng-model="vm.selectedPartner"
+      )
+        option(value='') Новый партнёр
+
+  .form-group(ng-hide='vm.selectedPartner')
     label.col-sm-4.control-label(for="inputName") Полное название
     .col-sm-8
       input#inputName.form-control(
         type="text"
         name="name"
-        readonly
-        ng-required="true"
         placeholder="Полное название"
-        ng-model="vm.data.name"
+        ng-model="vm.name"
         autocomplete="off"
       )
-  .form-group
+
+  .form-group(ng-hide='vm.selectedPartner')
     label.col-sm-4.control-label(for="inputShortName") Краткое название
     .col-sm-8
       input#inputName.form-control(
         type="text"
         name="shortName"
-        readonly
-        ng-required="true"
         placeholder="Краткое название"
-        ng-model="vm.data.shortName"
+        ng-model="vm.shortName"
         autocomplete="off"
       )
+
   .form-group
     label.col-sm-4.control-label(for="inputAddress") Адрес
     .col-sm-8
@@ -37,7 +46,7 @@ section.row-fluid
         ng-required="true"
         readonly
         placeholder="Адрес"
-        ng-model="vm.data.address"
+        ng-model="vm.address"
         autocomplete="off"
       )
 
