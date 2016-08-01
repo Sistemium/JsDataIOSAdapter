@@ -73,8 +73,7 @@
         url: '/addOutlet',
 
         data: {
-          hideTopBar: true,
-          disableNavs: true
+          hideNavs: true
         },
 
         templateUrl: 'app/domain/sales/views/AddOutlet.html',
