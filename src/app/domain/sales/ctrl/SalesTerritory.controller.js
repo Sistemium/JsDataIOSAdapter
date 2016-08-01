@@ -38,10 +38,7 @@
     }
 
     function addOutletClick() {
-
-      console.log('addOutletClick()');
       $state.go('.addOutlet');
-
     }
 
     function outletClick(outlet) {
