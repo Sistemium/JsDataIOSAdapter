@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($scope, $state, $q, ConfirmModal, Schema, toastr, $window) {
+  function AddOutletController($state, $q, ConfirmModal, Schema, toastr, $window) {
 
     var vm = this;
     var Partner = Schema.model('Partner');
@@ -85,7 +85,7 @@
     }
 
     function quit () {
-      return $scope['$$destroyed'] || $state.go('^');
+      return $state.go('^');
     }
 
     angular.extend(vm, {
