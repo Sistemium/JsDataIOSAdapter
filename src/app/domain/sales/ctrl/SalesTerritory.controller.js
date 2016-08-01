@@ -10,6 +10,9 @@
     var SM = Schema.model('Salesman');
     var stateFilter = {};
 
+    vm.addOutletBtnLabel = '+';
+    vm.showAddOutletButton = true;
+
     var rootState = 'sales.territory';
 
     vm.salesman = SalesmanAuth.getCurrentUser();
@@ -32,6 +35,10 @@
           vm.outlets = res[2];
           setupHash();
         });
+    }
+
+    function addOutletClick() {
+      console.log('addOutletClick()');
     }
 
     function outletClick(outlet) {
@@ -82,6 +89,7 @@
     angular.extend(vm, {
 
       refresh: refresh,
+      addOutletClick: addOutletClick,
       outletClick: outletClick,
       hashClick: hashClick,
 
