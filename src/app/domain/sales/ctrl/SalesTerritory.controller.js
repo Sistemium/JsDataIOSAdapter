@@ -21,20 +21,15 @@
       stateFilter.salesmanId = vm.salesman.id;
     }
 
+    Partner.bindAll(false, $scope, 'vm.partners', setupHash);
+
     function refresh() {
 
       vm.busy = $q.all([
-        Partner.findAll()
-          .then(function (res) {
-            vm.partners = res;
-          }),
+        Partner.findAll(false,{bypassCache: true}),
         SM.findAll(),
         Outlet.findAll(stateFilter, {limit: 1000})
-      ])
-        .then(function (res) {
-          vm.outlets = res[2];
-          setupHash();
-        });
+      ]);
     }
 
     function addOutletClick() {
