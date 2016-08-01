@@ -3,55 +3,44 @@ h3 Добавить точку
 hr
 
 section.row-fluid
-  form.form-horizontal(ng-submit="vm.submit()" name="addOutletForm")
+  form.form-horizontal(name="addOutletForm")
 
-  .form-group
-    label.col-sm-4.control-label(for="selectedPartner") Партнёр
-    .col-sm-8
-      select(
+    .form-group
+      label.col-sm-4.control-label(for="selectedPartner") Партнёр
+      .col-sm-8
+        select(
         ng-options='partner as partner.shortName for partner in vm.partners | orderBy:"shortName"'
         name='selectedPartner'
+        ng-required='!vm.name'
         ng-model="vm.selectedPartner"
-      )
-        option(value='') Новый партнёр
+        )
+          option(value='') Новый партнёр
 
-  .form-group(ng-hide='vm.selectedPartner')
-    label.col-sm-4.control-label(for="inputName") Полное название
-    .col-sm-8
-      input#inputName.form-control(
+    .form-group(ng-hide='vm.selectedPartner')
+      label.col-sm-4.control-label(for="inputName") Полное название
+      .col-sm-8
+        input#inputName.form-control(
         type="text"
         name="name"
+        ng-required='!vm.selectedPartner'
         placeholder="Полное название"
         ng-model="vm.name"
         autocomplete="off"
-      )
+        )
 
-  .form-group(ng-hide='vm.selectedPartner')
-    label.col-sm-4.control-label(for="inputShortName") Краткое название
-    .col-sm-8
-      input#inputName.form-control(
-        type="text"
-        name="shortName"
-        placeholder="Краткое название"
-        ng-model="vm.shortName"
-        autocomplete="off"
-      )
-
-  .form-group
-    label.col-sm-4.control-label(for="inputAddress") Адрес
-    .col-sm-8
-      input#inputCode.form-control(
+    .form-group
+      label.col-sm-4.control-label(for="inputAddress") Адрес
+      .col-sm-8
+        input#inputCode.form-control(
         type="text"
         name="address"
-        ng-required="true"
-        readonly
+        ng-required='true'
         placeholder="Адрес"
         ng-model="vm.address"
         autocomplete="off"
-      )
+        )
 
 hr
 .pull-right
-  button.btn.btn-primary(type="submit" ng-disabled="addOutletForm.$invalid") Сохранить
-  = " "
+  button.btn.btn-primary(type="submit" ng-click="vm.submit()" ng-disabled="addOutletForm.$invalid") Сохранить
   button.btn.btn-warning(type="button" ng-click="vm.cancel()") Отменить
