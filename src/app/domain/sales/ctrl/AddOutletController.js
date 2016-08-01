@@ -38,49 +38,21 @@
 
           Partner.save(newPartner)
             .then(function(partner){
-
-              resolve(partner);
-              saveOutlet(vm.name, partner)
-                .then(function(outlet){
-
-                  resolve(outlet);
-                  quit();
-
-                }, function (err) {
-
-                  reject(err);
-                  toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
-
-                });
-
+              saveOutlet(vm.name, partner, resolve, reject);
             }, function (err) {
-
               reject(err);
               toastr.error(angular.toJson(err), 'Не удалось сохранить партнёра');
-
             });
 
         } else {
-
-          saveOutlet(vm.name, vm.selectedPartner)
-            .then(function(outlet){
-
-              resolve(outlet);
-              quit();
-
-            }, function (err) {
-
-              reject(err);
-              toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
-
-            });
+          saveOutlet(vm.name, vm.selectedPartner, resolve, reject);
         }
 
       }).then(quit);
 
     }
 
-    function saveOutlet(name, partner) {
+    function saveOutlet(name, partner, resolve, reject) {
 
       var newOutlet = Outlet.inject({
         address: vm.address,
@@ -88,7 +60,19 @@
         partnerId: partner.id
       });
 
-      return Outlet.save(newOutlet);
+      Outlet.save(newOutlet)
+        .then(function(outlet){
+
+          resolve(outlet);
+          quit();
+
+        }, function (err) {
+
+          reject(err);
+          toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
+
+        })
+      ;
 
     }
 
