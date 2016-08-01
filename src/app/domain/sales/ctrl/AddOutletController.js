@@ -71,13 +71,16 @@
 
     }
 
-    function cancel() {
+    function cancel(form) {
+
+      if (form.$pristine) {
+        return quit();
+      }
 
       ConfirmModal.show({
         text: 'Отменить добавление точки?'
       })
-        .then(quit)
-      ;
+        .then(quit);
 
     }
 
