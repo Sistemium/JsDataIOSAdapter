@@ -10,9 +10,6 @@
     var SM = Schema.model('Salesman');
     var stateFilter = {};
 
-    vm.addOutletBtnLabel = '+';
-    vm.showAddOutletButton = true;
-
     var rootState = 'sales.territory';
 
     vm.salesman = SalesmanAuth.getCurrentUser();

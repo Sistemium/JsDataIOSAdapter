@@ -8,11 +8,8 @@
 
 
 section.text-center.scroll-horizontal(style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}')
-  button.btn.margin(
-  ng-show ='vm.showAddOutletButton'
-  ng-click = 'vm.addOutletClick()'
-  ng-class='btn.match.test(vm.currentHash) ? "btn-primary" : "btn-default"'
-  ) {{ vm.addOutletBtnLabel }}
+  button.btn.btn-default.margin.green(ng-click='vm.addOutletClick()')
+    i.glyphicon.glyphicon-plus
   button.btn.margin(
   ng-repeat-start='btn in vm.hashButtons track by btn.label'
   ng-click='vm.hashClick(btn)'
