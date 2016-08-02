@@ -42,5 +42,14 @@ section.row-fluid(cg-busy='vm.busy')
 
 hr
 .pull-right
-  button.btn.btn-primary(type="submit" ng-click="vm.submit(addOutletForm)" ng-disabled="addOutletForm.$invalid") Сохранить
-  button.btn.btn-warning(type="button" ng-click="vm.cancel(addOutletForm)") Отменить
+
+  button.btn.btn-primary(
+  type="submit"
+  ng-click="vm.submit(addOutletForm)"
+  ng-disabled="addOutletForm.$invalid"
+  ) Сохранить
+
+  button.btn.btn-warning(
+  type="button"
+  ng-click="vm.cancel(addOutletForm)"
+  ) Отменить

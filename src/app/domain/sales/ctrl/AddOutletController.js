@@ -65,6 +65,9 @@
       });
 
       return Outlet.create(newOutlet)
+        .then(function() {
+          vm.newOutletId = newOutlet.id;
+        })
         .catch(function (err) {
           toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
         });
@@ -85,11 +88,12 @@
     }
 
     function quit () {
-      return $state.go('^');
+      return vm.newOutletId ? $state.go('^.outlet',{id: vm.newOutletId}) : $state.go('^');
     }
 
     angular.extend(vm, {
       selectedPartner: null,
+      newOutletId: null,
       refresh: refresh,
       submit: submit,
       cancel: cancel
