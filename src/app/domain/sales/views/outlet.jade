@@ -21,11 +21,11 @@ hr.clear-both
 
 section.ui-view
 
-  div(ng-if='vm.outlet.photos.length')
+  div(ng-if='vm.photos.length')
     h4.page-header
       a(href ng-click='vm.togglePhotosSection()') Фотографии:
     section.fow-fluid.mt(ng-hide='vm.collapsePhotosSection')
-      .col-xs-3.col-sm-2(ng-repeat='pic in vm.outlet.photos track by pic.id')
+      .col-xs-3.col-sm-2(ng-repeat='pic in vm.photos track by pic.id')
         a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
           img(ng-src='{{vm.thumbnails[pic.id]}}')
 

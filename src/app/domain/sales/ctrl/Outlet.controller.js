@@ -7,12 +7,17 @@
     var vm = this;
     var Outlet = Schema.model('Outlet');
     var Visit = Schema.model('Visit');
+    var OutletPhoto = Schema.model('OutletPhoto');
     var rootState = 'sales.territory.outlet';
 
     var stateFilter = $state.params.id;
     var salesman = SalesmanAuth.getCurrentUser();
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet');
+
+    OutletPhoto.bindAll({
+      outletId: stateFilter
+    }, $scope, 'vm.photos');
 
     Visit.bindAll({
       outletId: stateFilter,
@@ -43,13 +48,25 @@
 
       q.then(function (res) {
 
-        console.log(res);
-        //importThumbnail(VisitPhoto.inject(res));
+        importThumbnail(OutletPhoto.inject(res));
 
       }).catch(function (res) {
         vm.photo = false;
         vm.error = res;
       })
+    }
+
+    function importThumbnail(op) {
+
+      if (vm.thumbnails[op.id]) {
+        return op;
+      }
+
+      return op.getImageSrc('thumbnail').then(function (src) {
+        vm.thumbnails[op.id] = src;
+        return op;
+      });
+
     }
 
     function togglePhotosSection() {
@@ -78,7 +95,9 @@
       togglePhotosSection: togglePhotosSection,
       collapsePhotosSection: true,
       toggleVisitsSection: toggleVisitsSection,
-      collapseVisitsSection: false
+      collapseVisitsSection: false,
+
+      thumbnails: {}
 
     });
 
