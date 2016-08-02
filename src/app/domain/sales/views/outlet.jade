@@ -4,13 +4,32 @@ h3.pull-left(style='max-width: 63%')
   small
     a.inherit-colors(href ng-click='vm.outletClick()' ng-class='{disabled: vm.disableNavs}') {{ vm.outlet.address }}
 
+h3.pull-right.with-map
+  button.btn.ml-em.btn-default(ng-click='vm.takePhoto()')
+    i.glyphicon.glyphicon-camera
+  button.btn.btn-default.ml-5(
+  popover-placement="bottom-left auto"
+  popover-trigger='outsideClick'
+  uib-popover-template="'app/domain/sales/views/location.html'"
+  popover-is-open='vm.popover'
+  type='button'
+  ng-class='{green: true}'
+  )
+    i.glyphicon.glyphicon-map-marker
+
 section.ui-view
-  .buttons.pull-right
-    button.btn.btn-success(ng-click='vm.newVisitClick()') Новый визит
+
+  h4.page-header(ng-if='vm.outlet.photos.length') Фотографии
+  section.fow-fluid.mt(ng-if='vm.outlet.photos.length')
+    .col-xs-3.col-sm-2(ng-repeat='pic in vm.outlet.photos track by pic.id')
+      a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
+        img(ng-src='{{vm.thumbnails[pic.id]}}')
+
 
   table.table.table-striped.clear-both(ng-if='vm.visits.length')
     caption
-      h4 Недавние визиты
+      h4.page-header Визиты
+      button.btn.btn-success(ng-click='vm.newVisitClick()') Новый визит
     thead
       tr
         th Дата
