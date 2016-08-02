@@ -40,6 +40,14 @@
       }
     }
 
+    function togglePhotosSection() {
+      vm.collapsePhotosSection = !vm.collapsePhotosSection;
+    }
+
+    function toggleVisitsSection() {
+      vm.collapseVisitsSection = !vm.collapseVisitsSection;
+    }
+
     angular.extend(vm, {
 
       refresh: refresh,
@@ -49,7 +57,11 @@
         $state.go('.visit', {visitId: visit.id});
       },
 
-      outletClick: outletClick
+      outletClick: outletClick,
+      togglePhotosSection: togglePhotosSection,
+      collapsePhotosSection: true,
+      toggleVisitsSection: toggleVisitsSection,
+      collapseVisitsSection: false
 
     });
 
