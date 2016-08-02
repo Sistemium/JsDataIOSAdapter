@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal, toastr) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal, toastr, PhotoHelper) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
@@ -19,21 +19,16 @@
     var salesman = SalesmanAuth.getCurrentUser();
 
     var vm = this;
-    var creatingMode = !!_.get($state,'current.name').match(/\.visitCreate$/);
+    var creatingMode = !!_.get($state, 'current.name').match(/\.visitCreate$/);
 
     var yaLatLng = mapsHelper.yLatLng;
 
-    function importThumbnail(vp) {
+    function takePhoto() {
+      return PhotoHelper.takePhoto('VisitPhoto', {visitId: vm.visit.id}, vm.thumbnails);
+    }
 
-      if (vm.thumbnails[vp.id]) {
-        return vp;
-      }
-
-      return vp.getImageSrc('thumbnail').then(function (src) {
-        vm.thumbnails[vp.id] = src;
-        return vp;
-      });
-
+    function importThumbnail(picture) {
+      return PhotoHelper.importThumbnail(picture, vm.thumbnails);
     }
 
     function thumbnailClick(pic) {
@@ -64,23 +59,6 @@
       });
 
     }
-
-
-    function takePhoto() {
-      var q = IOS.takePhoto('VisitPhoto', {
-        visitId: vm.visit.id
-      });
-
-      q.then(function (res) {
-
-        importThumbnail(VisitPhoto.inject(res));
-
-      }).catch(function (res) {
-        vm.photo = false;
-        vm.error = res;
-      })
-    }
-
 
     function initMap(visit) {
 
@@ -119,7 +97,7 @@
     }
 
 
-    function quit () {
+    function quit() {
       return $scope['$$destroyed'] || $state.go('^');
     }
 
@@ -181,7 +159,7 @@
 
         vm.saving = true;
 
-        var done = function(){
+        var done = function () {
           vm.saving = false;
         };
 
@@ -193,10 +171,10 @@
               vm.visit.checkOutLocationId = checkOutLocation.id;
               Visit.save(vm.visit)
                 .then(function (visit) {
-                  var cts = _.get(visit,'checkInLocation.deviceCts') || visit.deviceCts;
-                  var diff = moment(visit.checkOutLocation.deviceCts).diff(cts,'seconds');
-                  toastr.info(diff > 60 ? Math.round(diff/60) + ' мин' : diff + ' сек', 'Визит завершен');
-                  resolve (visit);
+                  var cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
+                  var diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
+                  toastr.info(diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек', 'Визит завершен');
+                  resolve(visit);
                   quit();
                 }, function (err) {
                   reject(err);
@@ -213,7 +191,7 @@
               .then(quit);
           }
 
-        }).then(done,done);
+        }).then(done, done);
       },
 
       mapClick: function () {
@@ -297,8 +275,8 @@
 
             vm.visit.checkInLocationId = res.id;
             initMap(res);
-            Visit.save(vm.visit).then(function(visit){
-              $state.go('.',{visitId: visit.id});
+            Visit.save(vm.visit).then(function (visit) {
+              $state.go('.', {visitId: visit.id});
             });
 
           }, function (err) {

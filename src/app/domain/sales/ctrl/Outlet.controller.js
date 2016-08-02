@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, IOS) {
+  function OutletController(Schema, $window, $q, $state, $scope, SalesmanAuth, IOS, PhotoHelper) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
@@ -13,7 +13,16 @@
     var stateFilter = $state.params.id;
     var salesman = SalesmanAuth.getCurrentUser();
 
-    Outlet.bindOne(stateFilter, $scope, 'vm.outlet');
+    vm.thumbnails = {};
+
+    $window.Schema = Schema;
+
+    Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function() {
+      Outlet.loadRelations(vm.outlet, 'OutletPhoto')
+        .then(function(outlet) {
+          _.each(outlet.photos, importThumbnail);
+        });
+    });
 
     OutletPhoto.bindAll({
       outletId: stateFilter
@@ -42,31 +51,11 @@
     }
 
     function takePhoto() {
-      var q = IOS.takePhoto('OutletPhoto', {
-        outletId: vm.outlet.id
-      });
-
-      q.then(function (res) {
-
-        importThumbnail(OutletPhoto.inject(res));
-
-      }).catch(function (res) {
-        vm.photo = false;
-        vm.error = res;
-      })
+      return PhotoHelper.takePhoto('OutletPhoto', {outletId: vm.outlet.id}, vm.thumbnails);
     }
 
     function importThumbnail(op) {
-
-      if (vm.thumbnails[op.id]) {
-        return op;
-      }
-
-      return op.getImageSrc('thumbnail').then(function (src) {
-        vm.thumbnails[op.id] = src;
-        return op;
-      });
-
+      return PhotoHelper.importThumbnail(op, vm.thumbnails);
     }
 
     function togglePhotosSection() {
@@ -95,16 +84,14 @@
       togglePhotosSection: togglePhotosSection,
       collapsePhotosSection: true,
       toggleVisitsSection: toggleVisitsSection,
-      collapseVisitsSection: false,
-
-      thumbnails: {}
+      collapseVisitsSection: false
 
     });
 
     refresh();
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.disableNavs = !!_.get(to,'data.disableNavs') || to.name === rootState;
+      vm.disableNavs = !!_.get(to, 'data.disableNavs') || to.name === rootState;
     });
 
   }
