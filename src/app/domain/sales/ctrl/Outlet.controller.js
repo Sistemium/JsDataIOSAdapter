@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, IOS) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
@@ -28,10 +28,6 @@
       ]);
     }
 
-    function newVisitClick() {
-      $state.go('.visitCreate');
-    }
-
     function outletClick() {
       if ($state.current.name === rootState) {
         // return;
@@ -40,12 +36,32 @@
       }
     }
 
+    function takePhoto() {
+      var q = IOS.takePhoto('OutletPhoto', {
+        outletId: vm.outlet.id
+      });
+
+      q.then(function (res) {
+
+        console.log(res);
+        //importThumbnail(VisitPhoto.inject(res));
+
+      }).catch(function (res) {
+        vm.photo = false;
+        vm.error = res;
+      })
+    }
+
     function togglePhotosSection() {
       vm.collapsePhotosSection = !vm.collapsePhotosSection;
     }
 
     function toggleVisitsSection() {
       vm.collapseVisitsSection = !vm.collapseVisitsSection;
+    }
+
+    function newVisitClick() {
+      $state.go('.visitCreate');
     }
 
     angular.extend(vm, {
@@ -57,6 +73,7 @@
         $state.go('.visit', {visitId: visit.id});
       },
 
+      takePhoto: takePhoto,
       outletClick: outletClick,
       togglePhotosSection: togglePhotosSection,
       collapsePhotosSection: true,
