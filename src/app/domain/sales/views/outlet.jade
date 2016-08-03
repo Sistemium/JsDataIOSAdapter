@@ -4,20 +4,20 @@ h3.pull-left.container-fluid(style='max-width: 75%')
   small
     a.inherit-colors(href ng-click='vm.outletClick()' ng-class='{disabled: vm.disableNavs}') {{ vm.outlet.address }}
 
-h3.pull-right.with-map.container-fluid
-  button.btn.btn-default.ml-5(
-  popover-placement="bottom-left auto"
-  popover-trigger='outsideClick'
-  uib-popover-template="'app/domain/sales/views/location.html'"
-  popover-is-open='vm.popover'
-  type='button'
-  ng-class='{green: true}'
-  )
-    i.glyphicon.glyphicon-map-marker
-
-hr.clear-both
-
 section.ui-view
+
+  h3.pull-right.with-map.container-fluid
+    button.btn.btn-default.ml-5(
+    popover-placement="bottom-left auto"
+    popover-trigger='outsideClick'
+    uib-popover-template="'app/domain/sales/views/location.html'"
+    popover-is-open='vm.popover'
+    type='button'
+    ng-class='{green: true}'
+    )
+      i.glyphicon.glyphicon-map-marker
+
+  hr.clear-both
 
   div
     h4.container-fluid

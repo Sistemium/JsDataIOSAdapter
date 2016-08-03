@@ -7,7 +7,10 @@
 //      i.glyphicon.glyphicon-home
 
 
-section.text-center.scroll-horizontal(style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}')
+section.text-center.scroll-horizontal(
+style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}'
+ng-hide='vm.hideHashes'
+)
   button.btn.btn-default.margin.green(ng-click='vm.addOutletClick()')
     i.glyphicon.glyphicon-plus
   button.btn.margin(

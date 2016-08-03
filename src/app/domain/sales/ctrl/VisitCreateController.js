@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal, toastr, PhotoHelper) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
@@ -84,18 +84,16 @@
 
     }
 
-
     function getLocation() {
+
       vm.locating = true;
-      return IOS.checkIn(100, {
-        ownerXid: _.get(vm, 'visit.id'),
-        target: 'Visit'
-      }).then(function (res) {
+
+      return LocationHelper.getLocation(100, _.get(vm, 'visit.id'), 'Visit').then(function (res) {
         vm.locating = false;
         return Location.inject(res);
       });
-    }
 
+    }
 
     function quit() {
       return $scope['$$destroyed'] || $state.go('^');
