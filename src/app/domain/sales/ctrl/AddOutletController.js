@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, $q, ConfirmModal, Schema, toastr, $window) {
+  function AddOutletController($state, $q, ConfirmModal, Schema, toastr, $window, LocationHelper) {
 
     var vm = this;
     var Partner = Schema.model('Partner');
@@ -24,7 +24,7 @@
       ConfirmModal.show({
         text: 'Сохранить точку?'
       })
-      .then(saveNewData);
+        .then(saveNewData);
 
     }
 
@@ -39,17 +39,23 @@
           });
 
           Partner.create(newPartner)
-            .then(function(partner){
+            .then(function (partner) {
+
               saveOutlet(vm.name, partner)
                 .then(resolve, reject);
+
             }, function (err) {
+
               reject(err);
               toastr.error(angular.toJson(err), 'Не удалось сохранить партнёра');
+
             });
 
         } else {
+
           saveOutlet(vm.name, vm.selectedPartner)
             .then(resolve, reject);
+
         }
 
       }).then(quit);
@@ -74,6 +80,27 @@
 
     }
 
+    function getLocation(outlet) {
+
+      return LocationHelper.getLocation(100, outlet.id, 'Outlet')
+        .catch(function (err) {
+
+          toastr.error(angular.toJson(err), 'Невозможно получить геопозицию.');
+
+          ConfirmModal.show({
+            text: 'Невозможно получить геопозицию. Повторить попытку?'
+          })
+            .then(function () {
+              Outlet.destroy(outlet.id);
+              if (!vm.selectedPartner) Partner.destroy(outlet.partnerId);
+              vm.newOutletId = null;
+              saveNewData();
+            });
+
+        });
+
+    }
+
     function cancel(form) {
 
       if (form.$pristine) {
@@ -87,8 +114,8 @@
 
     }
 
-    function quit () {
-      return vm.newOutletId ? $state.go('^.outlet',{id: vm.newOutletId}) : $state.go('^');
+    function quit() {
+      return vm.newOutletId ? $state.go('^.outlet', {id: vm.newOutletId}) : $state.go('^');
     }
 
     angular.extend(vm, {
