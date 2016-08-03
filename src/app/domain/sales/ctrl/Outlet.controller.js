@@ -17,9 +17,9 @@
 
     $window.Schema = Schema;
 
-    Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function() {
+    Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
       Outlet.loadRelations(vm.outlet, 'OutletPhoto')
-        .then(function(outlet) {
+        .then(function (outlet) {
           _.each(outlet.photos, importThumbnail);
         });
     });
@@ -51,7 +51,8 @@
     }
 
     function takePhoto() {
-      return PhotoHelper.takePhoto('OutletPhoto', {outletId: vm.outlet.id}, vm.thumbnails);
+      return PhotoHelper.takePhoto('OutletPhoto', {outletId: vm.outlet.id}, vm.thumbnails)
+        .then(vm.collapsePhotosSection = false);
     }
 
     function importThumbnail(op) {
