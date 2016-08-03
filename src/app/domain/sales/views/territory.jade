@@ -34,5 +34,5 @@ hr(ng-hide='vm.hideHashes')
       h5
         .lead {{ p.shortName }}
 
-      p.text-right(ng-repeat='o in p.outlets | orderBy:"address" | filter:vm.filter track by o.id')
+      p.text-right(ng-repeat='o in p.outlets | orderBy:"address"')
         a(href='' ng-click='vm.outletClick(o)') {{ o.address }}
