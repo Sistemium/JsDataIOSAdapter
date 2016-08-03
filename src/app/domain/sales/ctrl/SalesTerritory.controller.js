@@ -63,7 +63,7 @@
 
     function setupHash() {
       vm.hashButtons = hashButtons('');
-      console.log(vm.hashButtons);
+      //console.log(vm.hashButtons);
     }
 
     function hashClick(btn) {
