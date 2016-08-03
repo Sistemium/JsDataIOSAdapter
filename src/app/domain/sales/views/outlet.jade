@@ -19,28 +19,30 @@ hr.clear-both
 
 section.ui-view
 
-  div(ng-if='vm.photos.length')
+  div
     h4.page-header.container-fluid
-      a(href ng-click='vm.togglePhotosSection()') Фотографии ({{vm.photos.length}})
+      a(href ng-click='vm.togglePhotosSection()') Фотографии
+        span(ng-if='vm.photos.length') &nbsp({{vm.photos.length}})
       button.btn.ml-em.btn-default.pull-right.clear-right(ng-click='vm.takePhoto()')
         i.glyphicon.glyphicon-camera
-    section.fow-fluid.mt(ng-hide='vm.collapsePhotosSection')
+    section.fow-fluid.mt(ng-hide='vm.collapsePhotosSection|| !vm.photos.length')
       .col-xs-3.col-sm-2(ng-repeat='pic in vm.photos track by pic.id')
         a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
           img(ng-src='{{vm.thumbnails[pic.id]}}')
       hr.clear-both
 
-  div(ng-if='vm.visits.length')
+  div
     h4.page-header.container-fluid
-      a(href ng-click='vm.toggleVisitsSection()') Визиты ({{vm.visits.length}})
+      a(href ng-click='vm.toggleVisitsSection()') Визиты
+        span(ng-if='vm.visits.length') &nbsp({{vm.visits.length}})
       button.btn.ml-em.btn-default.pull-right.clear-right(ng-click='vm.newVisitClick()')
         i.glyphicon.glyphicon-plus
-    table.table.table-striped.clear-both(ng-hide='vm.collapseVisitsSection')
+    table.table.table-striped.clear-both(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
       thead
         tr
           th Дата
-          th.number Кол-во фото
-          th.number Кол-во ответов
+          th.number Фото
+          th.number Ответы
       tbody
         tr.clickable(ng-repeat='visit in vm.visits | orderBy:"-deviceCts" track by visit.id' ng-click='vm.visitClick(visit)')
           td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
