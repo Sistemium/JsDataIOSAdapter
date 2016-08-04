@@ -32,12 +32,19 @@
 
       vm.busy = $q(function (resolve, reject) {
 
+        vm.busyMessage = 'Сохраняем партнёра…';
         savePartner(vm.name)
           .then(function (partner) {
+
+            vm.busyMessage = 'Сохраняем точку…';
             return saveOutlet(vm.name, partner, vm.address);
+
           })
           .then(function (outlet) {
+
+            vm.busyMessage = 'Получаем геопозицию…';
             return getLocation(outlet);
+
           })
           .then(function (data) {
 

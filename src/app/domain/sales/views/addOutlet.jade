@@ -2,7 +2,7 @@ h3 Добавить точку
 
 hr
 
-section.row-fluid(cg-busy='vm.busy')
+section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   form.form-horizontal(name="addOutletForm")
 
     .form-group
