@@ -56,17 +56,6 @@
 
     }
 
-    function showSaveErrorAlert(err) {
-
-      var errText = err + '\n Повторить попытку?';
-
-      ConfirmModal.show({
-        text: errText
-      })
-        .then(saveNewData);
-
-    }
-
     function savePartner(name) {
 
       var havePartner = vm.selectedPartner || vm.newPartner;
@@ -137,6 +126,17 @@
 
     }
 
+    function showSaveErrorAlert(err) {
+
+      var errText = err + '\n Повторить попытку?';
+
+      ConfirmModal.show({
+        text: errText
+      })
+        .then(saveNewData);
+
+    }
+
     function cancel(form) {
 
       if (form.$pristine) {
@@ -146,7 +146,30 @@
       ConfirmModal.show({
         text: 'Отменить добавление точки?'
       })
-        .then(quit);
+        .then(function () {
+
+          cleanUp();
+          quit();
+
+        });
+
+    }
+
+    function cleanUp() {
+
+      if (vm.newOutlet) {
+
+        Outlet.destroy(vm.newOutlet);
+        vm.newOutlet = null;
+
+      }
+
+      if (vm.newPartner) {
+
+        Partner.destroy(vm.newPartner);
+        vm.newPartner = null;
+
+      }
 
     }
 
