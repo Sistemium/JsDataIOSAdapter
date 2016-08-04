@@ -40,13 +40,30 @@
             return getLocation(outlet);
           })
           .then(function (data) {
+
             resolve(data);
+            quit();
+
           })
           .catch(function (err) {
+
             reject(err);
+            showSaveErrorAlert(err);
+
           });
 
       });
+
+    }
+
+    function showSaveErrorAlert(err) {
+
+      var errText = err + '\n Повторить попытку?';
+
+      ConfirmModal.show({
+        text: errText
+      })
+        .then(saveNewData);
 
     }
 
@@ -68,11 +85,9 @@
             vm.newPartner = newPartner;
             return newPartner;
 
-          }, function (err) {
-
-            toastr.error(angular.toJson(err), 'Не удалось сохранить партнёра');
-            throw err;
-
+          })
+          .catch(function (err) {
+            gotError(err, 'Не удалось сохранить партнёра.');
           });
 
       }
@@ -97,11 +112,9 @@
             vm.newOutlet = newOutlet;
             return newOutlet;
 
-          }, function (err) {
-
-            toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
-            throw err;
-
+          })
+          .catch(function (err) {
+            gotError(err, 'Не удалось сохранить точку.');
           });
 
       }
@@ -112,9 +125,15 @@
 
       return LocationHelper.getLocation(100, outlet.id, 'Outlet')
         .catch(function (err) {
-          toastr.error(angular.toJson(err), 'Невозможно получить геопозицию.');
-          throw err;
+          gotError(err, 'Невозможно получить геопозицию.');
         });
+
+    }
+
+    function gotError(err, errText) {
+
+      toastr.error(angular.toJson(err), errText);
+      throw errText;
 
     }
 
