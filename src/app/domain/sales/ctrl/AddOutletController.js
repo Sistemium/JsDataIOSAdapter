@@ -32,51 +32,79 @@
 
       vm.busy = $q(function (resolve, reject) {
 
-        if (!vm.selectedPartner) {
-
-          var newPartner = Partner.createInstance({
-            name: vm.name
+        savePartner(vm.name)
+          .then(function (partner) {
+            return saveOutlet(vm.name, partner, vm.address);
+          })
+          .then(function (outlet) {
+            return getLocation(outlet);
+          })
+          .then(function (data) {
+            resolve(data);
+          })
+          .catch(function (err) {
+            reject(err);
           });
 
-          Partner.create(newPartner)
-            .then(function (partner) {
-
-              saveOutlet(vm.name, partner)
-                .then(resolve, reject);
-
-            }, function (err) {
-
-              reject(err);
-              toastr.error(angular.toJson(err), 'Не удалось сохранить партнёра');
-
-            });
-
-        } else {
-
-          saveOutlet(vm.name, vm.selectedPartner)
-            .then(resolve, reject);
-
-        }
-
-      }).then(quit);
+      });
 
     }
 
-    function saveOutlet(name, partner) {
+    function savePartner(name) {
 
-      var newOutlet = Outlet.createInstance({
-        address: vm.address,
-        name: name,
-        partnerId: partner.id
-      });
+      var havePartner = vm.selectedPartner || vm.newPartner;
 
-      return Outlet.create(newOutlet)
-        .then(function() {
-          vm.newOutletId = newOutlet.id;
-        })
-        .catch(function (err) {
-          toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
+      if (havePartner) {
+        return $q.resolve(havePartner);
+      } else {
+
+        var newPartner = Partner.createInstance({
+          name: name
         });
+
+        return Partner.create(newPartner)
+          .then(function (newPartner) {
+
+            vm.newPartner = newPartner;
+            return newPartner;
+
+          }, function (err) {
+
+            toastr.error(angular.toJson(err), 'Не удалось сохранить партнёра');
+            throw err;
+
+          });
+
+      }
+
+    }
+
+    function saveOutlet(name, partner, address) {
+
+      if (vm.newOutlet) {
+        return $q.resolve(vm.newOutlet);
+      } else {
+
+        var newOutlet = Outlet.createInstance({
+          address: address,
+          name: name,
+          partnerId: partner.id
+        });
+
+        return Outlet.create(newOutlet)
+          .then(function (newOutlet) {
+
+            vm.newOutlet = newOutlet;
+            return newOutlet;
+
+          }, function (err) {
+
+            toastr.error(angular.toJson(err), 'Не удалось сохранить точку');
+            throw err;
+
+          });
+
+      }
 
     }
 
@@ -84,19 +112,8 @@
 
       return LocationHelper.getLocation(100, outlet.id, 'Outlet')
         .catch(function (err) {
-
           toastr.error(angular.toJson(err), 'Невозможно получить геопозицию.');
-
-          ConfirmModal.show({
-            text: 'Невозможно получить геопозицию. Повторить попытку?'
-          })
-            .then(function () {
-              Outlet.destroy(outlet.id);
-              if (!vm.selectedPartner) Partner.destroy(outlet.partnerId);
-              vm.newOutletId = null;
-              saveNewData();
-            });
-
+          throw err;
         });
 
     }
@@ -115,12 +132,12 @@
     }
 
     function quit() {
-      return vm.newOutletId ? $state.go('^.outlet', {id: vm.newOutletId}) : $state.go('^');
+      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
     }
 
     angular.extend(vm, {
       selectedPartner: null,
-      newOutletId: null,
+      newOutlet: null,
       refresh: refresh,
       submit: submit,
       cancel: cancel
