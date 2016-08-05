@@ -22,8 +22,9 @@ section.ui-view
 
   div
     h4.container-fluid
-      a(href ng-click='vm.togglePhotosSection()') Фотографии
-        span(ng-if='vm.photos.length') &nbsp({{vm.photos.length}})
+      span(ng-hide='vm.photos.length') Фотографии
+      a(ng-show='vm.photos.length' href ng-click='vm.togglePhotosSection()') Фотографии
+        span &nbsp({{vm.photos.length}})
       button.btn.ml-em.btn-default.pull-right.clear-right(ng-click='vm.takePhoto()')
         i.glyphicon.glyphicon-camera
     section.fow-fluid.mt(ng-hide='vm.collapsePhotosSection|| !vm.photos.length')
@@ -34,8 +35,9 @@ section.ui-view
 
   div
     h4.container-fluid
-      a(href ng-click='vm.toggleVisitsSection()') Визиты
-        span(ng-if='vm.visits.length') &nbsp({{vm.visits.length}})
+      span(ng-hide='vm.visits.length') Визиты
+      a(ng-show='vm.visits.length' href ng-click='vm.toggleVisitsSection()') Визиты
+        span &nbsp({{vm.visits.length}})
       button.btn.ml-em.btn-default.pull-right.clear-right(ng-click='vm.newVisitClick()')
         i.glyphicon.glyphicon-plus
     table.table.table-striped.clear-both(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
