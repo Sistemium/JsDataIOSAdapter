@@ -2,7 +2,7 @@
 
 (function () {
 
-  function PhotoHelper(IOS, Schema, $q) {
+  function PhotoHelper(IOS, Schema, $q, ConfirmModal, toastr) {
 
     function takePhoto(resourceName, data, thumbnailCache) {
 
@@ -43,6 +43,35 @@
 
     }
 
+    function thumbnailClick(resourceName, pic, src, title) {
+
+      ConfirmModal.show({
+
+        text: false,
+        src: src,
+        title: title,
+
+        deleteDelegate: function () {
+          return Schema.model(resourceName).destroy(pic);
+        },
+
+        resolve: function (ctrl) {
+          ctrl.busy = pic.getImageSrc('resized').then(function (src) {
+            ctrl.src = src;
+          }, function (err) {
+            console.log(err);
+            ctrl.cancel();
+            toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
+          });
+        }
+
+      }, {
+        templateUrl: 'app/components/modal/PictureModal.html',
+        size: 'lg'
+      });
+
+    }
+
     function getImageSrc(picture, size) {
 
       return IOS.isIos() ? IOS.getPicture(picture.id, size)
@@ -63,6 +92,7 @@
 
       takePhoto: takePhoto,
       importThumbnail: importThumbnail,
+      thumbnailClick: thumbnailClick,
       getImageSrc: getImageSrc
 
     };
