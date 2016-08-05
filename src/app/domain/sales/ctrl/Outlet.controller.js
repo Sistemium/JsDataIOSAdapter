@@ -70,6 +70,16 @@
       return PhotoHelper.importThumbnail(op, vm.thumbnails);
     }
 
+    function thumbnailClick(pic) {
+
+      var resourceName = 'OutletPhoto';
+      var src = vm.thumbnails[pic.id];
+      var title = vm.outlet.partner.shortName + ' (' + vm.outlet.address + ')';
+
+      return PhotoHelper.thumbnailClick(resourceName, pic, src, title);
+
+    }
+
     function togglePhotosSection() {
       vm.collapsePhotosSection = !vm.collapsePhotosSection;
     }
@@ -121,6 +131,7 @@
 
       takePhoto: takePhoto,
       outletClick: outletClick,
+      thumbnailClick: thumbnailClick,
       togglePhotosSection: togglePhotosSection,
       collapsePhotosSection: true,
       toggleVisitsSection: toggleVisitsSection,
