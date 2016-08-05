@@ -11,7 +11,7 @@
 
     function refresh() {
 
-      Partner.findAll()
+      Partner.findAll(false, {bypassCache: true})
         .then(function (res) {
           vm.partners = res;
         });
@@ -26,7 +26,11 @@
         text: 'Сохранить точку?'
       })
         .then(checkOutletName)
-        .then(saveNewData);
+        .then(function (partner) {
+          return checkOutletAddress(partner);
+        })
+        .then(saveNewData)
+        .catch();
 
     }
 
@@ -52,7 +56,7 @@
 
             var location = Location.inject(data);
             vm.newOutlet.locationId = location.id;
-            Outlet.save(vm.newOutlet);
+
             resolve(location);
             quit();
 
@@ -70,20 +74,65 @@
 
     function checkOutletName() {
 
-      var filteredPartner = _.find(vm.partners, {'name' : vm.name});
+      if (vm.selectedPartner) return $q.resolve(vm.selectedPartner);
+
+      var filteredPartner = _.find(vm.partners, {name: vm.name});
 
       if (filteredPartner) {
 
         return ConfirmModal.show({
-          text: 'Партнёр "' + vm.name + '" уже существует. Использовать существующего партнёра?'
+          text: 'Партнёр "' + filteredPartner.name + '" уже существует. Использовать существующего партнёра?'
         })
           .then(function () {
+
             vm.selectedPartner = filteredPartner;
+            return filteredPartner;
+
           });
 
       } else {
         return $q.resolve();
       }
+
+    }
+
+    function checkOutletAddress(partner) {
+
+      if (!partner) return $q.resolve();
+
+      var filterParams = {
+        partnerId: partner.id,
+        address: vm.address
+      };
+
+      //vm.salesman = SalesmanAuth.getCurrentUser();
+      //
+      //if (vm.salesman) {
+      //  filterParams.salesmanId = vm.salesman.id;
+      //}
+
+      return Outlet.findAll(filterParams, {bypassCache: true})
+        .then(function (outlets) {
+
+          var filteredOutlet = outlets[0];
+
+          if (filteredOutlet) {
+
+            return ConfirmModal.show({
+              text: 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?'
+            })
+              .then(function () {
+
+                $state.go('^.outlet', {id: filteredOutlet.id});
+                return $q.reject();
+
+              }, function () {
+                return $q.reject();
+              });
+
+          }
+
+        });
 
     }
 
