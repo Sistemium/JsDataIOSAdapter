@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, $q, ConfirmModal, Schema, toastr, $window, LocationHelper) {
+  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper) {
 
     var vm = this;
     var Partner = Schema.model('Partner');
@@ -25,6 +25,7 @@
       ConfirmModal.show({
         text: 'Сохранить точку?'
       })
+        .then(checkOutletName)
         .then(saveNewData);
 
     }
@@ -64,6 +65,25 @@
           });
 
       });
+
+    }
+
+    function checkOutletName() {
+
+      var filteredPartner = _.find(vm.partners, {'name' : vm.name});
+
+      if (filteredPartner) {
+
+        return ConfirmModal.show({
+          text: 'Партнёр "' + vm.name + '" уже существует. Использовать существующего партнёра?'
+        })
+          .then(function () {
+            vm.selectedPartner = filteredPartner;
+          });
+
+      } else {
+        return $q.resolve();
+      }
 
     }
 
@@ -197,6 +217,10 @@
     });
 
     vm.refresh();
+
+    $scope.$watch('vm.name', function (newValue, oldValue) {
+      console.log('name changed from ' + oldValue + ' to ' + newValue);
+    })
 
   }
 
