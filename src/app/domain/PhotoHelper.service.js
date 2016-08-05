@@ -10,8 +10,14 @@
 
       return q.then(function (res) {
 
-        importThumbnail(Schema.model(resourceName).inject(res), thumbnailCache);
-        return res;
+        if (angular.isObject(res)) {
+
+          importThumbnail(Schema.model(resourceName).inject(res), thumbnailCache);
+          $q.resolve(res);
+
+        } else {
+          $q.reject(res);
+        }
 
       });
 
