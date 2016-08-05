@@ -96,7 +96,84 @@
     }
 
     function quit() {
-      return $scope['$$destroyed'] || $state.go('^');
+      return $scope['$$destroyed'] || goBack();
+    }
+
+    function goBack() {
+        $state.go('^');
+    }
+
+    function changeAnswer(qst, data) {
+
+      var ans = answersByQuestion[qst.id] || VA.inject({visitId: vm.visit.id, questionId: qst.id});
+      if (qst.dataType.code === 'boolean') {
+        ans.data = data && '1' || '0';
+      } else if (qst.dataType.code === 'date') {
+        ans.data = data && moment(data).format('YYYY/MM/DD') || null;
+      } else {
+        ans.data = data;
+      }
+      answersByQuestion[qst.id] = ans;
+      VA.save(ans);
+
+    }
+
+    function save() {
+
+      vm.saving = true;
+
+      var done = function () {
+        vm.saving = false;
+      };
+
+      vm.busy = $q(function (resolve, reject) {
+
+        if (creatingMode && IOS.isIos()) {
+
+          getLocation().then(function (checkOutLocation) {
+            vm.visit.checkOutLocationId = checkOutLocation.id;
+            Visit.save(vm.visit)
+              .then(function (visit) {
+                var cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
+                var diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
+                toastr.info(diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек', 'Визит завершен');
+                resolve(visit);
+                quit();
+              }, function (err) {
+                reject(err);
+                toastr.error(angular.toJson(err), 'Не удалось сохранить визит');
+              });
+          }, function (err) {
+            reject(err);
+            toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
+          });
+
+        } else {
+          Visit.save(vm.visit)
+            .then(resolve, reject)
+            .then(quit);
+        }
+
+      }).then(done, done);
+
+    }
+
+    function mapClick() {
+      vm.popover = false;
+    }
+
+    function deleteVisit() {
+      if (!Visit.lastSaved(vm.visit)) {
+        return quit();
+      }
+      ConfirmModal.show({
+        text: 'Действительно удалить запись об этом визите?'
+      })
+        .then(function () {
+          Visit.destroy(vm.visit)
+            .then(quit);
+        })
+      ;
     }
 
     var buttons = [];
@@ -136,79 +213,11 @@
 
       thumbnails: {},
 
-      goBack: function () {
-        $state.go('^');
-      },
-
-      changeAnswer: function (qst, data) {
-        var ans = answersByQuestion[qst.id] || VA.inject({visitId: vm.visit.id, questionId: qst.id});
-        if (qst.dataType.code === 'boolean') {
-          ans.data = data && '1' || '0';
-        } else if (qst.dataType.code === 'date') {
-          ans.data = data && moment(data).format('YYYY/MM/DD') || null;
-        } else {
-          ans.data = data;
-        }
-        answersByQuestion[qst.id] = ans;
-        VA.save(ans);
-      },
-
-      save: function () {
-
-        vm.saving = true;
-
-        var done = function () {
-          vm.saving = false;
-        };
-
-        vm.busy = $q(function (resolve, reject) {
-
-          if (creatingMode && IOS.isIos()) {
-
-            getLocation().then(function (checkOutLocation) {
-              vm.visit.checkOutLocationId = checkOutLocation.id;
-              Visit.save(vm.visit)
-                .then(function (visit) {
-                  var cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
-                  var diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
-                  toastr.info(diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек', 'Визит завершен');
-                  resolve(visit);
-                  quit();
-                }, function (err) {
-                  reject(err);
-                  toastr.error(angular.toJson(err), 'Не удалось сохранить визит');
-                });
-            }, function (err) {
-              reject(err);
-              toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
-            });
-
-          } else {
-            Visit.save(vm.visit)
-              .then(resolve, reject)
-              .then(quit);
-          }
-
-        }).then(done, done);
-      },
-
-      mapClick: function () {
-        vm.popover = false;
-      },
-
-      deleteVisit: function () {
-        if (!Visit.lastSaved(vm.visit)) {
-          return quit();
-        }
-        ConfirmModal.show({
-          text: 'Действительно удалить запись об этом визите?'
-        })
-          .then(function () {
-            Visit.destroy(vm.visit)
-              .then(quit);
-          })
-        ;
-      }
+      goBack: goBack,
+      changeAnswer: changeAnswer,
+      save: save,
+      mapClick: mapClick,
+      deleteVisit: deleteVisit
 
     });
 
