@@ -9,7 +9,6 @@
     var VQ = Schema.model('VisitQuestion');
     var VA = Schema.model('VisitAnswer');
     var Location = Schema.model('Location');
-    var VisitPhoto = Schema.model('VisitPhoto');
 
     var date = moment().format('YYYY-MM-DD');
     var id = $state.params.visitId;
@@ -33,30 +32,11 @@
 
     function thumbnailClick(pic) {
 
-      ConfirmModal.show({
+      var resourceName = 'VisitPhoto';
+      var src = vm.thumbnails[pic.id];
+      var title = vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')';
 
-        text: false,
-        src: vm.thumbnails[pic.id],
-        title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')',
-
-        deleteDelegate: function () {
-          return VisitPhoto.destroy(pic);
-        },
-
-        resolve: function (ctrl) {
-          ctrl.busy = pic.getImageSrc('resized').then(function (src) {
-            ctrl.src = src;
-          }, function (err) {
-            console.log(err);
-            ctrl.cancel();
-            toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
-          });
-        }
-
-      }, {
-        templateUrl: 'app/components/modal/PictureModal.html',
-        size: 'lg'
-      });
+      return PhotoHelper.thumbnailClick(resourceName, pic, src, title);
 
     }
 
