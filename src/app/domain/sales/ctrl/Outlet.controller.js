@@ -2,12 +2,13 @@
 
 (function () {
 
-  function OutletController(Schema, $window, $q, $state, $scope, SalesmanAuth, IOS, PhotoHelper) {
+  function OutletController(Schema, $window, $q, $state, $scope, SalesmanAuth, IOS, PhotoHelper, mapsHelper) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
     var Visit = Schema.model('Visit');
     var OutletPhoto = Schema.model('OutletPhoto');
+    var Location = Schema.model('Location');
     var rootState = 'sales.territory.outlet';
 
     var stateFilter = $state.params.id;
@@ -17,11 +18,21 @@
 
     $window.Schema = Schema;
 
+    Outlet.find(stateFilter)
+      .then(function (outlet) {
+        Location.find(outlet.locationId)
+          .then(function (location) {
+            initMap(location);
+          })
+      })
+
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
+
       Outlet.loadRelations(vm.outlet, 'OutletPhoto')
         .then(function (outlet) {
           _.each(outlet.photos, importThumbnail);
         });
+
     });
 
     OutletPhoto.bindAll({
@@ -71,6 +82,34 @@
       $state.go('.visitCreate');
     }
 
+    function initMap(location) {
+
+      location = location ? location : _.get(vm.outlet, 'location') || _.get(vm, 'outlet.location');
+
+      if (!location) {
+        return;
+      }
+
+      vm.map = {
+        yaCenter: mapsHelper.yLatLng(location),
+        afterMapInit: function () {
+
+          vm.startMarker = mapsHelper.yMarkerConfig({
+            id: 'outletLocation',
+            location: location,
+            content: vm.outlet.name,
+            hintContent: moment(location.deviceCts + ' Z').format('HH:mm')
+          });
+
+        }
+      };
+
+    }
+
+    function mapClick() {
+      vm.popover = false;
+    }
+
     angular.extend(vm, {
 
       refresh: refresh,
@@ -85,7 +124,8 @@
       togglePhotosSection: togglePhotosSection,
       collapsePhotosSection: true,
       toggleVisitsSection: toggleVisitsSection,
-      collapseVisitsSection: false
+      collapseVisitsSection: false,
+      mapClick: mapClick
 
     });
 

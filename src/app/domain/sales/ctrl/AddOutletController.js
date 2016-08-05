@@ -7,6 +7,7 @@
     var vm = this;
     var Partner = Schema.model('Partner');
     var Outlet = Schema.model('Outlet');
+    var Location = Schema.model('Location');
 
     function refresh() {
 
@@ -48,7 +49,10 @@
           })
           .then(function (data) {
 
-            resolve(data);
+            var location = Location.inject(data);
+            vm.newOutlet.locationId = location.id;
+            Outlet.save(vm.newOutlet);
+            resolve(location);
             quit();
 
           })

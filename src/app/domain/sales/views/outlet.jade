@@ -13,7 +13,8 @@ section.ui-view
     uib-popover-template="'app/domain/sales/views/location.html'"
     popover-is-open='vm.popover'
     type='button'
-    ng-class='{green: true}'
+    ng-class='{green: vm.map}'
+    ng-disabled='!vm.map'
     )
       i.glyphicon.glyphicon-map-marker
 
