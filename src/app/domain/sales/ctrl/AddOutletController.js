@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper) {
+  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper, SalesmanAuth) {
 
     var vm = this;
     var Partner = Schema.model('Partner');
@@ -26,9 +26,7 @@
         text: 'Сохранить точку?'
       })
         .then(checkOutletName)
-        .then(function (partner) {
-          return checkOutletAddress(partner);
-        })
+        .then(checkOutletAddress)
         .then(saveNewData)
         .catch();
 
@@ -36,45 +34,41 @@
 
     function saveNewData() {
 
-      vm.busy = $q(function (resolve, reject) {
+      vm.busyMessage = 'Сохраняем партнёра…';
 
-        vm.busyMessage = 'Сохраняем партнёра…';
-        savePartner(vm.name)
-          .then(function (partner) {
+      vm.busy = savePartner(vm.name)
+        .then(function (partner) {
 
-            vm.busyMessage = 'Сохраняем точку…';
-            return saveOutlet(vm.name, partner, vm.address);
+          vm.busyMessage = 'Сохраняем точку…';
+          return saveOutlet(vm.name, partner, vm.address);
 
-          })
-          .then(function (outlet) {
+        })
+        .then(function (outlet) {
 
-            vm.busyMessage = 'Получаем геопозицию…';
-            return getLocation(outlet);
+          vm.busyMessage = 'Получаем геопозицию…';
+          return getLocation(outlet);
 
-          })
-          .then(function (data) {
+        })
+        .then(function (data) {
 
-            var location = Location.inject(data);
-            vm.newOutlet.locationId = location.id;
+          var location = Location.inject(data);
+          vm.newOutlet.locationId = location.id;
 
-            resolve(location);
-            quit();
+          quit();
 
-          })
-          .catch(function (err) {
+        })
+        .catch(function (err) {
 
-            reject(err);
-            showSaveErrorAlert(err);
+          showSaveErrorAlert(err);
+          return $q.reject(err);
 
-          });
-
-      });
+        });
 
     }
 
     function checkOutletName() {
 
-      if (vm.selectedPartner) return $q.resolve(vm.selectedPartner);
+      if (vm.selectedPartner) return vm.selectedPartner;
 
       var filteredPartner = _.find(vm.partners, {name: vm.name});
 
@@ -90,15 +84,13 @@
 
           });
 
-      } else {
-        return $q.resolve();
       }
 
     }
 
     function checkOutletAddress(partner) {
 
-      if (!partner) return $q.resolve();
+      if (!partner) return;
 
       var filterParams = {
         partnerId: partner.id,
@@ -126,9 +118,7 @@
                 $state.go('^.outlet', {id: filteredOutlet.id});
                 return $q.reject();
 
-              }, function () {
-                return $q.reject();
-              });
+              }, $q.reject);
 
           }
 
