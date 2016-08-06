@@ -4,7 +4,7 @@ var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
 
-var $ = require('gulp-load-plugins')();
+var $ = conf.plugins;
 
 var wiredep = require('wiredep').stream;
 var _ = require('lodash');

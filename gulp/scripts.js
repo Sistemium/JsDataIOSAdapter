@@ -6,7 +6,7 @@ var conf = require('./conf');
 
 var browserSync = require('browser-sync');
 
-var $ = require('gulp-load-plugins')();
+var $ = conf.plugins;
 
 
 gulp.task('scripts-reload', function() {
@@ -23,4 +23,4 @@ function buildScripts() {
     .pipe($.eslint())
     .pipe($.eslint.format())
     .pipe($.size())
-};
+}

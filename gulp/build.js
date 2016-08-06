@@ -5,9 +5,7 @@ var gulp = require('gulp');
 var conf = require('./conf');
 var runSequence = require ('run-sequence');
 
-var $ = require('gulp-load-plugins')({
-  pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
-});
+var $ = conf.plugins;
 
 gulp.task('partials', ['markups'], function () {
   return gulp.src([

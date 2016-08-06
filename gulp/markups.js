@@ -6,7 +6,7 @@ var conf = require('./conf');
 
 var browserSync = require('browser-sync');
 
-var $ = require('gulp-load-plugins')();
+var $ = conf.plugins;
 
 gulp.task('markups', function() {
   function renameToHtml(path) {

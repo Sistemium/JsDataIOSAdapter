@@ -39,3 +39,9 @@ exports.errorHandler = function(title) {
     this.emit('end');
   };
 };
+
+exports.plugins = require('gulp-load-plugins')({
+  scope: ['dependencies', 'devDependencies', 'peerDependencies']
+});
+
+console.log (exports.plugins);

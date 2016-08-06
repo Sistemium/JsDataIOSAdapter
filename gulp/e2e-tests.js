@@ -6,7 +6,7 @@ var conf = require('./conf');
 
 var browserSync = require('browser-sync');
 
-var $ = require('gulp-load-plugins')();
+var $ = conf.plugins;
 
 // Downloads the selenium webdriver
 gulp.task('webdriver-update', $.protractor.webdriver_update);
