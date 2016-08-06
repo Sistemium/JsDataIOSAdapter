@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper, SalesmanAuth) {
+  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper) {
 
     var vm = this;
     var Partner = Schema.model('Partner');

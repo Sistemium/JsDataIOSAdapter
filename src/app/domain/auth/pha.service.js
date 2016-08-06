@@ -4,7 +4,7 @@
 
   angular.module('core.services').service('phaService', phaService);
 
-  function phaService($http, $rootScope, $q) {
+  function phaService($http, $rootScope) {
 
     var
       url = 'https://api.sistemium.com/pha/auth',
