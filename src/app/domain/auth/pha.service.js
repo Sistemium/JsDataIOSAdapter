@@ -39,15 +39,10 @@
 
     function confirm (code) {
 
-      return $q(function(resolve,reject) {
-        $http
-          .post(url, null, {params: {ID: ID, smsCode: code}})
-          .then(function (res) {
-            getRoles(res.data.accessToken)
-              .then(resolve,reject);
-          },reject)
-        ;
-      });
+      return $http.post(url, null, {params: {ID: ID, smsCode: code}})
+        .then(function (res) {
+          return getRoles(res.data.accessToken);
+        });
 
     }
 
