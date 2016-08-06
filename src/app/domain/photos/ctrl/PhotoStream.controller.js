@@ -27,28 +27,23 @@
         return photo;
       }
 
-      thumbnails[pic.id] = $q(function (resolve, reject) {
+      thumbnails[pic.id] = VisitPhoto.loadRelations(pic, 'Visit')
+        .then(function () {
 
-        VisitPhoto.loadRelations(pic, 'Visit')
-          .then(function () {
+          thumbnails[pic.id] = {
+            visit: pic.visit
+          };
 
-            var p = {
-              visit: pic.visit
-            };
+          importThumbnail(pic);
 
-            thumbnails[pic.id] = p;
+          return Visit.loadRelations(pic.visit, 'Outlet');
 
-            importThumbnail(pic);
+        })
+        .then(function (visit) {
+          Outlet.loadRelations(visit.outlet, 'Partner');
+          return thumbnails[pic.id];
+        });
 
-            Visit.loadRelations(pic.visit, 'Outlet')
-              .then(function () {
-                Outlet.loadRelations(pic.visit.outlet, 'Partner');
-                resolve(p);
-              }, reject);
-
-          }, reject);
-
-      });
 
     }
 
