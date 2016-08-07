@@ -6,11 +6,7 @@ var config = {
 
 require('babel-register')({
   ignore: function(filename) {
-    if (/node_modules\/sistemium-gulp/.test(filename)) {
-      return false;
-    } else {
-      return true;
-    }
+    return !/sistemium-gulp\/(gulp|[^\/]*js)/.test(filename);
   }
 });
 
