@@ -46,9 +46,7 @@
 
       InitService.init(appConfig);
 
-      Sockets.on('jsData:update', function (data) {
-        DEBUG('jsData:update', data);
-      });
+      Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
       var lastPicker = window.localStorage.getItem('currentPickerId');
 
@@ -61,14 +59,12 @@
         $state.go(lastState.name,lastState.params);
       }
 
-      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess', function (e, to, params) {
-
-        localStorageService.set('lastState', {
+      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
+        (e, to, params) => localStorageService.set('lastState', {
           name: to.name,
           params: params
-        });
-
-      }));
+        })
+      ));
 
     });
 
