@@ -101,14 +101,7 @@
 
       var promise = new DSUtils.Promise(function (resolve, reject) {
 
-        requests [id] = {
-
-          promise: promise,
-          message: message,
-          resolve: resolve,
-          reject: reject
-
-        };
+        requests [id] = {promise, message, resolve, reject};
 
         ios.messageHandlers[type].postMessage(message);
 
