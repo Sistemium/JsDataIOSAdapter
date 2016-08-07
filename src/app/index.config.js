@@ -14,7 +14,7 @@
     return saDebug.log('stg:log');
   }
 
-  function run($rootScope, $q, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
+  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
 
     var lastState = localStorageService.get('lastState');
 
