@@ -65,7 +65,7 @@
           }
         }, cfg);
 
-        messages[requestId] = {resolve,reject,msg};
+        messages[requestId] = {resolve: resolve,reject: reject, msg: msg};
 
         handler(handlerName).postMessage(msg);
 
