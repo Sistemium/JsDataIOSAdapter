@@ -1,10 +1,10 @@
 'use strict';
 
-(function() {
+(function () {
 
-  function ConfirmModal ($uibModal) {
+  function ConfirmModal($uibModal) {
 
-    function show(config,modalConfig) {
+    function show(config, modalConfig) {
 
       var modalInstance = $uibModal.open(angular.extend({
 
@@ -16,7 +16,7 @@
 
           var me = this;
 
-          angular.extend (me, angular.extend({
+          angular.extend(me, angular.extend({
 
             title: 'Внимание!',
             text: 'Вы действительно хотите сделать это?',
@@ -45,7 +45,7 @@
               }
             }
 
-          },config));
+          }, config));
 
           if (config.resolve) {
             config.resolve(me);
@@ -55,7 +55,7 @@
 
         }]
 
-      },modalConfig));
+      }, modalConfig));
 
       return modalInstance.result;
 
