@@ -126,7 +126,11 @@
 
       var filterParams = {
         partnerId: partner.id,
-        address: vm.address
+        where: {
+          address: {
+            'likei': vm.address
+          }
+        }
       };
 
       //vm.salesman = SalesmanAuth.getCurrentUser();
