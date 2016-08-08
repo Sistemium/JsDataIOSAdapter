@@ -73,7 +73,7 @@
       var modalText = '';
 
 // check full name
-      var filteredPartner = _.find(vm.partners, function(partner) {
+      var filteredPartner = _.find(vm.partners, function (partner) {
         return _.lowerCase(partner.name) === _.lowerCase(vm.name);
       });
 
@@ -85,7 +85,7 @@
       } else {
 
 // check short name
-        filteredPartner = _.find(vm.partners, function(partner) {
+        filteredPartner = _.find(vm.partners, function (partner) {
           return _.lowerCase(partner.shortName) === _.lowerCase(vm.name);
         });
         if (filteredPartner) {
@@ -124,7 +124,8 @@
         .then(function (buttonId) {
 
           switch (buttonId) {
-            case 'useExisting': {
+            case 'useExisting':
+            {
               vm.selectedPartner = partner;
               return partner;
             }
@@ -139,46 +140,33 @@
       if (!partner) return $q.resolve();
 
       var filterParams = {
-        partnerId: partner.id,
         where: {
-          address: {
-            'likei': vm.address
-          }
+          partnerId: {'===': partner.id},
+          address: {'likei': vm.address}
         }
       };
 
-      //vm.salesman = SalesmanAuth.getCurrentUser();
-      //
-      //if (vm.salesman) {
-      //  filterParams.salesmanId = vm.salesman.id;
-      //}
+      var filteredOutlet = Outlet.filter(filterParams)[0];
 
-      return Outlet.findAll(filterParams, {bypassCache: true})
-        .then(function (outlets) {
+      if (filteredOutlet) {
 
-          var filteredOutlet = outlets[0];
+        var modalText = 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?';
 
-          if (filteredOutlet) {
+        return ConfirmModal.show({
+          text: modalText,
+          hideCloseButton: true
+        }, {
+          backdrop: 'static',
+          keyboard: false
+        })
+          .then(function () {
 
-            var modalText = 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?';
+            $state.go('^.outlet', {id: filteredOutlet.id});
+            return $q.reject();
 
-            return ConfirmModal.show({
-              text: modalText,
-              hideCloseButton: true
-            }, {
-              backdrop  : 'static',
-              keyboard  : false
-            })
-              .then(function () {
+          }, $q.reject);
 
-                $state.go('^.outlet', {id: filteredOutlet.id});
-                return $q.reject();
-
-              }, $q.reject);
-
-          }
-
-        });
+      }
 
     }
 
@@ -270,7 +258,8 @@
       }
 
       ConfirmModal.show({
-        text: 'Отменить добавление точки?'})
+        text: 'Отменить добавление точки?'
+      })
         .then(function () {
 
           cleanUp();
