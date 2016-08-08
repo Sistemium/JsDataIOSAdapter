@@ -70,27 +70,59 @@
 
       if (vm.selectedPartner) return vm.selectedPartner;
 
-      var filteredPartner = _.find(vm.partners, {name: vm.name});
+      var modalText = '';
+
+// check full name
+      var filteredPartner = _.find(vm.partners, function(partner) {
+        return _.lowerCase(partner.name) === _.lowerCase(vm.name);
+      });
 
       if (filteredPartner) {
 
-        return ConfirmModal.show({
-          text: 'Партнёр "' + filteredPartner.name + '" уже существует. Использовать существующего партнёра?'
-        })
-          .then(function () {
+        modalText = 'Партнёр "' + filteredPartner.name + '" уже существует. Использовать существующего партнёра или создать нового?';
+        return partnerModal(filteredPartner, modalText);
 
-            vm.selectedPartner = filteredPartner;
-            return filteredPartner;
+      } else {
 
-          });
+// check short name
+        filteredPartner = _.find(vm.partners, function(partner) {
+          return _.lowerCase(partner.shortName) === _.lowerCase(vm.name);
+        });
+        if (filteredPartner) {
+
+          modalText = 'Партнёр с похожим названием: "' + filteredPartner.name + '" уже существует. Использовать этого партнёра или создать нового?';
+          return partnerModal(filteredPartner, modalText);
+
+        }
 
       }
 
     }
 
+    function partnerModal(partner, text) {
+
+      return ConfirmModal.show({
+        buttons: {
+          yes: 'Использовать существующего',
+          no: 'Создать нового'
+        },
+        text: text
+      })
+        .then(function () {
+
+          vm.selectedPartner = partner;
+          return partner;
+
+        })
+        .catch(function () {
+          return $q.resolve();
+        });
+
+    }
+
     function checkOutletAddress(partner) {
 
-      if (!partner) return;
+      if (!partner) return $q.resolve();
 
       var filterParams = {
         partnerId: partner.id,
@@ -272,7 +304,7 @@
       return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
     }
 
-    $scope.$watch('vm.name', function (newValue) {
+    $scope.$watch('vm.name', function () {
 
       if (vm.selectedPartner && vm.inputNameInFocus) {
         if (vm.name !== vm.selectedPartner.shortName) {
