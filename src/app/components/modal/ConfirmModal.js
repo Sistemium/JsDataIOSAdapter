@@ -26,6 +26,8 @@
               no: 'Нет'
             },
 
+            hideCloseButton: false,
+
             submit: function () {
               $uibModalInstance.close();
             },
@@ -44,7 +46,7 @@
             }
 
           },config));
-          
+
           if (config.resolve) {
             config.resolve(me);
           }

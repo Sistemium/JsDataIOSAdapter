@@ -1,7 +1,7 @@
 .modal-header
   h4.modal-title
     span {{vm.title}}
-    a(href='' ng-click='vm.cancel()')
+    a(ng-hide='vm.hideCloseButton' href='' ng-click='vm.cancel()')
       i.pull-right.glyphicon.glyphicon-remove
 .modal-body
   p {{vm.text}}

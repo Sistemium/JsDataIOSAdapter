@@ -106,7 +106,11 @@
           yes: 'Использовать существующего',
           no: 'Создать нового'
         },
-        text: text
+        text: text,
+        hideCloseButton: true
+      }, {
+        backdrop  : 'static',
+        keyboard  : false
       })
         .then(function () {
 
@@ -146,8 +150,14 @@
 
           if (filteredOutlet) {
 
+            var modalText = 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?';
+
             return ConfirmModal.show({
-              text: 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?'
+              text: modalText,
+              hideCloseButton: true
+            }, {
+              backdrop  : 'static',
+              keyboard  : false
             })
               .then(function () {
 
@@ -250,8 +260,7 @@
       }
 
       ConfirmModal.show({
-        text: 'Отменить добавление точки?'
-      })
+        text: 'Отменить добавление точки?'})
         .then(function () {
 
           cleanUp();
