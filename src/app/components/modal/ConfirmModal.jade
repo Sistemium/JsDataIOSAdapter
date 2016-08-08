@@ -6,5 +6,8 @@
 .modal-body
   p {{vm.text}}
 .modal-footer
-  button.btn.btn-primary(ng-click='vm.submit()') {{vm.buttons.yes}}
-  button.btn.btn-warning(ng-click='vm.cancel()') {{vm.buttons.no}}
+  button.btn(
+  ng-repeat='button in vm.buttons'
+  ng-click='vm.buttonClick(button.id, button.type)'
+  ng-class="{'btn-primary': (button.type === 'submit'), 'btn-warning': (button.type === 'cancel')}"
+  ) {{button.title}}

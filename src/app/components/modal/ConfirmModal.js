@@ -12,7 +12,7 @@
         controllerAs: 'vm',
         size: 'sm',
 
-        controller: ['$uibModalInstance', function ConfirmModalController ($uibModalInstance) {
+        controller: ['$uibModalInstance', function ConfirmModalController($uibModalInstance) {
 
           var me = this;
 
@@ -21,19 +21,42 @@
             title: 'Внимание!',
             text: 'Вы действительно хотите сделать это?',
 
-            buttons: {
-              yes: 'Да',
-              no: 'Нет'
+            submit: function (buttonId) {
+              $uibModalInstance.close(buttonId);
             },
+
+            cancel: function (buttonId) {
+              $uibModalInstance.dismiss(buttonId);
+            },
+
+            buttons: [
+              {
+                title: 'Да',
+                id: 'yes',
+                type: 'submit'
+              },
+              {
+                title: 'Нет',
+                id: 'no',
+                type: 'cancel'
+              }
+            ],
 
             hideCloseButton: false,
 
-            submit: function () {
-              $uibModalInstance.close();
-            },
-
-            cancel: function () {
-              $uibModalInstance.dismiss();
+            buttonClick: function (buttonId, buttonType) {
+              switch (buttonType) {
+                case 'submit':
+                {
+                  me.submit(buttonId);
+                  break;
+                }
+                case 'cancel':
+                {
+                  me.cancel(buttonId);
+                  break;
+                }
+              }
             },
 
             deleteItem: function () {

@@ -102,24 +102,34 @@
     function partnerModal(partner, text) {
 
       return ConfirmModal.show({
-        buttons: {
-          yes: 'Использовать существующего',
-          no: 'Создать нового'
-        },
-        text: text,
-        hideCloseButton: true
-      }, {
-        backdrop  : 'static',
-        keyboard  : false
+
+        buttons: [
+          {
+            title: 'Использовать существующего',
+            id: 'useExisting',
+            type: 'submit'
+          },
+          {
+            title: 'Создать нового',
+            id: 'createNew',
+            type: 'submit'
+          },
+          {
+            title: 'Отмена',
+            type: 'cancel'
+          }
+        ],
+        text: text
       })
-        .then(function () {
+        .then(function (buttonId) {
 
-          vm.selectedPartner = partner;
-          return partner;
+          switch (buttonId) {
+            case 'useExisting': {
+              vm.selectedPartner = partner;
+              return partner;
+            }
+          }
 
-        })
-        .catch(function () {
-          return $q.resolve();
         });
 
     }
