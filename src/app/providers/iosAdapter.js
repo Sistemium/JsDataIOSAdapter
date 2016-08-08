@@ -73,6 +73,13 @@
 
     };
 
+    function jsdParamsToIOSWhere(params) {
+      return _.mapValues(params, function (val) {
+        return {
+          '==': val
+        }
+      });
+    }
 
     function requestFromIOS(type, entity, params, options) {
 
@@ -92,11 +99,7 @@
       } else if (type === 'update') {
         message.data = params;
       } else if (params) {
-        message.where = _.mapValues(params, function (val) {
-          return {
-            '==': val
-          }
-        });
+        message.where = jsdParamsToIOSWhere(params);
       }
 
       var promise = new DSUtils.Promise(function (resolve, reject) {

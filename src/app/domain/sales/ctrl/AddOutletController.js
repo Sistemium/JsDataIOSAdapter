@@ -9,12 +9,15 @@
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
 
-    function refresh() {
+    function getPartners(viewValue) {
 
-      Partner.findAll(false, {bypassCache: true})
-        .then(function (res) {
-          vm.partners = res;
-        });
+      return Partner.findAll({
+        where: {
+          name: {
+            likei: viewValue
+          }
+        }
+      });
 
     }
 
@@ -384,12 +387,12 @@
       newOutlet: null,
       filterPartnersByString: filterPartnersByString,
       filteredPartners: [],
-      refresh: refresh,
+      getPartners: getPartners,
       submit: submit,
       cancel: cancel
     });
 
-    vm.refresh();
+    //vm.refresh();
 
   }
 
