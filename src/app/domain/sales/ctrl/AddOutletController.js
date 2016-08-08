@@ -225,10 +225,28 @@
 
     }
 
+    function inputNameFocus() {
+
+      if (vm.selectedPartner) {
+        vm.name = vm.selectedPartner.shortName;
+      }
+      vm.inputNameInFocus = true;
+
+    }
+
+    function inputNameBlur() {
+
+      vm.inputNameInFocus = false;
+      if (vm.selectedPartner) {
+        vm.name = vm.selectedPartner.name;
+      }
+
+    }
+
     function selectPartner(partner) {
 
-      vm.selectedPartner = partner;
       vm.name = partner.shortName;
+      vm.selectedPartner = partner;
 
     }
 
@@ -254,25 +272,17 @@
       return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
     }
 
-    angular.extend(vm, {
-      selectedPartner: null,
-      selectPartner: selectPartner,
-      newOutlet: null,
-      filterPartnersByString: filterPartnersByString,
-      filteredPartners: [],
-      refresh: refresh,
-      submit: submit,
-      cancel: cancel
+    $scope.$watch('vm.name', function (newValue) {
+
+      if (vm.selectedPartner && vm.inputNameInFocus) {
+        if (vm.name !== vm.selectedPartner.shortName) {
+          vm.selectedPartner = null;
+        }
+      }
+
+      //filterPartnersByString(newValue);
+
     });
-
-    vm.refresh();
-
-    //$scope.$watch('vm.name', function (newValue) {
-    //
-    //  console.log(newValue);
-    //  filterPartnersByString(newValue);
-    //
-    //});
 
     function filterPartnersByString(newValue) {
 
@@ -321,6 +331,21 @@
       }
 
     }
+
+    angular.extend(vm, {
+      selectedPartner: null,
+      selectPartner: selectPartner,
+      inputNameFocus: inputNameFocus,
+      inputNameBlur: inputNameBlur,
+      newOutlet: null,
+      filterPartnersByString: filterPartnersByString,
+      filteredPartners: [],
+      refresh: refresh,
+      submit: submit,
+      cancel: cancel
+    });
+
+    vm.refresh();
 
   }
 

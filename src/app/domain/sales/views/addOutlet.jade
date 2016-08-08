@@ -5,26 +5,17 @@ hr
 section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   form.form-horizontal(name="addOutletForm")
 
-    .form-group
-      label.col-sm-4.control-label(for="selectedPartner") Партнёр
-      .col-sm-8
-        select#selectedPartner(
-        ng-options='partner as partner.shortName for partner in vm.partners | orderBy:"shortName"'
-        name='selectedPartner'
-        ng-required='!vm.name'
-        ng-model="vm.selectedPartner"
-        )
-          option(value='') Новый партнёр
-
-    .form-group(ng-hide='vm.selectedPartner')
-      label.col-sm-4.control-label(for="inputName") Полное название
+    .form-group()
+      label.col-sm-4.control-label(for="inputName") Название партнёра
       .col-sm-8
         input#inputName.form-control(
         type='text'
         name='name'
         ng-required='!vm.selectedPartner'
-        placeholder='Полное название'
+        placeholder='Название партнёра'
         ng-model='vm.name'
+        ng-focus='vm.inputNameFocus()'
+        ng-blur='vm.inputNameBlur()'
         autocomplete='off'
         uib-typeahead='partner as partner.shortName for partner in vm.partners | filter:{shortName:$viewValue} | orderBy:"shortName"'
         typeahead-min-length=0
