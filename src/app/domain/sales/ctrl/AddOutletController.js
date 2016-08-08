@@ -225,6 +225,13 @@
 
     }
 
+    function selectPartner(partner) {
+
+      vm.selectedPartner = partner;
+      vm.name = partner.shortName;
+
+    }
+
     function cleanUp() {
 
       if (vm.newOutlet) {
@@ -249,7 +256,10 @@
 
     angular.extend(vm, {
       selectedPartner: null,
+      selectPartner: selectPartner,
       newOutlet: null,
+      filterPartnersByString: filterPartnersByString,
+      filteredPartners: [],
       refresh: refresh,
       submit: submit,
       cancel: cancel
@@ -257,9 +267,60 @@
 
     vm.refresh();
 
-    $scope.$watch('vm.name', function (newValue, oldValue) {
-      console.log('name changed from ' + oldValue + ' to ' + newValue);
-    })
+    //$scope.$watch('vm.name', function (newValue) {
+    //
+    //  console.log(newValue);
+    //  filterPartnersByString(newValue);
+    //
+    //});
+
+    function filterPartnersByString(newValue) {
+
+      if (newValue) {
+
+        var checkValues = _.words(_.lowerCase(newValue));
+
+        if (!checkValues) return;
+
+        var cPartners = {};
+
+        vm.filteredPartners = _.filter(vm.partners, function (p) {
+
+          var checkOk = true;
+          var vIndexes = [];
+
+          angular.forEach(checkValues, function (v) {
+
+            if (checkOk) {
+
+              var vIndex = _.lowerCase(p.shortName).indexOf(v);
+              vIndex >= 0 ? vIndexes.push(vIndex) : checkOk = false;
+
+            }
+
+          });
+
+          if (checkOk) {
+            cPartners[p.id] = vIndexes;
+          }
+
+          return checkOk;
+
+        });
+
+        console.log(vm.filteredPartners);
+        console.log(cPartners);
+
+        vm.showPartnersDropdownList = vm.filteredPartners.length && !(vm.filteredPartners.length == 1 && vm.filteredPartners[0].shortName == vm.name);
+
+      } else {
+
+        vm.filteredPartners = null;
+        vm.showPartnersDropdownList = false;
+
+      }
+
+    }
 
   }
 

@@ -20,12 +20,15 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
       label.col-sm-4.control-label(for="inputName") Полное название
       .col-sm-8
         input#inputName.form-control(
-        type="text"
-        name="name"
+        type='text'
+        name='name'
         ng-required='!vm.selectedPartner'
-        placeholder="Полное название"
-        ng-model="vm.name"
-        autocomplete="off"
+        placeholder='Полное название'
+        ng-model='vm.name'
+        autocomplete='off'
+        uib-typeahead='partner as partner.shortName for partner in vm.partners | filter:{shortName:$viewValue} | orderBy:"shortName"'
+        typeahead-min-length=0
+        typeahead-on-select='vm.selectPartner($item)'
         )
 
     .form-group
