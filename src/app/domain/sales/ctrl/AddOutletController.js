@@ -17,7 +17,10 @@
             likei: viewValue
           }
         }
-      });
+      })
+        .then(function (partners) {
+          return _.sortBy(partners, function(p) { return p.shortName.toLowerCase(); });
+        });
 
     }
 

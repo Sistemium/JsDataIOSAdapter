@@ -17,7 +17,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         ng-focus='vm.inputNameFocus()'
         ng-blur='vm.inputNameBlur()'
         autocomplete='off'
-        uib-typeahead='partner as partner.shortName for partner in vm.getPartners($viewValue)'
+        uib-typeahead='partner as partner.name for partner in vm.getPartners($viewValue)'
         typeahead-min-length=0
         typeahead-on-select='vm.selectPartner($item)'
         )
