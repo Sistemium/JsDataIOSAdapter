@@ -9,7 +9,7 @@
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
 
-    function getPartners(viewValue) {
+    function getPartners(viewValue, opt) {
 
       return Partner.findAll({
         where: {
@@ -17,7 +17,7 @@
             likei: viewValue
           }
         }
-      })
+      }, opt)
         .then(function (partners) {
           return _.sortBy(partners, function(p) { return p.shortName.toLowerCase(); });
         });
