@@ -11,6 +11,8 @@
 
     function getPartners(viewValue, opt) {
 
+      if (!viewValue) return;
+
       return Partner.findAll({
         where: {
           name: {
