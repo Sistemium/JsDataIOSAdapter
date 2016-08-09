@@ -74,6 +74,10 @@
     };
 
     function jsdParamsToIOSWhere(params) {
+
+      if (params.where) {
+        return params.where;
+      }
       return _.mapValues(params, function (val) {
         return {
           '==': val
