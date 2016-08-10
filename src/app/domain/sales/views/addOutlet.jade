@@ -34,16 +34,12 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         autocomplete="off"
         )
 
-hr
-.pull-right
+    hr
+    .pull-right
 
-  button.btn.btn-primary(
-  type="submit"
-  ng-click="vm.submit(addOutletForm)"
-  ng-disabled="addOutletForm.$invalid"
-  ) Сохранить
-
-  button.btn.btn-warning(
-  type="button"
-  ng-click="vm.cancel(addOutletForm)"
-  ) Отменить
+      button.btn.margin(
+      ng-repeat='button in vm.buttons'
+      ng-click='vm.buttonClick(addOutletForm, button.id, button.type)'
+      ng-class="{'btn-primary': (button.type === 'submit'), 'btn-warning': (button.type === 'cancel')}"
+      ng-disabled="button.type === 'submit' && addOutletForm.$invalid"
+      ) {{ button.title }}

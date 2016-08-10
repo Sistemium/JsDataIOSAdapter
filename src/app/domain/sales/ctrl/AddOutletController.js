@@ -9,6 +9,35 @@
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
 
+    var initialButtons = [
+      {
+        title: 'Сохранить',
+        id: 'savePartnerButton',
+        type: 'submit',
+        clickFn: 'vm.submit()'
+      },
+      {
+        title: 'Отменить',
+        type: 'cancel',
+        clickFn: 'vm.cancel()'
+      }
+    ];
+
+    function buttonClick(form, buttonId, buttonType) {
+      switch (buttonType) {
+        case 'submit':
+        {
+          vm.submit();
+          break;
+        }
+        case 'cancel':
+        {
+          vm.cancel(form);
+          break;
+        }
+      }
+    }
+
     function getPartners(viewValue, opt) {
 
       if (!viewValue) return;
@@ -302,28 +331,6 @@
 
     }
 
-    function cleanUp() {
-
-      if (vm.newOutlet) {
-
-        Outlet.destroy(vm.newOutlet);
-        vm.newOutlet = null;
-
-      }
-
-      if (vm.newPartner) {
-
-        Partner.destroy(vm.newPartner);
-        vm.newPartner = null;
-
-      }
-
-    }
-
-    function quit() {
-      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
-    }
-
     $scope.$watch('vm.name', function () {
 
       if (vm.selectedPartner && vm.inputNameInFocus) {
@@ -384,7 +391,31 @@
 
     }
 
+    function cleanUp() {
+
+      if (vm.newOutlet) {
+
+        Outlet.destroy(vm.newOutlet);
+        vm.newOutlet = null;
+
+      }
+
+      if (vm.newPartner) {
+
+        Partner.destroy(vm.newPartner);
+        vm.newPartner = null;
+
+      }
+
+    }
+
+    function quit() {
+      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
+    }
+
     angular.extend(vm, {
+      buttons: initialButtons,
+      buttonClick: buttonClick,
       selectedPartner: null,
       selectPartner: selectPartner,
       inputNameFocus: inputNameFocus,
@@ -396,8 +427,6 @@
       submit: submit,
       cancel: cancel
     });
-
-    //vm.refresh();
 
   }
 
