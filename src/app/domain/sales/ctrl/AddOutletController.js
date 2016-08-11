@@ -9,30 +9,49 @@
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
 
-    var initialButtons = [
-      {
-        title: 'Сохранить',
-        id: 'savePartnerButton',
-        type: 'submit',
-        clickFn: 'vm.submit()'
-      },
-      {
-        title: 'Отменить',
-        type: 'cancel',
-        clickFn: 'vm.cancel()'
-      }
-    ];
+    var deb = $window.debug('stg:addOutlet');
 
-    function buttonClick(form, buttonId, buttonType) {
-      switch (buttonType) {
-        case 'submit':
-        {
-          vm.submit();
-          break;
-        }
-        case 'cancel':
+    const buttonsTypes = {
+      blank: 'default',
+      primary: 'primary',
+      success: 'success',
+      info: 'info',
+      warning: 'warning',
+      danger: 'danger'
+    };
+
+    vm.submitButton = {
+      title: 'Сохранить',
+      type: buttonsTypes.primary,
+      isOpen: false,
+      description: 'Сохранить точку?'
+    };
+
+    vm.cancelButton = {
+      title: 'Отменить',
+      type: buttonsTypes.warning,
+      isOpen: false,
+      description: 'Отменить добавление точки?',
+      subButtons: [{
+        id: 'mainFormCancel',
+        title: 'Да, отменить',
+        type: buttonsTypes.primary
+      }]
+    };
+
+    var initialButtons = [vm.submitButton, vm.cancelButton];
+
+    function buttonClick(form, buttonId) {
+      switch (buttonId) {
+        case 'mainFormCancel':
         {
           vm.cancel(form);
+          break;
+        }
+        case 'savePartnerCancel':
+        {
+          vm.buttons = initialButtons;
+          vm.buttonsGroupTitle = ' ';
           break;
         }
       }
@@ -50,7 +69,9 @@
         }
       }, opt)
         .then(function (partners) {
-          return _.sortBy(partners, function(p) { return p.shortName.toLowerCase(); });
+          return _.sortBy(partners, function (p) {
+            return p.shortName.toLowerCase();
+          });
         });
 
     }
@@ -59,13 +80,28 @@
 
       _.result($window.document, 'activeElement.blur');
 
-      ConfirmModal.show({
-        text: 'Сохранить точку?'
-      })
-        .then(checkOutletName)
-        .then(checkOutletAddress)
-        .then(saveNewData)
-        .catch();
+      vm.buttonsGroupTitle = 'Сохранить точку?';
+
+      vm.buttons = [
+        {
+          title: 'Отменить',
+          id: 'savePartnerCancel',
+          type: 'cancel'
+        },
+        {
+          title: 'Да, сохранить',
+          id: 'savePartnerConfirm',
+          type: 'submit'
+        }
+      ];
+
+      //ConfirmModal.show({
+      //  text: 'Сохранить точку?'
+      //})
+      //  .then(checkOutletName)
+      //  .then(checkOutletAddress)
+      //  .then(saveNewData)
+      //  .catch();
 
     }
 
@@ -330,6 +366,31 @@
       vm.selectedPartner = partner;
 
     }
+
+    $scope.$watch('vm.submitButton', function (newValue) {
+
+      if (newValue.isOpen) {
+        deb('vm.submitButton isOpen!');
+        vm.submitButton.description = 'OPEN!';
+      }
+
+      if (!newValue.isOpen) {
+        deb('vm.submitButton !isOpen');
+      }
+
+    }, true);
+
+    $scope.$watch('vm.cancelButton', function (newValue) {
+
+      if (newValue.isOpen) {
+        deb('vm.cancelButton isOpen');
+      }
+
+      if (!newValue.isOpen) {
+        deb('vm.cancelButton !isOpen');
+      }
+
+    }, true);
 
     $scope.$watch('vm.name', function () {
 

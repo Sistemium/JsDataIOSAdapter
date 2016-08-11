@@ -35,11 +35,21 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
 
     hr
-    .pull-right
 
-      button.btn.margin(
+    uib-accordion.pull-right(close-others=true)
+
+      uib-accordion-group(
       ng-repeat='button in vm.buttons'
-      ng-click='vm.buttonClick(addOutletForm, button.id, button.type)'
-      ng-class="{'btn-primary': (button.type === 'submit'), 'btn-warning': (button.type === 'cancel')}"
-      ng-disabled="button.type === 'submit' && addOutletForm.$invalid"
-      ) {{ button.title }}
+      class='panel-{{ button.type }}'
+      is-disabled="(button.type === 'primary') && addOutletForm.$invalid"
+      is-open='button.isOpen'
+      )
+        uib-accordion-heading {{ button.title }}
+
+        p {{ button.description }}
+        .pull-right
+          button(
+          ng-repeat='btn in button.subButtons'
+          class='btn margin btn-{{ btn.type }}'
+          ng-click='vm.buttonClick(addOutletForm, btn.id)'
+          ) {{ btn.title }}
