@@ -31,17 +31,20 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         ng-required='true'
         placeholder="Адрес"
         ng-model="vm.address"
+        ng-focus='vm.inputFocus()'
+        ng-blur='vm.inputBlur()'
         autocomplete="off"
         )
 
     hr
 
-    uib-accordion.pull-right(close-others=true)
+    uib-accordion(close-others='true')
 
       uib-accordion-group(
       ng-repeat='button in vm.buttons'
       class='panel-{{ button.type }}'
       is-disabled="(button.type === 'primary') && addOutletForm.$invalid"
+      ng-click='vm.accButtonClick(addOutletForm, button)'
       is-open='button.isOpen'
       )
         uib-accordion-heading {{ button.title }}
@@ -51,5 +54,5 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
           button(
           ng-repeat='btn in button.subButtons'
           class='btn margin btn-{{ btn.type }}'
-          ng-click='vm.buttonClick(addOutletForm, btn.id)'
+          ng-click='vm.subButtonClick(btn)'
           ) {{ btn.title }}

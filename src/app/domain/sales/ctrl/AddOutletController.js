@@ -9,7 +9,7 @@
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
 
-    var deb = $window.debug('stg:addOutlet');
+    //var deb = $window.debug('stg:addOutlet');
 
     const buttonsTypes = {
       blank: 'default',
@@ -21,6 +21,7 @@
     };
 
     vm.submitButton = {
+      id: 'mainFormSubmit',
       title: 'Сохранить',
       type: buttonsTypes.primary,
       isOpen: false,
@@ -28,12 +29,13 @@
     };
 
     vm.cancelButton = {
+      id: 'mainFormCancel',
       title: 'Отменить',
       type: buttonsTypes.warning,
       isOpen: false,
       description: 'Отменить добавление точки?',
       subButtons: [{
-        id: 'mainFormCancel',
+        id: 'mainFormCancelConfirm',
         title: 'Да, отменить',
         type: buttonsTypes.primary
       }]
@@ -41,18 +43,31 @@
 
     var initialButtons = [vm.submitButton, vm.cancelButton];
 
-    function buttonClick(form, buttonId) {
-      switch (buttonId) {
+    function accButtonClick(form, button) {
+      switch (button.id) {
         case 'mainFormCancel':
         {
-          vm.cancel(form);
+          if (form.$pristine) return quit();
           break;
         }
-        case 'savePartnerCancel':
+        case 'mainFormSubmit':
         {
-          vm.buttons = initialButtons;
-          vm.buttonsGroupTitle = ' ';
+
+        }
+      }
+    }
+
+    function subButtonClick(button) {
+      switch (button.id) {
+        case 'mainFormCancelConfirm':
+        {
+          cleanUp();
+          quit();
           break;
+        }
+        case 'mainFormSubmitConfirm':
+        {
+          saveNewData();
         }
       }
     }
@@ -80,20 +95,7 @@
 
       _.result($window.document, 'activeElement.blur');
 
-      vm.buttonsGroupTitle = 'Сохранить точку?';
-
-      vm.buttons = [
-        {
-          title: 'Отменить',
-          id: 'savePartnerCancel',
-          type: 'cancel'
-        },
-        {
-          title: 'Да, сохранить',
-          id: 'savePartnerConfirm',
-          type: 'submit'
-        }
-      ];
+      angular.extend(vm.submitButton, checkName());
 
       //ConfirmModal.show({
       //  text: 'Сохранить точку?'
@@ -102,6 +104,21 @@
       //  .then(checkOutletAddress)
       //  .then(saveNewData)
       //  .catch();
+
+    }
+
+    function checkName() {
+
+      if (vm.selectPartner) {
+        return {
+          description: 'Сохранить точку?',
+          subButtons: [{
+            id: 'mainFormSubmitConfirm',
+            title: 'Да, сохранить',
+            type: buttonsTypes.primary
+          }]
+        }
+      }
 
     }
 
@@ -324,25 +341,9 @@
 
     }
 
-    function cancel(form) {
-
-      if (form.$pristine) {
-        return quit();
-      }
-
-      ConfirmModal.show({
-        text: 'Отменить добавление точки?'
-      })
-        .then(function () {
-
-          cleanUp();
-          quit();
-
-        });
-
-    }
-
     function inputNameFocus() {
+
+      inputFocus();
 
       if (vm.selectedPartner) {
         vm.name = vm.selectedPartner.shortName;
@@ -353,10 +354,23 @@
 
     function inputNameBlur() {
 
+      inputBlur();
+
       vm.inputNameInFocus = false;
       if (vm.selectedPartner) {
         vm.name = vm.selectedPartner.name;
       }
+
+    }
+
+    function inputFocus() {
+
+      vm.submitButton.isOpen = false;
+      vm.cancelButton.isOpen = false;
+
+    }
+
+    function inputBlur() {
 
     }
 
@@ -367,27 +381,18 @@
 
     }
 
-    $scope.$watch('vm.submitButton', function (newValue) {
+    $scope.$watch('vm.submitButton', function (newValue, oldValue) {
 
-      if (newValue.isOpen) {
-        deb('vm.submitButton isOpen!');
-        vm.submitButton.description = 'OPEN!';
-      }
-
-      if (!newValue.isOpen) {
-        deb('vm.submitButton !isOpen');
+      if (newValue && newValue.isOpen && newValue.isOpen !== oldValue.isOpen) {
+        submit();
       }
 
     }, true);
 
-    $scope.$watch('vm.cancelButton', function (newValue) {
+    $scope.$watch('vm.cancelButton', function (newValue, oldValue) {
 
-      if (newValue.isOpen) {
-        deb('vm.cancelButton isOpen');
-      }
-
-      if (!newValue.isOpen) {
-        deb('vm.cancelButton !isOpen');
+      if (newValue && newValue.isOpen && newValue.isOpen !== oldValue.isOpen) {
+        _.result($window.document, 'activeElement.blur');
       }
 
     }, true);
@@ -476,17 +481,18 @@
 
     angular.extend(vm, {
       buttons: initialButtons,
-      buttonClick: buttonClick,
+      accButtonClick: accButtonClick,
+      subButtonClick: subButtonClick,
       selectedPartner: null,
       selectPartner: selectPartner,
       inputNameFocus: inputNameFocus,
       inputNameBlur: inputNameBlur,
+      inputFocus: inputFocus,
+      inputBlur: inputBlur,
       newOutlet: null,
       filterPartnersByString: filterPartnersByString,
       filteredPartners: [],
-      getPartners: getPartners,
-      submit: submit,
-      cancel: cancel
+      getPartners: getPartners
     });
 
   }
