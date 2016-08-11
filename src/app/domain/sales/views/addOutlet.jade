@@ -50,9 +50,9 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         uib-accordion-heading {{ button.title }}
 
         p {{ button.description }}
-        .pull-right
-          button(
-          ng-repeat='btn in button.subButtons'
-          class='btn margin btn-{{ btn.type }} white-space-normal'
-          ng-click='vm.subButtonClick(btn)'
-          ) {{ btn.title }}
+          .pull-right.buttons-container
+            button(
+            ng-repeat='btn in button.subButtons'
+            class='btn margin btn-{{ btn.type }} white-space-normal'
+            ng-click='vm.subButtonClick(btn)'
+            ) {{ btn.title }}
