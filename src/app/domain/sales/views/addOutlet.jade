@@ -53,6 +53,6 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         .pull-right
           button(
           ng-repeat='btn in button.subButtons'
-          class='btn margin btn-{{ btn.type }}'
+          class='btn margin btn-{{ btn.type }} white-space-normal'
           ng-click='vm.subButtonClick(btn)'
           ) {{ btn.title }}
