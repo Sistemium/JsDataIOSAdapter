@@ -78,6 +78,7 @@
         {
           if (button.partner) {
             vm.selectedPartner = button.partner;
+            vm.name = vm.selectedPartner.name;
             submit();
           } else {
             return saveNewData();
