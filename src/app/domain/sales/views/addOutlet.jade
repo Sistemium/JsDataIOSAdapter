@@ -35,27 +35,30 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         ng-blur='vm.inputBlur()'
         autocomplete="off"
         )
-
     hr
 
-    uib-accordion(close-others='true')
+    .form-group
+      .col-sm-4
+      .col-sm-8
+        .pull-right
+          uib-accordion(close-others='true')
 
-      uib-accordion-group(
-      ng-repeat='button in vm.buttons'
-      class='panel-{{ button.type }}'
-      is-disabled="(button.type === 'primary') && addOutletForm.$invalid"
-      ng-click='vm.accButtonClick(addOutletForm, button)'
-      is-open='button.isOpen'
-      )
-        uib-accordion-heading {{ button.title }}
-          i.pull-right.glyphicon(
-          ng-hide="(button.type === 'primary') && addOutletForm.$invalid"
-          ng-class="{'glyphicon-chevron-up': button.isOpen, 'glyphicon-chevron-down': !button.isOpen && !addOutletForm.$pristine, 'glyphicon-chevron-left': addOutletForm.$pristine}"
-          )
-        p {{ button.description }}
-          .pull-right.buttons-container
-            button(
-            ng-repeat='btn in button.subButtons'
-            class='btn margin btn-{{ btn.type }}'
-            ng-click='vm.subButtonClick(btn)'
-            ) {{ btn.title }}
+            uib-accordion-group(
+            ng-repeat='button in vm.buttons'
+            class='panel-{{ button.type }}'
+            is-disabled="(button.type === 'primary') && addOutletForm.$invalid"
+            ng-click='vm.accButtonClick(addOutletForm, button)'
+            is-open='button.isOpen'
+            )
+              uib-accordion-heading {{ button.title }}
+                i.pull-right.glyphicon(
+                ng-hide="(button.type === 'primary') && addOutletForm.$invalid"
+                ng-class="{'glyphicon-chevron-up': button.isOpen, 'glyphicon-chevron-down': !button.isOpen && !addOutletForm.$pristine, 'glyphicon-chevron-left': addOutletForm.$pristine}"
+                )
+              p {{ button.description }}
+                .pull-right.buttons-container
+                  button(
+                  ng-repeat='btn in button.subButtons'
+                  class='btn margin btn-{{ btn.type }}'
+                  ng-click='vm.subButtonClick(btn)'
+                  ) {{ btn.title }}
