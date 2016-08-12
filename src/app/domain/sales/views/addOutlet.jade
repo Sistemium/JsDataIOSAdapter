@@ -48,7 +48,9 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
       is-open='button.isOpen'
       )
         uib-accordion-heading {{ button.title }}
-
+          i.pull-right.glyphicon(
+          ng-class="{'glyphicon-chevron-up': button.isOpen, 'glyphicon-chevron-down': !button.isOpen}"
+          )
         p {{ button.description }}
           .pull-right.buttons-container
             button(
