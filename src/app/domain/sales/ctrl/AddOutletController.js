@@ -52,7 +52,7 @@
         }
         case 'mainFormSubmit':
         {
-
+          deb('mainFormSubmit');
         }
       }
     }
@@ -67,13 +67,21 @@
         }
         case 'mainFormSubmitConfirm':
         {
-          saveNewData();
-          break;
+          return saveNewData();
         }
         case 'useOutletSubmitConfirm':
         {
           if (button.outlet) return quit(button.outlet);
           return saveNewData();
+        }
+        case 'usePartnerSubmitConfirm':
+        {
+          if (button.partner) {
+            vm.selectedPartner = button.partner;
+            submit();
+          } else {
+            return saveNewData();
+          }
         }
       }
     }
@@ -101,23 +109,107 @@
 
       _.result($window.document, 'activeElement.blur');
 
-      angular.extend(vm.submitButton, checkName());
+      checkName()
+      .then(updateSubmitButtonState);
 
-      //ConfirmModal.show({
-      //  text: 'Сохранить точку?'
-      //})
-      //  .then(checkOutletName)
-      //  .then(checkOutletAddress)
-      //  .then(saveNewData)
-      //  .catch();
+    }
 
+    function updateSubmitButtonState(value) {
+      angular.extend(vm.submitButton, value);
     }
 
     function checkName() {
 
-      if (vm.selectedPartner) {
-        return checkAddress(vm.selectedPartner);
+      return $q(function (resolve) {
+
+        if (vm.selectedPartner) {
+          resolve(checkAddress(vm.selectedPartner));
+        } else {
+          resolve(checkPartnerName());
+        }
+
+      });
+
+    }
+
+    function checkPartnerName() {
+
+      if (vm.selectedPartner) return;
+
+      if (vm.newPartner) {
+
+        return {
+          description: 'Сохранить точку?',
+          subButtons: [{
+            id: 'mainFormSubmitConfirm',
+            title: 'Да, сохранить',
+            type: buttonsTypes.primary
+          }]
+        };
+
+      } else {
+
+        return getPartners(vm.name)
+          .then(generateSubmitPartnerButtonState);
+
       }
+
+    }
+
+    function generateSubmitPartnerButtonState(partners) {
+
+      if (partners.length) {
+
+        var description = '';
+
+        if (partners.length == 1) {
+          description = 'Существует партнёр с похожим именем. Выберите его или создайте нового:';
+        } else {
+          description = 'Существуют партнёры с похожими именами. Выберите из них, либо создайте нового:';
+        }
+
+        return partnersButtons(partners, description);
+
+      } else {
+
+        return {
+          description: 'Сохранить точку?',
+          subButtons: [{
+            id: 'mainFormSubmitConfirm',
+            title: 'Да, сохранить',
+            type: buttonsTypes.primary
+          }]
+        };
+
+      }
+
+    }
+
+    function partnersButtons(partners, description) {
+
+      var partnersButtons = [];
+
+      angular.forEach(partners, function (partner) {
+
+        partnersButtons.push({
+          id: 'usePartnerSubmitConfirm',
+          title: partner.name,
+          type: buttonsTypes.blank,
+          partner: partner
+        });
+
+      });
+
+      partnersButtons.push({
+        id: 'usePartnerSubmitConfirm',
+        title: 'Нового партнёра делай',
+        type: buttonsTypes.primary
+      });
+
+      return {
+        description: description,
+        subButtons: partnersButtons
+      };
 
     }
 
@@ -132,7 +224,7 @@
         }
       };
 
-      var filteredOutlets = Outlet.filter(filterParams);
+      var filteredOutlets = (vm.newOutlet) ? [] : Outlet.filter(filterParams);
 
       if (filteredOutlets.length) {
 
@@ -144,29 +236,7 @@
           description += 'точки с похожим адресом. Выберите какую-нибудь из них, либо создайте новую:';
         }
 
-        var outletButtons = [];
-
-        angular.forEach(filteredOutlets, function (outlet) {
-
-          outletButtons.push({
-            id: 'useOutletSubmitConfirm',
-            title: outlet.address,
-            type: buttonsTypes.blank,
-            outlet: outlet
-          });
-
-        });
-
-        outletButtons.push({
-          id: 'useOutletSubmitConfirm',
-          title: 'Новую точку сделать хочу',
-          type: buttonsTypes.primary
-        });
-
-        return {
-          description: description,
-          subButtons: outletButtons
-        };
+        return outletsButtons(filteredOutlets, description);
 
       } else {
 
@@ -180,6 +250,34 @@
         };
 
       }
+
+    }
+
+    function outletsButtons(outlets, description) {
+
+      var outletButtons = [];
+
+      angular.forEach(outlets, function (outlet) {
+
+        outletButtons.push({
+          id: 'useOutletSubmitConfirm',
+          title: outlet.address,
+          type: buttonsTypes.blank,
+          outlet: outlet
+        });
+
+      });
+
+      outletButtons.push({
+        id: 'useOutletSubmitConfirm',
+        title: 'Новую точку сделать хочу',
+        type: buttonsTypes.primary
+      });
+
+      return {
+        description: description,
+        subButtons: outletButtons
+      };
 
     }
 
@@ -217,109 +315,76 @@
 
     }
 
-    function checkOutletName() {
+    //function partnerModal(partner, text) {
+    //
+    //  return ConfirmModal.show({
+    //
+    //    buttons: [
+    //      {
+    //        title: 'Использовать существующего',
+    //        id: 'useExisting',
+    //        type: 'submit'
+    //      },
+    //      {
+    //        title: 'Создать нового',
+    //        id: 'createNew',
+    //        type: 'submit'
+    //      },
+    //      {
+    //        title: 'Отмена',
+    //        type: 'cancel'
+    //      }
+    //    ],
+    //    text: text
+    //  })
+    //    .then(function (buttonId) {
+    //
+    //      switch (buttonId) {
+    //        case 'useExisting':
+    //        {
+    //          vm.selectedPartner = partner;
+    //          return partner;
+    //        }
+    //      }
+    //
+    //    });
+    //
+    //}
 
-      if (vm.selectedPartner) return vm.selectedPartner;
-
-      var modalText = '';
-
-// check full name
-      var filteredPartner = _.find(vm.partners, function (partner) {
-        return _.lowerCase(partner.name) === _.lowerCase(vm.name);
-      });
-
-      if (filteredPartner) {
-
-        modalText = 'Партнёр "' + filteredPartner.name + '" уже существует. Использовать существующего партнёра или создать нового?';
-        return partnerModal(filteredPartner, modalText);
-
-      } else {
-
-// check short name
-        filteredPartner = _.find(vm.partners, function (partner) {
-          return _.lowerCase(partner.shortName) === _.lowerCase(vm.name);
-        });
-        if (filteredPartner) {
-
-          modalText = 'Партнёр с похожим названием: "' + filteredPartner.name + '" уже существует. Использовать этого партнёра или создать нового?';
-          return partnerModal(filteredPartner, modalText);
-
-        }
-
-      }
-
-    }
-
-    function partnerModal(partner, text) {
-
-      return ConfirmModal.show({
-
-        buttons: [
-          {
-            title: 'Использовать существующего',
-            id: 'useExisting',
-            type: 'submit'
-          },
-          {
-            title: 'Создать нового',
-            id: 'createNew',
-            type: 'submit'
-          },
-          {
-            title: 'Отмена',
-            type: 'cancel'
-          }
-        ],
-        text: text
-      })
-        .then(function (buttonId) {
-
-          switch (buttonId) {
-            case 'useExisting':
-            {
-              vm.selectedPartner = partner;
-              return partner;
-            }
-          }
-
-        });
-
-    }
-
-    function checkOutletAddress(partner) {
-
-      if (!partner) return $q.resolve();
-
-      var filterParams = {
-        where: {
-          partnerId: {'===': partner.id},
-          address: {'likei': vm.address}
-        }
-      };
-
-      var filteredOutlet = Outlet.filter(filterParams)[0];
-
-      if (filteredOutlet) {
-
-        var modalText = 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?';
-
-        return ConfirmModal.show({
-          text: modalText,
-          hideCloseButton: true
-        }, {
-          backdrop: 'static',
-          keyboard: false
-        })
-          .then(function () {
-
-            $state.go('^.outlet', {id: filteredOutlet.id});
-            return $q.reject();
-
-          }, $q.reject);
-
-      }
-
-    }
+    //function checkOutletAddress(partner) {
+    //
+    //  if (!partner) return $q.resolve();
+    //
+    //  var filterParams = {
+    //    where: {
+    //      partnerId: {'===': partner.id},
+    //      address: {'likei': vm.address}
+    //    }
+    //  };
+    //
+    //  var filteredOutlet = Outlet.filter(filterParams)[0];
+    //
+    //  if (filteredOutlet) {
+    //
+    //    var modalText = 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?';
+    //
+    //    return ConfirmModal.show({
+    //      text: modalText,
+    //      hideCloseButton: true
+    //    }, {
+    //      backdrop: 'static',
+    //      keyboard: false
+    //    })
+    //      .then(function () {
+    //
+    //        $state.go('^.outlet', {id: filteredOutlet.id});
+    //        return $q.reject();
+    //
+    //      }, $q.reject);
+    //
+    //  }
+    //
+    //}
 
     function savePartner(name) {
 
