@@ -307,77 +307,6 @@
 
     }
 
-    //function partnerModal(partner, text) {
-    //
-    //  return ConfirmModal.show({
-    //
-    //    buttons: [
-    //      {
-    //        title: 'Использовать существующего',
-    //        id: 'useExisting',
-    //        type: 'submit'
-    //      },
-    //      {
-    //        title: 'Создать нового',
-    //        id: 'createNew',
-    //        type: 'submit'
-    //      },
-    //      {
-    //        title: 'Отмена',
-    //        type: 'cancel'
-    //      }
-    //    ],
-    //    text: text
-    //  })
-    //    .then(function (buttonId) {
-    //
-    //      switch (buttonId) {
-    //        case 'useExisting':
-    //        {
-    //          vm.selectedPartner = partner;
-    //          return partner;
-    //        }
-    //      }
-    //
-    //    });
-    //
-    //}
-
-    //function checkOutletAddress(partner) {
-    //
-    //  if (!partner) return $q.resolve();
-    //
-    //  var filterParams = {
-    //    where: {
-    //      partnerId: {'===': partner.id},
-    //      address: {'likei': vm.address}
-    //    }
-    //  };
-    //
-    //  var filteredOutlet = Outlet.filter(filterParams)[0];
-    //
-    //  if (filteredOutlet) {
-    //
-    //    var modalText = 'Точка "' + filteredOutlet.name + '" с адресом ' + filteredOutlet.address + ' уже существует. Использовать существующую точку?';
-    //
-    //    return ConfirmModal.show({
-    //      text: modalText,
-    //      hideCloseButton: true
-    //    }, {
-    //      backdrop: 'static',
-    //      keyboard: false
-    //    })
-    //      .then(function () {
-    //
-    //        $state.go('^.outlet', {id: filteredOutlet.id});
-    //        return $q.reject();
-    //
-    //      }, $q.reject);
-    //
-    //  }
-    //
-    //}
-
     function savePartner(name) {
 
       var havePartner = vm.selectedPartner || vm.newPartner;
@@ -523,57 +452,7 @@
         }
       }
 
-      //filterPartnersByString(newValue);
-
     });
-
-    function filterPartnersByString(newValue) {
-
-      if (newValue) {
-
-        var checkValues = _.words(_.lowerCase(newValue));
-
-        if (!checkValues) return;
-
-        var cPartners = {};
-
-        vm.filteredPartners = _.filter(vm.partners, function (p) {
-
-          var checkOk = true;
-          var vIndexes = [];
-
-          angular.forEach(checkValues, function (v) {
-
-            if (checkOk) {
-
-              var vIndex = _.lowerCase(p.shortName).indexOf(v);
-              vIndex >= 0 ? vIndexes.push(vIndex) : checkOk = false;
-
-            }
-
-          });
-
-          if (checkOk) {
-            cPartners[p.id] = vIndexes;
-          }
-
-          return checkOk;
-
-        });
-
-        console.log(vm.filteredPartners);
-        console.log(cPartners);
-
-        vm.showPartnersDropdownList = vm.filteredPartners.length && !(vm.filteredPartners.length == 1 && vm.filteredPartners[0].shortName == vm.name);
-
-      } else {
-
-        vm.filteredPartners = null;
-        vm.showPartnersDropdownList = false;
-
-      }
-
-    }
 
     function cleanUp() {
 
@@ -608,7 +487,6 @@
       inputFocus: inputFocus,
       inputBlur: inputBlur,
       newOutlet: null,
-      filterPartnersByString: filterPartnersByString,
       filteredPartners: [],
       getPartners: getPartners
     });
