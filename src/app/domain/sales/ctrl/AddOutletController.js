@@ -9,7 +9,7 @@
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
 
-    //var deb = $window.debug('stg:addOutlet');
+    var deb = $window.debug('stg:addOutlet');
 
     const buttonsTypes = {
       blank: 'default',
@@ -68,6 +68,12 @@
         case 'mainFormSubmitConfirm':
         {
           saveNewData();
+          break;
+        }
+        case 'useOutletSubmitConfirm':
+        {
+          if (button.outlet) return quit(button.outlet);
+          return saveNewData();
         }
       }
     }
@@ -109,7 +115,61 @@
 
     function checkName() {
 
-      if (vm.selectPartner) {
+      if (vm.selectedPartner) {
+        return checkAddress(vm.selectedPartner);
+      }
+
+    }
+
+    function checkAddress(partner) {
+
+      if (!partner) return;
+
+      var filterParams = {
+        where: {
+          partnerId: {'===': partner.id},
+          address: {'likei': vm.address}
+        }
+      };
+
+      var filteredOutlets = Outlet.filter(filterParams);
+
+      if (filteredOutlets.length) {
+
+        var description = 'У партнёра «' + partner.shortName + '» есть ';
+
+        if (filteredOutlets.length == 1) {
+          description += 'точка с похожим адресом. Выберите её или создайте новую:';
+        } else {
+          description += 'точки с похожим адресом. Выберите какую-нибудь из них, либо создайте новую:';
+        }
+
+        var outletButtons = [];
+
+        angular.forEach(filteredOutlets, function (outlet) {
+
+          outletButtons.push({
+            id: 'useOutletSubmitConfirm',
+            title: outlet.address,
+            type: buttonsTypes.blank,
+            outlet: outlet
+          });
+
+        });
+
+        outletButtons.push({
+          id: 'useOutletSubmitConfirm',
+          title: 'Новую точку сделать хочу',
+          type: buttonsTypes.primary
+        });
+
+        return {
+          description: description,
+          subButtons: outletButtons
+        };
+
+      } else {
+
         return {
           description: 'Сохранить точку?',
           subButtons: [{
@@ -117,7 +177,8 @@
             title: 'Да, сохранить',
             type: buttonsTypes.primary
           }]
-        }
+        };
+
       }
 
     }
@@ -144,7 +205,7 @@
           var location = Location.inject(data);
           vm.newOutlet.locationId = location.id;
 
-          quit();
+          return quit(vm.newOutlet);
 
         })
         .catch(function (err) {
@@ -475,8 +536,8 @@
 
     }
 
-    function quit() {
-      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
+    function quit(outlet) {
+      return outlet ? $state.go('^.outlet', {id: outlet.id}) : $state.go('^');
     }
 
     angular.extend(vm, {
