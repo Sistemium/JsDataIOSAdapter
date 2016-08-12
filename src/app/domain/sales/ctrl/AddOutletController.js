@@ -41,6 +41,16 @@
       }]
     };
 
+    var mainFormSubmitConfirmButton = {
+      description: 'Сохранить точку?',
+        subButtons: [{
+        id: 'mainFormSubmitConfirm',
+        title: 'Да, сохранить',
+        type: buttonsTypes.primary
+      }]
+    };
+
+
     var initialButtons = [vm.submitButton, vm.cancelButton];
 
     function accButtonClick(form, button) {
@@ -138,16 +148,7 @@
       if (vm.selectedPartner) return;
 
       if (vm.newPartner) {
-
-        return {
-          description: 'Сохранить точку?',
-          subButtons: [{
-            id: 'mainFormSubmitConfirm',
-            title: 'Да, сохранить',
-            type: buttonsTypes.primary
-          }]
-        };
-
+        return mainFormSubmitConfirmButton;
       } else {
 
         return getPartners(vm.name)
@@ -172,16 +173,7 @@
         return partnersButtons(partners, description);
 
       } else {
-
-        return {
-          description: 'Сохранить точку?',
-          subButtons: [{
-            id: 'mainFormSubmitConfirm',
-            title: 'Да, сохранить',
-            type: buttonsTypes.primary
-          }]
-        };
-
+        return mainFormSubmitConfirmButton;
       }
 
     }
@@ -225,31 +217,30 @@
         }
       };
 
-      var filteredOutlets = (vm.newOutlet) ? [] : Outlet.filter(filterParams);
+      if (vm.newOutlet) {
+        return mainFormSubmitConfirmButton;
+      } else {
+        return generateSubmitOutletButtonState(Outlet.filter(filterParams), partner);
+      }
 
-      if (filteredOutlets.length) {
+    }
+
+    function generateSubmitOutletButtonState(outlets, partner) {
+
+      if (outlets.length) {
 
         var description = 'У партнёра «' + partner.shortName + '» есть ';
 
-        if (filteredOutlets.length == 1) {
+        if (outlets.length == 1) {
           description += 'точка с похожим адресом. Выберите её или создайте новую:';
         } else {
           description += 'точки с похожим адресом. Выберите какую-нибудь из них, либо создайте новую:';
         }
 
-        return outletsButtons(filteredOutlets, description);
+        return outletsButtons(outlets, description);
 
       } else {
-
-        return {
-          description: 'Сохранить точку?',
-          subButtons: [{
-            id: 'mainFormSubmitConfirm',
-            title: 'Да, сохранить',
-            type: buttonsTypes.primary
-          }]
-        };
-
+        return mainFormSubmitConfirmButton;
       }
 
     }
@@ -271,7 +262,7 @@
 
       outletButtons.push({
         id: 'useOutletSubmitConfirm',
-        title: 'Новую точку сделать хочу',
+        title: 'Новую точку делай',
         type: buttonsTypes.primary
       });
 
