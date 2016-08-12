@@ -49,13 +49,13 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
       )
         uib-accordion-heading {{ button.title }}
           i.pull-right.glyphicon(
-          ng-hide='addOutletForm.$pristine'
-          ng-class="{'glyphicon-chevron-up': button.isOpen, 'glyphicon-chevron-down': !button.isOpen}"
+          ng-hide="(button.type === 'primary') && addOutletForm.$invalid"
+          ng-class="{'glyphicon-chevron-up': button.isOpen, 'glyphicon-chevron-down': !button.isOpen && !addOutletForm.$pristine, 'glyphicon-chevron-left': addOutletForm.$pristine}"
           )
         p {{ button.description }}
           .pull-right.buttons-container
             button(
             ng-repeat='btn in button.subButtons'
-            class='btn margin btn-{{ btn.type }} white-space-normal'
+            class='btn margin btn-{{ btn.type }}'
             ng-click='vm.subButtonClick(btn)'
             ) {{ btn.title }}

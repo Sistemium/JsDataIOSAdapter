@@ -1,17 +1,40 @@
 button {
-  &.margin{
+  &.margin {
     margin: 2px;
   }
   .glyphicon {
     top: 2px;
     left: 1px;
   }
-  &.white-space-normal{
+}
+
+.buttons-container {
+  button {
+    width: 100%;
+    text-align: left;
     white-space: normal;
   }
 }
 
-.buttons-container button {
-  width: 100%;
-  text-align: left;
+.panel {
+  .panel-heading {
+    a:active, a:focus, a:hover, a:visited {
+      text-decoration: none;
+    }
+  }
 }
+
+.panel-primary {
+  .panel-heading {
+
+    .text-muted {
+      color: lightgrey;
+    }
+    a:active, a:focus, a:hover, a:visited {
+      color: white;
+    }
+
+  }
+}
+
+
