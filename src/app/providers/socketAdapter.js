@@ -25,30 +25,40 @@
       return q;
     }
 
-    //function paramsToOptions (params) {
-    //
-    //  var parsed = {};
-    //
-    //  if (params.limit) {
-    //    parsed.pageSize = params.limit;
-    //  }
-    //
-    //  if (params.offset) {
-    //    parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
-    //  }
-    //
-    //  delete params.limit;
-    //  delete params.offset;
-    //
-    //  return parsed;
-    //}
+    function paramsToOptions(params) {
+
+      var parsed = {};
+
+      if (params.limit) {
+        parsed.pageSize = params.limit;
+      }
+
+      if (params.offset) {
+        parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
+      }
+
+      var where = params.where;
+
+      if (where) {
+
+        _.each(where, function (val, key) {
+          if (val.likei) {
+            parsed['searchFields:'] = key;
+            parsed['searchFor:'] = val.likei;
+          }
+        });
+
+      }
+
+      return parsed;
+    }
 
     SocketAdapter.prototype.findAll = function (resource, params, options) {
       return emit({
         method: 'findAll',
         //TODO rename models with pool or set basePath for adapter or leave as it is now
         resource: (this.defaults.pool || options.pool) + '/' + resource.name,
-        params: params,
+        params: paramsToOptions(params),
         options: angular.extend({
           headers: {
             'x-page-size': options.limit || 1000
