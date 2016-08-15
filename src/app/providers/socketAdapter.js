@@ -4,8 +4,9 @@
 
   angular.module('Models').service('SocketAdapter', function (Sockets) {
 
-    var DEBUG = debug ('stg:SocketAdapter');
-    var Defaults = function () {};
+    var DEBUG = debug('stg:SocketAdapter');
+    var Defaults = function () {
+    };
     var defaultsPrototype = Defaults.prototype;
     defaultsPrototype.basePath = '';
 
@@ -15,12 +16,12 @@
       _.assign(this.defaults, options);
     };
 
-    function emit (options) {
-      var q = Sockets.emitQ('jsData',options);
-      q.then(function(data){
-        DEBUG ('emit:success', options.resource, data, options);
-      },function(err){
-        DEBUG ('emit:catch', err, options);
+    function emit(options) {
+      var q = Sockets.emitQ('jsData', options);
+      q.then(function (data) {
+        DEBUG('emit:success', options.resource, data, options);
+      }, function (err) {
+        DEBUG('emit:catch', err, options);
       });
       return q;
     }
@@ -63,7 +64,7 @@
           headers: {
             'x-page-size': options.limit || 1000
           }
-        },options)
+        }, options)
       });
     };
 
@@ -81,14 +82,14 @@
       return emit({
         method: 'create',
         resource: (this.defaults.pool || options.pool) + '/' + resource.name,
-        attrs: angular.extend(attrs||{}, { deviceCts: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS') })
+        attrs: angular.extend(attrs || {}, {deviceCts: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS')})
       });
     };
 
     SocketAdapter.prototype.update = function (resource, id, attrs, options) {
-      var deviceCts = _.get(attrs,'deviceCts');
+      var deviceCts = _.get(attrs, 'deviceCts');
       if (!deviceCts) {
-        attrs = angular.extend(attrs||{}, { deviceCts: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS') });
+        attrs = angular.extend(attrs || {}, {deviceCts: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS')});
       }
       return emit({
         method: 'update',
@@ -106,7 +107,7 @@
         options: options
       });
 
-      q.catch (function(err){
+      q.catch(function (err) {
         if (err && err.error === 404) {
           resource.eject(id);
         }
