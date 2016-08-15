@@ -28,7 +28,7 @@
 
     function paramsToOptions(params) {
 
-      var parsed = {};
+      var parsed = _.assign({},params);
 
       if (params.limit) {
         parsed.pageSize = params.limit;
@@ -50,6 +50,10 @@
         });
 
       }
+
+      delete parsed.where;
+      delete parsed.offset;
+      delete parsed.limit;
 
       return parsed;
     }
