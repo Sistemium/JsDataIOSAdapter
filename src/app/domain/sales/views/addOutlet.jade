@@ -3,7 +3,10 @@ h3 Добавить точку
 hr
 
 section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
-  form.form-horizontal(name="addOutletForm")
+  form.form-horizontal(
+  name="addOutletForm"
+  novalidate
+  )
 
     .form-group
       label.col-sm-4.control-label(for="inputName") Название партнёра
@@ -68,6 +71,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
       label.col-sm-4.control-label(for="inputINN") ИНН
       .col-sm-8
         input#inputINN.form-control(
+        inn-input
         type="text"
         name="legalForm"
         ng-required='true'
