@@ -43,7 +43,7 @@
 
     var mainFormSubmitConfirmButton = {
       description: 'Сохранить точку?',
-        subButtons: [{
+      subButtons: [{
         id: 'mainFormSubmitConfirm',
         title: 'Да, сохранить',
         type: buttonsTypes.primary
@@ -57,10 +57,10 @@
       switch (button.id) {
         case 'mainFormCancel':
         {
-          if (form.$pristine) return quit();
-          break;
+          if (form.$pristine || !angular.isObject(vm.selectPartner)) return quit();
         }
-        case 'mainFormSubmit':
+          break;
+        case 'mainFormSubmit' :
         {
           deb('mainFormSubmit');
         }
@@ -88,7 +88,7 @@
         {
           if (button.partner) {
             vm.selectedPartner = button.partner;
-            vm.name = vm.selectedPartner.name;
+            //vm.name = vm.selectedPartner.name;
             submit();
           } else {
             return saveNewData();
@@ -99,7 +99,9 @@
 
     function getPartners(viewValue, opt) {
 
-      if (!viewValue) return;
+      //if (!viewValue) return;
+
+      vm.currentSearchValue = viewValue;
 
       return Partner.findAll({
         where: {
@@ -109,9 +111,12 @@
         }
       }, opt)
         .then(function (partners) {
-          return _.sortBy(partners, function (p) {
+
+          vm.partners = _.sortBy(partners, function (p) {
             return p.shortName.toLowerCase();
           });
+          return vm.partners;
+
         });
 
     }
@@ -121,7 +126,7 @@
       _.result($window.document, 'activeElement.blur');
 
       checkName()
-      .then(updateSubmitButtonState);
+        .then(updateSubmitButtonState);
 
     }
 
@@ -151,8 +156,8 @@
         return mainFormSubmitConfirmButton;
       } else {
 
-        return getPartners(vm.name)
-          .then(generateSubmitPartnerButtonState);
+        //return getPartners(vm.name)
+        //  .then(generateSubmitPartnerButtonState);
 
       }
 
@@ -276,7 +281,7 @@
     function saveNewData() {
 
       vm.busyMessage = 'Сохраняем партнёра…';
-
+/*
       vm.busy = savePartner(vm.name)
         .then(function (partner) {
 
@@ -304,7 +309,7 @@
           return $q.reject(err);
 
         });
-
+*/
     }
 
     function savePartner(name) {
@@ -393,7 +398,7 @@
       inputFocus();
 
       if (vm.selectedPartner) {
-        vm.name = vm.selectedPartner.shortName;
+        //vm.name = vm.selectedPartner.shortName;
       }
       vm.inputNameInFocus = true;
 
@@ -405,7 +410,7 @@
 
       vm.inputNameInFocus = false;
       if (vm.selectedPartner) {
-        vm.name = vm.selectedPartner.name;
+        //vm.name = vm.selectedPartner.name;
       }
 
     }
@@ -423,8 +428,8 @@
 
     function selectPartner(partner) {
 
-      vm.name = partner.shortName;
-      vm.selectedPartner = partner;
+      //partner ? vm.name = partner.shortName : delete vm.name;
+      partner ? vm.selectedPartner = partner : delete vm.selectedPartner;
 
     }
 
@@ -444,15 +449,15 @@
 
     }, true);
 
-    $scope.$watch('vm.name', function () {
-
-      if (vm.selectedPartner && vm.inputNameInFocus) {
-        if (vm.name !== vm.selectedPartner.shortName) {
-          vm.selectedPartner = null;
-        }
-      }
-
-    });
+    //$scope.$watch('vm.name', function () {
+    //
+    //  if (vm.selectedPartner && vm.inputNameInFocus) {
+    //    if (vm.name !== vm.selectedPartner.shortName) {
+    //      vm.selectedPartner = null;
+    //    }
+    //  }
+    //
+    //});
 
     function cleanUp() {
 
@@ -487,8 +492,9 @@
       inputFocus: inputFocus,
       inputBlur: inputBlur,
       newOutlet: null,
-      filteredPartners: [],
-      getPartners: getPartners
+      partners: [],
+      getPartners: getPartners,
+      currentSearchValue: null
     });
 
   }
@@ -496,4 +502,5 @@
   angular.module('webPage')
     .controller('AddOutletController', AddOutletController);
 
-})();
+})
+();
