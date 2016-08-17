@@ -25,7 +25,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
                 allow-clear
                 ) {{ $select.selected.shortName }}
                 ui-select-choices(
-                repeat='partner in vm.partners | filter: $select.search | orderBy:"shortName" track by partner.id'
+                repeat='partner in vm.partners | filter: $select.search | orderBy:["shortName", "name"] track by partner.id'
                 refresh='vm.getPartners($select.search, {sortBy: "shortName"})'
                 refresh-delay=0
                 )
