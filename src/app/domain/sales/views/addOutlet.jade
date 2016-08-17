@@ -8,14 +8,14 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputName") Название партнёра
       .col-sm-8
-        .container-fluid
+        .container-fluid(ng-if='!vm.isInCreatingPartnerProcess')
           .row
             .col-xs-10
               ui-select#inputName(
               ng-model='vm.selectedPartner'
               on-remove="vm.selectPartner()"
               on-select="vm.selectPartner($item)"
-              ng-required
+              ng-required='true'
               )
                 ui-select-match(
                 placeholder="Название партнёра"
@@ -29,19 +29,59 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
                   div(ng-bind-html="partner.name | highlight: $select.search")
             .col-xs-2
               button.btn.ml-em.btn-primary.pull-right(
-              ng-click=''
+              ng-click='vm.addPartnerBtnClick()'
               ng-hide='!vm.currentSearchValue'
               )
                 i.glyphicon.glyphicon-plus
 
-    .form-group(ng-hide='!vm.selectedPartner')
+        input#inputName.form-control(
+        ng-if='vm.isInCreatingPartnerProcess'
+        type="text"
+        name="name"
+        ng-required='true'
+        placeholder="Имя партнёра"
+        ng-focus='vm.inputFocus()'
+        ng-blur='vm.inputBlur()'
+        autocomplete="off"
+        value='{{ vm.currentSearchValue }}'
+        )
+
+    .form-group(ng-if='vm.isInCreatingPartnerProcess')
+      label.col-sm-4.control-label(for="inputLegalForm") Форма
+      .col-sm-8
+        input#inputLegalForm.form-control(
+        type="text"
+        name="legalForm"
+        ng-required='true'
+        placeholder="Форма собственности"
+        ng-model="vm.legalForm"
+        ng-focus='vm.inputFocus()'
+        ng-blur='vm.inputBlur()'
+        autocomplete="off"
+        )
+
+    .form-group(ng-if='vm.isInCreatingPartnerProcess')
+      label.col-sm-4.control-label(for="inputINN") ИНН
+      .col-sm-8
+        input#inputINN.form-control(
+        type="text"
+        name="legalForm"
+        ng-required='true'
+        placeholder="Индивидуальный номер налогоплательщика"
+        ng-model="vm.inn"
+        ng-focus='vm.inputFocus()'
+        ng-blur='vm.inputBlur()'
+        autocomplete="off"
+        )
+
+    .form-group(ng-if='vm.isInCreatingPartnerProcess || vm.selectedPartner')
       label.col-sm-4.control-label(for="inputAddress") Адрес
       .col-sm-8
         input#inputAddress.form-control(
         type="text"
         name="address"
         ng-required='true'
-        placeholder="{{ vm.selectedPartner ? 'Адрес' : 'Сначала выберите партнёра' }}"
+        placeholder="{{ vm.selectedPartner || vm.isInCreatingPartnerProcess ? 'Адрес' : 'Сначала выберите партнёра' }}"
         ng-model="vm.address"
         ng-focus='vm.inputFocus()'
         ng-blur='vm.inputBlur()'

@@ -97,6 +97,12 @@
       }
     }
 
+    function addPartnerBtnClick() {
+
+      vm.isInCreatingPartnerProcess = true;
+
+    }
+
     function getPartners(viewValue, opt) {
 
       //if (!viewValue) return;
@@ -494,7 +500,9 @@
       newOutlet: null,
       partners: [],
       getPartners: getPartners,
-      currentSearchValue: null
+      currentSearchValue: null,
+      isInCreatingPartnerProcess: false,
+      addPartnerBtnClick: addPartnerBtnClick
     });
 
   }
