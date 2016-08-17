@@ -14,6 +14,13 @@
       },
 
       relations: {
+        hasOne: {
+          LegalForm: {
+            localField: 'legalForm',
+            localKey: 'legalFormId'
+          }
+
+        },
         hasMany: {
           Outlet: {
             localField: 'outlets',
