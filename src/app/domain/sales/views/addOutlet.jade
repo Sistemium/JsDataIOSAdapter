@@ -39,6 +39,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
 
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
+        ng-model='vm.name'
         auto-focus='false'
         type="text"
         name="name"
@@ -47,7 +48,6 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         ng-focus='vm.inputFocus()'
         ng-blur='vm.inputBlur()'
         autocomplete="off"
-        value='{{ vm.currentSearchValue }}'
         )
 
     .form-group(ng-if='vm.isInCreatingPartnerProcess')
@@ -114,7 +114,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
                 span {{ button.title }}
                 i.pull-right.glyphicon(
                 ng-hide="(button.type === 'primary') && addOutletForm.$invalid"
-                ng-class="button.isOpen && 'glyphicon-chevron-up' || vm.selectedPartner && 'glyphicon-chevron-down' || 'glyphicon-chevron-left'"
+                ng-class="button.isOpen && 'glyphicon-chevron-up' || (vm.selectedPartner || vm.addPartnerFieldsCheck()) && 'glyphicon-chevron-down' || 'glyphicon-chevron-left'"
                 )
             p {{ button.description }}
               .pull-right.buttons-container

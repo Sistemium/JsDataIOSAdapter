@@ -58,7 +58,7 @@
       switch (button.id) {
         case 'mainFormCancel':
         {
-          if (form.$pristine || !angular.isObject(vm.selectPartner)) return quit();
+          if (form.$pristine || !angular.isObject(vm.selectedPartner)) return quit();
         }
           break;
         case 'mainFormSubmit' :
@@ -101,12 +101,11 @@
     function addPartnerBtnClick() {
 
       vm.isInCreatingPartnerProcess = true;
+      vm.name = vm.currentSearchValue;
 
     }
 
     function getPartners(viewValue, opt) {
-
-      //if (!viewValue) return;
 
       vm.currentSearchValue = viewValue;
 
@@ -148,6 +147,10 @@
 
     }
 
+    function addPartnerFieldsCheck() {
+      return (vm.name && vm.selectedLegalForm && vm.inn && vm.address);
+    }
+
     function submit() {
 
       _.result($window.document, 'activeElement.blur');
@@ -179,7 +182,7 @@
 
       if (vm.selectedPartner) return;
 
-      if (vm.newPartner) {
+      if (vm.addPartnerFieldsCheck()) {
         return mainFormSubmitConfirmButton;
       } else {
 
@@ -308,8 +311,8 @@
     function saveNewData() {
 
       vm.busyMessage = 'Сохраняем партнёра…';
-/*
-      vm.busy = savePartner(vm.name)
+
+      vm.busy = savePartner(vm.name, vm.inn, vm.selectedLegalForm)
         .then(function (partner) {
 
           vm.busyMessage = 'Сохраняем точку…';
@@ -336,10 +339,10 @@
           return $q.reject(err);
 
         });
-*/
+
     }
 
-    function savePartner(name) {
+    function savePartner(name, inn, legalForm) {
 
       var havePartner = vm.selectedPartner || vm.newPartner;
 
@@ -348,7 +351,9 @@
       } else {
 
         var newPartner = Partner.createInstance({
-          name: name
+          name: legalForm.name + ' "' + name + '"',
+          inn: inn,
+          legalFormId: legalForm.id
         });
 
         return Partner.create(newPartner)
@@ -510,23 +515,26 @@
 
     angular.extend(vm, {
       buttons: initialButtons,
+      selectedPartner: null,
+      newOutlet: null,
+      partners: [],
+      currentSearchValue: null,
+      isInCreatingPartnerProcess: false,
+      selectedLegalForm: null,
+      legalForms: [],
+      inn: null,
+      name: null,
       accButtonClick: accButtonClick,
       subButtonClick: subButtonClick,
-      selectedPartner: null,
       selectPartner: selectPartner,
       inputNameFocus: inputNameFocus,
       inputNameBlur: inputNameBlur,
       inputFocus: inputFocus,
       inputBlur: inputBlur,
-      newOutlet: null,
-      partners: [],
       getPartners: getPartners,
-      currentSearchValue: null,
-      isInCreatingPartnerProcess: false,
       addPartnerBtnClick: addPartnerBtnClick,
       getLegalForms: getLegalForms,
-      selectedLegalForm: null,
-      legalForms: []
+      addPartnerFieldsCheck: addPartnerFieldsCheck
     });
 
   }
