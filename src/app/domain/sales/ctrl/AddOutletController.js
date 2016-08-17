@@ -8,6 +8,7 @@
     var Partner = Schema.model('Partner');
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
+    var LegalForm = Schema.model('LegalForm');
 
     var deb = $window.debug('stg:addOutlet');
 
@@ -122,6 +123,26 @@
             return p.shortName.toLowerCase();
           });
           return vm.partners;
+
+        });
+
+    }
+
+    function getLegalForms(viewValue, opt) {
+
+      return LegalForm.findAll({
+        where: {
+          name: {
+            likei: viewValue
+          }
+        }
+      }, opt)
+        .then(function (legalForm) {
+
+          vm.legalForms = _.sortBy(legalForm, function (lf) {
+            return lf.name.toLowerCase();
+          });
+          return vm.legalForms;
 
         });
 
@@ -502,7 +523,10 @@
       getPartners: getPartners,
       currentSearchValue: null,
       isInCreatingPartnerProcess: false,
-      addPartnerBtnClick: addPartnerBtnClick
+      addPartnerBtnClick: addPartnerBtnClick,
+      getLegalForms: getLegalForms,
+      selectedLegalForm: null,
+      legalForms: []
     });
 
   }
