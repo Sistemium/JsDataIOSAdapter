@@ -99,6 +99,8 @@
 
       vm.currentSearchValue = viewValue;
 
+      angular.extend(opt, {bypassCache: true});
+
       return Partner.findAll({
         where: {
           name: {
@@ -118,6 +120,8 @@
     }
 
     function getLegalForms(viewValue, opt) {
+
+      angular.extend(opt, {bypassCache: true});
 
       return LegalForm.findAll({
         where: {
