@@ -85,16 +85,6 @@
           if (button.outlet) return quit(button.outlet);
           return saveNewData();
         }
-        case 'usePartnerSubmitConfirm':
-        {
-          if (button.partner) {
-            vm.selectedPartner = button.partner;
-            //vm.name = vm.selectedPartner.name;
-            submit();
-          } else {
-            return saveNewData();
-          }
-        }
       }
     }
 
@@ -181,63 +171,7 @@
     function checkPartnerName() {
 
       if (vm.selectedPartner) return;
-
-      if (vm.addPartnerFieldsCheck()) {
-        return mainFormSubmitConfirmButton;
-      } else {
-
-        //return getPartners(vm.name)
-        //  .then(generateSubmitPartnerButtonState);
-
-      }
-
-    }
-
-    function generateSubmitPartnerButtonState(partners) {
-
-      if (partners.length) {
-
-        var description = '';
-
-        if (partners.length == 1) {
-          description = 'Существует партнёр с похожим именем. Выберите его или создайте нового:';
-        } else {
-          description = 'Существуют партнёры с похожими именами. Выберите из них, либо создайте нового:';
-        }
-
-        return partnersButtons(partners, description);
-
-      } else {
-        return mainFormSubmitConfirmButton;
-      }
-
-    }
-
-    function partnersButtons(partners, description) {
-
-      var partnersButtons = [];
-
-      angular.forEach(partners, function (partner) {
-
-        partnersButtons.push({
-          id: 'usePartnerSubmitConfirm',
-          title: partner.name,
-          type: buttonsTypes.blank,
-          partner: partner
-        });
-
-      });
-
-      partnersButtons.push({
-        id: 'usePartnerSubmitConfirm',
-        title: 'Нового партнёра делай',
-        type: buttonsTypes.primary
-      });
-
-      return {
-        description: description,
-        subButtons: partnersButtons
-      };
+      if (vm.addPartnerFieldsCheck())  return mainFormSubmitConfirmButton;
 
     }
 
@@ -425,28 +359,6 @@
 
     }
 
-    function inputNameFocus() {
-
-      inputFocus();
-
-      if (vm.selectedPartner) {
-        //vm.name = vm.selectedPartner.shortName;
-      }
-      vm.inputNameInFocus = true;
-
-    }
-
-    function inputNameBlur() {
-
-      inputBlur();
-
-      vm.inputNameInFocus = false;
-      if (vm.selectedPartner) {
-        //vm.name = vm.selectedPartner.name;
-      }
-
-    }
-
     function inputFocus() {
 
       vm.submitButton.isOpen = false;
@@ -454,15 +366,8 @@
 
     }
 
-    function inputBlur() {
-
-    }
-
     function selectPartner(partner) {
-
-      //partner ? vm.name = partner.shortName : delete vm.name;
       partner ? vm.selectedPartner = partner : delete vm.selectedPartner;
-
     }
 
     $scope.$watch('vm.submitButton', function (newValue, oldValue) {
@@ -480,16 +385,6 @@
       }
 
     }, true);
-
-    //$scope.$watch('vm.name', function () {
-    //
-    //  if (vm.selectedPartner && vm.inputNameInFocus) {
-    //    if (vm.name !== vm.selectedPartner.shortName) {
-    //      vm.selectedPartner = null;
-    //    }
-    //  }
-    //
-    //});
 
     function cleanUp() {
 
@@ -520,17 +415,11 @@
       partners: [],
       currentSearchValue: null,
       isInCreatingPartnerProcess: false,
-      selectedLegalForm: null,
       legalForms: [],
-      inn: null,
-      name: null,
       accButtonClick: accButtonClick,
       subButtonClick: subButtonClick,
       selectPartner: selectPartner,
-      inputNameFocus: inputNameFocus,
-      inputNameBlur: inputNameBlur,
       inputFocus: inputFocus,
-      inputBlur: inputBlur,
       getPartners: getPartners,
       addPartnerBtnClick: addPartnerBtnClick,
       getLegalForms: getLegalForms,
