@@ -69,15 +69,15 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
 
     .form-group(
     ng-if='vm.isInCreatingPartnerProcess'
-    ng-class="addOutletForm.inn.$touched && (addOutletForm.inn.$error.required && 'has-error' || addOutletForm.inn.$invalid && 'has-warning')"
+    ng-class="addOutletForm.inn.$touched && addOutletForm.inn.$invalid && 'has-error'"
     )
       label.col-sm-4.control-label(for="inputINN") ИНН
       .col-sm-8
         input#inputINN.form-control(
         inn-input
-        required
         type="text"
         name="inn"
+        required
         ng-pattern='/^([0-9]{10}|[0-9]{12})$/'
         placeholder="Индивидуальный номер налогоплательщика"
         ng-model="vm.inn"
