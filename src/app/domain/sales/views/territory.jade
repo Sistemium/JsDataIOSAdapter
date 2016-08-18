@@ -33,9 +33,9 @@ hr(ng-hide='vm.hideHashes')
   section#scroll-main(
   style='height: {{windowHeight - 98 }}px;'
   )
-    section(ng-repeat='p in vm.partners | orderBy:"shortName" | filter:vm.filter track by p.id')
+    section(ng-repeat='p in vm.partners | orderBy:["shortName", "name"] | filter:vm.filter track by p.id')
       h5
-        .lead {{ p.shortName }}
+        .lead {{ p.name }}
 
       p.text-right(ng-repeat='o in p.outlets | orderBy:"address"')
         a(href='' ng-click='vm.outletClick(o)') {{ o.address }}
