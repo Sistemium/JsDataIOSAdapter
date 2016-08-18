@@ -58,7 +58,7 @@
       switch (button.id) {
         case 'mainFormCancel':
         {
-          if (form.$pristine || !angular.isObject(vm.selectedPartner)) return quit();
+          if (form.$pristine) return quit();
         }
           break;
         case 'mainFormSubmit' :
