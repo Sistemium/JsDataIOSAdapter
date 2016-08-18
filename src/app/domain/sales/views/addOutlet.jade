@@ -67,20 +67,31 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
           )
             div(ng-bind-html="legalForm.name | highlight: $select.search")
 
-    .form-group(ng-if='vm.isInCreatingPartnerProcess')
+    .form-group(
+    ng-if='vm.isInCreatingPartnerProcess'
+    ng-class="addOutletForm.inn.$touched && (addOutletForm.inn.$error.required && 'has-error' || addOutletForm.inn.$invalid && 'has-warning')"
+    )
       label.col-sm-4.control-label(for="inputINN") ИНН
       .col-sm-8
         input#inputINN.form-control(
         inn-input
+        required
         type="text"
-        name="legalForm"
-        ng-required='true'
+        name="inn"
+        ng-pattern='/^([0-9]{10}|[0-9]{12})$/'
         placeholder="Индивидуальный номер налогоплательщика"
         ng-model="vm.inn"
         ng-focus='vm.inputFocus()'
         ng-blur='vm.inputBlur()'
         autocomplete="off"
         )
+        div(
+        class="help-block"
+        ng-if="addOutletForm.inn.$touched"
+        ng-messages="addOutletForm.inn.$error"
+        )
+          p(ng-message="pattern") ИНН: 10 или 12 цифр
+          p(ng-message="innInput") Неверная контрольная сумма
 
     .form-group(ng-if='vm.isInCreatingPartnerProcess || vm.selectedPartner')
       label.col-sm-4.control-label(for="inputAddress") Адрес
