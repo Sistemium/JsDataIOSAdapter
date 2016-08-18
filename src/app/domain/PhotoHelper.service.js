@@ -88,7 +88,12 @@
 
     }
 
-    return {takePhoto,importThumbnail, thumbnailClick, getImageSrc};
+    return {
+      takePhoto: takePhoto,
+      importThumbnail: importThumbnail,
+      thumbnailClick: thumbnailClick,
+      getImageSrc: getImageSrc
+    };
 
   }
 
