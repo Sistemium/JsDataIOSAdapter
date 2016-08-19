@@ -207,10 +207,12 @@
     }
 
     function selectPartner(partner) {
-      partner ? vm.selectedPartner = partner : delete vm.selectedPartner;
+      partner ? vm.selectedPartner = partner : cleanUp();
     }
-    
+
     function cleanUp() {
+
+      delete vm.selectedPartner;
 
       if (vm.newOutlet) {
 
