@@ -110,7 +110,7 @@
 
           vm.newLocation = Location.inject(data);
           vm.newOutlet.locationId = vm.newLocation.id;
-
+          saveAll();
           return quit();
 
         })
@@ -216,14 +216,16 @@
 
     }
 
-    function quit() {
+    function saveAll() {
 
       if (vm.newPartner) Partner.save(vm.newPartner);
       if (vm.newOutlet) Outlet.save(vm.newOutlet);
       if (vm.newLocation) Location.save(vm.newLocation);
 
-      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
+    }
 
+    function quit() {
+      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
     }
 
     angular.extend(vm, {
