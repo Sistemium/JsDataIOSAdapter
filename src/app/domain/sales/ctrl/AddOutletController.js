@@ -198,22 +198,15 @@
 
     }
 
-    function generateSubmitOutletButtonState(outlets, partner) {
+    function cancel(form) {
 
-      if (outlets.length) {
-
-        var description = 'У партнёра «' + partner.shortName + '» есть ';
-
-        if (outlets.length == 1) {
-          description += 'точка с похожим адресом. Выберите её или создайте новую:';
-        } else {
-          description += 'точки с похожим адресом. Выберите какую-нибудь из них, либо создайте новую:';
-        }
-
-        return outletsButtons(outlets, description);
-
+      if (form.$pristine) {
+        console.log('cancel w/o confirmation');
+        quit();
       } else {
-        return mainFormSubmitConfirmButton;
+        console.log('cancel: should ask for confirm?');
+        cleanUp();
+        quit();
       }
 
     }
@@ -413,17 +406,15 @@
     }
 
     angular.extend(vm, {
-      buttons: initialButtons,
+      submit: submit,
+      cancel: cancel,
       selectedPartner: null,
       newOutlet: null,
       partners: [],
       currentSearchValue: null,
       isInCreatingPartnerProcess: false,
       legalForms: [],
-      accButtonClick: accButtonClick,
-      subButtonClick: subButtonClick,
       selectPartner: selectPartner,
-      inputFocus: inputFocus,
       getPartners: getPartners,
       addPartnerBtnClick: addPartnerBtnClick,
       getLegalForms: getLegalForms,

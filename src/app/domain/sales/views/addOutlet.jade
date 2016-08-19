@@ -103,28 +103,11 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     hr
 
     .form-group
-      .col-sm-4.col-sm-offset-8
-        uib-accordion(close-others='true')
-
-          uib-accordion-group(
-          ng-hide="(button.type === 'primary') && addOutletForm.$invalid"
-          ng-repeat='button in vm.buttons'
-          class='panel-{{ button.type }}'
-          is-disabled="(button.type === 'primary') && addOutletForm.$invalid"
-          ng-click='vm.accButtonClick(addOutletForm, button)'
-          is-open='button.isOpen'
-          )
-            uib-accordion-heading
-              div(ng-click='toggleOpen()')
-                span {{ button.title }}
-                i.pull-right.glyphicon(
-                ng-hide="(button.type === 'primary') && addOutletForm.$invalid"
-                ng-class="button.isOpen && 'glyphicon-chevron-up' || (vm.selectedPartner || vm.addPartnerFieldsCheck()) && 'glyphicon-chevron-down' || 'glyphicon-chevron-left'"
-                )
-            p {{ button.description }}
-              .pull-right.buttons-container
-                button(
-                ng-repeat='btn in button.subButtons'
-                class='btn margin btn-{{ btn.type }}'
-                ng-click='vm.subButtonClick(btn)'
-                ) {{ btn.title }}
+      .col-sm-4.col-sm-offset-8.pull-right
+        button.btn.margin.btn-primary(
+        ng-disabled='addOutletForm.$invalid'
+        ng-click='vm.submit()'
+        ) Сохранить
+        button.btn.margin.btn-warning(
+        ng-click='vm.cancel(addOutletForm)'
+        ) Отменить
