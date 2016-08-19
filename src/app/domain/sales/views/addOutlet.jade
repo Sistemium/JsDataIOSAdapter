@@ -11,8 +11,8 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputName") Название партнёра
       .col-sm-8
-        .row(ng-if='!vm.isInCreatingPartnerProcess')
-          .col-xs-10
+        .display-flex(ng-if='!vm.isInCreatingPartnerProcess')
+          .flex-1
             ui-select#inputName(
             ng-model='vm.selectedPartner'
             on-remove="vm.selectPartner()"
@@ -29,10 +29,9 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
               refresh-delay=0
               )
                 div(ng-bind-html="partner.name | highlight: $select.search")
-          .col-xs-2
+          .flex-right.animate-show(ng-show='vm.currentSearchValue')
             button.btn.ml-em.btn-primary.pull-right(
             ng-click='vm.addPartnerBtnClick()'
-            ng-hide='!vm.currentSearchValue'
             )
               i.glyphicon.glyphicon-plus
 
