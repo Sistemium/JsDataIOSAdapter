@@ -11,31 +11,30 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputName") Название партнёра
       .col-sm-8
-        .container-fluid(ng-if='!vm.isInCreatingPartnerProcess')
-          .row
-            .col-xs-10
-              ui-select#inputName(
-              ng-model='vm.selectedPartner'
-              on-remove="vm.selectPartner()"
-              on-select="vm.selectPartner($item)"
-              ng-required='true'
+        .row(ng-if='!vm.isInCreatingPartnerProcess')
+          .col-xs-10
+            ui-select#inputName(
+            ng-model='vm.selectedPartner'
+            on-remove="vm.selectPartner()"
+            on-select="vm.selectPartner($item)"
+            ng-required='true'
+            )
+              ui-select-match(
+              placeholder="Название партнёра"
+              allow-clear
+              ) {{ $select.selected.shortName }}
+              ui-select-choices(
+              repeat='partner in vm.partners | filter: $select.search | orderBy:["shortName", "name"] track by partner.id'
+              refresh='vm.getPartners($select.search, {sortBy: "shortName"})'
+              refresh-delay=0
               )
-                ui-select-match(
-                placeholder="Название партнёра"
-                allow-clear
-                ) {{ $select.selected.shortName }}
-                ui-select-choices(
-                repeat='partner in vm.partners | filter: $select.search | orderBy:["shortName", "name"] track by partner.id'
-                refresh='vm.getPartners($select.search, {sortBy: "shortName"})'
-                refresh-delay=0
-                )
-                  div(ng-bind-html="partner.name | highlight: $select.search")
-            .col-xs-2
-              button.btn.ml-em.btn-primary.pull-right(
-              ng-click='vm.addPartnerBtnClick()'
-              ng-hide='!vm.currentSearchValue'
-              )
-                i.glyphicon.glyphicon-plus
+                div(ng-bind-html="partner.name | highlight: $select.search")
+          .col-xs-2
+            button.btn.ml-em.btn-primary.pull-right(
+            ng-click='vm.addPartnerBtnClick()'
+            ng-hide='!vm.currentSearchValue'
+            )
+              i.glyphicon.glyphicon-plus
 
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
