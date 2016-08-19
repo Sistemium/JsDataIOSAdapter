@@ -43,7 +43,6 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         name="name"
         ng-required='true'
         placeholder="Имя партнёра"
-        ng-focus='vm.inputFocus()'
         autocomplete="off"
         )
 
@@ -77,7 +76,6 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         ng-pattern='innPattern'
         placeholder='{{ placeholder }}'
         ng-model="vm.inn"
-        ng-focus='vm.inputFocus()'
         autocomplete="off"
         )
         div(
@@ -97,7 +95,6 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         ng-required='true'
         placeholder="{{ vm.selectedPartner || vm.isInCreatingPartnerProcess ? 'Адрес' : 'Сначала выберите партнёра' }}"
         ng-model="vm.address"
-        ng-focus='vm.inputFocus()'
         autocomplete="off"
         )
     hr
