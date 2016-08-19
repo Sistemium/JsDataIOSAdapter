@@ -108,10 +108,10 @@
         })
         .then(function (data) {
 
-          var location = Location.inject(data);
-          vm.newOutlet.locationId = location.id;
+          vm.newLocation = Location.inject(data);
+          vm.newOutlet.locationId = vm.newLocation.id;
 
-          return quit(vm.newOutlet);
+          return quit();
 
         })
         .catch(function (err) {
@@ -131,22 +131,12 @@
         return $q.resolve(havePartner);
       } else {
 
-        var newPartner = Partner.createInstance({
+        vm.newPartner = Partner.inject({
           name: legalForm.name + ' "' + name + '"',
           inn: inn,
           legalFormId: legalForm.id
         });
-
-        return Partner.create(newPartner)
-          .then(function (newPartner) {
-
-            vm.newPartner = newPartner;
-            return newPartner;
-
-          })
-          .catch(function (err) {
-            gotError(err, 'Не удалось сохранить партнёра.');
-          });
+        return $q.resolve(vm.newPartner);
 
       }
 
@@ -154,28 +144,17 @@
 
     function saveOutlet(name, partner, address) {
 
-      if (vm.newOutlet) {
-        return $q.resolve(vm.newOutlet);
-      } else {
+      if (!angular.isObject(vm.newOutlet)) {
 
-        var newOutlet = Outlet.createInstance({
+        vm.newOutlet = Outlet.inject({
           address: address,
           name: name,
           partnerId: partner.id
         });
 
-        return Outlet.create(newOutlet)
-          .then(function (newOutlet) {
-
-            vm.newOutlet = newOutlet;
-            return newOutlet;
-
-          })
-          .catch(function (err) {
-            gotError(err, 'Не удалось сохранить точку.');
-          });
-
       }
+
+      return $q.resolve(vm.newOutlet);
 
     }
 
@@ -216,22 +195,35 @@
 
       if (vm.newOutlet) {
 
-        Outlet.destroy(vm.newOutlet);
-        vm.newOutlet = null;
+        Outlet.eject(vm.newOutlet);
+        delete vm.newOutlet;
 
       }
 
       if (vm.newPartner) {
 
-        Partner.destroy(vm.newPartner);
-        vm.newPartner = null;
+        Partner.eject(vm.newPartner);
+        delete vm.newPartner;
+
+      }
+
+      if (vm.newLocation) {
+
+        Location.eject(vm.newLocation);
+        delete vm.newLocation;
 
       }
 
     }
 
-    function quit(outlet) {
-      return outlet ? $state.go('^.outlet', {id: outlet.id}) : $state.go('^');
+    function quit() {
+
+      if (vm.newPartner) Partner.save(vm.newPartner);
+      if (vm.newOutlet) Outlet.save(vm.newOutlet);
+      if (vm.newLocation) Location.save(vm.newLocation);
+
+      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
+
     }
 
     angular.extend(vm, {
