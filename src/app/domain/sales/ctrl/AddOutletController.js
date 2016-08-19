@@ -218,9 +218,13 @@
 
     function saveAll() {
 
-      if (vm.newPartner) Partner.save(vm.newPartner);
-      if (vm.newOutlet) Outlet.save(vm.newOutlet);
-      if (vm.newLocation) Location.save(vm.newLocation);
+      if (vm.newPartner) Partner.save(vm.newPartner)
+        .then(function() {
+          if (vm.newOutlet) Outlet.save(vm.newOutlet)
+            .then(function() {
+              if (vm.newLocation) Location.save(vm.newLocation);
+            });
+        });
 
     }
 
