@@ -91,21 +91,12 @@
 
     function saveNewData() {
 
-      vm.busyMessage = 'Сохраняем партнёра…';
+      var partner = vm.selectedPartner || vm.newPartner || injectPartner(vm.name, vm.inn, vm.selectedLegalForm);
+      var outlet = vm.newOutlet || injectOutlet(vm.name, partner, vm.address);
 
-      vm.busy = savePartner(vm.name, vm.inn, vm.selectedLegalForm)
-        .then(function (partner) {
+      vm.busyMessage = 'Получаем геопозицию…';
 
-          vm.busyMessage = 'Сохраняем точку…';
-          return saveOutlet(vm.name, partner, vm.address);
-
-        })
-        .then(function (outlet) {
-
-          vm.busyMessage = 'Получаем геопозицию…';
-          return getLocation(outlet);
-
-        })
+      vm.busy = getLocation(outlet)
         .then(function (data) {
 
           vm.newLocation = Location.inject(data);
@@ -123,38 +114,26 @@
 
     }
 
-    function savePartner(name, inn, legalForm) {
+    function injectPartner(name, inn, legalForm) {
 
-      var havePartner = vm.selectedPartner || vm.newPartner;
-
-      if (havePartner) {
-        return $q.resolve(havePartner);
-      } else {
-
-        vm.newPartner = Partner.inject({
-          name: legalForm.name + ' "' + name + '"',
-          inn: inn,
-          legalFormId: legalForm.id
-        });
-        return $q.resolve(vm.newPartner);
-
-      }
+      vm.newPartner = Partner.inject({
+        name: legalForm.name + ' "' + name + '"',
+        inn: inn,
+        legalFormId: legalForm.id
+      });
+      return vm.newPartner;
 
     }
 
-    function saveOutlet(name, partner, address) {
+    function injectOutlet(name, partner, address) {
 
-      if (!angular.isObject(vm.newOutlet)) {
+      vm.newOutlet = Outlet.inject({
+        address: address,
+        name: name,
+        partnerId: partner.id
+      });
 
-        vm.newOutlet = Outlet.inject({
-          address: address,
-          name: name,
-          partnerId: partner.id
-        });
-
-      }
-
-      return $q.resolve(vm.newOutlet);
+      return vm.newOutlet;
 
     }
 
