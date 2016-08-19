@@ -101,10 +101,10 @@
 
           vm.newLocation = Location.inject(data);
           vm.newOutlet.locationId = vm.newLocation.id;
-          saveAll();
-          return quit();
 
         })
+        .then(saveAll)
+        .then(quit)
         .catch(function (err) {
 
           showSaveErrorAlert(err);
@@ -197,13 +197,18 @@
 
     function saveAll() {
 
-      if (vm.newPartner) Partner.save(vm.newPartner)
-        .then(function() {
-          if (vm.newOutlet) Outlet.save(vm.newOutlet)
-            .then(function() {
-              if (vm.newLocation) Location.save(vm.newLocation);
-            });
-        });
+      if (vm.newPartner) {
+
+        return Partner.save(vm.newPartner)
+          .then(Outlet.save(vm.newOutlet))
+          .then(Location.save(vm.newLocation));
+
+      } else {
+
+        return Outlet.save(vm.newOutlet)
+          .then(Location.save(vm.newLocation));
+
+      }
 
     }
 
