@@ -102,9 +102,19 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       .col-sm-4.col-sm-offset-8.pull-right
         button.btn.margin.btn-primary(
+        ng-if='!vm.isInCancelProcess'
         ng-disabled='addOutletForm.$invalid'
         ng-click='vm.submit()'
         ) Сохранить
         button.btn.margin.btn-warning(
+        ng-if='!vm.isInCancelProcess'
         ng-click='vm.cancel(addOutletForm)'
         ) Отменить
+        button.btn.margin.btn-primary(
+        ng-if='vm.isInCancelProcess'
+        ng-click='vm.cancelConfirm()'
+        ) Да, отменить
+        button.btn.margin.btn-warning(
+        ng-if='vm.isInCancelProcess'
+        ng-click='vm.isInCancelProcess = false'
+        ) Нет

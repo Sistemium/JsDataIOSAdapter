@@ -70,8 +70,6 @@
     function submit() {
 
       _.result($window.document, 'activeElement.blur');
-
-      console.log('submit: should ask for confirm?');
       return saveNewData();
 
     }
@@ -79,14 +77,16 @@
     function cancel(form) {
 
       if (form.$pristine) {
-        console.log('cancel w/o confirmation');
         quit();
       } else {
-        console.log('cancel: should ask for confirm?');
-        cleanUp();
-        quit();
+        vm.isInCancelProcess = true;
       }
 
+    }
+
+    function cancelConfirm() {
+      cleanUp();
+      quit();
     }
 
     function saveNewData() {
@@ -237,11 +237,13 @@
     angular.extend(vm, {
       submit: submit,
       cancel: cancel,
+      cancelConfirm: cancelConfirm,
       selectedPartner: null,
       newOutlet: null,
       partners: [],
       currentSearchValue: null,
       isInCreatingPartnerProcess: false,
+      isInCancelProcess: false,
       legalForms: [],
       selectPartner: selectPartner,
       getPartners: getPartners,
