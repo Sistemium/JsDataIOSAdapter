@@ -15,9 +15,28 @@
     .directive('innInput', innInput);
 
   function innInput() {
+
+    var placeholder = 'Индивидуальный номер налогоплательщика';
+    var innRegexp = /^(\d{10}|\d{12}|^$)$/;
+
     return {
       restrict: 'AC',
       require: 'ngModel',
+
+      controller: function($scope){
+
+        if (angular.isUndefined($scope.placeholder)) $scope.placeholder = placeholder;
+
+        if (angular.isUndefined($scope.innPattern)) $scope.innPattern = (function() {
+
+          return {
+            test: function(value) {
+              return innRegexp.test(value);
+            }
+          };
+        })();
+
+      },
 
       link: function(scope, elm, attrs, ctrl) {
 
@@ -27,7 +46,7 @@
 
           if (angular.isString(viewValue)) {
 
-            if(viewValue.match(/^([0-9]{10}|[0-9]{12})$/im)){
+            if(innRegexp.test(viewValue)){
 
               if (viewValue.length === 10) return checkTenDigitsINN(viewValue);
               if (viewValue.length === 12) return checkTwelveDigitsINN(viewValue);
