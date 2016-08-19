@@ -23,14 +23,14 @@
       restrict: 'AC',
       require: 'ngModel',
 
-      controller: function($scope){
+      controller: function ($scope) {
 
         if (angular.isUndefined($scope.placeholder)) $scope.placeholder = placeholder;
 
-        if (angular.isUndefined($scope.innPattern)) $scope.innPattern = (function() {
+        if (angular.isUndefined($scope.innPattern)) $scope.innPattern = (function () {
 
           return {
-            test: function(value) {
+            test: function (value) {
               return innRegexp.test(value);
             }
           };
@@ -38,9 +38,9 @@
 
       },
 
-      link: function(scope, elm, attrs, ctrl) {
+      link: function (scope, elm, attrs, ctrl) {
 
-        ctrl.$validators.innInput = function(modelValue, viewValue) {
+        ctrl.$validators.innInput = function (modelValue, viewValue) {
 
           if (!viewValue || viewValue.length === 0) return true;
 
