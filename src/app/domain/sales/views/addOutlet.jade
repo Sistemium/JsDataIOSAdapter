@@ -76,8 +76,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         inn-input
         type="text"
         name="inn"
-        required
-        ng-pattern='/^([0-9]{10}|[0-9]{12})$/'
+        ng-pattern='/^(\\d{10}|\\d{12}|^$)$/'
         placeholder="Индивидуальный номер налогоплательщика"
         ng-model="vm.inn"
         ng-focus='vm.inputFocus()'

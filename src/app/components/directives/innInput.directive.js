@@ -23,12 +23,14 @@
 
         ctrl.$validators.innInput = function(modelValue, viewValue) {
 
+          if (!viewValue || viewValue.length === 0) return true;
+
           if (angular.isString(viewValue)) {
 
             if(viewValue.match(/^([0-9]{10}|[0-9]{12})$/im)){
 
-              if (viewValue.length == 10) return checkTenDigitsINN(viewValue);
-              if (viewValue.length == 12) return checkTwelveDigitsINN(viewValue);
+              if (viewValue.length === 10) return checkTenDigitsINN(viewValue);
+              if (viewValue.length === 12) return checkTwelveDigitsINN(viewValue);
 
             }
 
