@@ -11,12 +11,15 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputName") Название партнёра
       .col-sm-8
-        input#inputName(
+        input#inputName.form-control(
         type="text"
-        ng-model="vm.name"
+        ng-model='vm.name'
         placeholder="Название партнёра"
+        ng-focus='vm.inputNameFocus($event)'
+        ng-blur='vm.inputNameBlur()'
         uib-typeahead='partner as partner.name for partner in vm.partners | filter:{shortName:$viewValue} | orderBy:["shortName", "name"]'
-        class="form-control"
+        typeahead-min-length=0
+        typeahead-on-select='vm.selectPartner($item)'
         )
 
     .form-group

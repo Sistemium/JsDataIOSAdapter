@@ -17,6 +17,15 @@
 
     }
 
+    Partner.findAll()
+      .then(function (partners) {
+
+        vm.partners = _.sortBy(partners, function (p) {
+          return [p.shortName.toLowerCase(), p.name.toLowerCase()];
+        });
+
+      });
+
     function getPartners(viewValue, opt) {
 
       vm.currentSearchValue = viewValue;
@@ -164,6 +173,32 @@
 
     }
 
+    function inputNameFocus(event) {
+
+      if (vm.selectedPartner) {
+        vm.name = vm.selectedPartner.shortName;
+      }
+
+      //vm.name = '';
+
+      //angular.element(event.target).triggerHandler('open');
+      //angular.element(event.target).triggerHandler({
+      //  type: 'keydown',
+      //  which: ''.charCodeAt(0)
+      //});
+      //vm.inputNameInFocus = true;
+
+    }
+
+    function inputNameBlur() {
+
+      //vm.inputNameInFocus = false;
+      if (vm.selectedPartner) {
+        vm.name = vm.selectedPartner.name;
+      }
+
+    }
+
     function selectPartner(partner) {
       partner ? vm.selectedPartner = partner : cleanUp();
     }
@@ -231,7 +266,9 @@
       getPartners: getPartners,
       addPartnerBtnClick: addPartnerBtnClick,
       getLegalForms: getLegalForms,
-      addPartnerFieldsCheck: addPartnerFieldsCheck
+      addPartnerFieldsCheck: addPartnerFieldsCheck,
+      inputNameFocus:inputNameFocus,
+      inputNameBlur:inputNameBlur
     });
 
   }
