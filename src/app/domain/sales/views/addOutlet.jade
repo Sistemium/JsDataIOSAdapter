@@ -11,6 +11,17 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputName") Название партнёра
       .col-sm-8
+        input#inputName(
+        type="text"
+        ng-model="vm.name"
+        placeholder="Название партнёра"
+        uib-typeahead='partner as partner.name for partner in vm.partners | filter:{shortName:$viewValue} | orderBy:["shortName", "name"]'
+        class="form-control"
+        )
+
+    .form-group
+      label.col-sm-4.control-label(for="inputName") Название партнёра
+      .col-sm-8
         .display-flex(ng-if='!vm.isInCreatingPartnerProcess')
           .flex-1
             ui-select#inputName(
