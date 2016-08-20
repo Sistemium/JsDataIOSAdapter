@@ -75,7 +75,7 @@
     }
 
     return {
-      getLocation: getLocation
+      getLocation
     };
 
   }

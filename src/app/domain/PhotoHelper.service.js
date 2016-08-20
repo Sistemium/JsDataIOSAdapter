@@ -89,10 +89,10 @@
     }
 
     return {
-      takePhoto: takePhoto,
-      importThumbnail: importThumbnail,
-      thumbnailClick: thumbnailClick,
-      getImageSrc: getImageSrc
+      takePhoto,
+      importThumbnail,
+      thumbnailClick,
+      getImageSrc
     };
 
   }
