@@ -21,10 +21,8 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:css({.tmp/serve,src}) styles/app.css -->
-    <!-- inject:css -->
-    <!-- css files will be automatically insert here -->
-    <!-- endinject -->
+    <!-- build:css({.tmp,src}) styles/app.css -->
+    <link rel="stylesheet" href="index.css"/>
     <!-- endbuild -->
   </head>
   <body ng-controller="BodyController as vm" ng-class="vm.cls">
