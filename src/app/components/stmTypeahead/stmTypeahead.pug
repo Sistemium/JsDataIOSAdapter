@@ -1,0 +1,15 @@
+input(
+type="text"
+ng-class='vm.inputClass'
+id='{{vm.inputId}}'
+ng-model='vm.inputModel'
+placeholder="{{vm.placeholder}}"
+ng-focus='vm.inputFocus($event)'
+ng-blur='vm.inputBlur()'
+uib-typeahead
+autocomplete="off"
+typeahead-min-length=0
+typeahead-append-to-body='true'
+typeahead-on-select='vm.onSelectItem($item)'
+typeahead-popup-template-url='/app/components/stmTypeahead/stmTypeaheadPopup.html'
+)
