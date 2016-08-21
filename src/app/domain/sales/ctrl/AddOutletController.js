@@ -11,10 +11,7 @@
     var LegalForm = Schema.model('LegalForm');
 
     function addPartnerBtnClick() {
-
       vm.isInCreatingPartnerProcess = true;
-      vm.name = vm.currentSearchValue;
-
     }
 
     Partner.findAll()
@@ -25,30 +22,6 @@
         });
 
       });
-
-    function getPartners(viewValue, opt) {
-
-      vm.currentSearchValue = viewValue;
-
-      angular.extend(opt, {bypassCache: true});
-
-      return Partner.findAll({
-        where: {
-          name: {
-            likei: viewValue
-          }
-        }
-      }, opt)
-        .then(function (partners) {
-
-          vm.partners = _.sortBy(partners, function (p) {
-            return p.shortName.toLowerCase();
-          });
-          return vm.partners;
-
-        });
-
-    }
 
     function getLegalForms(viewValue, opt) {
 
@@ -173,7 +146,7 @@
 
     }
 
-    function inputNameFocus(event) {
+    function inputNameFocus() {
 
       if (vm.selectedPartner) {
         vm.name = vm.selectedPartner.shortName;
@@ -263,7 +236,6 @@
       isInCancelProcess: false,
       legalForms: [],
       selectPartner: selectPartner,
-      getPartners: getPartners,
       addPartnerBtnClick: addPartnerBtnClick,
       getLegalForms: getLegalForms,
       addPartnerFieldsCheck: addPartnerFieldsCheck,

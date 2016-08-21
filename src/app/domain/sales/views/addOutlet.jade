@@ -1,4 +1,4 @@
-h3 Добавить точку
+h3 Добавление точки
 
 hr
 
@@ -9,46 +9,8 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   )
 
     .form-group
-      label.col-sm-4.control-label(for="inputName") Название партнёра
+      label.col-sm-4.control-label(for="inputName") Контрагент
       .col-sm-8
-        input#inputName.form-control(
-        type="text"
-        ng-model='vm.name'
-        placeholder="Название партнёра"
-        ng-focus='vm.inputNameFocus($event)'
-        ng-blur='vm.inputNameBlur()'
-        uib-typeahead='partner as partner.name for partner in vm.partners | filter:{shortName:$viewValue} | orderBy:["shortName", "name"]'
-        typeahead-min-length=0
-        typeahead-on-select='vm.selectPartner($item)'
-        )
-
-    .form-group
-      label.col-sm-4.control-label(for="inputName") Название партнёра
-      .col-sm-8
-        .display-flex(ng-if='!vm.isInCreatingPartnerProcess')
-          .flex-1
-            ui-select#inputName(
-            ng-model='vm.selectedPartner'
-            on-remove="vm.selectPartner()"
-            on-select="vm.selectPartner($item)"
-            ng-required='true'
-            )
-              ui-select-match(
-              placeholder="Название партнёра"
-              allow-clear
-              ) {{ $select.selected.shortName }}
-              ui-select-choices(
-              repeat='partner in vm.partners | filter: $select.search | orderBy:["shortName", "name"] track by partner.id'
-              refresh='vm.getPartners($select.search, {sortBy: "shortName"})'
-              refresh-delay=0
-              )
-                div(ng-bind-html="partner.name | highlight: $select.search")
-          .flex-right.animate-show(ng-show='vm.currentSearchValue')
-            button.btn.ml-em.btn-primary.pull-right(
-            ng-click='vm.addPartnerBtnClick()'
-            )
-              i.glyphicon.glyphicon-plus
-
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
         ng-model='vm.name'
@@ -59,6 +21,24 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         placeholder="Имя партнёра"
         autocomplete="off"
         )
+        .display-flex(ng-if='!vm.isInCreatingPartnerProcess')
+          stm-typeahead.flex-1(
+            input-model='vm.name'
+            input-id='inputName'
+            input-class='form-control'
+            placeholder='Название контрагента'
+            input-focus-fn='vm.inputNameFocus'
+            input-blur-fn='vm.inputNameBlur'
+            rows-data='vm.partners'
+            rows-filters='filter:{shortName:$viewValue}'
+            row-as='name'
+            on-select-item-fn='vm.selectPartner'
+            )
+          .animate-show(ng-show='vm.name && !vm.selectedPartner')
+            button.btn.ml-em.btn-primary.pull-right(
+            ng-click='vm.addPartnerBtnClick()'
+            )
+              i.glyphicon.glyphicon-plus
 
     .form-group(ng-if='vm.isInCreatingPartnerProcess')
       label.col-sm-4.control-label(for="inputLegalForm") Форма
