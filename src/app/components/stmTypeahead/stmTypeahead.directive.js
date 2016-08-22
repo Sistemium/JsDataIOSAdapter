@@ -24,6 +24,9 @@
       bindToController: true,
 
       link: function (scope, element, attrs, ctrl) {
+
+        ctrl.rootElement = element;
+
         $templateRequest('app/components/stmTypeahead/stmTypeahead.html')
           .then(function (html) {
             ctrl.rowsFilters = _.replace(ctrl.rowsFilters,`'`,'"');
@@ -49,7 +52,10 @@
 
       inputFocus: ($event) => vm.inputFocusFn()($event),
       inputBlur: ($event) => vm.inputBlurFn()($event),
-      onSelectItem: ($item) => vm.onSelectItemFn()($item)
+      onSelectItem: ($item) => {
+        // vm.rootElement.children()[0].blur();
+        vm.onSelectItemFn()($item);
+      }
 
     });
 
