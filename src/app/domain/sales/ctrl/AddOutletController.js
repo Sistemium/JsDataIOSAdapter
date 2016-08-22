@@ -11,7 +11,10 @@
     var LegalForm = Schema.model('LegalForm');
 
     function addPartnerBtnClick() {
+
       vm.isInCreatingPartnerProcess = true;
+      vm.name = vm.currentSearchValue;
+
     }
 
     Partner.findAll()
@@ -148,9 +151,9 @@
 
     function inputNameFocus() {
 
-      if (vm.selectedPartner) {
-        vm.name = vm.selectedPartner.shortName;
-      }
+      //if (vm.selectedPartner) {
+      //  vm.name = vm.selectedPartner.shortName;
+      //}
 
       //vm.name = '';
 
@@ -166,9 +169,9 @@
     function inputNameBlur() {
 
       //vm.inputNameInFocus = false;
-      if (vm.selectedPartner) {
-        vm.name = vm.selectedPartner.name;
-      }
+      //if (vm.selectedPartner) {
+      //  vm.name = vm.selectedPartner.name;
+      //}
 
     }
 
