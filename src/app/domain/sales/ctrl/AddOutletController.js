@@ -11,10 +11,7 @@
     var LegalForm = Schema.model('LegalForm');
 
     function addPartnerBtnClick() {
-
       vm.isInCreatingPartnerProcess = true;
-      vm.name = vm.currentSearchValue;
-
     }
 
     Partner.findAll()
@@ -151,32 +148,31 @@
 
     function inputNameFocus() {
 
-      //if (vm.selectedPartner) {
-      //  vm.name = vm.selectedPartner.shortName;
-      //}
-
-      //vm.name = '';
+      if (!angular.isUndefined(vm.currentSearchValue)) {
+        vm.name = vm.currentSearchValue;
+      }
 
       //angular.element(event.target).triggerHandler('open');
       //angular.element(event.target).triggerHandler({
-      //  type: 'keydown',
-      //  which: ''.charCodeAt(0)
+      //  type: 'keypress',
+      //  which: 40
       //});
-      //vm.inputNameInFocus = true;
 
     }
 
     function inputNameBlur() {
 
-      //vm.inputNameInFocus = false;
-      //if (vm.selectedPartner) {
-      //  vm.name = vm.selectedPartner.name;
-      //}
+      if (vm.selectedPartner) {
+        vm.name = vm.selectedPartner.name;
+      }
 
     }
 
     function selectPartner(partner) {
+
+      vm.currentSearchValue = vm.name;
       partner ? vm.selectedPartner = partner : cleanUp();
+
     }
 
     function cleanUp() {
@@ -234,7 +230,7 @@
       selectedPartner: null,
       newOutlet: null,
       partners: [],
-      currentSearchValue: null,
+      currentSearchValue: undefined,
       isInCreatingPartnerProcess: false,
       isInCancelProcess: false,
       legalForms: [],

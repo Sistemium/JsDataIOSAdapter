@@ -23,7 +23,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
         .display-flex(ng-if='!vm.isInCreatingPartnerProcess')
           stm-typeahead.flex-1(
-            input-model='vm.currentSearchValue'
+            input-model='vm.name'
             input-id='inputName'
             input-class='form-control'
             placeholder='Название контрагента'
@@ -34,7 +34,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
             row-as='name'
             on-select-item-fn='vm.selectPartner'
             )
-          .animate-show(ng-show='vm.currentSearchValue && !vm.selectedPartner')
+          .animate-show(ng-show='vm.name && vm.name != vm.selectedPartner.name')
             button.btn.ml-em.btn-primary.pull-right(
             ng-click='vm.addPartnerBtnClick()'
             )
