@@ -169,13 +169,15 @@
     }
 
     function selectPartner(partner) {
+
+      if (angular.isUndefined(vm.currentSearchValue)) vm.currentSearchValue = '';
       partner ? vm.selectedPartner = partner : cleanUp();
+
     }
 
     $scope.$watch('vm.name', function (newValue) {
-      vm.currentSearchValue = angular.isObject(newValue) ? '' : newValue;
+      if (!angular.isObject(newValue)) vm.currentSearchValue = newValue;
     });
-
 
     function cleanUp() {
 
