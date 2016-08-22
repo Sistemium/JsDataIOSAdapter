@@ -11,7 +11,11 @@
     var LegalForm = Schema.model('LegalForm');
 
     function addPartnerBtnClick() {
+
+      vm.name = vm.currentSearchValue;
       vm.isInCreatingPartnerProcess = true;
+      vm.selectedPartner = null;
+
     }
 
     Partner.findAll()
@@ -242,8 +246,8 @@
       addPartnerBtnClick: addPartnerBtnClick,
       getLegalForms: getLegalForms,
       addPartnerFieldsCheck: addPartnerFieldsCheck,
-      inputNameFocus:inputNameFocus,
-      inputNameBlur:inputNameBlur
+      inputNameFocus: inputNameFocus,
+      inputNameBlur: inputNameBlur
     });
 
   }
