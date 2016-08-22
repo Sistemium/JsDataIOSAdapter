@@ -9,7 +9,7 @@
 
   ul.dropdown-menu(role="listbox")
     li.uib-typeahead-match(
-    ng-repeat="match in matches track by match.id" ang-class="{active: isActive($index) }"
+    ng-repeat="match in matches track by match.id"
     ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}"
     )
       div(uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl")
