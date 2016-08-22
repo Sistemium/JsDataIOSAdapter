@@ -154,7 +154,7 @@
 
       //angular.element(event.target).triggerHandler('open');
       //angular.element(event.target).triggerHandler({
-      //  type: 'keypress',
+      //  type: 'keydown',
       //  which: 40
       //});
 
@@ -163,17 +163,19 @@
     function inputNameBlur() {
 
       if (vm.selectedPartner) {
-        vm.name = vm.selectedPartner.name;
+        vm.name = vm.selectedPartner;
       }
 
     }
 
     function selectPartner(partner) {
-
-      vm.currentSearchValue = vm.name;
       partner ? vm.selectedPartner = partner : cleanUp();
-
     }
+
+    $scope.$watch('vm.name', function (newValue) {
+      vm.currentSearchValue = angular.isObject(newValue) ? '' : newValue;
+    });
+
 
     function cleanUp() {
 
