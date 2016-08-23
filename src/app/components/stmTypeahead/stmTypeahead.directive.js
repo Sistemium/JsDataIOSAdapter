@@ -50,9 +50,9 @@
 
     _.assign(vm, {
 
-      inputFocus: ($event) => vm.inputFocusFn()($event),
-      inputBlur: ($event) => vm.inputBlurFn()($event),
-      onSelectItem: ($item) => {
+      inputFocus: angular.isUndefined(vm.inputFocusFn()) ? angular.noop() : ($event) => vm.inputFocusFn()($event),
+      inputBlur: angular.isUndefined(vm.inputFocusFn()) ? angular.noop() : ($event) => vm.inputBlurFn()($event),
+      onSelectItem: angular.isUndefined(vm.inputFocusFn()) ? angular.noop() : ($item) => {
         // vm.rootElement.children()[0].blur();
         vm.onSelectItemFn()($item);
       }
