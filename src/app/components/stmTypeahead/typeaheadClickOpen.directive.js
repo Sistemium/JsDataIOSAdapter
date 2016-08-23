@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .directive('typeaheadClickOpen', function ($timeout) {
+    .directive('typeaheadClickOpen', function () {
 
       return {
 
@@ -21,25 +21,7 @@
             var prev = ctrl.$viewValue;
 
             ctrl.$setViewValue();
-            $timeout(function () {
-              ctrl.$setViewValue(prev);
-            });
-
-            //var prev = ctrl.$modelValue || '';
-            //
-            //if (prev) {
-            //
-            //  ctrl.$setViewValue('');
-            //  $timeout(function () {
-            //    ctrl.$setViewValue(prev);
-            //  });
-            //
-            //} else {
-            //  ctrl.$setViewValue(' ');
-            //  $timeout(function () {
-            //    ctrl.$setViewValue('');
-            //  });
-            //}
+            ctrl.$setViewValue(prev);
 
           };
           elem.bind('click', triggerFunc);
