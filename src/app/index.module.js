@@ -21,8 +21,7 @@
       'vs-repeat',
       'jsd',
       'toggle-switch',
-      'angularMoment',
-      'ui.select'
+      'angularMoment'
     ]);
 
   angular.module('jsd', ['sistemiumBootstrap','Sales']);
