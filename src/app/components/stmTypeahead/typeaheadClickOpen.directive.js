@@ -9,22 +9,37 @@
 
         require: 'ngModel',
 
-        link: function($scope, elem, attrs, ctrl) {
+        link: function ($scope, elem, attrs, ctrl) {
 
-          var triggerFunc = function() {
+          //ctrl.$viewChangeListeners.push(function() {
+          //  console.log('ctrl.$modelValue', ctrl.$modelValue);
+          //  console.log('ctrl.$viewValue', ctrl.$viewValue);
+          //});
 
-            var prev = ctrl.$modelValue || '';
+          var triggerFunc = function () {
 
-            if (prev) {
+            var prev = ctrl.$viewValue;
 
-              ctrl.$setViewValue('');
-              $timeout(function() {
-                ctrl.$setViewValue(prev);
-              });
+            ctrl.$setViewValue();
+            $timeout(function () {
+              ctrl.$setViewValue(prev);
+            });
 
-            } else {
-              ctrl.$setViewValue(' ');
-            }
+            //var prev = ctrl.$modelValue || '';
+            //
+            //if (prev) {
+            //
+            //  ctrl.$setViewValue('');
+            //  $timeout(function () {
+            //    ctrl.$setViewValue(prev);
+            //  });
+            //
+            //} else {
+            //  ctrl.$setViewValue(' ');
+            //  $timeout(function () {
+            //    ctrl.$setViewValue('');
+            //  });
+            //}
 
           };
           elem.bind('click', triggerFunc);
