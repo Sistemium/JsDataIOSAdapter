@@ -24,7 +24,7 @@
           .then(function (location) {
             initMap(location);
           })
-      })
+      });
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
 
