@@ -43,19 +43,16 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group(ng-if='vm.isInCreatingPartnerProcess')
       label.col-sm-4.control-label(for="inputLegalForm") Форма
       .col-sm-8
-        ui-select#inputLegalForm(
-        ng-model="vm.selectedLegalForm"
+        stm-typeahead(
         ng-required='true'
+        input-model='vm.selectedLegalForm'
+        input-id='inputLegalForm'
+        input-class='form-control'
+        placeholder='Форма собственности'
+        rows-data='vm.legalForms'
+        rows-filters='filter:{name:$viewValue}'
+        row-as='name'
         )
-          ui-select-match(
-          placeholder="Форма собственности"
-          ) {{ $select.selected.fullName }}
-          ui-select-choices(
-          repeat='legalForm in vm.legalForms | filter: $select.search | orderBy:"name" track by legalForm.id'
-          refresh='vm.getLegalForms($select.search, {sortBy: "name"})'
-          refresh-delay=0
-          )
-            div(ng-bind-html="legalForm.name | highlight: $select.search")
 
     .form-group(
     ng-if='vm.isInCreatingPartnerProcess'
