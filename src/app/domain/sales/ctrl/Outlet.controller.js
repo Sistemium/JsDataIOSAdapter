@@ -4,6 +4,8 @@
 
   function OutletController(Schema, $window, $q, $state, $scope, SalesmanAuth, IOS, PhotoHelper, mapsHelper) {
 
+    // TODO: allow to add/change location for an existing outlet
+
     var vm = this;
     var Outlet = Schema.model('Outlet');
     var Visit = Schema.model('Visit');
