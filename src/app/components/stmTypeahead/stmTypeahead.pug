@@ -6,6 +6,7 @@ ng-model='vm.inputModel'
 placeholder="{{vm.placeholder}}"
 ng-focus='vm.inputFocus($event)'
 ng-blur='vm.inputBlur()'
+input-required
 uib-typeahead
 autocomplete="off"
 typeahead-click-open
@@ -14,4 +15,5 @@ typeahead-min-length=0
 typeahead-append-to-body='true'
 typeahead-on-select='vm.onSelectItem($item)'
 typeahead-popup-template-url='/app/components/stmTypeahead/stmTypeaheadPopup.html'
+typeahead-editable
 )

@@ -15,6 +15,8 @@
         rowAs: '@',
         inputClass: '@',
         inputId: '@',
+        inputEditable: '@',
+        inputRequired: '@',
         inputFocusFn: '&',
         inputBlurFn: '&',
         onSelectItemFn: '&'
@@ -29,12 +31,23 @@
 
         $templateRequest('app/components/stmTypeahead/stmTypeahead.html')
           .then(function (html) {
+
             ctrl.rowsFilters = _.replace(ctrl.rowsFilters,`'`,'"');
             var typeAhead = `uib-typeahead='row as row.${ctrl.rowAs} for row in vm.rowsData${ctrl.rowsFilters && "|"+ctrl.rowsFilters}'`;
             html = html.replace('uib-typeahead', typeAhead);
+
+            ctrl.inputEditable = angular.isUndefined(ctrl.inputEditable) ? 'true' : ctrl.inputEditable;
+            var inputEditable = `typeahead-editable='${ctrl.inputEditable}'`;
+            html = html.replace('typeahead-editable', inputEditable);
+
+            ctrl.inputRequired = angular.isUndefined(ctrl.inputRequired) ? 'false' : ctrl.inputRequired;
+            var inputRequired = `ng-required='${ctrl.inputRequired}'`;
+            html = html.replace('input-required', inputRequired);
+
             var template = angular.element(html);
             element.append(template);
             $compile(template)(scope);
+
           });
       }
 
