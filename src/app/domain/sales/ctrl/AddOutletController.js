@@ -27,27 +27,14 @@
 
       });
 
-    function getLegalForms(viewValue, opt) {
+    LegalForm.findAll()
+    .then(function (legalForms) {
 
-      angular.extend(opt, {bypassCache: true});
-
-      return LegalForm.findAll({
-        where: {
-          name: {
-            likei: viewValue
-          }
-        }
-      }, opt)
-        .then(function (legalForm) {
-
-          vm.legalForms = _.sortBy(legalForm, function (lf) {
-            return lf.name.toLowerCase();
-          });
-          return vm.legalForms;
-
+        vm.legalForms = _.sortBy(legalForms, function (lf) {
+          return lf.name.toLowerCase();
         });
 
-    }
+      });
 
     function addPartnerFieldsCheck() {
       return (vm.name && vm.selectedLegalForm && vm.inn && vm.address);
@@ -156,12 +143,6 @@
         vm.name = vm.currentSearchValue;
       }
 
-      //angular.element(event.target).triggerHandler('open');
-      //angular.element(event.target).triggerHandler({
-      //  type: 'keydown',
-      //  which: 40
-      //});
-
     }
 
     function inputNameBlur() {
@@ -244,7 +225,6 @@
       legalForms: [],
       selectPartner: selectPartner,
       addPartnerBtnClick: addPartnerBtnClick,
-      getLegalForms: getLegalForms,
       addPartnerFieldsCheck: addPartnerFieldsCheck,
       inputNameFocus: inputNameFocus,
       inputNameBlur: inputNameBlur
