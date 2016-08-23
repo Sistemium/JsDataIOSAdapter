@@ -21,8 +21,7 @@
     "angular-vs-repeat": "^1.1.7",
     "angular-moment": "1.0.0-beta.6",
     "angular-bootstrap-toggle-switch": "^0.5.6",
-    "ya-map": "angular-yandex-map#^1.0.9",
-    "angular-ui-select": "^0.19.1"
+    "ya-map": "angular-yandex-map#^1.0.9"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.2"
