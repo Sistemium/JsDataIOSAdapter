@@ -80,6 +80,7 @@
         .then(quit)
         .catch(function (err) {
 
+          vm.busyMessage = null;
           showSaveErrorAlert(err);
           return $q.reject(err);
 
