@@ -93,7 +93,8 @@
       vm.newPartner = Partner.inject({
         name: legalForm.name + ' "' + name + '"',
         inn: inn,
-        legalFormId: legalForm.id
+        legalFormId: legalForm.id,
+        source: 'user'
       });
       return vm.newPartner;
 
@@ -104,7 +105,8 @@
       vm.newOutlet = Outlet.inject({
         address: address,
         name: name,
-        partnerId: partner.id
+        partnerId: partner.id,
+        source: 'user'
       });
 
       return vm.newOutlet;
