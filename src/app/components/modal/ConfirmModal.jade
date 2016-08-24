@@ -5,6 +5,8 @@
       i.pull-right.glyphicon.glyphicon-remove
 .modal-body
   p {{vm.text}}
+  p
+    strong(ng-if='vm.question') {{vm.question}}?
 .modal-footer
   button.btn(
   ng-repeat='button in vm.buttons'

@@ -131,20 +131,9 @@
 
     function showSaveErrorAlert(err) {
 
-      if (!angular.isString(err)) {
-
-        if (angular.isObject(err)) {
-
-          err = JSON.stringify(err);
-
-        }
-
-      }
-
-      var errText = err + '\n Повторить попытку?';
-
-      ConfirmModal.show({
-        text: errText
+      return ConfirmModal.show({
+        text: angular.toJson(err),
+        question: 'Повторить попытку'
       })
         .then(saveNewData);
 
