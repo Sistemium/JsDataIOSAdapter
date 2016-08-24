@@ -7,7 +7,6 @@
     "test": "gulp test"
   },
   "devDependencies": {
-    "gulp": "gulpjs/gulp#d8f5c90a0622d19ef1943a2a3d02dc50e3c853e7",
     "sistemium-gulp": ">=0.2.0"
   },
   "engines": {
