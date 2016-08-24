@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
@@ -108,7 +108,7 @@
 
       vm.busy = $q(function (resolve, reject) {
 
-        if (creatingMode && IOS.isIos()) {
+        if (creatingMode) {
 
           getLocation().then(function (checkOutLocation) {
             vm.visit.checkOutLocationId = checkOutLocation.id;
@@ -251,33 +251,31 @@
           salesmanId: salesman.id
         });
 
-        if (IOS.isIos()) {
-          vm.busy = getLocation();
+        vm.busy = getLocation();
 
-          vm.busy.then(function (res) {
+        vm.busy.then(function (res) {
 
-            if ($scope['$$destroyed']) {
-              return;
-            }
+          if ($scope['$$destroyed']) {
+            return;
+          }
 
-            vm.visit.checkInLocationId = res.id;
-            initMap(res);
-            Visit.save(vm.visit).then(function (visit) {
-              $state.go('.', {visitId: visit.id});
-            });
-
-          }, function (err) {
-
-            if ($scope['$$destroyed']) {
-              return;
-            }
-
-            console.error(err);
-            toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
-            $state.go('^');
-
+          vm.visit.checkInLocationId = res.id;
+          initMap(res);
+          return Visit.save(vm.visit).then(function (visit) {
+            $state.go('.', {visitId: visit.id});
           });
-        }
+
+        }, function (err) {
+
+          if ($scope['$$destroyed']) {
+            return;
+          }
+
+          console.error(err);
+          toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
+          $state.go('^');
+
+        });
 
       }
 
