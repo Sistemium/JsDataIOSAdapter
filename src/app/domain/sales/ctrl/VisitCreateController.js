@@ -176,11 +176,11 @@
     }
 
 
-    angular.extend(vm, {
+    _.assign(vm, {
 
       buttons: buttons,
-
       creatingMode: creatingMode,
+      thumbnails: {},
 
       mapOptions: {
         avoidFractionalZoom: false,
@@ -188,16 +188,13 @@
         balloonAutoPanMargin: 300
       },
 
-      takePhoto: takePhoto,
-      thumbnailClick: thumbnailClick,
-
-      thumbnails: {},
-
-      goBack: goBack,
-      changeAnswer: changeAnswer,
-      save: save,
-      mapClick: mapClick,
-      deleteVisit: deleteVisit
+      takePhoto,
+      thumbnailClick,
+      goBack,
+      changeAnswer,
+      save,
+      mapClick,
+      deleteVisit
 
     });
 
