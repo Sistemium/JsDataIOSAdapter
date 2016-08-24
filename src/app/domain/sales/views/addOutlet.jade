@@ -91,8 +91,8 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
     hr
 
-    .form-group
-      .col-sm-4.col-sm-offset-8.pull-right
+    .col-sm-4.col-sm-offset-8
+      .form-group.pull-right
         button.btn.margin.btn-primary(
         ng-if='!vm.isInCancelProcess'
         ng-disabled='addOutletForm.$invalid'
