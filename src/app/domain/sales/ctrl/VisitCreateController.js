@@ -11,7 +11,7 @@
     var Location = Schema.model('Location');
 
     var date = moment().format('YYYY-MM-DD');
-    var id = $state.params.visitId;
+    var visitId = $state.params.visitId;
     var outletId = $state.params.id;
     var answersByQuestion = {};
 
@@ -210,8 +210,8 @@
       VQ.findAllWithRelations()('VisitQuestionDataType')
     ]).then(function () {
 
-      if (id) {
-        vm.busy = Visit.find(id)
+      if (visitId) {
+        vm.busy = Visit.find(visitId)
           .then(vm.importData('visit'))
           .then(function (v) {
             Visit.loadRelations(v, ['Location', 'VisitPhoto'])
