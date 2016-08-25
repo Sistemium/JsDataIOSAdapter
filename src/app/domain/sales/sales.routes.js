@@ -48,8 +48,8 @@
         url: '/visitCreate?visitId',
 
         data: {
-          hideTopBar: true,
-          disableNavs: true
+          hideTopBar: false,
+          hideNavs: true
         },
 
         templateUrl: 'app/domain/sales/views/VisitCreate.html',
