@@ -204,26 +204,28 @@
       };
     };
 
-    vm.busy = $q.all([
-      VQS.findAllWithRelations({isEnabled: true})('VisitQuestionGroup')
-        .then(vm.importData('questionSets')),
-      VQ.findAllWithRelations()('VisitQuestionDataType')
-    ]).then(function () {
 
-      if (visitId) {
-        vm.busy = Visit.find(visitId)
+
+    if (visitId) {
+
+      vm.busy = $q.all([
+        VQS.findAllWithRelations({isEnabled: true})('VisitQuestionGroup')
+          .then(vm.importData('questionSets')),
+        VQ.findAllWithRelations()('VisitQuestionDataType')
+      ]).then(function () {
+        return Visit.find(visitId)
           .then(vm.importData('visit'))
-          .then(function (v) {
-            Visit.loadRelations(v, ['Location', 'VisitPhoto'])
-              .then(function (visit) {
+          .then(function (visit) {
+            Visit.loadRelations(visit, ['Location', 'VisitPhoto'])
+              .then(() => {
                 _.each(visit.photos, importThumbnail);
                 return visit;
               })
               .then(initMap);
-            return v;
+            return visit;
           })
           .then(function (visit) {
-            VA.findAll({
+            return VA.findAll({
               visitId: visit.id
             }).then(function () {
               var index = _.groupBy(visit.answers, 'questionId');
@@ -239,28 +241,28 @@
 
             });
           });
-      } else {
+      });
 
-        vm.answers = {};
-        vm.visit = Visit.inject({
-          date: date,
-          outletId: outletId,
-          salesmanId: salesman.id
-        });
+    } else {
 
-        vm.busy = getLocation();
-
-        vm.busy.then(function (res) {
+      vm.busy = getLocation()
+        .then(function (res) {
 
           if ($scope['$$destroyed']) {
             return;
           }
 
-          vm.visit.checkInLocationId = res.id;
-          initMap(res);
-          return Visit.save(vm.visit).then(function (visit) {
-            $state.go('.', {visitId: visit.id});
+          vm.visit = Visit.inject({
+            date: date,
+            outletId: outletId,
+            salesmanId: salesman.id,
+            checkInLocationId: res.id
           });
+
+          return Visit.save(vm.visit)
+            .then(visit => {
+              $state.go('.', {visitId: visit.id})
+            });
 
         }, function (err) {
 
@@ -274,9 +276,8 @@
 
         });
 
-      }
+    }
 
-    });
 
     $scope.$on('$destroy', function () {
 
