@@ -36,10 +36,7 @@
 
           _.each(outlet.photos, importThumbnail);
 
-          LegalForm.find(vm.outlet.partner.legalFormId)
-            .then(function (legalForm) {
-              vm.legalForm = legalForm;
-            });
+          LegalForm.find(vm.outlet.partner.legalFormId);
 
         });
 
