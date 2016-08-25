@@ -5,6 +5,28 @@
   function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper) {
 
     var vm = this;
+
+    _.assign(vm, {
+
+      currentSearchValue: undefined,
+      selectedPartner: null,
+      newOutlet: null,
+      partners: [],
+      legalForms: [],
+      isInCreatingPartnerProcess: false,
+      isInCancelProcess: false,
+
+      submit,
+      cancel,
+      cancelConfirm,
+      selectPartner,
+      addPartnerBtnClick,
+      addPartnerFieldsCheck,
+      inputNameFocus,
+      inputNameBlur
+
+    });
+
     var Partner = Schema.model('Partner');
     var Outlet = Schema.model('Outlet');
     var Location = Schema.model('Location');
@@ -20,20 +42,12 @@
 
     Partner.findAll()
       .then(function (partners) {
-
-        vm.partners = _.sortBy(partners, function (p) {
-          return [p.shortName.toLowerCase(), p.name.toLowerCase()];
-        });
-
+        vm.partners = _.sortBy(partners, (p) => [p.shortName.toLowerCase(), p.name.toLowerCase()]);
       });
 
     LegalForm.findAll()
     .then(function (legalForms) {
-
-        vm.legalForms = _.sortBy(legalForms, function (lf) {
-          return lf.name.toLowerCase();
-        });
-
+        vm.legalForms = _.sortBy(legalForms, (lf) => lf.name.toLowerCase());
       });
 
     function addPartnerFieldsCheck() {
@@ -116,9 +130,7 @@
     function getLocation(outlet) {
 
       return LocationHelper.getLocation(100, outlet.id, 'Outlet')
-        .catch(function (err) {
-          gotError(err, 'Невозможно получить геопозицию.');
-        });
+        .catch((err) => gotError(err, 'Невозможно получить геопозицию.'));
 
     }
 
@@ -213,24 +225,6 @@
     function quit() {
       return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
     }
-
-    angular.extend(vm, {
-      submit: submit,
-      cancel: cancel,
-      cancelConfirm: cancelConfirm,
-      selectedPartner: null,
-      newOutlet: null,
-      partners: [],
-      currentSearchValue: undefined,
-      isInCreatingPartnerProcess: false,
-      isInCancelProcess: false,
-      legalForms: [],
-      selectPartner: selectPartner,
-      addPartnerBtnClick: addPartnerBtnClick,
-      addPartnerFieldsCheck: addPartnerFieldsCheck,
-      inputNameFocus: inputNameFocus,
-      inputNameBlur: inputNameBlur
-    });
 
   }
 
