@@ -7,6 +7,8 @@ h3.pull-left.max-width-75p
 section.ui-view
 
   h3.pull-right.with-map
+    button.btn.ml-5.btn-default.pull-right(ng-click='vm.takePhoto()')
+      i.glyphicon.glyphicon-camera
     button.btn.btn-default.ml-5(
     popover-placement="bottom-left auto"
     popover-trigger='outsideClick'
@@ -18,18 +20,15 @@ section.ui-view
     )
       i.glyphicon.glyphicon-map-marker
 
-  hr.clear-both
+  hr.clear-both(ng-if='vm.photos.length')
 
-  .header-button
-    h4.pull-left
-      a(ng-class='{disabled: !vm.photos.length}' href ng-click='vm.togglePhotosSection()') Фотографии
-        span(ng-if='vm.photos.length') &nbsp({{vm.photos.length}})
-    button.btn.ml-em.btn-primary.pull-right(ng-click='vm.takePhoto()')
-      i.glyphicon.glyphicon-camera
-    section.mt.clear-both(ng-hide='vm.collapsePhotosSection|| !vm.photos.length')
-      .col-xs-3.col-sm-2(ng-repeat='pic in vm.photos track by pic.id')
-        a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
-          img(ng-src='{{vm.thumbnails[pic.id]}}')
+  section.mt.clear-both(ng-if='vm.photos.length')
+    h4
+      a(ng-click='vm.togglePhotosSection()' href) Фотографии точки ({{ vm.photos.length }})
+
+    .col-xs-3.col-sm-2(ng-repeat='pic in vm.photos track by pic.id' ng-if='!vm.collapsePhotosSection')
+      a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
+        img(ng-src='{{vm.thumbnails[pic.id]}}')
 
   hr.clear-both
 
@@ -37,8 +36,8 @@ section.ui-view
     h4.pull-left
       a(ng-class='{disabled: !vm.visits.length}' href ng-click='vm.toggleVisitsSection()') Визиты
         span(ng-if='vm.visits.length') &nbsp({{vm.visits.length}})
-    button.btn.ml-em.btn-primary.pull-right(ng-click='vm.newVisitClick()')
-      i.glyphicon.glyphicon-plus
+
+    button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
 
     table.table.table-striped.clear-both(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
       thead
