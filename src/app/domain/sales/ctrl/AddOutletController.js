@@ -32,14 +32,6 @@
     var Location = Schema.model('Location');
     var LegalForm = Schema.model('LegalForm');
 
-    function addPartnerBtnClick() {
-
-      vm.name = vm.currentSearchValue;
-      vm.isInCreatingPartnerProcess = true;
-      vm.selectedPartner = null;
-
-    }
-
     Partner.findAll()
       .then(function (partners) {
         vm.partners = _.sortBy(partners, (p) => [p.shortName.toLowerCase(), p.name.toLowerCase()]);
@@ -47,12 +39,8 @@
 
     LegalForm.findAll()
     .then(function (legalForms) {
-        vm.legalForms = _.sortBy(legalForms, (lf) => lf.name.toLowerCase());
+        vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, lf.name.toLowerCase()]);
       });
-
-    function addPartnerFieldsCheck() {
-      return (vm.name && vm.selectedLegalForm && vm.inn && vm.address);
-    }
 
     function submit() {
 
@@ -74,6 +62,18 @@
     function cancelConfirm() {
       cleanUp();
       quit();
+    }
+
+    function addPartnerBtnClick() {
+
+      vm.name = vm.currentSearchValue;
+      vm.isInCreatingPartnerProcess = true;
+      vm.selectedPartner = null;
+
+    }
+
+    function addPartnerFieldsCheck() {
+      return (vm.name && vm.selectedLegalForm && vm.inn && vm.address);
     }
 
     function saveNewData() {
