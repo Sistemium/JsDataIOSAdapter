@@ -129,3 +129,12 @@ p.list-group-item-text {
     }
   }
 }
+
+// TODO: something a bit smarter needed
+.max-width-75p {
+  max-width: 75%;
+  @media (max-width: 400px) {
+    max-width: 200px;
+  }
+}
+
