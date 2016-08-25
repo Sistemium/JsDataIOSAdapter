@@ -11,6 +11,7 @@
     var Visit = Schema.model('Visit');
     var OutletPhoto = Schema.model('OutletPhoto');
     var Location = Schema.model('Location');
+    var LegalForm = Schema.model('LegalForm');
     var rootState = 'sales.territory.outlet';
 
     var stateFilter = $state.params.id;
@@ -32,7 +33,14 @@
 
       Outlet.loadRelations(vm.outlet, 'OutletPhoto')
         .then(function (outlet) {
+
           _.each(outlet.photos, importThumbnail);
+
+          LegalForm.find(vm.outlet.partner.legalFormId)
+            .then(function (legalForm) {
+              vm.legalForm = legalForm;
+            });
+
         });
 
     });

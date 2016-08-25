@@ -1,5 +1,5 @@
 h3.pull-left(style='max-width: 75%')
-  span {{ vm.outlet.partner.shortName }}
+  span {{ vm.legalForm.name }} «{{ vm.outlet.partner.shortName }}»
   = ' '
   small
     a.inherit-colors(href ng-click='vm.outletClick()' ng-class='{disabled: vm.disableNavs}') {{ vm.outlet.address }}
