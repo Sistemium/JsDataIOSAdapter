@@ -144,7 +144,7 @@
     function showSaveErrorAlert(err) {
 
       return ConfirmModal.show({
-        text: angular.toJson(err),
+        text: angular.isString(err) ? err : angular.toJson(err),
         question: 'Повторить попытку'
       })
         .then(saveNewData);
