@@ -36,7 +36,7 @@
 
       vm.busyMessage = 'Получение геопозиции…';
 
-      vm.busy = LocationHelper.getLocation(1000, null, 'Outlet')
+      vm.busy = LocationHelper.getLocation(100, null, 'Outlet')
         .then((data) => {
 
           vm.busyMessage = 'Загрузка данных…';
