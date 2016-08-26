@@ -57,6 +57,18 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         row-as='name'
         )
 
+    .form-group(ng-if='vm.isInCreatingPartnerProcess || vm.selectedPartner')
+      label.col-sm-4.control-label(for="inputAddress") Адрес
+      .col-sm-8
+        input#inputAddress.form-control(
+        type="text"
+        name="address"
+        ng-required='true'
+        placeholder="{{ vm.selectedPartner || vm.isInCreatingPartnerProcess ? 'Адрес' : 'Сначала выберите партнёра' }}"
+        ng-model="vm.address"
+        autocomplete="off"
+        )
+
     .form-group(
     ng-if='vm.isInCreatingPartnerProcess'
     ng-class="addOutletForm.inn.$touched && addOutletForm.inn.$invalid && 'has-error'"
@@ -80,17 +92,6 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
           p(ng-message="pattern") ИНН: 10 или 12 цифр
           p(ng-message="innInput") Неверная контрольная сумма
 
-    .form-group(ng-if='vm.isInCreatingPartnerProcess || vm.selectedPartner')
-      label.col-sm-4.control-label(for="inputAddress") Адрес
-      .col-sm-8
-        input#inputAddress.form-control(
-        type="text"
-        name="address"
-        ng-required='true'
-        placeholder="{{ vm.selectedPartner || vm.isInCreatingPartnerProcess ? 'Адрес' : 'Сначала выберите партнёра' }}"
-        ng-model="vm.address"
-        autocomplete="off"
-        )
     hr
 
     .col-sm-4.col-sm-offset-8
