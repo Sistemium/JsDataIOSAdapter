@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper) {
+  function AddOutletController($state, $q, ConfirmModal, Schema, $window, LocationHelper) {
 
     var vm = this;
 
@@ -21,9 +21,7 @@
       cancelConfirm,
       selectPartner,
       addPartnerBtnClick,
-      addPartnerFieldsCheck,
-      inputNameFocus,
-      inputNameBlur
+      addPartnerFieldsCheck
 
     });
 
@@ -38,39 +36,28 @@
 
       vm.busyMessage = 'Получение геопозиции…';
 
-      vm.busy = getLocation()
+      vm.busy = LocationHelper.getLocation(1000, null, 'Outlet')
         .then((data) => {
 
+          vm.busyMessage = 'Загрузка данных…';
           vm.newLocation = Location.inject(data);
-          vm.busyMessage = null;
-          startController();
+          return startController();
 
         })
-        .catch((err) => {
-
-          vm.busyMessage = null;
-          showGetLocationErrorAlert(err);
-          return $q.reject(err);
-
-        });
+        .catch(showGetLocationErrorAlert);
 
     }
 
     function startController() {
 
-      Partner.findAll()
+      return Partner.findAll()
         .then(function (partners) {
           vm.partners = _.sortBy(partners, (p) => [_.lowerCase(p.shortName), _.lowerCase(p.name)]);
+          LegalForm.findAll()
+            .then(function (legalForms) {
+              vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.lowerCase(lf.name)]);
+            });
         });
-
-      LegalForm.findAll()
-        .then(function (legalForms) {
-          vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.lowerCase(lf.name)]);
-        });
-
-      $scope.$watch('vm.name', function (newValue) {
-        if (!angular.isObject(newValue)) vm.currentSearchValue = newValue;
-      });
 
     }
 
@@ -96,11 +83,10 @@
       quit();
     }
 
-    function addPartnerBtnClick() {
+    function addPartnerBtnClick(name) {
 
-      vm.name = vm.currentSearchValue;
       vm.isInCreatingPartnerProcess = true;
-      vm.selectedPartner = null;
+      vm.name = name;
 
     }
 
@@ -118,11 +104,7 @@
       vm.busy = saveAll()
         .then(quit)
         .catch(function (err) {
-
-          vm.busyMessage = null;
           showSaveErrorAlert(err);
-          return $q.reject(err);
-
         });
 
     }
@@ -155,20 +137,6 @@
 
     }
 
-    function getLocation(outletId) {
-
-      return LocationHelper.getLocation(100, outletId, 'Outlet')
-        .catch((err) => gotError(err, 'Невозможно получить геопозицию.'));
-
-    }
-
-    function gotError(err, errText) {
-
-      toastr.error(angular.toJson(err), errText);
-      throw errText;
-
-    }
-
     function showGetLocationErrorAlert(err) {
 
       return ConfirmModal.show({
@@ -190,54 +158,16 @@
 
     }
 
-    function inputNameFocus() {
-
-      if (!angular.isUndefined(vm.currentSearchValue)) {
-        vm.name = vm.currentSearchValue;
-      }
-
-    }
-
-    function inputNameBlur() {
-
-      if (vm.selectedPartner) {
-        vm.name = vm.selectedPartner;
-      }
-
-    }
-
     function selectPartner(partner) {
 
-      if (angular.isUndefined(vm.currentSearchValue)) vm.currentSearchValue = '';
-      partner ? vm.selectedPartner = partner : cleanUp();
+      vm.selectedPartner = partner;
 
     }
 
     function cleanUp() {
-
-      delete vm.selectedPartner;
-
-      if (vm.newOutlet) {
-
-        Outlet.eject(vm.newOutlet);
-        delete vm.newOutlet;
-
-      }
-
-      if (vm.newPartner) {
-
-        Partner.eject(vm.newPartner);
-        delete vm.newPartner;
-
-      }
-
-      if (vm.newLocation) {
-
-        Location.eject(vm.newLocation);
-        delete vm.newLocation;
-
-      }
-
+      vm.newOutlet && Outlet.eject(vm.newOutlet);
+      vm.newPartner && Partner.eject(vm.newPartner);
+      vm.newLocation && Location.eject(vm.newLocation);
     }
 
     function saveAll() {

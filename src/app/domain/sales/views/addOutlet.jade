@@ -2,22 +2,23 @@ h3 Добавление точки
 
 hr
 
-h5(
-ng-if='vm.isInCreatingPartnerProcess'
-) {{ vm.selectedLegalForm.name }} «{{ vm.name }}»
-  span(ng-if='vm.address') , {{ vm.address }}
-  span(ng-if='vm.inn') , {{ vm.inn }}
-  hr
-
 section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   form.form-horizontal(
   ng-if='vm.newLocation'
   name="addOutletForm"
   novalidate
   )
+    .form-group(ng-if='vm.isInCreatingPartnerProcess')
+      label.col-sm-4.control-label.hidden-xs(for="inputName") Полное название
+      .col-sm-8.col-xs-12
+        p.form-control-static
+          span {{ vm.selectedLegalForm.name }} "{{ vm.name }}"
+          = ' '
+          span.gray {{ vm.address }}
 
     .form-group
-      label.col-sm-4.control-label(for="inputName") Контрагент
+      label.col-sm-4.control-label(for="inputName")
+        | {{ vm.isInCreatingPartnerProcess ? 'Контрагент сокращенно' : 'Контрагент' }}
       .col-sm-8
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
@@ -26,38 +27,33 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         type="text"
         name="name"
         ng-required='true'
-        placeholder="Имя партнёра"
+        placeholder="Название без кавычек"
         autocomplete="off"
         )
-        .display-flex(ng-if='!vm.isInCreatingPartnerProcess')
-          stm-typeahead.flex-1(
-            input-required='true'
-            input-model='vm.name'
-            input-id='inputName'
-            input-class='form-control'
-            placeholder='Название контрагента'
-            input-focus-fn='vm.inputNameFocus'
-            input-blur-fn='vm.inputNameBlur'
-            rows-data='vm.partners'
-            rows-filters='filter:{shortName:$viewValue}'
-            row-as='name'
-            on-select-item-fn='vm.selectPartner'
-            )
-          .animate-show(ng-show='vm.name && vm.name != vm.selectedPartner')
-            button.btn.ml-em.btn-primary.pull-right(
-            ng-click='vm.addPartnerBtnClick()'
-            )
-              i.glyphicon.glyphicon-plus
+
+        stm-typeahead(ng-if='!vm.isInCreatingPartnerProcess'
+          input-required='true'
+          input-model='vm.name'
+          selected-model='vm.selectedPartner'
+          add-button-click-fn='vm.addPartnerBtnClick'
+          input-id='inputName'
+          input-class='form-control'
+          input-editable
+          placeholder='Название контрагента'
+          rows-data='vm.partners'
+          rows-filters='filter:{shortName:$viewValue}'
+          row-as='name'
+          on-select-item-fn='vm.selectPartner'
+          )
 
     .form-group(ng-if='vm.isInCreatingPartnerProcess')
-      label.col-sm-4.control-label(for="inputLegalForm") Форма
+      label.col-sm-4.control-label(for="inputLegalForm") Форма собственности
       .col-sm-8
         stm-typeahead(
         input-required='true'
         input-model='vm.selectedLegalForm'
         input-id='inputLegalForm'
         input-class='form-control'
-        input-editable='false'
         placeholder='Форма собственности'
         rows-data='vm.legalForms'
         rows-filters='filter:{name:$viewValue}'
@@ -87,7 +83,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         type="text"
         name="inn"
         ng-pattern='innPattern'
-        placeholder='Необязательно'
+        placeholder='10 или 12 цифр (если известен)'
         ng-model="vm.inn"
         autocomplete="off"
         )
@@ -103,9 +99,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
 
     .col-sm-4.col-sm-offset-8
       .form-group.pull-right
-        fieldset(
-        ng-disabled='vm.busyMessage'
-        )
+        fieldset
           button.btn.margin.btn-primary(
           ng-if='!vm.isInCancelProcess'
           ng-disabled='addOutletForm.$invalid || !vm.address'
