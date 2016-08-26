@@ -2,6 +2,9 @@
 
 require('sistemium-gulp')
   .config({
-    ngModule: 'webPage'
+    ngModule: 'webPage',
+    browserSync: {
+      ghostMode: false
+    }
   })
   .run(require('gulp'));
