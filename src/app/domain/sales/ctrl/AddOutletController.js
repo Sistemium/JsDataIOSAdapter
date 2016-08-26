@@ -32,15 +32,47 @@
     var Location = Schema.model('Location');
     var LegalForm = Schema.model('LegalForm');
 
-    Partner.findAll()
-      .then(function (partners) {
-        vm.partners = _.sortBy(partners, (p) => [_.lowerCase(p.shortName), _.lowerCase(p.name)]);
+    checkLocation();
+
+    function checkLocation() {
+
+      vm.busyMessage = 'Получение геопозиции…';
+
+      vm.busy = getLocation()
+        .then((data) => {
+
+          vm.newLocation = Location.inject(data);
+          vm.busyMessage = null;
+          startController();
+
+        })
+        .catch((err) => {
+
+          vm.busyMessage = null;
+          showGetLocationErrorAlert(err);
+          return $q.reject(err);
+
+        });
+
+    }
+
+    function startController() {
+
+      Partner.findAll()
+        .then(function (partners) {
+          vm.partners = _.sortBy(partners, (p) => [_.lowerCase(p.shortName), _.lowerCase(p.name)]);
+        });
+
+      LegalForm.findAll()
+        .then(function (legalForms) {
+          vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.lowerCase(lf.name)]);
+        });
+
+      $scope.$watch('vm.name', function (newValue) {
+        if (!angular.isObject(newValue)) vm.currentSearchValue = newValue;
       });
 
-    LegalForm.findAll()
-      .then(function (legalForms) {
-        vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.lowerCase(lf.name)]);
-      });
+    }
 
     function submit() {
 
@@ -79,18 +111,11 @@
     function saveNewData() {
 
       var partner = vm.selectedPartner || vm.newPartner || injectPartner(vm.name, vm.inn, vm.selectedLegalForm);
-      var outlet = vm.newOutlet || injectOutlet(vm.name, partner, vm.address);
+      var outlet = vm.newOutlet || injectOutlet(vm.name, partner, vm.address, vm.newLocation);
 
-      vm.busyMessage = 'Получение геопозиции…';
+      vm.busyMessage = 'Создание точки…';
 
-      vm.busy = getLocation(outlet)
-        .then(function (data) {
-
-          vm.newLocation = Location.inject(data);
-          vm.newOutlet.locationId = vm.newLocation.id;
-
-        })
-        .then(saveAll)
+      vm.busy = saveAll()
         .then(quit)
         .catch(function (err) {
 
@@ -114,22 +139,25 @@
 
     }
 
-    function injectOutlet(name, partner, address) {
+    function injectOutlet(name, partner, address, location) {
 
       vm.newOutlet = Outlet.inject({
         address: address,
         name: name,
         partnerId: partner.id,
+        locationId: location.id,
         source: 'user'
       });
+
+      location.ownerXid = vm.newOutlet.id;
 
       return vm.newOutlet;
 
     }
 
-    function getLocation(outlet) {
+    function getLocation(outletId) {
 
-      return LocationHelper.getLocation(100, outlet.id, 'Outlet')
+      return LocationHelper.getLocation(100, outletId, 'Outlet')
         .catch((err) => gotError(err, 'Невозможно получить геопозицию.'));
 
     }
@@ -138,6 +166,17 @@
 
       toastr.error(angular.toJson(err), errText);
       throw errText;
+
+    }
+
+    function showGetLocationErrorAlert(err) {
+
+      return ConfirmModal.show({
+        text: err,
+        question: 'Повторить попытку'
+      })
+        .then(checkLocation)
+        .catch(quit);
 
     }
 
@@ -173,10 +212,6 @@
       partner ? vm.selectedPartner = partner : cleanUp();
 
     }
-
-    $scope.$watch('vm.name', function (newValue) {
-      if (!angular.isObject(newValue)) vm.currentSearchValue = newValue;
-    });
 
     function cleanUp() {
 
