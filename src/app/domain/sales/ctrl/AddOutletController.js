@@ -81,7 +81,7 @@
       var partner = vm.selectedPartner || vm.newPartner || injectPartner(vm.name, vm.inn, vm.selectedLegalForm);
       var outlet = vm.newOutlet || injectOutlet(vm.name, partner, vm.address);
 
-      vm.busyMessage = 'Получаем геопозицию…';
+      vm.busyMessage = 'Получение геопозиции…';
 
       vm.busy = getLocation(outlet)
         .then(function (data) {
@@ -144,7 +144,7 @@
     function showSaveErrorAlert(err) {
 
       return ConfirmModal.show({
-        text: angular.isString(err) ? err : angular.toJson(err),
+        text: err,
         question: 'Повторить попытку'
       })
         .then(saveNewData);
