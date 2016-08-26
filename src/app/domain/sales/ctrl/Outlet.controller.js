@@ -11,33 +11,16 @@
     var Visit = Schema.model('Visit');
     var OutletPhoto = Schema.model('OutletPhoto');
     var Location = Schema.model('Location');
-    //var LegalForm = Schema.model('LegalForm');
     var rootState = 'sales.territory.outlet';
 
     var stateFilter = $state.params.id;
     var salesman = SalesmanAuth.getCurrentUser();
 
-    vm.thumbnails = {};
-
-    $window.Schema = Schema;
-
-    Outlet.find(stateFilter)
-      .then(function (outlet) {
-        Location.find(outlet.locationId)
-          .then(function (location) {
-            initMap(location);
-          })
-      });
-
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
 
       Outlet.loadRelations(vm.outlet, 'OutletPhoto')
         .then(function (outlet) {
-
           _.each(outlet.photos, importThumbnail);
-
-          //LegalForm.find(vm.outlet.partner.legalFormId);
-
         });
 
     });
@@ -53,6 +36,11 @@
 
     function refresh() {
       vm.busy = $q.all([
+        Outlet.find(stateFilter)
+          .then(function (outlet) {
+            Location.find(outlet.locationId)
+              .then(initMap)
+          }),
         Visit.findAllWithRelations({
           outletId: stateFilter,
           salesmanId: salesman.id
@@ -70,7 +58,7 @@
 
     function takePhoto() {
       return PhotoHelper.takePhoto('OutletPhoto', {outletId: vm.outlet.id}, vm.thumbnails)
-        .then(vm.collapsePhotosSection = false);
+        .then(()=> vm.collapsePhotosSection = false);
     }
 
     function importThumbnail(op) {
@@ -79,11 +67,10 @@
 
     function thumbnailClick(pic) {
 
-      var resourceName = 'OutletPhoto';
       var src = vm.thumbnails[pic.id];
       var title = vm.outlet.partner.shortName + ' (' + vm.outlet.address + ')';
 
-      return PhotoHelper.thumbnailClick(resourceName, pic, src, title);
+      return PhotoHelper.thumbnailClick('OutletPhoto', pic, src, title);
 
     }
 
@@ -100,8 +87,6 @@
     }
 
     function initMap(location) {
-
-      location = location ? location : _.get(vm.outlet, 'location') || _.get(vm, 'outlet.location');
 
       if (!location) {
         return;
@@ -123,27 +108,22 @@
 
     }
 
-    function mapClick() {
-      vm.popover = false;
-    }
+    _.assign(vm, {
 
-    angular.extend(vm, {
-
-      refresh: refresh,
-      newVisitClick: newVisitClick,
-
-      visitClick: function (visit) {
-        $state.go('.visit', {visitId: visit.id});
-      },
-
-      takePhoto: takePhoto,
-      outletClick: outletClick,
-      thumbnailClick: thumbnailClick,
-      togglePhotosSection: togglePhotosSection,
       collapsePhotosSection: true,
-      toggleVisitsSection: toggleVisitsSection,
       collapseVisitsSection: false,
-      mapClick: mapClick
+      thumbnails: {},
+
+      visitClick: visit => $state.go('.visit', {visitId: visit.id}),
+      mapClick: () => vm.popover = false,
+
+      refresh,
+      newVisitClick,
+      takePhoto,
+      outletClick,
+      thumbnailClick,
+      togglePhotosSection,
+      toggleVisitsSection
 
     });
 
