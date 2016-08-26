@@ -9,13 +9,14 @@
       restrict: 'EA',
       scope: {
         inputModel: '=',
+        selectedModel: '=',
+        addButtonClickFn: '&',
         placeholder: '@',
         rowsFilters: '@',
         rowsData: '=',
         rowAs: '@',
         inputClass: '@',
         inputId: '@',
-        inputEditable: '@',
         inputRequired: '@',
         inputFocusFn: '&',
         inputBlurFn: '&',
@@ -28,6 +29,7 @@
       link: function (scope, element, attrs, ctrl) {
 
         ctrl.rootElement = element;
+        ctrl.scope = scope;
 
         $templateRequest('app/components/stmTypeahead/stmTypeahead.html')
           .then(function (html) {
@@ -36,7 +38,7 @@
             var typeAhead = `uib-typeahead='row as row.${ctrl.rowAs} for row in vm.rowsData${ctrl.rowsFilters && "|"+ctrl.rowsFilters}'`;
             html = html.replace('uib-typeahead', typeAhead);
 
-            ctrl.inputEditable = angular.isUndefined(ctrl.inputEditable) ? 'true' : ctrl.inputEditable;
+            ctrl.inputEditable = angular.isDefined(attrs.inputEditable);
             var inputEditable = `typeahead-editable='${ctrl.inputEditable}'`;
             html = html.replace('typeahead-editable', inputEditable);
 
@@ -57,19 +59,42 @@
   angular.module('webPage')
     .directive('stmTypeahead', stmTypeaheadDirective);
 
-  function stmTypeaheadController() {
+  function stmTypeaheadController($scope) {
 
     var vm = this;
 
     _.assign(vm, {
 
-      inputFocus: angular.isUndefined(vm.inputFocusFn()) ? angular.noop() : ($event) => vm.inputFocusFn()($event),
-      inputBlur: angular.isUndefined(vm.inputFocusFn()) ? angular.noop() : ($event) => vm.inputBlurFn()($event),
-      onSelectItem: angular.isUndefined(vm.inputFocusFn()) ? angular.noop() : ($item) => {
+      inputFocus: () => {
+        vm.inputModel = vm.lastSearch || '';
+        // vm.inputFocusFn() && vm.inputFocusFn()($event);
+      },
+      inputBlur: (event) => {
+        if (_.get(event, 'defaultPrevented')) {
+          return;
+        }
+        if (!angular.isObject(vm.inputModel)) {
+          vm.lastSearch = vm.inputModel;
+          vm.inputModel = vm.selectedModel || vm.inputModel;
+        }
+        // vm.inputBlurFn() && vm.inputBlurFn()($event);
+      },
+      onSelectItem: ($item) => {
         // vm.rootElement.children()[0].blur();
-        vm.onSelectItemFn()($item);
+        vm.selectedModel = $item;
+        vm.onSelectItemFn() && vm.onSelectItemFn()($item);
+      },
+      addButtonClick: (event) => {
+        event.preventDefault();
+        vm.addButtonClickFn() && vm.addButtonClickFn()(vm.lastSearch);
       }
 
+    });
+
+    $scope.$watch('vm.inputModel', (newValue)=>{
+      if (!angular.isObject(newValue)) {
+        vm.lastSearch = vm.inputModel;
+      }
     });
 
   }
