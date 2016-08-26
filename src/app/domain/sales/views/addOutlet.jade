@@ -71,7 +71,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
 
     .form-group(
     ng-if='vm.isInCreatingPartnerProcess'
-    ng-class="addOutletForm.inn.$touched && addOutletForm.inn.$invalid && 'has-error'"
+    ng-class="addOutletForm.inn.$dirty && addOutletForm.inn.$invalid && 'has-error'"
     )
       label.col-sm-4.control-label(for="inputINN") ИНН
       .col-sm-8
@@ -86,7 +86,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
         div(
         class="help-block"
-        ng-if="addOutletForm.inn.$touched && (addOutletForm.inn.$error.pattern || addOutletForm.inn.$error.innInput)"
+        ng-if="addOutletForm.inn.$dirty && (addOutletForm.inn.$error.pattern || addOutletForm.inn.$error.innInput)"
         ng-messages="addOutletForm.inn.$error"
         )
           p(ng-message="pattern") ИНН: 10 или 12 цифр
