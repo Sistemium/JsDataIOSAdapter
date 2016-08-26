@@ -70,6 +70,10 @@
 
           }, config));
 
+          if (me.text && !_.isString(me.text)) {
+            me.text = angular.toJson(me.text);
+          }
+
           if (config.resolve) {
             config.resolve(me);
           }
