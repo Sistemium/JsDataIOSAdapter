@@ -40,7 +40,7 @@ section.fow-fluid.mt(ng-if='vm.visit.photos.length')
     a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
       img(ng-src='{{vm.thumbnails[pic.id]}}')
 
-section.clear-both(cg-busy='vm.busy' ng-class='{mt: !vm.visit.photos.length}')
+section.clear-both(cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}' ng-class='{mt: !vm.visit.photos.length}')
 
   uib-tabset.nav-tabs-right(active="active")
     uib-tab(
