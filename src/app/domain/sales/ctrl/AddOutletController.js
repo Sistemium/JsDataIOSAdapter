@@ -175,13 +175,13 @@
       if (vm.newPartner) {
 
         return Partner.save(vm.newPartner)
-          .then(Outlet.save(vm.newOutlet))
-          .then(Location.save(vm.newLocation));
+          .then(()=>Outlet.save(vm.newOutlet))
+          .then(()=>Location.save(vm.newLocation));
 
       } else {
 
         return Outlet.save(vm.newOutlet)
-          .then(Location.save(vm.newLocation));
+          .then(()=>Location.save(vm.newLocation));
 
       }
 
