@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $window, $q, $state, $scope, SalesmanAuth, IOS, PhotoHelper, mapsHelper) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, ConfirmModal) {
 
     // TODO: allow to add/change location for an existing outlet
 
@@ -108,6 +108,20 @@
 
     }
 
+    function quit() {
+      return $state.go('^');
+    }
+
+    function deleteOutletClick() {
+      ConfirmModal.show({
+        text: 'Действительно удалить запись об этой точке?'
+      })
+        .then(function () {
+          Outlet.destroy(stateFilter)
+            .then(quit);
+        })
+    }
+
     _.assign(vm, {
 
       collapsePhotosSection: true,
@@ -119,6 +133,7 @@
 
       refresh,
       newVisitClick,
+      deleteOutletClick,
       takePhoto,
       outletClick,
       thumbnailClick,

@@ -3,6 +3,9 @@ h3.pull-left.max-width-75p
   = ' '
   small
     a.inherit-colors(href ng-click='vm.outletClick()' ng-class='{disabled: vm.disableNavs}') {{ vm.outlet.address }}
+    small
+      a.ml-em(href ng-click='vm.deleteOutletClick()' ng-if='vm.disableNavs')
+        i.glyphicon.glyphicon-trash
 
 section.ui-view
 
