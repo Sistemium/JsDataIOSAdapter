@@ -2,6 +2,13 @@ h3 Добавление точки
 
 hr
 
+h5(
+ng-if='vm.isInCreatingPartnerProcess'
+) {{ vm.selectedLegalForm.name }} «{{ vm.name }}»
+  span(ng-if='vm.address') , {{ vm.address }}
+  span(ng-if='vm.inn') , {{ vm.inn }}
+  hr
+
 section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   form.form-horizontal(
   ng-if='vm.newLocation'
