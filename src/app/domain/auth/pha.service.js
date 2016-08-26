@@ -4,29 +4,29 @@
 
   angular.module('core.services').service('phaService', phaService);
 
-  function phaService ($http,$rootScope,$q) {
+  function phaService($http, $rootScope) {
 
     var
       url = 'https://api.sistemium.com/pha/auth',
       logoffUrl = 'https://api.sistemium.com/pha/logoff',
       rolesUrl = 'https://api.sistemium.com/pha/roles',
       ID
-    ;
+      ;
 
     var me = {};
 
-    function auth (mobileNumber) {
+    function auth(mobileNumber) {
       return $http
         .post(url, null, {params: {mobileNumber: mobileNumber}})
-        .success(function (res){
+        .success(function (res) {
           if (res && res.ID) {
             ID = res.ID;
           }
         })
-      ;
+        ;
     }
 
-    function logoff (token) {
+    function logoff(token) {
       return $http
         .get(logoffUrl, {
           headers: {
@@ -34,24 +34,19 @@
           },
           timeout: 4000
         })
-      ;
-    }
-
-    function confirm (code) {
-
-      return $q(function(resolve,reject) {
-        $http
-          .post(url, null, {params: {ID: ID, smsCode: code}})
-          .then(function (res) {
-            getRoles(res.data.accessToken)
-              .then(resolve,reject);
-          },reject)
         ;
-      });
+    }
+
+    function confirm(code) {
+
+      return $http.post(url, null, {params: {ID: ID, smsCode: code}})
+        .then(function (res) {
+          return getRoles(res.data.accessToken);
+        });
 
     }
 
-    function getRoles (token) {
+    function getRoles(token) {
       return $http
         .get(rolesUrl, {
           headers: {
@@ -59,7 +54,7 @@
           },
           timeout: 15000
         })
-        .then(function(httpResponse){
+        .then(function (httpResponse) {
           var res = httpResponse.data;
           var response = {
             accessToken: token,
@@ -68,13 +63,13 @@
           };
           me.roles = res.roles;
           me.account = res.account;
-          $rootScope.$broadcast('authenticated',response);
+          $rootScope.$broadcast('authenticated', response);
           return response;
         })
-      ;
+        ;
     }
 
-    return angular.extend(me,{
+    return angular.extend(me, {
       auth: auth,
       logoff: logoff,
       confirm: confirm,

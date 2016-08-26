@@ -2,19 +2,54 @@
 
 (function () {
 
-  function IOS($window, $q, $timeout) {
+  function IOS($window, $q, $timeout, Schema) {
 
     var CHECKIN = 'checkin';
-
     var CALLBACK = 'iosPhotoCallback';
+
+    var ClientData = Schema.model('ClientData');
 
     var messages = {};
     var id = 0;
 
     var deb = $window.debug('stg:IOS');
 
+    function isIos() {
+      return !!$window.webkit;
+    }
+
+    function getDevicePlatform() {
+      if (isIos() && ClientData) {
+        return ClientData.findAll()
+          .then(function(data){
+            return _.get(_.first(data),'devicePlatform') || 'Unknown';
+          });
+      } else {
+        return $q(function(resolve){
+          resolve('Unknown');
+        });
+      }
+    }
+
     function handler(name) {
-      return $window.webkit.messageHandlers[name];
+      return $window.webkit.messageHandlers[name] || {
+          postMessage: function (options) {
+
+            if (name === 'roles') {
+              $window[options.callback]([{
+                account: {
+                  name: 'Error'
+                },
+                roles: {
+                  picker: true
+                }
+              }], options);
+            } else {
+              console.error('IOS handler undefined call', name, options);
+            }
+
+          }
+        };
     }
 
     function message(handlerName, cfg) {
@@ -30,11 +65,7 @@
           }
         }, cfg);
 
-        messages[requestId] = {
-          resolve: resolve,
-          reject: reject,
-          msg: msg
-        };
+        messages[requestId] = {resolve: resolve,reject: reject, msg: msg};
 
         handler(handlerName).postMessage(msg);
 
@@ -110,20 +141,19 @@
 
       init: init,
 
-      isIos: function () {
-        return !!$window.webkit;
-      },
+      isIos: isIos,
 
       handler: handler,
       checkIn: checkIn,
       getPicture: getPicture,
-      takePhoto: takePhoto
+      takePhoto: takePhoto,
+      getDevicePlatform: getDevicePlatform
 
     };
 
   }
 
-  angular.module('sistemium')
+  angular.module('core.services')
     .service('IOS', IOS)
     .run(function ($window, IOS) {
       $window.saIOS = IOS;

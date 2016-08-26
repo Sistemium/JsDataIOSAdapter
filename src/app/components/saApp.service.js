@@ -5,7 +5,7 @@
   function saApp($window, Schema) {
 
     var appIdKey = 'saAppId';
-    var version = '0.4.3';
+    const VERSION = '0.5.0';
 
     var appId = $window.localStorage.getItem(appIdKey);
 
@@ -21,7 +21,7 @@
         event: 'appInit',
         appName: 'j-sistemium',
         appId: appId,
-        version: version
+        version: VERSION
       };
 
       LogMessage.create({
@@ -33,10 +33,8 @@
     }
 
     return {
-      init: init,
-      version: function () {
-        return version;
-      }
+      init,
+      version: () => VERSION
     };
 
   }

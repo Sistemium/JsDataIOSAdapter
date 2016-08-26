@@ -16,6 +16,8 @@
 
   function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
 
+    var lastState = localStorageService.get('lastState');
+
     PickerAuth.init();
 
     InitService
@@ -44,33 +46,26 @@
 
       InitService.init(appConfig);
 
-      Sockets.on('jsData:update', function (data) {
-        DEBUG('jsData:update', data);
-      });
+      Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
       var lastPicker = window.localStorage.getItem('currentPickerId');
 
       if (lastPicker) {
-        Picker.setCurrentById(lastPicker).then(function (p) {
-          PickerAuth.login(p);
-        });
-      }
-
-      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess', function (e, to, params) {
-
-        localStorageService.set('lastState', {
-          name: to.name,
-          params: params
-        });
-
-      }));
-
-      var lastState = localStorageService.get('lastState');
-
-      if (lastState) {
+        Picker.setCurrentById(lastPicker)
+          .then(function (p) {
+            PickerAuth.login(p, lastState);
+          });
+      } else if (lastState) {
         $state.go(lastState.name,lastState.params);
       }
-      
+
+      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
+        (e, to, params) => localStorageService.set('lastState', {
+          name: to.name,
+          params: params
+        })
+      ));
+
     });
 
   }

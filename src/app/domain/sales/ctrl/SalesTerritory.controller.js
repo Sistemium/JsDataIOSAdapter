@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SalesTerritoryController(Schema, $q, $state, SalesmanAuth) {
+  function SalesTerritoryController(Schema, $q, $state, SalesmanAuth, $scope) {
 
     var vm = this;
     var Outlet = Schema.model('Outlet');
@@ -10,34 +10,35 @@
     var SM = Schema.model('Salesman');
     var stateFilter = {};
 
+    var rootState = 'sales.territory';
+
     vm.salesman = SalesmanAuth.getCurrentUser();
 
     if (vm.salesman) {
       stateFilter.salesmanId = vm.salesman.id;
     }
 
+    Partner.bindAll(false, $scope, 'vm.partners', setupHash);
+
     function refresh() {
 
       vm.busy = $q.all([
-        Partner.findAll()
-          .then(function (res) {
-            vm.partners = res;
-          }),
+        Partner.findAll(false, {bypassCache: true}),
         SM.findAll(),
-        Outlet.findAll(stateFilter, {limit: 1000})
-      ])
-        .then(function (res) {
-          vm.outlets = res[2];
-          setupHash();
-        });
+        Outlet.findAll(stateFilter, {limit: 1000, bypassCache: true})
+      ]);
+    }
+
+    function addOutletClick() {
+      $state.go('.addOutlet');
     }
 
     function outletClick(outlet) {
-      $state.go('.outlet',{id: outlet.id});
+      $state.go('.outlet', {id: outlet.id});
     }
 
-    function hashButtons (hash) {
-      var hashRe = new RegExp('^'+_.escapeRegExp(hash),'i');
+    function hashButtons(hash) {
+      var hashRe = new RegExp('^' + _.escapeRegExp(hash), 'i');
 
       var partners = _.filter(vm.partners, function (p) {
         return hashRe.test(p.shortName);
@@ -50,7 +51,7 @@
       return _.orderBy(_.map(grouped, function (val, key) {
         var b = {
           label: key,
-          match: new RegExp('^'+_.escapeRegExp(key),'i')
+          match: new RegExp('^' + _.escapeRegExp(key), 'i')
         };
         if (val.length > 1 && !hash) {
           b.buttons = hashButtons(key);
@@ -62,7 +63,7 @@
 
     function setupHash() {
       vm.hashButtons = hashButtons('');
-      console.log (vm.hashButtons);
+      //console.log(vm.hashButtons);
     }
 
     function hashClick(btn) {
@@ -70,7 +71,7 @@
       var label = btn.label || '';
 
       if (vm.currentHash === label) {
-        vm.currentHash = label.substr(0,label.length - 1);
+        vm.currentHash = label.substr(0, label.length - 1);
       } else {
         vm.currentHash = label;
       }
@@ -80,16 +81,25 @@
     angular.extend(vm, {
 
       refresh: refresh,
+      addOutletClick: addOutletClick,
       outletClick: outletClick,
       hashClick: hashClick,
 
-      filter: function(partner) {
-        return !vm.currentHash || partner.shortName.match(new RegExp('^'+vm.currentHash,'i'));
+      filter: function (partner) {
+        return !vm.currentHash || partner.shortName.match(new RegExp('^' + vm.currentHash, 'i'));
       }
 
     });
 
     vm.refresh();
+
+    $scope.$on('rootClick', function () {
+      $state.go('sales.territory');
+    });
+
+    $scope.$on('$stateChangeSuccess', function (e, to) {
+      vm.hideHashes = (to.name !== rootState);
+    });
 
   }
 

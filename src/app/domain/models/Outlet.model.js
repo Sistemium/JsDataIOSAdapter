@@ -18,9 +18,18 @@
           Partner: {
             localField: 'partner',
             localKey: 'partnerId'
+          },
+          Location: {
+            localField: 'location',
+            localKey: 'locationId'
           }
+
         },
         hasMany: {
+          OutletPhoto: {
+            localField: 'photos',
+            foreignKey: 'outletId'
+          }
           // PickingRequest: {
           //   localField: 'pickingOrders',
           //   foreignKey: 'outlet'

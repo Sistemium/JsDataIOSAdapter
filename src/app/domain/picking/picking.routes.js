@@ -56,6 +56,9 @@
               templateUrl: 'app/domain/picking/pickingOrderList.html',
               controller: 'PickingOrderListController',
               controllerAs: 'vm',
+              data: {
+                title: 'Сборка требований'
+              },
               children: [
                 {
                   name: 'selectedOrders',

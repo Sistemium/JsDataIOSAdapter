@@ -73,6 +73,7 @@
               stockBatch: sb.id,
               pickingOrderPosition: this.id,
               volume: volume || this.volume,
+              article: sb.article,
               code: code
             });
 
@@ -109,7 +110,8 @@
               return {
 
                 id: key,
-                article: positions[0].Article,
+                sameId: article.sameId,
+                article: article,
                 positions: positions,
                 volume: boxPcs,
                 totalVolume: totalVolume,

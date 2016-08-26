@@ -14,6 +14,13 @@
       },
 
       relations: {
+        hasOne: {
+          LegalForm: {
+            localField: 'legalForm',
+            localKey: 'legalFormId'
+          }
+
+        },
         hasMany: {
           Outlet: {
             localField: 'outlets',
@@ -24,7 +31,7 @@
 
       computed: {
         shortName: ['name',function (name) {
-          var match = name.match(/"([^"]*)"[^"]*$/);
+          var match = name.match(/"([^"]*[^ ])"/);
           return match ? match[1] : name;
         }]
       }

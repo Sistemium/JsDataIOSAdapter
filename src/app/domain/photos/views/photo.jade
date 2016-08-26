@@ -1,0 +1,11 @@
+.text-center(cg-busy='{delay: 100, promise: vm.busy}')
+  h4.text-left
+    .clear-both {{ vm.photo.visit.outlet.partner.shortName || 'Неизвестный визит' }}
+      = ' '
+      .small.darkgray
+        .ml-em.pull-right.black {{ vm.photo.visit.deviceCts | amUtc | amLocal | amCalendar }}
+        span {{ vm.photo.visit.outlet.address }}
+
+  a.thumbnail(ng-click='vm.photoClick()')
+    img(ng-if='vm.src' ng-src='{{ ::vm.src }}')
+    img(ng-hide='vm.src' ng-src='{{ ::vm.thumbnailSrc }}' style="min-width: 100%")

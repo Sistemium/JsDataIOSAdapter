@@ -2,7 +2,7 @@
 
 (function () {
 
-  function resize($window) {
+  function resize($window, IOS) {
 
     return function (scope) {
       var w = $window;
@@ -12,8 +12,9 @@
           'w': w.innerWidth
         };
       };
+      var desktopFix = IOS.isIos() ? 0 : 45;
       scope.$watch(scope.getWindowDimensions, function (newValue) {
-        scope.windowHeight = newValue.h;
+        scope.windowHeight = newValue.h - desktopFix;
         scope.windowWidth = newValue.w;
       }, true);
 

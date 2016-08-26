@@ -1,3 +1,21 @@
-button.margin {
-  margin: 2px;
+button {
+  &.margin {
+    margin: 2px;
+  }
+  .glyphicon {
+    top: 2px;
+    left: 1px;
+  }
 }
+
+.buttons-container {
+  button {
+    width: 100%;
+    text-align: left;
+    white-space: normal;
+  }
+}
+
+
+
+

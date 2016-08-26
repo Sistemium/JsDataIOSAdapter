@@ -2,79 +2,43 @@
 
 (function () {
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, IOS, mapsHelper, ConfirmModal, toastr) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper) {
 
     var Visit = Schema.model('Visit');
     var VQS = Schema.model('VisitQuestionSet');
     var VQ = Schema.model('VisitQuestion');
     var VA = Schema.model('VisitAnswer');
     var Location = Schema.model('Location');
-    var VisitPhoto = Schema.model('VisitPhoto');
 
     var date = moment().format('YYYY-MM-DD');
-    var id = $state.params.visitId;
+    var visitId = $state.params.visitId;
     var outletId = $state.params.id;
     var answersByQuestion = {};
 
     var salesman = SalesmanAuth.getCurrentUser();
 
     var vm = this;
-    var creatingMode = _.get($state,'current.name').match(/\.visitCreate$/);
+    var creatingMode = !!_.get($state, 'current.name').match(/\.visitCreate$/);
 
     var yaLatLng = mapsHelper.yLatLng;
 
-
-    function importThumbnail(vp) {
-
-      if (vm.thumbnails[vp.id]) {
-        return vp;
-      }
-
-      return vp.getImageSrc('thumbnail').then(function (src) {
-        vm.thumbnails[vp.id] = src;
-        return vp;
-      });
-
+    function takePhoto() {
+      return PhotoHelper.takePhoto('VisitPhoto', {visitId: vm.visit.id}, vm.thumbnails);
     }
 
+    function importThumbnail(picture) {
+      return PhotoHelper.importThumbnail(picture, vm.thumbnails);
+    }
 
     function thumbnailClick(pic) {
-      vm.busy = pic.getImageSrc('resized').then(function (src) {
 
-        ConfirmModal.show({
-          src: src,
-          text: false,
-          title: vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')',
-          deleteDelegate: function () {
-            return VisitPhoto.destroy(pic);
-          }
-        }, {
-          templateUrl: 'app/components/modal/PictureModal.html',
-          size: 'lg'
-        });
+      var resourceName = 'VisitPhoto';
+      var src = vm.thumbnails[pic.id];
+      var title = vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')';
 
-      }, function (err) {
-        console.log(err);
-        toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
-      });
+      return PhotoHelper.thumbnailClick(resourceName, pic, src, title);
+
     }
-
-
-    function takePhoto() {
-      var q = IOS.takePhoto('VisitPhoto', {
-        visitId: vm.visit.id
-      });
-
-      q.then(function (res) {
-
-        importThumbnail(VisitPhoto.inject(res));
-
-      }).catch(function (res) {
-        vm.photo = false;
-        vm.error = res;
-      })
-    }
-
 
     function initMap(visit) {
 
@@ -100,38 +64,121 @@
 
     }
 
-
     function getLocation() {
+
       vm.locating = true;
-      return IOS.checkIn(100, {
-        ownerXid: _.get(vm, 'visit.id'),
-        target: 'Visit'
-      }).then(function (res) {
+      vm.busyMessage = 'Получение геопозиции…';
+
+      return LocationHelper.getLocation(100, _.get(vm, 'visit.id'), 'Visit').then(function (res) {
         vm.locating = false;
         return Location.inject(res);
+      })
+        .finally(()=> delete vm.busyMessage);
+
+    }
+
+    function quit() {
+      return $scope['$$destroyed'] || goBack();
+    }
+
+    function goBack() {
+        $state.go('^');
+    }
+
+    function changeAnswer(qst, data) {
+
+      var ans = answersByQuestion[qst.id] || VA.inject({visitId: vm.visit.id, questionId: qst.id});
+      if (qst.dataType.code === 'boolean') {
+        ans.data = data && '1' || '0';
+      } else if (qst.dataType.code === 'date') {
+        ans.data = data && moment(data).format('YYYY/MM/DD') || null;
+      } else {
+        ans.data = data;
+      }
+      answersByQuestion[qst.id] = ans;
+      VA.save(ans);
+
+    }
+
+    function save() {
+
+      vm.saving = true;
+
+      var done = function () {
+        vm.saving = false;
+      };
+
+      vm.busy = $q(function (resolve, reject) {
+
+        if (creatingMode) {
+
+          getLocation().then(function (checkOutLocation) {
+            vm.visit.checkOutLocationId = checkOutLocation.id;
+            Visit.save(vm.visit)
+              .then(function (visit) {
+                var cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
+                var diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
+                toastr.info(diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек', 'Визит завершен');
+                resolve(visit);
+                quit();
+              }, function (err) {
+                reject(err);
+                toastr.error(angular.toJson(err), 'Не удалось сохранить визит');
+              });
+          }, function (err) {
+            reject(err);
+            toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
+          });
+
+        } else {
+          Visit.save(vm.visit)
+            .then(resolve, reject)
+            .then(quit);
+        }
+
+      }).then(done, done);
+
+    }
+
+    function deleteVisit() {
+      if (!Visit.lastSaved(vm.visit)) {
+        return quit();
+      }
+      ConfirmModal.show({
+        text: 'Действительно удалить запись об этом визите?'
+      })
+        .then(function () {
+          Visit.destroy(vm.visit)
+            .then(quit);
+        })
+      ;
+    }
+
+    var buttons = [];
+
+    if (creatingMode) {
+      buttons.push({
+        // label: 'Отмена',
+        // class: 'btn-default',
+        fa: 'glyphicon glyphicon-trash',
+        clickFn: 'deleteVisit'
+      });
+      buttons.push({
+        label: !creatingMode ? 'Готово' : 'Завершить',
+        clickFn: 'save',
+        class: 'btn-success',
+        isDisabled: function () {
+          return creatingMode && !_.get(vm, 'visit.checkInLocationId') || vm.saving;
+        }
       });
     }
 
 
-    function quit () {
-      return $scope['$$destroyed'] || $state.go('^');
-    }
+    _.assign(vm, {
 
-    angular.extend(vm, {
-
-      buttons: [
-        {label: !creatingMode ? 'Закрыть' : 'Отменить', clickFn: creatingMode ? 'deleteVisit' : 'goBack'},
-        {
-          label: !creatingMode ? 'Сохранить' : 'Завершить',
-          clickFn: 'save',
-          class: 'btn-success',
-          isDisabled: function () {
-            return !_.get(vm, 'visit.checkInLocationId');
-          }
-        }
-      ],
-
+      buttons: buttons,
       creatingMode: creatingMode,
+      thumbnails: {},
 
       mapOptions: {
         avoidFractionalZoom: false,
@@ -139,69 +186,13 @@
         balloonAutoPanMargin: 300
       },
 
-      takePhoto: takePhoto,
-      thumbnailClick: thumbnailClick,
-
-      thumbnails: {},
-
-      goBack: function () {
-        $state.go('^');
-      },
-
-      changeAnswer: function (qst, data) {
-        var ans = answersByQuestion[qst.id] || VA.inject({visitId: vm.visit.id, questionId: qst.id});
-        if (qst.dataType.code === 'boolean') {
-          ans.data = data && '1' || '0';
-        } else if (qst.dataType.code === 'date') {
-          ans.data = data && moment(data).format('YYYY/MM/DD') || null;
-        } else {
-          ans.data = data;
-        }
-        answersByQuestion[qst.id] = ans;
-        VA.save(ans);
-      },
-
-      save: function () {
-        vm.busy = $q(function (resolve, reject) {
-
-          if (creatingMode && IOS.isIos()) {
-
-            getLocation().then(function (res) {
-              vm.visit.checkOutLocationId = res.id;
-              Visit.save(vm.visit)
-                .then(resolve, reject)
-                .then(quit);
-            }, function (err) {
-              reject(err);
-              toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
-            });
-
-          } else {
-            Visit.save(vm.visit)
-              .then(resolve, reject)
-              .then(quit);
-          }
-
-        });
-      },
-
-      mapClick: function () {
-        vm.popover = false;
-      },
-
-      deleteVisit: function () {
-        if (!Visit.lastSaved(vm.visit)) {
-          return quit();
-        }
-        ConfirmModal.show({
-          text: 'Действительно удалить запись об этом визите?'
-        })
-          .then(function () {
-            Visit.destroy(vm.visit)
-              .then(quit);
-          })
-        ;
-      }
+      takePhoto,
+      thumbnailClick,
+      goBack,
+      changeAnswer,
+      save,
+      mapClick: () => vm.visitMapPopoverOpen = false,
+      deleteVisit
 
     });
 
@@ -211,26 +202,28 @@
       };
     };
 
-    vm.busy = $q.all([
-      VQS.findAllWithRelations({isEnabled: true})('VisitQuestionGroup')
-        .then(vm.importData('questionSets')),
-      VQ.findAllWithRelations()('VisitQuestionDataType')
-    ]).then(function () {
 
-      if (id) {
-        vm.busy = Visit.find(id)
+
+    if (visitId) {
+
+      vm.busy = $q.all([
+        VQS.findAllWithRelations({isEnabled: true})('VisitQuestionGroup')
+          .then(vm.importData('questionSets')),
+        VQ.findAllWithRelations()('VisitQuestionDataType')
+      ]).then(function () {
+        return Visit.find(visitId)
           .then(vm.importData('visit'))
-          .then(function (v) {
-            Visit.loadRelations(v, ['Location', 'VisitPhoto'])
-              .then(function (visit) {
+          .then(function (visit) {
+            Visit.loadRelations(visit, ['Location', 'VisitPhoto'])
+              .then(() => {
                 _.each(visit.photos, importThumbnail);
                 return visit;
               })
               .then(initMap);
-            return v;
+            return visit;
           })
           .then(function (visit) {
-            VA.findAll({
+            return VA.findAll({
               visitId: visit.id
             }).then(function () {
               var index = _.groupBy(visit.answers, 'questionId');
@@ -246,46 +239,44 @@
 
             });
           });
-      } else {
+      });
 
-        vm.answers = {};
-        vm.visit = Visit.inject({
-          date: date,
-          outletId: outletId,
-          salesmanId: salesman.id
-        });
+    } else {
 
-        if (IOS.isIos()) {
-          vm.busy = getLocation();
+      vm.visit = Visit.inject({
+        date: date,
+        outletId: outletId,
+        salesmanId: salesman.id
+      });
 
-          vm.busy.then(function (res) {
+      vm.busy = getLocation()
+        .then(function (res) {
 
-            if ($scope['$$destroyed']) {
-              return;
-            }
+          if ($scope['$$destroyed']) {
+            return;
+          }
 
-            vm.visit.checkInLocationId = res.id;
-            initMap(res);
-            Visit.save(vm.visit).then(function(visit){
-              $state.go('.',{visitId: visit.id});
+          vm.visit.checkInLocationId = res.id;
+
+          return Visit.save(vm.visit)
+            .then(visit => {
+              $state.go('.', {visitId: visit.id})
             });
 
-          }, function (err) {
+        }, function (err) {
 
-            if ($scope['$$destroyed']) {
-              return;
-            }
+          if ($scope['$$destroyed']) {
+            return;
+          }
 
-            console.error(err);
-            toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
-            $state.go('^');
+          console.error(err);
+          toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
+          $state.go('^');
 
-          });
-        }
+        });
 
-      }
+    }
 
-    });
 
     $scope.$on('$destroy', function () {
 

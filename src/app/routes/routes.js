@@ -12,7 +12,10 @@
           url: '/playground',
           templateUrl: 'app/domain/playground/playground.html',
           controller: 'PlayGroundController',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          data: {
+            title: 'Песочница'
+          }
         })
 
         .state({

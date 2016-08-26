@@ -29,6 +29,59 @@
         ]
       };
 
+      var visit = {
+        name: 'visit',
+        url: '/visit?visitId',
+
+        data: {
+          // hideNavs: true
+        },
+
+        templateUrl: 'app/domain/sales/views/VisitCreate.html',
+        controller: 'VisitCreateController',
+        controllerAs: 'vm'
+
+      };
+
+      var visitCreate = {
+        name: 'visitCreate',
+        url: '/visitCreate?visitId',
+
+        data: {
+          hideTopBar: false,
+          hideNavs: true
+        },
+
+        templateUrl: 'app/domain/sales/views/VisitCreate.html',
+        controller: 'VisitCreateController',
+        controllerAs: 'vm'
+
+      };
+
+      var outlet = {
+        name: 'outlet',
+        url: '/outlet/:id',
+        templateUrl: 'app/domain/sales/views/outlet.html',
+        controller: 'OutletController',
+        controllerAs: 'vm',
+
+        children: [visit, visitCreate]
+      };
+
+      var addOutlet = {
+        name: 'addOutlet',
+        url: '/addOutlet',
+
+        data: {
+          hideNavs: true
+        },
+
+        templateUrl: 'app/domain/sales/views/AddOutlet.html',
+        controller: 'AddOutletController',
+        controllerAs: 'vm'
+
+      };
+
       var territory = {
         name: 'territory',
         url: '/territory',
@@ -40,36 +93,11 @@
         data: {
           needCurrent: 'Salesman',
           needRole: 'salesman',
-          hideTopBar: true
+          // hideTopBar: true,
+          title: 'Клиенты'
         },
 
-        children: [
-          {
-            name: 'outlet',
-            url: '/outlet/:id',
-            templateUrl: 'app/domain/sales/views/outlet.html',
-            controller: 'OutletController',
-            controllerAs: 'vm',
-
-            children: [{
-              name: 'visit',
-              url: '/visit?visitId',
-
-              templateUrl: 'app/domain/sales/views/VisitCreate.html',
-              controller: 'VisitCreateController',
-              controllerAs: 'vm'
-
-            },{
-              name: 'visitCreate',
-              url: '/visitCreate?visitId',
-
-              templateUrl: 'app/domain/sales/views/VisitCreate.html',
-              controller: 'VisitCreateController',
-              controllerAs: 'vm'
-
-            }]
-          }
-        ]
+        children: [outlet, addOutlet]
 
       };
 
@@ -84,7 +112,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [territory,prePreOrders]
+          children: [territory, prePreOrders]
 
         })
       ;

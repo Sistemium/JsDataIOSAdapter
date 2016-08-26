@@ -1,21 +1,56 @@
-h3 {{ vm.outlet.partner.shortName }}
+h3.pull-left.max-width-75p
+  span {{ vm.outlet.partner.name }}
   = ' '
-  small.gray {{ vm.outlet.address }}
+  small
+    a.inherit-colors(href ng-click='vm.outletClick()' ng-class='{disabled: vm.disableNavs}') {{ vm.outlet.address }}
+    a.ml-em(href ng-click='vm.deleteOutletClick()' ng-if='vm.disableNavs')
+      i.glyphicon.glyphicon-trash
 
 section.ui-view
-  .buttons.pull-right
-    button.btn.btn-success(ng-click='vm.newVisitClick()') Новый визит
 
-  table.table.table-striped.clear-both(ng-if='vm.visits.length')
-    caption
-      h4 Недавние визиты
-    thead
-      tr
-        th Дата
-        th.number Кол-во фото
-        th.number Кол-во ответов
-    tbody
+  h3.pull-right.with-map
+    button.btn.ml-5.btn-default.pull-right(ng-click='vm.takePhoto()')
+      i.glyphicon.glyphicon-camera
+    button.btn.btn-default.ml-5(
+    popover-placement="bottom-left auto"
+    popover-trigger='outsideClick'
+    uib-popover-template="'app/domain/sales/views/location.html'"
+    popover-is-open='vm.popover'
+    type='button'
+    ng-class='{green: vm.map}'
+    ng-disabled='!vm.map'
+    )
+      i.glyphicon.glyphicon-map-marker
+
+  hr.clear-both(ng-if='vm.photos.length')
+
+  section.clear-both(ng-if='vm.photos.length')
+    h4
+      a(ng-click='vm.togglePhotosSection()' href) Фотографии точки ({{ vm.photos.length }})
+
+    .col-xs-3.col-sm-2(ng-repeat='pic in vm.photos track by pic.id' ng-if='!vm.collapsePhotosSection')
+      a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
+        img(ng-src='{{vm.thumbnails[pic.id]}}')
+
+  hr.clear-both
+
+  .header-button
+    h4.pull-left
+      a(ng-class='{disabled: !vm.visits.length}' href ng-click='vm.toggleVisitsSection()') Визиты
+        span(ng-if='vm.visits.length') &nbsp({{vm.visits.length}})
+
+    button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
+
+    table.table.table-striped.clear-both(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
+      thead
+        tr
+          th Дата
+          th.number Фото
+          th.number Ответы
+      tbody
         tr.clickable(ng-repeat='visit in vm.visits | orderBy:"-deviceCts" track by visit.id' ng-click='vm.visitClick(visit)')
           td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
           td.number {{ visit.photos.length | number: 0 }}
           td.number {{ visit.answers.length | number: 0 }}
+
+    hr.clear-both

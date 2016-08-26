@@ -23,6 +23,9 @@
             },{
               localField: 'visitOut',
               foreignKey: 'checkOutLocationId'
+            },{
+              localField: 'outlet',
+              foreignKey: 'locationId'
             }
           ]
         }

@@ -1,0 +1,117 @@
+h3 Добавление точки
+
+hr
+
+section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
+  form.form-horizontal(
+  ng-if='vm.newLocation'
+  name="addOutletForm"
+  novalidate
+  )
+
+    .form-group
+      label.col-sm-4.control-label(for="inputName") Контрагент
+      .col-sm-8
+        input#inputName.form-control(
+        ng-if='vm.isInCreatingPartnerProcess'
+        ng-model='vm.name'
+        auto-focus='false'
+        type="text"
+        name="name"
+        ng-required='true'
+        placeholder="Имя партнёра"
+        autocomplete="off"
+        )
+        .display-flex(ng-if='!vm.isInCreatingPartnerProcess')
+          stm-typeahead.flex-1(
+            input-required='true'
+            input-model='vm.name'
+            input-id='inputName'
+            input-class='form-control'
+            placeholder='Название контрагента'
+            input-focus-fn='vm.inputNameFocus'
+            input-blur-fn='vm.inputNameBlur'
+            rows-data='vm.partners'
+            rows-filters='filter:{shortName:$viewValue}'
+            row-as='name'
+            on-select-item-fn='vm.selectPartner'
+            )
+          .animate-show(ng-show='vm.name && vm.name != vm.selectedPartner')
+            button.btn.ml-em.btn-primary.pull-right(
+            ng-click='vm.addPartnerBtnClick()'
+            )
+              i.glyphicon.glyphicon-plus
+
+    .form-group(ng-if='vm.isInCreatingPartnerProcess')
+      label.col-sm-4.control-label(for="inputLegalForm") Форма
+      .col-sm-8
+        stm-typeahead(
+        input-required='true'
+        input-model='vm.selectedLegalForm'
+        input-id='inputLegalForm'
+        input-class='form-control'
+        input-editable='false'
+        placeholder='Форма собственности'
+        rows-data='vm.legalForms'
+        rows-filters='filter:{name:$viewValue}'
+        row-as='name'
+        )
+
+    .form-group(
+    ng-if='vm.isInCreatingPartnerProcess'
+    ng-class="addOutletForm.inn.$touched && addOutletForm.inn.$invalid && 'has-error'"
+    )
+      label.col-sm-4.control-label(for="inputINN") ИНН
+      .col-sm-8
+        input#inputINN.form-control(
+        inn-input
+        type="text"
+        name="inn"
+        ng-pattern='innPattern'
+        placeholder='{{ placeholder }}'
+        ng-model="vm.inn"
+        autocomplete="off"
+        )
+        div(
+        class="help-block"
+        ng-if="addOutletForm.inn.$touched && (addOutletForm.inn.$error.pattern || addOutletForm.inn.$error.innInput)"
+        ng-messages="addOutletForm.inn.$error"
+        )
+          p(ng-message="pattern") ИНН: 10 или 12 цифр
+          p(ng-message="innInput") Неверная контрольная сумма
+
+    .form-group(ng-if='vm.isInCreatingPartnerProcess || vm.selectedPartner')
+      label.col-sm-4.control-label(for="inputAddress") Адрес
+      .col-sm-8
+        input#inputAddress.form-control(
+        type="text"
+        name="address"
+        ng-required='true'
+        placeholder="{{ vm.selectedPartner || vm.isInCreatingPartnerProcess ? 'Адрес' : 'Сначала выберите партнёра' }}"
+        ng-model="vm.address"
+        autocomplete="off"
+        )
+    hr
+
+    .col-sm-4.col-sm-offset-8
+      .form-group.pull-right
+        fieldset(
+        ng-disabled='vm.busyMessage'
+        )
+          button.btn.margin.btn-primary(
+          ng-if='!vm.isInCancelProcess'
+          ng-disabled='addOutletForm.$invalid'
+          ng-click='vm.submit()'
+          ) Сохранить
+          button.btn.margin.btn-warning(
+          ng-if='!vm.isInCancelProcess'
+          ng-click='vm.cancel(addOutletForm)'
+          ) Отменить
+          button.btn.margin.btn-primary(
+          ng-if='vm.isInCancelProcess'
+          ng-click='vm.cancelConfirm()'
+          ) Да, отменить
+          button.btn.margin.btn-warning(
+          ng-if='vm.isInCancelProcess'
+          ng-click='vm.isInCancelProcess = false'
+          ) Нет

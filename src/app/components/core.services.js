@@ -2,6 +2,6 @@
 
 (function () {
 
-    angular.module('core.services', []);
+    angular.module('core.services', ['jsd']);
 
 })();

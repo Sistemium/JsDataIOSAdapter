@@ -1,10 +1,10 @@
 'use strict';
 
-(function() {
+(function () {
 
-  function ConfirmModal ($uibModal) {
+  function ConfirmModal($uibModal) {
 
-    function show(config,modalConfig) {
+    function show(config, modalConfig) {
 
       var modalInstance = $uibModal.open(angular.extend({
 
@@ -12,26 +12,51 @@
         controllerAs: 'vm',
         size: 'sm',
 
-        controller: ['$uibModalInstance', function ConfirmModalController ($uibModalInstance) {
+        controller: ['$uibModalInstance', function ConfirmModalController($uibModalInstance) {
 
           var me = this;
 
-          angular.extend (me, angular.extend({
+          angular.extend(me, angular.extend({
 
             title: 'Внимание!',
             text: 'Вы действительно хотите сделать это?',
 
-            buttons: {
-              yes: 'Да',
-              no: 'Нет'
+            submit: function (buttonId) {
+              $uibModalInstance.close(buttonId);
             },
 
-            submit: function () {
-              $uibModalInstance.close();
+            cancel: function (buttonId) {
+              $uibModalInstance.dismiss(buttonId);
             },
 
-            cancel: function () {
-              $uibModalInstance.dismiss();
+            buttons: [
+              {
+                title: 'Да',
+                id: 'yes',
+                type: 'submit'
+              },
+              {
+                title: 'Нет',
+                id: 'no',
+                type: 'cancel'
+              }
+            ],
+
+            hideCloseButton: false,
+
+            buttonClick: function (buttonId, buttonType) {
+              switch (buttonType) {
+                case 'submit':
+                {
+                  me.submit(buttonId);
+                  break;
+                }
+                case 'cancel':
+                {
+                  me.cancel(buttonId);
+                  break;
+                }
+              }
             },
 
             deleteItem: function () {
@@ -43,13 +68,21 @@
               }
             }
 
-          },config));
+          }, config));
+
+          if (me.text && !_.isString(me.text)) {
+            me.text = angular.toJson(me.text);
+          }
+
+          if (config.resolve) {
+            config.resolve(me);
+          }
 
           return me;
 
         }]
 
-      },modalConfig));
+      }, modalConfig));
 
       return modalInstance.result;
 

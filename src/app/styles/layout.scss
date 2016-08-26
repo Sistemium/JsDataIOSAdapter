@@ -6,6 +6,25 @@ h1, h2, h3, h4, h5, h6 {
   &:active, &:focus {
     outline: none;
   }
+
+  a.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    -moz-filter:    grayscale(100%);
+    -ms-filter:     grayscale(100%);
+    -o-filter:      grayscale(100%);
+    filter: gray;
+    -webkit-filter: grayscale(100%);
+  }
+
+}
+
+.ui-view {
+  > h1, > h2, > h3, > h4, > h5, > h6 {
+    &:first-child {
+      margin-top: 5px;
+    }
+  }
 }
 
 .list-group {
@@ -87,8 +106,35 @@ p.list-group-item-text {
 .scroll-horizontal {
   white-space: nowrap;
   overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .p-6 {
   padding: 6px;
 }
+
+
+.header-button {
+  h4 {
+    margin-top: 3px;
+    @media (min-width: 768px) {
+      margin-top: 0px;
+    }
+  }
+  button {
+    position: relative;
+    top: -3px;
+    @media (min-width: 768px) {
+      top: -8px;
+    }
+  }
+}
+
+// TODO: something a bit smarter needed
+.max-width-75p {
+  max-width: 75%;
+  @media (max-width: 400px) {
+    max-width: 200px;
+  }
+}
+

@@ -130,7 +130,7 @@
           });
 
           if (!vm.selectedItems.length && vm.mode !== 'orderList') {
-            $state.go('picking.orderList');
+            $state.go('picking.orderList',{state: 'notdone'});
           }
 
           setSelected();
@@ -178,10 +178,11 @@
       refresh();
     });
 
-    function scanFn(code,type,object) {
+    function scanFn(code, type, object) {
+
+      var notFound = 'Неизвестный штрих-код';
 
       Errors.clear();
-
       code = code || vm.barCodeInput;
 
       var q;
@@ -190,13 +191,13 @@
         SB.inject(object);
         //toastr.info (object.id,'scanFn object.id');
         q = SB.find(object.id);
-      } else {
+      } else if (vm.barCodeInput) {
         q = SB.someBy.barCode(code).then(function (sbs) {
           return _.head(sbs);
         });
+      } else {
+        return SoundSynth.say(notFound);
       }
-
-      var notFound = 'Неизвестный штрих-код';
 
       q.then(function(sb){
         if (!sb) {

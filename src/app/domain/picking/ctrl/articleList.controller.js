@@ -12,29 +12,69 @@
     //var SB = models.StockBatch;
     //var SBBC = models.StockBatchBarCode;
     var orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
+    var Article = models.Article;
 
     function processArticle(a, sb, code) {
 
-      if (!vm.articleIndex [a.id]) {
+      var pas = _.filter(vm.articles, {sameId: a.sameId});
+
+      if (!pas.length) {
         return;
       }
 
-      var pa = _.find(vm.articles, {id: a.id});
-
-      vm.pickedIndex [a.id] = true;
+      var totalUnpicked = 0;
+      var pa = _.find(pas,function(p){
+        totalUnpicked += p.totalUnPickedVolume;
+        return totalUnpicked > 0;
+      });
 
       var pickablePositions = [];
+      var maxVolume = _.result(sb,'spareVolume') || 0;
+
+      function respondToSay(say,pickedVolume) {
+        if (!say && !totalUnpicked) {
+          say = 'Товар уже собран';
+        } else if (!say) {
+          say = 'В этой партии уже нет товара';
+        }
+
+        if (totalUnpicked) {
+          say += '.  Требуется товар из другой партии';
+        }
+
+        return {
+          id: a.id,
+          name: a.name,
+          speakable: _.trim(say),
+          volume: pickedVolume
+            ? a.boxPcs(pickedVolume).full
+            : say
+        };
+      }
+
+      if (!pa) {
+        return respondToSay();
+      }
+
+      vm.pickedIndex [pa.id] = true;
 
       _.each (pa.positions,function (pop){
-        var unp = pop.unPickedVolume();
+
+        var unp = _.min([pop.unPickedVolume(), maxVolume]);
+
+        maxVolume -= unp;
+        totalUnpicked -= unp;
+
         if (unp > 0) {
           pickablePositions.push ({
             pop: pop,
             unp: unp,
             num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,
+            // TODO: check packageRels
             volume: Language.speakableBoxPcs(a.boxPcs(unp))
           });
         }
+
       });
 
       pickablePositions = _.orderBy(pickablePositions ,'num');
@@ -68,18 +108,7 @@
           );
       }, '');
 
-      if (!say) {
-        say = 'Товар уже собран';
-      }
-
-      return {
-        id: a.id,
-        name: a.name,
-        speakable: _.trim(say),
-        volume: pickedVolume
-          ? a.boxPcs(pickedVolume).full
-          : 'Товар уже собран'
-      };
+      return respondToSay(say, pickedVolume);
 
     }
 
@@ -93,7 +122,7 @@
 
       lockScanProcessor = true;
 
-      $timeout(function(){
+      var fn = function(){
 
         var found = options.stockBatch.Article &&
           processArticle(options.stockBatch.Article, options.stockBatch, options.code);
@@ -109,7 +138,15 @@
 
         lockScanProcessor = false;
 
-      },10);
+      };
+
+      Article.find(options.stockBatch.article)
+        .then(function(){
+          $timeout(fn,10);
+        })
+        .catch(function(){
+          lockScanProcessor = false;
+        })
 
     });
 
