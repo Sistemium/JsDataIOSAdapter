@@ -138,10 +138,6 @@
 
     }
 
-    function mapClick() {
-      vm.popover = false;
-    }
-
     function deleteVisit() {
       if (!Visit.lastSaved(vm.visit)) {
         return quit();
@@ -193,7 +189,7 @@
       goBack,
       changeAnswer,
       save,
-      mapClick,
+      mapClick: () => vm.visitMapPopoverOpen = false,
       deleteVisit
 
     });
