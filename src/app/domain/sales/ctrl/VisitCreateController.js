@@ -241,6 +241,12 @@
 
     } else {
 
+      vm.visit = Visit.inject({
+        date: date,
+        outletId: outletId,
+        salesmanId: salesman.id
+      });
+
       vm.busy = getLocation()
         .then(function (res) {
 
@@ -248,12 +254,7 @@
             return;
           }
 
-          vm.visit = Visit.inject({
-            date: date,
-            outletId: outletId,
-            salesmanId: salesman.id,
-            checkInLocationId: res.id
-          });
+          vm.visit.checkInLocationId = res.id;
 
           return Visit.save(vm.visit)
             .then(visit => {
