@@ -54,7 +54,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         input-model='vm.selectedLegalForm'
         input-id='inputLegalForm'
         input-class='form-control'
-        placeholder='Форма собственности'
+        placeholder='Нажмите для выбора'
         rows-data='vm.legalForms'
         rows-filters='filter:{name:$viewValue}'
         row-as='name'
@@ -67,7 +67,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         type="text"
         name="address"
         ng-required='true'
-        placeholder="{{ vm.selectedPartner || vm.isInCreatingPartnerProcess ? 'Адрес' : 'Сначала выберите партнёра' }}"
+        placeholder="Улица, дом, вывеска"
         ng-model="vm.address"
         autocomplete="off"
         )
