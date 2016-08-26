@@ -76,7 +76,7 @@
           hideNavs: true
         },
 
-        templateUrl: 'app/domain/sales/views/AddOutlet.html',
+        templateUrl: 'app/domain/sales/views/addOutlet.html',
         controller: 'AddOutletController',
         controllerAs: 'vm'
 
