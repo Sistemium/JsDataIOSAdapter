@@ -4,6 +4,7 @@ hr
 
 section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   form.form-horizontal(
+  ng-if='vm.newLocation'
   name="addOutletForm"
   novalidate
   )
