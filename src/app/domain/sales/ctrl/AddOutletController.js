@@ -111,7 +111,7 @@
     function saveNewData() {
 
       var partner = vm.selectedPartner || vm.newPartner || injectPartner(vm.name, vm.inn, vm.selectedLegalForm);
-      var outlet = vm.newOutlet || injectOutlet(vm.name, partner, vm.address, vm.newLocation);
+      vm.newOutlet || injectOutlet(vm.name, partner, vm.address, vm.newLocation);
 
       vm.busyMessage = 'Создание точки…';
 
