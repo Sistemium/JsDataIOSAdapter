@@ -34,12 +34,12 @@
 
     Partner.findAll()
       .then(function (partners) {
-        vm.partners = _.sortBy(partners, (p) => [p.shortName.toLowerCase(), p.name.toLowerCase()]);
+        vm.partners = _.sortBy(partners, (p) => [_.lowerCase(p.shortName), _.lowerCase(p.name)]);
       });
 
     LegalForm.findAll()
-    .then(function (legalForms) {
-        vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, lf.name.toLowerCase()]);
+      .then(function (legalForms) {
+        vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.lowerCase(lf.name)]);
       });
 
     function submit() {
