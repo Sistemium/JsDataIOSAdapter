@@ -21,3 +21,24 @@
     ya-source='vm.track'
     ya-options='{balloonHasCloseButton:false,strokeColor:"#000000",strokeWidth:2,strokeOpacity:1}'
     )
+
+fieldset.pull-right(
+ng-if='vm.isUpdateLocationEnabled'
+cg-busy='{promise: vm.busy, message: vm.busyMessage}'
+)
+  fieldset(
+  ng-if='!vm.shouldConfirmUpdateLocation'
+  )
+    button.btn.btn-primary.margin(
+    ng-click='vm.shouldConfirmUpdateLocation = true'
+    ) Обновить геометку
+  fieldset(
+  ng-if='vm.shouldConfirmUpdateLocation'
+  )
+    button.btn.btn-primary.margin(
+    ng-click='vm.updateLocation()'
+    ) Да, обновить
+    button.btn.btn-warning.margin(
+    ng-click='vm.shouldConfirmUpdateLocation = false'
+    ) Нет
+

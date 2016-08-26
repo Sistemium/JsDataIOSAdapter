@@ -2,11 +2,37 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, ConfirmModal) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, ConfirmModal, LocationHelper, toastr) {
 
     // TODO: allow to add/change location for an existing outlet
 
     var vm = this;
+
+    _.assign(vm, {
+
+      outlet: undefined,
+      isUpdateLocationEnabled: true,
+      collapsePhotosSection: true,
+      collapseVisitsSection: false,
+      thumbnails: {},
+
+      visitClick: visit => $state.go('.visit', {visitId: visit.id}),
+      mapClick: () => {
+        vm.popover = false;
+      },
+
+      refresh,
+      newVisitClick,
+      deleteOutletClick,
+      takePhoto,
+      outletClick,
+      thumbnailClick,
+      togglePhotosSection,
+      toggleVisitsSection,
+      updateLocation
+
+    });
+
     var Outlet = Schema.model('Outlet');
     var Visit = Schema.model('Visit');
     var OutletPhoto = Schema.model('OutletPhoto');
@@ -82,6 +108,43 @@
       vm.collapseVisitsSection = !vm.collapseVisitsSection;
     }
 
+    function updateLocation() {
+
+      vm.busyMessage = 'Обновление геопозиции…';
+
+      vm.busy = getLocation(vm.outlet.id)
+        .then((data) => {
+
+          vm.updatedLocation = Location.inject(data);
+          vm.outlet.locationId = vm.updatedLocation.id;
+          vm.busyMessage = null;
+          vm.shouldConfirmUpdateLocation = false;
+          updateMap(vm.updatedLocation);
+
+        })
+        .catch(() => {
+
+          vm.busyMessage = null;
+          vm.shouldConfirmUpdateLocation = false
+
+        });
+
+    }
+
+    function getLocation(outletId) {
+
+      return LocationHelper.getLocation(100, outletId, 'Outlet')
+        .catch((err) => gotError(err, 'Невозможно получить геопозицию.'));
+
+    }
+
+    function gotError(err, errText) {
+
+      toastr.error(angular.toJson(err), errText);
+      throw errText;
+
+    }
+
     function newVisitClick() {
       $state.go('.visitCreate');
     }
@@ -108,6 +171,22 @@
 
     }
 
+    function updateMap(location) {
+
+      if (!location) return;
+
+      vm.map.yaCenter = mapsHelper.yLatLng(location);
+
+      vm.startMarker = mapsHelper.yMarkerConfig({
+        id: 'outletLocation',
+        location: location,
+        content: vm.outlet.name,
+        hintContent: moment(location.deviceCts + ' Z').format('HH:mm')
+      });
+
+
+    }
+
     function quit() {
       return $state.go('^');
     }
@@ -121,26 +200,6 @@
             .then(quit);
         })
     }
-
-    _.assign(vm, {
-
-      collapsePhotosSection: true,
-      collapseVisitsSection: false,
-      thumbnails: {},
-
-      visitClick: visit => $state.go('.visit', {visitId: visit.id}),
-      mapClick: () => vm.popover = false,
-
-      refresh,
-      newVisitClick,
-      deleteOutletClick,
-      takePhoto,
-      outletClick,
-      thumbnailClick,
-      togglePhotosSection,
-      toggleVisitsSection
-
-    });
 
     refresh();
 
