@@ -17,7 +17,6 @@
         rowAs: '@',
         inputClass: '@',
         inputId: '@',
-        inputRequired: '@',
         inputFocusFn: '&',
         inputBlurFn: '&',
         onSelectItemFn: '&'
@@ -42,7 +41,11 @@
             var inputEditable = `typeahead-editable='${ctrl.inputEditable}'`;
             html = html.replace('typeahead-editable', inputEditable);
 
-            ctrl.inputRequired = angular.isUndefined(ctrl.inputRequired) ? 'false' : ctrl.inputRequired;
+            ctrl.trimEnabled = angular.isDefined(attrs.trimEnabled) ? attrs.trimEnabled : 'true';
+            var trimEnabled = `ng-trim='${ctrl.trimEnabled}'`;
+            html = html.replace('trim-enabled', trimEnabled);
+
+            ctrl.inputRequired = angular.isDefined(attrs.inputRequired) ? attrs.inputRequired : 'false';
             var inputRequired = `ng-required='${ctrl.inputRequired}'`;
             html = html.replace('input-required', inputRequired);
 

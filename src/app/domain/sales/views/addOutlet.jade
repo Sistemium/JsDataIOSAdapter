@@ -39,6 +39,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
           input-id='inputName'
           input-class='form-control'
           input-editable
+          trim-enabled='false'
           placeholder='Название контрагента'
           rows-data='vm.partners'
           rows-filters='filter:{shortName:$viewValue}'
