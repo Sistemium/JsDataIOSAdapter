@@ -56,32 +56,10 @@
 
           LegalForm.findAll()
             .then(function (legalForms) {
-
               vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]);
-              watchForLegalFormEntered();
-
             });
 
         });
-
-    }
-
-    function watchForLegalFormEntered() {
-
-      $scope.$watch('vm.name', (newValue, oldValue) => {
-
-        var filteredLegalForm = _.find(vm.legalForms, (lf) => _.toLower(oldValue) === _.toLower(lf.name + ' '));
-
-        if (filteredLegalForm) {
-
-          vm.selectedLegalForm = filteredLegalForm;
-          vm.legalFormSearch = filteredLegalForm;
-          var lastCharacter = newValue.substr(newValue.length - 1);
-          addPartnerBtnClick(lastCharacter);
-
-        }
-
-      });
 
     }
 
@@ -110,6 +88,17 @@
     function addPartnerBtnClick(name) {
 
       vm.isInCreatingPartnerProcess = true;
+
+      var filteredLegalForm = _.find(vm.legalForms, (lf) => _.toLower(name).indexOf(_.toLower(lf.name + ' ')) === 0);
+
+      if (filteredLegalForm) {
+
+        vm.selectedLegalForm = filteredLegalForm;
+        vm.legalFormSearch = filteredLegalForm;
+        name = name.substr(filteredLegalForm.name.length);
+
+      }
+
       vm.name = name;
 
       $timeout(function() {
