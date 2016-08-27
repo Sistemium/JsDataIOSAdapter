@@ -2,25 +2,22 @@
 
 (function () {
 
-  function resize($window, IOS) {
+  function resize($window, $uibPosition) {
 
-    return function (scope) {
-      var w = $window;
-      scope.getWindowDimensions = function () {
+    return (scope, element) => {
+
+      function getWindowDimensions () {
         return {
-          'h': w.innerHeight,
-          'w': w.innerWidth
+          windowHeight: $window.innerHeight,
+          windowWidth: $window.innerWidth,
+          offsetTop: $uibPosition.offset(element).top
         };
-      };
-      var desktopFix = IOS.isIos() ? 0 : 45;
-      scope.$watch(scope.getWindowDimensions, function (newValue) {
-        scope.windowHeight = newValue.h - desktopFix;
-        scope.windowWidth = newValue.w;
-      }, true);
+      }
 
-      angular.element($window).bind('resize', function () {
-        scope.$apply();
-      });
+      scope.$watch(getWindowDimensions, newValue => _.assign(scope,newValue));
+
+      angular.element($window).bind('resize', () => scope.$apply());
+
     }
 
   }
