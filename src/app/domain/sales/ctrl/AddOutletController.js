@@ -8,7 +8,6 @@
 
     _.assign(vm, {
 
-      currentSearchValue: undefined,
       selectedPartner: null,
       newOutlet: null,
       partners: [],
