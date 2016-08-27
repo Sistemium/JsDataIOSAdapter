@@ -18,12 +18,8 @@
         rowAs: '@',
         inputClass: '@',
         inputId: '@',
-<<<<<<< HEAD
         inputFocusFn: '&',
         inputBlurFn: '&',
-=======
-        inputRequired: '@',
->>>>>>> origin/addOutlet
         onSelectItemFn: '&'
       },
       controller: stmTypeaheadController,
