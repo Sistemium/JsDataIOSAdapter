@@ -96,6 +96,7 @@
         vm.selectedLegalForm = filteredLegalForm;
         vm.legalFormSearch = filteredLegalForm;
         name = name.substr(filteredLegalForm.name.length);
+        name = name.replace(/[`'"»«„“\s]+/, '');
 
       }
 
