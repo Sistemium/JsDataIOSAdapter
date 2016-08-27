@@ -16,7 +16,9 @@
           //  console.log('ctrl.$viewValue', ctrl.$viewValue);
           //});
 
-          elem.bind('focus', () => $scope.vm.startClickOpen = true);
+          $scope.vm.typeaheadElement = elem;
+
+          elem.bind('focus', () => $scope.$apply(()=>$scope.vm.startClickOpen = true));
 
           elem.bind('click', () => {
 
