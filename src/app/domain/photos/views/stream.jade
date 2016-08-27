@@ -2,7 +2,7 @@
 
 section#scroll-main(
 resize
-style='height: {{windowHeight - 8 -38 }}px; max-width: {{ vm.hideStream ? "0" : "100%" }};'
+style='height: {{windowHeight - offsetTop - 5}}px; max-width: {{ vm.hideStream ? "0" : "100%" }};'
 )
   .vr-parent(vs-repeat='340' vs-scroll-parent="#scroll-main" ng-if='vm.photos.length')
     .stream-photo.text-center(ng-repeat='pic in vm.photos track by pic.id')

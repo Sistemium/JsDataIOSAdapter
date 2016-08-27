@@ -115,12 +115,12 @@
       });
     }
 
-    function checkIn(accuracy, data) {
+    function checkIn(accuracy, data, timeout) {
 
       return message(CHECKIN, {
         accuracy: accuracy,
         data: data,
-        timeout: 20000
+        timeout: timeout || 20000
       });
 
     }

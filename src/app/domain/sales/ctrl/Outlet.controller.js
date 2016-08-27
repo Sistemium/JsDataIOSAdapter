@@ -193,7 +193,7 @@
 
     function deleteOutletClick() {
       ConfirmModal.show({
-        text: 'Действительно удалить запись об этой точке?'
+        text: `Действительно удалить запись о точке ${vm.outlet.name} (${vm.outlet.address})?`
       })
         .then(function () {
           Outlet.destroy(stateFilter)

@@ -2,13 +2,12 @@
 
 (function () {
 
-  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, toastr, $window, LocationHelper) {
+  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, $window, LocationHelper, $timeout) {
 
     var vm = this;
 
     _.assign(vm, {
 
-      currentSearchValue: undefined,
       selectedPartner: null,
       newOutlet: null,
       partners: [],
@@ -21,9 +20,7 @@
       cancelConfirm,
       selectPartner,
       addPartnerBtnClick,
-      addPartnerFieldsCheck,
-      inputNameFocus,
-      inputNameBlur
+      addPartnerFieldsCheck
 
     });
 
@@ -38,39 +35,31 @@
 
       vm.busyMessage = 'Получение геопозиции…';
 
-      vm.busy = getLocation()
+      vm.busy = LocationHelper.getLocation(100, null, 'Outlet')
         .then((data) => {
 
+          vm.busyMessage = 'Загрузка данных…';
           vm.newLocation = Location.inject(data);
-          vm.busyMessage = null;
-          startController();
+          return startController();
 
         })
-        .catch((err) => {
-
-          vm.busyMessage = null;
-          showGetLocationErrorAlert(err);
-          return $q.reject(err);
-
-        });
+        .catch(showGetLocationErrorAlert);
 
     }
 
     function startController() {
 
-      Partner.findAll()
+      return Partner.findAll()
         .then(function (partners) {
-          vm.partners = _.sortBy(partners, (p) => [_.lowerCase(p.shortName), _.lowerCase(p.name)]);
-        });
 
-      LegalForm.findAll()
-        .then(function (legalForms) {
-          vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.lowerCase(lf.name)]);
-        });
+          vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
 
-      $scope.$watch('vm.name', function (newValue) {
-        if (!angular.isObject(newValue)) vm.currentSearchValue = newValue;
-      });
+          LegalForm.findAll()
+            .then(function (legalForms) {
+              vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]);
+            });
+
+        });
 
     }
 
@@ -96,11 +85,31 @@
       quit();
     }
 
-    function addPartnerBtnClick() {
+    function addPartnerBtnClick(name) {
 
-      vm.name = vm.currentSearchValue;
       vm.isInCreatingPartnerProcess = true;
-      vm.selectedPartner = null;
+
+      var filteredLegalForm = _.find(vm.legalForms, (lf) => _.toLower(name).indexOf(_.toLower(lf.name + ' ')) === 0);
+
+      if (filteredLegalForm) {
+
+        vm.selectedLegalForm = filteredLegalForm;
+        vm.legalFormSearch = filteredLegalForm;
+        name = name.substr(filteredLegalForm.name.length);
+
+      }
+
+      name = name.replace(/[`'"»«„“\s]+/, '');
+      name = _.upperFirst(name);
+
+      vm.name = name;
+
+      $timeout(function() {
+
+        var element = $window.document.getElementById('inputName');
+        if (element) element.focus();
+
+      });
 
     }
 
@@ -118,11 +127,7 @@
       vm.busy = saveAll()
         .then(quit)
         .catch(function (err) {
-
-          vm.busyMessage = null;
           showSaveErrorAlert(err);
-          return $q.reject(err);
-
         });
 
     }
@@ -155,20 +160,6 @@
 
     }
 
-    function getLocation(outletId) {
-
-      return LocationHelper.getLocation(100, outletId, 'Outlet')
-        .catch((err) => gotError(err, 'Невозможно получить геопозицию.'));
-
-    }
-
-    function gotError(err, errText) {
-
-      toastr.error(angular.toJson(err), errText);
-      throw errText;
-
-    }
-
     function showGetLocationErrorAlert(err) {
 
       return ConfirmModal.show({
@@ -190,54 +181,16 @@
 
     }
 
-    function inputNameFocus() {
-
-      if (!angular.isUndefined(vm.currentSearchValue)) {
-        vm.name = vm.currentSearchValue;
-      }
-
-    }
-
-    function inputNameBlur() {
-
-      if (vm.selectedPartner) {
-        vm.name = vm.selectedPartner;
-      }
-
-    }
-
     function selectPartner(partner) {
 
-      if (angular.isUndefined(vm.currentSearchValue)) vm.currentSearchValue = '';
-      partner ? vm.selectedPartner = partner : cleanUp();
+      vm.selectedPartner = partner;
 
     }
 
     function cleanUp() {
-
-      delete vm.selectedPartner;
-
-      if (vm.newOutlet) {
-
-        Outlet.eject(vm.newOutlet);
-        delete vm.newOutlet;
-
-      }
-
-      if (vm.newPartner) {
-
-        Partner.eject(vm.newPartner);
-        delete vm.newPartner;
-
-      }
-
-      if (vm.newLocation) {
-
-        Location.eject(vm.newLocation);
-        delete vm.newLocation;
-
-      }
-
+      vm.newOutlet && Outlet.eject(vm.newOutlet);
+      vm.newPartner && Partner.eject(vm.newPartner);
+      vm.newLocation && Location.eject(vm.newLocation);
     }
 
     function saveAll() {
@@ -245,13 +198,13 @@
       if (vm.newPartner) {
 
         return Partner.save(vm.newPartner)
-          .then(Outlet.save(vm.newOutlet))
-          .then(Location.save(vm.newLocation));
+          .then(()=>Outlet.save(vm.newOutlet))
+          .then(()=>Location.save(vm.newLocation));
 
       } else {
 
         return Outlet.save(vm.newOutlet)
-          .then(Location.save(vm.newLocation));
+          .then(()=>Location.save(vm.newLocation));
 
       }
 
