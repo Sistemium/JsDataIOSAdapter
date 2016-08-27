@@ -1,4 +1,4 @@
-.popover-map
+.popover-map(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   ya-map.ya-map-container(ng-if='vm.map' ng-click='vm.mapClick()'
   ya-behaviors='-DblClickZoom -Ruler -Drag -ScrollZoom'
   ya-options='{{vm.mapOptions}}'
@@ -22,23 +22,20 @@
     ya-options='{balloonHasCloseButton:false,strokeColor:"#000000",strokeWidth:2,strokeOpacity:1}'
     )
 
-fieldset.pull-right(
-ng-if='vm.isUpdateLocationEnabled'
-cg-busy='{promise: vm.busy, message: vm.busyMessage}'
-)
-  fieldset(
-  ng-if='!vm.shouldConfirmUpdateLocation'
-  )
-    button.btn.btn-primary.margin(
-    ng-click='vm.shouldConfirmUpdateLocation = true'
-    ) Обновить геометку
-  fieldset(
-  ng-if='vm.shouldConfirmUpdateLocation'
-  )
-    button.btn.btn-primary.margin(
-    ng-click='vm.updateLocation()'
-    ) Да, обновить
-    button.btn.btn-warning.margin(
-    ng-click='vm.shouldConfirmUpdateLocation = false'
-    ) Нет
+  h3.pull-right(ng-if='vm.isUpdateLocationEnabled')
+    .buttons(
+    ng-show='!vm.shouldConfirmUpdateLocation'
+    )
+      button.btn.btn-default(
+      ng-click='vm.updateLocationClick($event)'
+      ) Обновить геометку
+    .buttons(
+    ng-show='vm.shouldConfirmUpdateLocation'
+    )
+      button.btn.btn-success(
+      ng-click='vm.confirmLocationYesClick($event)'
+      ) Сохранить
+      button.btn.btn-warning(
+      ng-click='vm.confirmLocationNoClick($event)'
+      ) Отмена
 
