@@ -2,11 +2,39 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, ConfirmModal) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, ConfirmModal, LocationHelper, toastr) {
 
     // TODO: allow to add/change location for an existing outlet
 
     var vm = this;
+
+    _.assign(vm, {
+
+      outlet: undefined,
+      isUpdateLocationEnabled: true,
+      collapsePhotosSection: true,
+      collapseVisitsSection: false,
+      thumbnails: {},
+
+      visitClick: visit => $state.go('.visit', {visitId: visit.id}),
+      mapClick: () => {
+        vm.popover = false;
+      },
+
+      refresh,
+      newVisitClick,
+      deleteOutletClick,
+      takePhoto,
+      outletClick,
+      thumbnailClick,
+      togglePhotosSection,
+      toggleVisitsSection,
+      confirmLocationYesClick,
+      confirmLocationNoClick,
+      updateLocationClick
+
+    });
+
     var Outlet = Schema.model('Outlet');
     var Visit = Schema.model('Visit');
     var OutletPhoto = Schema.model('OutletPhoto');
@@ -18,9 +46,13 @@
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
 
-      Outlet.loadRelations(vm.outlet, 'OutletPhoto')
+      Outlet.loadRelations(vm.outlet, ['OutletPhoto', 'Location'])
         .then(function (outlet) {
           _.each(outlet.photos, importThumbnail);
+          if (outlet.location) {
+            initMap(outlet.location);
+          }
+
         });
 
     });
@@ -36,11 +68,7 @@
 
     function refresh() {
       vm.busy = $q.all([
-        Outlet.find(stateFilter)
-          .then(function (outlet) {
-            Location.find(outlet.locationId)
-              .then(initMap)
-          }),
+        Outlet.find(stateFilter),
         Visit.findAllWithRelations({
           outletId: stateFilter,
           salesmanId: salesman.id
@@ -82,6 +110,57 @@
       vm.collapseVisitsSection = !vm.collapseVisitsSection;
     }
 
+    function updateLocationClick($event) {
+
+      $event.preventDefault();
+
+      vm.busyMessage = 'Поиск геопозиции…';
+
+      vm.busy = getLocation(vm.outlet.id)
+        .then((data) => {
+
+          vm.updatedLocation = Location.inject(data);
+          vm.shouldConfirmUpdateLocation = true;
+          updateMap(vm.updatedLocation);
+
+        });
+
+    }
+
+    function confirmLocationYesClick($event) {
+      $event.preventDefault();
+      vm.outlet.location = vm.updatedLocation;
+      vm.busyMessage = 'Сохранение геопозиции…';
+      vm.busy = Outlet.save(vm.outlet)
+        .then(()=>{
+          vm.shouldConfirmUpdateLocation = false;
+          vm.markers = false;
+          makeOutletMarker();
+        })
+        .catch(err => gotError(err, 'Не удалось сохранить данные'));
+    }
+
+    function confirmLocationNoClick($event) {
+      $event.preventDefault();
+      vm.shouldConfirmUpdateLocation = false;
+      vm.markers = false;
+      vm.map.yaCenter = mapsHelper.yLatLng(vm.outlet.location);
+    }
+
+    function getLocation(outletId) {
+
+      return LocationHelper.getLocation(100, outletId, 'Outlet')
+        .catch((err) => gotError(err, 'Невозможно получить геопозицию.'));
+
+    }
+
+    function gotError(err, errText) {
+
+      toastr.error(angular.toJson(err), errText);
+      throw errText;
+
+    }
+
     function newVisitClick() {
       $state.go('.visitCreate');
     }
@@ -94,17 +173,34 @@
 
       vm.map = {
         yaCenter: mapsHelper.yLatLng(location),
-        afterMapInit: function () {
-
-          vm.startMarker = mapsHelper.yMarkerConfig({
-            id: 'outletLocation',
-            location: location,
-            content: vm.outlet.name,
-            hintContent: moment(location.deviceCts + ' Z').format('HH:mm')
-          });
-
+        afterMapInit: ()=>{
+          makeOutletMarker();
         }
       };
+
+    }
+
+    function makeOutletMarker () {
+      vm.startMarker = mapsHelper.yMarkerConfig({
+        id: 'outletLocation',
+        location: vm.outlet.location,
+        content: vm.outlet.name,
+        hintContent: moment(vm.outlet.location.timestamp + ' Z').format('HH:mm')
+      });
+    }
+
+    function updateMap(location) {
+
+      if (!location) return;
+
+      vm.map.yaCenter = mapsHelper.yLatLng(location);
+
+      vm.markers = [mapsHelper.yMarkerConfig({
+        id: 'updatedLocation',
+        location: location,
+        content: 'Новая геопозиция',
+        hintContent: moment(location.deviceCts + ' Z').format('HH:mm')
+      })];
 
     }
 
@@ -114,33 +210,13 @@
 
     function deleteOutletClick() {
       ConfirmModal.show({
-        text: 'Действительно удалить запись об этой точке?'
+        text: `Действительно удалить запись о точке ${vm.outlet.name} (${vm.outlet.address})?`
       })
         .then(function () {
           Outlet.destroy(stateFilter)
             .then(quit);
         })
     }
-
-    _.assign(vm, {
-
-      collapsePhotosSection: true,
-      collapseVisitsSection: false,
-      thumbnails: {},
-
-      visitClick: visit => $state.go('.visit', {visitId: visit.id}),
-      mapClick: () => vm.popover = false,
-
-      refresh,
-      newVisitClick,
-      deleteOutletClick,
-      takePhoto,
-      outletClick,
-      thumbnailClick,
-      togglePhotosSection,
-      toggleVisitsSection
-
-    });
 
     refresh();
 

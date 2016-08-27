@@ -1,8 +1,7 @@
 .stm-typeahead-popup-wrapper(
-  resize
-  ng-style="{top: position().top+'px', left: position().left+'px', 'max-height': (windowHeight - position().top + 30) + 'px'}"
+  ng-style="{top: position().top+'px', left: position().left+'px', 'max-height': $parent.vm.popupHeightPx}"
   style="display: block;"
-  ng-show="isOpen() && !moveInProgress"
+  ng-show="$parent.vm.popupHeightPx && isOpen() && !moveInProgress"
   aria-hidden="{{!isOpen()}}"
 )
   //p.message Выберите контрагента
