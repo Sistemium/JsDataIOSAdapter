@@ -1,4 +1,4 @@
-h3 Добавление точки
+h3 Новая точка
 
 hr
 
@@ -9,8 +9,8 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
   novalidate
   )
     .form-group(ng-if='vm.isInCreatingPartnerProcess')
-      label.col-sm-4.control-label.hidden-xs(for="inputName") Полное название
-      .col-sm-8.col-xs-12
+      label.col-sm-4.control-label(for="inputName") Полное название
+      .col-sm-8
         p.form-control-static
           span {{ vm.selectedLegalForm.name }} "{{ vm.name }}"
           = ' '
@@ -18,7 +18,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
 
     .form-group
       label.col-sm-4.control-label(for="inputName")
-        | {{ vm.isInCreatingPartnerProcess ? 'Контрагент сокращенно' : 'Контрагент' }}
+        | {{ vm.isInCreatingPartnerProcess ? 'Новый контрагент' : 'Контрагент' }}
       .col-sm-8
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
@@ -40,6 +40,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
           input-class='form-control'
           input-editable
           placeholder='Название контрагента'
+          placeholder-focused='Выберите или напишите новое название'
           rows-data='vm.partners'
           rows-filters='filter:{shortName:$viewValue}'
           row-as='name'
@@ -56,6 +57,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         input-id='inputLegalForm'
         input-class='form-control'
         placeholder='Нажмите для выбора'
+        placeholder-focused='Выберите из предложенного'
         rows-data='vm.legalForms'
         rows-filters='filter:{name:$viewValue}'
         row-as='name'
