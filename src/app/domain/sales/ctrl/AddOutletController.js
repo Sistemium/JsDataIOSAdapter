@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, $q, ConfirmModal, Schema, $window, LocationHelper) {
+  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, $window, LocationHelper, $timeout) {
 
     var vm = this;
 
@@ -51,12 +51,37 @@
 
       return Partner.findAll()
         .then(function (partners) {
-          vm.partners = _.sortBy(partners, (p) => [_.lowerCase(p.shortName), _.lowerCase(p.name)]);
+
+          vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
+
           LegalForm.findAll()
             .then(function (legalForms) {
-              vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.lowerCase(lf.name)]);
+
+              vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]);
+              watchForLegalFormEntered();
+
             });
+
         });
+
+    }
+
+    function watchForLegalFormEntered() {
+
+      $scope.$watch('vm.name', (newValue, oldValue) => {
+
+        var filteredLegalForm = _.find(vm.legalForms, (lf) => _.toLower(oldValue) === _.toLower(lf.name + ' '));
+
+        if (filteredLegalForm) {
+
+          vm.selectedLegalForm = filteredLegalForm;
+          vm.legalFormSearch = filteredLegalForm;
+          var lastCharacter = newValue.substr(newValue.length - 1);
+          addPartnerBtnClick(lastCharacter);
+
+        }
+
+      });
 
     }
 
@@ -86,6 +111,13 @@
 
       vm.isInCreatingPartnerProcess = true;
       vm.name = name;
+
+      $timeout(function() {
+
+        var element = $window.document.getElementById('inputName');
+        if (element) element.focus();
+
+      });
 
     }
 
