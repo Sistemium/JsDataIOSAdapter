@@ -70,7 +70,6 @@
 
         var vpo = $uibPosition.viewportOffset(vm.typeaheadElement);
         if (vpo) {
-          console.log (vpo);
           vm.popupHeightPx = `${$window.innerHeight - vpo.top - 50}px`;
         }
 
