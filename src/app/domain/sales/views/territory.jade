@@ -1,12 +1,3 @@
-//h2.flex
-//  a.inherit-colors(href ui-sref='sales.territory' ng-class='{disabled: vm.hideNavs}') Клиенты
-//  span.flex-1
-//  small.gray {{ vm.salesman.shortName }}
-//  small.gray.ml-10
-//    a.inherit-colors.p-6(href='' ui-sref='home' ng-class='{disabled: vm.hideNavs}')
-//      i.glyphicon.glyphicon-home
-
-
 section.text-center.scroll-horizontal(
 style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}'
 ng-hide='vm.hideHashes'
@@ -31,7 +22,7 @@ hr(ng-hide='vm.hideHashes')
 .ui-view(resize)
 
   section#scroll-main(
-  style='height: {{windowHeight - 98 }}px;'
+  style='height: {{windowHeight - offsetTop - 5}}px;'
   )
     section(ng-repeat='p in vm.partners | orderBy:["shortName", "name"] | filter:vm.filter track by p.id')
       h5
