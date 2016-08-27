@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .directive('typeaheadClickOpen', function () {
+    .directive('typeaheadClickOpen', function ($timeout) {
 
       return {
 
@@ -16,15 +16,21 @@
           //  console.log('ctrl.$viewValue', ctrl.$viewValue);
           //});
 
-          var triggerFunc = function () {
+          elem.bind('focus', () => $scope.vm.startHack = true);
+
+          elem.bind('click', () => {
 
             var prev = ctrl.$viewValue;
 
             ctrl.$setViewValue();
-            ctrl.$setViewValue(prev);
 
-          };
-          elem.bind('click', triggerFunc);
+            $timeout(10)
+              .then(()=>{
+                ctrl.$setViewValue(prev);
+                $scope.vm.startHack = false;
+              });
+
+          });
 
         }
 

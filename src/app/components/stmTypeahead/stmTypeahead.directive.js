@@ -9,7 +9,7 @@
       restrict: 'EA',
       scope: {
         inputModel: '=',
-        selectedModel: '=',
+        currentSelected: '=selectedModel',
         addButtonClickFn: '&',
         placeholder: '@',
         rowsFilters: '@',
@@ -68,6 +68,8 @@
       inputFocus: () => {
         vm.inputModel = vm.lastSearch || '';
         // vm.inputFocusFn() && vm.inputFocusFn()($event);
+        // TODO: try scroll on small ios
+        // $uiViewScroll(vm.rootElement);
       },
       inputBlur: (event) => {
         if (_.get(event, 'defaultPrevented')) {
@@ -75,13 +77,13 @@
         }
         if (!angular.isObject(vm.inputModel)) {
           vm.lastSearch = vm.inputModel;
-          vm.inputModel = vm.selectedModel || vm.inputModel;
+          vm.inputModel = vm.currentSelected || vm.inputModel;
         }
         // vm.inputBlurFn() && vm.inputBlurFn()($event);
       },
       onSelectItem: ($item) => {
         // vm.rootElement.children()[0].blur();
-        vm.selectedModel = $item;
+        vm.currentSelected = $item;
         vm.onSelectItemFn() && vm.onSelectItemFn()($item);
       },
       addButtonClick: (event) => {

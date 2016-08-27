@@ -12,13 +12,14 @@
   autocomplete="off"
   typeahead-click-open
   typeahead-focus-on-select='false'
+  typeahead-wait-ms="20"
   typeahead-min-length=0
   typeahead-append-to-body='true'
   typeahead-on-select='vm.onSelectItem($item)'
   typeahead-popup-template-url='app/components/stmTypeahead/stmTypeaheadPopup.html'
   typeahead-editable
   )
-  .animate-show(ng-show='vm.inputEditable && vm.inputModel && vm.inputModel !== vm.selectedModel')
+  div.animate-show(ng-if='vm.inputEditable' ng-show='!vm.startHack && vm.inputModel && vm.inputModel !== vm.currentSelected')
     button.btn.ml-em.btn-primary.pull-right(
     ng-click='vm.addButtonClick($event)'
     )
