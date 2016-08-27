@@ -16,18 +16,19 @@
 
       relations: {
         hasMany: {
-          Location: [
+          Visit: [
             {
-              localField: 'visitIn',
+              localField: 'visitIns',
               foreignKey: 'checkInLocationId'
             },{
-              localField: 'visitOut',
+              localField: 'visitOuts',
               foreignKey: 'checkOutLocationId'
-            },{
-              localField: 'outlet',
-              foreignKey: 'locationId'
             }
-          ]
+          ],
+          Outlet: {
+            localField: 'outlets',
+            foreignKey: 'locationId'
+          }
         }
       }
 
