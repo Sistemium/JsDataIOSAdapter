@@ -19,7 +19,7 @@
   typeahead-popup-template-url='app/components/stmTypeahead/stmTypeaheadPopup.html'
   typeahead-editable
   )
-  div.animate-show(ng-if='vm.inputEditable' ng-show='!vm.startHack && vm.inputModel && vm.inputModel !== vm.currentSelected')
+  div.animate-show(ng-if='vm.inputEditable' ng-show='!vm.startClickOpen && vm.inputModel && vm.inputModel !== vm.currentSelected')
     button.btn.ml-em.btn-primary.pull-right(
     ng-click='vm.addButtonClick($event)'
     )

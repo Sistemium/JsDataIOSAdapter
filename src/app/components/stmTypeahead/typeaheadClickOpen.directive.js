@@ -16,19 +16,24 @@
           //  console.log('ctrl.$viewValue', ctrl.$viewValue);
           //});
 
-          elem.bind('focus', () => $scope.vm.startHack = true);
+          elem.bind('focus', () => $scope.vm.startClickOpen = true);
 
           elem.bind('click', () => {
 
             var prev = ctrl.$viewValue;
 
-            ctrl.$setViewValue();
+            if (angular.isDefined(prev)) {
 
-            $timeout(10)
-              .then(()=>{
-                ctrl.$setViewValue(prev);
-                $scope.vm.startHack = false;
-              });
+              ctrl.$setViewValue();
+
+              $timeout(10)
+                .then(()=>{
+                    ctrl.$setViewValue(prev);
+                  $scope.vm.startClickOpen = false;
+                });
+            } else {
+              $scope.vm.startClickOpen = false;
+            }
 
           });
 
