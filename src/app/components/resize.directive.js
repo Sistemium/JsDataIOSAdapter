@@ -14,7 +14,7 @@
         };
       }
 
-      scope.$watch(getWindowDimensions, newValue => _.assign(scope,newValue));
+      scope.$watch(getWindowDimensions, newValue => _.assign(scope,newValue), true);
 
       angular.element($window).bind('resize', () => scope.$apply());
 
