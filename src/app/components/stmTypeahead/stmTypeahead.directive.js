@@ -12,13 +12,18 @@
         currentSelected: '=selectedModel',
         addButtonClickFn: '&',
         placeholder: '@',
+        placeholderFocused: '@',
         rowsFilters: '@',
         rowsData: '=',
         rowAs: '@',
         inputClass: '@',
         inputId: '@',
+<<<<<<< HEAD
         inputFocusFn: '&',
         inputBlurFn: '&',
+=======
+        inputRequired: '@',
+>>>>>>> origin/addOutlet
         onSelectItemFn: '&'
       },
       controller: stmTypeaheadController,
@@ -62,33 +67,47 @@
   angular.module('webPage')
     .directive('stmTypeahead', stmTypeaheadDirective);
 
-  function stmTypeaheadController($scope) {
+  function stmTypeaheadController($scope, $uiViewScroll, $uibPosition, $window, $timeout) {
 
     var vm = this;
 
     _.assign(vm, {
 
+      currentPlaceholder: vm.placeholder,
+
+      popupHeightRecalc: () => {
+
+        var vpo = $uibPosition.viewportOffset(vm.typeaheadElement);
+        if (vpo) {
+          vm.popupHeightPx = `${$window.innerHeight - vpo.top - 50}px`;
+        }
+
+      },
+
       inputFocus: () => {
         vm.inputModel = vm.lastSearch || '';
-        // vm.inputFocusFn() && vm.inputFocusFn()($event);
-        // TODO: try scroll on small ios
-        // $uiViewScroll(vm.rootElement);
+        vm.currentPlaceholder = vm.placeholderFocused;
+        $uiViewScroll(vm.rootElement.parent().parent())
+          .then(()=>$timeout(100).then(vm.popupHeightRecalc));
       },
+
       inputBlur: (event) => {
         if (_.get(event, 'defaultPrevented')) {
           return;
         }
+        $timeout(300).then(()=>vm.popupHeightPx = 0);
+        vm.currentPlaceholder = vm.placeholder;
         if (!angular.isObject(vm.inputModel)) {
           vm.lastSearch = vm.inputModel;
           vm.inputModel = vm.currentSelected || vm.inputModel;
         }
-        // vm.inputBlurFn() && vm.inputBlurFn()($event);
       },
+
       onSelectItem: ($item) => {
-        // vm.rootElement.children()[0].blur();
         vm.currentSelected = $item;
         vm.onSelectItemFn() && vm.onSelectItemFn()($item);
       },
+
       addButtonClick: (event) => {
         event.preventDefault();
         vm.addButtonClickFn() && vm.addButtonClickFn()(vm.lastSearch);

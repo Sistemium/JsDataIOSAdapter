@@ -80,10 +80,10 @@
 
     angular.extend(vm, {
 
-      refresh: refresh,
-      addOutletClick: addOutletClick,
-      outletClick: outletClick,
-      hashClick: hashClick,
+      refresh,
+      addOutletClick,
+      outletClick,
+      hashClick,
 
       filter: function (partner) {
         return !vm.currentHash || partner.shortName.match(new RegExp('^' + vm.currentHash, 'i'));
