@@ -120,7 +120,7 @@
     function saveNewData() {
 
       var partner = vm.selectedPartner || vm.newPartner || injectPartner(vm.name, vm.inn, vm.selectedLegalForm);
-      vm.newOutlet || injectOutlet(vm.name, partner, vm.address, vm.newLocation);
+      vm.newOutlet || injectOutlet(partner, vm.address, vm.newLocation);
 
       vm.busyMessage = 'Создание точки…';
 
@@ -144,11 +144,11 @@
 
     }
 
-    function injectOutlet(name, partner, address, location) {
+    function injectOutlet(partner, address, location) {
 
       vm.newOutlet = Outlet.inject({
         address: address,
-        name: name,
+        name: partner.name,
         partnerId: partner.id,
         locationId: location.id,
         source: 'user'
