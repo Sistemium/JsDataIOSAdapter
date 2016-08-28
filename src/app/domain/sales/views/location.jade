@@ -22,20 +22,25 @@
     ya-options='{balloonHasCloseButton:false,strokeColor:"#000000",strokeWidth:2,strokeOpacity:1}'
     )
 
-  h3.pull-right(ng-if='vm.isUpdateLocationEnabled')
-    .buttons(
-    ng-show='!vm.shouldConfirmUpdateLocation'
+  h3.pull-right(
+  ng-if='vm.isUpdateLocationEnabled'
+  )
+    fieldset(
+    ng-disabled='vm.busy.$$state.status <= 0'
     )
-      button.btn.btn-default(
-      ng-click='vm.updateLocationClick($event)'
-      ) Обновить геометку
-    .buttons(
-    ng-show='vm.shouldConfirmUpdateLocation'
-    )
-      button.btn.btn-success(
-      ng-click='vm.confirmLocationYesClick($event)'
-      ) Сохранить
-      button.btn.btn-warning(
-      ng-click='vm.confirmLocationNoClick($event)'
-      ) Отмена
+      .buttons(
+      ng-show='!vm.shouldConfirmUpdateLocation'
+      )
+        button.btn.btn-default(
+        ng-click='vm.updateLocationClick($event)'
+        ) Обновить геометку
+      .buttons(
+      ng-show='vm.shouldConfirmUpdateLocation'
+      )
+        button.btn.btn-success(
+        ng-click='vm.confirmLocationYesClick($event)'
+        ) Сохранить
+        button.btn.btn-warning(
+        ng-click='vm.confirmLocationNoClick($event)'
+        ) Отмена
 
