@@ -82,6 +82,14 @@
 
       };
 
+      var editOutlet = {
+        name: 'editOutlet',
+        url: '/outlet/:id/edit',
+        templateUrl: 'app/domain/sales/views/editOutlet.html',
+        controller: 'EditOutletController',
+        controllerAs: 'vm'
+      };
+
       var territory = {
         name: 'territory',
         url: '/territory',
@@ -97,7 +105,7 @@
           title: 'Клиенты'
         },
 
-        children: [outlet, addOutlet]
+        children: [outlet, addOutlet, editOutlet]
 
       };
 
