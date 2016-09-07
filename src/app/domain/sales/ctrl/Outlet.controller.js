@@ -24,6 +24,7 @@
       refresh,
       newVisitClick,
       deleteOutletClick,
+      editOutletClick,
       takePhoto,
       outletClick,
       thumbnailClick,
@@ -216,6 +217,10 @@
           Outlet.destroy(stateFilter)
             .then(quit);
         })
+    }
+
+    function editOutletClick() {
+      return $state.go('^.editOutlet', {id: vm.outlet.id});
     }
 
     refresh();
