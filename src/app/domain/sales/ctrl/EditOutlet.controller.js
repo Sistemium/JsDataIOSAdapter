@@ -2,7 +2,7 @@
 
 (function () {
 
-  function EditOutletController(Schema, $state, $window, ConfirmModal/*, $scope*/) {
+  function EditOutletController(Schema, $state, $window, ConfirmModal) {
 
     var vm = this;
 
@@ -33,15 +33,7 @@
     var Partner = Schema.model('Partner');
 
     findOutlet();
-
-    //$scope.$watch('vm.partner', (newValue) => {
-    //  console.log('vm.partner', newValue);
-    //});
-    //
-    //$scope.$watch('vm.selectedPartner', (newValue) => {
-    //  console.log('vm.selectedPartner', newValue);
-    //});
-
+    
     function findOutlet() {
 
       vm.busyMessage = 'Загрузка точки…';
