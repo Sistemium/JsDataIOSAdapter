@@ -50,14 +50,12 @@
     function startController() {
 
       return Partner.findAll()
-        .then(function (partners) {
+        .then((partners) => {
 
           vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
 
-          LegalForm.findAll()
-            .then(function (legalForms) {
-              vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]);
-            });
+          return LegalForm.findAll()
+            .then((legalForms) => vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]));
 
         });
 
@@ -198,13 +196,13 @@
       if (vm.newPartner) {
 
         return Partner.save(vm.newPartner)
-          .then(()=>Outlet.save(vm.newOutlet))
-          .then(()=>Location.save(vm.newLocation));
+          .then(() => Outlet.save(vm.newOutlet))
+          .then(() => Location.save(vm.newLocation));
 
       } else {
 
         return Outlet.save(vm.newOutlet)
-          .then(()=>Location.save(vm.newLocation));
+          .then(() => Location.save(vm.newLocation));
 
       }
 
