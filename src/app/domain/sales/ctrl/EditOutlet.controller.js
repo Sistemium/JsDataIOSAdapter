@@ -2,7 +2,7 @@
 
 (function () {
 
-  function EditOutletController(Schema, $state) {
+  function EditOutletController(Schema, $state/*, $scope*/) {
 
     var vm = this;
 
@@ -13,6 +13,7 @@
       outlet: null,
       partner: null,
       partners: [],
+      initialPartner: null,
       selectedPartner: null,
 
       address: '',
@@ -26,19 +27,28 @@
 
     vm.busy = findOutlet();
 
+    //$scope.$watch('vm.partner', (newValue) => {
+    //  console.log('vm.partner', newValue);
+    //});
+    //
+    //$scope.$watch('vm.selectedPartner', (newValue) => {
+    //  console.log('vm.selectedPartner', newValue);
+    //});
+
     function findOutlet() {
 
       return Outlet.find($state.params.id)
-        .then(function (outlet) {
+        .then((outlet) => {
 
           vm.outlet = outlet;
           vm.address = outlet.address;
 
           return Partner.findAll()
-            .then(function (partners) {
+            .then((partners) => {
 
               vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
               vm.partner = _.find(partners, {id: outlet.partnerId});
+              vm.initialPartner = vm.partner;
               vm.selectedPartner = vm.partner;
 
             });
