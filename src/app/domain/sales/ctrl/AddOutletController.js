@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, $window, LocationHelper, $timeout) {
+  function AddOutletController($state, ConfirmModal, Schema, $window, LocationHelper, $timeout) {
 
     var vm = this;
 
