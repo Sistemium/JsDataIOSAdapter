@@ -16,10 +16,8 @@
       collapseVisitsSection: false,
       thumbnails: {},
 
-      visitClick: visit => $state.go('.visit', {visitId: visit.id}),
-      mapClick: () => {
-        vm.popover = false;
-      },
+      visitClick: (visit) => $state.go('.visit', {visitId: visit.id}),
+      mapClick: () => vm.popover = false,
 
       refresh,
       newVisitClick,
