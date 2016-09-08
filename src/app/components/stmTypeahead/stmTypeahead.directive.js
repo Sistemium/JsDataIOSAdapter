@@ -34,8 +34,8 @@
         $templateRequest('app/components/stmTypeahead/stmTypeahead.html')
           .then(function (html) {
 
-            ctrl.rowsFilters = _.replace(ctrl.rowsFilters,`'`,'"');
-            var typeAhead = `uib-typeahead='row as row.${ctrl.rowAs} for row in vm.rowsData${ctrl.rowsFilters && "|"+ctrl.rowsFilters}'`;
+            ctrl.rowsFilters = _.replace(ctrl.rowsFilters, `'`, '"');
+            var typeAhead = `uib-typeahead='row as row.${ctrl.rowAs} for row in vm.rowsData${ctrl.rowsFilters && "|" + ctrl.rowsFilters}'`;
             html = html.replace('uib-typeahead', typeAhead);
 
             ctrl.inputEditable = angular.isDefined(attrs.inputEditable);
@@ -71,47 +71,66 @@
 
       currentPlaceholder: vm.placeholder,
 
-      popupHeightRecalc: () => {
-
-        var vpo = $uibPosition.viewportOffset(vm.typeaheadElement);
-        if (vpo) {
-          vm.popupHeightPx = `${$window.innerHeight - vpo.top - 50}px`;
-        }
-
-      },
-
-      inputFocus: () => {
-        vm.inputModel = vm.lastSearch || '';
-        vm.currentPlaceholder = vm.placeholderFocused;
-        $uiViewScroll(vm.rootElement.parent().parent())
-          .then(()=>$timeout(100).then(vm.popupHeightRecalc));
-      },
-
-      inputBlur: (event) => {
-        if (_.get(event, 'defaultPrevented')) {
-          return;
-        }
-        $timeout(300).then(()=>vm.popupHeightPx = 0);
-        vm.currentPlaceholder = vm.placeholder;
-        if (!angular.isObject(vm.inputModel)) {
-          vm.lastSearch = vm.inputModel;
-          vm.inputModel = vm.currentSelected || vm.inputModel;
-        }
-      },
-
-      onSelectItem: ($item) => {
-        vm.currentSelected = $item;
-        vm.onSelectItemFn() && vm.onSelectItemFn()($item);
-      },
-
-      addButtonClick: (event) => {
-        event.preventDefault();
-        vm.addButtonClickFn() && vm.addButtonClickFn()(vm.lastSearch);
-      }
+      popupHeightRecalc,
+      inputFocus,
+      inputBlur,
+      onSelectItem,
+      addButtonClick
 
     });
 
-    $scope.$watch('vm.inputModel', (newValue)=>{
+    function popupHeightRecalc() {
+
+      var vpo = $uibPosition.viewportOffset(vm.typeaheadElement);
+      if (vpo) {
+        vm.popupHeightPx = `${$window.innerHeight - vpo.top - 50}px`;
+      }
+
+    }
+
+    function inputFocus() {
+
+      vm.inputModel = vm.lastSearch || '';
+      vm.currentPlaceholder = vm.placeholderFocused;
+      $uiViewScroll(vm.rootElement.parent().parent())
+        .then(()=>$timeout(100).then(vm.popupHeightRecalc));
+
+    }
+
+    function inputBlur(event) {
+
+      if (_.get(event, 'defaultPrevented')) {
+        return;
+      }
+
+      $timeout(300).then(() => vm.popupHeightPx = 0);
+
+      vm.currentPlaceholder = vm.placeholder;
+
+      if (!angular.isObject(vm.inputModel)) {
+
+        vm.lastSearch = vm.inputModel;
+        vm.inputModel = vm.currentSelected || vm.inputModel;
+
+      }
+
+    }
+
+    function onSelectItem($item) {
+
+      vm.currentSelected = $item;
+      vm.onSelectItemFn() && vm.onSelectItemFn()($item);
+
+    }
+
+    function addButtonClick(event) {
+
+      event.preventDefault();
+      vm.addButtonClickFn() && vm.addButtonClickFn()(vm.lastSearch);
+
+    }
+
+    $scope.$watch('vm.inputModel', (newValue)=> {
       if (!angular.isObject(newValue)) {
         vm.lastSearch = vm.inputModel;
       }
