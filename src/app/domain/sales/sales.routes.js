@@ -73,6 +73,17 @@
 
       };
 
+      var editPartner = {
+
+        name: 'editPartner',
+        url: '/partner/:id/edit',
+
+        templateUrl: 'app/domain/sales/views/editPartner.html',
+        controller: 'EditPartnerController',
+        controllerAs: 'vm'
+
+      };
+
       var outlet = {
 
         name: 'outlet',
@@ -128,7 +139,7 @@
           title: 'Клиенты'
         },
 
-        children: [partner, outlet, addOutlet, editOutlet]
+        children: [partner, editPartner, outlet, addOutlet, editOutlet]
 
       };
 
