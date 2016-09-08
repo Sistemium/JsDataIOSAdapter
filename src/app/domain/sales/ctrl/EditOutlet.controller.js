@@ -33,7 +33,7 @@
     var Partner = Schema.model('Partner');
 
     findOutlet();
-    
+
     function findOutlet() {
 
       vm.busyMessage = 'Загрузка точки…';
@@ -131,7 +131,7 @@
     }
 
     function quit() {
-      return $state.go('^');
+      return $state.go('^.outlet', {id: vm.outlet.id});
     }
 
   }
