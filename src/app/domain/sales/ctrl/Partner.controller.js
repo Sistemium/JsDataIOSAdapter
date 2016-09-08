@@ -2,19 +2,29 @@
 
 (function () {
 
-  function PartnerController(Schema, $state) {
+  function PartnerController(Schema, $state, $scope) {
 
     var vm = this;
 
     _.assign(vm, {
 
       partner: null,
-      outlets: []
+      outlets: [],
+
+      deletePartnerClick,
+      editPartnerClick,
+      toggleOutletsSection,
+      newOutletClick
 
     });
 
     var Partner = Schema.model('Partner');
     var Outlet = Schema.model('Outlet');
+    var rootState = 'sales.territory.partner';
+
+    $scope.$on('$stateChangeSuccess', function (e, to) {
+      vm.disableNavs = !!_.get(to, 'data.disableNavs') || to.name === rootState;
+    });
 
     findPartner();
 
@@ -44,6 +54,21 @@
 
     }
 
+    function deletePartnerClick() {
+      alert('deletePartnerClick()');
+    }
+
+    function editPartnerClick() {
+      alert('editPartnerClick()');
+    }
+
+    function toggleOutletsSection() {
+      vm.collapseOutletsSection = !vm.collapseOutletsSection;
+    }
+
+    function newOutletClick() {
+      $state.go('^.addOutlet');
+    }
 
   }
 
