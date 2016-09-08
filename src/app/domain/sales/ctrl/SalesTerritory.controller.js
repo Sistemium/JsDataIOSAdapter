@@ -9,6 +9,7 @@
     _.assign(vm, {
 
       refresh,
+      partnerClick,
       outletClick,
       addOutletClick,
       hashClick,
@@ -45,6 +46,10 @@
         SM.findAll(),
         Outlet.findAll(stateFilter, {limit: 1000, bypassCache: true})
       ]);
+    }
+
+    function partnerClick(partner) {
+      $state.go('.partner', {id: partner.id});
     }
 
     function outletClick(outlet) {
