@@ -39,6 +39,7 @@
 
               vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
               vm.partner = _.find(partners, {id: outlet.partnerId});
+              vm.selectedPartner = vm.partner;
 
             });
 
@@ -49,7 +50,6 @@
     function selectPartner(partner) {
       vm.selectedPartner = partner;
     }
-
 
   }
 
