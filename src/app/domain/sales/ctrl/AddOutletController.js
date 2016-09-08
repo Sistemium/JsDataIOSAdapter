@@ -182,15 +182,15 @@
     }
 
     function selectPartner(partner) {
-
       vm.selectedPartner = partner;
-
     }
 
     function cleanUp() {
+
       vm.newOutlet && Outlet.eject(vm.newOutlet);
       vm.newPartner && Partner.eject(vm.newPartner);
       vm.newLocation && Location.eject(vm.newLocation);
+
     }
 
     function saveAll() {
