@@ -60,7 +60,7 @@
     }
 
     function editPartnerClick() {
-      alert('editPartnerClick()');
+      return $state.go('^.editPartner', {id: vm.partner.id});
     }
 
     function toggleOutletsSection() {
