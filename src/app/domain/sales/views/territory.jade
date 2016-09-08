@@ -26,9 +26,12 @@ hr(ng-hide='vm.hideHashes')
   )
     section(ng-repeat='p in vm.partners | orderBy:["shortName", "name"] | filter:vm.filter track by p.id')
       h5
-        .lead {{ p.name }}
+        a.lead(href ng-click='vm.partnerClick(p)')
+          b {{ p.name }}
 
       p.text-right(ng-repeat='o in p.outlets | orderBy:"address"')
         a.green(ng-if='o.locationId')
           i.glyphicon.glyphicon-map-marker
         a.ml-5(href ng-click='vm.outletClick(o)') {{ o.address }}
+
+      hr
