@@ -14,6 +14,7 @@
       deletePartnerClick,
       editPartnerClick,
       toggleOutletsSection,
+      outletClick,
       newOutletClick
 
     });
@@ -64,6 +65,10 @@
 
     function toggleOutletsSection() {
       vm.collapseOutletsSection = !vm.collapseOutletsSection;
+    }
+
+    function outletClick(outlet) {
+      $state.go('^.outlet', {id: outlet.id});
     }
 
     function newOutletClick() {
