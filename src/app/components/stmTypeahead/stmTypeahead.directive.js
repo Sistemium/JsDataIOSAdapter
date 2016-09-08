@@ -90,8 +90,6 @@
 
     function inputFocus() {
 
-      vm.initialModel = vm.initialModel || vm.inputModel || null;
-
       vm.inputModel = vm.lastSearch || '';
       vm.currentPlaceholder = vm.placeholderFocused;
       $uiViewScroll(vm.rootElement.parent().parent())
@@ -113,10 +111,6 @@
 
         vm.lastSearch = vm.inputModel;
         vm.inputModel = vm.currentSelected || vm.inputModel;
-
-        if (!vm.inputModel) {
-          vm.inputModel = vm.initialModel;
-        }
 
       }
 
