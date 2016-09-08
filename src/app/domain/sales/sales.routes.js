@@ -6,6 +6,7 @@
     .config(function (stateHelperProvider) {
 
       var prePreOrders = {
+
         name:'prePreOrders',
         url: '/prePreOrders?state',
 
@@ -27,9 +28,11 @@
             controllerAs: 'vm'
           }
         ]
+
       };
 
       var visit = {
+
         name: 'visit',
         url: '/visit?visitId',
 
@@ -44,6 +47,7 @@
       };
 
       var visitCreate = {
+
         name: 'visitCreate',
         url: '/visitCreate?visitId',
 
@@ -58,17 +62,32 @@
 
       };
 
+      var partner = {
+
+        name: 'partner',
+        url: '/partner/:id',
+
+        templateUrl: 'app/domain/sales/views/partner.html',
+        controller: 'PartnerController',
+        controllerAs: 'vm'
+
+      };
+
       var outlet = {
+
         name: 'outlet',
         url: '/outlet/:id',
+
         templateUrl: 'app/domain/sales/views/outlet.html',
         controller: 'OutletController',
         controllerAs: 'vm',
 
         children: [visit, visitCreate]
+
       };
 
       var addOutlet = {
+
         name: 'addOutlet',
         url: '/addOutlet',
 
@@ -83,14 +102,18 @@
       };
 
       var editOutlet = {
+
         name: 'editOutlet',
         url: '/outlet/:id/edit',
+
         templateUrl: 'app/domain/sales/views/editOutlet.html',
         controller: 'EditOutletController',
         controllerAs: 'vm'
+
       };
 
       var territory = {
+
         name: 'territory',
         url: '/territory',
 
@@ -105,7 +128,7 @@
           title: 'Клиенты'
         },
 
-        children: [outlet, addOutlet, editOutlet]
+        children: [partner, outlet, addOutlet, editOutlet]
 
       };
 
