@@ -42,7 +42,7 @@
 
         ctrl.$validators.innInput = function (modelValue, viewValue) {
 
-          if (angular.isUndefined(viewValue) || viewValue.length === 0) return true;
+          if (angular.isUndefined(viewValue) || viewValue === null || viewValue.length === 0) return true;
 
           if (innRegexp.test(viewValue)) {
 
