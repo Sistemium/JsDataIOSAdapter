@@ -29,6 +29,10 @@
           OutletPhoto: {
             localField: 'photos',
             foreignKey: 'outletId'
+          },
+          Visit: {
+            localField: 'visits',
+            foreignKey: 'outletId'
           }
           // PickingRequest: {
           //   localField: 'pickingOrders',
