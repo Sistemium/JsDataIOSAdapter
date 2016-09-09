@@ -72,7 +72,7 @@
     }
 
     function newOutletClick() {
-      $state.go('^.addOutlet');
+      $state.go('.addOutletToPartner', {id: vm.partner.id});
     }
 
   }
