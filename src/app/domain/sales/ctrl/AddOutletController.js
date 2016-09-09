@@ -209,7 +209,7 @@
 
     function cleanUp() {
 
-      vm.newOutlet && Outlet.eject(vm.newOutlet);
+      vm.newOutlet && Outlet.eject(vm.newOutlet) && delete vm.newOutlet;
       vm.newPartner && Partner.eject(vm.newPartner);
       vm.newLocation && Location.eject(vm.newLocation);
 
