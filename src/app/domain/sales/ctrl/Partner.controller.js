@@ -38,7 +38,7 @@
 
           vm.partner = partner;
 
-          return Outlet.findAllWithRelations({partnerId: vm.partner.id})('Visit')
+          return Outlet.findAllWithRelations({partnerId: vm.partner.id}, {bypassCache:true})('Visit')
             .then((outlets) => {
 
               vm.outlets = outlets;
