@@ -62,6 +62,21 @@
 
       };
 
+      var addOutletToPartner = {
+
+        name: 'addOutletToPartner',
+        url: '/partner/:id/addOutlet',
+
+        data: {
+          hideNavs: true
+        },
+
+        templateUrl: 'app/domain/sales/views/addOutlet.html',
+        controller: 'AddOutletController',
+        controllerAs: 'vm'
+
+      };
+
       var partner = {
 
         name: 'partner',
@@ -69,7 +84,9 @@
 
         templateUrl: 'app/domain/sales/views/partner.html',
         controller: 'PartnerController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+
+        children: [addOutletToPartner]
 
       };
 
