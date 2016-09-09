@@ -233,7 +233,7 @@
     }
 
     function quit() {
-      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
+      return vm.newOutlet ? $state.go('sales.territory.outlet', {id: vm.newOutlet.id}) : $state.go('^');
     }
 
   }
