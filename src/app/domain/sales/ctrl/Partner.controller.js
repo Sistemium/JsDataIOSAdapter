@@ -2,7 +2,7 @@
 
 (function () {
 
-  function PartnerController(Schema, $state, $scope) {
+  function PartnerController(Schema, $state, $scope, ConfirmModal) {
 
     var vm = this;
 
@@ -38,7 +38,7 @@
 
           vm.partner = partner;
 
-          return Outlet.findAllWithRelations({partnerId: vm.partner.id}, {bypassCache:true})('Visit')
+          return Outlet.findAllWithRelations({partnerId: vm.partner.id}, {bypassCache: true})('Visit')
             .then((outlets) => {
 
               vm.outlets = outlets;
@@ -56,7 +56,14 @@
     }
 
     function deletePartnerClick() {
-      alert('deletePartnerClick()');
+      ConfirmModal.show({
+        text: `Действительно удалить запись о контрагенте ${vm.partner.name}?`
+      })
+        .then(function () {
+          return Partner.destroy(vm.partner.id)
+            .then(quit)
+            .catch((err) => alert(err.text));
+        })
     }
 
     function editPartnerClick() {
@@ -73,6 +80,10 @@
 
     function newOutletClick() {
       $state.go('.addOutletToPartner', {id: vm.partner.id});
+    }
+
+    function quit() {
+      return $state.go('^');
     }
 
   }
