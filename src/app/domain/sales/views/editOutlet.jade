@@ -8,7 +8,9 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputPartner")
         | Контрагент
-      .col-sm-8
+      fieldset.col-sm-8(
+      disabled
+      )
         stm-typeahead(
         input-required='true'
         input-model='vm.partner'
