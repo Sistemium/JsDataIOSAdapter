@@ -14,6 +14,7 @@
       legalForms: [],
       isInCreatingPartnerProcess: false,
       isInCancelProcess: false,
+      haveFixedPartner: false,
 
       submit,
       cancel,
@@ -29,13 +30,14 @@
     var Location = Schema.model('Location');
     var LegalForm = Schema.model('LegalForm');
 
-    checkLocation();
+    vm.haveFixedPartner = angular.isDefined($state.params.id);
+
+    vm.busyMessage = 'Получение геопозиции…';
+    vm.busy = checkLocation();
 
     function checkLocation() {
 
-      vm.busyMessage = 'Получение геопозиции…';
-
-      vm.busy = LocationHelper.getLocation(100, null, 'Outlet')
+      return LocationHelper.getLocation(100, null, 'Outlet')
         .then((data) => {
 
           vm.busyMessage = 'Загрузка данных…';
@@ -48,16 +50,38 @@
     }
 
     function startController() {
+      return vm.haveFixedPartner ? getFixedPartner() : getPartners();
+    }
+
+    function getFixedPartner() {
+
+      return Partner.find($state.params.id)
+        .then((partner) => {
+
+          vm.name = partner;
+          selectPartner(partner);
+          return getLegalForms();
+
+        });
+
+    }
+
+    function getPartners() {
 
       return Partner.findAll()
         .then((partners) => {
 
           vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
-
-          return LegalForm.findAll()
-            .then((legalForms) => vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]));
+          return getLegalForms();
 
         });
+
+    }
+
+    function getLegalForms() {
+
+      return LegalForm.findAll()
+        .then((legalForms) => vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]));
 
     }
 
