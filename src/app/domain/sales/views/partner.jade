@@ -4,18 +4,35 @@ ng-if='vm.disableNavs'
   span {{ vm.partner.name }}
   = ' '
   small
-    a.ml-em(href ng-click='vm.deletePartnerClick()')
+    a.ml-em(
+    href
+    ng-click='vm.deletePartnerClick()'
+    )
       i.glyphicon.glyphicon-trash
-    a.ml-em(href ng-click='vm.editPartnerClick()')
+    a.ml-em(
+    href
+    ng-click='vm.editPartnerClick()'
+    )
       i.glyphicon.glyphicon-edit
+
 section.ui-view
   hr.clear-both
   .header-button
     h4.pull-left
-      a(ng-class='{disabled: !vm.outlets.length}' href ng-click='vm.toggleOutletsSection()') Точки
-        span(ng-if='vm.outlets.length') &nbsp({{vm.outlets.length}})
-    button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newOutletClick()') Новая точка
-    table.table.table-striped.clear-both(ng-hide='vm.collapseOutletsSection || !vm.outlets.length')
+      a(
+      ng-class='{disabled: !vm.outlets.length}'
+      href
+      ng-click='vm.toggleOutletsSection()'
+      ) Точки
+        span(
+        ng-if='vm.outlets.length'
+        ) &nbsp({{vm.outlets.length}})
+    button.btn.ml-em.btn-success.pull-right.btn-sm(
+    ng-click='vm.newOutletClick()'
+    ) Новая точка
+    table.table.table-striped.clear-both(
+    ng-hide='vm.collapseOutletsSection || !vm.outlets.length'
+    )
       thead
         tr
           th Адрес
@@ -23,7 +40,10 @@ section.ui-view
           th.number
             .glyphicon.glyphicon-time
       tbody
-        tr.clickable(ng-repeat='outlet in vm.outlets | orderBy:"address" track by outlet.id' ng-click='vm.outletClick(outlet)')
+        tr.clickable(
+        ng-repeat='outlet in vm.outlets | orderBy:"address" track by outlet.id'
+        ng-click='vm.outletClick(outlet)'
+        )
           td {{ outlet.address }}
           td.number {{ outlet.visits.length | number: 0 }}
           td.number {{ outlet.lastVisitDate | amUtc | amLocal | amCalendar }}
