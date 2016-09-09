@@ -19,7 +19,9 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputName")
         | {{ vm.isInCreatingPartnerProcess ? 'Новый контрагент' : 'Контрагент' }}
-      .col-sm-8
+      fieldset.col-sm-8(
+      ng-disabled='vm.haveFixedPartner'
+      )
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
         ng-model='vm.name'
@@ -38,7 +40,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
           add-button-click-fn='vm.addPartnerBtnClick'
           input-id='inputName'
           input-class='form-control'
-          input-editable
+          input-editable='{{!vm.haveFixedPartner}}'
           trim-enabled='false'
           placeholder='Название контрагента'
           placeholder-focused='Выберите или напишите новое название'
