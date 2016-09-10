@@ -17,8 +17,7 @@
       selectPartner,
       outletDataWasChanged,
       submit,
-      cancel,
-      cancelConfirm
+      cancel
 
     });
 
@@ -82,21 +81,11 @@
 
     }
 
-    function cancel(form) {
-
-      if (form.$pristine) {
-        quit();
-      } else {
-        vm.isInCancelProcess = true;
-      }
-
-    }
-
     function revertChanges() {
       Outlet.revert(vm.outlet);
     }
 
-    function cancelConfirm() {
+    function cancel() {
       revertChanges();
       quit();
     }
@@ -112,5 +101,4 @@
   angular.module('webPage')
     .controller('EditOutletController', EditOutletController);
 
-})
-();
+})();

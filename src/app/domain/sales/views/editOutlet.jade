@@ -38,22 +38,9 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
     hr
     .col-sm-4.col-sm-offset-8
-      .form-group.text-right
-        fieldset
-          button.btn.margin.btn-primary(
-          ng-if='!vm.isInCancelProcess'
-          ng-disabled='!vm.outletDataWasChanged() || editOutletForm.$invalid'
-          ng-click='vm.submit()'
-          ) Сохранить
-          button.btn.margin.btn-warning(
-          ng-if='!vm.isInCancelProcess'
-          ng-click='vm.cancel(editOutletForm)'
-          ) Отменить
-          button.btn.margin.btn-primary(
-          ng-if='vm.isInCancelProcess'
-          ng-click='vm.cancelConfirm()'
-          ) Да, отменить
-          button.btn.margin.btn-warning(
-          ng-if='vm.isInCancelProcess'
-          ng-click='vm.isInCancelProcess = false'
-          ) Нет
+      sab-confirm-buttons.form-group.text-right(
+      submit-disable='!vm.outletDataWasChanged() || editOutletForm.$invalid'
+      form='editOutletForm'
+      on-cancel='vm.cancel'
+      on-submit='vm.submit'
+      )
