@@ -224,7 +224,8 @@
     refresh();
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.disableNavs = !!_.get(to, 'data.disableNavs') || to.name === rootState;
+      vm.isRootState = (to.name === rootState);
+      vm.disableNavs = !!_.get(to, 'data.disableNavs') || vm.isRootState;
     });
 
   }

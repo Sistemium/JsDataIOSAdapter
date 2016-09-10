@@ -52,6 +52,7 @@
         url: '/visitCreate?visitId',
 
         data: {
+          disableNavs: true,
           hideTopBar: false,
           hideNavs: true
         },
