@@ -1,4 +1,4 @@
-h3 Редактировать контрагента
+h3 Редактирование контрагента
 
 hr
 
@@ -11,15 +11,14 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
       label.col-sm-4.control-label(for="inputName") Полное название
       .col-sm-8
         p.form-control-static
-          span {{ vm.selectedLegalForm.name }} "{{ vm.name }}"
-          = ' '
-          span.gray {{ vm.inn }}
+          span {{ vm.partner.name }}
     .form-group
       label.col-sm-4.control-label(for="inputName")
-        | Контрагент
+        | Название
       .col-sm-8
         input#inputName.form-control(
-        ng-model='vm.name'
+        ng-model='vm.shortName'
+        ng-change='vm.onShortNameChange()'
         auto-focus='false'
         type="text"
         name="name"
@@ -33,7 +32,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         stm-typeahead(
         input-required='true'
         input-model='vm.legalForm'
-        selected-model='vm.selectedLegalForm'
+        selected-model='vm.legalForm'
         input-id='inputLegalForm'
         input-class='form-control'
         placeholder='Нажмите для выбора'
@@ -41,6 +40,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         rows-data='vm.legalForms'
         rows-filters='filter:{name:$viewValue}'
         row-as='name'
+        on-select-item-fn='vm.onLegalFormChange'
         )
     .form-group(
     ng-class="editPartnerForm.inn.$dirty && editPartnerForm.inn.$invalid && 'has-error'"
@@ -53,7 +53,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         name="inn"
         ng-pattern='innPattern'
         placeholder='10 или 12 цифр (если известен)'
-        ng-model="vm.inn"
+        ng-model="vm.partner.inn"
         autocomplete="off"
         )
         div(

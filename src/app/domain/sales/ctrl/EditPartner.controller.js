@@ -2,31 +2,31 @@
 
 (function () {
 
-  function EditPartnerController(Schema, $state, $window, ConfirmModal) {
+  function EditPartnerController(Schema, $state, $window, $scope, ConfirmModal) {
 
     var vm = this;
 
     _.assign(vm, {
 
       partner: null,
-      legalForm: null,
       legalForms: [],
-      name: '',
-      inn: '',
       isInCancelProcess: false,
-      nameWasChanged: false,
-      legalFormWasChanged: false,
-      innWasChanged: false,
 
       partnerDataWasChanged,
       submit,
       cancel,
-      cancelConfirm
+      cancelConfirm,
+      onShortNameChange,
+      onLegalFormChange
 
     });
 
     var Partner = Schema.model('Partner');
     var LegalForm = Schema.model('LegalForm');
+
+    LegalForm.bindAll({
+      orderBy: ['ord', 'name']
+    }, $scope, 'vm.legalForms');
 
     findPartner();
 
@@ -36,65 +36,25 @@
 
       vm.busy = Partner.find($state.params.id)
         .then((partner) => {
-
           vm.partner = partner;
-          vm.name = vm.partner.shortName;
-          vm.inn = vm.partner.inn;
-
+          vm.shortName = partner.shortName;
           return LegalForm.findAll()
-            .then((legalForms) => {
-
-              vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]);
-              vm.legalForm = _.find(legalForms, {id: vm.partner.legalFormId});
-              vm.initialLegalForm = vm.legalForm;
-              vm.selectedLegalForm = vm.legalForm;
-
-            });
-
+            .then(() => vm.legalForm = partner.legalForm);
         });
 
     }
 
-    function partnerDataWasChanged() {
-
-      vm.legalFormWasChanged = vm.initialLegalForm !== vm.selectedLegalForm;
-
-      if (vm.partner) {
-
-        vm.nameWasChanged = vm.partner.shortName !== vm.name;
-        vm.innWasChanged = vm.partner.inn !== vm.inn;
-
-      }
-
-      return vm.nameWasChanged || vm.legalFormWasChanged || vm.innWasChanged;
-
+    function onShortNameChange() {
+      vm.partner.name = `${_.get(vm.partner,'legalForm.name')} "${vm.shortName}"`;
     }
 
-    function saveNewData() {
+    function onLegalFormChange(legalForm) {
+      vm.partner.legalForm = legalForm;
+      onShortNameChange()
+    }
 
-      if (partnerDataWasChanged()) {
-
-        var legalFormName = vm.initialLegalForm.name;
-
-        if (vm.legalFormWasChanged) {
-
-          vm.partner.legalFormId = vm.selectedLegalForm.id;
-          legalFormName = vm.selectedLegalForm.name;
-
-        }
-
-        if (vm.nameWasChanged) {
-          vm.partner.name = legalFormName + ' "' + vm.name + '"';
-        }
-
-        if (vm.innWasChanged) {
-          vm.partner.inn = vm.inn;
-        }
-
-        return savePartner();
-
-      }
-
+    function partnerDataWasChanged() {
+      return vm.partner && Partner.hasChanges(vm.partner);
     }
 
     function savePartner() {
@@ -120,7 +80,10 @@
     function submit() {
 
       _.result($window.document, 'activeElement.blur');
-      return saveNewData();
+
+      if (partnerDataWasChanged()) {
+        savePartner();
+      }
 
     }
 
@@ -134,7 +97,12 @@
 
     }
 
+    function revertChanges() {
+      Partner.revert(vm.partner);
+    }
+
     function cancelConfirm() {
+      revertChanges();
       quit();
     }
 
@@ -142,11 +110,11 @@
       return $state.go('^.partner', {id: vm.partner.id});
     }
 
+    $scope.$on('$destroy', revertChanges);
 
   }
 
   angular.module('webPage')
     .controller('EditPartnerController', EditPartnerController);
 
-})
-();
+})();
