@@ -64,8 +64,8 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
           p(ng-message="pattern") ИНН: 10 или 12 цифр
           p(ng-message="innInput") Неверная контрольная сумма
     hr
-    .col-sm-4.col-sm-offset-8
-      sab-confirm-buttons.form-group.text-right(
+    .form-group.text-right
+      sab-confirm-buttons.col-sm-4.col-sm-offset-8.col-xs-12(
       submit-disable='!vm.partnerDataWasChanged() || editPartnerForm.$invalid'
       form='editPartnerForm'
       on-cancel='vm.cancel'

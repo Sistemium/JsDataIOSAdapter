@@ -37,8 +37,8 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         autocomplete="off"
         )
     hr
-    .col-sm-4.col-sm-offset-8
-      sab-confirm-buttons.form-group.text-right(
+    .form-group.text-right
+      sab-confirm-buttons.col-sm-4.col-sm-offset-8.col-xs-12(
       submit-disable='!vm.outletDataWasChanged() || editOutletForm.$invalid'
       form='editOutletForm'
       on-cancel='vm.cancel'
