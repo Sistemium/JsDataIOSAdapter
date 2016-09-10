@@ -33,10 +33,10 @@
     div(
     ng-show='vm.shouldConfirmUpdateLocation'
     )
-      button.btn.btn-success(
-      ng-click='vm.confirmLocationYesClick($event)'
-      ) Сохранить
       button.btn.btn-warning(
       ng-click='vm.confirmLocationNoClick($event)'
       ) Отмена
+      button.btn.btn-primary(
+      ng-click='vm.confirmLocationYesClick($event)'
+      ) Сохранить
 
