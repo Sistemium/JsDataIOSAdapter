@@ -5,6 +5,7 @@
   function AddOutletController($state, ConfirmModal, Schema, saEtc, LocationHelper) {
 
     var vm = this;
+    const locationMinAccuracy = 100;
 
     _.assign(vm, {
 
@@ -35,7 +36,7 @@
 
     function checkLocation() {
 
-      return LocationHelper.getLocation(100, null, 'Outlet')
+      return LocationHelper.getLocation(locationMinAccuracy, null, 'Outlet')
         .then((data) => {
 
           vm.busyMessage = 'Загрузка данных…';
