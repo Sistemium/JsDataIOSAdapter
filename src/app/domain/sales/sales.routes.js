@@ -97,7 +97,11 @@
 
         templateUrl: 'app/domain/sales/views/editPartner.html',
         controller: 'EditPartnerController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+
+        data: {
+          hideNavs: true
+        }
 
       };
 
@@ -136,7 +140,11 @@
 
         templateUrl: 'app/domain/sales/views/editOutlet.html',
         controller: 'EditOutletController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+
+        data: {
+          hideNavs: true
+        }
 
       };
 
