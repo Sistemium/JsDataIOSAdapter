@@ -18,7 +18,6 @@
 
       submit,
       cancel,
-      cancelConfirm,
       selectPartner,
       addPartnerBtnClick,
       addPartnerFieldsCheck
@@ -92,17 +91,7 @@
 
     }
 
-    function cancel(form) {
-
-      if (form.$pristine) {
-        quit();
-      } else {
-        vm.isInCancelProcess = true;
-      }
-
-    }
-
-    function cancelConfirm() {
+    function cancel() {
       cleanUp();
       quit();
     }
