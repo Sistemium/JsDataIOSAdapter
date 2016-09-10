@@ -31,7 +31,7 @@
 
       computed: {
         shortName: ['name',function (name) {
-          var match = name.match(/"([^"]*[^ "]*)"/);
+          var match = name.match(/"([^"]*[^ ])"/) || name.match(/"([^"]*[^ "]*)"/);
           return match ? match[1] : name;
         }]
       }
