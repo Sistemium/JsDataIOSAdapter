@@ -60,12 +60,8 @@
             },
 
             deleteItem: function () {
-              if (!me.confirmationMode) {
-                me.confirmationMode = true;
-              } else {
-                me.busy = me.deleteDelegate()
-                  .then(me.cancel);
-              }
+              me.busy = me.deleteDelegate()
+                .then(me.cancel);
             }
 
           }, config));

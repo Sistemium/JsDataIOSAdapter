@@ -10,12 +10,10 @@
   .text-center
     img(ng-if='vm.src' ng-src='{{ vm.src }}' style='max-width: 100%; max-height: 500px;')
 .modal-footer
-
-  button.btn.btn-warning(
-  ng-click='vm.deleteItem()'
-  ng-if='vm.deleteDelegate'
-  ng-class='vm.confirmationMode ? "btn-danger" : "btn-warning"'
+  sab-confirm-buttons(
+  submit-disable='false'
+  on-cancel='vm.deleteItem'
+  on-submit='vm.submit'
+  submit-label='Готово'
+  cancel-label='{{vm.deleteDelegate ? "Удалить" : ""}}'
   )
-    | {{ vm.confirmationMode ? 'Да, удалить' : 'Удалить' }}
-  = ' '
-  button.btn.btn-primary(ng-click='vm.submit()') Закрыть
