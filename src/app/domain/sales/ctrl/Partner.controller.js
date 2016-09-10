@@ -10,6 +10,7 @@
 
       partner: null,
       outlets: [],
+      outletLastVisitDate: {},
 
       deletePartnerClick,
       editPartnerClick,
@@ -35,22 +36,17 @@
 
       vm.busy = Partner.find($state.params.id)
         .then((partner) => {
-
           vm.partner = partner;
-
-          return Outlet.findAllWithRelations({partnerId: vm.partner.id}, {bypassCache: true})('Visit')
-            .then((outlets) => {
+          return Outlet.findAllWithRelations({partnerId: partner.id}, {bypassCache: true})('Visit')
+            .then(outlets => {
 
               vm.outlets = outlets;
-              _.each(vm.outlets, (o) => {
 
-                var lastVisit = _.last(_.sortBy(o.visits, 'deviceCts'));
-                o.lastVisitDate = lastVisit ? lastVisit.deviceCts : '';
-
+              _.each(outlets, o => {
+                vm.outletLastVisitDate [o.id] = _.get(_.last(_.sortBy(o.visits, 'deviceCts')), 'deviceCts') || '';
               });
 
             });
-
         });
 
     }

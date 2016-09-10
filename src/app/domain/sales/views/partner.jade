@@ -46,5 +46,5 @@ section.ui-view
         )
           td {{ outlet.address }}
           td.number {{ outlet.visits.length | number: 0 }}
-          td.number {{ outlet.lastVisitDate | amUtc | amLocal | amCalendar }}
+          td.number {{ vm.outletLastVisitDate[outlet.id] | amUtc | amLocal | amCalendar }}
     hr.clear-both
