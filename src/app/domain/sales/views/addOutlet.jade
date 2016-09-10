@@ -34,21 +34,21 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
 
         stm-typeahead(ng-if='!vm.isInCreatingPartnerProcess'
-          input-required='true'
-          input-model='vm.name'
-          selected-model='vm.selectedPartner'
-          add-button-click-fn='vm.addPartnerBtnClick'
-          input-id='inputName'
-          input-class='form-control'
-          input-editable='{{!vm.haveFixedPartner}}'
-          trim-enabled='false'
-          placeholder='Название контрагента'
-          placeholder-focused='Выберите или напишите новое название'
-          rows-data='vm.partners'
-          rows-filters='filter:{shortName:$viewValue}'
-          row-as='name'
-          on-select-item-fn='vm.selectPartner'
-          )
+        input-required='true'
+        input-model='vm.name'
+        selected-model='vm.selectedPartner'
+        add-button-click-fn='vm.addPartnerBtnClick'
+        input-id='inputName'
+        input-class='form-control'
+        input-editable='{{!vm.haveFixedPartner}}'
+        trim-enabled='false'
+        placeholder='Название контрагента'
+        placeholder-focused='Выберите или напишите новое название'
+        rows-data='vm.partners'
+        rows-filters='filter:{shortName:$viewValue}'
+        row-as='name'
+        on-select-item-fn='vm.selectPartner'
+        )
 
     .form-group(ng-if='vm.isInCreatingPartnerProcess')
       label.col-sm-4.control-label(for="inputLegalForm") Форма собственности
