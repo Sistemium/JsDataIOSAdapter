@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, ConfirmModal, Schema, $window, LocationHelper, $timeout) {
+  function AddOutletController($state, ConfirmModal, Schema, saEtc, LocationHelper) {
 
     var vm = this;
 
@@ -86,7 +86,7 @@
 
     function submit() {
 
-      _.result($window.document, 'activeElement.blur');
+      saEtc.blurActive();
       return saveNewData();
 
     }
@@ -115,12 +115,7 @@
 
       vm.name = name;
 
-      $timeout(function() {
-
-        var element = $window.document.getElementById('inputName');
-        if (element) element.focus();
-
-      });
+      saEtc.focusElementById('inputName');
 
     }
 
