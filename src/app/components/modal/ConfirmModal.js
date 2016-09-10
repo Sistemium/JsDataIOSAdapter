@@ -4,6 +4,19 @@
 
   function ConfirmModal($uibModal) {
 
+    function showErrorAskRepeat(onSuccess, onError) {
+      return (err) => {
+        return show({
+          text: err.text || err,
+          question: 'Повторить попытку',
+          textClass: 'text-danger',
+          title: 'Ошибка!'
+        },{
+          windowClass: 'modal-warning'
+        }).then(onSuccess, onError);
+      };
+    }
+
     function show(config, modalConfig) {
 
       var modalInstance = $uibModal.open(angular.extend({
@@ -85,7 +98,8 @@
     }
 
     return {
-      show: show
+      show,
+      showErrorAskRepeat
     };
 
   }
