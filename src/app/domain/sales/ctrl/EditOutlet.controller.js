@@ -2,7 +2,7 @@
 
 (function () {
 
-  function EditOutletController(Schema, $state, $window, $scope, ConfirmModal) {
+  function EditOutletController(Schema, $state, saEtc, $scope, ConfirmModal) {
 
     var vm = this;
 
@@ -63,7 +63,7 @@
 
     function submit() {
 
-      _.result($window.document, 'activeElement.blur');
+      saEtc.blurActive();
 
       if (outletDataWasChanged()) {
         saveOutlet();

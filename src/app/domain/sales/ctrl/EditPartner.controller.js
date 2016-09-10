@@ -2,7 +2,7 @@
 
 (function () {
 
-  function EditPartnerController(Schema, $state, $window, $scope, ConfirmModal) {
+  function EditPartnerController(Schema, $state, saEtc, $scope, ConfirmModal) {
 
     var vm = this;
 
@@ -67,7 +67,7 @@
 
     function submit() {
 
-      _.result($window.document, 'activeElement.blur');
+      saEtc.blurActive();
 
       if (partnerDataWasChanged()) {
         savePartner();
