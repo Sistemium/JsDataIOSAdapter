@@ -2,7 +2,7 @@
 
 (function () {
 
-  function EditOutletController(Schema, $state, $window, ConfirmModal) {
+  function EditOutletController(Schema, $state, $window, $scope, ConfirmModal) {
 
     var vm = this;
 
@@ -13,13 +13,6 @@
       outlet: null,
       partner: null,
       partners: [],
-      initialPartner: null,
-      selectedPartner: null,
-      isInCancelProcess: false,
-      partnerWasChanged: false,
-      addressWasChanged: false,
-
-      address: '',
 
       selectPartner,
       outletDataWasChanged,
@@ -34,59 +27,29 @@
 
     findOutlet();
 
+    Partner.bindAll({
+      orderBy: ['shortName', 'name']
+    }, $scope, 'vm.partners');
+
     function findOutlet() {
 
       vm.busyMessage = 'Загрузка точки…';
 
       vm.busy = Outlet.find($state.params.id)
         .then((outlet) => {
-
           vm.outlet = outlet;
-          vm.address = outlet.address;
-
           return Partner.findAll()
-            .then((partners) => {
-
-              vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
-              vm.partner = _.find(partners, {id: outlet.partnerId});
-              vm.initialPartner = vm.partner;
-              vm.selectedPartner = vm.partner;
-
-            });
-
+            .then(() => vm.partner = outlet.partner);
         });
 
     }
 
     function selectPartner(partner) {
-      vm.selectedPartner = partner;
+      vm.outlet.partner = partner;
     }
 
     function outletDataWasChanged() {
-
-      vm.partnerWasChanged = vm.initialPartner !== vm.selectedPartner;
-      vm.addressWasChanged = vm.outlet && vm.outlet.address !== vm.address;
-
-      return vm.partnerWasChanged || vm.addressWasChanged;
-
-    }
-
-    function saveNewData() {
-
-      if (outletDataWasChanged()) {
-
-        if (vm.partnerWasChanged) {
-          vm.outlet.partnerId = vm.selectedPartner.id;
-        }
-
-        if (vm.addressWasChanged) {
-          vm.outlet.address = vm.address;
-        }
-
-        return saveOutlet();
-
-      }
-
+      return vm.outlet && Outlet.hasChanges(vm.outlet);
     }
 
     function saveOutlet() {
@@ -112,7 +75,10 @@
     function submit() {
 
       _.result($window.document, 'activeElement.blur');
-      return saveNewData();
+
+      if (outletDataWasChanged()) {
+        saveOutlet();
+      }
 
     }
 
@@ -126,13 +92,20 @@
 
     }
 
+    function revertChanges() {
+      Outlet.revert(vm.outlet);
+    }
+
     function cancelConfirm() {
+      revertChanges();
       quit();
     }
 
     function quit() {
       return $state.go('^.outlet', {id: vm.outlet.id});
     }
+
+    $scope.$on('$destroy', revertChanges);
 
   }
 
