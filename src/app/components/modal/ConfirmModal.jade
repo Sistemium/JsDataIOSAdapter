@@ -1,12 +1,11 @@
 .modal-header
   h4.modal-title
-    span {{vm.title}}
+    span.title {{vm.title}}
     a(ng-hide='vm.hideCloseButton' href='' ng-click='vm.cancel()')
       i.pull-right.glyphicon.glyphicon-remove
 .modal-body
-  p {{vm.text}}
-  p
-    strong(ng-if='vm.question') {{vm.question}}?
+  p(ng-class='vm.textClass') {{vm.text}}
+  p(ng-class='vm.questionClass' ng-if='vm.question') {{vm.question}}?
 .modal-footer
   button.btn(
   ng-repeat='button in vm.buttons'
