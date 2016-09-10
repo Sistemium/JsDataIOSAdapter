@@ -48,7 +48,7 @@
       },
 
       cancelClick: function () {
-        if (vm.form.$pristine) {
+        if (vm.form && vm.form.$pristine) {
           onCancel()
         } else {
           vm.isInCancelProcess = true;
