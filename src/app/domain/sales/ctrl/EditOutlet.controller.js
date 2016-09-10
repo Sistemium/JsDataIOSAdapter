@@ -57,17 +57,7 @@
 
       vm.busy = Outlet.save(vm.outlet)
         .then(quit)
-        .catch((err) => showSaveErrorAlert(err));
-
-    }
-
-    function showSaveErrorAlert(err) {
-
-      return ConfirmModal.show({
-        text: err,
-        question: 'Повторить попытку'
-      })
-        .then(saveOutlet);
+        .catch(ConfirmModal.showErrorAskRepeat(saveOutlet));
 
     }
 

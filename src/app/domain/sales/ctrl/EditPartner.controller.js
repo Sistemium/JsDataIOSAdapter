@@ -10,7 +10,6 @@
 
       partner: null,
       legalForms: [],
-      isInCancelProcess: false,
 
       partnerDataWasChanged,
       submit,
@@ -62,17 +61,7 @@
 
       vm.busy = Partner.save(vm.partner)
         .then(quit)
-        .catch((err) => showSaveErrorAlert(err));
-
-    }
-
-    function showSaveErrorAlert(err) {
-
-      return ConfirmModal.show({
-        text: err,
-        question: 'Повторить попытку'
-      })
-        .then(savePartner);
+        .catch(ConfirmModal.showErrorAskRepeat(savePartner));
 
     }
 
