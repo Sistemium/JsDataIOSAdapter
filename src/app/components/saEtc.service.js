@@ -2,14 +2,24 @@
 
 (function () {
 
-  function saEtc($window) {
+  function saEtc($window, $timeout) {
 
     function blurActive() {
       return _.result($window.document, 'activeElement.blur');
     }
 
+    function focusElementById(id) {
+      $timeout(function() {
+
+        var element = $window.document.getElementById(id);
+        if (element) element.focus();
+
+      });
+    }
+
     return {
-      blurActive
+      blurActive,
+      focusElementById
     };
 
   }
