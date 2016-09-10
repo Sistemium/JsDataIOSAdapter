@@ -13,7 +13,6 @@
       partners: [],
       legalForms: [],
       isInCreatingPartnerProcess: false,
-      isInCancelProcess: false,
       haveFixedPartner: false,
 
       submit,
@@ -44,7 +43,7 @@
           return startController();
 
         })
-        .catch(showGetLocationErrorAlert);
+        .catch(ConfirmModal.showErrorAskRepeat(checkLocation, quit));
 
     }
 
@@ -132,9 +131,7 @@
 
       vm.busy = saveAll()
         .then(quit)
-        .catch(function (err) {
-          showSaveErrorAlert(err);
-        });
+        .catch(ConfirmModal.showErrorAskRepeat(saveNewData));
 
     }
 
@@ -163,27 +160,6 @@
       location.ownerXid = vm.newOutlet.id;
 
       return vm.newOutlet;
-
-    }
-
-    function showGetLocationErrorAlert(err) {
-
-      return ConfirmModal.show({
-        text: err,
-        question: 'Повторить попытку'
-      })
-        .then(checkLocation)
-        .catch(quit);
-
-    }
-
-    function showSaveErrorAlert(err) {
-
-      return ConfirmModal.show({
-        text: err,
-        question: 'Повторить попытку'
-      })
-        .then(saveNewData);
 
     }
 
