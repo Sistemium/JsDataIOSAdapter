@@ -1,6 +1,6 @@
 fieldset
   button.btn.margin.btn-warning(
-  ng-if='!vm.isInCancelProcess'
+  ng-if='!vm.isInCancelProcess && vm.cancelLabel !== ""'
   ng-click='vm.cancelClick()'
   ) {{ ::vm.cancelLabel }}
   button.btn.margin.btn-warning(
