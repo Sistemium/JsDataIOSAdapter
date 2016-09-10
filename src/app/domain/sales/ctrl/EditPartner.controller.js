@@ -15,7 +15,6 @@
       partnerDataWasChanged,
       submit,
       cancel,
-      cancelConfirm,
       onShortNameChange,
       onLegalFormChange
 
@@ -87,21 +86,11 @@
 
     }
 
-    function cancel(form) {
-
-      if (form.$pristine) {
-        quit();
-      } else {
-        vm.isInCancelProcess = true;
-      }
-
-    }
-
     function revertChanges() {
       Partner.revert(vm.partner);
     }
 
-    function cancelConfirm() {
+    function cancel() {
       revertChanges();
       quit();
     }
