@@ -5,10 +5,10 @@ section(ng-hide='vm.hide')
     span.flex-1
     small.gray.ml-10(ng-if='vm.isRootState && vm.toggleFullScreen')
       a.p-6(href ng-click='vm.toggleFullScreen()' ng-class='{disabled: vm.hideNavs}')
-        i.glyphicon.glyphicon-fullscreen
+        b.glyphicon.glyphicon-fullscreen
 
     small.gray.ml-10
       a.p-6(href ui-sref='home' ng-class='{disabled: vm.hideNavs}')
-        i.glyphicon.glyphicon-home
+        b.glyphicon.glyphicon-home
 
   hr
