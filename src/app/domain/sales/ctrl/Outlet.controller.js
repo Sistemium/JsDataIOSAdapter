@@ -16,14 +16,13 @@
       collapseVisitsSection: false,
       thumbnails: {},
 
-      visitClick: visit => $state.go('.visit', {visitId: visit.id}),
-      mapClick: () => {
-        vm.popover = false;
-      },
+      visitClick: (visit) => $state.go('.visit', {visitId: visit.id}),
+      mapClick: () => vm.popover = false,
 
       refresh,
       newVisitClick,
       deleteOutletClick,
+      editOutletClick,
       takePhoto,
       outletClick,
       thumbnailClick,
@@ -218,10 +217,15 @@
         })
     }
 
+    function editOutletClick() {
+      return $state.go('^.editOutlet', {id: vm.outlet.id});
+    }
+
     refresh();
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.disableNavs = !!_.get(to, 'data.disableNavs') || to.name === rootState;
+      vm.isRootState = (to.name === rootState);
+      vm.disableNavs = !!_.get(to, 'data.disableNavs') || vm.isRootState;
     });
 
   }

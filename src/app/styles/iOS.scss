@@ -82,3 +82,7 @@ body.iOS {
   //  -webkit-overflow-scrolling: touch;
   //}
 }
+
+::-webkit-scrollbar, *::-webkit-scrollbar {
+  display: none;
+}

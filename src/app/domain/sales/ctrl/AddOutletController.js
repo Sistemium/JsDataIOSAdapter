@@ -2,9 +2,10 @@
 
 (function () {
 
-  function AddOutletController($state, $q, $scope, ConfirmModal, Schema, $window, LocationHelper, $timeout) {
+  function AddOutletController($state, ConfirmModal, Schema, saEtc, LocationHelper) {
 
     var vm = this;
+    const locationMinAccuracy = 100;
 
     _.assign(vm, {
 
@@ -13,11 +14,10 @@
       partners: [],
       legalForms: [],
       isInCreatingPartnerProcess: false,
-      isInCancelProcess: false,
+      haveFixedPartner: false,
 
       submit,
       cancel,
-      cancelConfirm,
       selectPartner,
       addPartnerBtnClick,
       addPartnerFieldsCheck
@@ -29,13 +29,14 @@
     var Location = Schema.model('Location');
     var LegalForm = Schema.model('LegalForm');
 
-    checkLocation();
+    vm.haveFixedPartner = angular.isDefined($state.params.id);
+
+    vm.busyMessage = 'Получение геопозиции…';
+    vm.busy = checkLocation();
 
     function checkLocation() {
 
-      vm.busyMessage = 'Получение геопозиции…';
-
-      vm.busy = LocationHelper.getLocation(100, null, 'Outlet')
+      return LocationHelper.getLocation(locationMinAccuracy, null, 'Outlet')
         .then((data) => {
 
           vm.busyMessage = 'Загрузка данных…';
@@ -43,44 +44,54 @@
           return startController();
 
         })
-        .catch(showGetLocationErrorAlert);
+        .catch(ConfirmModal.showErrorAskRepeat(checkLocation, quit));
 
     }
 
     function startController() {
+      return vm.haveFixedPartner ? getFixedPartner() : getPartners();
+    }
 
-      return Partner.findAll()
-        .then(function (partners) {
+    function getFixedPartner() {
 
-          vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
+      return Partner.find($state.params.id)
+        .then((partner) => {
 
-          LegalForm.findAll()
-            .then(function (legalForms) {
-              vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]);
-            });
+          vm.name = partner;
+          selectPartner(partner);
+          return getLegalForms();
 
         });
 
     }
 
+    function getPartners() {
+
+      return Partner.findAll()
+        .then((partners) => {
+
+          vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
+          return getLegalForms();
+
+        });
+
+    }
+
+    function getLegalForms() {
+
+      return LegalForm.findAll()
+        .then((legalForms) => vm.legalForms = _.sortBy(legalForms, (lf) => [lf.ord, _.toLower(lf.name)]));
+
+    }
+
     function submit() {
 
-      _.result($window.document, 'activeElement.blur');
+      saEtc.blurActive();
       return saveNewData();
 
     }
 
-    function cancel(form) {
-
-      if (form.$pristine) {
-        quit();
-      } else {
-        vm.isInCancelProcess = true;
-      }
-
-    }
-
-    function cancelConfirm() {
+    function cancel() {
       cleanUp();
       quit();
     }
@@ -104,12 +115,7 @@
 
       vm.name = name;
 
-      $timeout(function() {
-
-        var element = $window.document.getElementById('inputName');
-        if (element) element.focus();
-
-      });
+      saEtc.focusElementById('inputName');
 
     }
 
@@ -126,9 +132,7 @@
 
       vm.busy = saveAll()
         .then(quit)
-        .catch(function (err) {
-          showSaveErrorAlert(err);
-        });
+        .catch(ConfirmModal.showErrorAskRepeat(saveNewData));
 
     }
 
@@ -160,37 +164,16 @@
 
     }
 
-    function showGetLocationErrorAlert(err) {
-
-      return ConfirmModal.show({
-        text: err,
-        question: 'Повторить попытку'
-      })
-        .then(checkLocation)
-        .catch(quit);
-
-    }
-
-    function showSaveErrorAlert(err) {
-
-      return ConfirmModal.show({
-        text: err,
-        question: 'Повторить попытку'
-      })
-        .then(saveNewData);
-
-    }
-
     function selectPartner(partner) {
-
       vm.selectedPartner = partner;
-
     }
 
     function cleanUp() {
-      vm.newOutlet && Outlet.eject(vm.newOutlet);
+
+      vm.newOutlet && Outlet.eject(vm.newOutlet) && delete vm.newOutlet;
       vm.newPartner && Partner.eject(vm.newPartner);
       vm.newLocation && Location.eject(vm.newLocation);
+
     }
 
     function saveAll() {
@@ -198,20 +181,20 @@
       if (vm.newPartner) {
 
         return Partner.save(vm.newPartner)
-          .then(()=>Outlet.save(vm.newOutlet))
-          .then(()=>Location.save(vm.newLocation));
+          .then(() => Outlet.save(vm.newOutlet))
+          .then(() => Location.save(vm.newLocation));
 
       } else {
 
         return Outlet.save(vm.newOutlet)
-          .then(()=>Location.save(vm.newLocation));
+          .then(() => Location.save(vm.newLocation));
 
       }
 
     }
 
     function quit() {
-      return vm.newOutlet ? $state.go('^.outlet', {id: vm.newOutlet.id}) : $state.go('^');
+      return vm.newOutlet ? $state.go('sales.territory.outlet', {id: vm.newOutlet.id}) : $state.go('^');
     }
 
   }

@@ -19,7 +19,9 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
     .form-group
       label.col-sm-4.control-label(for="inputName")
         | {{ vm.isInCreatingPartnerProcess ? 'Новый контрагент' : 'Контрагент' }}
-      .col-sm-8
+      fieldset.col-sm-8(
+      ng-disabled='vm.haveFixedPartner'
+      )
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
         ng-model='vm.name'
@@ -32,21 +34,21 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
 
         stm-typeahead(ng-if='!vm.isInCreatingPartnerProcess'
-          input-required='true'
-          input-model='vm.name'
-          selected-model='vm.selectedPartner'
-          add-button-click-fn='vm.addPartnerBtnClick'
-          input-id='inputName'
-          input-class='form-control'
-          input-editable
-          trim-enabled='false'
-          placeholder='Название контрагента'
-          placeholder-focused='Выберите или напишите новое название'
-          rows-data='vm.partners'
-          rows-filters='filter:{shortName:$viewValue}'
-          row-as='name'
-          on-select-item-fn='vm.selectPartner'
-          )
+        input-required='true'
+        input-model='vm.name'
+        selected-model='vm.selectedPartner'
+        add-button-click-fn='vm.addPartnerBtnClick'
+        input-id='inputName'
+        input-class='form-control'
+        input-editable='{{!vm.haveFixedPartner}}'
+        trim-enabled='false'
+        placeholder='Название контрагента'
+        placeholder-focused='Выберите или напишите новое название'
+        rows-data='vm.partners'
+        rows-filters='filter:{shortName:$viewValue}'
+        row-as='name'
+        on-select-item-fn='vm.selectPartner'
+        )
 
     .form-group(ng-if='vm.isInCreatingPartnerProcess')
       label.col-sm-4.control-label(for="inputLegalForm") Форма собственности
@@ -101,23 +103,10 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
 
     hr
 
-    .col-sm-4.col-sm-offset-8
-      .form-group.text-right
-        fieldset
-          button.btn.margin.btn-primary(
-          ng-if='!vm.isInCancelProcess'
-          ng-disabled='addOutletForm.$invalid || !vm.address'
-          ng-click='vm.submit()'
-          ) Сохранить
-          button.btn.margin.btn-warning(
-          ng-if='!vm.isInCancelProcess'
-          ng-click='vm.cancel(addOutletForm)'
-          ) Отменить
-          button.btn.margin.btn-primary(
-          ng-if='vm.isInCancelProcess'
-          ng-click='vm.cancelConfirm()'
-          ) Да, отменить
-          button.btn.margin.btn-warning(
-          ng-if='vm.isInCancelProcess'
-          ng-click='vm.isInCancelProcess = false'
-          ) Нет
+    .form-group.text-right
+      sab-confirm-buttons.col-sm-4.col-sm-offset-8.col-xs-12(
+      submit-disable='addOutletForm.$invalid || !vm.address'
+      form='addOutletForm'
+      on-cancel='vm.cancel'
+      on-submit='vm.submit'
+      )

@@ -5,6 +5,19 @@
   function SalesTerritoryController(Schema, $q, $state, SalesmanAuth, $scope) {
 
     var vm = this;
+
+    _.assign(vm, {
+
+      refresh,
+      partnerClick,
+      outletClick,
+      addOutletClick,
+      hashClick,
+
+      filter: (partner) => !vm.currentHash || partner.shortName.match(new RegExp('^' + vm.currentHash, 'i'))
+
+    });
+
     var Outlet = Schema.model('Outlet');
     var Partner = Schema.model('Partner');
     var SM = Schema.model('Salesman');
@@ -20,6 +33,12 @@
 
     Partner.bindAll(false, $scope, 'vm.partners', setupHash);
 
+    vm.refresh();
+
+    $scope.$on('rootClick', () => $state.go('sales.territory'));
+
+    $scope.$on('$stateChangeSuccess', (e, to) =>  vm.hideHashes = (to.name !== rootState));
+
     function refresh() {
 
       vm.busy = $q.all([
@@ -29,26 +48,26 @@
       ]);
     }
 
-    function addOutletClick() {
-      $state.go('.addOutlet');
+    function partnerClick(partner) {
+      $state.go('.partner', {id: partner.id});
     }
 
     function outletClick(outlet) {
       $state.go('.outlet', {id: outlet.id});
     }
 
+    function addOutletClick() {
+      $state.go('.addOutlet');
+    }
+
     function hashButtons(hash) {
       var hashRe = new RegExp('^' + _.escapeRegExp(hash), 'i');
 
-      var partners = _.filter(vm.partners, function (p) {
-        return hashRe.test(p.shortName);
-      });
+      var partners = _.filter(vm.partners, (p) => hashRe.test(p.shortName));
 
-      var grouped = _.groupBy(partners, function (p) {
-        return _.upperFirst(p.shortName.substr(0, hash.length + 1).toLowerCase());
-      });
+      var grouped = _.groupBy(partners, (p) => _.upperFirst(p.shortName.substr(0, hash.length + 1).toLowerCase()));
 
-      return _.orderBy(_.map(grouped, function (val, key) {
+      return _.orderBy(_.map(grouped, (val, key) => {
         var b = {
           label: key,
           match: new RegExp('^' + _.escapeRegExp(key), 'i')
@@ -77,29 +96,6 @@
       }
 
     }
-
-    angular.extend(vm, {
-
-      refresh,
-      addOutletClick,
-      outletClick,
-      hashClick,
-
-      filter: function (partner) {
-        return !vm.currentHash || partner.shortName.match(new RegExp('^' + vm.currentHash, 'i'));
-      }
-
-    });
-
-    vm.refresh();
-
-    $scope.$on('rootClick', function () {
-      $state.go('sales.territory');
-    });
-
-    $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.hideHashes = (to.name !== rootState);
-    });
 
   }
 

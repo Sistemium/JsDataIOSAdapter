@@ -1,0 +1,46 @@
+h3 Редактирование точки
+hr
+section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
+  form.form-horizontal(
+  name="editOutletForm"
+  novalidate
+  )
+    .form-group
+      label.col-sm-4.control-label(for="inputPartner")
+        | Контрагент
+      fieldset.col-sm-8(
+      disabled
+      )
+        stm-typeahead(
+        input-required='true'
+        input-model='vm.partner'
+        selected-model='vm.partner'
+        input-id='inputPartner'
+        input-class='form-control'
+        trim-enabled='false'
+        placeholder='Название контрагента'
+        placeholder-focused='Выберите контрагента'
+        rows-data='vm.partners'
+        rows-filters='filter:{shortName:$viewValue}'
+        row-as='name'
+        on-select-item-fn='vm.selectPartner'
+        )
+    .form-group
+      label.col-sm-4.control-label(for="inputAddress") Адрес
+      .col-sm-8
+        input#inputAddress.form-control(
+        type="text"
+        name="address"
+        ng-required='true'
+        placeholder="Улица, дом, вывеска"
+        ng-model="vm.outlet.address"
+        autocomplete="off"
+        )
+    hr
+    .form-group.text-right
+      sab-confirm-buttons.col-sm-4.col-sm-offset-8.col-xs-12(
+      submit-disable='!vm.outletDataWasChanged() || editOutletForm.$invalid'
+      form='editOutletForm'
+      on-cancel='vm.cancel'
+      on-submit='vm.submit'
+      )

@@ -6,6 +6,7 @@
     .config(function (stateHelperProvider) {
 
       var prePreOrders = {
+
         name:'prePreOrders',
         url: '/prePreOrders?state',
 
@@ -27,9 +28,11 @@
             controllerAs: 'vm'
           }
         ]
+
       };
 
       var visit = {
+
         name: 'visit',
         url: '/visit?visitId',
 
@@ -44,10 +47,12 @@
       };
 
       var visitCreate = {
+
         name: 'visitCreate',
         url: '/visitCreate?visitId',
 
         data: {
+          disableNavs: true,
           hideTopBar: false,
           hideNavs: true
         },
@@ -58,17 +63,64 @@
 
       };
 
+      var addOutletToPartner = {
+
+        name: 'addOutletToPartner',
+        url: '/partner/:id/addOutlet',
+
+        data: {
+          hideNavs: true
+        },
+
+        templateUrl: 'app/domain/sales/views/addOutlet.html',
+        controller: 'AddOutletController',
+        controllerAs: 'vm'
+
+      };
+
+      var partner = {
+
+        name: 'partner',
+        url: '/partner/:id',
+
+        templateUrl: 'app/domain/sales/views/partner.html',
+        controller: 'PartnerController',
+        controllerAs: 'vm',
+
+        children: [addOutletToPartner]
+
+      };
+
+      var editPartner = {
+
+        name: 'editPartner',
+        url: '/partner/:id/edit',
+
+        templateUrl: 'app/domain/sales/views/editPartner.html',
+        controller: 'EditPartnerController',
+        controllerAs: 'vm',
+
+        data: {
+          hideNavs: true
+        }
+
+      };
+
       var outlet = {
+
         name: 'outlet',
         url: '/outlet/:id',
+
         templateUrl: 'app/domain/sales/views/outlet.html',
         controller: 'OutletController',
         controllerAs: 'vm',
 
         children: [visit, visitCreate]
+
       };
 
       var addOutlet = {
+
         name: 'addOutlet',
         url: '/addOutlet',
 
@@ -82,7 +134,23 @@
 
       };
 
+      var editOutlet = {
+
+        name: 'editOutlet',
+        url: '/outlet/:id/edit',
+
+        templateUrl: 'app/domain/sales/views/editOutlet.html',
+        controller: 'EditOutletController',
+        controllerAs: 'vm',
+
+        data: {
+          hideNavs: true
+        }
+
+      };
+
       var territory = {
+
         name: 'territory',
         url: '/territory',
 
@@ -97,7 +165,7 @@
           title: 'Клиенты'
         },
 
-        children: [outlet, addOutlet]
+        children: [partner, editPartner, outlet, addOutlet, editOutlet]
 
       };
 

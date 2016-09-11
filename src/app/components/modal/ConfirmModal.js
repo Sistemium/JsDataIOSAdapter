@@ -4,6 +4,19 @@
 
   function ConfirmModal($uibModal) {
 
+    function showErrorAskRepeat(onSuccess, onError) {
+      return (err) => {
+        return show({
+          text: err.text || err,
+          question: 'Повторить попытку',
+          textClass: 'text-danger',
+          title: 'Ошибка!'
+        },{
+          windowClass: 'modal-warning'
+        }).then(onSuccess, onError);
+      };
+    }
+
     function show(config, modalConfig) {
 
       var modalInstance = $uibModal.open(angular.extend({
@@ -60,12 +73,8 @@
             },
 
             deleteItem: function () {
-              if (!me.confirmationMode) {
-                me.confirmationMode = true;
-              } else {
-                me.busy = me.deleteDelegate()
-                  .then(me.cancel);
-              }
+              me.busy = me.deleteDelegate()
+                .then(me.cancel);
             }
 
           }, config));
@@ -89,7 +98,8 @@
     }
 
     return {
-      show: show
+      show,
+      showErrorAskRepeat
     };
 
   }
