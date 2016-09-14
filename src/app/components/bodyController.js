@@ -13,7 +13,7 @@
         return appcache.textStatus;
       };
 
-      appcache.addEventListener('updateready', function () {
+      function onUpdate () {
         toastr.error ('Нажмите, чтобы применить его', 'Получено обновление', {
           timeOut: 0,
           extendedTimeOut: 0,
@@ -21,7 +21,11 @@
             $window.location.reload (true);
           }
         });
-      },true);
+      }
+
+      $window.stmAppCacheUpdated = onUpdate;
+
+      appcache.addEventListener('updateready', onUpdate, true);
 
     });
 
