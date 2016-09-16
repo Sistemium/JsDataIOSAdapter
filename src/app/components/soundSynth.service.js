@@ -22,7 +22,7 @@
 
     IOS.getDevicePlatform().then(function (devicePlatform) {
       if (/iPhone/.test(devicePlatform)) {
-        rate = 0.2;
+        // rate = 0.2;
       }
     });
 
