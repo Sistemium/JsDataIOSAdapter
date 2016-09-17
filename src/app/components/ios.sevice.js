@@ -125,11 +125,13 @@
 
     }
 
+    function getRoles () {
+      return message('roles');
+    }
+
     var me = {
 
-      getRoles: function () {
-        return message('roles');
-      }
+      getRoles
 
     };
 
@@ -139,15 +141,14 @@
 
     return {
 
-      init: init,
-
-      isIos: isIos,
-
-      handler: handler,
-      checkIn: checkIn,
-      getPicture: getPicture,
-      takePhoto: takePhoto,
-      getDevicePlatform: getDevicePlatform
+      init,
+      isIos,
+      handler,
+      checkIn,
+      takePhoto,
+      getPicture,
+      getDevicePlatform,
+      getRoles
 
     };
 

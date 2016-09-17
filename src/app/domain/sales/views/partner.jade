@@ -1,4 +1,4 @@
-h3.pull-left.max-width-75p(
+h3.pull-left(
 ng-if='vm.disableNavs'
 )
   span {{ vm.partner.name }}
@@ -30,7 +30,7 @@ section.ui-view
     button.btn.ml-em.btn-success.pull-right.btn-sm(
     ng-click='vm.newOutletClick()'
     ) Новая точка
-    table.table.table-striped.clear-both(
+    table.table.table-striped.clear-both.table-hover(
     ng-hide='vm.collapseOutletsSection || !vm.outlets.length'
     )
       thead
