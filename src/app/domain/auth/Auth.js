@@ -114,33 +114,14 @@
 
     });
 
-    var onAuthenticated = $rootScope.$on('authenticated', function (event, res) {
+    $rootScope.$on('authenticated', function (event, res) {
       console.log ('authenticated', res);
       setRoles(res);
       if (resolveRoles) {
         resolveRoles (roles);
       }
       $window.localStorage.setItem('authorization', res.accessToken);
-      sockAuth();
     });
-
-    $rootScope.$on('$destroy', function () {
-      needAuth();
-      onAuthenticated();
-    });
-
-    var sockAuth = function () {
-      var accessToken = getAccessToken();
-      if (!accessToken) {
-        return;
-      }
-      Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
-        DEBUG('Socket authorization:', ack);
-        $rootScope.$broadcast ('socket:authorized');
-      });
-    };
-
-    Sockets.on('connect', sockAuth);
 
     return angular.extend(me, {
 
@@ -160,7 +141,9 @@
         return true;
       },
 
-      init: init,
+      init,
+
+      getAccessToken,
 
       roles: function() {
         return roles && roles.roles;
