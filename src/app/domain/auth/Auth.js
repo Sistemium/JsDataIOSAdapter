@@ -4,8 +4,6 @@
 
   angular.module('core.services').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS, PickerAuth) {
 
-    var DEBUG = debug ('stg:Auth');
-
     var me = this;
 
     var roles;
@@ -89,7 +87,7 @@
 
     }
 
-    var needAuth = $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
+    $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
       if (!roles) {
         if (next.name !== 'auth') {
