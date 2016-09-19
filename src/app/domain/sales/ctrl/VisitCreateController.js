@@ -69,11 +69,11 @@
       vm.locating = true;
       vm.busyMessage = 'Получение геопозиции…';
 
-      return LocationHelper.getLocation(100, _.get(vm, 'visit.id'), 'Visit').then(function (res) {
-        vm.locating = false;
-        return Location.inject(res);
-      })
-        .finally(()=> delete vm.busyMessage);
+      return LocationHelper.getLocation(100, _.get(vm, 'visit.id'), 'Visit')
+        .then(function (res) {
+          vm.locating = false;
+          return Location.inject(res);
+        });
 
     }
 
@@ -82,7 +82,7 @@
     }
 
     function goBack() {
-        $state.go('^');
+      $state.go('^');
     }
 
     function changeAnswer(qst, data) {
@@ -201,7 +201,6 @@
         return (vm[name] = data);
       };
     };
-
 
 
     if (visitId) {
