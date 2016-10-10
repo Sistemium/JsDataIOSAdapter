@@ -4,6 +4,12 @@
 
   function ConfirmModal($uibModal) {
 
+    return {
+      show,
+      showErrorAskRepeat,
+      showMessageAskRepeat
+    };
+
     function showErrorAskRepeat(onSuccess, onError) {
       return (err) => {
         return showMessageAskRepeat(err, onSuccess, onError);
@@ -93,16 +99,9 @@
 
     }
 
-    return {
-      show,
-      showErrorAskRepeat,
-      showMessageAskRepeat
-    };
-
   }
 
   angular.module('sistemiumBootstrap')
-    .service('ConfirmModal', ConfirmModal)
-  ;
+    .service('ConfirmModal', ConfirmModal);
 
 })();
