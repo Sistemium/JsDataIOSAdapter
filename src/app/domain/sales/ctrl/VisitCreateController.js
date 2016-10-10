@@ -2,6 +2,8 @@
 
 (function () {
 
+  const REQUIRED_ACCURACY = 100;
+
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper) {
 
     var vm = this;
@@ -92,20 +94,18 @@
       vm.locating = true;
       vm.busyMessage = 'Получение геопозиции…';
 
-      var accuracy = 100;
-
-      return LocationHelper.getLocation(accuracy, _.get(vm, 'visit.id'), 'Visit')
+      return LocationHelper.getLocation(REQUIRED_ACCURACY, _.get(vm, 'visit.id'), 'Visit')
         .then(function (location) {
 
           vm.locating = false;
 
-          if (location.horizontalAccuracy <= accuracy) {
+          if (location.horizontalAccuracy <= REQUIRED_ACCURACY) {
 
             return Location.inject(location);
 
           } else {
 
-            var message = 'Требуемая точность — ' + accuracy + 'м. ';
+            var message = 'Требуемая точность — ' + REQUIRED_ACCURACY + 'м. ';
             message += 'Достигнутая точность — ' + location.horizontalAccuracy + 'м.';
             return ConfirmModal.showMessageAskRepeat(message, getLocation, $q.reject());
 
