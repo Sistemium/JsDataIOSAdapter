@@ -245,8 +245,22 @@
               });
 
               vm.answers = _.mapValues(answersByQuestion, function (ans) {
-                return _.get(ans, 'question.dataType.code') === 'date' && ans.data ?
-                  moment(ans.data, 'YYYY-MM-DD').toDate() : ans.data;
+
+                if (!ans.data) {
+                  return ans.data;
+                }
+
+                switch (_.get(ans, 'question.dataType.code')) {
+                  case 'date': {
+                    return moment(ans.data, 'YYYY-MM-DD').toDate();
+                  }
+                  case 'boolean': {
+                    return (ans.data == '1');
+                  }
+                }
+
+                return ans.data;
+
               });
 
             });
