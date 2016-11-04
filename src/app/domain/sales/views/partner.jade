@@ -19,10 +19,8 @@ section.ui-view
   hr.clear-both
   .header-button
     h4.pull-left
-      a(
+      span(
       ng-class='{disabled: !vm.outlets.length}'
-      href
-      ng-click='vm.toggleOutletsSection()'
       ) Точки
         span(
         ng-if='vm.outlets.length'

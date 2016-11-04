@@ -38,8 +38,7 @@ section.ui-view
 
   .header-button
     h4.pull-left
-      a(ng-class='{disabled: !vm.visits.length}' href ng-click='vm.toggleVisitsSection()') Визиты
-        span(ng-if='vm.visits.length') &nbsp({{vm.visits.length}})
+      span Визиты
 
     button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
 
