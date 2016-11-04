@@ -42,7 +42,8 @@ section.ui-view
         ng-repeat='outlet in vm.outlets | orderBy:"address" track by outlet.id'
         ng-click='vm.outletClick(outlet)'
         )
-          td {{ outlet.address }}
+          td
+            a {{ outlet.address }}
           td.number {{ outlet.visits.length | number: 0 }}
           td.number {{ vm.outletLastVisitDate[outlet.id] | amUtc | amLocal | amCalendar }}
     hr.clear-both
