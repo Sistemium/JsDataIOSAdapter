@@ -19,14 +19,14 @@ ng-hide='vm.hideHashes'
 
 hr(ng-hide='vm.hideHashes')
 
-.ui-view(resize)
+.territory.ui-view(resize)
 
   section#scroll-main(
   style='height: {{windowHeight - offsetTop - 5}}px;'
   )
     section(ng-repeat='p in vm.partners | orderBy:["shortName", "name"] | filter:vm.filter track by p.id')
       h5
-        a.lead(href ng-click='vm.partnerClick(p)') {{ p.name }}
+        a.lead(href ng-click='vm.partnerClick(p)') {{ p.shortName }}
 
       p.text-right(ng-repeat='o in p.outlets | orderBy:"address"')
         a.green(ng-if='o.locationId')
