@@ -1,14 +1,16 @@
-section.text-center.scroll-horizontal(
+section.text-center.scroll-horizontal.hashes(
 style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}'
 ng-hide='vm.hideHashes'
 )
-  button.btn.btn-default.margin.green(ng-click='vm.addOutletClick()')
+  button.btn.btn-success.margin(ng-click='vm.addOutletClick()')
     i.glyphicon.glyphicon-plus
+
   button.btn.margin(
   ng-repeat-start='btn in vm.hashButtons track by btn.label'
   ng-click='vm.hashClick(btn)'
   ng-class='btn.match.test(vm.currentHash) ? "btn-primary" : "btn-default"'
   ) {{ btn.label }}
+
   button.btn.margin(
   ng-repeat-end
   ng-repeat='subbtn in btn.buttons track by subbtn.label'
