@@ -38,7 +38,12 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         )
     hr
     .form-group.text-right
-      sab-confirm-buttons.col-sm-4.col-sm-offset-8.col-xs-12(
+      .col-sm-1.col-xs-2
+        button.btn.btn-danger(
+        ng-click='vm.deleteOutletClick()'
+        )
+          i.glyphicon.glyphicon-trash
+      sab-confirm-buttons.col-sm-4.col-sm-offset-7.col-xs-10(
       submit-disable='!vm.outletDataWasChanged() || editOutletForm.$invalid'
       form='editOutletForm'
       on-cancel='vm.cancel'

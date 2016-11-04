@@ -21,7 +21,6 @@
 
       refresh,
       newVisitClick,
-      deleteOutletClick,
       editOutletClick,
       takePhoto,
       outletClick,
@@ -201,20 +200,6 @@
         hintContent: moment(location.deviceCts + ' Z').format('HH:mm')
       })];
 
-    }
-
-    function quit() {
-      return $state.go('^');
-    }
-
-    function deleteOutletClick() {
-      ConfirmModal.show({
-        text: `Действительно удалить запись о точке ${vm.outlet.name} (${vm.outlet.address})?`
-      })
-        .then(function () {
-          Outlet.destroy(stateFilter)
-            .then(quit);
-        })
     }
 
     function editOutletClick() {
