@@ -169,6 +169,22 @@
 
       };
 
+      var visits = {
+
+          name: 'visits',
+          url: '/visits',
+
+          templateUrl: 'app/domain/sales/views/visits.html',
+
+          data: {
+              needCurrent: 'Salesman',
+              needRole: 'salesman',
+              // hideTopBar: true,
+              title: 'Визиты'
+          }
+
+      };
+
       stateHelperProvider
         .state({
 
@@ -180,7 +196,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [territory, prePreOrders]
+          children: [territory, prePreOrders, visits]
 
         })
       ;
