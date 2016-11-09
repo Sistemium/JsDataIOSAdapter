@@ -20,8 +20,12 @@
               state: 'picker',
               needRoles: 'picker'
             },{
-              title: 'Визиты',
+              title: 'Клиенты',
               state: 'sales.territory',
+              needRoles: 'salesman'
+            },{
+              title: 'Визиты',
+              state: 'sales.visits',
               needRoles: 'salesman'
             },{
               title: 'Фотопоток',
