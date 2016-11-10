@@ -53,6 +53,8 @@
 
         function selectPreviousDay() {
 
+            if (!previousDayAvailable()) return;
+
             var previousDay = vm.selectedDate;
             previousDay.setDate(previousDay.getDate() - 1);
             vm.selectedDate = new Date(previousDay);
@@ -60,12 +62,12 @@
         }
 
         function previousDayAvailable() {
-            return (vm.selectedDate < new Date());
+            return (vm.selectedDate > minDate().setDate(minDate().getDate() + 1));
         }
 
         function selectNextDay() {
 
-            if (!nextDayAvailable) return;
+            if (!nextDayAvailable()) return;
 
             var nextDay = vm.selectedDate;
             nextDay.setDate(nextDay.getDate() + 1);
@@ -74,11 +76,16 @@
         }
 
         function nextDayAvailable() {
-            return (vm.selectedDate < new Date());
+            return (vm.selectedDate < maxDate());
         }
 
         function maxDate() {
-            return new Date();
+
+            var maxDate = new Date();
+            maxDate.setHours(0,0,0,0);
+
+            return maxDate;
+
         }
 
         function minDate() {
@@ -88,7 +95,10 @@
             var firstVisitDate = _.get(_.first(_.sortBy(vm.visits, 'deviceCts')), 'deviceCts');
             firstVisitDate = _.truncate(firstVisitDate, {'separator':' ', length: '10', omission: ''});
 
-            return new Date(firstVisitDate);
+            var minDate = new Date(firstVisitDate);
+            minDate.setHours(0,0,0,0);
+
+            return minDate;
 
         }
 
