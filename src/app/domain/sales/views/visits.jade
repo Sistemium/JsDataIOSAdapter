@@ -38,3 +38,18 @@ section.ui-view(cg-busy='vm.busy')
                         i.glyphicon.glyphicon-chevron-right
 
         hr.clear-both
+
+    table.table.table-striped.clear-both.table-hover(ng-if='vm.selectedDayVisits.length')
+        thead
+            tr
+                th Дата
+                th.number Фото
+                th.number Ответы
+        tbody
+            tr.clickable(
+            ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
+            ng-click='vm.visitClick(visit)'
+            )
+                td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
+                td.number {{ visit.photos.length | number: 0 }}
+                td.number {{ visit.answers.length | number: 0 }}

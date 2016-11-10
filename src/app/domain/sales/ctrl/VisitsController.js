@@ -9,6 +9,7 @@
         _.assign(vm, {
 
             visits: [],
+            selectedDayVisits: [],
 
             selectedDate: new Date(),
             selectPreviousDay,
@@ -31,6 +32,8 @@
                 vm.selectedDate = new Date();
             }
 
+            filterVisitsBySelectedDate();
+
         });
 
         findVisits();
@@ -47,6 +50,7 @@
                     vm.visits = visits;
                     vm.datepickerOptions = datepickerOptions();
                     markDaysWithVisits();
+                    filterVisitsBySelectedDate();
 
                 });
 
@@ -55,10 +59,8 @@
         function markDaysWithVisits() {
 
             var visitDays = _.map(vm.visits, (visit) => {
-                return _.truncate(_.get(visit, 'deviceCts'), {'separator':' ', length: '10', omission: ''})
+                return _.truncate(_.get(visit, 'deviceCts'), {'separator':' ', length: '10', omission: ''});
             });
-
-            console.log(_.uniq(visitDays));
 
             vm.events = [{
                 date: maxDate(),
@@ -76,6 +78,23 @@
 
         }
 
+        function filterVisitsBySelectedDate() {
+
+            vm.selectedDayVisits = _.filter(vm.visits, (visit) => {
+
+                var dateToCompare = vm.selectedDate;
+                dateToCompare.setHours(0,0,0,0);
+
+                var visitDate = _.truncate(_.get(visit, 'deviceCts'), {'separator':' ', length: '10', omission: ''});
+                visitDate = new Date(visitDate);
+                visitDate.setHours(0,0,0,0);
+
+                return (dateToCompare.getDate() == visitDate.getDate());
+
+            });
+
+        }
+
         function selectPreviousDay() {
 
             if (!previousDayAvailable()) return;
@@ -87,7 +106,7 @@
         }
 
         function previousDayAvailable() {
-            return (vm.selectedDate > minDate().setDate(minDate().getDate() + 1));
+            return (vm.selectedDate > minDate()/*.setDate(minDate().getDate() + 1)*/);
         }
 
         function selectNextDay() {
