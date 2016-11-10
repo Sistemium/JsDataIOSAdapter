@@ -2,7 +2,7 @@
 
 (function () {
 
-    function VisitsController(Schema, SalesmanAuth) {
+    function VisitsController(Schema, SalesmanAuth, $scope) {
 
         var vm = this;
 
@@ -24,6 +24,14 @@
 
         var Visit = Schema.model('Visit');
         var salesman = SalesmanAuth.getCurrentUser();
+
+        $scope.$watch('vm.selectedDate',  (newValue) => {
+
+            if (!angular.isObject(newValue)) {
+                vm.selectedDate = new Date();
+            }
+
+        });
 
         findVisits();
 
