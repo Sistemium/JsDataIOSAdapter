@@ -25,7 +25,7 @@
               needRoles: 'salesman'
             },{
               title: 'Визиты',
-              state: 'sales.visits',
+              state: 'sales.territory.visits',
               needRoles: 'salesman'
             },{
               title: 'Фотопоток',

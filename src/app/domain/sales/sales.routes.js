@@ -2,208 +2,208 @@
 
 (function () {
 
-  angular.module('webPage')
-    .config(function (stateHelperProvider) {
+    angular.module('webPage')
+        .config(function (stateHelperProvider) {
 
-      var prePreOrders = {
+            var prePreOrders = {
 
-        name:'prePreOrders',
-        url: '/prePreOrders?state',
+                name: 'prePreOrders',
+                url: '/prePreOrders?state',
 
-        templateUrl: 'app/domain/sales/views/prePreOrderList.html',
-        controller: 'PrePreOrderListController',
-        controllerAs: 'vm',
+                templateUrl: 'app/domain/sales/views/prePreOrderList.html',
+                controller: 'PrePreOrderListController',
+                controllerAs: 'vm',
 
-        data: {
-          needCurrent: 'Salesman',
-          needRole: 'preOrdering'
-        },
+                data: {
+                    needCurrent: 'Salesman',
+                    needRole: 'preOrdering'
+                },
 
-        children: [
-          {
-            name: 'selectedOrder',
-            url: '/selected',
-            templateUrl: 'app/domain/views/selectedPrePreOrder.html',
-            controller: 'SelectedPrePreOrderController',
-            controllerAs: 'vm'
-          }
-        ]
+                children: [
+                    {
+                        name: 'selectedOrder',
+                        url: '/selected',
+                        templateUrl: 'app/domain/views/selectedPrePreOrder.html',
+                        controller: 'SelectedPrePreOrderController',
+                        controllerAs: 'vm'
+                    }
+                ]
 
-      };
+            };
 
-      var visit = {
+            var visit = {
 
-        name: 'visit',
-        url: '/visit?visitId',
+                name: 'visit',
+                url: '/visit?visitId',
 
-        data: {
-          // hideNavs: true
-        },
+                data: {
+                    // hideNavs: true
+                },
 
-        templateUrl: 'app/domain/sales/views/VisitCreate.html',
-        controller: 'VisitCreateController',
-        controllerAs: 'vm'
+                templateUrl: 'app/domain/sales/views/VisitCreate.html',
+                controller: 'VisitCreateController',
+                controllerAs: 'vm'
 
-      };
+            };
 
-      var visitCreate = {
+            var visitCreate = {
 
-        name: 'visitCreate',
-        url: '/visitCreate?visitId',
+                name: 'visitCreate',
+                url: '/visitCreate?visitId',
 
-        data: {
-          disableNavs: true,
-          hideTopBar: false,
-          hideNavs: true
-        },
+                data: {
+                    disableNavs: true,
+                    hideTopBar: false,
+                    hideNavs: true
+                },
 
-        templateUrl: 'app/domain/sales/views/VisitCreate.html',
-        controller: 'VisitCreateController',
-        controllerAs: 'vm'
+                templateUrl: 'app/domain/sales/views/VisitCreate.html',
+                controller: 'VisitCreateController',
+                controllerAs: 'vm'
 
-      };
+            };
 
-      var addOutletToPartner = {
+            var addOutletToPartner = {
 
-        name: 'addOutletToPartner',
-        url: '/partner/:id/addOutlet',
+                name: 'addOutletToPartner',
+                url: '/partner/:id/addOutlet',
 
-        data: {
-          hideNavs: true
-        },
+                data: {
+                    hideNavs: true
+                },
 
-        templateUrl: 'app/domain/sales/views/addOutlet.html',
-        controller: 'AddOutletController',
-        controllerAs: 'vm'
+                templateUrl: 'app/domain/sales/views/addOutlet.html',
+                controller: 'AddOutletController',
+                controllerAs: 'vm'
 
-      };
+            };
 
-      var partner = {
+            var partner = {
 
-        name: 'partner',
-        url: '/partner/:id',
+                name: 'partner',
+                url: '/partner/:id',
 
-        templateUrl: 'app/domain/sales/views/partner.html',
-        controller: 'PartnerController',
-        controllerAs: 'vm',
+                templateUrl: 'app/domain/sales/views/partner.html',
+                controller: 'PartnerController',
+                controllerAs: 'vm',
 
-        children: [addOutletToPartner]
+                children: [addOutletToPartner]
 
-      };
+            };
 
-      var editPartner = {
+            var editPartner = {
 
-        name: 'editPartner',
-        url: '/partner/:id/edit',
+                name: 'editPartner',
+                url: '/partner/:id/edit',
 
-        templateUrl: 'app/domain/sales/views/editPartner.html',
-        controller: 'EditPartnerController',
-        controllerAs: 'vm',
+                templateUrl: 'app/domain/sales/views/editPartner.html',
+                controller: 'EditPartnerController',
+                controllerAs: 'vm',
 
-        data: {
-          hideNavs: true
-        }
+                data: {
+                    hideNavs: true
+                }
 
-      };
+            };
 
-      var outlet = {
+            var outlet = {
 
-        name: 'outlet',
-        url: '/outlet/:id',
+                name: 'outlet',
+                url: '/outlet/:id',
 
-        templateUrl: 'app/domain/sales/views/outlet.html',
-        controller: 'OutletController',
-        controllerAs: 'vm',
+                templateUrl: 'app/domain/sales/views/outlet.html',
+                controller: 'OutletController',
+                controllerAs: 'vm',
 
-        children: [visit, visitCreate]
+                children: [visit, visitCreate]
 
-      };
+            };
 
-      var addOutlet = {
+            var addOutlet = {
 
-        name: 'addOutlet',
-        url: '/addOutlet',
+                name: 'addOutlet',
+                url: '/addOutlet',
 
-        data: {
-          hideNavs: true
-        },
+                data: {
+                    hideNavs: true
+                },
 
-        templateUrl: 'app/domain/sales/views/addOutlet.html',
-        controller: 'AddOutletController',
-        controllerAs: 'vm'
+                templateUrl: 'app/domain/sales/views/addOutlet.html',
+                controller: 'AddOutletController',
+                controllerAs: 'vm'
 
-      };
+            };
 
-      var editOutlet = {
+            var editOutlet = {
 
-        name: 'editOutlet',
-        url: '/outlet/:id/edit',
+                name: 'editOutlet',
+                url: '/outlet/:id/edit',
 
-        templateUrl: 'app/domain/sales/views/editOutlet.html',
-        controller: 'EditOutletController',
-        controllerAs: 'vm',
+                templateUrl: 'app/domain/sales/views/editOutlet.html',
+                controller: 'EditOutletController',
+                controllerAs: 'vm',
 
-        data: {
-          hideNavs: true
-        }
+                data: {
+                    hideNavs: true
+                }
 
-      };
+            };
 
-      var territory = {
+            var visits = {
 
-        name: 'territory',
-        url: '/territory',
+                name: 'visits',
+                url: '/visits',
 
-        templateUrl: 'app/domain/sales/views/territory.html',
-        controller: 'SalesTerritoryController',
-        controllerAs: 'vm',
+                templateUrl: 'app/domain/sales/views/visits.html',
+                controller: 'VisitsController',
+                controllerAs: 'vm',
 
-        data: {
-          needCurrent: 'Salesman',
-          needRole: 'salesman',
-          // hideTopBar: true,
-          title: 'Клиенты'
-        },
+                data: {
+                    needCurrent: 'Salesman',
+                    needRole: 'salesman',
+                    title: 'Визиты'
+                }
 
-        children: [partner, editPartner, outlet, addOutlet, editOutlet]
+            };
 
-      };
 
-      var visits = {
+            var territory = {
 
-          name: 'visits',
-          url: '/visits',
+                name: 'territory',
+                url: '/territory',
 
-          templateUrl: 'app/domain/sales/views/visits.html',
-          controller: 'VisitsController',
-          controllerAs: 'vm',
+                templateUrl: 'app/domain/sales/views/territory.html',
+                controller: 'SalesTerritoryController',
+                controllerAs: 'vm',
 
-          data: {
-              needCurrent: 'Salesman',
-              needRole: 'salesman',
-              // hideTopBar: true,
-              title: 'Визиты'
-          }
+                data: {
+                    needCurrent: 'Salesman',
+                    needRole: 'salesman',
+                    // hideTopBar: true,
+                    title: 'Клиенты'
+                },
 
-      };
+                children: [partner, editPartner, outlet, addOutlet, editOutlet, visits]
 
-      stateHelperProvider
-        .state({
+            };
 
-          name: 'sales',
-          abstract: true,
-          templateUrl: 'app/domain/ui-view.html',
+            stateHelperProvider
+                .state({
 
-          data: {
-            auth: 'SalesmanAuth'
-          },
+                    name: 'sales',
+                    abstract: true,
+                    templateUrl: 'app/domain/ui-view.html',
 
-          children: [territory, prePreOrders, visits]
+                    data: {
+                        auth: 'SalesmanAuth'
+                    },
+
+                    children: [territory, prePreOrders]
+
+                })
+            ;
 
         })
-      ;
-
-    })
-  ;
+    ;
 
 }());

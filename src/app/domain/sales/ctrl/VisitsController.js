@@ -2,7 +2,7 @@
 
 (function () {
 
-    function VisitsController(Schema, SalesmanAuth, $scope) {
+    function VisitsController(Schema, SalesmanAuth, $scope, $state) {
 
         var vm = this;
 
@@ -19,14 +19,16 @@
 
             datepickerPopup: {opened: false},
             datepickerOptions: datepickerOptions(),
-            openDatepicker
+            openDatepicker,
+
+            visitClick
 
         });
 
         var Visit = Schema.model('Visit');
         var salesman = SalesmanAuth.getCurrentUser();
 
-        $scope.$watch('vm.selectedDate',  (newValue) => {
+        $scope.$watch('vm.selectedDate', (newValue) => {
 
             if (!angular.isObject(newValue)) {
                 vm.selectedDate = new Date();
@@ -59,7 +61,7 @@
         function markDaysWithVisits() {
 
             var visitDays = _.map(vm.visits, (visit) => {
-                return _.truncate(_.get(visit, 'deviceCts'), {'separator':' ', length: '10', omission: ''});
+                return _.truncate(_.get(visit, 'deviceCts'), {'separator': ' ', length: '10', omission: ''});
             });
 
             vm.events = [{
@@ -83,11 +85,11 @@
             vm.selectedDayVisits = _.filter(vm.visits, (visit) => {
 
                 var dateToCompare = vm.selectedDate;
-                dateToCompare.setHours(0,0,0,0);
+                dateToCompare.setHours(0, 0, 0, 0);
 
-                var visitDate = _.truncate(_.get(visit, 'deviceCts'), {'separator':' ', length: '10', omission: ''});
+                var visitDate = _.truncate(_.get(visit, 'deviceCts'), {'separator': ' ', length: '10', omission: ''});
                 visitDate = new Date(visitDate);
-                visitDate.setHours(0,0,0,0);
+                visitDate.setHours(0, 0, 0, 0);
 
                 return (dateToCompare.getDate() == visitDate.getDate());
 
@@ -126,7 +128,7 @@
         function maxDate() {
 
             var maxDate = new Date();
-            maxDate.setHours(0,0,0,0);
+            maxDate.setHours(0, 0, 0, 0);
 
             return maxDate;
 
@@ -137,10 +139,10 @@
             if (!vm.visits || vm.visits.length == 0) return maxDate();
 
             var firstVisitDate = _.get(_.first(_.sortBy(vm.visits, 'deviceCts')), 'deviceCts');
-            firstVisitDate = _.truncate(firstVisitDate, {'separator':' ', length: '10', omission: ''});
+            firstVisitDate = _.truncate(firstVisitDate, {'separator': ' ', length: '10', omission: ''});
 
             var minDate = new Date(firstVisitDate);
-            minDate.setHours(0,0,0,0);
+            minDate.setHours(0, 0, 0, 0);
 
             return minDate;
 
@@ -165,11 +167,11 @@
 
             if (mode === 'day') {
 
-                var dayToCheck = new Date(date).setHours(0,0,0,0);
+                var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
 
                 for (var i = 0; i < vm.events.length; i++) {
 
-                    var currentDay = new Date(vm.events[i].date).setHours(0,0,0,0);
+                    var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
 
                     if (dayToCheck === currentDay) {
                         return vm.events[i].status;
@@ -185,6 +187,10 @@
 
         function openDatepicker() {
             vm.datepickerPopup.opened = true;
+        }
+
+        function visitClick(visit) {
+            $state.go('^.outlet.visit', {visitId: visit.id})
         }
 
     }
