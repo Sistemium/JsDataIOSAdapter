@@ -46,7 +46,21 @@
 
       InitService.init(appConfig);
 
-      Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
+      //sockAuth();
+      Sockets.on('connect', sockAuth);
+
+      function sockAuth () {
+        var accessToken = Auth.getAccessToken();
+        if (!accessToken) {
+          return;
+        }
+        Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
+          DEBUG('Socket authorization:', ack);
+          $rootScope.$broadcast ('socket:authorized');
+        });
+      }
+
+      //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
       var lastPicker = window.localStorage.getItem('currentPickerId');
 

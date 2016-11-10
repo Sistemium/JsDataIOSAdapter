@@ -4,17 +4,30 @@
 
   function ConfirmModal($uibModal) {
 
+    return {
+      show,
+      showErrorAskRepeat,
+      showMessageAskRepeat
+    };
+
     function showErrorAskRepeat(onSuccess, onError) {
       return (err) => {
-        return show({
-          text: err.text || err,
-          question: 'Повторить попытку',
-          textClass: 'text-danger',
-          title: 'Ошибка!'
-        },{
-          windowClass: 'modal-warning'
-        }).then(onSuccess, onError);
+        return showMessageAskRepeat(err, onSuccess, onError);
       };
+    }
+
+    function showMessageAskRepeat(msg, onSuccess, onError) {
+
+      return show({
+        text: msg.text || msg,
+        question: 'Повторить попытку',
+        textClass: 'text-danger',
+        title: 'Ошибка!'
+      },{
+        windowClass: 'modal-warning'
+      })
+        .then(onSuccess, onError);
+
     }
 
     function show(config, modalConfig) {
@@ -33,15 +46,6 @@
 
             title: 'Внимание!',
             text: 'Вы действительно хотите сделать это?',
-
-            submit: function (buttonId) {
-              $uibModalInstance.close(buttonId);
-            },
-
-            cancel: function (buttonId) {
-              $uibModalInstance.dismiss(buttonId);
-            },
-
             buttons: [
               {
                 title: 'Да',
@@ -54,10 +58,13 @@
                 type: 'cancel'
               }
             ],
-
             hideCloseButton: false,
 
-            buttonClick: function (buttonId, buttonType) {
+            submit: (buttonId) => $uibModalInstance.close(buttonId),
+            cancel: (buttonId) => $uibModalInstance.dismiss(buttonId),
+            deleteItem: () => me.busy = me.deleteDelegate().then(me.cancel),
+
+            buttonClick: (buttonId, buttonType) => {
               switch (buttonType) {
                 case 'submit':
                 {
@@ -70,11 +77,6 @@
                   break;
                 }
               }
-            },
-
-            deleteItem: function () {
-              me.busy = me.deleteDelegate()
-                .then(me.cancel);
             }
 
           }, config));
@@ -97,15 +99,9 @@
 
     }
 
-    return {
-      show,
-      showErrorAskRepeat
-    };
-
   }
 
   angular.module('sistemiumBootstrap')
-    .service('ConfirmModal', ConfirmModal)
-  ;
+    .service('ConfirmModal', ConfirmModal);
 
 })();

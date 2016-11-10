@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+
+.territory {
+  h5 > a.lead {
+    color: $dark-blue;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+}
+
+navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
+  color: $dark-blue;
+  font-weight: 500;
+}

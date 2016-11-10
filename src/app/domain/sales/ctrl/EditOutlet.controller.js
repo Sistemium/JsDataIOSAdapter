@@ -16,6 +16,7 @@
 
       selectPartner,
       outletDataWasChanged,
+      deleteOutletClick,
       submit,
       cancel
 
@@ -72,7 +73,7 @@
     }
 
     function revertChanges() {
-      Outlet.revert(vm.outlet);
+      vm.outlet && Outlet.revert(vm.outlet);
     }
 
     function cancel() {
@@ -82,6 +83,20 @@
 
     function quit() {
       return $state.go('^.outlet', {id: vm.outlet.id});
+    }
+
+    function deleteOutletClick() {
+      ConfirmModal.show({
+        text: `Действительно удалить запись о точке ${vm.outlet.name} (${vm.outlet.address})?`
+      })
+        .then(function () {
+          var partnerId = vm.outlet.partnerId;
+          Outlet.destroy(vm.outlet.id)
+            .then(() => {
+              vm.outlet = null;
+              $state.go('^.partner', {id: partnerId});
+            })
+        })
     }
 
     $scope.$on('$destroy', revertChanges);

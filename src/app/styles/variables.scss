@@ -1,3 +1,6 @@
 @import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/variables.scss";
 
 $navbar-padding-vertical: 15px;
+$black: lighten(black, 5%);
+$blue: $sab-blue;
+$dark-blue: darken($blue, 10%);
