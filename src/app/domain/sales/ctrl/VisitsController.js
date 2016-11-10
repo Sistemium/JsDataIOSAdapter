@@ -46,8 +46,33 @@
 
                     vm.visits = visits;
                     vm.datepickerOptions = datepickerOptions();
+                    markDaysWithVisits();
 
                 });
+
+        }
+
+        function markDaysWithVisits() {
+
+            var visitDays = _.map(vm.visits, (visit) => {
+                return _.truncate(_.get(visit, 'deviceCts'), {'separator':' ', length: '10', omission: ''})
+            });
+
+            console.log(_.uniq(visitDays));
+
+            vm.events = [{
+                date: maxDate(),
+                status: 'today'
+            }];
+
+            _.forEach(visitDays, (visitDay) => {
+
+                vm.events.push({
+                    date: new Date(visitDay),
+                    status: 'haveVisit'
+                });
+
+            });
 
         }
 
@@ -105,11 +130,37 @@
         function datepickerOptions() {
 
             return {
+                customClass: getDayClass,
                 maxDate: maxDate(),
                 minDate: minDate(),
                 startingDay: 1,
                 showWeeks: false
             };
+
+        }
+
+        function getDayClass(data) {
+
+            var date = data.date,
+                mode = data.mode;
+
+            if (mode === 'day') {
+
+                var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+                for (var i = 0; i < vm.events.length; i++) {
+
+                    var currentDay = new Date(vm.events[i].date).setHours(0,0,0,0);
+
+                    if (dayToCheck === currentDay) {
+                        return vm.events[i].status;
+                    }
+
+                }
+
+            }
+
+            return '';
 
         }
 
