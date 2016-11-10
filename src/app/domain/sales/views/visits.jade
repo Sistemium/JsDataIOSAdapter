@@ -1,1 +1,39 @@
-Visits
+section.ui-view
+
+    .header-button
+        button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
+
+        hr.clear-both
+
+    .row
+        .col-md-6
+            p.input-group
+                input.form-control(
+                type='text'
+                uib-datepicker-popup
+                ng-model='vm.selectedDate'
+                is-open='vm.datepickerPopup.opened'
+                datepicker-options='vm.datepickerOptions'
+                ng-required='true'
+                close-text='Закрыть'
+                readonly
+                avalue = '{{ vm.selectedDate | amUtc | amLocal | amDateFormat:"DD/MM/YYYY, dddd" }}'
+                )
+                span.input-group-btn
+                    button.btn.btn-default(
+                    type='button'
+                    ng-click='vm.selectPreviousDay()'
+                    )
+                        i.glyphicon.glyphicon-chevron-left
+                    button.btn.btn-default(
+                    type='button'
+                    ng-click='vm.openDatepicker()'
+                    )
+                        i.glyphicon.glyphicon-calendar
+                    button.btn.btn-default(
+                    type='button'
+                    ng-click='vm.selectNextDay()'
+                    )
+                        i.glyphicon.glyphicon-chevron-right
+
+        hr.clear-both

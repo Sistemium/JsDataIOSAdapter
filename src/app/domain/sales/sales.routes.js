@@ -175,6 +175,8 @@
           url: '/visits',
 
           templateUrl: 'app/domain/sales/views/visits.html',
+          controller: 'VisitsController',
+          controllerAs: 'vm',
 
           data: {
               needCurrent: 'Salesman',
