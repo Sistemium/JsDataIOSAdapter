@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, ConfirmModal, LocationHelper, toastr) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, LocationHelper, toastr) {
 
     // TODO: allow to add/change location for an existing outlet
 
