@@ -1,4 +1,4 @@
-section.ui-view
+section.ui-view(cg-busy='vm.busy')
 
     .header-button
         button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
@@ -10,14 +10,13 @@ section.ui-view
             p.input-group
                 input.form-control(
                 type='text'
-                uib-datepicker-popup
+                uib-datepicker-popup='dd/MM/yyyy, EEEE'
                 ng-model='vm.selectedDate'
                 is-open='vm.datepickerPopup.opened'
                 datepicker-options='vm.datepickerOptions'
                 ng-required='true'
                 close-text='Закрыть'
                 readonly
-                avalue = '{{ vm.selectedDate | amUtc | amLocal | amDateFormat:"DD/MM/YYYY, dddd" }}'
                 )
                 span.input-group-btn
                     button.btn.btn-default(
