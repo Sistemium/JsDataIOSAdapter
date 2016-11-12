@@ -188,7 +188,7 @@
           title: 'Визиты'
         },
 
-        children: [territory, _.clone(outlet), _.clone(visit)]
+        children: [territory, _.clone(outlet), _.clone(visit), _.clone(visitCreate)]
 
       };
 
