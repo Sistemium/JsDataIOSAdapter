@@ -149,24 +149,6 @@
 
             };
 
-            var visits = {
-
-                name: 'visits',
-                url: '/visits',
-
-                templateUrl: 'app/domain/sales/views/visits.html',
-                controller: 'VisitsController',
-                controllerAs: 'vm',
-
-                data: {
-                    needCurrent: 'Salesman',
-                    needRole: 'salesman',
-                    title: 'Визиты'
-                }
-
-            };
-
-
             var territory = {
 
                 name: 'territory',
@@ -183,7 +165,26 @@
                     title: 'Клиенты'
                 },
 
-                children: [partner, editPartner, outlet, addOutlet, editOutlet, visits]
+                children: [partner, editPartner, outlet, addOutlet, editOutlet]
+
+            };
+
+            var visits = {
+
+                name: 'visits',
+                url: '/visits',
+
+                templateUrl: 'app/domain/sales/views/visits.html',
+                controller: 'VisitsController',
+                controllerAs: 'vm',
+
+                data: {
+                    needCurrent: 'Salesman',
+                    needRole: 'salesman',
+                    title: 'Визиты'
+                },
+
+                children: [angular.copy(territory), angular.copy(outlet), angular.copy(visit)]
 
             };
 
@@ -198,7 +199,7 @@
                         auth: 'SalesmanAuth'
                     },
 
-                    children: [territory, prePreOrders]
+                    children: [territory, prePreOrders, visits]
 
                 })
             ;
