@@ -23,7 +23,7 @@
     var SM = Schema.model('Salesman');
     var stateFilter = {};
 
-    var rootState = 'sales.territory';
+    var rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
 
     vm.salesman = SalesmanAuth.getCurrentUser();
 
@@ -53,6 +53,9 @@
     }
 
     function outletClick(outlet) {
+      if (rootState == 'sales.visits') {
+        return $state.go(`${rootState}.visitCreate`, {id: outlet.id});
+      }
       $state.go('.outlet', {id: outlet.id});
     }
 
