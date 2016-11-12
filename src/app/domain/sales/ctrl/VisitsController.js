@@ -46,7 +46,7 @@
                 salesmanId: salesman.id
             };
 
-            vm.busy = Visit.findAll(filter)
+            vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})('Outlet')
                 .then((visits) => {
 
                     vm.visits = visits;
@@ -190,7 +190,7 @@
         }
 
         function visitClick(visit) {
-            $state.go('^.outlet.visit', {visitId: visit.id, id: visit.outlet.id})
+            $state.go('^.outlet.visit', {visitId: visit.id, id: visit.outlet.id, parentRoute: $state.current.name});
         }
 
     }
