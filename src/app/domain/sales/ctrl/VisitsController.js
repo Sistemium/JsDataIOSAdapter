@@ -21,7 +21,8 @@
             datepickerOptions: datepickerOptions(),
             openDatepicker,
 
-            visitClick
+            visitClick,
+            newVisitClick
 
         });
 
@@ -191,6 +192,10 @@
 
         function visitClick(visit) {
             $state.go('^.outlet.visit', {visitId: visit.id, id: visit.outlet.id, parentRoute: $state.current.name});
+        }
+
+        function newVisitClick() {
+            $state.go('^');
         }
 
     }
