@@ -115,7 +115,7 @@
                 controller: 'OutletController',
                 controllerAs: 'vm',
 
-                children: [visit, visitCreate]
+                children: [angular.copy(visit), visitCreate]
 
             };
 
@@ -165,7 +165,7 @@
                     title: 'Клиенты'
                 },
 
-                children: [partner, editPartner, outlet, addOutlet, editOutlet]
+                children: [partner, editPartner, angular.copy(outlet), addOutlet, editOutlet]
 
             };
 
@@ -199,7 +199,7 @@
                         auth: 'SalesmanAuth'
                     },
 
-                    children: [territory, prePreOrders, visits]
+                    children: [angular.copy(territory), prePreOrders, visits]
 
                 })
             ;
