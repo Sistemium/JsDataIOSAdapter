@@ -156,7 +156,11 @@
 
         templateUrl: 'app/domain/sales/views/territory.html',
         controller: 'SalesTerritoryController',
-        controllerAs: 'vm',
+        controllerAs: 'vm'
+
+      };
+
+      var salesTerritory = _.assign({
 
         data: {
           needCurrent: 'Salesman',
@@ -167,7 +171,7 @@
 
         children: [partner, editPartner, angular.copy(outlet), addOutlet, editOutlet]
 
-      };
+      }, territory);
 
       var visits = {
 
@@ -184,7 +188,7 @@
           title: 'Визиты'
         },
 
-        children: [angular.copy(territory), angular.copy(outlet), angular.copy(visit)]
+        children: [territory, angular.copy(outlet), angular.copy(visit)]
 
       };
 
@@ -199,7 +203,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [angular.copy(territory), prePreOrders, visits]
+          children: [salesTerritory, prePreOrders, visits]
 
         })
       ;
