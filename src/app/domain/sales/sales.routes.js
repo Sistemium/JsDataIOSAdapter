@@ -169,7 +169,7 @@
           title: 'Клиенты'
         },
 
-        children: [partner, editPartner, _.clone(outlet), addOutlet, editOutlet]
+        children: [partner, editPartner, _.cloneDeep(outlet), addOutlet, editOutlet]
 
       }, territory);
 
@@ -188,7 +188,7 @@
           title: 'Визиты'
         },
 
-        children: [territory, _.clone(outlet), _.clone(visit), _.clone(visitCreate)]
+        children: [territory, _.cloneDeep(outlet), _.cloneDeep(visit), _.cloneDeep(visitCreate)]
 
       };
 
