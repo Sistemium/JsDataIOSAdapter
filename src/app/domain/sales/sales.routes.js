@@ -169,7 +169,7 @@
           title: 'Клиенты'
         },
 
-        children: [partner, editPartner, angular.copy(outlet), addOutlet, editOutlet]
+        children: [partner, editPartner, _.clone(outlet), addOutlet, editOutlet]
 
       }, territory);
 
@@ -188,7 +188,7 @@
           title: 'Визиты'
         },
 
-        children: [territory, angular.copy(outlet), angular.copy(visit)]
+        children: [territory, _.clone(outlet), _.clone(visit)]
 
       };
 
