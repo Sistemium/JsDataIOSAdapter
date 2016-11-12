@@ -29,6 +29,8 @@
     var Visit = Schema.model('Visit');
     var salesman = SalesmanAuth.getCurrentUser();
 
+    $scope.$on('rootClick', () => $state.go('sales.visits'));
+
     $scope.$watch('vm.selectedDate', (newValue) => {
 
       if (!angular.isObject(newValue)) {
