@@ -1,55 +1,55 @@
 section.ui-view(cg-busy='vm.busy')
 
-    .header-button
-        button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
+  .header-button
+    button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
 
-        hr.clear-both
+    hr.clear-both
 
-    .row
-        .col-md-6
-            p.input-group
-                input.form-control(
-                type='text'
-                uib-datepicker-popup='dd/MM/yyyy, EEEE'
-                ng-model='vm.selectedDate'
-                is-open='vm.datepickerPopup.opened'
-                datepicker-options='vm.datepickerOptions'
-                ng-required='true'
-                close-text='Закрыть'
-                current-text='Сегодня'
-                clear-text='Очистить'
-                readonly
-                )
-                span.input-group-btn
-                    button.btn.btn-default(
-                    type='button'
-                    ng-click='vm.selectPreviousDay()'
-                    )
-                        i.glyphicon.glyphicon-chevron-left
-                    button.btn.btn-default(
-                    type='button'
-                    ng-click='vm.openDatepicker()'
-                    )
-                        i.glyphicon.glyphicon-calendar
-                    button.btn.btn-default(
-                    type='button'
-                    ng-click='vm.selectNextDay()'
-                    )
-                        i.glyphicon.glyphicon-chevron-right
+  .row
+    .col-md-6
+      p.input-group
+        input.form-control(
+        type='text'
+        uib-datepicker-popup='dd/MM/yyyy, EEEE'
+        ng-model='vm.selectedDate'
+        is-open='vm.datepickerPopup.opened'
+        datepicker-options='vm.datepickerOptions'
+        ng-required='true'
+        close-text='Закрыть'
+        current-text='Сегодня'
+        clear-text='Очистить'
+        readonly
+        )
+        span.input-group-btn
+          button.btn.btn-default(
+          type='button'
+          ng-click='vm.selectPreviousDay()'
+          )
+            i.glyphicon.glyphicon-chevron-left
+          button.btn.btn-default(
+          type='button'
+          ng-click='vm.openDatepicker()'
+          )
+            i.glyphicon.glyphicon-calendar
+          button.btn.btn-default(
+          type='button'
+          ng-click='vm.selectNextDay()'
+          )
+            i.glyphicon.glyphicon-chevron-right
 
-        hr.clear-both
+    hr.clear-both
 
-    table.table.table-striped.clear-both.table-hover(ng-if='vm.selectedDayVisits.length')
-        thead
-            tr
-                th Дата
-                th.number Фото
-                th.number Ответы
-        tbody
-            tr.clickable(
-            ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
-            ng-click='vm.visitClick(visit)'
-            )
-                td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
-                td.number {{ visit.photos.length | number: 0 }}
-                td.number {{ visit.answers.length | number: 0 }}
+  table.table.table-striped.clear-both.table-hover(ng-if='vm.selectedDayVisits.length')
+    thead
+      tr
+        th Дата
+        th.number Фото
+        th.number Ответы
+    tbody
+      tr.clickable(
+      ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
+      ng-click='vm.visitClick(visit)'
+      )
+        td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
+        td.number {{ visit.photos.length | number: 0 }}
+        td.number {{ visit.answers.length | number: 0 }}
