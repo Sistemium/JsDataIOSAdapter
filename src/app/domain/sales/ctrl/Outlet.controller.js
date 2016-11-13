@@ -217,7 +217,7 @@
         isRootState,
         disableNavs,
         partnerNavClass: {
-          disabled: !isRootState && disableNavs
+          disabled: !isRootState && disableNavs || /visits.*/.test(rootState)
         },
         outletNavClass: {
           disabled: disableNavs
