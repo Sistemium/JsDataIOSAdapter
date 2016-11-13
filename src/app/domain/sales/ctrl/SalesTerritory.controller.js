@@ -35,7 +35,7 @@
 
     vm.refresh();
 
-    $scope.$on('rootClick', () => $state.go('sales.territory'));
+    $scope.$on('rootClick', () => $state.go(rootState));
 
     $scope.$on('$stateChangeSuccess', (e, to) =>  vm.hideHashes = (to.name !== rootState));
 
