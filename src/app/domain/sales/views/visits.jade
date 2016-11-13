@@ -39,14 +39,20 @@ section.visits.ui-view(cg-busy='vm.busy')
   table.table.table-striped.clear-both.table-hover(ng-if='vm.selectedDayVisits.length')
     thead
       tr
+        th Точка
         th Время
-        th.number Фото
-        th.number Ответов
+        th.number.hidden-xs Фото
+        th.number.hidden-xs Ответов
     tbody
       tr.clickable(
       ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
       ng-click='vm.visitClick(visit)'
       )
-        td {{ visit.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
-        td.number {{ visit.photos.length | number: 0 }}
-        td.number {{ visit.answers.length | number: 0 }}
+        td
+          div {{ visit.outlet.name }}
+          .gray {{ visit.outlet.address }}
+        td
+          div {{ visit.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
+          div {{ visit.duration() }}
+        td.number.hidden-xs {{ visit.photos.length | number: 0 }}
+        td.number.hidden-xs {{ visit.answers.length | number: 0 }}
