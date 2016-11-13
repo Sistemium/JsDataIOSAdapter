@@ -54,7 +54,7 @@
 
     function outletClick(outlet) {
       if (rootState == 'sales.visits') {
-        return $state.go(`${rootState}.visitCreate`, {id: outlet.id});
+        return $state.go(`${rootState}.outlet.visitCreate`, {id: outlet.id});
       }
       $state.go('.outlet', {id: outlet.id});
     }
