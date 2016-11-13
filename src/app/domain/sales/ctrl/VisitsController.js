@@ -49,7 +49,7 @@
         salesmanId: salesman.id
       };
 
-      vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})('Outlet')
+      vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})(['Outlet', 'photos', 'answers'])
         .then((visits) => {
 
           vm.visits = visits;
