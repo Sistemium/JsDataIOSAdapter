@@ -37,7 +37,7 @@
     var Visit = Schema.model('Visit');
     var OutletPhoto = Schema.model('OutletPhoto');
     var Location = Schema.model('Location');
-    var rootState = 'sales.territory.outlet';
+    var rootState = _.first($state.current.name.match(/sales\.[^.]+\.[^.]+/)) || 'sales.territory.outlet';
 
     var stateFilter = $state.params.id;
     var salesman = SalesmanAuth.getCurrentUser();
@@ -209,8 +209,21 @@
     refresh();
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.isRootState = (to.name === rootState);
-      vm.disableNavs = !!_.get(to, 'data.disableNavs') || vm.isRootState;
+
+      var isRootState = (to.name === rootState);
+      var disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
+
+      _.assign(vm, {
+        isRootState,
+        disableNavs,
+        partnerNavClass: {
+          disabled: !isRootState && disableNavs
+        },
+        outletNavClass: {
+          disabled: disableNavs
+        }
+      });
+
     });
 
   }

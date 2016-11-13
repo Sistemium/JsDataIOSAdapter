@@ -1,8 +1,8 @@
 h3.pull-left.max-width-75p
-  a.inherit-colors(href ui-sref='^.partner({id: vm.outlet.partner.id})' ng-class='{disabled: !vm.isRootState && vm.disableNavs}') {{ vm.outlet.partner.name }}
+  a.inherit-colors(href ui-sref='^.partner({id: vm.outlet.partner.id})' ng-class='vm.partnerNavClass') {{ vm.outlet.partner.name }}
   = ' '
   small
-    a.inherit-colors(href ng-click='vm.outletClick()' ng-class='{disabled: vm.disableNavs}') {{ vm.outlet.address }}
+    a.inherit-colors(href ng-click='vm.outletClick()' ng-class='vm.outletNavClass') {{ vm.outlet.address }}
     a.ml-em(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState')
       i.glyphicon.glyphicon-edit
 
