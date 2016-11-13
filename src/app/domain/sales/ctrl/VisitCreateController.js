@@ -45,6 +45,8 @@
     var Outlet = Schema.model('Outlet');
     Outlet.loadRelations(outletId, ['partner']);
 
+    var rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
+
     var answersByQuestion = {};
 
     var salesman = SalesmanAuth.getCurrentUser();
@@ -124,7 +126,13 @@
     }
 
     function goBack() {
+
+      if (rootState == 'sales.visits') {
+        return $state.go(rootState);
+      }
+
       $state.go('^');
+
     }
 
     function changeAnswer(qst, data) {
