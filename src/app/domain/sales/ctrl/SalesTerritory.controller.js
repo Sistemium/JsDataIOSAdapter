@@ -37,7 +37,7 @@
 
     $scope.$on('rootClick', () => $state.go(rootState));
 
-    $scope.$on('$stateChangeSuccess', (e, to) =>  vm.hideHashes = (to.name !== rootState));
+    $scope.$on('$stateChangeSuccess', (e, to) =>  vm.hideHashes = !/.*territory$/.test(to.name));
 
     function refresh() {
 
