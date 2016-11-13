@@ -15,6 +15,7 @@
       collapsePhotosSection: true,
       collapseVisitsSection: false,
       thumbnails: {},
+      isEditable: $state.current.name === 'sales.territory.outlet',
 
       visitClick: (visit) => $state.go('.visit', {visitId: visit.id}),
       mapClick: () => vm.popover = false,
