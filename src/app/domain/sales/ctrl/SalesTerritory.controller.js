@@ -25,6 +25,10 @@
 
     var rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
 
+    if (rootState !== 'sales.territory') {
+      delete vm.addOutletClick;
+    }
+
     vm.salesman = SalesmanAuth.getCurrentUser();
 
     if (vm.salesman) {

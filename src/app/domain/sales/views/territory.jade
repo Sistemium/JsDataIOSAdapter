@@ -2,7 +2,7 @@ section.text-center.scroll-horizontal.hashes(
 style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}'
 ng-hide='vm.hideHashes'
 )
-  button.btn.btn-success.margin(ng-click='vm.addOutletClick()')
+  button.btn.btn-success.margin(ng-click='vm.addOutletClick()' ng-if='vm.addOutletClick')
     i.glyphicon.glyphicon-plus
 
   button.btn.margin(
