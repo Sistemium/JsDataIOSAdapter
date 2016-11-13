@@ -41,6 +41,10 @@
     var date = moment().format('YYYY-MM-DD');
     var visitId = $state.params.visitId;
     var outletId = $state.params.id;
+
+    var Outlet = Schema.model('Outlet');
+    Outlet.loadRelations(outletId, ['partner']);
+
     var answersByQuestion = {};
 
     var salesman = SalesmanAuth.getCurrentUser();
