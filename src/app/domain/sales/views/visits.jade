@@ -1,42 +1,44 @@
 section.ui-view(cg-busy='vm.busy')
 
-  .header-button
+  .header-button.visible-xs
     button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
 
     hr.clear-both
 
-  .row
-    .col-md-6
-      p.input-group
-        span.form-control(
-        uib-datepicker-popup
-        ng-model='vm.selectedDate'
-        is-open='vm.datepickerPopup.opened'
-        datepicker-options='vm.datepickerOptions'
-        ng-required='true'
-        close-text='Закрыть'
-        current-text='Сегодня'
-        clear-text='Очистить'
-        ng-click='vm.openDatepicker()'
-        ) {{ vm.selectedDate | amUtc | amLocal | amDateFormat:'DD/MM/YYYY, dddd' }}
-        span.input-group-btn
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.selectPreviousDay()'
-          )
-            i.glyphicon.glyphicon-chevron-left
-          button.btn.btn-default(
-          type='button'
+  .container
+    .row
+      .col-md-6
+        p.input-group
+          span.form-control(
+          uib-datepicker-popup
+          ng-model='vm.selectedDate'
+          is-open='vm.datepickerPopup.opened'
+          datepicker-options='vm.datepickerOptions'
+          ng-required='true'
+          close-text='Закрыть'
+          current-text='Сегодня'
+          clear-text='Очистить'
           ng-click='vm.openDatepicker()'
-          )
-            i.glyphicon.glyphicon-calendar
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.selectNextDay()'
-          )
-            i.glyphicon.glyphicon-chevron-right
+          ) {{ vm.selectedDate | amUtc | amLocal | amDateFormat:'DD/MM/YYYY, dd' }}
+          span.input-group-btn
+            button.btn.btn-default(
+            type='button'
+            ng-click='vm.selectPreviousDay()'
+            )
+              i.glyphicon.glyphicon-chevron-left
+            button.btn.btn-default(
+            type='button'
+            ng-click='vm.openDatepicker()'
+            )
+              i.glyphicon.glyphicon-calendar
+            button.btn.btn-default(
+            type='button'
+            ng-click='vm.selectNextDay()'
+            )
+              i.glyphicon.glyphicon-chevron-right
+          button.hidden-xs.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
 
-    hr.clear-both
+      hr.clear-both
 
   table.table.table-striped.clear-both.table-hover(ng-if='vm.selectedDayVisits.length')
     thead
