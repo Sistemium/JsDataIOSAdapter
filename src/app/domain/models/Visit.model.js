@@ -53,6 +53,10 @@
       methods: {
         answerByQuestion: function (q) {
           return _.findWhere(this.answers,{ questionId:q.id });
+        },
+        duration: function() {
+          var diff = moment(this.ts).diff(this.deviceCts,'seconds');
+          return diff > 60 ? Math.round(diff/60) + ' мин' : diff + ' сек';
         }
       }
 
