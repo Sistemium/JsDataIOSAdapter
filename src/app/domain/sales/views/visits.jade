@@ -1,7 +1,7 @@
 section.visits.ui-view(cg-busy='vm.busy')
 
   .row.datepicker-with-buttons
-    .col-sm-10.col-lg-11
+    .col-sm-9.col-md-10
       .input-group
         span.form-control(
         uib-datepicker-popup
@@ -30,9 +30,9 @@ section.visits.ui-view(cg-busy='vm.busy')
           ng-click='vm.selectNextDay()'
           )
             i.glyphicon.glyphicon-chevron-right
-    .col-sm-2.col-lg-1
+    .col-sm-3.col-md-2
       .buttons
-        button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
+        button.btn.btn-block.btn-success.pull-right(ng-click='vm.newVisitClick()') Новый визит
 
   hr.clear-both
 

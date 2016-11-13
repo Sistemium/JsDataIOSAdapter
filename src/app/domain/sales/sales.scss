@@ -30,9 +30,11 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 .visits {
   .datepicker-with-buttons {
     .buttons {
-      margin-top: 2px;
       @media (max-width: $screen-xs-max) {
         margin-top: 6px;
+        .btn-block {
+          max-width: 150px;
+        }
       }
     }
   }
