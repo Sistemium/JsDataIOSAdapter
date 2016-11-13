@@ -55,7 +55,8 @@
           return _.findWhere(this.answers,{ questionId:q.id });
         },
         duration: function() {
-          var diff = moment(this.ts).diff(this.deviceCts,'seconds');
+          var diff = moment(_.get(this, 'checkOutLocation.deviceCts'))
+            .diff(_.get(this, 'checkInLocation.deviceCts'),'seconds');
           return diff > 60 ? Math.round(diff/60) + ' мин' : diff + ' сек';
         }
       }

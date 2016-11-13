@@ -49,7 +49,7 @@
         salesmanId: salesman.id
       };
 
-      vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})(['Outlet', 'photos', 'answers'])
+      vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})(['Outlet', 'photos', 'answers', 'Location'])
         .then(() => {
 
           Visit.bindAll(filter, $scope, 'vm.visits', () => {
