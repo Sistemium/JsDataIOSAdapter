@@ -41,7 +41,7 @@ section.visits.ui-view(cg-busy='vm.busy')
       tr
         th Время
         th.number Фото
-        th.number Ответы
+        th.number Ответов
     tbody
       tr.clickable(
       ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
