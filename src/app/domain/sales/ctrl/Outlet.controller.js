@@ -45,7 +45,7 @@
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
 
-      Outlet.loadRelations(vm.outlet, ['OutletPhoto', 'Location'])
+      Outlet.loadRelations(vm.outlet, ['OutletPhoto', 'Location', 'Partner'])
         .then(function (outlet) {
           _.each(outlet.photos, importThumbnail);
           if (outlet.location) {
