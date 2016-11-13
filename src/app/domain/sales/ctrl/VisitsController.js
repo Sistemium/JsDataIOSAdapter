@@ -50,12 +50,15 @@
       };
 
       vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})(['Outlet', 'photos', 'answers'])
-        .then((visits) => {
+        .then(() => {
 
-          vm.visits = visits;
-          vm.datepickerOptions = datepickerOptions();
-          markDaysWithVisits();
-          filterVisitsBySelectedDate();
+          Visit.bindAll(filter, $scope, 'vm.visits', () => {
+
+            vm.datepickerOptions = datepickerOptions();
+            markDaysWithVisits();
+            filterVisitsBySelectedDate();
+
+          });
 
         });
 
