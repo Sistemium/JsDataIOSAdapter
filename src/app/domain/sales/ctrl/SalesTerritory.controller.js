@@ -37,7 +37,22 @@
 
     $scope.$on('rootClick', () => $state.go(rootState));
 
-    $scope.$on('$stateChangeSuccess', (e, to) =>  vm.hideHashes = !/.*territory$/.test(to.name));
+    $scope.$on('$stateChangeSuccess', (e, to) =>  {
+
+      _.assign(vm, {
+
+        hideHashes: !/.*territory$/.test(to.name),
+        partnerLinkClass: {
+          disabled: visitsIsRootState()
+        }
+
+      });
+
+    });
+
+    function visitsIsRootState() {
+      return (rootState == 'sales.visits');
+    }
 
     function refresh() {
 
@@ -53,7 +68,7 @@
     }
 
     function outletClick(outlet) {
-      if (rootState == 'sales.visits') {
+      if (visitsIsRootState()) {
         return $state.go(`${rootState}.outlet.visitCreate`, {id: outlet.id});
       }
       $state.go('.outlet', {id: outlet.id});
