@@ -28,23 +28,31 @@
 
     var Visit = Schema.model('Visit');
     var salesman = SalesmanAuth.getCurrentUser();
-
-    $scope.$on('rootClick', () => $state.go('sales.visits'));
-
     var timeoutPromise;
 
-    $scope.$watch('vm.selectedDate', (newValue) => {
-
-      if (!angular.isObject(newValue)) {
-        vm.selectedDate = new Date();
-      }
-
-      timeoutPromise && $timeout.cancel(timeoutPromise);
-      timeoutPromise = $timeout(filterVisitsBySelectedDate, 500);
-
-    });
-
+    scopeRoutine();
     findVisits();
+
+    function scopeRoutine() {
+
+      $scope.$on('rootClick', () => $state.go('sales.visits'));
+
+      $scope.$on('$destroy', () => {
+        $timeout.cancel(timeoutPromise);
+      });
+
+      $scope.$watch('vm.selectedDate', (newValue) => {
+
+        if (!angular.isObject(newValue)) {
+          vm.selectedDate = new Date();
+        }
+
+        timeoutPromise && $timeout.cancel(timeoutPromise);
+        timeoutPromise = $timeout(filterVisitsBySelectedDate, 500);
+
+      });
+
+    }
 
     function findVisits() {
 
