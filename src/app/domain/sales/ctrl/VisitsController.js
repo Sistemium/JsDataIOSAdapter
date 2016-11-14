@@ -49,18 +49,18 @@
         salesmanId: salesman.id
       };
 
-      vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})(['Outlet', 'photos', 'answers', 'Location'])
+      vm.busy = Visit.findAll(filter, {bypassCache: true})
         .then(() => {
 
           Visit.bindAll(filter, $scope, 'vm.visits', () => {
 
             vm.datepickerOptions = datepickerOptions();
             markDaysWithVisits();
-            filterVisitsBySelectedDate();
 
           });
 
-        });
+        })
+        .then(filterVisitsBySelectedDate);
 
     }
 
@@ -86,20 +86,19 @@
 
     }
 
+    var unBindSelectedDayVisits;
+
     function filterVisitsBySelectedDate() {
 
-      vm.selectedDayVisits = _.filter(vm.visits, (visit) => {
+      var filter = {
+        salesmanId: salesman.id,
+        date: moment(vm.selectedDate).format('YYYY-MM-DD')
+      };
 
-        var dateToCompare = vm.selectedDate;
-        dateToCompare.setHours(0, 0, 0, 0);
+      vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})();
 
-        var visitDate = _.truncate(_.get(visit, 'deviceCts'), {'separator': ' ', length: '10', omission: ''});
-        visitDate = new Date(visitDate);
-        visitDate.setHours(0, 0, 0, 0);
-
-        return (dateToCompare.getDate() == visitDate.getDate());
-
-      });
+      unBindSelectedDayVisits && unBindSelectedDayVisits();
+      unBindSelectedDayVisits = Visit.bindAll(filter, $scope, 'vm.selectedDayVisits');
 
     }
 
