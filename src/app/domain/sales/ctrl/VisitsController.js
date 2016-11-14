@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state, $timeout) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state) {
 
     var vm = this;
 
@@ -55,7 +55,7 @@
       }, todayTime => {
 
         vm.selectedDate = new Date(todayTime);
-        
+
       });
 
     }
