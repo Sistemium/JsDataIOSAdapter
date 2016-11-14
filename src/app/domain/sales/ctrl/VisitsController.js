@@ -30,10 +30,10 @@
     var salesman = SalesmanAuth.getCurrentUser();
     var timeoutPromise;
 
-    scopeRoutine();
+    scopeRoutines();
     findVisits();
 
-    function scopeRoutine() {
+    function scopeRoutines() {
 
       $scope.$on('rootClick', () => $state.go('sales.visits'));
 
