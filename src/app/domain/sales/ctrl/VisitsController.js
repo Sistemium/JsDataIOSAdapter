@@ -28,7 +28,6 @@
 
     var Visit = Schema.model('Visit');
     var salesman = SalesmanAuth.getCurrentUser();
-    var timeoutPromise;
 
     scopeRoutines();
     findVisits();
@@ -37,20 +36,15 @@
 
       $scope.$on('rootClick', () => $state.go('sales.visits'));
 
-      $scope.$on('$destroy', () => {
-        $timeout.cancel(timeoutPromise);
-      });
-
-      $scope.$watch('vm.selectedDate', (newValue) => {
+      $scope.$watch('vm.selectedDate', _.debounce(newValue => {
 
         if (!angular.isObject(newValue)) {
           vm.selectedDate = new Date();
         }
 
-        timeoutPromise && $timeout.cancel(timeoutPromise);
-        timeoutPromise = $timeout(filterVisitsBySelectedDate, 500);
+        filterVisitsBySelectedDate();
 
-      });
+      }, 500));
 
       $scope.$watch(() => {
 
@@ -61,7 +55,7 @@
       }, () => {
 
         vm.selectedDate = new Date();
-        
+
       }, true);
 
     }
