@@ -11,7 +11,7 @@
       visits: [],
       selectedDayVisits: [],
 
-      selectedDate: new Date(),
+      selectedDate: null,
       selectPreviousDay,
       previousDayAvailable,
       selectNextDay,
@@ -50,13 +50,13 @@
 
         var todayDate = new Date();
         todayDate.setHours(0,0,0,0);
-        return todayDate;
+        return todayDate.getTime();
 
-      }, () => {
+      }, todayTime => {
 
-        vm.selectedDate = new Date();
-
-      }, true);
+        vm.selectedDate = new Date(todayTime);
+        
+      });
 
     }
 
