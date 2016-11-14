@@ -52,6 +52,18 @@
 
       });
 
+      $scope.$watch(() => {
+
+        var todayDate = new Date();
+        todayDate.setHours(0,0,0,0);
+        return todayDate;
+
+      }, () => {
+
+        vm.selectedDate = new Date();
+        
+      }, true);
+
     }
 
     function findVisits() {
