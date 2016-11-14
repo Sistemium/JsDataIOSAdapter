@@ -112,7 +112,7 @@
     }
 
     function previousDayAvailable() {
-      return (vm.selectedDate > minDate()/*.setDate(minDate().getDate() + 1)*/);
+      return (vm.selectedDate.setHours(0,0,0,0) > minDate());
     }
 
     function selectNextDay() {
@@ -126,7 +126,7 @@
     }
 
     function nextDayAvailable() {
-      return (vm.selectedDate < maxDate());
+      return (vm.selectedDate.setHours(0,0,0,0) < maxDate());
     }
 
     function maxDate() {
