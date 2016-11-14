@@ -59,8 +59,7 @@
 
           });
 
-        })
-        .then(filterVisitsBySelectedDate);
+        });
 
     }
 
