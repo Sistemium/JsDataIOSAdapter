@@ -18,6 +18,7 @@ section.visits.ui-view(cg-busy='vm.busy')
           button.btn.btn-default(
           type='button'
           ng-click='vm.selectPreviousDay()'
+          ng-disabled='!vm.previousDayAvailable()'
           )
             i.glyphicon.glyphicon-chevron-left
           button.btn.btn-default(
@@ -28,6 +29,7 @@ section.visits.ui-view(cg-busy='vm.busy')
           button.btn.btn-default(
           type='button'
           ng-click='vm.selectNextDay()'
+          ng-disabled='!vm.nextDayAvailable()'
           )
             i.glyphicon.glyphicon-chevron-right
     .col-sm-3.col-md-2
