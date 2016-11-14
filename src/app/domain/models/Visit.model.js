@@ -47,6 +47,10 @@
         }
       },
 
+      fieldTypes: {
+        date: 'date'
+      },
+
       computed: {
       },
 
