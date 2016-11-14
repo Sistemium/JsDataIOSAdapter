@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, $timeout) {
 
     var vm = this;
 
@@ -31,13 +31,16 @@
 
     $scope.$on('rootClick', () => $state.go('sales.visits'));
 
+    var timeoutPromise;
+
     $scope.$watch('vm.selectedDate', (newValue) => {
 
       if (!angular.isObject(newValue)) {
         vm.selectedDate = new Date();
       }
 
-      filterVisitsBySelectedDate();
+      timeoutPromise && $timeout.cancel(timeoutPromise);
+      timeoutPromise = $timeout(filterVisitsBySelectedDate, 500);
 
     });
 
