@@ -97,8 +97,6 @@
 
     }
 
-    var unBindSelectedDayVisits;
-
     function filterVisitsBySelectedDate() {
 
       var filter = {
@@ -108,8 +106,7 @@
 
       vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})();
 
-      unBindSelectedDayVisits && unBindSelectedDayVisits();
-      unBindSelectedDayVisits = Visit.bindAll(filter, $scope, 'vm.selectedDayVisits');
+      vm.rebindAll(Visit, filter, 'vm.selectedDayVisits');
 
     }
 
