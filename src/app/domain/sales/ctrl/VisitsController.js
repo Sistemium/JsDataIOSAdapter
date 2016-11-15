@@ -36,27 +36,22 @@
 
       $scope.$on('rootClick', () => $state.go('sales.visits'));
 
-      $scope.$watch('vm.selectedDate', _.debounce(newValue => {
+      $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
-        if (!angular.isObject(newValue)) {
-          vm.selectedDate = new Date();
-        }
+      $scope.$watch(
+        () => todayDate.getTime().setHours(0,0,0,0),
+        todayTime => vm.selectedDate = new Date(todayTime)
+      );
 
-        filterVisitsBySelectedDate();
+    }
 
-      }, 500));
+    function setDate(newValue) {
 
-      $scope.$watch(() => {
+      if (!angular.isObject(newValue)) {
+        vm.selectedDate = new Date();
+      }
 
-        var todayDate = new Date();
-        todayDate.setHours(0,0,0,0);
-        return todayDate.getTime();
-
-      }, todayTime => {
-
-        vm.selectedDate = new Date(todayTime);
-
-      });
+      filterVisitsBySelectedDate();
 
     }
 
