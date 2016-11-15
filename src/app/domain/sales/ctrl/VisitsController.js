@@ -6,7 +6,7 @@
 
     var vm = saControllerHelper(this, $scope);
 
-    _.assign(vm, {
+    vm.use({
 
       visits: [],
       selectedDayVisits: [],
