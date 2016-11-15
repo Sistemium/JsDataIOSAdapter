@@ -79,6 +79,7 @@
             });
 
             vm.busy.catch(() => {
+              vm.busy = false;
               busyArray = [];
             });
 
