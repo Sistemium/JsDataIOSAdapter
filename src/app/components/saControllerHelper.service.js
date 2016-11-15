@@ -95,7 +95,7 @@
           busyArray.push({promise, message});
           // console.info('setBusy push', promise);
 
-          return vm.busy;
+          return promise;
 
         }
 

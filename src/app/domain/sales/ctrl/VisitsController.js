@@ -61,7 +61,7 @@
         salesmanId: salesman.id
       };
 
-      vm.setBusy(Visit.findAll(filter, {bypassCache: true})
+      vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
         .then(() => {
 
           Visit.bindAll(filter, $scope, 'vm.visits', () => {
@@ -71,7 +71,7 @@
 
           });
 
-        }), 'Загрузка данных визитов');
+        });
 
     }
 
