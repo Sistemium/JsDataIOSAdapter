@@ -51,7 +51,7 @@
           return vm;
         },
 
-        setBusy: promise => {
+        setBusy: (promise, message) => {
 
           if (!busyArray.length) {
 
@@ -64,7 +64,8 @@
 
                 if (next) {
                   // console.info('setBusy next', next);
-                  next.then(popResolver, reject);
+                  next.promise.then(popResolver, reject);
+                  if (next.message) vm.cgBusy.message = next.message;
                 } else {
                   // console.info('setBusy resolve');
                   resolve();
@@ -81,9 +82,17 @@
               busyArray = [];
             });
 
+            vm.cgBusy = {
+              promise: vm.busy
+            };
+
+            if (message) {
+              vm.cgBusy.message = message;
+            }
+
           }
 
-          busyArray.push(promise);
+          busyArray.push({promise, message});
           // console.info('setBusy push', promise);
 
           return vm.busy;
