@@ -4,7 +4,7 @@
 
   function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
 
-    var vm = saControllerHelper(this, $scope);
+    var vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 

@@ -33,7 +33,7 @@
 
       var bindAllStore = {};
 
-      scope.on('$destroy', () => _.each(bindAllStore, unbind => unbind()));
+      scope.$on('$destroy', () => _.each(bindAllStore, unbind => unbind()));
 
       return _.assign(vm,{
 
