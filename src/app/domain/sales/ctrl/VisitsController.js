@@ -2,9 +2,9 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
 
-    var vm = this;
+    var vm = saControllerHelper(this, $scope);
 
     _.assign(vm, {
 
