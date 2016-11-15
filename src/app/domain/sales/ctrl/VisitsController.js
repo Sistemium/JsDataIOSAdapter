@@ -71,7 +71,7 @@
 
           });
 
-        }));
+        }), 'Загрузка данных визитов');
 
     }
 
@@ -107,7 +107,8 @@
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
           ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto']
-        )
+        ),
+        'Загрузка данных дня'
       );
 
       vm.rebindAll(Visit, filter, 'vm.selectedDayVisits');
