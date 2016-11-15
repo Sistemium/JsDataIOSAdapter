@@ -2,7 +2,7 @@
 
 (function () {
 
-  function saControllerHelper() {
+  function saControllerHelper($q) {
 
     return {
       setup
@@ -32,6 +32,7 @@
     function setup(vm, scope) {
 
       var bindAllStore = {};
+      var busyArray = [];
 
       scope.$on('$destroy', () => _.each(bindAllStore, unbind => unbind()));
 
@@ -48,6 +49,45 @@
           if (unbind) unbind();
           bindAllStore[expr] = model.bindAll(filter, scope, expr, callback);
           return vm;
+        },
+
+        setBusy: promise => {
+
+          if (!busyArray.length) {
+
+            // console.info('setBusy make new');
+            vm.busy = $q((resolve, reject) => {
+
+              function popResolver () {
+
+                var next = busyArray.pop();
+
+                if (next) {
+                  // console.info('setBusy next', next);
+                  next.then(popResolver, reject);
+                } else {
+                  // console.info('setBusy resolve');
+                  resolve();
+                  vm.busy = false;
+                }
+
+              }
+
+              promise.then(popResolver, reject)
+
+            });
+
+            vm.busy.catch(() => {
+              busyArray = [];
+            });
+
+          }
+
+          busyArray.push(promise);
+          // console.info('setBusy push', promise);
+
+          return vm.busy;
+
         }
 
       });
