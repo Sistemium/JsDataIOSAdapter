@@ -22,10 +22,10 @@
             localField: 'checkOutLocation',
             localKey: 'checkOutLocationId'
           }],
-          Account: {
-            localField: 'account',
-            localKey: 'author'
-          },
+          // Account: {
+          //   localField: 'account',
+          //   localKey: 'author'
+          // },
           Outlet: {
             localField: 'outlet',
             localKey: 'outletId'
