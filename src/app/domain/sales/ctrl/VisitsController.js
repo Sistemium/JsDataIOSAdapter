@@ -61,7 +61,7 @@
         salesmanId: salesman.id
       };
 
-      vm.busy = Visit.findAll(filter, {bypassCache: true})
+      vm.setBusy(Visit.findAll(filter, {bypassCache: true})
         .then(() => {
 
           Visit.bindAll(filter, $scope, 'vm.visits', () => {
@@ -71,7 +71,7 @@
 
           });
 
-        });
+        }));
 
     }
 
@@ -104,7 +104,11 @@
         date: moment(vm.selectedDate).format('YYYY-MM-DD')
       };
 
-      vm.busy = Visit.findAllWithRelations(filter, {bypassCache: true})();
+      vm.setBusy(
+        Visit.findAllWithRelations(filter, {bypassCache: true})(
+          ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto']
+        )
+      );
 
       vm.rebindAll(Visit, filter, 'vm.selectedDayVisits');
 
