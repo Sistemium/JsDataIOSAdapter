@@ -26,7 +26,7 @@
 
     });
 
-    var Visit = Schema.model('Visit');
+    var {Visit} = Schema.models();
     var salesman = SalesmanAuth.getCurrentUser();
 
     scopeRoutines();
