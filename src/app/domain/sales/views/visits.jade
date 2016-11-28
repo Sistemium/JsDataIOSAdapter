@@ -1,0 +1,61 @@
+section.visits.ui-view(cg-busy='vm.cgBusy')
+
+  .row.datepicker-with-buttons
+    .col-sm-9.col-md-10
+      .input-group
+        span.form-control(
+        uib-datepicker-popup
+        ng-model='vm.selectedDate'
+        is-open='vm.datepickerPopup.opened'
+        datepicker-options='vm.datepickerOptions'
+        ng-required='true'
+        close-text='Закрыть'
+        current-text='Сегодня'
+        clear-text='Очистить'
+        ng-click='vm.openDatepicker()'
+        ) {{ vm.selectedDate | amUtc | amLocal | amDateFormat:'DD/MM/YYYY, dd' }}
+        span.input-group-btn
+          button.btn.btn-default(
+          type='button'
+          ng-click='vm.selectPreviousDay()'
+          ng-disabled='!vm.previousDayAvailable()'
+          )
+            i.glyphicon.glyphicon-chevron-left
+          button.btn.btn-default(
+          type='button'
+          ng-click='vm.openDatepicker()'
+          )
+            i.glyphicon.glyphicon-calendar
+          button.btn.btn-default(
+          type='button'
+          ng-click='vm.selectNextDay()'
+          ng-disabled='!vm.nextDayAvailable()'
+          )
+            i.glyphicon.glyphicon-chevron-right
+    .col-sm-3.col-md-2
+      .buttons
+        button.btn.btn-block.btn-success.pull-right(ng-click='vm.newVisitClick()') Новый визит
+
+  hr.clear-both
+
+  #scroll-main(resize ng-style='{height: (windowHeight - offsetTop) + "px"}')
+    table.table.table-striped.clear-both.table-hover(ng-if='vm.selectedDayVisits.length')
+      thead
+        tr
+          th Точка
+          th Время
+          th.number.hidden-xs Фото
+          th.number.hidden-xs Ответов
+      tbody
+        tr.clickable(
+        ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
+        ng-click='vm.visitClick(visit)'
+        )
+          td
+            div {{ visit.outlet.name }}
+            .gray {{ visit.outlet.address }}
+          td
+            div {{ visit.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
+            div {{ visit.duration() }}
+          td.number.hidden-xs {{ visit.photos.length | number: 0 }}
+          td.number.hidden-xs {{ visit.answers.length | number: 0 }}

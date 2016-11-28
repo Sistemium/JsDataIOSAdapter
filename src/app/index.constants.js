@@ -6,7 +6,9 @@
     .module('webPage')
     .constant('moment', moment)
     .value('cgBusyDefaults',{
-      message:'Идет загрузка'
+      message:'Идет загрузка',
+      delay: 100,
+      minDuration: 300
     });
 
 })();

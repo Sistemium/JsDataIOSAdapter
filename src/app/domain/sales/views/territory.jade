@@ -2,7 +2,7 @@ section.text-center.scroll-horizontal.hashes(
 style='min-height: {{vm.hideHashes ? "0" : "37px"}}; max-height: {{vm.hideHashes ? "0" : "37px"}}'
 ng-hide='vm.hideHashes'
 )
-  button.btn.btn-success.margin(ng-click='vm.addOutletClick()')
+  button.btn.btn-success.margin(ng-click='vm.addOutletClick()' ng-if='vm.addOutletClick')
     i.glyphicon.glyphicon-plus
 
   button.btn.margin(
@@ -28,7 +28,7 @@ hr(ng-hide='vm.hideHashes')
   )
     section(ng-repeat='p in vm.partners | orderBy:["shortName", "name"] | filter:vm.filter track by p.id')
       h5
-        a.lead(href ng-click='vm.partnerClick(p)') {{ p.shortName }}
+        a.lead(ng-class='vm.partnerLinkClass' href ng-click='vm.partnerClick(p)') {{ p.shortName }}
 
       p.text-right(ng-repeat='o in p.outlets | orderBy:"address"')
         a.green(ng-if='o.locationId')

@@ -7,7 +7,7 @@
 
       var prePreOrders = {
 
-        name:'prePreOrders',
+        name: 'prePreOrders',
         url: '/prePreOrders?state',
 
         templateUrl: 'app/domain/sales/views/prePreOrderList.html',
@@ -115,7 +115,7 @@
         controller: 'OutletController',
         controllerAs: 'vm',
 
-        children: [visit, visitCreate]
+        children: [angular.copy(visit), visitCreate]
 
       };
 
@@ -156,7 +156,11 @@
 
         templateUrl: 'app/domain/sales/views/territory.html',
         controller: 'SalesTerritoryController',
-        controllerAs: 'vm',
+        controllerAs: 'vm'
+
+      };
+
+      var salesTerritory = _.assign({
 
         data: {
           needCurrent: 'Salesman',
@@ -165,7 +169,26 @@
           title: 'Клиенты'
         },
 
-        children: [partner, editPartner, outlet, addOutlet, editOutlet]
+        children: [partner, editPartner, _.cloneDeep(outlet), addOutlet, editOutlet]
+
+      }, territory);
+
+      var visits = {
+
+        name: 'visits',
+        url: '/visits',
+
+        templateUrl: 'app/domain/sales/views/visits.html',
+        controller: 'VisitsController',
+        controllerAs: 'vm',
+
+        data: {
+          needCurrent: 'Salesman',
+          needRole: 'salesman',
+          title: 'Визиты'
+        },
+
+        children: [territory, _.cloneDeep(outlet), _.cloneDeep(visit), _.cloneDeep(visitCreate)]
 
       };
 
@@ -180,7 +203,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [territory, prePreOrders]
+          children: [salesTerritory, prePreOrders, visits]
 
         })
       ;

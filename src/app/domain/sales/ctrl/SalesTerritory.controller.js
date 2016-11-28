@@ -23,7 +23,11 @@
     var SM = Schema.model('Salesman');
     var stateFilter = {};
 
-    var rootState = 'sales.territory';
+    var rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
+
+    if (rootState !== 'sales.territory') {
+      delete vm.addOutletClick;
+    }
 
     vm.salesman = SalesmanAuth.getCurrentUser();
 
@@ -35,9 +39,24 @@
 
     vm.refresh();
 
-    $scope.$on('rootClick', () => $state.go('sales.territory'));
+    $scope.$on('rootClick', () => $state.go(rootState));
 
-    $scope.$on('$stateChangeSuccess', (e, to) =>  vm.hideHashes = (to.name !== rootState));
+    $scope.$on('$stateChangeSuccess', (e, to) =>  {
+
+      _.assign(vm, {
+
+        hideHashes: !/.*territory$/.test(to.name),
+        partnerLinkClass: {
+          disabled: visitsIsRootState()
+        }
+
+      });
+
+    });
+
+    function visitsIsRootState() {
+      return (rootState == 'sales.visits');
+    }
 
     function refresh() {
 
@@ -53,6 +72,9 @@
     }
 
     function outletClick(outlet) {
+      if (visitsIsRootState()) {
+        return $state.go(`${rootState}.outlet.visitCreate`, {id: outlet.id});
+      }
       $state.go('.outlet', {id: outlet.id});
     }
 

@@ -13,7 +13,7 @@
 
     mapApiLoad(function(){
       me.yandex = $window.ymaps;
-      console.log ('yandex', me.yandex);
+      // console.log ('yandex', me.yandex);
     });
 
     function distanceFn (a,b) {

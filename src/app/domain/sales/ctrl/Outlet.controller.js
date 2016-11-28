@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, ConfirmModal, LocationHelper, toastr) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, LocationHelper, toastr) {
 
     // TODO: allow to add/change location for an existing outlet
 
@@ -15,6 +15,7 @@
       collapsePhotosSection: true,
       collapseVisitsSection: false,
       thumbnails: {},
+      isEditable: $state.current.name === 'sales.territory.outlet',
 
       visitClick: (visit) => $state.go('.visit', {visitId: visit.id}),
       mapClick: () => vm.popover = false,
@@ -37,14 +38,14 @@
     var Visit = Schema.model('Visit');
     var OutletPhoto = Schema.model('OutletPhoto');
     var Location = Schema.model('Location');
-    var rootState = 'sales.territory.outlet';
+    var rootState = _.first($state.current.name.match(/sales\.[^.]+\.[^.]+/)) || 'sales.territory.outlet';
 
     var stateFilter = $state.params.id;
     var salesman = SalesmanAuth.getCurrentUser();
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
 
-      Outlet.loadRelations(vm.outlet, ['OutletPhoto', 'Location'])
+      Outlet.loadRelations(vm.outlet, ['OutletPhoto', 'Location', 'Partner'])
         .then(function (outlet) {
           _.each(outlet.photos, importThumbnail);
           if (outlet.location) {
@@ -209,8 +210,21 @@
     refresh();
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.isRootState = (to.name === rootState);
-      vm.disableNavs = !!_.get(to, 'data.disableNavs') || vm.isRootState;
+
+      var isRootState = (to.name === rootState);
+      var disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
+
+      _.assign(vm, {
+        isRootState,
+        disableNavs,
+        partnerNavClass: {
+          disabled: !isRootState && disableNavs || /visits.*/.test(rootState)
+        },
+        outletNavClass: {
+          disabled: disableNavs
+        }
+      });
+
     });
 
   }

@@ -4,9 +4,12 @@
 
   const REQUIRED_ACCURACY = 100;
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, Helpers) {
 
-    var vm = this;
+    var {mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
+
+    var vm = saControllerHelper.setup(this, $scope);
+
     var buttons = [];
     var creatingMode = !!_.get($state, 'current.name').match(/\.visitCreate$/);
 
@@ -32,15 +35,20 @@
 
     });
 
-    var Visit = Schema.model('Visit');
+    var {Visit, Location, Outlet} = Schema.models();
+
     var VQS = Schema.model('VisitQuestionSet');
     var VQ = Schema.model('VisitQuestion');
     var VA = Schema.model('VisitAnswer');
-    var Location = Schema.model('Location');
 
     var date = moment().format('YYYY-MM-DD');
     var visitId = $state.params.visitId;
     var outletId = $state.params.id;
+
+    Outlet.loadRelations(outletId, ['partner']);
+
+    var rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
+
     var answersByQuestion = {};
 
     var salesman = SalesmanAuth.getCurrentUser();
@@ -120,7 +128,13 @@
     }
 
     function goBack() {
+
+      if (rootState == 'sales.visits') {
+        return $state.go(rootState);
+      }
+
       $state.go('^');
+
     }
 
     function changeAnswer(qst, data) {

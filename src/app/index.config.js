@@ -8,6 +8,9 @@
     .config(function(localStorageServiceProvider){
       localStorageServiceProvider.setPrefix('stg');
     })
+    .run(function(amMoment) {
+      amMoment.changeLocale('ru');
+    })
   ;
 
   function debugService(saDebug) {
