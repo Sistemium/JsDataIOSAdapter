@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  function NavbarController(Auth, Menu, $scope, $state, $timeout, $rootScope, IOS, saControllerHelper) {
+  function NavbarController(Auth, Menu, $scope, $state, $timeout, $rootScope, IOS, saControllerHelper, SalesmanAuth) {
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -23,9 +23,18 @@
 
       fullscreenButtonClass,
       fullscreenButtonTitle,
+      salesmanClick,
       salesmanMenuTitle
 
     });
+
+    toggleFullScreen();
+
+    var salesman = SalesmanAuth.getCurrentUser();
+
+    if (salesman) {
+      vm.selectedSalesman = salesman;
+    }
 
     function toggleFullScreen() {
 
@@ -49,11 +58,13 @@
       return vm.isFullScreen? 'Свернуть' : 'Развернуть';
     }
 
+    function salesmanClick() {
+      console.log('show salesmans list to select one');
+    }
+
     function salesmanMenuTitle() {
       return vm.selectedSalesman ? vm.selectedSalesman : 'Выбрать салесмана';
     }
-
-    toggleFullScreen();
 
     $scope.$on('$stateChangeSuccess', (e, to) => {
 
