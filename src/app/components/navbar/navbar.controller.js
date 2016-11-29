@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  function NavbarController(Auth, Menu, $window, $scope, $state, $timeout, $rootScope, IOS) {
+  function NavbarController(Auth, Menu, $scope, $state, $timeout, $rootScope, IOS) {
 
     var vm = this;
 
