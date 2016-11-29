@@ -7,9 +7,16 @@
 
       stateHelperProvider
         .state({
-          url: '/saleOrders',
+          url: '/saleOrders?date',
           name: 'sales.saleOrders',
-          template: '<h3>SaleOrders</h3>'
+          templateUrl: 'app/domain/sales/views/saleOrders.html',
+          controller: 'SaleOrderController',
+          controllerAs: 'vm',
+
+          data: {
+            title: 'Заказы'
+          }
+
         });
 
     });
