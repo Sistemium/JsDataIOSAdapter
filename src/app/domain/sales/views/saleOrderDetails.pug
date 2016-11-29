@@ -19,12 +19,12 @@
         #date.form-control {{vm.saleOrder.date}}
 
     .form-group
-      label.col-sm-3.control-label(for='salesMan') Продавец
+      label.col-sm-3.control-label(for='salesMan') ТП
       .col-sm-9
         #salesMan.form-control {{vm.saleOrder.salesman.name}}
 
     .form-group
-      label.col-sm-3.control-label(for='price') Итого
+      label.col-sm-3.control-label(for='price') Стоимость
       .col-sm-9
         #price.form-control {{vm.saleOrder.totalCost | number: 2}} руб.
 
