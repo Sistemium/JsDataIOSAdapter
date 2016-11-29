@@ -1,9 +1,26 @@
 'use strict';
 
 (function () {
-  function NavbarController(Auth, Menu, $scope, $state, $timeout, $rootScope, IOS) {
+  function NavbarController(Auth, Menu, $scope, $state, $timeout, $rootScope, IOS, saControllerHelper) {
 
-    var vm = this;
+    var vm = saControllerHelper.setup(this, $scope);
+
+    vm.use({
+
+      auth: Auth,
+      menu: Menu.root(),
+
+      isCollapsed: true,
+
+      onBrandClick: () => {
+        if (vm.currentItem) {
+          $state.go(vm.currentItem.state)
+        }
+      },
+      onProfileClick: () => $state.go(Auth.profileState),
+      rootClick: () => $rootScope.$broadcast('rootClick'),
+
+    });
 
     function toggleFullScreen() {
 
@@ -19,33 +36,10 @@
 
     }
 
-    angular.extend(vm, {
-
-      menu: Menu.root(),
-
-      isCollapsed: true,
-
-      auth: Auth,
-
-      onBrandClick: function () {
-        if (vm.currentItem) {
-          $state.go(vm.currentItem.state);
-        }
-      },
-
-      onProfileClick: function () {
-        $state.go(Auth.profileState);
-      },
-
-      rootClick: function () {
-        $rootScope.$broadcast('rootClick');
-      }
-
-    });
 
     toggleFullScreen();
 
-    $scope.$on('$stateChangeSuccess', function (e, to) {
+    $scope.$on('$stateChangeSuccess', (e, to) => {
 
       vm.hide = !!_.get(to, 'data.hideTopBar');
       vm.hideNavs = !! _.get(to, 'data.hideNavs');
@@ -56,9 +50,7 @@
         return to.name && _.startsWith(to.name, item.state);
       });
 
-      $timeout(function () {
-        vm.isCollapsed = true;
-      }, 500);
+      $timeout(() => vm.isCollapsed = true, 500);
       vm.currentItem = item;
 
     });
