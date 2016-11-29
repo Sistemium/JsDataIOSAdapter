@@ -22,7 +22,7 @@
         hasMany: {
           SaleOrderPosition: {
             localField: 'positions',
-            foreignKey: 'saleOrderPositionId'
+            foreignKey: 'saleOrderId'
           }
         }
       },
