@@ -15,7 +15,15 @@
 
           data: {
             title: 'Заказы'
-          }
+          },
+
+          children: [{
+            url: '/:id',
+            name: 'item',
+            templateUrl: 'app/domain/sales/views/saleOrderDetails.html',
+            controller: 'SaleOrderDetailsController',
+            controllerAs: 'vm'
+          }]
 
         });
 
