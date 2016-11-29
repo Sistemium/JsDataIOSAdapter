@@ -51,4 +51,4 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
             .gray {{ item.outlet.address }}
           td {{ item.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
           td {{ item.totalCost | number:2 }}
-          td {{ item.totalPositionCount }}
+          td {{ item.agg.cnt }}
