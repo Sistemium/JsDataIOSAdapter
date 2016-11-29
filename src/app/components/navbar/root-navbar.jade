@@ -32,9 +32,19 @@ section(ng-hide='vm.hide')
       uib-dropdown-toggle
       )
         b.glyphicon.glyphicon-option-vertical
-      ul.dropdown-menu-right(uib-dropdown-menu)
+      ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
         li
-          small.gray.ml-10(ng-if='vm.isRootState && vm.toggleFullScreen')
+          small.gray.ml-10
+            a.p-6(
+            href
+            ng-click='vm.salesmanClick()'
+            ng-class='{disabled: vm.hideNavs}'
+            )
+              b.glyphicon.glyphicon-user
+              span {{vm.salesmanMenuTitle()}}
+
+        li(ng-if='vm.isRootState && vm.toggleFullScreen')
+          small.gray.ml-10
             a.p-6(
             href
             ng-click='vm.toggleFullScreen()'

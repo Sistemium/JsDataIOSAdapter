@@ -11,6 +11,7 @@
       menu: Menu.root(),
 
       isCollapsed: true,
+      selectedSalesman: undefined,
 
       onBrandClick: () => {
         if (vm.currentItem) {
@@ -21,7 +22,8 @@
       rootClick: () => $rootScope.$broadcast('rootClick'),
 
       fullscreenButtonClass,
-      fullscreenButtonTitle
+      fullscreenButtonTitle,
+      salesmanMenuTitle
 
     });
 
@@ -44,7 +46,11 @@
     }
 
     function fullscreenButtonTitle() {
-      return vm.isFullScreen? ' Свернуть' : ' Развернуть';
+      return vm.isFullScreen? 'Свернуть' : 'Развернуть';
+    }
+
+    function salesmanMenuTitle() {
+      return vm.selectedSalesman ? vm.selectedSalesman : 'Выбрать салесмана';
     }
 
     toggleFullScreen();
