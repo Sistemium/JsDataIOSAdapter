@@ -2,7 +2,7 @@
 
 (function () {
 
-  function navbarMenuController(saControllerHelper, Schema, IOS, $scope) {
+  function navbarMenuController(saControllerHelper, Schema, IOS, $scope, SalesmanAuth) {
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -23,6 +23,9 @@
 
       vm.hideNavs = !!_.get(to, 'data.hideNavs');
       vm.isRootState = (to.name === 'home');
+      vm.isSalesState = _.startsWith(to.name, 'sales.');
+
+      vm.showMenu = vm.isSalesState || (vm.isRootState && vm.toggleFullScreen);
 
     });
 
@@ -50,17 +53,13 @@
 
     function salesmanClick() {
 
-      console.log('show salesmans list to select one');
       Salesman.findAll()
         .then(data => {
-          console.log(data)
-        });
 
-      //var salesman = SalesmanAuth.getCurrentUser();
-      //
-      //if (salesman) {
-      //  vm.selectedSalesman = salesman;
-      //}
+          console.log(data);
+          vm.selectedSalesman = SalesmanAuth.getCurrentUser();
+
+        });
 
     }
 

@@ -5,13 +5,13 @@ on-toggle='toggled(open)'
 auto-close='outsideClick'
 )
   a.p-6(
-  href
-  ng-click=''
+  ng-href='{{vm.showMenu ? " " : ""}}'
+  ng-disabled="!vm.showMenu"
   uib-dropdown-toggle
   )
-    b.glyphicon.glyphicon-option-vertical
+    b.glyphicon.glyphicon-option-vertical(ng-if='vm.showMenu')
   ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-    li
+    li(ng-if='vm.isSalesState')
       small.gray.ml-10
         a.p-6(
         href
