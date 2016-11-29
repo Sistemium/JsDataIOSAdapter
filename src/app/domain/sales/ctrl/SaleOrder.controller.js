@@ -33,7 +33,6 @@
      */
 
     $scope.$on('rootClick', () => $state.go('sales.saleOrders'));
-
     $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
     /*
@@ -46,7 +45,7 @@
         vm.selectedDate = new Date();
       }
 
-      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD') });
+      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')});
 
     }
 
