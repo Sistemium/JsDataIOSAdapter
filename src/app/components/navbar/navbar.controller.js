@@ -20,7 +20,8 @@
       onProfileClick: () => $state.go(Auth.profileState),
       rootClick: () => $rootScope.$broadcast('rootClick'),
 
-      fullscreenButtonClass
+      fullscreenButtonClass,
+      fullscreenButtonTitle
 
     });
 
@@ -40,6 +41,10 @@
 
     function fullscreenButtonClass() {
       return vm.isFullScreen? 'glyphicon-resize-small' : 'glyphicon-resize-full';
+    }
+
+    function fullscreenButtonTitle() {
+      return vm.isFullScreen? ' Свернуть' : ' Развернуть';
     }
 
     toggleFullScreen();

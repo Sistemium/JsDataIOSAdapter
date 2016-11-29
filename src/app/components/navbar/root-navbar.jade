@@ -1,19 +1,6 @@
 section(ng-hide='vm.hide')
 
   h2.flex
-    a.inherit-colors(
-    href=''
-    ng-click='vm.rootClick()'
-    ng-class='{disabled: vm.hideNavs}'
-    ) {{ vm.title }}
-    span.flex-1
-    small.gray.ml-10(ng-if='vm.isRootState && vm.toggleFullScreen')
-      a.p-6(
-      href
-      ng-click='vm.toggleFullScreen()'
-      ng-class='{disabled: vm.hideNavs}'
-      )
-        b.glyphicon(ng-class='vm.fullscreenButtonClass()')
 
     small.gray.ml-10
       a.p-6(
@@ -22,5 +9,39 @@ section(ng-hide='vm.hide')
       ng-class='{disabled: vm.hideNavs}'
       )
         b.glyphicon.glyphicon-home
+
+    span.flex-1
+
+    a.inherit-colors(
+    href=''
+    ng-click='vm.rootClick()'
+    ng-class='{disabled: vm.hideNavs}'
+    ) {{ vm.title }}
+
+    span.flex-1
+
+    small.gray.ml-10(
+    uib-dropdown
+    outsideClick
+    on-toggle='toggled(open)'
+    auto-close='outsideClick'
+    )
+      a.p-6(
+      href
+      ng-click=''
+      uib-dropdown-toggle
+      )
+        b.glyphicon.glyphicon-option-vertical
+      ul.dropdown-menu-right(uib-dropdown-menu)
+        li
+          small.gray.ml-10(ng-if='vm.isRootState && vm.toggleFullScreen')
+            a.p-6(
+            href
+            ng-click='vm.toggleFullScreen()'
+            ng-class='{disabled: vm.hideNavs}'
+            )
+              b.glyphicon(ng-class='vm.fullscreenButtonClass()')
+              span {{vm.fullscreenButtonTitle()}}
+
 
   hr
