@@ -98,7 +98,7 @@
 
       if (articleGroup) {
         filter.articleGroup = {
-          'in': [articleGroup.id]
+          'in': _.union([articleGroup.id], _.map(articleGroup.descendants(), 'id'))
         };
       }
 
