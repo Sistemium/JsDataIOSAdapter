@@ -42,8 +42,6 @@
 
     function setDate(newValue) {
 
-      nextDayAvailable();
-
       if (!angular.isObject(newValue)) {
         vm.selectedDate = new Date();
       }
@@ -106,7 +104,7 @@
     }
 
     function nextDayAvailable() {
-      return (vm.selectedDate.setHours(0, 0, 0, 0) < maxDate());
+      return vm.selectedDate.setHours(0, 0, 0, 0) < maxDate();
     }
 
     function openDatepicker() {
