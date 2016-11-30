@@ -99,7 +99,7 @@
 
     function maxDate() {
 
-      var maxDate = new Date();
+      var maxDate = moment().add(7, 'days').toDate();
       maxDate.setHours(0, 0, 0, 0);
       return maxDate;
 
