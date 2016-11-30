@@ -106,12 +106,16 @@
         where: filter
       });
 
+      filter = {};
+
+      if (articleGroup) {
+        filter.articleId = {
+          'in': _.map(articles, 'id')
+        };
+      }
+
       vm.stock = Stock.filter({
-        where: {
-          articleId: {
-            'in': _.map(articles, 'id')
-          }
-        },
+        where: filter,
         orderBy: ['article.name']
       })
 
