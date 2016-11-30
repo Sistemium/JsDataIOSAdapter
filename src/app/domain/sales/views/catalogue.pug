@@ -24,7 +24,7 @@ section(cg-busy='vm.cgBusy')
           span {{elem.name}}
 
     #scroll-articles.col-sm-8.scroll-y(style='max-height: {{windowHeight - offsetTop - 5}}px;')
-      ul.list-group.vr-parent(vs-repeat='41' vs-scroll-parent="#scroll-articles")
+      ul.list-group.vr-parent(vs-repeat vs-autoresize vs-scroll-parent="#scroll-articles")
         .list-group-item.display-flex(ng-repeat='stock in vm.stock track by stock.id')
           span.flex-1 {{stock.article.name}}
           span.right {{stock.displayVolume}}
