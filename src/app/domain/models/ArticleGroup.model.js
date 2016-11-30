@@ -14,6 +14,12 @@
               localField: 'Articles',
               foreignKey: 'articleGroup'
             }
+          },
+          hasOne: {
+            ArticleGroup: {
+              localField: 'articleGroup',
+              localKey: 'articleGroupId'
+            }
           }
         }
 
