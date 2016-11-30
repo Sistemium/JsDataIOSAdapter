@@ -50,6 +50,16 @@
           return res;
 
         },
+        descendants: function () {
+          let res = this.children;
+
+          _.each(res, item => {
+            Array.prototype.push.apply(res, item.descendants());
+          });
+
+          return res;
+
+        },
         stockArticles: function () {
           return _.get(stockCache[this.id], 'length');
         }
