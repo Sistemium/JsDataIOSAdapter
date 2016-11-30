@@ -111,7 +111,8 @@
           articleId: {
             'in': _.map(articles, 'id')
           }
-        }
+        },
+        orderBy: ['article.name']
       })
 
     }
