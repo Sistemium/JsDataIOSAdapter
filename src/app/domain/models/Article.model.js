@@ -15,6 +15,13 @@
             localKey: 'articleGroup'
           }
         },
+        hasOne: {
+          Stock: {
+            localField: 'stock',
+            foreignKey: 'articleId'
+          }
+        },
+
         hasMany: {
           StockBatch: {
             localField: 'stockBatches',
