@@ -30,7 +30,11 @@
           }, {
             title: 'Заказы',
             state: 'sales.saleOrders',
-            needRoles: 'salesman' // TODO roles
+            needRoles: 'salesman' // TODO roles via state.data
+          }, {
+            title: 'Каталог',
+            state: 'sales.catalogue',
+            needRoles: 'salesman'
           }, {
             title: 'Фотопоток',
             state: 'photos.stream',
