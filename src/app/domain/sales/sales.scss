@@ -25,17 +25,3 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   border-radius: 64px;
   color: black;
 }
-
-
-.visits {
-  .datepicker-with-buttons {
-    .buttons {
-      @media (max-width: $screen-xs-max) {
-        margin-top: 6px;
-        .btn-block {
-          //max-width: 400px;
-        }
-      }
-    }
-  }
-}
