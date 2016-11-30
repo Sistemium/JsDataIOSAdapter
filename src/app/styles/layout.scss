@@ -141,3 +141,12 @@ p.list-group-item-text {
 small i.glyphicon {
   font-size: 80%;
 }
+
+
+.breadcrumb > li + li:before {
+  margin-left: 4px;
+}
+
+.breadcrumb > li + li.active:before {
+  margin-left: 0;
+}
