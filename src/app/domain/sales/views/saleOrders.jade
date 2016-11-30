@@ -1,7 +1,7 @@
 section.ui-view(cg-busy='vm.cgBusy')
 
   .row.datepicker-with-buttons
-    .col-sm-12.col-md-12
+    .col-sm-9.col-md-10
       .input-group
         span.form-control(
         uib-datepicker-popup
@@ -31,6 +31,9 @@ section.ui-view(cg-busy='vm.cgBusy')
           ng-disabled='!vm.nextDayAvailable()'
           )
             i.glyphicon.glyphicon-chevron-right
+    .col-sm-3.col-md-2
+      .buttons
+        button.btn.btn-block.btn-success.pull-right(ng-click='vm.newItemClick($event)') Новый Заказ
 
   hr.clear-both
 
@@ -57,4 +60,5 @@ section.ui-view(cg-busy='vm.cgBusy')
           td {{ item.deviceCts | amUtc | amLocal | amCalendar }}
           td {{ item.totalCost | number:2 }}
           td {{ item.agg.cnt }}
-  pre.centered.bg-danger(ng-show='!vm.data.length') Заказов не найдено
+
+  .alert.alert-info.centered(ng-show='!vm.data.length') Нет заказов на указанную дату
