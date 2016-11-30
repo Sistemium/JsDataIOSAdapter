@@ -10,7 +10,7 @@ section(cg-busy='vm.cgBusy')
   resize
   style='height: {{windowHeight - offsetTop - 5}}px;'
   )
-    .col-sm-4.scroll-y.height-100
+    .col-sm-4.scroll-y(style='max-height: 100%')
 
       ul.list-group
         a.list-group-item(
@@ -23,7 +23,7 @@ section(cg-busy='vm.cgBusy')
           i.glyphicon.glyphicon-menu-right.pull-right(ng-if='elem.children.length')
           span {{elem.name}}
 
-    #scroll-articles.col-sm-8.scroll-y.height-100
+    #scroll-articles.col-sm-8.scroll-y(style='max-height: {{windowHeight - offsetTop - 5}}px;')
       ul.list-group.vr-parent(vs-repeat='41' vs-scroll-parent="#scroll-articles")
         .list-group-item.display-flex(ng-repeat='stock in vm.stock track by stock.id')
           span.flex-1 {{stock.article.name}}
