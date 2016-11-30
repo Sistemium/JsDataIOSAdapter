@@ -1,0 +1,13 @@
+section(cg-busy='vm.cgBusy')
+
+  section.row(
+  resize
+  style='height: {{windowHeight - offsetTop - 5}}px;'
+  )
+    .col-sm-4
+      div(ng-repeat='elem in vm.articleGroups track by elem.id') {{elem.name}}
+    #scroll-articles.col-sm-8.scroll-y.height-100
+      .vr-parent(vs-repeat='29' vs-scroll-parent="#scroll-articles")
+        p.display-flex(ng-repeat='stock in vm.stock track by stock.id')
+          span.flex-1 {{stock.article.name}}
+          span.text-right {{stock.volume}}
