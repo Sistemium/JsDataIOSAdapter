@@ -6,6 +6,7 @@
 
     let vm = saControllerHelper.setup(this, $scope);
     let {Article, Stock, ArticleGroup} = Schema.models();
+    let currentArticleGroupId = $state.params.articleGroupId || null;
 
     vm.use({
       currentArticleGroup: null,
@@ -25,9 +26,6 @@
         .then(() => setCurrentArticleGroup(null))
     );
 
-    // vm.rebindAll(Stock, false, 'vm.stock');
-    // vm.rebindAll(Article, false, 'vm.articles');
-
     /*
      Functions
      */
@@ -43,11 +41,17 @@
       ])
         .then(() => {
           ArticleGroup.meta.setStock();
-          setCurrentArticleGroup(null);
+          setCurrentArticleGroup(currentArticleGroupId);
         });
     }
 
-    function setCurrentArticleGroup(articleGroup) {
+    function setCurrentArticleGroup(articleGroupOrId) {
+
+      let articleGroup = articleGroupOrId;
+
+      if (articleGroupOrId && !articleGroupOrId.id) {
+        articleGroup = ArticleGroup.get(articleGroupOrId) || null;
+      }
 
       let filter = {
         articleGroupId: _.get(articleGroup, 'id') || null
@@ -58,8 +62,16 @@
       let children = _.filter(ArticleGroup.filter(filter), hasArticlesOrGroups);
       if (children.length) vm.articleGroups = children;
 
+      if (!vm.articleGroups && articleGroup) {
+        vm.articleGroups = _.filter(ArticleGroup.filter({
+          articleGroupId: articleGroup.articleGroupId
+        }), hasArticlesOrGroups);
+      }
+
       setArticles(articleGroup);
       setAncestors(articleGroup);
+
+      $state.go('.', {articleGroupId: filter.articleGroupId}, {notify: false});
 
     }
 
