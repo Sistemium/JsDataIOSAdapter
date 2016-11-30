@@ -20,6 +20,7 @@
       openDatepicker,
       selectPreviousDay,
       selectNextDay,
+      nextDayAvailable,
 
       itemClick,
       newItemClick
@@ -41,6 +42,8 @@
 
     function setDate(newValue) {
 
+      nextDayAvailable();
+
       if (!angular.isObject(newValue)) {
         vm.selectedDate = new Date();
       }
@@ -58,9 +61,8 @@
       };
 
       vm.setBusy(
-        SaleOrder.findAllWithRelations(filter, {bypassCache: true})(
-          ['Outlet']
-        ),
+        SaleOrder.findAllWithRelations(filter, {bypassCache: true})
+        (['Outlet']),
         'Загрузка данных дня'
       );
 
@@ -86,11 +88,25 @@
 
     function datepickerOptions() {
 
+
       return {
+        maxDate: maxDate(),
         startingDay: 1,
         showWeeks: false
       };
 
+    }
+
+    function maxDate() {
+
+      var maxDate = new Date();
+      maxDate.setHours(0, 0, 0, 0);
+      return maxDate;
+
+    }
+
+    function nextDayAvailable() {
+      return (vm.selectedDate.setHours(0, 0, 0, 0) < maxDate());
     }
 
     function openDatepicker() {
