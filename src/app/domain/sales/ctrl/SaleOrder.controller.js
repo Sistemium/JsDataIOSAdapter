@@ -59,8 +59,7 @@
       };
 
       vm.setBusy(
-        SaleOrder.findAllWithRelations(filter, {bypassCache: true})
-        (['Outlet']),
+        SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet']),
         'Загрузка данных дня'
       );
 
