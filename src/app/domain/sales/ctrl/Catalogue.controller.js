@@ -5,36 +5,47 @@
   function CatalogueController(Schema, $scope, $state, saControllerHelper, $q) {
 
     let vm = saControllerHelper.setup(this, $scope);
+    let {Article, Stock, ArticleGroup} = Schema.models();
 
     vm.use({
-      currentArticleGroup: null
+      currentArticleGroup: null,
+      ancestors: [],
+      setCurrentArticleGroup
     });
 
-    let {Article, Stock, ArticleGroup} = Schema.models();
-    let options = {headers: {'x-page-size': 3000}};
-
-    let busy = $q.all([
-      ArticleGroup.findAll({}, options),
-      Stock.findAll({volumeNotZero: true}, options),
-      Article.findAll({volumeNotZero: true}, options)
-    ]);
-
-    vm.setBusy(busy);
+    vm.setBusy(findAll());
 
     /*
      Listeners
      */
 
-    $scope.$on('rootClick', () => $state.go('sales.catalogue'));
+    $scope.$on(
+      'rootClick',
+      () => $state.go('sales.catalogue')
+        .then(() => setCurrentArticleGroup(null))
+    );
 
-    vm.rebindAll(Stock, false, 'vm.stock');
-    vm.rebindAll(Article, false, 'vm.articles');
-    setCurrentArticleGroup(null);
+    // vm.rebindAll(Stock, false, 'vm.stock');
+    // vm.rebindAll(Article, false, 'vm.articles');
 
     /*
      Functions
      */
 
+
+    function findAll() {
+      let options = {headers: {'x-page-size': 3000}};
+
+      return $q.all([
+        ArticleGroup.findAll({}, options),
+        Stock.findAll({volumeNotZero: true}, options),
+        Article.findAll({volumeNotZero: true}, options)
+      ])
+        .then(() => {
+          ArticleGroup.meta.setStock();
+          setCurrentArticleGroup(null);
+        });
+    }
 
     function setCurrentArticleGroup(articleGroup) {
 
@@ -44,7 +55,52 @@
 
       vm.currentArticleGroup = articleGroup;
 
-      vm.rebindAll(ArticleGroup, filter, 'vm.articleGroups');
+      let children = _.filter(ArticleGroup.filter(filter), hasArticlesOrGroups);
+      if (children.length) vm.articleGroups = children;
+
+      setArticles(articleGroup);
+      setAncestors(articleGroup);
+
+    }
+
+    function hasArticlesOrGroups(articleGroup) {
+      return articleGroup.children.length || articleGroup.stockArticles();
+    }
+
+    function setAncestors(articleGroup) {
+      vm.ancestors = [{name: 'Все товары'}];
+      if (articleGroup) {
+        Array.prototype.push.apply(vm.ancestors, _.reverse(articleGroup.ancestors()));
+        // vm.ancestors.push(articleGroup);
+      }
+
+    }
+
+    function setArticles(articleGroup) {
+
+      let filter = {
+        // 'stock.volume': {
+        //   '>': 0
+        // }
+      };
+
+      if (articleGroup) {
+        filter.articleGroup = {
+          'in': [articleGroup.id]
+        };
+      }
+
+      let articles = Article.filter({
+        where: filter
+      });
+
+      vm.stock = Stock.filter({
+        where: {
+          articleId: {
+            'in': _.map(articles, 'id')
+          }
+        }
+      })
 
     }
 
