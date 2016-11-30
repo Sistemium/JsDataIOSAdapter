@@ -18,7 +18,7 @@
     "sistemium-angular": "^0.7.2",
     "sistemium-angular-bootstrap": ">=0.3.7",
     "angular-busy": "^4.1.3",
-    "angular-vs-repeat": "^1.1.7",
+    "angular-vs-repeat": "CalMlynarczyk/angular-vs-repeat#439f75c47b858032992b3304b98c80530d6a14cd",
     "angular-moment": "1.0.0-beta.6",
     "angular-bootstrap-toggle-switch": "^0.5.6",
     "ya-map": "angular-yandex-map#^1.0.9",
