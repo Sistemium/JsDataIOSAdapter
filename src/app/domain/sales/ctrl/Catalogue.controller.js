@@ -26,6 +26,9 @@
         .then(() => setCurrentArticleGroup(null))
     );
 
+
+    $scope.$watch('vm.search', () => setArticles(vm.currentArticleGroup));
+
     /*
      Functions
      */
@@ -53,6 +56,8 @@
         articleGroup = ArticleGroup.get(articleGroupOrId) || null;
       }
 
+      setArticles(articleGroup);
+
       let filter = {
         articleGroupId: _.get(articleGroup, 'id') || null
       };
@@ -68,7 +73,6 @@
         }), hasArticlesOrGroups);
       }
 
-      setArticles(articleGroup);
       setAncestors(articleGroup);
 
       $state.go('.', {articleGroupId: filter.articleGroupId}, {notify: false});
@@ -96,6 +100,12 @@
 
       let filter = {};
 
+      if (vm.search) {
+        filter.name = {
+          'likei': '%' + vm.search + '%'
+        }
+      }
+
       if (articleGroup) {
         filter.articleGroup = {
           'in': _.union([articleGroup.id], _.map(articleGroup.descendants(), 'id'))
@@ -108,7 +118,7 @@
 
       filter = {};
 
-      if (articleGroup) {
+      if (articleGroup || vm.search) {
         filter.articleId = {
           'in': _.map(articles, 'id')
         };

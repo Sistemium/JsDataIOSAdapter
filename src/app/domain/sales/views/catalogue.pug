@@ -12,6 +12,21 @@ section(cg-busy='vm.cgBusy')
   )
     .col-sm-4.scroll-y.max-height-100
 
+      .form-group.display-flex.has-feedback
+        label(for="search-input")
+          i.glyphicon.glyphicon-search
+        input#search-input.form-control.flex-1(
+        type='search'
+        placeholder='Поиск'
+        aria-describedby='search-input'
+        ng-model='vm.search'
+        ng-model-options='{debounce: 300}'
+        )
+
+        span.form-control-feedback(ng-hide='!vm.search' )
+          a(ng-click="vm.search=''" href)
+            i.glyphicon.glyphicon-remove
+
       ul.list-group
         a.list-group-item(
         ng-class='{active: vm.currentArticleGroup.id === elem.id}'
@@ -28,7 +43,7 @@ section(cg-busy='vm.cgBusy')
         .list-group-item.display-flex(ng-repeat='stock in vm.stock track by stock.id')
           .flex-1
             div
-              span {{stock.article.firstName}}
+              strong {{stock.article.firstName}}
               = ' '
               span.label.label-default {{stock.article.pieceVolume}}
             .gray(title='{{stock.article.name}}')
