@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueController(Schema, $scope, $state, saControllerHelper, $q) {
+  function CatalogueController(Schema, $scope, $state, saControllerHelper, $q, $window) {
 
     let vm = saControllerHelper.setup(this, $scope);
     let {Article, Stock, ArticleGroup} = Schema.models();
@@ -88,6 +88,12 @@
 
     }
 
+    function scrollArticlesTop() {
+      let scrollParent = $window.document.getElementById('scroll-articles');
+      if (!scrollParent) return;
+      scrollParent.scrollTop = 0;
+    }
+
     function setArticles(articleGroup) {
 
       let filter = {
@@ -118,6 +124,8 @@
         where: filter,
         orderBy: ['article.name']
       });
+
+      scrollArticlesTop();
 
     }
 
