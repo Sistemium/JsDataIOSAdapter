@@ -1,7 +1,7 @@
 small.gray.ml-10(
 uib-dropdown
 outsideClick
-on-toggle='toggled(open)'
+on-toggle='vm.salesmansListOpen = false || toggled(open)'
 auto-close='outsideClick'
 )
   a.p-6(
@@ -10,22 +10,34 @@ auto-close='outsideClick'
   uib-dropdown-toggle
   )
     b.glyphicon.glyphicon-option-vertical(ng-if='vm.showMenu')
-  ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-    li(ng-if='vm.isSalesState')
+  ul.dropdown-menu.dropdown-menu-right(
+  uib-dropdown-menu
+  ng-class='{disabled: vm.hideNavs}'
+  )
+    li
       small.gray.ml-10
         a.p-6(
-        href
-        ng-click='vm.salesmanClick()'
-        ng-class='{disabled: vm.hideNavs}'
+        ng-click='vm.salesmansListOpen = !vm.salesmansListOpen'
         )
           b.glyphicon.glyphicon-user
           span {{vm.salesmanMenuTitle()}}
+    hr(ng-if='vm.salesmansListOpen')
+    li(
+    ng-if='vm.salesmansListOpen'
+    ng-repeat='salesman in vm.salesmans'
+    )
+      small.gray.ml-10
+        a.p-6(
+        href
+        ng-click='vm.salesmanClick(salesman)'
+        )
+          b.glyphicon.glyphicon-ok(ng-class='vm.selectedSalesman !== salesman ? "glyphicon-none" : ""')
+          span {{salesman.shortName}}
     li(ng-if='vm.isRootState && vm.toggleFullScreen')
       small.gray.ml-10
         a.p-6(
         href
         ng-click='vm.toggleFullScreen()'
-        ng-class='{disabled: vm.hideNavs}'
         )
           b.glyphicon(ng-class='vm.fullscreenButtonClass()')
           span {{vm.fullscreenButtonTitle()}}
