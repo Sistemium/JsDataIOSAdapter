@@ -24,7 +24,6 @@
   }
 }
 
-
 @media (min-width: 768px) {
   .navbar.navbar-fixed-bottom {
     .float-right {
@@ -64,7 +63,6 @@
       margin-bottom: 5px;
     }
 
-
     li.divider {
       height: 1px;
       margin: 9px 0;
@@ -81,19 +79,27 @@
   }
 }
 
-.dropdown-menu {
+.dropdown-navbar-menu {
 
-  li {
-    padding: 10px 0px 10px 0px;
+  .dropdown-menu {
 
-    b {
-      margin-right: 10px;
+    li {
+      padding: 10px 0px 10px 0px;
+
+      b {
+        margin-right: 10px;
+      }
+
+    }
+
+    .glyphicon-none {
+      visibility: hidden;
     }
 
   }
 
-  .glyphicon-none:before {
-    visibility: hidden;
-  }
+}
 
+a[disabled] {
+  color: gray;
 }
