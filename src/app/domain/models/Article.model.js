@@ -35,6 +35,10 @@
       },
 
       computed: {
+        preName: ['name', function (name) {
+          var m = name.match(/[^"]+/);
+          return (m && m.length) ? _.trim(m[0]) : null;
+        }],
         firstName: ['name', function (name) {
           var m = name.match(/"[^"]+"/);
           return (m && m.length) ? m[0] : null;
