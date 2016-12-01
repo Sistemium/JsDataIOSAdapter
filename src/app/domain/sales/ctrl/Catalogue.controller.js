@@ -5,7 +5,7 @@
   function CatalogueController(Schema, $scope, $state, saControllerHelper, $q, $window) {
 
     let vm = saControllerHelper.setup(this, $scope);
-    let {Article, Stock, ArticleGroup} = Schema.models();
+    let {Article, Stock, ArticleGroup, Price, PriceType} = Schema.models();
     let currentArticleGroupId = $state.params.articleGroupId || null;
     let sortedStock = [];
 
@@ -13,6 +13,7 @@
       currentArticleGroup: null,
       ancestors: [],
       setCurrentArticleGroup,
+      priceTypeClick,
       articleGroupIds: {},
       search: $state.params.q || ''
     });
@@ -22,6 +23,9 @@
     /*
      Listeners
      */
+
+
+    vm.rebindAll(PriceType, null, 'vm.priceTypes');
 
     $scope.$on(
       'rootClick',
@@ -37,6 +41,12 @@
      Functions
      */
 
+    function priceTypeClick(priceType) {
+      //TODO write PriceType to localStorage
+      vm.currentPriceType = priceType;
+      filterStock();
+      setCurrentArticleGroup(vm.currentArticleGroup);
+    }
 
     function findAll() {
       let options = {headers: {'x-page-size': 3000}};
@@ -44,15 +54,34 @@
       return $q.all([
         ArticleGroup.findAll({}, options),
         Stock.findAll({volumeNotZero: true}, options),
-        Article.findAll({volumeNotZero: true}, options)
+        Article.findAll({volumeNotZero: true}, options),
+        PriceType.findAllWithRelations()('Price', null, null, options)
       ])
         .then(() => {
-          sortedStock = Stock.filter({
-            orderBy: ['article.name']
-          });
+          vm.currentPriceType = _.first(PriceType.filter({limit: 1}));
+          filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
         });
     }
+
+
+    function filterStock() {
+
+      sortedStock = Stock.filter({
+        orderBy: ['article.name']
+      });
+
+      let prices = _.groupBy(vm.currentPriceType.prices, 'articleId');
+
+      console.log(prices);
+
+      vm.prices = {};
+      _.each(prices, (val, key) => vm.prices[key] = val[0].price);
+
+      sortedStock = _.filter(sortedStock, stock => vm.prices[stock.articleId]);
+
+    }
+
 
     function setCurrentArticleGroup(articleGroupOrId) {
 

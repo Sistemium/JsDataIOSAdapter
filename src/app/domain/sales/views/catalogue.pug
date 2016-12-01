@@ -1,10 +1,23 @@
 section(cg-busy='vm.cgBusy')
 
   ol.breadcrumb
+
+    span.pull-right(uib-dropdown is-open='status.isopen')
+      a(href uib-dropdown-toggle)
+        | {{vm.currentPriceType.name || 'Выберите тип цен'}}
+        =' '
+        span.caret
+
+      ul.dropdown-menu(uib-dropdown-menu)
+        li(ng-repeat='priceType in vm.priceTypes track by priceType.id')
+          a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
+
+
     li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
       a(href ng-click='vm.setCurrentArticleGroup(ancestor.id && ancestor)') {{ ancestor.name }}
 
     li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
+
 
   section.row(
   resize
@@ -40,7 +53,7 @@ section(cg-busy='vm.cgBusy')
 
     #scroll-articles.col-sm-8.scroll-y.max-height-100
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length') Нет подходящих товаров
-      ul.list-group.vr-parent(vs-repeat='60' vs-scroll-parent="#scroll-articles")
+      ul.list-group.vr-parent(vs-repeat='80' vs-scroll-parent="#scroll-articles")
         .list-group-item.display-flex(ng-repeat='stock in vm.stock track by stock.id')
           .flex-1
             div
@@ -51,4 +64,6 @@ section(cg-busy='vm.cgBusy')
               small(ng-if='stock.article.lastName') {{stock.article.preName}}
               = ' '
               small {{stock.article.lastName || stock.article.name}}
+            .gray
+              small {{vm.prices[stock.articleId] | number:2}} ₽
           span.right {{stock.displayVolume}}
