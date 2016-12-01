@@ -63,7 +63,8 @@ section(cg-busy='vm.cgBusy')
             .gray(title='{{stock.article.name}}')
               small(ng-if='stock.article.lastName') {{stock.article.preName}}
               = ' '
-              small {{stock.article.lastName || stock.article.name}}
+              small {{stock.article.lastName || stock.article.name}} (1 x {{stock.article.packageRel}})
             .gray
               small {{vm.prices[stock.articleId] | number:2}} ₽
+
           span.right {{stock.displayVolume}}
