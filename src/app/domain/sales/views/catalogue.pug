@@ -33,7 +33,7 @@ section(cg-busy='vm.cgBusy')
         placeholder='Поиск'
         aria-describedby='search-input'
         ng-model='vm.search'
-        ng-model-options='{debounce: 300}'
+        ng-model-options='{debounce: 400}'
         )
 
         span.form-control-feedback(ng-hide='!vm.search' )
@@ -63,8 +63,12 @@ section(cg-busy='vm.cgBusy')
             .gray(title='{{stock.article.name}}')
               small(ng-if='stock.article.lastName') {{stock.article.preName}}
               = ' '
-              small {{stock.article.lastName || stock.article.name}} (1 x {{stock.article.packageRel}})
-            .gray
+              small {{stock.article.lastName || stock.article.name}}
+            div
               small {{vm.prices[stock.articleId] | number:2}} ₽
+              = ' '
+              small.gray 1 x {{stock.article.packageRel}}
+              = ' '
+              small ~{{stock.displayVolume}}
 
-          span.right {{stock.displayVolume}}
+          //span.right {{stock.displayVolume}}
