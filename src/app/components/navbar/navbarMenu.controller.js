@@ -23,7 +23,7 @@
 
       vm.hideNavs = !!_.get(to, 'data.hideNavs');
       vm.isRootState = (to.name === 'home');
-      vm.isSalesState = true;//_.startsWith(to.name, 'sales.');
+      vm.isSalesState = _.startsWith(to.name, 'sales.');
 
       vm.showMenu = vm.isSalesState || (vm.isRootState && vm.toggleFullScreen);
 
