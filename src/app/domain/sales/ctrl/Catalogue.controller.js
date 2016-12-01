@@ -71,12 +71,21 @@
         orderBy: ['article.name']
       });
 
-      let prices = _.groupBy(vm.currentPriceType.prices, 'articleId');
+      let prices;
+      let useCustomPrice = !!vm.currentPriceType.parent;
+      let discount = 1;
 
-      console.log(prices);
+      if (useCustomPrice) {
+        prices = _.groupBy(vm.currentPriceType.parent.prices, 'articleId');
+        discount += vm.currentPriceType.discountPercent / 100;
+      } else {
+        prices = _.groupBy(vm.currentPriceType.prices, 'articleId');
+      }
 
       vm.prices = {};
-      _.each(prices, (val, key) => vm.prices[key] = val[0].price);
+      _.each(prices, (val, key) => {
+        vm.prices[key] = val[0].price * discount
+      });
 
       sortedStock = _.filter(sortedStock, stock => vm.prices[stock.articleId]);
 
