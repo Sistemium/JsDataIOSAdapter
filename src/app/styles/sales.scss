@@ -17,7 +17,7 @@
     margin: 8px 8px 0 0;
   }
   &.has-feedback label ~ .form-control-feedback {
-    top: 0;
+    top: 1px;
   }
   .form-control-feedback {
     pointer-events: inherit;
