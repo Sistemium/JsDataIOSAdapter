@@ -41,10 +41,7 @@
 
           if (this.articleGroupId) {
             res.push(this.articleGroup);
-            let parents = this.articleGroup.ancestors();
-            if (parents.length) {
-              Array.prototype.push.apply(res, parents);
-            }
+            Array.prototype.push.apply(res, this.articleGroup.ancestors());
           }
 
           return res;
