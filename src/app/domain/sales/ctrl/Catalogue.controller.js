@@ -83,9 +83,7 @@
       vm.ancestors = [{name: 'Все товары'}];
       if (articleGroup) {
         Array.prototype.push.apply(vm.ancestors, _.reverse(articleGroup.ancestors()));
-        // vm.ancestors.push(articleGroup);
       }
-
     }
 
     function scrollArticlesTop() {
@@ -96,11 +94,7 @@
 
     function setArticles(articleGroup) {
 
-      let filter = {
-        // 'stock.volume': {
-        //   '>': 0
-        // }
-      };
+      let filter = {};
 
       if (articleGroup) {
         filter.articleGroup = {
