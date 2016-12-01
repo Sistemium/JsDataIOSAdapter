@@ -13,7 +13,8 @@
       currentArticleGroup: null,
       ancestors: [],
       setCurrentArticleGroup,
-      articleGroupIds: {}
+      articleGroupIds: {},
+      search: $state.params.q || ''
     });
 
     vm.setBusy(findAll());
@@ -92,7 +93,7 @@
       setAncestors(articleGroup);
 
       scrollArticlesTop();
-      $state.go('.', {articleGroupId: filter.articleGroupId}, {notify: false});
+      $state.go('.', {articleGroupId: filter.articleGroupId, q: vm.search}, {notify: false});
 
     }
 

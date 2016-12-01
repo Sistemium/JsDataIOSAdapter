@@ -7,7 +7,7 @@
 
       stateHelperProvider
         .state({
-          url: '/catalogue?articleGroupId',
+          url: '/catalogue?articleGroupId&q',
           name: 'sales.catalogue',
           templateUrl: 'app/domain/sales/views/catalogue.html',
           controller: 'CatalogueController',
