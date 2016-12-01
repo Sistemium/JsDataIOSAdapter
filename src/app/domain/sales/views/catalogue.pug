@@ -26,5 +26,13 @@ section(cg-busy='vm.cgBusy')
     #scroll-articles.col-sm-8.scroll-y(style='max-height: {{windowHeight - offsetTop - 5}}px;')
       ul.list-group.vr-parent(vs-repeat vs-autoresize vs-scroll-parent="#scroll-articles")
         .list-group-item.display-flex(ng-repeat='stock in vm.stock track by stock.id')
-          span.flex-1 {{stock.article.name}}
+          .flex-1
+            div
+              span {{stock.article.firstName}}
+              = ' '
+              span.label.label-default {{stock.article.pieceVolume}}
+            .gray(title='{{stock.article.name}}')
+              small(ng-if='stock.article.lastName') {{stock.article.preName}}
+              = ' '
+              small {{stock.article.lastName || stock.article.name}}
           span.right {{stock.displayVolume}}
