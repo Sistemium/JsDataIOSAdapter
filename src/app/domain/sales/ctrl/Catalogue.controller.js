@@ -29,8 +29,9 @@
         .then(() => setCurrentArticleGroup(null))
     );
 
-
-    $scope.$watch('vm.search', () => setCurrentArticleGroup(vm.currentArticleGroup));
+    $scope.$watch('vm.search', (newValue, oldValue) => {
+      if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
+    });
 
     /*
      Functions
@@ -91,8 +92,8 @@
       vm.articleGroupIdsLength = Object.keys(vm.articleGroupIds).length;
 
       setAncestors(articleGroup);
-
       scrollArticlesTop();
+
       $state.go('.', {articleGroupId: filter.articleGroupId, q: vm.search}, {notify: false});
 
     }
