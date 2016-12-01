@@ -117,7 +117,7 @@
       vm.stock = Stock.filter({
         where: filter,
         orderBy: ['article.name']
-      })
+      });
 
     }
 
