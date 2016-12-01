@@ -18,9 +18,10 @@ auto-close='outsideClick'
       small.gray.ml-10
         a.p-6(
         ng-click='vm.salesmansListOpen = !vm.salesmansListOpen'
+        ng-disabled='vm.salesmans.length === 1'
         )
           b.glyphicon.glyphicon-user
-          span {{vm.salesmanMenuTitle()}}
+          span {{vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выберать салесмана'}}
 
     section(ng-if='vm.salesmansListOpen')
       hr

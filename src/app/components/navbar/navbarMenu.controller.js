@@ -10,8 +10,7 @@
 
       fullscreenButtonClass,
       fullscreenButtonTitle,
-      salesmanClick,
-      salesmanMenuTitle
+      salesmanClick
 
     });
 
@@ -32,6 +31,10 @@
 
           vm.salesmans = _.sortBy(salesmans, 'name');
           console.log(vm.salesmans);
+
+          if (vm.salesmans.length === 1) {
+            vm.selectedSalesman = _.first(vm.salesmans);
+          }
 
         });
 
@@ -62,15 +65,9 @@
     function salesmanClick(salesman) {
 
       if (_.isObject(salesman)) {
-
         vm.selectedSalesman = (vm.selectedSalesman !== salesman) ? salesman : undefined;
-
       }
 
-    }
-
-    function salesmanMenuTitle() {
-      return vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выбрать салесмана';
     }
 
   }
