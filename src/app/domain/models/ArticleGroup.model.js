@@ -4,8 +4,6 @@
 
   angular.module('Models').run(function (Schema) {
 
-    let stockCache = {};
-
     Schema.register({
 
       name: 'ArticleGroup',
@@ -30,9 +28,6 @@
       },
 
       meta: {
-        setStock: function () {
-          stockCache = _.groupBy(Schema.model('Stock').getAll(), 'article.articleGroup');
-        }
       },
 
       methods: {
@@ -57,7 +52,7 @@
           return res;
 
         },
-        stockArticles: function () {
+        stockArticles: function (stockCache) {
           return _.get(stockCache[this.id], 'length');
         }
       }

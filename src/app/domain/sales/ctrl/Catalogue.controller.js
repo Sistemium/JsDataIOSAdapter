@@ -7,11 +7,13 @@
     let vm = saControllerHelper.setup(this, $scope);
     let {Article, Stock, ArticleGroup} = Schema.models();
     let currentArticleGroupId = $state.params.articleGroupId || null;
+    let sortedStock = [];
 
     vm.use({
       currentArticleGroup: null,
       ancestors: [],
-      setCurrentArticleGroup
+      setCurrentArticleGroup,
+      articleGroupIds: {}
     });
 
     vm.setBusy(findAll());
@@ -27,7 +29,7 @@
     );
 
 
-    $scope.$watch('vm.search', () => setArticles(vm.currentArticleGroup));
+    $scope.$watch('vm.search', () => setCurrentArticleGroup(vm.currentArticleGroup));
 
     /*
      Functions
@@ -43,7 +45,9 @@
         Article.findAll({volumeNotZero: true}, options)
       ])
         .then(() => {
-          ArticleGroup.meta.setStock();
+          sortedStock = Stock.filter({
+            orderBy: ['article.name']
+          });
           setCurrentArticleGroup(currentArticleGroupId);
         });
     }
@@ -56,7 +60,7 @@
         articleGroup = ArticleGroup.get(articleGroupOrId) || null;
       }
 
-      setArticles(articleGroup);
+      let ownStock = getStockByArticlesOfGroup(articleGroup);
 
       let filter = {
         articleGroupId: _.get(articleGroup, 'id') || null
@@ -64,23 +68,40 @@
 
       vm.currentArticleGroup = articleGroup;
 
-      let children = _.filter(ArticleGroup.filter(filter), hasArticlesOrGroups);
-      if (children.length) vm.articleGroups = children;
+      let groupIds = articleGroupIds(ownStock);
+      let children = _.filter(ArticleGroup.filter(filter), hasArticlesOrGroupsInStock(groupIds));
 
-      if (!vm.articleGroups && articleGroup) {
+      vm.stock = ownStock;
+
+      if (children.length) {
+        vm.currentArticleGroupParent = articleGroup;
+        vm.articleGroups = children;
+      } else if (articleGroup && articleGroup.articleGroup) {
+        ownStock = getStockByArticlesOfGroup(articleGroup.articleGroup);
+        groupIds = articleGroupIds(ownStock);
         vm.articleGroups = _.filter(ArticleGroup.filter({
           articleGroupId: articleGroup.articleGroupId
-        }), hasArticlesOrGroups);
+        }), hasArticlesOrGroupsInStock(groupIds));
+      } else {
+        vm.articleGroups = null;
       }
+
+      vm.articleGroupIds = groupIds;
+      vm.articleGroupIdsLength = Object.keys(vm.articleGroupIds).length;
 
       setAncestors(articleGroup);
 
+      scrollArticlesTop();
       $state.go('.', {articleGroupId: filter.articleGroupId}, {notify: false});
 
     }
 
-    function hasArticlesOrGroups(articleGroup) {
-      return articleGroup.children.length || articleGroup.stockArticles();
+
+    function hasArticlesOrGroupsInStock(groupIds) {
+      return (articleGroup) => {
+        return groupIds[articleGroup.id]
+          || _.find(articleGroup.descendants(), item => groupIds[item.id])
+      }
     }
 
     function setAncestors(articleGroup) {
@@ -96,7 +117,7 @@
       scrollParent.scrollTop = 0;
     }
 
-    function setArticles(articleGroup) {
+    function getStockByArticlesOfGroup(articleGroup) {
 
       let filter = {};
 
@@ -124,13 +145,13 @@
         };
       }
 
-      vm.stock = Stock.filter({
-        where: filter,
-        orderBy: ['article.name']
-      });
+      let articleIds = _.groupBy(articles, 'id');
+      return _.filter(sortedStock, stock => articleIds[stock.articleId]);
 
-      scrollArticlesTop();
+    }
 
+    function articleGroupIds(stock) {
+      return _.groupBy(stock, 'article.articleGroup');
     }
 
   }
