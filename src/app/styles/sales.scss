@@ -12,9 +12,21 @@
   max-height: 100%;
 }
 
-.form-group.display-flex {
+.stm-searcher {
   label {
-    margin: 8px 8px 0 0;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    z-index: 2;
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    margin: 0;
+    text-align: center;
+  }
+  input {
+    padding-left: 30px;
   }
   &.has-feedback label ~ .form-control-feedback {
     top: 1px;
