@@ -51,9 +51,11 @@
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
-    // $scope.$watch('vm.saleOrderId', (newValue) => {
-    //
-    // });
+    $scope.$watch('vm.saleOrder.id', (newValue, oldValue) => {
+      if (newValue != oldValue && vm.showOnlyOrdered) {
+        saleOrderTotalsClick();
+      }
+    });
 
     onStateChange($state.name, $state.params);
 
@@ -93,8 +95,6 @@
 
       if (!vm.saleOrderId) {
         vm.showOnlyOrdered = false;
-      } else if (vm.showOnlyOrdered) {
-        saleOrderTotalsClick();
       }
 
     }
