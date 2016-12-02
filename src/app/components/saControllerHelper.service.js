@@ -29,12 +29,27 @@
       return this;
     }
 
+    function watchStateChange(vm, $scope) {
+      managedOn($scope, '$stateChangeSuccess', (event, toState, toParams) => {
+
+        _.assign(vm, {
+          currentState: _.first(toState.name.match(/[^.]+$/))
+        });
+
+        if (_.isFunction(vm.onStateChange)) {
+          vm.onStateChange(toState, toParams);
+        }
+
+      })
+    }
+
     function setup(vm, scope) {
 
       var bindAllStore = {};
       var busyArray = [];
 
       scope.$on('$destroy', () => _.each(bindAllStore, unbind => unbind()));
+      watchStateChange(vm, scope);
 
       return _.assign(vm,{
 
@@ -44,10 +59,18 @@
           scope.$watch(expr, callback);
           return vm;
         },
+
         rebindAll: (model, filter, expr, callback) => {
           var unbind = bindAllStore[expr];
           if (unbind) unbind();
           bindAllStore[expr] = model.bindAll(filter, scope, expr, callback);
+          return vm;
+        },
+
+        rebindOne: (model, id, expr, callback) => {
+          var unbind = bindAllStore[expr];
+          if (unbind) unbind();
+          bindAllStore[expr] = model.bindOne(id, scope, expr, callback);
           return vm;
         },
 
