@@ -11,12 +11,10 @@
 
     vm.use({
 
-      kButtonClick,
-      bButtonClick
+      kPlusButtonClick,
+      bPlusButtonClick
 
     });
-
-    vm.currentSaleOrderId = !!$state.params.saleOrderId;
 
     SaleOrder.find(saleOrderId)
       .then(saleOrder => {
@@ -24,13 +22,21 @@
         SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition');
       });
 
-    function kButtonClick(data) {
+    /*
+    Handlers
+     */
+
+    function kPlusButtonClick(data) {
       addPositionVolume(data.stock.articleId, data.stock.article.packageRel, data.price);
     }
 
-    function bButtonClick(data) {
+    function bPlusButtonClick(data) {
       addPositionVolume(data.stock.articleId, 1, data.price);
     }
+
+    /*
+    Functions
+     */
 
     function addPositionVolume (articleId, volume, price) {
       let position = _.find(vm.saleOrder.positions, {articleId: articleId});
