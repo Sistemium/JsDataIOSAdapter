@@ -31,8 +31,6 @@
         .then(salesmans => {
 
           vm.salesmans = _.sortBy(salesmans, 'name');
-          console.log(vm.salesmans);
-
           checkSelectedSalesman();
 
         });
