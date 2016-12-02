@@ -27,7 +27,7 @@
     });
 
     var {Visit} = Schema.models();
-    var salesman = SalesmanAuth.getCurrentUser();
+    var salesman = SalesmanAuth.getSelectedSalesman();
 
     scopeRoutines();
     findVisits();
@@ -57,9 +57,8 @@
 
     function findVisits() {
 
-      var filter = {
-        salesmanId: salesman.id
-      };
+      var filter = {};
+      if (salesman) filter.salesmanId = salesman.id;
 
       vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
         .then(() => {
@@ -100,9 +99,10 @@
     function filterVisitsBySelectedDate() {
 
       var filter = {
-        salesmanId: salesman.id,
         date: moment(vm.selectedDate).format('YYYY-MM-DD')
       };
+
+      if (salesman) filter.salesmanId = salesman.id;
 
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
@@ -126,7 +126,7 @@
     }
 
     function previousDayAvailable() {
-      return (vm.selectedDate.setHours(0,0,0,0) > minDate());
+      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) > minDate()) : false;
     }
 
     function selectNextDay() {
@@ -140,7 +140,7 @@
     }
 
     function nextDayAvailable() {
-      return (vm.selectedDate.setHours(0,0,0,0) < maxDate());
+      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) < maxDate()) : false;
     }
 
     function maxDate() {
