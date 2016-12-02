@@ -2,7 +2,7 @@
 
 (function () {
 
-  function navbarMenuController(saControllerHelper, Schema, IOS, $scope) {
+  function navbarMenuController(saControllerHelper, Schema, IOS, $scope, $window) {
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -15,6 +15,7 @@
     });
 
     var {Salesman} = Schema.models();
+    var selectedSalesmanIdKey = 'selectedSalesmanId';
 
     toggleFullScreen();
 
@@ -32,9 +33,7 @@
           vm.salesmans = _.sortBy(salesmans, 'name');
           console.log(vm.salesmans);
 
-          if (vm.salesmans.length === 1) {
-            vm.selectedSalesman = _.first(vm.salesmans);
-          }
+          checkSelectedSalesman();
 
         });
 
@@ -63,9 +62,36 @@
     }
 
     function salesmanClick(salesman) {
+      if (_.isObject(salesman)) selectSalesman(salesman);
+    }
 
-      if (_.isObject(salesman)) {
-        vm.selectedSalesman = (vm.selectedSalesman !== salesman) ? salesman : undefined;
+    function selectSalesman(salesman) {
+
+      vm.selectedSalesman = (vm.selectedSalesman !== salesman) ? salesman : undefined;
+
+      if (vm.selectedSalesman) {
+        $window.localStorage.setItem(selectedSalesmanIdKey, vm.selectedSalesman.id);
+      } else {
+        $window.localStorage.removeItem(selectedSalesmanIdKey);
+      }
+
+    }
+
+    function checkSelectedSalesman() {
+
+      if (vm.salesmans.length === 1) {
+        selectSalesman(_.first(vm.salesmans));
+      } else {
+
+        var selectedSalesmanId = $window.localStorage.getItem(selectedSalesmanIdKey);
+
+        if (selectedSalesmanId) {
+
+          var selectedSalesman = _.find(vm.salesmans, {'id': selectedSalesmanId});
+          if (selectedSalesman) selectSalesman(selectedSalesman);
+
+        }
+
       }
 
     }
