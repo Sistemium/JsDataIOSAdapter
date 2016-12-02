@@ -5,7 +5,7 @@
   function CatalogueController(Schema, $scope, $state, saControllerHelper, $q, saEtc) {
 
     let vm = saControllerHelper.setup(this, $scope);
-    let {Article, Stock, ArticleGroup, Price, PriceType} = Schema.models();
+    let {Article, Stock, ArticleGroup, PriceType, SaleOrder} = Schema.models();
     let currentArticleGroupId = $state.params.articleGroupId || null;
     let sortedStock = [];
 
@@ -15,7 +15,11 @@
       setCurrentArticleGroup,
       priceTypeClick,
       articleGroupIds: {},
-      search: $state.params.q || ''
+      search: $state.params.q || '',
+      orderedVolumeFull,
+      saleOrderId: $state.params.saleOrderId,
+      onStateChange,
+      setSaleOrderClick
     });
 
     vm.setBusy(findAll());
@@ -25,6 +29,7 @@
      */
 
     vm.rebindAll(PriceType, null, 'vm.priceTypes');
+    vm.rebindAll(SaleOrder, {processing: 'draft'}, 'vm.draftSaleOrders');
 
     $scope.$on(
       'rootClick',
@@ -36,10 +41,34 @@
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
+    $scope.$watch('vm.saleOrderId', (newValue) => {
+      SaleOrder.bindOne(newValue, $scope, 'vm.saleOrder');
+    });
+
+    onStateChange($state.name, $state.params);
+
     /*
      Functions
      */
 
+    function setSaleOrderClick(saleOrder) {
+      if (!saleOrder) {
+        // TODO go to state where we ask Outlet Salesman and etc
+      }
+      $state.go('sales.catalogue.saleOrder', {saleOrderId: saleOrder.id});
+    }
+
+    function onStateChange(to, params) {
+      vm.saleOrderId = params.saleOrderId;
+    }
+
+    function orderedVolumeFull(stock) {
+      let positions = _.get(vm.saleOrder, 'positions');
+      if (!positions) return;
+      let position = _.find(positions, {articleId: stock.articleId});
+      if (!position) return;
+      return position.article.boxPcs(position.volume).full;
+    }
 
     function priceTypeClick(priceType) {
       vm.currentPriceType = priceType;
@@ -61,6 +90,9 @@
           vm.currentPriceType = PriceType.meta.getDefault();
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
+
+          SaleOrder.findAllWithRelations({processing: 'draft'})('Outlet');
+
         });
     }
 
@@ -110,6 +142,7 @@
       let groupIds = articleGroupIds(ownStock);
       let children = _.filter(ArticleGroup.filter(filter), hasArticlesOrGroupsInStock(groupIds));
 
+      // TODO show only saleOrder positions and sort by deviceCts if user clicks 'show saleOrder'
       vm.stock = ownStock;
 
       if (children.length) {
