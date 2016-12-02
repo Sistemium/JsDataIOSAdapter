@@ -25,6 +25,7 @@
       priceTypeClick,
       setSaleOrderClick,
       saleOrderTotalsClick,
+      clearSearchClick,
 
       onStateChange,
 
@@ -62,6 +63,11 @@
     /*
      Handlers
      */
+
+    function clearSearchClick() {
+      vm.search = '';
+      saEtc.focusElementById('search-input');
+    }
 
     function saleOrderTotalsClick() {
       vm.showOnlyOrdered = true;

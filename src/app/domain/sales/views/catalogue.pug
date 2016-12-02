@@ -56,7 +56,7 @@ section.catalogue(cg-busy='vm.cgBusy')
         )
 
         span.form-control-feedback(ng-hide='!vm.search' )
-          a(ng-click="vm.search=''" href)
+          a(ng-click='vm.clearSearchClick()' href)
             i.glyphicon.glyphicon-remove
 
       ul.list-group
