@@ -1,0 +1,12 @@
+.alert.alert-info
+  .pull-right
+    label На сумму:
+    = ' '
+    span {{ vm.saleOrder.totalCost | number:2 }}
+    = ' '
+    label Количество позиций:
+    = ' '
+    span {{ vm.saleOrder.positions.length | number:0 }}
+    = ' '
+    a(href ui-sref='^') Завершить
+  h4 Заказ {{ vm.saleOrder.outlet.name }}
