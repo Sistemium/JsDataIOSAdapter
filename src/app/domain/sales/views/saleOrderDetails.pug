@@ -26,7 +26,7 @@
     .form-group
       label.col-sm-3.control-label(for='price') Стоимость
       .col-sm-9
-        #price.form-control {{vm.saleOrder.totalCost | number: 2}} руб.
+        #price.form-control {{vm.saleOrder.totalCost | number: 2}} ₽
 
 
   table.table.table-striped.clear-both.table-hover(ng-if='vm.saleOrder.positions.length')
