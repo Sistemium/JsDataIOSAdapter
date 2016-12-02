@@ -47,8 +47,8 @@ section.ui-view(cg-busy='vm.cgBusy')
         tr
           th Точка
           th Создан
-          th Стоимость
-          th Позиций
+          th.number Стоимость
+          th.number Позиций
       tbody
         tr.clickable(
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
@@ -58,7 +58,7 @@ section.ui-view(cg-busy='vm.cgBusy')
             div {{ item.outlet.name }}
             .gray {{ item.outlet.address }}
           td {{ item.deviceCts | amUtc | amLocal | amCalendar }}
-          td {{ item.totalCost | number:2 }}
-          td {{ item.agg.cnt }}
+          td.number {{ item.totalCost | number:2 }}
+          td.number {{ item.agg.cnt | number:0 }}
 
   .alert.alert-info.centered(ng-show='!vm.data.length') Нет заказов на указанную дату

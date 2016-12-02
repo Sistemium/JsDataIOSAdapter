@@ -41,6 +41,6 @@
       ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
       )
         td {{ item.article.name }}
-        td.number {{item.volume}}
-        td.number {{item.price}}
-        td.number {{ item.cost | number:2 }}
+        td.number {{ item.volume | number:0 }}
+        td.number {{ item.price | number:2 }}
+        td.number {{ item.cost | number:2}}
