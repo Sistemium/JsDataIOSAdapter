@@ -2,7 +2,7 @@
 
 (function () {
 
-  function navbarMenuController(saControllerHelper, Schema, IOS, $scope, $window) {
+  function navbarMenuController(saControllerHelper, Schema, IOS, $scope, $window, $rootScope) {
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -72,6 +72,8 @@
       } else {
         $window.localStorage.removeItem(selectedSalesmanIdKey);
       }
+
+      $rootScope.$broadcast('selectedSalesmanChanged');
 
     }
 
