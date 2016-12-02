@@ -92,4 +92,11 @@ section(cg-busy='vm.cgBusy')
               = ' '
               small ~{{stock.displayVolume}}
 
-          //span.right {{stock.displayVolume}}
+          span.right(ng-if='vm.currentState=="saleOrder"')
+            strong {{ vm.orderedVolumeFull(stock) }}
+
+          span.right(ng-if='vm.currentState=="saleOrder"')
+            button.btn.btn-default(stm-click='kButton' click-payload='{stock: stock, price: vm.prices[stock.articleId]}')
+              span +К
+            button.btn.btn-default(stm-click='bButton' click-payload='{stock: stock, price: vm.prices[stock.articleId]}')
+              span +Б
