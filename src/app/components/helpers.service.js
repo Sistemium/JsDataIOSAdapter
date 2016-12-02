@@ -10,7 +10,8 @@
       mapsHelper,
       toastr,
       PhotoHelper,
-      LocationHelper
+      LocationHelper,
+      ClickHelper
     ) {
 
       return {
@@ -21,7 +22,8 @@
         mapsHelper,
         toastr,
         PhotoHelper,
-        LocationHelper
+        LocationHelper,
+        ClickHelper
 
       };
 
