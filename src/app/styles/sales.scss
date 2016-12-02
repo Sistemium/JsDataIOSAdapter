@@ -39,3 +39,9 @@
 .breadcrumb {
   min-height: 35px;
 }
+
+li.active {
+  .gray {
+    color: white;
+  }
+}
