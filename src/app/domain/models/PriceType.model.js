@@ -30,6 +30,9 @@
           let res = id && model.get(id);
           if (!res) {
             res = _.first(model.filter({limit: 1}))
+            if (res) {
+              model.meta.setDefault(res);
+            }
           }
           return res;
         },
