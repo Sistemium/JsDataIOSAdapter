@@ -3,11 +3,14 @@ div, h4, h3 {
   * + small,
   * + strong,
   * + span,
-  * + label,
   span + a {
 
     margin-left: 6px;
 
+  }
+
+  * + label {
+    //margin-left: 2px;
   }
 
 }
