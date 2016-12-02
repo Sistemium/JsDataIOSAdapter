@@ -5,7 +5,7 @@
   const BROADCAST_NAME = 'onStmClicked';
   const EMIT_NAME = 'stmClicked';
 
-  function stmClick() {
+  function stmClick($timeout) {
     return {
 
       restrict: 'A',
@@ -19,7 +19,9 @@
         let payload = $scope.clickPayload;
         elem.bind('click', event => {
           event.preventDefault();
-          $scope.$emit(EMIT_NAME, code, event, payload);
+          $timeout(()=>{
+            $scope.$emit(EMIT_NAME, code, event, payload);
+          });
         });
       }
 
