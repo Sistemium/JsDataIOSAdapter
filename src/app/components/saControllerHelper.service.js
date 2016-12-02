@@ -15,7 +15,7 @@
       if (!helper) return me;
 
       if (_.isFunction(helper.setupController)) {
-        helper.setupController(helper, scope);
+        helper.setupController(me, scope);
         return me;
       }
 
