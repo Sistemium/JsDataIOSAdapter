@@ -231,14 +231,6 @@
         where: filter
       });
 
-      filter = {};
-
-      if (articleGroup || vm.search) {
-        filter.articleId = {
-          'in': _.map(articles, 'id')
-        };
-      }
-
       let articleIds = _.groupBy(articles, 'id');
       return _.filter(sortedStock, stock => articleIds[stock.articleId]);
 
