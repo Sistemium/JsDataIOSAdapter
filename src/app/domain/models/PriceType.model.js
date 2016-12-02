@@ -2,9 +2,9 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, localStorageService) {
 
-    Schema.register({
+    let model = Schema.register({
 
       name: 'PriceType',
 
@@ -23,7 +23,23 @@
         }
       },
 
-      meta: {},
+      meta: {
+
+        getDefault: function () {
+          let id = localStorageService.get('PriceType.default');
+          let res = id && model.get(id);
+          if (!res) {
+            res = _.first(model.filter({limit: 1}))
+          }
+          return res;
+        },
+
+        setDefault: function (idOrModel) {
+          localStorageService.set('PriceType.default', _.get(idOrModel, 'id') || idOrModel);
+        }
+
+
+      },
 
       methods: {}
 
