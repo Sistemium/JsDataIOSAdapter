@@ -43,7 +43,7 @@
 
     function priceTypeClick(priceType) {
       vm.currentPriceType = priceType;
-      PriceType.setDefault(priceType);
+      PriceType.meta.setDefault(priceType);
       filterStock();
       setCurrentArticleGroup(vm.currentArticleGroup);
     }
@@ -58,7 +58,7 @@
         PriceType.findAllWithRelations()('Price', null, null, options)
       ])
         .then(() => {
-          vm.currentPriceType = PriceType.getDefault();
+          vm.currentPriceType = PriceType.meta.getDefault();
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
         });
