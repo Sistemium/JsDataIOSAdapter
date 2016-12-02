@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, saControllerHelper, ClickHelper, Schema) {
+  function CatalogueSaleOrderController($scope, $state, saControllerHelper, ClickHelper, Schema, $q) {
 
     let {SaleOrder, SaleOrderPosition} = Schema.models('SaleOrder');
     let vm = saControllerHelper.setup(this, $scope)
@@ -19,7 +19,9 @@
     SaleOrder.find(saleOrderId)
       .then(saleOrder => {
         vm.saleOrder = saleOrder;
-        SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition');
+        SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition')
+          .then(() => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
+          .catch(error => console.error(error));
       });
 
     /*
