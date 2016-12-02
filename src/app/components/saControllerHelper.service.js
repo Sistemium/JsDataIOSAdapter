@@ -70,7 +70,7 @@
         rebindOne: (model, id, expr, callback) => {
           var unbind = bindAllStore[expr];
           if (unbind) unbind();
-          bindAllStore[expr] = model.bindOne(id, scope, expr, callback);
+          if (id) bindAllStore[expr] = model.bindOne(id, scope, expr, callback);
           return vm;
         },
 
