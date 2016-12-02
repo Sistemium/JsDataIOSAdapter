@@ -42,8 +42,8 @@
      */
 
     function priceTypeClick(priceType) {
-      //TODO write PriceType to localStorage
       vm.currentPriceType = priceType;
+      PriceType.setDefault(priceType);
       filterStock();
       setCurrentArticleGroup(vm.currentArticleGroup);
     }
@@ -58,7 +58,7 @@
         PriceType.findAllWithRelations()('Price', null, null, options)
       ])
         .then(() => {
-          vm.currentPriceType = _.first(PriceType.filter({limit: 1}));
+          vm.currentPriceType = PriceType.getDefault();
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
         });
