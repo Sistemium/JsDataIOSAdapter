@@ -23,7 +23,7 @@ section(cg-busy='vm.cgBusy')
 
       ul.dropdown-menu(uib-dropdown-menu)
         li
-          a(href ng-click='vm.saleOrder = !vm.saleOrder') Новый Заказ
+          a(href ng-click='vm.setSaleOrderClick()') Новый Заказ
         li.divider(ng-if='vm.draftSaleOrders.length')
         li(ng-repeat='draft in vm.draftSaleOrders track by draft.id' ng-class='{active: vm.saleOrderId === draft.id}')
           a(href ng-click='vm.setSaleOrderClick(draft)')
@@ -92,7 +92,7 @@ section(cg-busy='vm.cgBusy')
               = ' '
               small ~{{stock.displayVolume}}
 
-          span.right(ng-if='vm.currentState=="saleOrder"')
+          span.right(ng-if='vm.currentState=="saleOrder"' ng-click='vm.clearOrderPosition(stock)')
             strong {{ vm.orderedVolumeFull(stock) }}
 
           span.right(ng-if='vm.currentState=="saleOrder"')
