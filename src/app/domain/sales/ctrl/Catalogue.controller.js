@@ -45,7 +45,7 @@
     });
 
     $scope.$watch('vm.saleOrderId', (newValue) => {
-      SaleOrder.bindOne(newValue, $scope, 'vm.saleOrder');
+      vm.rebindOne(SaleOrder, newValue, 'vm.saleOrder');
     });
 
     onStateChange($state.name, $state.params);
