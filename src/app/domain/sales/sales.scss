@@ -29,4 +29,17 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 #scroll-articles .right {
   margin-left: 1em;
   text-align: right;
+
+  button {
+    padding: 3px 5px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-radius: 3px;
+    display: block;
+  }
+
+  button + button {
+    margin-top: 5px;
+  }
+
 }
