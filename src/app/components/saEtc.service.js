@@ -17,7 +17,12 @@
       });
     }
 
+    function getElementById(id) {
+      return $window.document.getElementById(id);
+    }
+
     return {
+      getElementById,
       blurActive,
       focusElementById
     };
