@@ -1,0 +1,18 @@
+div, h4, h3 {
+
+  * + small,
+  * + strong,
+  * + span,
+  * + label,
+  span + a {
+
+    margin-left: 6px;
+
+  }
+
+}
+
+
+.alert h4 {
+  margin: 0;
+}

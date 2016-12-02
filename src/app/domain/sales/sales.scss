@@ -26,24 +26,36 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   color: black;
 }
 
-#scroll-articles .right {
-  margin-left: 1em;
-  text-align: right;
+#scroll-articles {
 
-  button {
-    padding: 3px 5px;
-    font-size: 13px;
-    line-height: 1.5;
-    border-radius: 3px;
-    display: block;
+  .right {
+
+    margin-left: 1em;
+    text-align: right;
+
+    button {
+      padding: 3px 5px;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 3px;
+      display: block;
+      color: #777777;
+    }
+
+    button + button {
+      margin-top: 5px;
+    }
+
+
   }
 
-  button + button {
-    margin-top: 5px;
+  .article-name-second {
+    color: gray;
+  }
+
+  .article-name-third {
+    text-align: right;
   }
 
 }
 
-.alert h4 {
-  margin: 0;
-}
