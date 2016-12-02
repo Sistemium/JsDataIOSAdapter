@@ -16,6 +16,8 @@
 
     });
 
+    vm.currentSaleOrderId = !!$state.params.saleOrderId;
+
     SaleOrder.find(saleOrderId)
       .then(saleOrder => {
         vm.saleOrder = saleOrder;
