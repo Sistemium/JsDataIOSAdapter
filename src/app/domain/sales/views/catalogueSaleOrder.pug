@@ -1,5 +1,5 @@
 .alert.alert-info
-  .pull-right(ng-if='vm.saleOrder')
+  a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder')
 
     label На сумму:
     span {{ vm.saleOrder.totalCost | number:2 }}

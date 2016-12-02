@@ -33,7 +33,7 @@ section.catalogue(cg-busy='vm.cgBusy')
           a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
 
     li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
-      a(href ng-click='vm.articleGroupClick(ancestor.id && ancestor)') {{ ancestor.name }}
+      a(href ng-click='vm.articleGroupClick(ancestor)') {{ ancestor.name }}
 
     li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
 

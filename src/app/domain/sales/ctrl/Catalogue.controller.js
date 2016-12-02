@@ -14,6 +14,7 @@
     let sortedStock = [];
 
     vm.use({
+
       currentArticleGroup: null,
       ancestors: [],
       articleGroupIds: {},
@@ -23,6 +24,8 @@
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
       setSaleOrderClick,
+      saleOrderTotalsClick,
+
       onStateChange,
 
       orderedVolumeFull
@@ -48,9 +51,9 @@
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
-    $scope.$watch('vm.saleOrderId', (newValue) => {
-      vm.rebindOne(SaleOrder, newValue, 'vm.saleOrder');
-    });
+    // $scope.$watch('vm.saleOrderId', (newValue) => {
+    //
+    // });
 
     onStateChange($state.name, $state.params);
 
@@ -58,15 +61,20 @@
      Handlers
      */
 
+    function saleOrderTotalsClick() {
+      vm.showOnlyOrdered = true;
+      vm.setBusy($q.all(
+        _.map(vm.saleOrder.positions, pos => Article.loadRelations(pos.articleId, 'Stock'))
+      ))
+        .then(() => {
+          filterStock();
+          return setCurrentArticleGroup(vm.currentArticleGroup);
+        })
+        .catch(error => console.error(error));
+    }
+
     function setSaleOrderClick(saleOrder) {
-
-      if (!saleOrder) {
-        $state.go('sales.catalogue.saleOrder', {saleOrderId: null});
-
-      } else {
-        $state.go('sales.catalogue.saleOrder', {saleOrderId: saleOrder.id});
-      }
-
+      $state.go('sales.catalogue.saleOrder', {saleOrderId: _.get(saleOrder, 'id')});
     }
 
     function priceTypeClick(priceType) {
@@ -77,7 +85,18 @@
     }
 
     function onStateChange(to, params) {
+
       vm.saleOrderId = params.saleOrderId;
+      vm.rebindOne(SaleOrder, vm.saleOrderId, 'vm.saleOrder');
+
+      currentArticleGroupId = params.articleGroupId;
+
+      if (!vm.saleOrderId) {
+        vm.showOnlyOrdered = false;
+      } else if (vm.showOnlyOrdered) {
+        saleOrderTotalsClick();
+      }
+
     }
 
     /*
@@ -133,7 +152,11 @@
         vm.prices[key] = val[0].price * discount
       });
 
-      sortedStock = _.filter(sortedStock, stock => vm.prices[stock.articleId]);
+      _.each(_.get(vm, 'saleOrder.positions'), pos => vm.prices[pos.articleId] = pos.price);
+
+      sortedStock = _.filter(sortedStock, stock => {
+        return vm.prices[stock.articleId]
+      });
 
     }
 
@@ -141,8 +164,12 @@
 
       let articleGroup = articleGroupOrId;
 
+      if (_.get(articleGroupOrId, 'showAll')) {
+        vm.showOnlyOrdered = false;
+      }
+
       if (articleGroupOrId && !articleGroupOrId.id) {
-        articleGroup = ArticleGroup.get(articleGroupOrId) || null;
+        articleGroup = _.isObject(articleGroupOrId) ? null : ArticleGroup.get(articleGroupOrId);
       }
 
       let ownStock = getStockByArticlesOfGroup(articleGroup);
@@ -199,10 +226,17 @@
     }
 
     function setAncestors(articleGroup) {
-      vm.ancestors = [{name: 'Все товары'}];
+
+      vm.ancestors = [{name: 'Все товары', showAll: true}];
+
+      if (vm.showOnlyOrdered) {
+        vm.ancestors.push({name: 'Товары заказа', id: false});
+      }
+
       if (articleGroup) {
         Array.prototype.push.apply(vm.ancestors, _.reverse(articleGroup.ancestors()));
       }
+
     }
 
     function scrollArticlesTop() {
@@ -227,11 +261,18 @@
         };
       }
 
+      if (vm.showOnlyOrdered) {
+        filter.id = {
+          'in': _.map(vm.saleOrder.positions, 'articleId')
+        }
+      }
+
       let articles = Article.filter({
         where: filter
       });
 
       let articleIds = _.groupBy(articles, 'id');
+
       return _.filter(sortedStock, stock => articleIds[stock.articleId]);
 
     }
