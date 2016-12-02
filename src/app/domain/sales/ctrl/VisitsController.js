@@ -27,7 +27,6 @@
     });
 
     var {Visit} = Schema.models();
-    var salesman = SalesmanAuth.getSelectedSalesman();
 
     scopeRoutines();
     findVisits();
@@ -42,6 +41,14 @@
         () => new Date().setHours(0,0,0,0),
         todayTime => vm.selectedDate = new Date(todayTime)
       );
+
+      $scope.$on('selectedSalesmanChanged', () => {
+
+        vm.selectedSalesmanId = SalesmanAuth.getSelectedSalesmanId();
+        findVisits();
+        filterVisitsBySelectedDate();
+
+      });
 
     }
 
@@ -58,10 +65,10 @@
     function findVisits() {
 
       var filter = {};
-      if (salesman) filter.salesmanId = salesman.id;
+      if (vm.selectedSalesmanId) filter.salesmanId = vm.selectedSalesmanId;
 
       vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
-        .then(() => {
+        .then((visits) => {
 
           Visit.bindAll(filter, $scope, 'vm.visits', () => {
 
@@ -102,7 +109,7 @@
         date: moment(vm.selectedDate).format('YYYY-MM-DD')
       };
 
-      if (salesman) filter.salesmanId = salesman.id;
+      if (vm.selectedSalesmanId) filter.salesmanId = vm.selectedSalesmanId;
 
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
