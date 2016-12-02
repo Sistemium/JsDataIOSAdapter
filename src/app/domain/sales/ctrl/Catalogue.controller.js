@@ -19,8 +19,7 @@
       orderedVolumeFull,
       saleOrderId: $state.params.saleOrderId,
       onStateChange,
-      setSaleOrderClick,
-      clearOrderPosition
+      setSaleOrderClick
     });
 
     vm.setBusy(findAll());
@@ -80,10 +79,6 @@
       PriceType.meta.setDefault(priceType);
       filterStock();
       setCurrentArticleGroup(vm.currentArticleGroup);
-    }
-
-    function clearOrderPosition(stock) {
-
     }
 
     function findAll() {

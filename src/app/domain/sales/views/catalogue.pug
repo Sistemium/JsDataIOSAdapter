@@ -92,7 +92,11 @@ section(cg-busy='vm.cgBusy')
               = ' '
               small ~{{stock.displayVolume}}
 
-          span.right(ng-if='vm.currentState=="saleOrder"' ng-click='vm.clearOrderPosition(stock)')
+          span.right(
+          ng-if='vm.currentState=="saleOrder"'
+          ng-click='vm.clearOrderPosition(stock)'
+          stm-click='orderedVolumeClick' click-payload='stock'
+          )
             strong {{ vm.orderedVolumeFull(stock) }}
 
           span.right(ng-if='vm.currentState=="saleOrder"')
