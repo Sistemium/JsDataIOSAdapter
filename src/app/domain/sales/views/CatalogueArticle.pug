@@ -10,7 +10,7 @@
   small {{stock.article.lastName || stock.article.name}}
 
 .article-name-third
-  small(ng-if='stock.displayVolume') ~{{stock.displayVolume}}
+  small.gray(ng-if='stock.displayVolume') ~{{stock.displayVolume}}
   small.red(ng-if='!stock.displayVolume') Нет в наличии
   small {{vm.prices[stock.articleId] | number:2}} ₽
 
