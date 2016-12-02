@@ -1,5 +1,5 @@
 .alert.alert-info
-  .pull-right
+  .pull-right(ng-if='vm.currentSaleOrderId')
     label На сумму:
     = ' '
     span {{ vm.saleOrder.totalCost | number:2 }}
@@ -9,4 +9,6 @@
     span {{ vm.saleOrder.positions.length | number:0 }}
     = ' '
     a(href ui-sref='^') Завершить
-  h4 Заказ {{ vm.saleOrder.outlet.name }}
+  h4 {{vm.currentSaleOrderId ? 'Заказ' : 'Новый заказ'}}
+    =' '
+    span(ng-if='vm.currentSaleOrderId') {{ vm.saleOrder.outlet.name }}
