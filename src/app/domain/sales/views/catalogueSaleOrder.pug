@@ -1,15 +1,16 @@
 .alert.alert-info
   a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder')
 
-    label На сумму:
-    span {{ vm.saleOrder.totalCost | number:2 }}
+    strong {{ vm.saleOrder.positions.length | number:0 }}
+    span позиций
 
-    label Количество позиций:
-    span {{ vm.saleOrder.positions.length | number:0 }}
+    span на сумму
+    strong {{ vm.saleOrder.totalCost | number:2 }}
+    span ₽
 
-    a(href ui-sref='^') Завершить
+    //a(href ui-sref='^') Завершить
 
   h4
-    span {{vm.saleOrder.id ? 'Заказ' : 'Новый заказ'}}
     a(href)
-      small {{ vm.saleOrder.outlet.name }}
+     span {{ vm.saleOrder.outlet.name }}
+     span(ng-if='!vm.saleOrder.outlet') {{ vm.saleOrder.outletId ? 'Загрузка ...' : 'Выберите клиента' }}
