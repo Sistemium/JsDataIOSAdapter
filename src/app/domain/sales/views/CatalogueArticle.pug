@@ -1,0 +1,16 @@
+.article-name-first
+  strong {{stock.article.firstName}}
+  strong {{stock.article.pieceVolume}}
+  small.gray 1 x {{stock.article.packageRel}}
+  strong.pull-right
+    a(href stm-click='orderedVolume' click-payload='stock') {{ vm.orderedVolumeFull(stock) }}
+
+.article-name-second(title='{{stock.article.name}}')
+  small(ng-if='stock.article.lastName') {{stock.article.preName}}
+  small {{stock.article.lastName || stock.article.name}}
+
+.article-name-third
+  small ~{{stock.displayVolume}}
+  small {{vm.prices[stock.articleId] | number:2}} ₽
+
+

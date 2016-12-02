@@ -1,0 +1,5 @@
+.right
+  button.btn.btn-default(stm-click='kPlusButton' click-payload='{stock: stock, price: vm.prices[stock.articleId]}')
+    | +К
+  button.btn.btn-default(stm-click='bPlusButton' click-payload='{stock: stock, price: vm.prices[stock.articleId]}')
+    | +Б

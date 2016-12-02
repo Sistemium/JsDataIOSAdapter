@@ -1,21 +1,10 @@
-section(cg-busy='vm.cgBusy')
+section.catalogue(cg-busy='vm.cgBusy')
 
-  //ng-include(src="'app/domain/sales/views/catalogueSaleOrder.html'")
   .ui-view
 
   ol.breadcrumb
 
     span.pull-right(uib-dropdown)
-      a(href uib-dropdown-toggle)
-        | {{vm.currentPriceType.name || 'Выберите тип цен'}}
-        =' '
-        span.caret
-
-      ul.dropdown-menu(uib-dropdown-menu)
-        li(ng-repeat='priceType in vm.priceTypes track by priceType.id' ng-class='{active: vm.currentPriceType.name == priceType.name}')
-          a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
-
-    span.pull-right(uib-dropdown style='margin-right: 1em;')
       a(href uib-dropdown-toggle)
         | Заказ
         =' '
@@ -33,9 +22,18 @@ section(cg-busy='vm.cgBusy')
             .gray
               small {{ draft.outlet.address }}
 
+    li(uib-dropdown)
+      a(href uib-dropdown-toggle)
+        | {{vm.currentPriceType.name || 'Выберите тип цен'}}
+        =' '
+        span.caret
+
+      ul.dropdown-menu(uib-dropdown-menu)
+        li(ng-repeat='priceType in vm.priceTypes track by priceType.id' ng-class='{active: vm.currentPriceType.name == priceType.name}')
+          a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
 
     li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
-      a(href ng-click='vm.setCurrentArticleGroup(ancestor.id && ancestor)') {{ ancestor.name }}
+      a(href ng-click='vm.articleGroupClick(ancestor.id && ancestor)') {{ ancestor.name }}
 
     li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
 
@@ -65,7 +63,7 @@ section(cg-busy='vm.cgBusy')
         a.list-group-item(
         ng-class='{active: vm.currentArticleGroup.id === elem.id}'
         href
-        ng-click='vm.setCurrentArticleGroup(elem)'
+        ng-click='vm.articleGroupClick(elem)'
         ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
         )
           span.badge(ng-if='!elem.children.length && vm.articleGroupIds[elem.id].length') {{vm.articleGroupIds[elem.id].length}}
@@ -73,34 +71,16 @@ section(cg-busy='vm.cgBusy')
           span {{elem.name}}
 
     #scroll-articles.col-sm-8.scroll-y.max-height-100
-      .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length') Нет подходящих товаров
-      ul.list-group.vr-parent(vs-repeat='80' vs-scroll-parent="#scroll-articles")
+
+      .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
+        | Нет подходящих товаров
+
+      ul.list-group.vr-parent(vs-repeat='81' vs-scroll-parent="#scroll-articles")
         .list-group-item.display-flex.flex-align-center(ng-repeat='stock in vm.stock track by stock.id')
-          .flex-1
-            div
-              strong {{stock.article.firstName}}
-              = ' '
-              span.label.label-default {{stock.article.pieceVolume}}
-            .gray(title='{{stock.article.name}}')
-              small(ng-if='stock.article.lastName') {{stock.article.preName}}
-              = ' '
-              small {{stock.article.lastName || stock.article.name}}
-            div
-              small {{vm.prices[stock.articleId] | number:2}} ₽
-              = ' '
-              small.gray 1 x {{stock.article.packageRel}}
-              = ' '
-              small ~{{stock.displayVolume}}
 
-          span.right(
+          .flex-1(ng-include="'app/domain/sales/views/CatalogueArticle.html'")
+
+          .display-flex.flex-align-center(
           ng-if='vm.currentState=="saleOrder"'
-          ng-click='vm.clearOrderPosition(stock)'
-          stm-click='orderedVolumeClick' click-payload='stock'
+          ng-include="'app/domain/sales/views/SaleOrderPosition.edit.html'"
           )
-            strong {{ vm.orderedVolumeFull(stock) }}
-
-          span.right(ng-if='vm.currentState=="saleOrder"')
-            button.btn.btn-default(stm-click='kButton' click-payload='{stock: stock, price: vm.prices[stock.articleId]}')
-              span +К
-            button.btn.btn-default(stm-click='bButton' click-payload='{stock: stock, price: vm.prices[stock.articleId]}')
-              span +Б
