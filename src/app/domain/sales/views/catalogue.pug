@@ -29,7 +29,7 @@ section(cg-busy='vm.cgBusy')
           a(href ng-click='vm.setSaleOrderClick(draft)')
             .display-flex
               .flex-1 {{ draft.outlet.name }}
-              .right {{ draft.totalCost | number:2 }}
+              .right {{ draft.totalCost | number:2 }} ₽
             .gray
               small {{ draft.outlet.address }}
 
