@@ -11,6 +11,13 @@
   > button:last-child {
     margin-right: -16px;
   }
+  .right {
+    margin-left: 1em;
+  }
+}
+
+.flex-align-center {
+  align-items: center;
 }
 
 li.display-flex:first-child > button:last-child {
