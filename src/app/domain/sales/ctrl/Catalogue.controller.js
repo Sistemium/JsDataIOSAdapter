@@ -12,14 +12,17 @@
     vm.use({
       currentArticleGroup: null,
       ancestors: [],
-      setCurrentArticleGroup,
-      priceTypeClick,
       articleGroupIds: {},
       search: $state.params.q || '',
-      orderedVolumeFull,
       saleOrderId: $state.params.saleOrderId,
+
+      articleGroupClick: setCurrentArticleGroup,
+      priceTypeClick,
+      setSaleOrderClick,
       onStateChange,
-      setSaleOrderClick
+
+      orderedVolumeFull
+
     });
 
     vm.setBusy(findAll());
@@ -48,7 +51,7 @@
     onStateChange($state.name, $state.params);
 
     /*
-     Functions
+     Handlers
      */
 
     function setSaleOrderClick(saleOrder) {
@@ -62,9 +65,20 @@
 
     }
 
+    function priceTypeClick(priceType) {
+      vm.currentPriceType = priceType;
+      PriceType.meta.setDefault(priceType);
+      filterStock();
+      setCurrentArticleGroup(vm.currentArticleGroup);
+    }
+
     function onStateChange(to, params) {
       vm.saleOrderId = params.saleOrderId;
     }
+
+    /*
+     Functions
+     */
 
     function orderedVolumeFull(stock) {
       let positions = _.get(vm.saleOrder, 'positions');
@@ -72,13 +86,6 @@
       let position = _.find(positions, {articleId: stock.articleId});
       if (!position) return;
       return position.article.boxPcs(position.volume).full;
-    }
-
-    function priceTypeClick(priceType) {
-      vm.currentPriceType = priceType;
-      PriceType.meta.setDefault(priceType);
-      filterStock();
-      setCurrentArticleGroup(vm.currentArticleGroup);
     }
 
     function findAll() {
@@ -126,7 +133,6 @@
 
     }
 
-
     function setCurrentArticleGroup(articleGroupOrId) {
 
       let articleGroup = articleGroupOrId;
@@ -150,14 +156,19 @@
       vm.stock = ownStock;
 
       if (children.length) {
+
         vm.currentArticleGroupParent = articleGroup;
         vm.articleGroups = children;
+
       } else if (articleGroup && articleGroup.articleGroup) {
+
         ownStock = getStockByArticlesOfGroup(articleGroup.articleGroup);
         groupIds = articleGroupIds(ownStock);
+
         vm.articleGroups = _.filter(ArticleGroup.filter({
           articleGroupId: articleGroup.articleGroupId
         }), hasArticlesOrGroupsInStock(groupIds));
+
       } else {
         vm.articleGroups = null;
       }
@@ -166,6 +177,9 @@
       vm.articleGroupIdsLength = Object.keys(vm.articleGroupIds).length;
 
       setAncestors(articleGroup);
+
+      vm.noMoreChildren = !children.length;
+
       scrollArticlesTop();
 
       $state.go('.', {articleGroupId: filter.articleGroupId, q: vm.search}, {notify: false});
