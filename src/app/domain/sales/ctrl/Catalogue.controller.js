@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueController(Schema, $scope, $state, saControllerHelper, $q, $window) {
+  function CatalogueController(Schema, $scope, $state, saControllerHelper, $q, saEtc) {
 
     let vm = saControllerHelper.setup(this, $scope);
     let {Article, Stock, ArticleGroup, Price, PriceType} = Schema.models();
@@ -24,7 +24,6 @@
      Listeners
      */
 
-
     vm.rebindAll(PriceType, null, 'vm.priceTypes');
 
     $scope.$on(
@@ -40,6 +39,7 @@
     /*
      Functions
      */
+
 
     function priceTypeClick(priceType) {
       vm.currentPriceType = priceType;
@@ -63,7 +63,6 @@
           setCurrentArticleGroup(currentArticleGroupId);
         });
     }
-
 
     function filterStock() {
 
@@ -152,7 +151,7 @@
     }
 
     function scrollArticlesTop() {
-      let scrollParent = $window.document.getElementById('scroll-articles');
+      let scrollParent = saEtc.getElementById('scroll-articles');
       if (!scrollParent) return;
       scrollParent.scrollTop = 0;
     }
