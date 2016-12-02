@@ -53,10 +53,14 @@
      */
 
     function setSaleOrderClick(saleOrder) {
+
       if (!saleOrder) {
-        // TODO go to state where we ask Outlet Salesman and etc
+        $state.go('sales.catalogue.saleOrder', {saleOrderId: null});
+
+      } else {
+        $state.go('sales.catalogue.saleOrder', {saleOrderId: saleOrder.id});
       }
-      $state.go('sales.catalogue.saleOrder', {saleOrderId: saleOrder.id});
+
     }
 
     function onStateChange(to, params) {
