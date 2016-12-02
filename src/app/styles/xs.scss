@@ -1,9 +1,11 @@
+$margin-bottom-xs: 10px;
+
 @media (max-width: 767px) {
 
   h3, .h3 {
 
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: $margin-bottom-xs;
+    margin-bottom: $margin-bottom-xs;
 
     font-size: 17px;
 
@@ -11,8 +13,8 @@
 
   h2, .h2 {
 
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: $margin-bottom-xs;
+    margin-bottom: $margin-bottom-xs;
 
     font-size: 21px;
 
@@ -24,7 +26,13 @@
 
   hr {
     margin-top: 7px;
-    margin-bottom: 7px;
+    margin-bottom: $margin-bottom-xs;
+  }
+
+  .breadcrumb,
+  .form-group,
+  .list-group {
+    margin-bottom: $margin-bottom-xs;
   }
 
 }
