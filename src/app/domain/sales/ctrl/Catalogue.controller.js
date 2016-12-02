@@ -2,10 +2,14 @@
 
 (function () {
 
-  function CatalogueController(Schema, $scope, $state, saControllerHelper, $q, saEtc) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers) {
 
-    let vm = saControllerHelper.setup(this, $scope);
+    let {ClickHelper, saEtc, saControllerHelper} = Helpers;
     let {Article, Stock, ArticleGroup, PriceType, SaleOrder} = Schema.models();
+
+    let vm = saControllerHelper.setup(this, $scope)
+      .use(ClickHelper);
+
     let currentArticleGroupId = $state.params.articleGroupId || null;
     let sortedStock = [];
 
