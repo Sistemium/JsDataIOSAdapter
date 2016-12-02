@@ -2,7 +2,7 @@ section(cg-busy='vm.cgBusy')
 
   ol.breadcrumb
 
-    span.pull-right(uib-dropdown is-open='status.isopen')
+    span.pull-right(uib-dropdown)
       a(href uib-dropdown-toggle)
         | {{vm.currentPriceType.name || 'Выберите тип цен'}}
         =' '
@@ -11,6 +11,24 @@ section(cg-busy='vm.cgBusy')
       ul.dropdown-menu(uib-dropdown-menu)
         li(ng-repeat='priceType in vm.priceTypes track by priceType.id')
           a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
+
+    span.pull-right(uib-dropdown style='margin-right: 1em;')
+      a(href uib-dropdown-toggle)
+        | Заказ
+        =' '
+        span.caret
+
+      ul.dropdown-menu(uib-dropdown-menu)
+        li
+          a(href ng-click='vm.saleOrder = !vm.saleOrder') Новый Заказ
+        li.divider(ng-if='vm.draftSaleOrders.length')
+        li(ng-repeat='draft in vm.draftSaleOrders track by draft.id' ng-class='{active: vm.saleOrderId === draft.id}')
+          a(href ng-click='vm.setSaleOrderClick(draft)')
+            .display-flex
+              .flex-1 {{ draft.outlet.name }}
+              .right {{ draft.totalCost | number:2 }}
+            .gray
+              small {{ draft.outlet.address }}
 
 
     li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
@@ -54,7 +72,7 @@ section(cg-busy='vm.cgBusy')
     #scroll-articles.col-sm-8.scroll-y.max-height-100
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length') Нет подходящих товаров
       ul.list-group.vr-parent(vs-repeat='80' vs-scroll-parent="#scroll-articles")
-        .list-group-item.display-flex(ng-repeat='stock in vm.stock track by stock.id')
+        .list-group-item.display-flex.flex-align-center(ng-repeat='stock in vm.stock track by stock.id')
           .flex-1
             div
               strong {{stock.article.firstName}}
