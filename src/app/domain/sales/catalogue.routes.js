@@ -15,7 +15,17 @@
 
           data: {
             title: 'Каталог'
-          }
+          },
+
+          children: [
+            {
+              name: 'saleOrder',
+              url: '/saleOrder?saleOrderId',
+              templateUrl: 'app/domain/sales/views/catalogueSaleOrder.html',
+              controller: 'CatalogueSaleOrderController',
+              controllerAs: 'vm'
+            }
+          ]
 
         });
 
