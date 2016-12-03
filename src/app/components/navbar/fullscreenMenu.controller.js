@@ -13,15 +13,18 @@
 
     });
 
-    checkState($state.current.name);
+    checkState($state.current);
     toggleFullScreen();
 
     $scope.$on('$stateChangeSuccess', (e, to) => {
-      checkState(to.name);
+      checkState(to);
     });
 
-    function checkState(stateName) {
-      vm.isRootState = (stateName === 'home');
+    function checkState(state) {
+
+      vm.isRootState = (state.name === 'home');
+      vm.hideNavs = !!_.get(state, 'data.hideNavs');
+
     }
 
     function toggleFullScreen() {

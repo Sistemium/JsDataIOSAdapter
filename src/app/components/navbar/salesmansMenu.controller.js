@@ -13,17 +13,20 @@
     var {Salesman} = Schema.models();
     var selectedSalesmanIdKey = 'selectedSalesmanId';
 
-    checkState($state.current.name);
+    checkState($state.current);
 
     $scope.$on('$stateChangeSuccess', (e, to) => {
 
-      checkState(to.name);
+      checkState(to);
       _.isUndefined(vm.salesmans) && findSalesmans();
 
     });
 
-    function checkState(stateName) {
-      vm.isSalesState = _.startsWith(stateName, 'sales.');
+    function checkState(state) {
+
+      vm.isSalesState = _.startsWith(state.name, 'sales.');
+      vm.hideNavs = !!_.get(state, 'data.hideNavs');
+
     }
 
     function findSalesmans() {
