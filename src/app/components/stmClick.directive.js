@@ -3,9 +3,8 @@
 (function () {
 
   const BROADCAST_NAME = 'onStmClicked';
-  const EMIT_NAME = 'stmClicked';
 
-  function stmClick($timeout) {
+  function stmClick($rootScope) {
     return {
 
       restrict: 'A',
@@ -19,22 +18,13 @@
         let payload = $scope.clickPayload;
         elem.bind('click', event => {
           event.preventDefault();
-          $timeout(()=>{
-            $scope.$emit(EMIT_NAME, code, event, payload);
+          $rootScope.$apply(()=>{
+            $rootScope.$broadcast(BROADCAST_NAME, code, event, payload)
           });
         });
       }
 
     };
-  }
-
-  function broadcaster($rootScope) {
-
-    $rootScope.$on(
-      EMIT_NAME,
-      (clickEvent, code, domEvent, payload) => $rootScope.$broadcast(BROADCAST_NAME, code, domEvent, payload)
-    );
-
   }
 
   function ClickHelper() {
@@ -55,7 +45,6 @@
 
   angular.module('sistemium')
     .directive('stmClick', stmClick)
-    .run(broadcaster)
     .service('ClickHelper', ClickHelper);
 
 })();
