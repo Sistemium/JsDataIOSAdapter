@@ -9,6 +9,12 @@ div, h4, h3 {
 
   }
 
+  .badge, .pull-right {
+    & + span, & + a {
+      margin-left: 0;
+    }
+  }
+
   * + label {
     //margin-left: 2px;
   }
