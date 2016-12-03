@@ -31,7 +31,7 @@
         .then(salesmans => {
 
           vm.salesmans = _.sortBy(salesmans, 'name');
-          checkSelectedSalesman();
+          checkSalesmanSelection();
 
         });
 
@@ -77,7 +77,7 @@
 
     }
 
-    function checkSelectedSalesman() {
+    function checkSalesmanSelection() {
 
       if (vm.salesmans.length === 1) {
         selectSalesman(_.first(vm.salesmans));
@@ -88,7 +88,7 @@
         if (selectedSalesmanId) {
 
           var selectedSalesman = _.find(vm.salesmans, {'id': selectedSalesmanId});
-          if (selectedSalesman) selectSalesman(selectedSalesman);
+          selectedSalesman && selectSalesman(selectedSalesman);
 
         }
 

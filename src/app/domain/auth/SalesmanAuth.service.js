@@ -76,8 +76,7 @@
       login: login,
 
       getCurrentUser: () => currentSalesman,
-      isLoggedIn: () => !!currentSalesman,
-      getSelectedSalesmanId: () => $window.localStorage.getItem('selectedSalesmanId')
+      isLoggedIn: () => !!currentSalesman
 
     };
 

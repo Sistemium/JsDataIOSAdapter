@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
+  function VisitsController(Schema, $window, $scope, $state, saControllerHelper) {
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -44,7 +44,7 @@
 
       $scope.$on('selectedSalesmanChanged', () => {
 
-        vm.selectedSalesmanId = SalesmanAuth.getSelectedSalesmanId();
+        vm.selectedSalesmanId = $window.localStorage.getItem('selectedSalesmanId');
         findVisits();
         filterVisitsBySelectedDate();
 
@@ -64,11 +64,10 @@
 
     function findVisits() {
 
-      var filter = {};
-      if (vm.selectedSalesmanId) filter.salesmanId = vm.selectedSalesmanId;
+      var filter = salesmanFilter();
 
       vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
-        .then((visits) => {
+        .then(() => {
 
           Visit.bindAll(filter, $scope, 'vm.visits', () => {
 
@@ -105,11 +104,8 @@
 
     function filterVisitsBySelectedDate() {
 
-      var filter = {
-        date: moment(vm.selectedDate).format('YYYY-MM-DD')
-      };
-
-      if (vm.selectedSalesmanId) filter.salesmanId = vm.selectedSalesmanId;
+      var dateFilter = {date: moment(vm.selectedDate).format('YYYY-MM-DD')};
+      var filter = salesmanFilter(dateFilter);
 
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
@@ -119,6 +115,14 @@
       );
 
       vm.rebindAll(Visit, filter, 'vm.selectedDayVisits');
+
+    }
+
+    function salesmanFilter(filter) {
+
+      if (!_.isObject(filter)) filter = {};
+      vm.selectedSalesmanId && _.set(filter, 'salesmanId', vm.selectedSalesmanId);
+      return filter;
 
     }
 
