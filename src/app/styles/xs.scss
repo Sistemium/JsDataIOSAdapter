@@ -20,6 +20,10 @@
 
   }
 
+  h4, .h4 {
+    font-size: 14px;
+  }
+
   .clear-both-xs {
     clear: both;
   }
@@ -31,8 +35,13 @@
 
   .breadcrumb,
   .form-group,
+  .alert,
   .list-group {
     margin-bottom: $margin-bottom-xs;
+  }
+
+  .alert {
+    padding: $margin-bottom-xs;
   }
 
 }
