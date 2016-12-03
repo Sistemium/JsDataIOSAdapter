@@ -15,7 +15,7 @@
 
 ul.list-group.scroll-y(
 resize='groups'
-style='height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
+style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
 )
   a.list-group-item(
   ng-class='{active: vm.currentArticleGroup.id === elem.id}'
