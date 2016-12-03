@@ -24,7 +24,6 @@
   }
 }
 
-
 @media (min-width: 768px) {
   .navbar.navbar-fixed-bottom {
     .float-right {
@@ -64,7 +63,6 @@
       margin-bottom: 5px;
     }
 
-
     li.divider {
       height: 1px;
       margin: 9px 0;
@@ -79,4 +77,24 @@
     }
 
   }
+}
+
+.dropdown-navbar-menu {
+
+  .dropdown-menu {
+
+    li {
+      padding: 10px 0px 10px 0px;
+    }
+
+  }
+
+}
+
+.glyphicon-none {
+  visibility: hidden;
+}
+
+a[disabled] {
+  color: gray;
 }

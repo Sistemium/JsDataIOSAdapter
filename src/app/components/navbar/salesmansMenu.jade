@@ -1,0 +1,30 @@
+small.dropdown-navbar-menu.gray(
+uib-dropdown
+outsideClick
+on-toggle='toggled(open)'
+auto-close='outsideClick'
+)
+  a.p-6(
+  ng-href='{{vm.showMenu ? " " : ""}}'
+  ng-if='vm.isSalesState'
+  ng-class='{disabled: vm.hideNavs}'
+  uib-dropdown-toggle
+  )
+    b.glyphicon.glyphicon-user
+    span.hidden-sm.hidden-xs.ml-10 {{vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выбрать салесмана'}}
+  ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+    li
+      small.gray.ml-10
+        span.p-6
+          b.glyphicon.glyphicon-user
+          span.ml-10 {{vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выбрать салесмана'}}
+    section(ng-if='vm.salesmans.length > 1')
+      hr
+      li(ng-repeat='salesman in vm.salesmans')
+        small.gray.ml-10
+          a.p-6(
+          href
+          ng-click='vm.salesmanClick(salesman)'
+          )
+            b.glyphicon.glyphicon-ok(ng-class='vm.selectedSalesman !== salesman ? "glyphicon-none" : ""')
+            span.ml-10 {{salesman.shortName}}

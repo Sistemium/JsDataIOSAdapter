@@ -75,13 +75,8 @@
       logout: logout,
       login: login,
 
-      getCurrentUser: function () {
-        return currentSalesman;
-      },
-
-      isLoggedIn: function () {
-        return !!currentSalesman;
-      }
+      getCurrentUser: () => currentSalesman,
+      isLoggedIn: () => !!currentSalesman
 
     };
 

@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
+  function VisitsController(Schema, $window, $scope, $state, saControllerHelper) {
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -27,7 +27,6 @@
     });
 
     var {Visit} = Schema.models();
-    var salesman = SalesmanAuth.getCurrentUser();
 
     scopeRoutines();
     findVisits();
@@ -43,6 +42,14 @@
         todayTime => vm.selectedDate = new Date(todayTime)
       );
 
+      $scope.$on('selectedSalesmanChanged', () => {
+
+        vm.selectedSalesmanId = $window.localStorage.getItem('selectedSalesmanId');
+        findVisits();
+        filterVisitsBySelectedDate();
+
+      });
+
     }
 
     function setDate(newValue) {
@@ -57,9 +64,7 @@
 
     function findVisits() {
 
-      var filter = {
-        salesmanId: salesman.id
-      };
+      var filter = salesmanFilter();
 
       vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
         .then(() => {
@@ -99,10 +104,8 @@
 
     function filterVisitsBySelectedDate() {
 
-      var filter = {
-        salesmanId: salesman.id,
-        date: moment(vm.selectedDate).format('YYYY-MM-DD')
-      };
+      var dateFilter = {date: moment(vm.selectedDate).format('YYYY-MM-DD')};
+      var filter = salesmanFilter(dateFilter);
 
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
@@ -112,6 +115,14 @@
       );
 
       vm.rebindAll(Visit, filter, 'vm.selectedDayVisits');
+
+    }
+
+    function salesmanFilter(filter) {
+
+      if (!_.isObject(filter)) filter = {};
+      vm.selectedSalesmanId && _.set(filter, 'salesmanId', vm.selectedSalesmanId);
+      return filter;
 
     }
 
@@ -126,7 +137,7 @@
     }
 
     function previousDayAvailable() {
-      return (vm.selectedDate.setHours(0,0,0,0) > minDate());
+      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) > minDate()) : false;
     }
 
     function selectNextDay() {
@@ -140,7 +151,7 @@
     }
 
     function nextDayAvailable() {
-      return (vm.selectedDate.setHours(0,0,0,0) < maxDate());
+      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) < maxDate()) : false;
     }
 
     function maxDate() {
