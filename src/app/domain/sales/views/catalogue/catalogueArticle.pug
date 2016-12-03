@@ -1,7 +1,7 @@
 .article-name-first
   strong {{stock.article.firstName}}
-  strong {{stock.article.pieceVolume}}
-  small.gray 1 x {{stock.article.packageRel}}
+  strong {{stock.article.pieceVolume}}л
+  small.gray x {{stock.article.packageRel}}
   strong.pull-right
     a(href stm-click='orderedVolume' click-payload='stock') {{ vm.orderedVolumeFull(stock) }}
 
