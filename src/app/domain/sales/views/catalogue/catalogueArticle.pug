@@ -2,6 +2,7 @@
   strong {{stock.article.firstName}}
   strong {{stock.article.pieceVolume}}л
   small.gray x {{stock.article.packageRel}}
+
   strong.pull-right
     a(href stm-click='orderedVolume' click-payload='stock') {{ vm.orderedVolumeFull(stock) }}
 
@@ -10,6 +11,8 @@
   small {{stock.article.lastName || stock.article.name}}
 
 .article-name-third
+  //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
+  //small {{ vm.articleRowHeight(stock, articles.windowWidth) }}
   small.gray(ng-if='stock.displayVolume') ~{{stock.displayVolume}}
   small.red(ng-if='!stock.displayVolume') Нет в наличии
   small {{vm.prices[stock.articleId] | number:2}} ₽
