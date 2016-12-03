@@ -29,7 +29,8 @@
 
       onStateChange,
 
-      orderedVolumeFull
+      orderedVolumeFull,
+      articleRowHeight
 
     });
 
@@ -108,6 +109,22 @@
     /*
      Functions
      */
+
+    function articleRowHeight(stock, windowWidth) {
+
+      let length = _.get(stock, 'article.lastName.length') + _.get(stock, 'article.preName.length');
+      let nameLength = _.get(stock, 'article.firstName.length');
+
+      let nameBreak = windowWidth > 991 ? 60 : 45;
+      let lastBreak = windowWidth > 991 ? 90 : 70;
+
+      if (vm.saleOrder) {
+        nameBreak -= 7;
+        lastBreak -= 10;
+      }
+
+      return (length > lastBreak || nameLength > nameBreak) ? 99 : 80;
+    }
 
     function orderedVolumeFull(stock) {
       let positions = _.get(vm.saleOrder, 'positions');
