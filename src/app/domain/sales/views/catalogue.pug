@@ -2,75 +2,15 @@ section.catalogue(cg-busy='vm.cgBusy')
 
   .ui-view
 
-  ol.breadcrumb
+  ol.breadcrumb(ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'")
 
-    span.pull-right(uib-dropdown)
-      a(href uib-dropdown-toggle)
-        | Заказ
-        =' '
-        span.caret
+  section.row
+    #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
 
-      ul.dropdown-menu(uib-dropdown-menu)
-        li
-          a(href ng-click='vm.setSaleOrderClick()') Новый Заказ
-        li.divider(ng-if='vm.draftSaleOrders.length')
-        li(ng-repeat='draft in vm.draftSaleOrders track by draft.id' ng-class='{active: vm.saleOrderId === draft.id}')
-          a(href ng-click='vm.setSaleOrderClick(draft)')
-            .display-flex
-              .flex-1 {{ draft.outlet.name }}
-              .right {{ draft.totalCost | number:2 }} ₽
-            .gray
-              small {{ draft.outlet.address }}
-
-    li(uib-dropdown)
-      a(href uib-dropdown-toggle)
-        | {{vm.currentPriceType.name || 'Выберите тип цен'}}
-        =' '
-        span.caret
-
-      ul.dropdown-menu(uib-dropdown-menu)
-        li(ng-repeat='priceType in vm.priceTypes track by priceType.id' ng-class='{active: vm.currentPriceType.name == priceType.name}')
-          a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
-
-    li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
-      a(href ng-click='vm.articleGroupClick(ancestor)') {{ ancestor.name }}
-
-    li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
-
-
-  section.row(
-  resize
-  style='height: {{windowHeight - offsetTop - 5}}px;'
-  )
-    .col-sm-4.scroll-y.max-height-100
-
-      .stm-searcher.form-group.has-feedback
-        label(for="search-input")
-          i.glyphicon.glyphicon-search
-        input#search-input.form-control(
-        type='search'
-        placeholder='Поиск'
-        aria-describedby='search-input'
-        ng-model='vm.search'
-        ng-model-options='{debounce: 400}'
-        )
-
-        span.form-control-feedback(ng-hide='!vm.search' )
-          a(ng-click='vm.clearSearchClick()' href)
-            i.glyphicon.glyphicon-remove
-
-      ul.list-group
-        a.list-group-item(
-        ng-class='{active: vm.currentArticleGroup.id === elem.id}'
-        href
-        ng-click='vm.articleGroupClick(elem)'
-        ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
-        )
-          span.badge(ng-if='!elem.children.length && vm.articleGroupIds[elem.id].length') {{vm.articleGroupIds[elem.id].length}}
-          i.glyphicon.glyphicon-menu-right.pull-right(ng-if='elem.children.length')
-          span {{elem.name}}
-
-    #scroll-articles.col-sm-8.scroll-y.max-height-100
+    #scroll-articles.col-sm-8.scroll-y(
+    resize='articles'
+    style='height: {{articles.windowHeight - articles.offsetTop - 5}}px;'
+    )
 
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
         | Нет подходящих товаров
