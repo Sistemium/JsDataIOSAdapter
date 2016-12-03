@@ -51,9 +51,13 @@
           var m = name.match(/[ ][^ ]+[ ]/);
           return (m && m.length) ? m[0].replace(/[^а-яa-z]/ig, ' ') : null;
         }],
-        lastName: ['name', function (name) {
-          var m = name.match(/"[^"]+" ([^,]*)/);
+        lastName: ['name', 'firstName', 'preName', function (name, firstName) {
+          var m = name.match(/"[^"]+" (.+)(?=,[ \D])/);
           m = (m && m.length > 1) ? m[1] : '';
+          if (!m && firstName) {
+           m = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
+          }
+          m = _.trim(m.replace(/^,[^ ]*/,''));
           return m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
         }],
         sameId: ['articleSame', 'id', function (articleSame, id) {
