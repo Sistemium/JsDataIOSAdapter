@@ -78,9 +78,9 @@ section.catalogue(cg-busy='vm.cgBusy')
       ul.list-group.vr-parent(vs-repeat='81' vs-scroll-parent="#scroll-articles")
         .list-group-item.display-flex.flex-align-center(ng-repeat='stock in vm.stock track by stock.id')
 
-          .flex-1(ng-include="'app/domain/sales/views/CatalogueArticle.html'")
+          .flex-1(ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'")
 
           .display-flex.flex-align-center(
           ng-if='vm.currentState=="saleOrder"'
-          ng-include="'app/domain/sales/views/SaleOrderPosition.edit.html'"
+          ng-include="'app/domain/sales/views/saleOrder/saleOrderPosition.edit.html'"
           )

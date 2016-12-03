@@ -21,7 +21,7 @@
             {
               name: 'saleOrder',
               url: '/saleOrder?saleOrderId',
-              templateUrl: 'app/domain/sales/views/catalogueSaleOrder.html',
+              templateUrl: 'app/domain/sales/views/catalogue/catalogueSaleOrder.html',
               controller: 'CatalogueSaleOrderController',
               controllerAs: 'vm'
             }
