@@ -1,12 +1,15 @@
 div, h4, h3 {
 
-  * + small,
   * + strong,
   * + span,
   span + a {
 
     margin-left: 6px;
 
+  }
+
+  * + small {
+    margin-left: 4px;
   }
 
   .badge, .pull-right {
