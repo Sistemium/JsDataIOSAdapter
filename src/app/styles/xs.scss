@@ -1,6 +1,8 @@
 @import "variables";
 
-@media (max-width: 767px) {
+$margin-bottom-xs-minus: 7px;
+
+@media (max-width: $screen-xs-max) {
 
   h3, .h3 {
 
@@ -29,7 +31,7 @@
   }
 
   hr {
-    margin-top: 7px;
+    margin-top: $margin-bottom-xs-minus;
     margin-bottom: $margin-bottom-xs;
   }
 
@@ -42,6 +44,10 @@
 
   .alert {
     padding: $margin-bottom-xs;
+  }
+
+  .list-group-item {
+    padding: $margin-bottom-xs-minus $margin-bottom-xs;
   }
 
 }
