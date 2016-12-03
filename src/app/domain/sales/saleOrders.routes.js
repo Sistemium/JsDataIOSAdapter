@@ -20,7 +20,7 @@
           children: [{
             url: '/:id',
             name: 'item',
-            templateUrl: 'app/domain/sales/views/saleOrderDetails.html',
+            templateUrl: 'app/domain/sales/views/saleOrder/saleOrderDetails.html',
             controller: 'SaleOrderDetailsController',
             controllerAs: 'vm'
           }]
