@@ -19,7 +19,7 @@ section(ng-hide='vm.hide')
         ng-class='{disabled: vm.hideNavs}'
         ) {{ vm.title }}
 
-      .col-xs-4.text-right
+      .col-xs-4.text-right(ng-class='{disabled: vm.hideNavs}')
         navbar-menu
 
   hr
