@@ -1,14 +1,19 @@
+@import "../../styles/variables";
+
 .root-navbar {
 
   .dropdown {
     font-size: 15px;
-    margin-top: 6px;
+    margin-top: 3px;
   }
 
-  .root-navbar-items > a + a{
-    margin-left: 20px;
-  }
+}
 
+.root-navbar-items > a + a{
+  margin-left: 35px;
+  @media (max-width: $screen-xs-max) {
+    margin-left: 10px;
+  }
 }
 
 @media (min-width: 768px) {

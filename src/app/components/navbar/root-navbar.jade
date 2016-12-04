@@ -1,11 +1,11 @@
-h2.root-navbar.display-flex(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
+h2.root-navbar-items.root-navbar.display-flex(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
-  .root-navbar-items.flex-1
+  a.inherit-colors(href ui-sref='home')
+    b.glyphicon.glyphicon-home
 
-    a.inherit-colors(href ui-sref='home')
-      b.glyphicon.glyphicon-home
+  a.inherit-colors(href ng-click='vm.rootClick()') {{ vm.title }}
 
-    a.inherit-colors(href ng-click='vm.rootClick()') {{ vm.title }}
+  .flex-1
 
   fullscreen-menu(ng-if='vm.isRootState')
 
