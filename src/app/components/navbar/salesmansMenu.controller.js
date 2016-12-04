@@ -2,80 +2,25 @@
 
 (function () {
 
-  function salesmansMenuController(saControllerHelper, Schema, $scope, $window, $rootScope, $state) {
+  function salesmansMenuController(saControllerHelper, $scope, SalesmanAuth) {
 
-    var vm = saControllerHelper.setup(this, $scope);
+    let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
-      salesmanClick
+      salesmanClick: SalesmanAuth.login,
+      onStateChange
     });
 
-    var {Salesman} = Schema.models();
-    var selectedSalesmanIdKey = 'selectedSalesmanId';
+    SalesmanAuth
+      .bindAll($scope, 'vm.salesmans')
+      .watchCurrent($scope, salesman => vm.selectedSalesman = salesman);
 
-    checkState($state.current);
+    /*
+    Functions
+     */
 
-    $scope.$on('$stateChangeSuccess', (e, to) => {
-
-      checkState(to);
-      _.isUndefined(vm.salesmans) && findSalesmans();
-
-    });
-
-    function checkState(state) {
-
+    function onStateChange(state) {
       vm.isSalesState = _.startsWith(state.name, 'sales.');
-      vm.hideNavs = !!_.get(state, 'data.hideNavs');
-
-    }
-
-    function findSalesmans() {
-
-      Salesman.findAll()
-        .then(salesmans => {
-
-          vm.salesmans = _.sortBy(salesmans, 'name');
-          checkSalesmanSelection();
-
-        });
-
-    }
-
-    function salesmanClick(salesman) {
-      if (_.isObject(salesman)) selectSalesman(salesman);
-    }
-
-    function selectSalesman(salesman) {
-
-      vm.selectedSalesman = (vm.selectedSalesman !== salesman) ? salesman : undefined;
-
-      if (vm.selectedSalesman) {
-        $window.localStorage.setItem(selectedSalesmanIdKey, vm.selectedSalesman.id);
-      } else {
-        $window.localStorage.removeItem(selectedSalesmanIdKey);
-      }
-
-      $rootScope.$broadcast('selectedSalesmanChanged');
-
-    }
-
-    function checkSalesmanSelection() {
-
-      if (vm.salesmans.length === 1) {
-        selectSalesman(_.first(vm.salesmans));
-      } else {
-
-        var selectedSalesmanId = $window.localStorage.getItem(selectedSalesmanIdKey);
-
-        if (selectedSalesmanId) {
-
-          var selectedSalesman = _.find(vm.salesmans, {'id': selectedSalesmanId});
-          selectedSalesman && selectSalesman(selectedSalesman);
-
-        }
-
-      }
-
     }
 
   }
