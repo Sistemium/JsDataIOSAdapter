@@ -22,7 +22,7 @@
       function setValues(newValue) {
         _.assign(property, newValue);
         _.assign(property, {
-          xsWidth: newValue.windowWidth < SCREEN_XS_MAX
+          xsWidth: _.get(newValue, 'windowWidth') < SCREEN_XS_MAX
         });
       }
 
