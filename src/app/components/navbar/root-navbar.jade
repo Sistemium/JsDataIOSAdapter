@@ -1,9 +1,10 @@
 h2.root-navbar-items.root-navbar.display-flex(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
-  a.inherit-colors(href ui-sref='home')
+  a(href ui-sref='home' ng-class='{disabled: vm.isRootState}')
     b.glyphicon.glyphicon-home
 
-  a.inherit-colors(href ng-click='vm.rootClick()') {{ vm.title }}
+  a(href ng-click='vm.rootClick()' ng-class='{disabled: vm.isRootState}')
+   | {{ vm.title }}
 
   .flex-1
 
