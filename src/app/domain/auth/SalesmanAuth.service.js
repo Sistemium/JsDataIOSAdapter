@@ -2,9 +2,11 @@
 
 (function () {
 
-  function SalesmanAuth($window, $rootScope, $state, Schema) {
+  function SalesmanAuth($window, $rootScope, $state, Schema, localStorageService) {
 
     const LOGIN_EVENT = 'salesman-login';
+    const LOCAL_STORAGE_KEY = 'currentSalesmanId';
+
     const {Salesman} = Schema.models();
 
     let currentSalesman;
@@ -28,7 +30,7 @@
     function logout() {
       currentSalesman = undefined;
       $rootScope.$broadcast('salesman-logout');
-      $window.localStorage.removeItem('currentSalesmanId');
+      localStorageService.remove('currentSalesmanId');
     }
 
     function login(user) {
@@ -36,13 +38,13 @@
       loginPromise = false;
 
       if (!user || !user.id) {
-        $window.localStorage.removeItem('currentSalesmanId');
+        localStorageService.remove(LOCAL_STORAGE_KEY);
         return $state.go('salesmanLogin');
       }
 
       currentSalesman = user;
 
-      $window.localStorage.setItem('currentSalesmanId', user.id);
+      localStorageService.set(LOCAL_STORAGE_KEY, user.id);
       $rootScope.$broadcast(LOGIN_EVENT, currentSalesman);
 
       if (redirectTo) {
@@ -55,8 +57,10 @@
     function init() {
 
       loginPromise = Salesman.findAll()
-        .then(res => {
-          return login(_.first(res));
+        .then(data => {
+          let salesmanId = localStorageService.get(LOCAL_STORAGE_KEY);
+          let res = salesmanId && _.find(data, {id: salesmanId});
+          return login(res || _.first(data));
         });
 
       $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
