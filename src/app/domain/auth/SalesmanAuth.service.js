@@ -23,6 +23,7 @@
 
       bindAll,
       watchCurrent,
+      makeFilter,
 
       getCurrentUser: () => currentSalesman,
       isLoggedIn: () => !!currentSalesman
@@ -106,6 +107,14 @@
     function bindAll(scope, expr, callback) {
       Salesman.bindAll({}, scope, expr, callback);
       return service;
+    }
+
+    function makeFilter(filter) {
+      let res = filter || {};
+      if (currentSalesman) {
+        res.salesmanId = currentSalesman.id;
+      }
+      return res;
     }
 
     return service;
