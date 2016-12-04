@@ -7,12 +7,14 @@
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
+      isEnabled: false,
       salesmanClick: SalesmanAuth.login,
+      noneClick: SalesmanAuth.logout,
       onStateChange
     });
 
     SalesmanAuth
-      .bindAll($scope, 'vm.salesmans')
+      .bindAll($scope, 'vm.salesmans', onDataChange)
       .watchCurrent($scope, salesman => vm.selectedSalesman = salesman);
 
     /*
@@ -21,6 +23,10 @@
 
     function onStateChange(state) {
       vm.isSalesState = _.startsWith(state.name, 'sales.');
+    }
+
+    function onDataChange(e, data) {
+      vm.isEnabled = _.get(data, 'length') > 1;
     }
 
   }
