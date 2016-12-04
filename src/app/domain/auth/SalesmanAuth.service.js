@@ -4,9 +4,26 @@
 
   function SalesmanAuth($window, $rootScope, $state, Schema) {
 
-    var currentSalesman;
-    var redirectTo;
-    var loginPromise;
+    const LOGIN_EVENT = 'salesman-login';
+    const {Salesman} = Schema.models();
+
+    let currentSalesman;
+    let redirectTo;
+    let loginPromise;
+
+    let service = {
+
+      init: init,
+      logout: logout,
+      login: login,
+      bindAll,
+
+      watchCurrent,
+
+      getCurrentUser: () => currentSalesman,
+      isLoggedIn: () => !!currentSalesman
+
+    };
 
     function logout() {
       currentSalesman = undefined;
@@ -14,7 +31,7 @@
       $window.localStorage.removeItem('currentSalesmanId');
     }
 
-    function login (user) {
+    function login(user) {
 
       loginPromise = false;
 
@@ -26,26 +43,20 @@
       currentSalesman = user;
 
       $window.localStorage.setItem('currentSalesmanId', user.id);
-      $rootScope.$broadcast('salesman-login', currentSalesman);
+      $rootScope.$broadcast(LOGIN_EVENT, currentSalesman);
 
       if (redirectTo) {
         $state.go(redirectTo.state, redirectTo.params);
         redirectTo = false;
-      } else {
-        $state.go('home');
       }
 
     }
 
     function init() {
 
-      var SM = Schema.model('Salesman');
-
-      loginPromise = SM.findAll()
-        .then(function(res){
-          if (res.length) {
-            login (res[0]);
-          }
+      loginPromise = Salesman.findAll()
+        .then(res => {
+          return login(_.first(res));
         });
 
       $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
@@ -69,16 +80,18 @@
 
     }
 
-    return {
+    function watchCurrent(scope, callback) {
+      if (currentSalesman) callback(currentSalesman);
+      scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
+      return service;
+    }
 
-      init: init,
-      logout: logout,
-      login: login,
+    function bindAll(scope, expr) {
+      Salesman.bindAll({}, scope, expr);
+      return service;
+    }
 
-      getCurrentUser: () => currentSalesman,
-      isLoggedIn: () => !!currentSalesman
-
-    };
+    return service;
 
   }
 
