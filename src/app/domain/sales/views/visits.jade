@@ -38,8 +38,12 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
 
   hr.clear-both
 
-  #scroll-main(resize ng-style='{height: (windowHeight - offsetTop) + "px"}')
-    table.table.table-striped.clear-both.table-hover(ng-if='vm.selectedDayVisits.length')
+  #scroll-main(
+  resize
+  ng-style='{height: (windowHeight - offsetTop) + "px"}'
+  ng-if='vm.selectedDayVisits.length'
+  )
+    table.table.table-striped.clear-both.table-hover
       thead
         tr
           th Точка
@@ -59,3 +63,5 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
             div {{ visit.duration() }}
           td.number.hidden-xs {{ visit.photos.length | number: 0 }}
           td.number.hidden-xs {{ visit.answers.length | number: 0 }}
+
+  .alert.alert-info.centered(ang-show='!vm.selectedDayVisits.length') Нет визитов на указанную дату
