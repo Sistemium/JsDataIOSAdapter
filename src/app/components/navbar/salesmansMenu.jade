@@ -1,10 +1,10 @@
-.salesman-menu(uib-dropdown ng-if='vm.isSalesState')
+.salesman-menu(uib-dropdown ng-if='vm.isSalesState' resize='rootNavbar')
   a.inherit-colors(
   href uib-dropdown-toggle
   ng-class="{disabled: !vm.isEnabled}"
   )
-    span {{vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выберите ТП'}}
-    = ' '
+    span(ng-if='!rootNavbar.xsWidth') {{vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выберите ТП'}}
+    span(ng-if='rootNavbar.xsWidth')  {{vm.selectedSalesman ? vm.selectedSalesman.tinyName : 'Выберите ТП'}}
     span.caret
 
   ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
