@@ -15,8 +15,7 @@
         controllerAs: 'vm',
 
         data: {
-          needCurrent: 'Salesman',
-          needRole: 'preOrdering'
+          needRoles: 'preOrdering'
         },
 
         children: [
@@ -163,9 +162,6 @@
       var salesTerritory = _.assign({
 
         data: {
-          needCurrent: 'Salesman',
-          needRole: 'salesman',
-          // hideTopBar: true,
           title: 'Клиенты'
         },
 
@@ -183,8 +179,6 @@
         controllerAs: 'vm',
 
         data: {
-          needCurrent: 'Salesman',
-          needRole: 'salesman',
           title: 'Визиты'
         },
 

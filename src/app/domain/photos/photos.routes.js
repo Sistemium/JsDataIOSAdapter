@@ -43,9 +43,7 @@
           templateUrl: 'app/domain/ui-view.html',
 
           data: {
-            auth: 'SalesmanAuth',
-            needRole: 'salesman',
-            needCurrent: 'Salesman'
+            auth: 'SalesmanAuth'
           },
 
           children: [stream]
