@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitsController(Schema, $window, $scope, $state, saControllerHelper) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -42,9 +42,9 @@
         todayTime => vm.selectedDate = new Date(todayTime)
       );
 
-      $scope.$on('selectedSalesmanChanged', () => {
+      SalesmanAuth.watchCurrent($scope, salesman => {
 
-        vm.selectedSalesmanId = $window.localStorage.getItem('selectedSalesmanId');
+        vm.selectedSalesmanId = salesman.id;
         findVisits();
         filterVisitsBySelectedDate();
 
