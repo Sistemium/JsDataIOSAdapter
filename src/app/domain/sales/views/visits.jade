@@ -46,6 +46,7 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
     table.table.table-striped.clear-both.table-hover
       thead
         tr
+          th(ng-if='!vm.selectedSalesmanId') ТП
           th Точка
           th Время
           th.number.hidden-xs Фото
@@ -55,6 +56,7 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
         ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
         ng-click='vm.visitClick(visit)'
         )
+          td(ng-if='!vm.selectedSalesmanId') {{ visit.salesman.shortName }}
           td
             div {{ visit.outlet.name }}
             .gray {{ visit.outlet.address }}
