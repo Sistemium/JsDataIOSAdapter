@@ -1,9 +1,12 @@
-.navbar {
+.root-navbar {
 
-  .navbar-toggle {
-    float: left;
-    margin-left: 15px;
-    margin-right: 0;
+  .dropdown {
+    font-size: 15px;
+    margin-top: 6px;
+  }
+
+  .root-navbar-items > a + a{
+    margin-left: 20px;
   }
 
 }
@@ -77,24 +80,4 @@
     }
 
   }
-}
-
-.dropdown-navbar-menu {
-
-  .dropdown-menu {
-
-    li {
-      padding: 10px 0px 10px 0px;
-    }
-
-  }
-
-}
-
-.glyphicon-none {
-  visibility: hidden;
-}
-
-a[disabled] {
-  color: gray;
 }

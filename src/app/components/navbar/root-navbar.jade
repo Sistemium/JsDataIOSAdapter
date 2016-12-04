@@ -1,25 +1,14 @@
-section(ng-hide='vm.hide')
+h2.root-navbar.display-flex(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
-  h2.container
+  .root-navbar-items.flex-1
 
-    .row
-      .col-xs-4.text-left
-        small.gray
-          a.p-6(
-          href
-          ui-sref='home'
-          ng-class='{disabled: vm.hideNavs}'
-          )
-            b.glyphicon.glyphicon-home
+    a.inherit-colors(href ui-sref='home')
+      b.glyphicon.glyphicon-home
 
-      .col-xs-4.text-center
-        a.inherit-colors(
-        href=''
-        ng-click='vm.rootClick()'
-        ng-class='{disabled: vm.hideNavs}'
-        ) {{ vm.title }}
+    a.inherit-colors(href ng-click='vm.rootClick()') {{ vm.title }}
 
-      .col-xs-4.text-right
-        navbar-menu
+  fullscreen-menu(ng-if='vm.isRootState')
 
-  hr
+  salesmans-menu
+
+hr
