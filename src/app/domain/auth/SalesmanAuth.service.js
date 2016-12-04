@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SalesmanAuth($window, $rootScope, $state, Schema, localStorageService) {
+  function SalesmanAuth($rootScope, $state, Schema, localStorageService) {
 
     const LOGIN_EVENT = 'salesman-login';
     const LOCAL_STORAGE_KEY = 'currentSalesmanId';
