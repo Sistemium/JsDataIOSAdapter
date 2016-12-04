@@ -34,7 +34,10 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
             i.glyphicon.glyphicon-chevron-right
     .col-sm-3.col-md-2
       .buttons
-        button.btn.btn-block.btn-success.pull-right(ng-click='vm.newVisitClick()') Новый визит
+        button.btn.btn-block.btn-success.pull-right(
+        ng-click='vm.newVisitClick()'
+        ng-disabled='!vm.selectedSalesmanId'
+        ) Новый визит
 
   hr.clear-both
 

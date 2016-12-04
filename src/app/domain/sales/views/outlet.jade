@@ -38,7 +38,10 @@ section.ui-view
     h4.pull-left
       span Визиты
 
-    button.btn.ml-em.btn-success.pull-right.btn-sm(ng-click='vm.newVisitClick()') Новый визит
+    button.btn.ml-em.btn-success.pull-right.btn-sm(
+    ng-click='vm.newVisitClick()'
+    ng-disabled='!vm.currentSalesman'
+    ) Новый визит
 
     table.table.table-striped.clear-both.table-hover(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
       thead
