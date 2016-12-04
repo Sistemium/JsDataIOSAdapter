@@ -12,15 +12,16 @@
 
     let currentSalesman;
     let redirectTo;
-    let loginPromise;
+    let initPromise;
+    let isAuthorized;
 
     let service = {
 
       init: init,
       logout: logout,
       login: login,
-      bindAll,
 
+      bindAll,
       watchCurrent,
 
       getCurrentUser: () => currentSalesman,
@@ -36,17 +37,16 @@
 
     function login(user) {
 
-      loginPromise = false;
+      initPromise = false;
 
       if (!user || !user.id) {
+        user = null;
         localStorageService.remove(LOCAL_STORAGE_KEY);
-        return $state.go('salesmanLogin');
+        $rootScope.$broadcast(LOGOUT_EVENT);
+      } else {
+        localStorageService.set(LOCAL_STORAGE_KEY, user.id);
+        $rootScope.$broadcast(LOGIN_EVENT, currentSalesman = user);
       }
-
-      currentSalesman = user;
-
-      localStorageService.set(LOCAL_STORAGE_KEY, user.id);
-      $rootScope.$broadcast(LOGIN_EVENT, currentSalesman);
 
       if (redirectTo) {
         $state.go(redirectTo.state, redirectTo.params);
@@ -57,26 +57,37 @@
 
     function init() {
 
-      loginPromise = Salesman.findAll()
+      initPromise = Salesman.findAll()
         .then(data => {
+
+          isAuthorized = !!data.length;
+
           let salesmanId = localStorageService.get(LOCAL_STORAGE_KEY);
           let res = salesmanId && _.find(data, {id: salesmanId});
-          return login(res || _.first(data));
+
+          return login(res || _.get(data, 'length') === 1 && _.first(data));
+
         });
 
       $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
-        var needRoles = _.get(next, 'data.auth');
+        let needRoles = _.get(next, 'data.auth');
 
-        if (needRoles === 'SalesmanAuth' && !currentSalesman) {
-          event.preventDefault();
-          redirectTo = {
-            state: next,
-            params: nextParams
-          };
-          if (!loginPromise) {
-            $state.go('salesmanLogin');
+        if (needRoles === 'SalesmanAuth') {
+
+          if (!isAuthorized) {
+            event.preventDefault();
           }
+
+          if (initPromise) {
+            redirectTo = {
+              state: next,
+              params: nextParams
+            };
+          } else {
+            // TODO: maybe add toast with error message
+          }
+
         }
 
       }));
@@ -86,13 +97,14 @@
     }
 
     function watchCurrent(scope, callback) {
-      if (currentSalesman) callback(currentSalesman);
+      callback(currentSalesman);
       scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
+      scope.$on(LOGOUT_EVENT, () => callback(null));
       return service;
     }
 
-    function bindAll(scope, expr) {
-      Salesman.bindAll({}, scope, expr);
+    function bindAll(scope, expr, callback) {
+      Salesman.bindAll({}, scope, expr, callback);
       return service;
     }
 
