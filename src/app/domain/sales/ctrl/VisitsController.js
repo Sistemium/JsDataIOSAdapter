@@ -4,14 +4,16 @@
 
   function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
 
-    var vm = saControllerHelper.setup(this, $scope);
+    const {Visit} = Schema.models();
+
+    let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
       visits: [],
       selectedDayVisits: [],
 
-      selectedDate: null,
+      selectedDate: moment($state.params.date).toDate(),
       selectPreviousDay,
       previousDayAvailable,
       selectNextDay,
@@ -26,8 +28,6 @@
 
     });
 
-    var {Visit} = Schema.models();
-
     scopeRoutines();
     findVisits();
 
@@ -39,12 +39,16 @@
 
       $scope.$watch(
         () => new Date().setHours(0,0,0,0),
-        todayTime => vm.selectedDate = new Date(todayTime)
+        (todayTime, oldValue) => {
+          if (todayTime != oldValue) {
+            vm.selectedDate = new Date(todayTime);
+          }
+        }
       );
 
       SalesmanAuth.watchCurrent($scope, salesman => {
 
-        vm.selectedSalesmanId = salesman.id;
+        vm.selectedSalesmanId = _.get(salesman, 'id');
         findVisits();
         filterVisitsBySelectedDate();
 
@@ -59,6 +63,8 @@
       }
 
       filterVisitsBySelectedDate();
+
+      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')}, {notify: false});
 
     }
 

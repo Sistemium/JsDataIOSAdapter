@@ -172,7 +172,7 @@
       var visits = {
 
         name: 'visits',
-        url: '/visits',
+        url: '/visits?date',
 
         templateUrl: 'app/domain/sales/views/visits.html',
         controller: 'VisitsController',
