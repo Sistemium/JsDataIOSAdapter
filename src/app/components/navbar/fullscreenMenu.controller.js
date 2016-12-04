@@ -2,30 +2,21 @@
 
 (function () {
 
-  function fullscreenMenuController(saControllerHelper, IOS, $scope, $state) {
+  function FullScreenMenuController(saControllerHelper, IOS, $scope) {
 
-    var vm = saControllerHelper.setup(this, $scope);
+    let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
-      fullscreenButtonClass,
-      fullscreenButtonTitle
+      isFullScreen: false,
+      toggleFullScreen: false,
+
+      fullScreenButtonClass,
+      fullScreenButtonTitle
 
     });
 
-    checkState($state.current);
     toggleFullScreen();
-
-    $scope.$on('$stateChangeSuccess', (e, to) => {
-      checkState(to);
-    });
-
-    function checkState(state) {
-
-      vm.isRootState = (state.name === 'home');
-      vm.hideNavs = !!_.get(state, 'data.hideNavs');
-
-    }
 
     function toggleFullScreen() {
 
@@ -41,17 +32,17 @@
 
     }
 
-    function fullscreenButtonClass() {
+    function fullScreenButtonClass() {
       return vm.isFullScreen ? 'glyphicon-resize-small' : 'glyphicon-resize-full';
     }
 
-    function fullscreenButtonTitle() {
+    function fullScreenButtonTitle() {
       return vm.isFullScreen ? 'Свернуть' : 'Развернуть';
     }
 
   }
 
   angular.module('webPage')
-    .controller('FullscreenMenuController', fullscreenMenuController);
+    .controller('FullScreenMenuController', FullScreenMenuController);
 
 })();

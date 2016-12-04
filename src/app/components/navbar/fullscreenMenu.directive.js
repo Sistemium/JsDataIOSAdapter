@@ -1,18 +1,19 @@
+'use strict';
+
 (function() {
-  'use strict';
 
   angular
     .module('webPage')
-    .directive('fullscreenMenu', fullscreenMenu);
+    .directive('fullscreenMenu', fullScreenMenu);
 
-  function fullscreenMenu() {
+  function fullScreenMenu() {
     return {
 
       restrict: 'E',
-      templateUrl: 'app/components/navbar/fullscreenMenu.html',
+      templateUrl: 'app/components/navbar/fullScreenMenu.html',
       scope: {
       },
-      controller: 'FullscreenMenuController',
+      controller: 'FullScreenMenuController',
       controllerAs: 'vm',
       bindToController: true
 

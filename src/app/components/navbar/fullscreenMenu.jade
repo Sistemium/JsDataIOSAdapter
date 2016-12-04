@@ -1,7 +1,3 @@
-small.gray.ml-10(ng-if='vm.isRootState && vm.toggleFullScreen')
-  a.p-6(
-  href
-  ng-click='vm.toggleFullScreen()'
-  ng-class='{disabled: vm.hideNavs}'
-  )
-    b.glyphicon(ng-class='vm.fullscreenButtonClass()')
+.fullscreen-menu(ng-if='vm.toggleFullScreen')
+  a(href ng-click='vm.toggleFullScreen()')
+    b.glyphicon(ng-class='vm.fullScreenButtonClass()')
