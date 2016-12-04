@@ -52,13 +52,11 @@
 
     function getData(salesman) {
 
-      let filter = {
-        date: moment(vm.selectedDate).format('YYYY-MM-DD')
-      };
+      vm.currentSalesman = salesman;
 
-      if (salesman) {
-        filter.salesmanId = salesman.id;
-      }
+      let filter = SalesmanAuth.makeFilter({
+        date: moment(vm.selectedDate).format('YYYY-MM-DD')
+      });
 
       vm.setBusy(
         SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet']),
