@@ -5,6 +5,7 @@
   function SalesmanAuth($rootScope, $state, Schema, localStorageService) {
 
     const LOGIN_EVENT = 'salesman-login';
+    const LOGOUT_EVENT = 'salesman-logout';
     const LOCAL_STORAGE_KEY = 'currentSalesmanId';
 
     const {Salesman} = Schema.models();
@@ -29,8 +30,8 @@
 
     function logout() {
       currentSalesman = undefined;
-      $rootScope.$broadcast('salesman-logout');
-      localStorageService.remove('currentSalesmanId');
+      $rootScope.$broadcast(LOGOUT_EVENT);
+      localStorageService.remove(LOCAL_STORAGE_KEY);
     }
 
     function login(user) {
