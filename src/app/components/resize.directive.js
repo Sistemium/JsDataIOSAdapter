@@ -4,6 +4,8 @@
 
   function resize($window, $uibPosition, $timeout) {
 
+    const SCREEN_XS_MAX = 480;
+
     return (scope, element, attrs) => {
 
       var property = attrs.resize ? (scope[attrs.resize] = {}) : scope;
@@ -19,6 +21,9 @@
 
       function setValues(newValue) {
         _.assign(property, newValue);
+        _.assign(property, {
+          xsWidth: newValue.windowWidth < SCREEN_XS_MAX
+        });
       }
 
       var un = scope.$watch(getWindowDimensions, setValues, true);
