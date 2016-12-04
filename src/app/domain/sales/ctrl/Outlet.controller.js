@@ -2,13 +2,19 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, PhotoHelper, mapsHelper, LocationHelper, toastr) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, Helpers) {
 
     // TODO: allow to add/change location for an existing outlet
 
-    var vm = this;
+    const {PhotoHelper, mapsHelper, LocationHelper, toastr, saControllerHelper} = Helpers;
+    const {Outlet, Visit, OutletPhoto, Location} = Schema.models();
 
-    _.assign(vm, {
+    let vm = saControllerHelper.setup(this, $scope);
+
+    let rootState = _.first($state.current.name.match(/sales\.[^.]+\.[^.]+/)) || 'sales.territory.outlet';
+    let stateFilter = $state.params.id;
+
+    vm.use({
 
       outlet: undefined,
       isUpdateLocationEnabled: true,
@@ -34,14 +40,7 @@
 
     });
 
-    var Outlet = Schema.model('Outlet');
-    var Visit = Schema.model('Visit');
-    var OutletPhoto = Schema.model('OutletPhoto');
-    var Location = Schema.model('Location');
-    var rootState = _.first($state.current.name.match(/sales\.[^.]+\.[^.]+/)) || 'sales.territory.outlet';
-
-    var stateFilter = $state.params.id;
-    var salesman = SalesmanAuth.getCurrentUser();
+    SalesmanAuth.watchCurrent($scope, refresh);
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
 
@@ -56,23 +55,24 @@
 
     });
 
-    OutletPhoto.bindAll({
-      outletId: stateFilter
-    }, $scope, 'vm.photos');
+    function currentFilter() {
+      return SalesmanAuth.makeFilter({
+        outletId: stateFilter
+      });
+    }
 
-    Visit.bindAll({
-      outletId: stateFilter,
-      salesmanId: salesman.id
-    }, $scope, 'vm.visits');
+    function refresh(salesman) {
 
-    function refresh() {
+      vm.currentSalesman = salesman;
+
+      OutletPhoto.bindAll(currentFilter(), $scope, 'vm.photos');
+      Visit.bindAll(currentFilter(), $scope, 'vm.visits');
+
       vm.busy = $q.all([
         Outlet.find(stateFilter),
-        Visit.findAllWithRelations({
-          outletId: stateFilter,
-          salesmanId: salesman.id
-        })(['VisitAnswer', 'VisitPhoto'])
+        Visit.findAllWithRelations(currentFilter())(['VisitAnswer', 'VisitPhoto'])
       ]);
+
     }
 
     function outletClick() {
