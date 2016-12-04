@@ -21,7 +21,7 @@ ng-hide='vm.hideHashes'
 
 hr(ng-hide='vm.hideHashes')
 
-.territory.ui-view(resize)
+.territory.ui-view(resize cg-busy='vm.cgBusy')
 
   section#scroll-main(
   style='height: {{windowHeight - offsetTop - 5}}px;'
