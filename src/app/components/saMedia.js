@@ -4,7 +4,10 @@
 
   function saMedia($window, $rootScope) {
 
-    const SCREEN_XS_MAX = 768;
+    const SCREEN_XS_MIN = 480;
+    const SCREEN_SM_MIN = 768;
+    const SCREEN_MD_MIN = 992;
+    const SCREEN_LG_MIN = 1200;
 
     const service = {};
 
@@ -17,9 +20,16 @@
      */
 
     function setValues(newValue) {
+      let windowWidth = _.get(newValue, 'windowWidth');
       _.assign(service, newValue);
       _.assign(service, {
-        xsWidth: _.get(newValue, 'windowWidth') < SCREEN_XS_MAX
+
+        xxsWidth: windowWidth < SCREEN_XS_MIN,
+        xsWidth: windowWidth >= SCREEN_SM_MIN && windowWidth < SCREEN_SM_MIN,
+        // xsWidth: windowWidth < SCREEN_SM_MIN,
+        smWidth: windowWidth >= SCREEN_SM_MIN && windowWidth < SCREEN_MD_MIN,
+        mdWidth: windowWidth >= SCREEN_MD_MIN && windowWidth < SCREEN_LG_MIN,
+        lgWidth: windowWidth >= SCREEN_LG_MIN
       });
     }
 
