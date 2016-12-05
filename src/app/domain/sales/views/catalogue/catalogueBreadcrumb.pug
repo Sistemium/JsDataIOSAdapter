@@ -29,4 +29,6 @@ li(uib-dropdown)
 li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
   a(href ng-click='vm.articleGroupClick(ancestor)') {{ ancestor.name }}
 
-li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
+//li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
+
+li.active(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroupsDropDown.html'")
