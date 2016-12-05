@@ -17,6 +17,8 @@
 
     let service = {
 
+      hasOptions: false,
+
       init: init,
       logout: logout,
       login: login,
@@ -62,11 +64,12 @@
         .then(data => {
 
           isAuthorized = !!data.length;
+          service.hasOptions = data.length > 1;
 
           let salesmanId = localStorageService.get(LOCAL_STORAGE_KEY);
           let res = salesmanId && _.find(data, {id: salesmanId});
 
-          return login(res || _.get(data, 'length') === 1 && _.first(data));
+          return login(res || data.length === 1 && _.first(data));
 
         });
 
