@@ -26,6 +26,10 @@
         })
         .catch(error => console.error(error));
     } else {
+
+      Outlet.findAll({}).then((data) => {
+        vm.outlets = data;
+      });
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
 
