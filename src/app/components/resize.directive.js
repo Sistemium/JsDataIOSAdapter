@@ -4,7 +4,7 @@
 
   function resize($window, $uibPosition, $timeout) {
 
-    const SCREEN_XS_MAX = 480;
+    const SCREEN_XS_MAX = 768;
 
     return (scope, element, attrs) => {
 
