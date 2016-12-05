@@ -36,7 +36,7 @@
     $scope.$on('rootClick', () => $state.go(rootState));
 
     $scope.$watch(
-      () => saMedia.xsWidth,
+      () => saMedia.xsWidth || saMedia.xxsWidth,
       (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
     );
 
@@ -58,7 +58,7 @@
     }
 
     function rowHeight(partner) {
-      let xsMargin = saMedia.xsWidth ? 21 : 0;
+      let xsMargin = (saMedia.xsWidth || saMedia.xxsWidth) ? 21 : 0;
       return 39 + partner.outlets.length * 29 + 8 + 17 - xsMargin;
     }
 
