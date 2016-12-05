@@ -5,7 +5,8 @@
   function SalesTerritoryController(Schema, Helpers, $state, SalesmanAuth, $scope) {
 
     const {Outlet, Partner} = Schema.models();
-    const {saMedia, saControllerHelper} = Helpers;
+    const {saMedia, saControllerHelper, saEtc} = Helpers;
+    const SCROLL_MAIN = 'scroll-main';
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -83,9 +84,9 @@
           Outlet.ejectAll(filter);
           filter.where.id.notIn = _.uniq(_.map(outlets, 'partnerId'));
           Partner.ejectAll(filter);
-        });
-
-      // TODO: scroll to top after refresh
+          saEtc.scrolTopElementById(SCROLL_MAIN);
+        })
+        .catch(e => console.error(e));
 
     }
 
