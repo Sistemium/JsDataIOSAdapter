@@ -1,3 +1,5 @@
+@import "variables";
+
 button {
   &.margin {
     margin: 2px;
@@ -20,4 +22,31 @@ button {
   .buttons {
     margin-top: 9px;
   }
+}
+
+.datepicker-with-buttons {
+  .buttons {
+    @media (max-width: $screen-xs-max) {
+      margin-top: 6px;
+      .btn-block {
+        //max-width: 400px;
+      }
+    }
+  }
+}
+
+a[disabled], [disabled] a {
+  color: gray;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+a.disabled, .disabled a {
+  pointer-events: none;
+  cursor: not-allowed;
+  -moz-filter:    grayscale(100%);
+  -ms-filter:     grayscale(100%);
+  -o-filter:      grayscale(100%);
+  filter: gray;
+  -webkit-filter: grayscale(100%);
 }

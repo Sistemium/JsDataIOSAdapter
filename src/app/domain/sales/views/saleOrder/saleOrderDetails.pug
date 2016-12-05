@@ -1,0 +1,46 @@
+#scroll-main(resize ng-style='{height: (windowHeight - offsetTop) + "px"}')
+
+  // display saleOrder fields
+  form.form-horizontal
+
+    .form-group
+      label.col-sm-3.control-label(for='ouletName') Торговая точка
+      .col-sm-9
+        #ouletName.form-control {{vm.saleOrder.outlet.name}}
+
+    .form-group(ng-if='vm.saleOrder.commentText')
+      label.col-sm-3.control-label(for='comment') Комментарий
+      .col-sm-9
+        #comment.form-control {{vm.saleOrder.commentText}}
+
+    .form-group
+      label.col-sm-3.control-label(for='date') Дата
+      .col-sm-9
+        #date.form-control {{vm.saleOrder.date}}
+
+    .form-group
+      label.col-sm-3.control-label(for='salesMan') ТП
+      .col-sm-9
+        #salesMan.form-control {{vm.saleOrder.salesman.name}}
+
+    .form-group
+      label.col-sm-3.control-label(for='price') Стоимость
+      .col-sm-9
+        #price.form-control {{vm.saleOrder.totalCost | number: 2}} ₽
+
+
+  table.table.table-striped.clear-both.table-hover(ng-if='vm.saleOrder.positions.length')
+    thead
+      tr
+        th Товар
+        th.number Количество
+        th.number Цена
+        th.number.hidden-xs Стоимость
+    tbody
+      tr.clickable(
+      ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
+      )
+        td {{ item.article.name }}
+        td.number {{ item.volume | number:0 }}
+        td.number {{ item.price | number:2 }}
+        td.number.hidden-xs {{ item.cost | number:2}}

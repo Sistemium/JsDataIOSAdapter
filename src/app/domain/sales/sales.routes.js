@@ -15,8 +15,7 @@
         controllerAs: 'vm',
 
         data: {
-          needCurrent: 'Salesman',
-          needRole: 'preOrdering'
+          needRoles: 'preOrdering'
         },
 
         children: [
@@ -163,9 +162,6 @@
       var salesTerritory = _.assign({
 
         data: {
-          needCurrent: 'Salesman',
-          needRole: 'salesman',
-          // hideTopBar: true,
           title: 'Клиенты'
         },
 
@@ -176,15 +172,13 @@
       var visits = {
 
         name: 'visits',
-        url: '/visits',
+        url: '/visits?date',
 
         templateUrl: 'app/domain/sales/views/visits.html',
         controller: 'VisitsController',
         controllerAs: 'vm',
 
         data: {
-          needCurrent: 'Salesman',
-          needRole: 'salesman',
           title: 'Визиты'
         },
 

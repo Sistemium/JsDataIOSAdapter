@@ -1,0 +1,16 @@
+.alert.alert-default
+  a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder')
+
+    strong {{ vm.saleOrder.positions.length | number:0 }}
+    span позиций
+
+    span на сумму
+    strong {{ vm.saleOrder.totalCost | number:2 }}
+    span ₽
+
+    //a(href ui-sref='^') Завершить
+
+  h4
+    a(href)
+     span(ng-if='vm.saleOrder.outlet') {{ vm.saleOrder.outlet.name }}
+     span(ng-if='!vm.saleOrder.outlet') {{ vm.saleOrder.outletId ? 'Загрузка ...' : 'Выберите клиента' }}

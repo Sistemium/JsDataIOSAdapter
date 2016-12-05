@@ -2,16 +2,18 @@
 
 (function () {
 
-  function VisitsController(Schema, $window, $scope, $state, saControllerHelper) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
 
-    var vm = saControllerHelper.setup(this, $scope);
+    const {Visit} = Schema.models();
+
+    let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
       visits: [],
       selectedDayVisits: [],
 
-      selectedDate: null,
+      selectedDate: moment($state.params.date).toDate(),
       selectPreviousDay,
       previousDayAvailable,
       selectNextDay,
@@ -26,31 +28,34 @@
 
     });
 
-    var {Visit} = Schema.models();
+    /*
+     Listeners
+     */
+    
+    SalesmanAuth.watchCurrent($scope, salesman => {
 
-    scopeRoutines();
-    findVisits();
+      vm.selectedSalesmanId = _.get(salesman, 'id');
+      findVisits();
+      filterVisitsBySelectedDate();
 
-    function scopeRoutines() {
+    });
 
-      $scope.$on('rootClick', () => $state.go('sales.visits'));
+    $scope.$on('rootClick', () => $state.go('sales.visits'));
 
-      $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
+    $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
-      $scope.$watch(
-        () => new Date().setHours(0,0,0,0),
-        todayTime => vm.selectedDate = new Date(todayTime)
-      );
+    $scope.$watch(
+      () => new Date().setHours(0, 0, 0, 0),
+      (todayTime, oldValue) => {
+        if (todayTime != oldValue) {
+          vm.selectedDate = new Date(todayTime);
+        }
+      }
+    );
 
-      $scope.$on('selectedSalesmanChanged', () => {
-
-        vm.selectedSalesmanId = $window.localStorage.getItem('selectedSalesmanId');
-        findVisits();
-        filterVisitsBySelectedDate();
-
-      });
-
-    }
+    /*
+     Functions
+     */
 
     function setDate(newValue) {
 
@@ -59,6 +64,8 @@
       }
 
       filterVisitsBySelectedDate();
+
+      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')}, {notify: false});
 
     }
 
@@ -119,11 +126,7 @@
     }
 
     function salesmanFilter(filter) {
-
-      if (!_.isObject(filter)) filter = {};
-      vm.selectedSalesmanId && _.set(filter, 'salesmanId', vm.selectedSalesmanId);
-      return filter;
-
+      return SalesmanAuth.makeFilter(filter);
     }
 
     function selectPreviousDay() {
@@ -137,7 +140,7 @@
     }
 
     function previousDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) > minDate()) : false;
+      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) > minDate()) : false;
     }
 
     function selectNextDay() {
@@ -151,7 +154,7 @@
     }
 
     function nextDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) < maxDate()) : false;
+      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) < maxDate()) : false;
     }
 
     function maxDate() {

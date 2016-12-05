@@ -26,16 +26,49 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   color: black;
 }
 
+#article-groups {
 
-.visits {
-  .datepicker-with-buttons {
-    .buttons {
-      @media (max-width: $screen-xs-max) {
-        margin-top: 6px;
-        .btn-block {
-          //max-width: 400px;
-        }
-      }
+  ul {
+    margin-bottom: 0;
+    @media (max-width: $screen-xs-max) {
+      max-height: 100px !important;
+      margin-bottom: $margin-bottom-xs;
     }
   }
+
 }
+
+#scroll-articles {
+
+  max-height: 100%;
+
+  .right {
+
+    margin-left: 1em;
+    text-align: right;
+
+    button {
+      padding: 3px 5px;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 3px;
+      display: block;
+      color: #777777;
+    }
+
+    button + button {
+      margin-top: 4px;
+    }
+
+  }
+
+  .article-name-second {
+    color: gray;
+  }
+
+  .article-name-third {
+    text-align: right;
+  }
+
+}
+

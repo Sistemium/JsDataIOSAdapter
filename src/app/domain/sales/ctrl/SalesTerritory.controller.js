@@ -2,69 +2,91 @@
 
 (function () {
 
-  function SalesTerritoryController(Schema, $q, $state, SalesmanAuth, $scope) {
+  function SalesTerritoryController(Schema, Helpers, $state, SalesmanAuth, $scope) {
 
-    var vm = this;
+    const {Outlet, Partner} = Schema.models();
+    const {saMedia, saControllerHelper} = Helpers;
 
-    _.assign(vm, {
+    let vm = saControllerHelper.setup(this, $scope);
+
+    let rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
+
+    vm.use({
 
       refresh,
       partnerClick,
       outletClick,
       addOutletClick,
       hashClick,
+      onStateChange,
+      rowHeight,
 
       filter: (partner) => !vm.currentHash || partner.shortName.match(new RegExp('^' + vm.currentHash, 'i'))
 
     });
 
-    var Outlet = Schema.model('Outlet');
-    var Partner = Schema.model('Partner');
-    var SM = Schema.model('Salesman');
-    var stateFilter = {};
-
-    var rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
-
     if (rootState !== 'sales.territory') {
       delete vm.addOutletClick;
     }
 
-    vm.salesman = SalesmanAuth.getCurrentUser();
-
-    if (vm.salesman) {
-      stateFilter.salesmanId = vm.salesman.id;
-    }
+    SalesmanAuth.watchCurrent($scope, refresh);
 
     Partner.bindAll(false, $scope, 'vm.partners', setupHash);
 
-    vm.refresh();
-
     $scope.$on('rootClick', () => $state.go(rootState));
 
-    $scope.$on('$stateChangeSuccess', (e, to) =>  {
+    $scope.$watch(
+      () => saMedia.xsWidth,
+      (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
+    );
 
+    /*
+     Functions
+     */
+
+    function onStateChange(to) {
       _.assign(vm, {
-
         hideHashes: !/.*territory$/.test(to.name),
         partnerLinkClass: {
           disabled: visitsIsRootState()
         }
-
       });
-
-    });
+    }
 
     function visitsIsRootState() {
       return (rootState == 'sales.visits');
     }
 
-    function refresh() {
+    function rowHeight(partner) {
+      let xsMargin = saMedia.xsWidth ? 21 : 0;
+      return 39 + partner.outlets.length * 29 + 8 + 17 - xsMargin;
+    }
 
-      vm.busy = $q.all([
-        Partner.findAll(false, {bypassCache: true}),
-        SM.findAll(),
-        Outlet.findAll(stateFilter, {limit: 1000, bypassCache: true})
-      ]);
+    function refresh(salesman) {
+
+      let filter = SalesmanAuth.makeFilter();
+      vm.salesman = salesman;
+
+      vm.setBusy (
+        Outlet.findAll(filter, {limit: 1000})
+          .then(outlets => Partner.findAll(filter).then(()=>outlets))
+      )
+        .then(outlets => {
+          if (!vm.salesman) return;
+          let filter = {
+            where: {
+              id: {
+                notIn: _.map(outlets, 'id')
+              }
+            }
+          };
+          Outlet.ejectAll(filter);
+          filter.where.id.notIn = _.uniq(_.map(outlets, 'partnerId'));
+          Partner.ejectAll(filter);
+        });
+
+      // TODO: scroll to top after refresh
+
     }
 
     function partnerClick(partner) {

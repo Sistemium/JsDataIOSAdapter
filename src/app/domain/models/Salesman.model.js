@@ -30,6 +30,10 @@
         shortName: ['name', function (name) {
           var m = name.match (/^[^ ]+ [^ ]+/);
           return m ? m[0] : null;
+        }],
+        tinyName: ['name', function (name) {
+          var m = name.match (/^[^ ]+[ ]+./);
+          return m ? (m[0]+'.') : null;
         }]
       },
 

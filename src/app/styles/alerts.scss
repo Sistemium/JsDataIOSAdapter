@@ -1,0 +1,13 @@
+@import "variables";
+
+.alert-default {
+  background-color: #f5f5f5;
+}
+
+.alert {
+  @media (max-width: $screen-xs-max) {
+    .pull-right {
+      line-height: 1.1;
+    }
+  }
+}

@@ -1,9 +1,13 @@
-@media (max-width: 767px) {
+@import "variables";
+
+$margin-bottom-xs-minus: 7px;
+
+@media (max-width: $screen-xs-max) {
 
   h3, .h3 {
 
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: $margin-bottom-xs;
+    margin-bottom: $margin-bottom-xs;
 
     font-size: 17px;
 
@@ -11,11 +15,15 @@
 
   h2, .h2 {
 
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: $margin-bottom-xs;
+    margin-bottom: $margin-bottom-xs;
 
     font-size: 21px;
 
+  }
+
+  h4, .h4 {
+    font-size: 14px;
   }
 
   .clear-both-xs {
@@ -23,8 +31,23 @@
   }
 
   hr {
-    margin-top: 7px;
-    margin-bottom: 7px;
+    margin-top: $margin-bottom-xs-minus;
+    margin-bottom: $margin-bottom-xs;
+  }
+
+  .breadcrumb,
+  .form-group,
+  .alert,
+  .list-group {
+    margin-bottom: $margin-bottom-xs;
+  }
+
+  .alert {
+    padding: $margin-bottom-xs;
+  }
+
+  .list-group-item {
+    padding: $margin-bottom-xs-minus $margin-bottom-xs;
   }
 
 }

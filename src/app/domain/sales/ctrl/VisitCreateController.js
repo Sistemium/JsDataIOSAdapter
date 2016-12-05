@@ -25,6 +25,8 @@
         balloonAutoPanMargin: 300
       },
 
+      showSalesman: SalesmanAuth.hasOptions,
+
       takePhoto,
       thumbnailClick,
       goBack,

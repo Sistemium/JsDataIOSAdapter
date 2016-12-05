@@ -2,55 +2,63 @@
 
 (function () {
 
-    angular.module('webPage').service('Menu', function (InitService,Auth) {
+  angular.module('webPage').service('Menu', function (InitService, Auth) {
 
-      return {
-        root: function () {
-          var menu = {
+    return {
+      root: function () {
+        var menu = {
 
-            title: 'Начало',
-            state: 'home',
+          title: 'Начало',
+          state: 'home',
 
-            items: [{
-              title: 'Сборка',
-              state: 'picking.orderList({state:"notdone"})',
-              needRoles: 'picker'
-            },{
-              title: 'Сборщик',
-              state: 'picker',
-              needRoles: 'picker'
-            },{
-              title: 'Клиенты',
-              state: 'sales.territory',
-              needRoles: 'salesman'
-            },{
-              title: 'Визиты',
-              state: 'sales.visits',
-              needRoles: 'salesman'
-            },{
-              title: 'Фотопоток',
-              state: 'photos.stream',
-              needRoles: 'salesman'
-            },{
-              title: 'Предзаказы',
-              state: 'sales.prePreOrders',
-              needRoles: 'pre-ordering'
-            },{
-              title: 'Тесты',
-              state: 'playground',
-              needRoles: ['admin','tester']
-            }]
+          items: [{
+            title: 'Сборка',
+            state: 'picking.orderList({state:"notdone"})',
+            needRoles: 'picker'
+          }, {
+            title: 'Сборщик',
+            state: 'picker',
+            needRoles: 'picker'
+          }, {
+            title: 'Клиенты',
+            state: 'sales.territory',
+            needRoles: 'salesman'
+          }, {
+            title: 'Визиты',
+            state: 'sales.visits',
+            needRoles: 'salesman'
+          }, {
+            title: 'Заказы',
+            state: 'sales.saleOrders',
+            needRoles: 'salesman' // TODO roles via state.data
+          }, {
+            title: 'Каталог',
+            state: 'sales.catalogue',
+            needRoles: 'salesman'
+          }, {
+            title: 'Фотопоток',
+            state: 'photos.stream',
+            needRoles: 'salesman'
+          }, {
+            title: 'Предзаказы',
+            state: 'sales.prePreOrders',
+            needRoles: 'pre-ordering'
+          }, {
+            title: 'Тесты',
+            state: 'playground',
+            needRoles: ['admin', 'tester']
+          }]
 
-          };
+        };
 
-          _.remove(menu.items,function(option){
-            return !Auth.isAuthorized(option.needRoles);
-          });
+        _.remove(menu.items, function (option) {
+          return !Auth.isAuthorized(option.needRoles);
+        });
 
-          return menu;
-        }
+        return menu;
       }
+    }
 
-    });
+  });
 
 })();

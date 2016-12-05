@@ -27,7 +27,7 @@
 
       vm.hide = !!_.get(to, 'data.hideTopBar');
       vm.hideNavs = !!_.get(to, 'data.hideNavs');
-      vm.title = _.get(to, 'data.title') || 'Системиум';
+      vm.title = _.get(to, 'data.title') || 'Главное меню';
       vm.isRootState = (to.name === 'home');
 
       var item = _.find(vm.menu.items, function (item) {

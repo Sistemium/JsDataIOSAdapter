@@ -7,16 +7,6 @@ h1, h2, h3, h4, h5, h6 {
     outline: none;
   }
 
-  a.disabled {
-    pointer-events: none;
-    cursor: not-allowed;
-    -moz-filter:    grayscale(100%);
-    -ms-filter:     grayscale(100%);
-    -o-filter:      grayscale(100%);
-    filter: gray;
-    -webkit-filter: grayscale(100%);
-  }
-
 }
 
 .ui-view {
@@ -140,4 +130,13 @@ p.list-group-item-text {
 
 small i.glyphicon {
   font-size: 80%;
+}
+
+
+.breadcrumb > li + li:before {
+  margin-left: 4px;
+}
+
+.breadcrumb > li + li.active:before {
+  margin-left: 0;
 }
