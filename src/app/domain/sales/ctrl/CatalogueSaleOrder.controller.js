@@ -42,7 +42,7 @@
     }
 
     /*
-    Handlers
+     Handlers
      */
 
     $scope.$watch('vm.search', (newValue, oldValue) => {
@@ -85,7 +85,7 @@
     }
 
     /*
-    Functions
+     Functions
      */
 
     function setOutlet(outlet) {
