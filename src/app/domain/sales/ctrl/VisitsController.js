@@ -28,33 +28,34 @@
 
     });
 
-    scopeRoutines();
-    findVisits();
+    /*
+     Listeners
+     */
+    
+    SalesmanAuth.watchCurrent($scope, salesman => {
 
-    function scopeRoutines() {
+      vm.selectedSalesmanId = _.get(salesman, 'id');
+      findVisits();
+      filterVisitsBySelectedDate();
 
-      $scope.$on('rootClick', () => $state.go('sales.visits'));
+    });
 
-      $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
+    $scope.$on('rootClick', () => $state.go('sales.visits'));
 
-      $scope.$watch(
-        () => new Date().setHours(0,0,0,0),
-        (todayTime, oldValue) => {
-          if (todayTime != oldValue) {
-            vm.selectedDate = new Date(todayTime);
-          }
+    $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
+
+    $scope.$watch(
+      () => new Date().setHours(0, 0, 0, 0),
+      (todayTime, oldValue) => {
+        if (todayTime != oldValue) {
+          vm.selectedDate = new Date(todayTime);
         }
-      );
+      }
+    );
 
-      SalesmanAuth.watchCurrent($scope, salesman => {
-
-        vm.selectedSalesmanId = _.get(salesman, 'id');
-        findVisits();
-        filterVisitsBySelectedDate();
-
-      });
-
-    }
+    /*
+     Functions
+     */
 
     function setDate(newValue) {
 
@@ -139,7 +140,7 @@
     }
 
     function previousDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) > minDate()) : false;
+      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) > minDate()) : false;
     }
 
     function selectNextDay() {
@@ -153,7 +154,7 @@
     }
 
     function nextDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0,0,0,0) < maxDate()) : false;
+      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) < maxDate()) : false;
     }
 
     function maxDate() {
