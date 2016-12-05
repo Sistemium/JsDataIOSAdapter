@@ -8,7 +8,7 @@
 
     vm.use({
       isEnabled: false,
-      salesmanClick: SalesmanAuth.login,
+      salesmanClick,
       noneClick: SalesmanAuth.logout,
       onStateChange
     });
@@ -20,6 +20,13 @@
     /*
     Functions
      */
+
+    function salesmanClick(salesman) {
+      if (!salesman || _.get(vm, 'selectedSalesman.id') === salesman.id) {
+        return SalesmanAuth.logout();
+      }
+      SalesmanAuth.login(salesman);
+    }
 
     function onStateChange(state) {
       vm.isSalesState = _.startsWith(state.name, 'sales.');
