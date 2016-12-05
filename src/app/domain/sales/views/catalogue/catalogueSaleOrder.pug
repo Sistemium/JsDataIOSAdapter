@@ -1,5 +1,5 @@
 .alert.alert-default
-  a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder')
+  a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder.positions.length')
 
     strong {{ vm.saleOrder.positions.length | number:0 }}
     span позиций
@@ -8,10 +8,28 @@
     strong {{ vm.saleOrder.totalCost | number:2 }}
     span ₽
 
-    //a(href ui-sref='^') Завершить
+  p.pull-right(href ng-if='!vm.saleOrder.positions.length') Товаров не добавлено
 
   h4
-    a(href)
-     // TODO here we need a dropdown or stm-typeahead
-     span(ng-if='vm.saleOrder.outlet') {{ vm.saleOrder.outlet.name }}
-     span(ng-if='!vm.saleOrder.outlet') {{ vm.saleOrder.outletId ? 'Загрузка ...' : 'Выберите клиента' }}
+    a(
+    href
+    uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
+    popover-title="Выберите клиента"
+    type="button"
+    popover-placement='bottom-left'
+    popover-is-open='false'
+    )  {{ vm.saleOrder.outlet.name || 'Выберите клиента' }}
+
+  .info(ng-if='vm.newOrder')
+    p Продавец: {{vm.saleOrder.salesman.name}}
+    p Заказ на: {{vm.saleOrder.date}}
+
+  input#comment-input.form-control.col-md-3(
+  type='text'
+  placeholder='Комментарий'
+  aria-describedby='comment-input'
+  ng-model='vm.saleOrder.commentText'
+  ng-model-options='{debounce: 100}'
+  )
+
+  button.pull-right(type="button" class="btn btn-success" ng-click='vm.saveOrder()') Сохранить заказ
