@@ -11,7 +11,8 @@
       toastr,
       PhotoHelper,
       LocationHelper,
-      ClickHelper
+      ClickHelper,
+      saMedia
     ) {
 
       return {
@@ -23,7 +24,8 @@
         toastr,
         PhotoHelper,
         LocationHelper,
-        ClickHelper
+        ClickHelper,
+        saMedia
 
       };
 
