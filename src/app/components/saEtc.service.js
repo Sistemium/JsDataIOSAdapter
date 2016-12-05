@@ -21,7 +21,14 @@
       return $window.document.getElementById(id);
     }
 
+    function scrolTopElementById(id) {
+      let element = getElementById(id);
+      if (!element) return;
+      element.scrollTop = 0;
+    }
+
     return {
+      scrolTopElementById,
       getElementById,
       blurActive,
       focusElementById

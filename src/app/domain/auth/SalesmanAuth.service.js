@@ -108,7 +108,9 @@
     }
 
     function bindAll(scope, expr, callback) {
-      Salesman.bindAll({}, scope, expr, callback);
+      Salesman.bindAll({
+        orderBy: 'name'
+      }, scope, expr, callback);
       return service;
     }
 

@@ -15,7 +15,7 @@ section.catalogue.spaced(cg-busy='vm.cgBusy')
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
         | Нет подходящих товаров
 
-      ul.list-group.vr-parent(vs-repeat vs-size='vm.articleRowHeight(stock, articles.windowWidth)' vs-scroll-parent="#scroll-articles")
+      ul.list-group.vr-parent(vs-repeat vs-size='vm.articleRowHeight(stock)' vs-scroll-parent="#scroll-articles")
         .list-group-item.display-flex.flex-align-center(ng-repeat='stock in vm.stock track by stock.id')
 
           .flex-1(ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'")

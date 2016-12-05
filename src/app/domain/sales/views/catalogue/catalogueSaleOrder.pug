@@ -12,5 +12,6 @@
 
   h4
     a(href)
+     // TODO here we need a dropdown or stm-typeahead
      span(ng-if='vm.saleOrder.outlet') {{ vm.saleOrder.outlet.name }}
      span(ng-if='!vm.saleOrder.outlet') {{ vm.saleOrder.outletId ? 'Загрузка ...' : 'Выберите клиента' }}
