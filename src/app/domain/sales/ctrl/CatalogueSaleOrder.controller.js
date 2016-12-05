@@ -79,7 +79,11 @@
     Functions
      */
 
-    function addPositionVolume (articleId, volume, price) {
+    function setOutlet(outlet) {
+      vm.saleOrder.outlet = outlet;
+    }
+
+    function addPositionVolume(articleId, volume, price) {
       let position = _.find(vm.saleOrder.positions, {articleId: articleId});
       if (!position) {
         position = SaleOrderPosition.createInstance({
