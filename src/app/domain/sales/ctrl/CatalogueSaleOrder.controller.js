@@ -45,6 +45,15 @@
     Handlers
      */
 
+    $scope.$watch('vm.search', (newValue, oldValue) => {
+      if (newValue != oldValue) searchOutlet()
+    });
+
+    function clearSearchClick() {
+      vm.search = '';
+      saEtc.focusElementById('search-input');
+    }
+
     function saveOrder() {
       vm.saleOrder.processing = 'draft';
       SaleOrder.create(vm.saleOrder).then((a) => {
