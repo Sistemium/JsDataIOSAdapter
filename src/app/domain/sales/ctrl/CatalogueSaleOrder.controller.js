@@ -45,6 +45,12 @@
     Handlers
      */
 
+    function saveOrder() {
+      vm.saleOrder.processing = 'draft';
+      SaleOrder.create(vm.saleOrder).then((a) => {
+        console.log(a);
+      }).catch(e => console.error(e));
+    }
     function kPlusButtonClick(data) {
       addPositionVolume(data.stock.articleId, data.stock.article.packageRel, data.price);
     }
