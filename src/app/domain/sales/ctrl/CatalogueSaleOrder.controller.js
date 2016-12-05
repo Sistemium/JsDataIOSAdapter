@@ -2,9 +2,9 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, saControllerHelper, ClickHelper, Schema, $q) {
+  function CatalogueSaleOrderController($scope, $state, saControllerHelper, ClickHelper, Schema, $q, SalesmanAuth, saEtc) {
 
-    let {SaleOrder, SaleOrderPosition} = Schema.models('SaleOrder');
+    let {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
     let saleOrderId = $state.params.saleOrderId;
