@@ -125,11 +125,7 @@
     }
 
     function salesmanFilter(filter) {
-
-      if (!_.isObject(filter)) filter = {};
-      vm.selectedSalesmanId && _.set(filter, 'salesmanId', vm.selectedSalesmanId);
-      return filter;
-
+      return SalesmanAuth.makeFilter(filter);
     }
 
     function selectPreviousDay() {
