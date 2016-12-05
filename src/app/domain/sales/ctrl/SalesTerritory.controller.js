@@ -68,9 +68,9 @@
       let filter = SalesmanAuth.makeFilter();
       vm.salesman = salesman;
 
-      vm.setBusy (
-        Outlet.findAll(filter, {limit: 1000})
-          .then(outlets => Partner.findAll(filter).then(()=>outlets))
+      vm.setBusy(
+        Outlet.findAll(filter, {bypassCache: true, limit: 3000})
+          .then(outlets => Partner.findAll(filter, {bypassCache: true, limit: 3000}).then(() => outlets))
       )
         .then(outlets => {
           if (!vm.salesman) return;
