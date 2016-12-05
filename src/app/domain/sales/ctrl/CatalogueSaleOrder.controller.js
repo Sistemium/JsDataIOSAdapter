@@ -13,6 +13,10 @@
 
       kPlusButtonClick,
       bPlusButtonClick,
+      newOrder: false,
+      setOutlet,
+      clearSearchClick,
+      saveOrder,
       orderedVolumeClick: stock => console.warn(stock)
 
     });
