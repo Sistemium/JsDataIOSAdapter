@@ -110,7 +110,7 @@
     }
 
     function makeFilter(filter) {
-      let res = filter || {};
+      let res = _.isObject(filter) ? filter : {};
       if (currentSalesman) {
         res.salesmanId = currentSalesman.id;
       }
