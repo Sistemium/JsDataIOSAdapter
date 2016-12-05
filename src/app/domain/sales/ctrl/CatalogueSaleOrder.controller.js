@@ -51,6 +51,22 @@
         console.log(a);
       }).catch(e => console.error(e));
     }
+
+    function searchOutlet() {
+      let filter = {};
+
+      if (vm.search) {
+        filter.name = {
+          'likei': '%' + vm.search + '%'
+        }
+      }
+
+      vm.outlets = Outlet.filter({
+        where: filter
+      });
+
+    }
+
     function kPlusButtonClick(data) {
       addPositionVolume(data.stock.articleId, data.stock.article.packageRel, data.price);
     }
