@@ -2,9 +2,10 @@
 
 (function () {
 
-  function SalesTerritoryController(Schema, $q, $state, SalesmanAuth, $scope, saControllerHelper) {
+  function SalesTerritoryController(Schema, Helpers, $state, SalesmanAuth, $scope) {
 
     const {Outlet, Partner} = Schema.models();
+    const {saMedia, saControllerHelper} = Helpers;
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -18,6 +19,7 @@
       addOutletClick,
       hashClick,
       onStateChange,
+      rowHeight,
 
       filter: (partner) => !vm.currentHash || partner.shortName.match(new RegExp('^' + vm.currentHash, 'i'))
 
@@ -32,6 +34,11 @@
     Partner.bindAll(false, $scope, 'vm.partners', setupHash);
 
     $scope.$on('rootClick', () => $state.go(rootState));
+
+    $scope.$watch(
+      () => saMedia.xsWidth,
+      (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
+    );
 
     /*
      Functions
@@ -50,22 +57,33 @@
       return (rootState == 'sales.visits');
     }
 
+    function rowHeight(partner) {
+      let xsMargin = saMedia.xsWidth ? 21 : 0;
+      return 39 + partner.outlets.length * 29 + 8 + 17 - xsMargin;
+    }
+
     function refresh(salesman) {
 
       let filter = SalesmanAuth.makeFilter();
       vm.salesman = salesman;
 
-      vm.setBusy ($q.all([
-        Partner.findAll(filter),
+      vm.setBusy (
         Outlet.findAll(filter, {limit: 1000})
-      ])
-        .then(res => vm.salesman && Partner.ejectAll({
-          where: {
-            id: {
-              'notIn': _.uniq(_.map(res[1], 'partnerId'))
+          .then(outlets => Partner.findAll(filter).then(()=>outlets))
+      )
+        .then(outlets => {
+          if (!vm.salesman) return;
+          let filter = {
+            where: {
+              id: {
+                notIn: _.map(outlets, 'id')
+              }
             }
-          }
-        })));
+          };
+          Outlet.ejectAll(filter);
+          filter.where.id.notIn = _.uniq(_.map(outlets, 'partnerId'));
+          Partner.ejectAll(filter);
+        });
 
       // TODO: scroll to top after refresh
 
