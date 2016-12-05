@@ -1,6 +1,7 @@
 .display-flex {
   display: flex;
   display: -webkit-flex;
+  align-items: center;
 
   > button {
     margin: -11px 0;

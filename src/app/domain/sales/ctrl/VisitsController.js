@@ -4,14 +4,16 @@
 
   function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
 
-    var vm = saControllerHelper.setup(this, $scope);
+    const {Visit} = Schema.models();
+
+    let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
       visits: [],
       selectedDayVisits: [],
 
-      selectedDate: null,
+      selectedDate: moment($state.params.date).toDate(),
       selectPreviousDay,
       previousDayAvailable,
       selectNextDay,
@@ -26,24 +28,34 @@
 
     });
 
-    var {Visit} = Schema.models();
-    var salesman = SalesmanAuth.getCurrentUser();
+    /*
+     Listeners
+     */
+    
+    SalesmanAuth.watchCurrent($scope, salesman => {
 
-    scopeRoutines();
-    findVisits();
+      vm.selectedSalesmanId = _.get(salesman, 'id');
+      findVisits();
+      filterVisitsBySelectedDate();
 
-    function scopeRoutines() {
+    });
 
-      $scope.$on('rootClick', () => $state.go('sales.visits'));
+    $scope.$on('rootClick', () => $state.go('sales.visits'));
 
-      $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
+    $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
-      $scope.$watch(
-        () => new Date().setHours(0,0,0,0),
-        todayTime => vm.selectedDate = new Date(todayTime)
-      );
+    $scope.$watch(
+      () => new Date().setHours(0, 0, 0, 0),
+      (todayTime, oldValue) => {
+        if (todayTime != oldValue) {
+          vm.selectedDate = new Date(todayTime);
+        }
+      }
+    );
 
-    }
+    /*
+     Functions
+     */
 
     function setDate(newValue) {
 
@@ -53,13 +65,13 @@
 
       filterVisitsBySelectedDate();
 
+      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')}, {notify: false});
+
     }
 
     function findVisits() {
 
-      var filter = {
-        salesmanId: salesman.id
-      };
+      var filter = salesmanFilter();
 
       vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
         .then(() => {
@@ -99,10 +111,8 @@
 
     function filterVisitsBySelectedDate() {
 
-      var filter = {
-        salesmanId: salesman.id,
-        date: moment(vm.selectedDate).format('YYYY-MM-DD')
-      };
+      var dateFilter = {date: moment(vm.selectedDate).format('YYYY-MM-DD')};
+      var filter = salesmanFilter(dateFilter);
 
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
@@ -113,6 +123,10 @@
 
       vm.rebindAll(Visit, filter, 'vm.selectedDayVisits');
 
+    }
+
+    function salesmanFilter(filter) {
+      return SalesmanAuth.makeFilter(filter);
     }
 
     function selectPreviousDay() {
@@ -126,7 +140,7 @@
     }
 
     function previousDayAvailable() {
-      return (vm.selectedDate.setHours(0,0,0,0) > minDate());
+      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) > minDate()) : false;
     }
 
     function selectNextDay() {
@@ -140,7 +154,7 @@
     }
 
     function nextDayAvailable() {
-      return (vm.selectedDate.setHours(0,0,0,0) < maxDate());
+      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) < maxDate()) : false;
     }
 
     function maxDate() {

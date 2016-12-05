@@ -6,7 +6,6 @@
 
     let vm = saControllerHelper.setup(this, $scope);
     let {SaleOrder} = Schema.models();
-    let salesman = SalesmanAuth.getCurrentUser();
 
     vm.use({
 
@@ -27,7 +26,7 @@
 
     });
 
-    getData();
+    SalesmanAuth.watchCurrent($scope, getData);
 
     /*
      Listeners
@@ -51,12 +50,13 @@
     }
 
 
-    function getData() {
+    function getData(salesman) {
 
-      let filter = {
-        salesmanId: salesman.id,
+      vm.currentSalesman = salesman;
+
+      let filter = SalesmanAuth.makeFilter({
         date: moment(vm.selectedDate).format('YYYY-MM-DD')
-      };
+      });
 
       vm.setBusy(
         SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet']),

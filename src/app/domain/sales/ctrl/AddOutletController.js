@@ -67,7 +67,7 @@
 
     function getPartners() {
 
-      return Partner.findAll()
+      return Partner.findAll({},{cacheResponse: false})
         .then((partners) => {
 
           vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);

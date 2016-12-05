@@ -45,6 +45,7 @@ section.ui-view(cg-busy='vm.cgBusy')
     table.table.table-striped.clear-both.table-hover
       thead
         tr
+          th(ng-if='!vm.currentSalesman') ТП
           th Точка
           th Создан
           th.number Стоимость
@@ -54,6 +55,7 @@ section.ui-view(cg-busy='vm.cgBusy')
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
         ng-click='vm.itemClick(item)'
         )
+          td(ng-if='!vm.currentSalesman') {{ item.salesman.shortName }}
           td
             div {{ item.outlet.name }}
             .gray {{ item.outlet.address }}

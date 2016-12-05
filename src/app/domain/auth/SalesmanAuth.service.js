@@ -2,65 +2,96 @@
 
 (function () {
 
-  function SalesmanAuth($window, $rootScope, $state, Schema) {
+  function SalesmanAuth($rootScope, $state, Schema, localStorageService) {
 
-    var currentSalesman;
-    var redirectTo;
-    var loginPromise;
+    const LOGIN_EVENT = 'salesman-login';
+    const LOGOUT_EVENT = 'salesman-logout';
+    const LOCAL_STORAGE_KEY = 'currentSalesmanId';
+
+    const {Salesman} = Schema.models();
+
+    let currentSalesman;
+    let redirectTo;
+    let initPromise;
+    let isAuthorized;
+
+    let service = {
+
+      hasOptions: false,
+
+      init: init,
+      logout: logout,
+      login: login,
+
+      bindAll,
+      watchCurrent,
+      makeFilter,
+
+      getCurrentUser: () => currentSalesman,
+      isLoggedIn: () => !!currentSalesman
+
+    };
 
     function logout() {
       currentSalesman = undefined;
-      $rootScope.$broadcast('salesman-logout');
-      $window.localStorage.removeItem('currentSalesmanId');
+      $rootScope.$broadcast(LOGOUT_EVENT);
+      localStorageService.remove(LOCAL_STORAGE_KEY);
     }
 
-    function login (user) {
+    function login(user) {
 
-      loginPromise = false;
+      initPromise = false;
 
       if (!user || !user.id) {
-        $window.localStorage.removeItem('currentSalesmanId');
-        return $state.go('salesmanLogin');
+        user = null;
+        localStorageService.remove(LOCAL_STORAGE_KEY);
+        $rootScope.$broadcast(LOGOUT_EVENT);
+      } else {
+        localStorageService.set(LOCAL_STORAGE_KEY, user.id);
+        $rootScope.$broadcast(LOGIN_EVENT, currentSalesman = user);
       }
-
-      currentSalesman = user;
-
-      $window.localStorage.setItem('currentSalesmanId', user.id);
-      $rootScope.$broadcast('salesman-login', currentSalesman);
 
       if (redirectTo) {
         $state.go(redirectTo.state, redirectTo.params);
         redirectTo = false;
-      } else {
-        $state.go('home');
       }
 
     }
 
     function init() {
 
-      var SM = Schema.model('Salesman');
+      initPromise = Salesman.findAll()
+        .then(data => {
 
-      loginPromise = SM.findAll()
-        .then(function(res){
-          if (res.length) {
-            login (res[0]);
-          }
+          isAuthorized = !!data.length;
+          service.hasOptions = data.length > 1;
+
+          let salesmanId = localStorageService.get(LOCAL_STORAGE_KEY);
+          let res = salesmanId && _.find(data, {id: salesmanId});
+
+          return login(res || data.length === 1 && _.first(data));
+
         });
 
       $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
-        var needRoles = _.get(next, 'data.auth');
+        let needRoles = _.get(next, 'data.auth');
 
-        if (needRoles === 'SalesmanAuth' && !currentSalesman) {
-          event.preventDefault();
-          redirectTo = {
-            state: next,
-            params: nextParams
-          };
-          if (!loginPromise) {
-            $state.go('salesmanLogin');
+        if (needRoles === 'SalesmanAuth') {
+
+          if (!isAuthorized) {
+            event.preventDefault();
           }
+
+          if (initPromise) {
+            redirectTo = {
+              state: next,
+              params: nextParams
+            };
+          } else {
+            // TODO: maybe add toast with error message
+          }
+
         }
 
       }));
@@ -69,21 +100,27 @@
 
     }
 
-    return {
+    function watchCurrent(scope, callback) {
+      callback(currentSalesman);
+      scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
+      scope.$on(LOGOUT_EVENT, () => callback(null));
+      return service;
+    }
 
-      init: init,
-      logout: logout,
-      login: login,
+    function bindAll(scope, expr, callback) {
+      Salesman.bindAll({}, scope, expr, callback);
+      return service;
+    }
 
-      getCurrentUser: function () {
-        return currentSalesman;
-      },
-
-      isLoggedIn: function () {
-        return !!currentSalesman;
+    function makeFilter(filter) {
+      let res = _.isObject(filter) ? filter : {};
+      if (currentSalesman) {
+        res.salesmanId = currentSalesman.id;
       }
+      return res;
+    }
 
-    };
+    return service;
 
   }
 

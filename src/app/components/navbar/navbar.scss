@@ -1,11 +1,31 @@
-.navbar {
+@import "../../styles/variables";
 
-  .navbar-toggle {
-    float: left;
-    margin-left: 15px;
-    margin-right: 0;
+.root-navbar {
+
+  .dropdown {
+    font-size: 15px;
+    margin-top: 3px;
   }
 
+  a:hover, a:focus {
+    text-decoration: none;
+  }
+
+}
+
+h2.root-navbar {
+  margin-top: $margin-bottom-xs;
+}
+
+.root-navbar + hr {
+  margin-top: 12px;
+}
+
+.root-navbar-items > a + a{
+  margin-left: 35px;
+  @media (max-width: $screen-xs-max) {
+    margin-left: 10px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -23,7 +43,6 @@
     }
   }
 }
-
 
 @media (min-width: 768px) {
   .navbar.navbar-fixed-bottom {
@@ -63,7 +82,6 @@
       margin-top: 5px;
       margin-bottom: 5px;
     }
-
 
     li.divider {
       height: 1px;

@@ -1,14 +1,15 @@
-div, h4, h3 {
+.spaced div, h4, h3, h2, h1, a {
 
-  * + strong,
-  * + span,
-  span + a {
+  > * + strong,
+  > * + span,
+  > span + a,
+  > a + a {
 
     margin-left: 6px;
 
   }
 
-  * + small {
+  > * + small {
     margin-left: 4px;
   }
 
@@ -18,7 +19,7 @@ div, h4, h3 {
     }
   }
 
-  * + label {
+  > * + label {
     //margin-left: 2px;
   }
 

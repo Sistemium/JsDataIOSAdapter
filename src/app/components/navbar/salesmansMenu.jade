@@ -1,0 +1,18 @@
+.salesman-menu(uib-dropdown ng-if='vm.isSalesState' resize='rootNavbar')
+  a(
+  href uib-dropdown-toggle
+  ng-class="{disabled: !vm.isEnabled}"
+  )
+    span(ng-if='!rootNavbar.xsWidth') {{vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выберите ТП'}}
+    span(ng-if='rootNavbar.xsWidth')  {{vm.selectedSalesman ? vm.selectedSalesman.tinyName : 'Выберите ТП'}}
+    span.caret
+
+  ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+    li(ng-if='vm.selectedSalesman')
+      a(href ng-click='vm.noneClick()') Отменить выбор
+    li.divider(ng-if='vm.selectedSalesman')
+    li(
+    ng-repeat='salesman in vm.salesmans track by salesman.id'
+    ng-class='{active: vm.selectedSalesman.id == salesman.id}'
+    )
+      a(href ng-click='vm.salesmanClick(salesman)') {{salesman.shortName}}

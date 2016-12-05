@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth) {
 
     let {ClickHelper, saEtc, saControllerHelper} = Helpers;
     let {Article, Stock, ArticleGroup, PriceType, SaleOrder} = Schema.models();
@@ -41,7 +41,6 @@
      */
 
     vm.rebindAll(PriceType, null, 'vm.priceTypes');
-    vm.rebindAll(SaleOrder, {processing: 'draft'}, 'vm.draftSaleOrders');
 
     $scope.$on(
       'rootClick',
@@ -60,6 +59,13 @@
     });
 
     onStateChange($state.name, $state.params);
+
+    SalesmanAuth.watchCurrent($scope, salesman => {
+      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+      vm.currentSalesman = salesman;
+      vm.rebindAll(SaleOrder, filter, 'vm.draftSaleOrders');
+      SaleOrder.findAllWithRelations(filter)('Outlet');
+    });
 
     /*
      Handlers
@@ -147,9 +153,6 @@
           vm.currentPriceType = PriceType.meta.getDefault();
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
-
-          SaleOrder.findAllWithRelations({processing: 'draft'})('Outlet');
-
         });
     }
 
