@@ -7,6 +7,12 @@
     text-transform: uppercase;
   }
 
+  .vr-parent .address {
+    overflow: hidden;
+    text-align: right;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
