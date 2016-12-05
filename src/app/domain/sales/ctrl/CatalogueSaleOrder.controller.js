@@ -12,17 +12,22 @@
     vm.use({
 
       kPlusButtonClick,
-      bPlusButtonClick
+      bPlusButtonClick,
+      orderedVolumeClick: stock => console.warn(stock)
 
     });
 
-    SaleOrder.find(saleOrderId)
-      .then(saleOrder => {
-        vm.saleOrder = saleOrder;
-        SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition')
-          .then(() => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
-          .catch(error => console.error(error));
-      });
+    if (saleOrderId) {
+      SaleOrder.find(saleOrderId)
+        .then(saleOrder => {
+          vm.saleOrder = saleOrder;
+          return SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition')
+            .then(() => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))));
+        })
+        .catch(error => console.error(error));
+    } else {
+      // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
+    }
 
     /*
     Handlers
