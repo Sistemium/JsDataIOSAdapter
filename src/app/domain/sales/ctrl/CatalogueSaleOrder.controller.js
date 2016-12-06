@@ -60,9 +60,12 @@
 
     function saveOrder() {
       vm.saleOrder.processing = 'draft';
-      SaleOrder.create(vm.saleOrder).then((a) => {
-        console.log(a);
-      }).catch(e => console.error(e));
+
+      SaleOrder.create(vm.saleOrder)
+        .then(() => $q.all(
+          _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
+        ))
+        .catch(e => console.error(e));
     }
 
     function searchOutlet() {
