@@ -149,18 +149,24 @@
 
     function findAll() {
       let options = {limit: 6000};
+      let volumeNotZero = {
+        volume: {
+          '>': 0
+        }
+      };
 
       return $q.all([
         ArticleGroup.findAll({}, options),
         Stock.findAll({
           volumeNotZero: true,
+          where: volumeNotZero
+        }, options),
+        Article.findAll({
+          volumeNotZero: true,
           where: {
-            volume: {
-              '>': 0
-            }
+            'ANY stocks': volumeNotZero
           }
         }, options),
-        Article.findAll({volumeNotZero: true}, options),
         PriceType.findAllWithRelations()('Price', null, null, options)
       ])
         .then(() => {
