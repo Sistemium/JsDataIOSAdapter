@@ -26,7 +26,7 @@
       p Продавец: {{vm.saleOrder.salesman.shortName}}
       p Заказ на: {{vm.saleOrder.date}}
 
-  .flex-1(style='display: flex')
+  .flex-1(style='display: flex' ng-if='vm.newOrder')
     input#comment-input.form-control.col-md-5(
     type='text'
     placeholder='Комментарий'
