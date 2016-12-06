@@ -7,9 +7,15 @@ ng-style='{height: (windowHeight - offsetTop) + "px"}'
   )
     thead
       tr
-        th {{ day | amUtc | amLocal | amCalendar }}
+        th
+          h3.content-float-right {{ day | amUtc | amLocal | amCalendar }}
+            button.btn.btn-success
+              i.glyphicon.glyphicon-plus
+
+
     tbody
       tr
-        td Schedule
+        td
+          a Scheduled outlet name with address
       tr.alert.alert-info.centered(ng-hide='vm.selectedDayVisits.length')
-        td Нет шедулов на указанную дату
+        td Нет шедулов
