@@ -148,11 +148,18 @@
     }
 
     function findAll() {
-      let options = {headers: {'x-page-size': 3000}};
+      let options = {limit: 6000};
 
       return $q.all([
         ArticleGroup.findAll({}, options),
-        Stock.findAll({volumeNotZero: true}, options),
+        Stock.findAll({
+          volumeNotZero: true,
+          where: {
+            volume: {
+              '>': 0
+            }
+          }
+        }, options),
         Article.findAll({volumeNotZero: true}, options),
         PriceType.findAllWithRelations()('Price', null, null, options)
       ])
@@ -289,7 +296,7 @@
       }
 
       if (articleGroup) {
-        filter.articleGroup = {
+        filter.articleGroupId = {
           'in': _.union([articleGroup.id], _.map(articleGroup.descendants(), 'id'))
         };
       }
@@ -311,7 +318,7 @@
     }
 
     function articleGroupIds(stock) {
-      return _.groupBy(stock, 'article.articleGroup');
+      return _.groupBy(stock, 'article.articleGroupId');
     }
 
   }
