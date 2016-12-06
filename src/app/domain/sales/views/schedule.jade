@@ -1,1 +1,15 @@
-.ml-10 SCHEDULE
+#scroll-main(
+resize
+ng-style='{height: (windowHeight - offsetTop) + "px"}'
+)
+  table.table.table-striped.clear-both.table-hover(
+    ng-repeat='day in vm.currentWeek'
+  )
+    thead
+      tr
+        th {{ day | amUtc | amLocal | amCalendar }}
+    tbody
+      tr
+        td Schedule
+      tr.alert.alert-info.centered(ng-hide='vm.selectedDayVisits.length')
+        td Нет шедулов на указанную дату
