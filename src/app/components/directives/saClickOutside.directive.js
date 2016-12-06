@@ -2,6 +2,8 @@
 
 (function () {
 
+  const BIND_ON = 'touchstart';
+
   function saClickOutside($document, $parse, IOS) {
 
     return {
@@ -15,15 +17,16 @@
         let evaluateOnClick = $parse(attrs.saClickOutside || `${attrs.outsideIf}=false`);
         let outsideIf = attrs.outsideIf && $parse(attrs.outsideIf);
 
-        let clicker = () => {
+        function clicker (domEvent) {
           if (outsideIf && outsideIf(scope)) {
+            _.result(domEvent, 'preventDefault');
             scope.$apply(() => evaluateOnClick(scope));
           }
-        };
+        }
 
-        $document.on('touchstart', clicker);
+        $document.on(BIND_ON, clicker);
 
-        scope.$on('$destroy', () => { $document.unbind('click', clicker); })
+        scope.$on('$destroy', () => { $document.off(BIND_ON, clicker); })
 
       }
     }
