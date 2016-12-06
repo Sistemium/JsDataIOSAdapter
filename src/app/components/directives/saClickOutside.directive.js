@@ -13,10 +13,10 @@
         if (!IOS.isIos()) return;
 
         let evaluateOnClick = $parse(attrs.saClickOutside);
-        let alwaysOutside = angular.isDefined(attrs.alwaysOutside);
+        let outsideIf = attrs.outsideIf && $parse(attrs.outsideIf);
 
-        let clicker = (e) => {
-          if (alwaysOutside || el !== e.target && !el[0].contains(e.target)) {
+        let clicker = () => {
+          if (outsideIf && outsideIf(scope)) {
             scope.$apply(() => evaluateOnClick(scope));
           }
         };
