@@ -28,7 +28,7 @@
         cost: 'decimal',
         volume: 'int',
         backVolume: 'int'
-      },
+      }
 
     });
 
