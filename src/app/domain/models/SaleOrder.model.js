@@ -28,7 +28,9 @@
       },
 
       fieldTypes: {
-        date: 'date'
+        date: 'date',
+        totalCost: 'decimal',
+        totalCostDoc: 'decimal'
       },
 
       computed: {}

@@ -27,10 +27,7 @@
       }
 
       var un = scope.$watch(getWindowDimensions, setValues, true);
-
-      function apply() {
-        scope.$apply();
-      }
+      var apply = _.throttle(() => scope.$apply(), 200);
 
       angular.element($window)
         .bind('resize', apply);
