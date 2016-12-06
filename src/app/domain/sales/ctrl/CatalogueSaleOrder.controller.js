@@ -37,10 +37,11 @@
 
       vm.newOrder = true;
 
-      vm.saleOrder = SaleOrder.createInstance({
+      vm.saleOrder = SaleOrder.inject({
         salesmanId: SalesmanAuth.getCurrentUser().id,
         date: moment().add(1, 'days').format('YYYY-MM-DD'),
       });
+
 
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
