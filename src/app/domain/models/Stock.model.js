@@ -19,7 +19,7 @@
 
       fieldTypes: {
         volume: 'int'
-      },
+      }
 
     });
 
