@@ -7,8 +7,10 @@ ng-style='{height: (windowHeight - offsetTop) + "px"}'
   )
     thead
       tr
-        th
-          h3.content-float-right {{ day | amUtc | amLocal | amCalendar }}
+        th.display-flex
+          h3 {{ day | amUtc | amLocal | amDateFormat:'DD/MM/YYYY, dd' }}
+          .flex-1
+          .content-float-right
             button.btn.btn-success
               i.glyphicon.glyphicon-plus
 
