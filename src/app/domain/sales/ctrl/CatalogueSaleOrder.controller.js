@@ -109,6 +109,7 @@
           priceDoc: price,
           articleId: articleId
         });
+        vm.saleOrder.totalCost = 0;
       }
       position.volume += volume;
       position.cost = position.volume * price;
