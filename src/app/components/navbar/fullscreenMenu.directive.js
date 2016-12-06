@@ -10,7 +10,7 @@
     return {
 
       restrict: 'E',
-      templateUrl: 'app/components/navbar/fullScreenMenu.html',
+      templateUrl: 'app/components/navbar/fullscreenMenu.html',
       scope: {
       },
       controller: 'FullScreenMenuController',
