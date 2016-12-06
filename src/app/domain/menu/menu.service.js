@@ -44,6 +44,10 @@
             state: 'sales.prePreOrders',
             needRoles: 'pre-ordering'
           }, {
+            title: 'Шедулы',
+            state: 'sales.schedule',
+            needRoles: 'salesman'
+          }, {
             title: 'Тесты',
             state: 'playground',
             needRoles: ['admin', 'tester']

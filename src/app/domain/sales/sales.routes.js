@@ -186,6 +186,21 @@
 
       };
 
+      var schedule = {
+
+        name: 'schedule',
+        url: '/schedule',
+
+        templateUrl: 'app/domain/sales/views/schedule.html',
+        controller: 'ScheduleController',
+        controllerAs: 'vm',
+
+        data: {
+          title: 'Шедулы'
+        }
+
+      };
+
       stateHelperProvider
         .state({
 
@@ -197,7 +212,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [salesTerritory, prePreOrders, visits]
+          children: [salesTerritory, prePreOrders, visits, schedule]
 
         })
       ;
