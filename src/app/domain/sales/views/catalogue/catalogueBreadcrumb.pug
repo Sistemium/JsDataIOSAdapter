@@ -1,10 +1,10 @@
-span.pull-right(uib-dropdown)
+span.pull-right(uib-dropdown is-open='saleOrdersOpen')
   a(href uib-dropdown-toggle)
     | Заказ
     =' '
     span.caret
 
-  ul.dropdown-menu(uib-dropdown-menu)
+  ul.dropdown-menu(uib-dropdown-menu sa-click-outside outside-if='saleOrdersOpen')
     li
       a(href ng-click='vm.setSaleOrderClick()') Новый Заказ
     li.divider(ng-if='vm.draftSaleOrders.length')
@@ -16,13 +16,13 @@ span.pull-right(uib-dropdown)
         .gray
           small {{ draft.outlet.address }}
 
-li(uib-dropdown)
+li(uib-dropdown is-open='priceTypesOpen')
   a(href uib-dropdown-toggle)
     | {{vm.currentPriceType.name || 'Выберите тип цен'}}
     =' '
     span.caret
 
-  ul.dropdown-menu(uib-dropdown-menu)
+  ul.dropdown-menu(uib-dropdown-menu sa-click-outside outside-if='priceTypesOpen')
     li(ng-repeat='priceType in vm.priceTypes track by priceType.id' ng-class='{active: vm.currentPriceType.name == priceType.name}')
       a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
 
