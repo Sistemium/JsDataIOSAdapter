@@ -13,6 +13,9 @@
 
     $rootScope.$watch(getWindowDimensions, setValues, true);
 
+    angular.element($window)
+      .bind('resize', _.throttle(() => $rootScope.$apply(), 300, {leading: false}));
+
     return service;
 
     /*
@@ -26,7 +29,6 @@
 
         xxsWidth: windowWidth < SCREEN_XS_MIN,
         xsWidth: windowWidth >= SCREEN_SM_MIN && windowWidth < SCREEN_SM_MIN,
-        // xsWidth: windowWidth < SCREEN_SM_MIN,
         smWidth: windowWidth >= SCREEN_SM_MIN && windowWidth < SCREEN_MD_MIN,
         mdWidth: windowWidth >= SCREEN_MD_MIN && windowWidth < SCREEN_LG_MIN,
         lgWidth: windowWidth >= SCREEN_LG_MIN
