@@ -12,7 +12,7 @@
         hasMany: {
           Article: {
             localField: 'Articles',
-            foreignKey: 'articleGroup'
+            foreignKey: 'articleGroupId'
           },
           ArticleGroup: {
             localField: 'children',

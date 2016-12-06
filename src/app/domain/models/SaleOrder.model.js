@@ -27,6 +27,10 @@
         }
       },
 
+      fieldTypes: {
+        date: 'date'
+      },
+
       computed: {}
 
     });

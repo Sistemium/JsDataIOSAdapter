@@ -5,7 +5,8 @@
   function SalesTerritoryController(Schema, Helpers, $state, SalesmanAuth, $scope) {
 
     const {Outlet, Partner} = Schema.models();
-    const {saMedia, saControllerHelper} = Helpers;
+    const {saMedia, saControllerHelper, saEtc} = Helpers;
+    const SCROLL_MAIN = 'scroll-main';
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -36,7 +37,7 @@
     $scope.$on('rootClick', () => $state.go(rootState));
 
     $scope.$watch(
-      () => saMedia.xsWidth,
+      () => saMedia.xsWidth || saMedia.xxsWidth,
       (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
     );
 
@@ -58,7 +59,7 @@
     }
 
     function rowHeight(partner) {
-      let xsMargin = saMedia.xsWidth ? 21 : 0;
+      let xsMargin = (saMedia.xsWidth || saMedia.xxsWidth) ? 21 : 0;
       return 39 + partner.outlets.length * 29 + 8 + 17 - xsMargin;
     }
 
@@ -67,9 +68,9 @@
       let filter = SalesmanAuth.makeFilter();
       vm.salesman = salesman;
 
-      vm.setBusy (
-        Outlet.findAll(filter, {limit: 1000})
-          .then(outlets => Partner.findAll(filter).then(()=>outlets))
+      vm.setBusy(
+        Outlet.findAll(filter, {bypassCache: true, limit: 3000})
+          .then(outlets => Partner.findAll(filter, {bypassCache: true, limit: 3000}).then(() => outlets))
       )
         .then(outlets => {
           if (!vm.salesman) return;
@@ -83,9 +84,9 @@
           Outlet.ejectAll(filter);
           filter.where.id.notIn = _.uniq(_.map(outlets, 'partnerId'));
           Partner.ejectAll(filter);
-        });
-
-      // TODO: scroll to top after refresh
+          saEtc.scrolTopElementById(SCROLL_MAIN);
+        })
+        .catch(e => console.error(e));
 
     }
 

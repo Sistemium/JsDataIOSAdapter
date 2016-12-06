@@ -12,7 +12,7 @@
         belongsTo: {
           ArticleGroup: {
             localField: 'ArticleGroup',
-            localKey: 'articleGroup'
+            localKey: 'articleGroupId'
           }
         },
         hasOne: {

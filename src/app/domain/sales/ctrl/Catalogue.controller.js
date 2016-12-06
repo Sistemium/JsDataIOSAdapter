@@ -4,7 +4,7 @@
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth) {
 
-    let {ClickHelper, saEtc, saControllerHelper} = Helpers;
+    let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
     let {Article, Stock, ArticleGroup, PriceType, SaleOrder} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope)
@@ -67,6 +67,11 @@
       SaleOrder.findAllWithRelations(filter)('Outlet');
     });
 
+    $scope.$watch(
+      () => saMedia.smWidth || saMedia.xxsWidth,
+      (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
+    );
+
     /*
      Handlers
      */
@@ -116,13 +121,15 @@
      Functions
      */
 
-    function articleRowHeight(stock, windowWidth) {
+    function articleRowHeight(stock) {
+
+      let breakPoint = !(saMedia.smWidth || saMedia.xxsWidth);
 
       let length = _.get(stock, 'article.lastName.length') + _.get(stock, 'article.preName.length');
       let nameLength = _.get(stock, 'article.firstName.length');
 
-      let nameBreak = windowWidth > 991 ? 60 : 45;
-      let lastBreak = windowWidth > 991 ? 90 : 70;
+      let nameBreak = breakPoint ? 60 : 45;
+      let lastBreak = breakPoint ? 90 : 70;
 
       if (vm.saleOrder) {
         nameBreak -= 7;
@@ -141,11 +148,18 @@
     }
 
     function findAll() {
-      let options = {headers: {'x-page-size': 3000}};
+      let options = {limit: 6000};
 
       return $q.all([
         ArticleGroup.findAll({}, options),
-        Stock.findAll({volumeNotZero: true}, options),
+        Stock.findAll({
+          volumeNotZero: true,
+          where: {
+            volume: {
+              '>': 0
+            }
+          }
+        }, options),
         Article.findAll({volumeNotZero: true}, options),
         PriceType.findAllWithRelations()('Price', null, null, options)
       ])
@@ -282,7 +296,7 @@
       }
 
       if (articleGroup) {
-        filter.articleGroup = {
+        filter.articleGroupId = {
           'in': _.union([articleGroup.id], _.map(articleGroup.descendants(), 'id'))
         };
       }
@@ -304,7 +318,7 @@
     }
 
     function articleGroupIds(stock) {
-      return _.groupBy(stock, 'article.articleGroup');
+      return _.groupBy(stock, 'article.articleGroupId');
     }
 
   }

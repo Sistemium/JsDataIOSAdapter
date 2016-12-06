@@ -159,7 +159,7 @@
 
     IosAdapter.prototype.findAll = function (resource, params, options) {
 
-      options = angular.extend(options, paramsToOptions(params));
+      options = angular.extend(paramsToOptions(options), paramsToOptions(params));
 
       return requestFromIOS('findAll', resource.endpoint, params, angular.extend({
           pageSize: 1000,
