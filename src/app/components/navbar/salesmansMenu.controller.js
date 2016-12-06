@@ -2,7 +2,7 @@
 
 (function () {
 
-  function salesmansMenuController(saControllerHelper, $scope, SalesmanAuth) {
+  function salesmansMenuController(saControllerHelper, $scope, SalesmanAuth, saMedia) {
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -10,7 +10,8 @@
       isEnabled: false,
       salesmanClick,
       noneClick: SalesmanAuth.logout,
-      onStateChange
+      onStateChange,
+      toggleLabel
     });
 
     SalesmanAuth
@@ -18,8 +19,15 @@
       .watchCurrent($scope, salesman => vm.selectedSalesman = salesman);
 
     /*
-    Functions
+     Functions
      */
+
+    function toggleLabel() {
+      if (vm.selectedSalesman) {
+        return (saMedia.xsWidth || saMedia.xxsWidth) ? vm.selectedSalesman.tinyName : vm.selectedSalesman.shortName;
+      }
+      return 'Выберите ТП';
+    }
 
     function salesmanClick(salesman) {
       if (!salesman || _.get(vm, 'selectedSalesman.id') === salesman.id) {
