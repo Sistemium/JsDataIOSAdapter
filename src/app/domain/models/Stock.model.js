@@ -15,7 +15,11 @@
             localKey: 'articleId'
           }
         }
-      }
+      },
+
+      fieldTypes: {
+        volume: 'int'
+      },
 
     });
 
