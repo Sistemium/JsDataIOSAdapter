@@ -28,7 +28,7 @@
       _.assign(service, {
 
         xxsWidth: windowWidth < SCREEN_XS_MIN,
-        xsWidth: windowWidth >= SCREEN_SM_MIN && windowWidth < SCREEN_SM_MIN,
+        xsWidth: windowWidth >= SCREEN_XS_MIN && windowWidth < SCREEN_SM_MIN,
         smWidth: windowWidth >= SCREEN_SM_MIN && windowWidth < SCREEN_MD_MIN,
         mdWidth: windowWidth >= SCREEN_MD_MIN && windowWidth < SCREEN_LG_MIN,
         lgWidth: windowWidth >= SCREEN_LG_MIN
