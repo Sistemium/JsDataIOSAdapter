@@ -4,9 +4,12 @@
 
   angular.module('webPage').service('Menu', function (InitService, Auth) {
 
+    const SALES_ROLES = ['salesman', 'supervisor'];
+    const PICKING_ROLES = ['picker'];
+
     return {
       root: function () {
-        var menu = {
+        let menu = {
 
           title: 'Начало',
           state: 'home',
@@ -14,31 +17,31 @@
           items: [{
             title: 'Сборка',
             state: 'picking.orderList({state:"notdone"})',
-            needRoles: 'picker'
+            needRoles: PICKING_ROLES
           }, {
             title: 'Сборщик',
             state: 'picker',
-            needRoles: 'picker'
+            needRoles: PICKING_ROLES
           }, {
             title: 'Клиенты',
             state: 'sales.territory',
-            needRoles: 'salesman'
+            needRoles: SALES_ROLES
           }, {
             title: 'Визиты',
             state: 'sales.visits',
-            needRoles: 'salesman'
+            needRoles: SALES_ROLES
           }, {
             title: 'Заказы',
             state: 'sales.saleOrders',
-            needRoles: 'salesman' // TODO roles via state.data
+            needRoles: SALES_ROLES
           }, {
             title: 'Каталог',
             state: 'sales.catalogue',
-            needRoles: 'salesman'
+            needRoles: SALES_ROLES
           }, {
             title: 'Фотопоток',
             state: 'photos.stream',
-            needRoles: 'salesman'
+            needRoles: SALES_ROLES
           }, {
             title: 'Предзаказы',
             state: 'sales.prePreOrders',
