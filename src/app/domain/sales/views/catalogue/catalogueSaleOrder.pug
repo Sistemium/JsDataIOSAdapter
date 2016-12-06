@@ -1,6 +1,6 @@
 .alert.alert-default
 
-  a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder.positions.length')
+  a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder.positions.length' ng-class='{"disable-click" : vm.newOrder }')
 
     strong {{ vm.saleOrder.positions.length | number:0 }}
     span позиций
