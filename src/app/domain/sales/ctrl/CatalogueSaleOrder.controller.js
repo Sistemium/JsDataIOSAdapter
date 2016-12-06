@@ -39,7 +39,7 @@
 
       vm.saleOrder = SaleOrder.inject({
         salesmanId: SalesmanAuth.getCurrentUser().id,
-        date: moment().add(1, 'days').format('YYYY-MM-DD'),
+        date: moment().add(1, 'days').format('YYYY-MM-DD')
       });
 
 
@@ -49,6 +49,13 @@
     /*
      Handlers
      */
+
+    $scope.$watch('vm.saleOrder.outlet', (nv, ov) => {
+      if (nv !== ov) {
+        vm.saleOrder.processing = 'draft';
+        saveOrder();
+      }
+    });
 
     $scope.$watch('vm.search', (newValue, oldValue) => {
       if (newValue != oldValue) searchOutlet()
@@ -60,8 +67,6 @@
     }
 
     function saveOrder() {
-      vm.saleOrder.processing = 'draft';
-
       SaleOrder.create(vm.saleOrder)
         .then(() => $q.all(
           _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
