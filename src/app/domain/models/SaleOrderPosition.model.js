@@ -19,7 +19,16 @@
             localKey: 'articleId'
           }
         }
-      }
+      },
+
+      fieldTypes: {
+        price: 'decimal',
+        priceDoc: 'decimal',
+        priceOrigin: 'decimal',
+        cost: 'decimal',
+        volume: 'int',
+        backVolume: 'int'
+      },
 
     });
 
