@@ -24,7 +24,7 @@
 
     function toggleLabel() {
       if (vm.selectedSalesman) {
-        return (saMedia.xsWidth || saMedia.xxsWidth) ? vm.selectedSalesman.tinyName : vm.selectedSalesman.shortName;
+        return saMedia.xxsWidth ? vm.selectedSalesman.tinyName : vm.selectedSalesman.shortName;
       }
       return 'Выберите ТП';
     }
