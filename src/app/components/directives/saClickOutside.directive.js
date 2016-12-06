@@ -12,7 +12,7 @@
 
         if (!IOS.isIos()) return;
 
-        let evaluateOnClick = $parse(attrs.saClickOutside);
+        let evaluateOnClick = $parse(attrs.saClickOutside || `${attrs.outsideIf}=false`);
         let outsideIf = attrs.outsideIf && $parse(attrs.outsideIf);
 
         let clicker = () => {
