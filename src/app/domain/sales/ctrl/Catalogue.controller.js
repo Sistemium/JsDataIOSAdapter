@@ -173,8 +173,11 @@
       ])
         .then(() => {
           vm.currentPriceType = PriceType.meta.getDefault();
+          DEBUG('currentPriceType');
           filterStock();
+          DEBUG('filterStock');
           setCurrentArticleGroup(currentArticleGroupId);
+          DEBUG('setCurrentArticleGroup');
         });
     }
 
@@ -220,7 +223,11 @@
         articleGroup = _.isObject(articleGroupOrId) ? null : ArticleGroup.get(articleGroupOrId);
       }
 
+      DEBUG('setCurrentArticleGroup');
+
       let ownStock = getStockByArticlesOfGroup(articleGroup);
+
+      DEBUG('setCurrentArticleGroup', 'getStockByArticlesOfGroup');
 
       let filter = {
         articleGroupId: _.get(articleGroup, 'id') || null
@@ -229,7 +236,12 @@
       vm.currentArticleGroup = articleGroup;
 
       let groupIds = articleGroupIds(ownStock);
+
+      DEBUG('setCurrentArticleGroup', 'articleGroupIds');
+
       let children = _.filter(ArticleGroup.filter(filter), hasArticlesOrGroupsInStock(groupIds));
+
+      DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock');
 
       // TODO show only saleOrder positions and sort by deviceCts if user clicks 'show saleOrder'
       vm.stock = ownStock;
@@ -247,6 +259,8 @@
         vm.articleGroups = _.filter(ArticleGroup.filter({
           articleGroupId: articleGroup.articleGroupId
         }), hasArticlesOrGroupsInStock(groupIds));
+
+        DEBUG('setCurrentArticleGroup', '!children.length');
 
       } else {
         vm.articleGroups = null;
