@@ -4,7 +4,7 @@
   angular
     .module('webPage', [
       'ngAnimate',
-      'ngTouch',
+      // 'ngTouch',
       'ngSanitize',
       'ngMessages',
       'ngAria',
