@@ -267,7 +267,7 @@
     function hasArticlesOrGroupsInStock(groupIds) {
       return (articleGroup) => {
         return groupIds[articleGroup.id]
-          || _.find(articleGroup.descendants(), item => groupIds[item.id])
+          || articleGroup.hasDescendants(groupIds);
       }
     }
 
