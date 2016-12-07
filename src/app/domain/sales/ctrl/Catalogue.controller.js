@@ -39,6 +39,8 @@
 
     vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
 
+    onStateChange($state.name, $state.params);
+
     /*
      Listeners
      */
@@ -60,8 +62,6 @@
         saleOrderTotalsClick();
       }
     });
-
-    onStateChange($state.name, $state.params);
 
     SalesmanAuth.watchCurrent($scope, salesman => {
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});

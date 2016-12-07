@@ -7,7 +7,7 @@ span.pull-right(uib-dropdown is-open='saleOrdersOpen')
   ul.dropdown-menu.scroll-y(
   uib-dropdown-menu
   resize
-  style='height: {{windowHeight - offsetTop - 15}}px'
+  style='max-height: {{windowHeight - offsetTop - 15}}px'
   )
     li
       a(href ng-click='vm.setSaleOrderClick()' angular-ripple) Новый Заказ
