@@ -33,7 +33,7 @@
 
   }
 
-  angular.module('sistemium')
+  angular.module('ngTouch')
     .directive('saClickOutside', saClickOutside);
 
 })();
