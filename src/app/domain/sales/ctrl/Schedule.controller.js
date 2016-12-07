@@ -2,7 +2,11 @@
 
 (function () {
 
-  function ScheduleController(saControllerHelper, $scope, SalesmanAuth) {
+  function ScheduleController(Schema, saControllerHelper, $scope, SalesmanAuth) {
+
+    //const {Schedule} = Schema.models();
+    //const {SchedulePurpose} = Schema.models();
+    const {ScheduledEvent} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -52,7 +56,22 @@
 
       }
 
-      console.log(vm.currentWeek);
+      findScheduledEvents();
+
+    }
+
+    function findScheduledEvents() {
+
+      var filter = SalesmanAuth.makeFilter();
+
+      vm.setBusy(ScheduledEvent.findAll(filter, {bypassCache: true}), 'Загрузка расписания')
+        .then(() => {
+
+          ScheduledEvent.bindAll(filter, $scope, 'vm.scheduledEvents', () => {
+            console.log(vm.scheduledEvents);
+          });
+
+        });
 
     }
 
