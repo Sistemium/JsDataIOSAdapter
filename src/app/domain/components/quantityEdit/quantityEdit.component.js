@@ -11,7 +11,7 @@
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEdit.html',
 
-    controller: function ($scope) {
+    controller: function ($scope, IOS) {
 
       let vm = this;
 
@@ -21,6 +21,8 @@
       let article = position.article;
 
       _.assign(vm, {
+
+        type: IOS.isIos() ? 'number' : 'text',
 
         incrementBoxes: () => changeVolume(article.packageRel),
         incrementBottles: () => changeVolume(1),
@@ -39,14 +41,14 @@
        Listeners
        */
 
-      $scope.$watchGroup(['vm.boxes', 'vm.bottles'], _.throttle(onQtyChange, 1500));
+      $scope.$watchGroup(['vm.boxes', 'vm.bottles'], onQtyChange);
 
       /*
        Functions
        */
 
       function onQtyChange(newValues) {
-        position.volume = newValues[0] * position.article.packageRel + newValues[1];
+        position.volume = (newValues[0] * position.article.packageRel || 0) + (newValues[1] || 0);
         position.updateCost();
         vm.saleOrder.updateTotalCost();
       }
