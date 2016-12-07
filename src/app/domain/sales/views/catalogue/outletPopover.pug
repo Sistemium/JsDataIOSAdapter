@@ -7,19 +7,18 @@ div.stm-searcher.form-group.has-feedback
   type='search'
   placeholder='Поиск'
   ng-model='vm.search'
-  ng-model-options='{debounce: 100}'
   )
 
   span.form-control-feedback(ng-hide='!vm.search' )
     a(ng-click='vm.clearSearchOutletClick("search-outlet")' href)
       i.glyphicon.glyphicon-remove
 
-section(
+.scroll-y(
 resize
-style='height: {{windowHeight - offsetTop - 15}}px; overflow: scroll'
+style='max-height: {{windowHeight - offsetTop - 15}}px'
 )
 
-  div(ng-repeat='outlet in vm.outlets | filterBy:vm.search track by outlet.id')
+  div(ng-repeat='outlet in vm.outlets | filter:vm.search track by outlet.id')
     a(href ng-click='vm.searchOutletClick(outlet)')
       p {{outlet.name}}
       p.gray

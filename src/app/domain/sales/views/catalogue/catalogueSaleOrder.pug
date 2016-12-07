@@ -1,17 +1,20 @@
 .alert.alert-default
   .row
 
-    h4.col-xs-6.col-sm-6
+    h4.col-xs-7
       a(
       href
       uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
-      popover-title="Выберите клиента"
-      popover-placement='bottom-right'
+      popover-trigger='outsideClick'
+      popover-placement='auto bottom-left'
       popover-is-open='vm.isOpenOutletPopover'
-      )  {{ vm.saleOrder.outlet.name || 'Выберите клиента' }}
+      )
+        span {{ vm.saleOrder.outlet.name }}
+        small(ng-if='vm.saleOrder.outlet.address') ({{vm.saleOrder.outlet.address}})
+        span(ng-if='!vm.saleOrder.outlet.id') Выберите клиента
+        span.caret
 
-
-    .col-xs-6.col-sm-6.text-right(ng-if='vm.saleOrder.positions.length')
+    .col-xs-5.text-right(ng-if='vm.saleOrder.positions.length')
       a(href stm-click='saleOrderTotals')
 
         strong {{ vm.saleOrder.positions.length | number:0 }}
