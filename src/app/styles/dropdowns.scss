@@ -2,5 +2,10 @@
   .option {
     padding: 8px 0;
     border-bottom: solid 1px lightgray;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
   }
 }
