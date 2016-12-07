@@ -14,12 +14,12 @@
     .col-xs-6.col-sm-6.text-right(ng-if='vm.saleOrder.positions.length')
       a(href stm-click='saleOrderTotals')
 
-          strong {{ vm.saleOrder.positions.length | number:0 }}
-          span {{ vm.saleOrder.positionsCountRu() }}
+        strong {{ vm.saleOrder.positions.length | number:0 }}
+        span {{ vm.saleOrder.positionsCountRu() }}
 
-          span на сумму
-          strong {{ vm.saleOrder.totalCost | number:2 }}
-          span ₽
+        span на сумму
+        strong {{ vm.saleOrder.totalCost | number:2 }}
+        span ₽
 
       span(ng-if='!vm.saleOrder.positions.length') В заказе нет позиций
 
