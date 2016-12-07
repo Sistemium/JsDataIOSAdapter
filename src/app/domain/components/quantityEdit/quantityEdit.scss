@@ -1,9 +1,15 @@
 .quantity-edit {
-  max-width: 130px;
+
+  //max-width: 130px;
 
   input {
     width: 60px;
   }
+
+  > * {
+    margin: 5px;
+  }
+
 }
 
 

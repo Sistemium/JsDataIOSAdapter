@@ -1,46 +1,29 @@
-table.quantity-edit
-  tbody
+.quantity-edit.text-center.display-flex
 
-    tr.text-center
+  .boxes.flex-1
 
-      td.uib-increment.hours
-        a.btn.btn-link(ng-click='vm.incrementBoxes()' angular-ripple)
-          span.glyphicon.glyphicon-chevron-up
+    a.btn.btn-link.btn-block(ng-click='vm.incrementBoxes()' angular-ripple) +К
+      //i.glyphicon.glyphicon-chevron-up
 
-      td  
+    input.form-control.text-center(
+    type='number'
+    placeholder='К'
+    ng-model='vm.boxes'
+    maxlength='3'
+    )
 
-      td.uib-increment.minutes
-        a.btn.btn-link(ng-click='vm.incrementBottles()' angular-ripple)
-          span.glyphicon.glyphicon-chevron-up
+    a.btn.btn-link.btn-block(ng-click='vm.decrementBoxes()' angular-ripple) -К
+      //i.glyphicon.glyphicon-chevron-down
 
-    tr
+  .bottles.flex-1
 
-      td.form-group
-        input.form-control.text-center(
-        type='number'
-        placeholder='К'
-        ng-model='vm.boxes'
-        maxlength='3'
-        )
+    a.btn.btn-link.btn-block(ng-click='vm.incrementBottles()' angular-ripple) +Б
 
-      td.uib-separator
+    input.form-control.text-center(
+    type='number'
+    placeholder='Б'
+    ng-model='vm.bottles'
+    maxlength='3'
+    )
 
-      td.form-group
-        input.form-control.text-center(
-        type='number'
-        placeholder='Б'
-        ng-model='vm.bottles'
-        maxlength='3'
-        )
-
-    tr.text-center
-
-      td.uib-decrement
-        a.btn.btn-link(ng-click='vm.decrementBoxes()' angular-ripple)
-          span.glyphicon.glyphicon-chevron-down
-
-      td  
-
-      td.uib-decrement.minutes
-        a.btn.btn-link(ng-click='vm.decrementBottles()' angular-ripple)
-          span.glyphicon.glyphicon-chevron-down
+    a.btn.btn-link.btn-block(ng-click='vm.decrementBottles()' angular-ripple) -Б
