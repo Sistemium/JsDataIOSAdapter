@@ -1,40 +1,55 @@
 .alert.alert-default
+  .row
+    .col-xs-6.col-sm-6
+      p.sale-order-info Продавец:
+        =' '
+        strong.hidden-xs {{vm.saleOrder.salesman.shortName}}
+        strong.visible-xs-inline {{vm.saleOrder.salesman.tinyName}}
+      p.sale-order-info Заказ на:
+        =' '
+        strong {{vm.saleOrder.date}}
+      p.sale-order-info(ng-if='!vm.newOrder&& vm.saleOrder.commentText') Комментарий:
+        =' '
+        strong {{vm.saleOrder.commentText}}
 
-  a.pull-right(href stm-click='saleOrderTotals' ng-if='vm.saleOrder.positions.length' ng-class='{"disable-click" : vm.newOrder }')
+    .col-xs-6.col-sm-6(style='text-align: right')
 
-    strong {{ vm.saleOrder.positions.length | number:0 }}
-    span позиций
+      div(ng-if='vm.saleOrder.positions.length')
+        a(
+        href
+        stm-click='saleOrderTotals'
+        ng-class='{"disable-click" : vm.newOrder }'
+        )
 
-    span на сумму
-    strong {{ vm.saleOrder.totalCost | number:2 }}
-    span ₽
+          strong {{ vm.saleOrder.positions.length | number:0 }}
+          span позиций
 
-  p.pull-right(href ng-if='!vm.saleOrder.positions.length') Товаров не добавлено
+          span на сумму
+          strong {{ vm.saleOrder.totalCost | number:2 }}
+          span ₽
 
-  h5
-    a(
-    href
-    uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
-    popover-title="Выберите клиента"
-    type="button"
-    popover-placement='bottom-left'
-    popover-is-open='false'
-    )  {{ vm.saleOrder.outlet.name || 'Выберите клиента' }}
+      p.sale-order-info(ng-if='!vm.saleOrder.positions.length') Товаров не добавлено
 
-  .info(ng-if='vm.newOrder')
-    h5
-      p Продавец: {{vm.saleOrder.salesman.shortName}}
-      p Заказ на: {{vm.saleOrder.date}}
-
-  .flex-1(style='display: flex' ng-if='vm.newOrder')
-    input#comment-input.form-control.col-md-5(
-    type='text'
-    placeholder='Комментарий'
-    aria-describedby='comment-input'
-    ng-model='vm.saleOrder.commentText'
-    ng-model-options='{debounce: 100}'
-    )
-
-    span.col-md-2
-
-    button.col-md-4(type="button" class="btn btn-success" ng-click='vm.saveOrder()') Сохранить заказ
+      div
+        a(
+        href
+        uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
+        popover-title="Выберите клиента"
+        type="button"
+        popover-placement='bottom-right'
+        popover-is-open='vm.isOpenOutletPopover'
+        )  {{ vm.saleOrder.outlet.name || 'Выберите клиента' }}
+  hr(style='border-color: #e0e0e0')
+  .row
+    .col-md-6.col-sm-6.col-xs-12.col-lg-6
+      input#comment-input.form-control(
+      type='text'
+      ng-if='vm.newOrder'
+      placeholder='Комментарий'
+      aria-describedby='comment-input'
+      ng-model='vm.saleOrder.commentText'
+      ng-model-options='{debounce: 100}'
+      )
+    .col-md-6.col-sm-6.col-xs-12.col-lg-6.text-align-right
+      button.btn.btn-success(type='button' ng-click='vm.saveOrder()') Сохранить
+      button.btn.btn-danger(type='button' ng-click='vm.deleteOrder()') Удалить
