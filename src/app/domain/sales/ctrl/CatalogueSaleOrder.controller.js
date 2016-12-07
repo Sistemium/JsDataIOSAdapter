@@ -103,6 +103,7 @@
 
     function setOutlet(outlet) {
       vm.saleOrder.outlet = outlet;
+      vm.isOpenOutletPopover = false;
     }
 
     function addPositionVolume(articleId, volume, price) {

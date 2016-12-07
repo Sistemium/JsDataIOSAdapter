@@ -20,6 +20,7 @@
       articleGroupIds: {},
       search: $state.params.q || '',
       saleOrderId: $state.params.saleOrderId,
+      isOpenOutletPopover: false,
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
