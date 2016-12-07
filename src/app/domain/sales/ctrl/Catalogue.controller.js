@@ -145,6 +145,7 @@
       if (!positions) return;
       let position = _.find(positions, {articleId: stock.articleId});
       if (!position) return;
+
       return position.article.boxPcs(position.volume).full;
     }
 
