@@ -11,7 +11,12 @@
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
+
+      saveScheduledEvent,
+      eventHaveChanges,
+      cancelChanges,
       closeView
+
     });
 
     /*
@@ -26,6 +31,7 @@
 
       console.log(toState, toParams, fromState, fromParams);
       vm.fromState = fromState;
+      vm.toParams = toParams;
       controllerInit(toParams);
 
     });
@@ -49,7 +55,11 @@
           .then((scheduledEvent) => {
 
             console.log(scheduledEvent);
+            vm.scheduledEvent = scheduledEvent;
             vm.date = scheduledEvent.date;
+            vm.outlet = scheduledEvent.outlet;
+            vm.purpose = scheduledEvent.purpose;
+            vm.schedule = scheduledEvent.schedule;
 
           });
 
@@ -57,12 +67,30 @@
 
     }
 
+    function saveScheduledEvent() {
+      console.log('saveScheduledEvent');
+    }
+
+    function eventHaveChanges() {
+
+      if (vm.creatingMode) {
+        return !_.isUndefined(vm.scheduledEvent);
+      } else {
+        return (vm.outlet !== vm.scheduledEvent.outlet || vm.purpose !== vm.scheduledEvent.purpose || vm.schedule !== vm.scheduledEvent.schedule);
+      }
+
+    }
+
+    function cancelChanges() {
+      console.log('cancelChanges');
+    }
+
     function closeView() {
 
       if (vm.creatingMode) {
 
         ConfirmModal.show({
-          text: `Отменить создание события?`
+          text: `Закрыть карточку события?`
         })
           .then(function () {
 

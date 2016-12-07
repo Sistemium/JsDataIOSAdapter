@@ -65,7 +65,7 @@
 
       var filter = SalesmanAuth.makeFilter();
 
-      vm.setBusy(ScheduledEvent.findAll(filter, {bypassCache: true}), 'Загрузка расписания')
+      vm.setBusy(ScheduledEvent.findAllWithRelations(filter, {bypassCache: true})('Schedule', 'SchedulePurpose', 'Outlet'), 'Загрузка расписания')
         .then(() => {
 
           ScheduledEvent.bindAll(filter, $scope, 'vm.scheduledEvents', () => {

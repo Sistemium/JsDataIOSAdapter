@@ -8,3 +8,34 @@
     a(href ng-click='vm.closeView()')
       i.glyphicon.glyphicon-remove
 
+hr
+section
+  span(ng-if='vm.outlet') {{ vm.outlet.name }}, {{ vm.outlet.address }}
+  a(href ng-if='!vm.outlet') Добавить точку
+
+hr
+section
+  span(ng-if='vm.schedulePurpose') {{ vm.schedulePurpose.name }}
+  a(href ng-if='!vm.schedulePurpose') Добавить описание
+
+hr
+section
+  span(ng-if='vm.schedule') {{ vm.schedule.name }}
+  a(href ng-if='!vm.schedule') Добавить периодичность
+
+hr
+.display-flex
+  .flex-1
+  .content-float-right
+    button.btn.btn-success.ml-10(
+    ng-if='vm.eventHaveChanges()'
+    ng-click='vm.saveScheduledEvent()'
+    ) Сохранить
+    button.btn.btn-warning.ml-10(
+    ng-if='vm.eventHaveChanges()'
+    ng-click='vm.cancelChanges()'
+    ) Отменить
+    button.btn.btn-success.ml-10(
+    ng-if='!vm.eventHaveChanges()'
+    ng-click='vm.closeView()'
+    ) Закрыть
