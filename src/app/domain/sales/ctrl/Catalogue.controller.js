@@ -2,7 +2,9 @@
 
 (function () {
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth) {
+  const SHORT_TIMEOUT = 100;
+
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG) {
 
     let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
     let {Article, Stock, ArticleGroup, PriceType, SaleOrder} = Schema.models();
@@ -34,7 +36,7 @@
 
     });
 
-    vm.setBusy(findAll());
+    vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
 
     /*
      Listeners
