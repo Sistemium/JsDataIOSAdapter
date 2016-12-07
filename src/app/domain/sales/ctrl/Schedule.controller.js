@@ -2,7 +2,7 @@
 
 (function () {
 
-  function ScheduleController(Schema, saControllerHelper, $scope, SalesmanAuth) {
+  function ScheduleController(Schema, saControllerHelper, $scope, SalesmanAuth, $state) {
 
     //const {Schedule} = Schema.models();
     //const {SchedulePurpose} = Schema.models();
@@ -12,6 +12,7 @@
 
     vm.use({
 
+      createScheduledEvent,
       displayDate,
       colorDate
 
@@ -73,6 +74,10 @@
 
         });
 
+    }
+
+    function createScheduledEvent(day) {
+      $state.go('^.scheduledEvent', {date: day});
     }
 
     function displayDate(date) {

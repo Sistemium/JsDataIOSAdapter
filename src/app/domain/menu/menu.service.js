@@ -44,7 +44,7 @@
             state: 'sales.prePreOrders',
             needRoles: 'pre-ordering'
           }, {
-            title: 'Шедулы',
+            title: 'Расписание',
             state: 'sales.schedule',
             needRoles: 'salesman'
           }, {

@@ -11,13 +11,12 @@ ng-style='{height: (windowHeight - offsetTop) + "px"}'
           h4(ng-class='vm.colorDate(day)') {{ vm.displayDate(day) }}
           .flex-1
           .content-float-right
-            button.btn.btn-success
+            button.btn.btn-success(ng-click='vm.createScheduledEvent(day)')
               i.glyphicon.glyphicon-plus
-
 
     tbody
       tr
         td
           a Scheduled outlet name with address
       tr.alert.alert-info.centered(ng-hide='vm.selectedDayVisits.length')
-        td Нет шедулов
+        td Нет запланированных посещений

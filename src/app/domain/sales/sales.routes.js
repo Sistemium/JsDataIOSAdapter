@@ -196,7 +196,26 @@
         controllerAs: 'vm',
 
         data: {
-          title: 'Шедулы'
+          title: 'Расписание'
+        }
+
+      };
+
+      var scheduledEvent = {
+
+        name: 'scheduledEvent',
+        url: '/scheduledEvent?scheduledEventId',
+
+        params: {
+          date: null
+        },
+
+        templateUrl: 'app/domain/sales/views/scheduledEvent.html',
+        controller: 'ScheduledEventController',
+        controllerAs: 'vm',
+
+        data: {
+          title: 'Событие'
         }
 
       };
@@ -212,7 +231,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [salesTerritory, prePreOrders, visits, schedule]
+          children: [salesTerritory, prePreOrders, visits, schedule, scheduledEvent]
 
         })
       ;
