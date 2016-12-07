@@ -19,6 +19,14 @@
             localKey: 'articleId'
           }
         }
+      },
+
+      aggregables: ['cost'],
+
+      methods: {
+        updateCost: function () {
+          return this.cost = this.price * this.volume;
+        }
       }
 
     });
