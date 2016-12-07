@@ -1,1 +1,10 @@
-h2 SCHEDULED EVENT
+.display-flex
+
+  .flex-1
+
+  h2 {{ vm.date | amUtc | amLocal | amDateFormat:'DD/MM/YYYY' }}
+
+  .flex-1.content-float-right
+    a(href ng-click='vm.closeView()')
+      i.glyphicon.glyphicon-remove
+
