@@ -16,11 +16,9 @@
 
       kPlusButtonClick,
       bPlusButtonClick,
-      newOrder: false,
-      setOutlet,
-      clearSearchClick,
-      saveOrder,
-      orderedVolumeClick: stock => console.warn(stock)
+      searchOutletClick,
+      clearSearchOutletClick,
+      saveOrder
 
     });
 
@@ -34,62 +32,32 @@
         .catch(error => console.error(error));
     } else {
 
-      Outlet.findAll({}).then((data) => {
-        vm.outlets = data;
-      });
-
-      vm.newOrder = true;
-
       vm.saleOrder = SaleOrder.inject({
-        salesmanId: SalesmanAuth.getCurrentUser().id,
+        salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
         date: moment().add(1, 'days').format('YYYY-MM-DD')
       });
-
 
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
 
     /*
+     Listeners
+     */
+
+    SalesmanAuth.watchCurrent($scope, () => {
+      let filter = SalesmanAuth.makeFilter({
+        orderBy: ['name']
+      });
+      vm.rebindAll(Outlet, filter, 'vm.outlets');
+    });
+
+    /*
      Handlers
      */
 
-    $scope.$watch('vm.saleOrder.outlet', (nv, ov) => {
-      if (nv !== ov) {
-        vm.saleOrder.processing = 'draft';
-        saveOrder();
-      }
-    });
-
-    $scope.$watch('vm.search', (newValue, oldValue) => {
-      if (newValue != oldValue) searchOutlet()
-    });
-
-    function clearSearchClick() {
+    function clearSearchOutletClick(id) {
       vm.search = '';
-      saEtc.focusElementById('search-input');
-    }
-
-    function saveOrder() {
-      SaleOrder.create(vm.saleOrder)
-        .then(() => $q.all(
-          _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
-        ))
-        .catch(e => console.error(e));
-    }
-
-    function searchOutlet() {
-      let filter = {};
-
-      if (vm.search) {
-        filter.name = {
-          'likei': '%' + vm.search + '%'
-        }
-      }
-
-      vm.outlets = Outlet.filter({
-        where: filter
-      });
-
+      saEtc.focusElementById(id);
     }
 
     function kPlusButtonClick(data) {
@@ -100,13 +68,21 @@
       addPositionVolume(data.stock.articleId, 1, data.price);
     }
 
+    function searchOutletClick(outlet) {
+      vm.saleOrder.outlet = outlet;
+      vm.isOpenOutletPopover = false;
+    }
+
     /*
      Functions
      */
 
-    function setOutlet(outlet) {
-      vm.saleOrder.outlet = outlet;
-      vm.isOpenOutletPopover = false;
+    function saveOrder() {
+      SaleOrder.create(vm.saleOrder)
+        .then(() => $q.all(
+          _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
+        ))
+        .catch(e => console.error(e));
     }
 
     function addPositionVolume(articleId, volume, price) {
@@ -124,8 +100,6 @@
         vm.saleOrder.totalCost = 0;
         SaleOrderPosition.inject(position);
       }
-
-      price = price || position.price;
 
       position.volume += volume;
 
