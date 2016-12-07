@@ -87,7 +87,10 @@
     function saleOrderTotalsClick() {
       vm.showOnlyOrdered = true;
       vm.setBusy($q.all(
-        _.map(vm.saleOrder.positions, pos => Article.loadRelations(pos.articleId, 'Stock'))
+        _.map(
+          _.filter(vm.saleOrder.positions, pos => !_.get(pos, 'article.stock')),
+          pos => Article.loadRelations(pos.articleId, 'Stock')
+        )
       ))
         .then(() => {
           filterStock();
