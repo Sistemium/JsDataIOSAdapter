@@ -21,6 +21,7 @@
         }
       },
 
+<<<<<<< HEAD
       fieldTypes: {
         price: 'decimal',
         priceDoc: 'decimal',
@@ -28,6 +29,14 @@
         cost: 'decimal',
         volume: 'int',
         backVolume: 'int'
+=======
+      aggregables: ['cost'],
+
+      methods: {
+        updateCost: function () {
+          return this.cost = this.price * this.volume;
+        }
+>>>>>>> saleOrders
       }
 
     });

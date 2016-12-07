@@ -2,17 +2,24 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, saControllerHelper, ClickHelper, Schema, $q) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth) {
 
-    let {SaleOrder, SaleOrderPosition} = Schema.models('SaleOrder');
+    const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
+    const {saControllerHelper, ClickHelper, saEtc} = Helpers;
+
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
+
     let saleOrderId = $state.params.saleOrderId;
 
     vm.use({
 
       kPlusButtonClick,
       bPlusButtonClick,
+      newOrder: false,
+      setOutlet,
+      clearSearchClick,
+      saveOrder,
       orderedVolumeClick: stock => console.warn(stock)
 
     });
@@ -26,12 +33,64 @@
         })
         .catch(error => console.error(error));
     } else {
+
+      Outlet.findAll({}).then((data) => {
+        vm.outlets = data;
+      });
+
+      vm.newOrder = true;
+
+      vm.saleOrder = SaleOrder.inject({
+        salesmanId: SalesmanAuth.getCurrentUser().id,
+        date: moment().add(1, 'days').format('YYYY-MM-DD')
+      });
+
+
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
 
     /*
-    Handlers
+     Handlers
      */
+
+    $scope.$watch('vm.saleOrder.outlet', (nv, ov) => {
+      if (nv !== ov) {
+        vm.saleOrder.processing = 'draft';
+        saveOrder();
+      }
+    });
+
+    $scope.$watch('vm.search', (newValue, oldValue) => {
+      if (newValue != oldValue) searchOutlet()
+    });
+
+    function clearSearchClick() {
+      vm.search = '';
+      saEtc.focusElementById('search-input');
+    }
+
+    function saveOrder() {
+      SaleOrder.create(vm.saleOrder)
+        .then(() => $q.all(
+          _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
+        ))
+        .catch(e => console.error(e));
+    }
+
+    function searchOutlet() {
+      let filter = {};
+
+      if (vm.search) {
+        filter.name = {
+          'likei': '%' + vm.search + '%'
+        }
+      }
+
+      vm.outlets = Outlet.filter({
+        where: filter
+      });
+
+    }
 
     function kPlusButtonClick(data) {
       addPositionVolume(data.stock.articleId, data.stock.article.packageRel, data.price);
@@ -42,11 +101,18 @@
     }
 
     /*
-    Functions
+     Functions
      */
 
-    function addPositionVolume (articleId, volume, price) {
+    function setOutlet(outlet) {
+      vm.saleOrder.outlet = outlet;
+      vm.isOpenOutletPopover = false;
+    }
+
+    function addPositionVolume(articleId, volume, price) {
+
       let position = _.find(vm.saleOrder.positions, {articleId: articleId});
+
       if (!position) {
         position = SaleOrderPosition.createInstance({
           saleOrderId: vm.saleOrder.id,
@@ -55,11 +121,17 @@
           priceDoc: price,
           articleId: articleId
         });
+        vm.saleOrder.totalCost = 0;
+        SaleOrderPosition.inject(position);
       }
+
+      price = price || position.price;
+
       position.volume += volume;
-      position.cost = position.volume * price;
-      vm.saleOrder.totalCost += volume * price;
-      SaleOrderPosition.inject(position);
+
+      position.updateCost();
+      vm.saleOrder.updateTotalCost();
+
     }
 
   }

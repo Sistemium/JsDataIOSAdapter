@@ -1,0 +1,27 @@
+div.stm-searcher.form-group.has-feedback
+
+  label(for="search-input")
+    i.glyphicon.glyphicon-search
+
+  input#search-input.form-control(
+  type='search'
+  placeholder='Поиск'
+  aria-describedby='search-input'
+  ng-model='vm.search'
+  ng-model-options='{debounce: 100}'
+  )
+
+  span.form-control-feedback(ng-hide='!vm.search' )
+    a(ng-click='vm.clearSearchClick()' href)
+      i.glyphicon.glyphicon-remove
+
+section(
+resize
+style='height: {{windowHeight - offsetTop - 15}}px; overflow: scroll'
+)
+
+  div(ng-repeat='outlet in vm.outlets track by outlet.id')
+    a(href ng-click='vm.setOutlet(outlet)')
+      p {{outlet.name}}
+      p.gray {{outlet.fullAddress}}
+    hr
