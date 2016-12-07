@@ -45,9 +45,10 @@
      */
 
     SalesmanAuth.watchCurrent($scope, () => {
-      let filter = SalesmanAuth.makeFilter({
+      Outlet.findAll(SalesmanAuth.makeFilter());
+      let filter = {
         orderBy: ['name']
-      });
+      };
       vm.rebindAll(Outlet, filter, 'vm.outlets');
     });
 
