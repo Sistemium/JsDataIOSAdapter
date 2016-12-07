@@ -4,13 +4,13 @@ table.quantity-edit
     tr.text-center
 
       td.uib-increment.hours
-        a.btn.btn-link(ng-click='vm.incrementBoxes()')
+        a.btn.btn-link(ng-click='vm.incrementBoxes()' angular-ripple)
           span.glyphicon.glyphicon-chevron-up
 
       td  
 
       td.uib-increment.minutes
-        a.btn.btn-link(ng-click='vm.incrementBottles()')
+        a.btn.btn-link(ng-click='vm.incrementBottles()' angular-ripple)
           span.glyphicon.glyphicon-chevron-up
 
     tr
@@ -36,13 +36,11 @@ table.quantity-edit
     tr.text-center
 
       td.uib-decrement
-        a.btn.btn-link(ng-click='vm.decrementBoxes()')
+        a.btn.btn-link(ng-click='vm.decrementBoxes()' angular-ripple)
           span.glyphicon.glyphicon-chevron-down
 
       td  
 
       td.uib-decrement.minutes
-        a.btn.btn-link(
-        ng-click='vm.decrementBottles()'
-        )
+        a.btn.btn-link(ng-click='vm.decrementBottles()' angular-ripple)
           span.glyphicon.glyphicon-chevron-down
