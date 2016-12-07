@@ -62,6 +62,10 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
       color: #777777;
     }
 
+    [angular-ripple] {
+      overflow: visible;
+    }
+
     button + button {
       margin-top: 4px;
     }
