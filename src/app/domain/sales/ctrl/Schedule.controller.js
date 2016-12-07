@@ -8,6 +8,9 @@
 
     vm.use({
 
+      displayDate,
+      colorDate
+
     });
 
     /*
@@ -52,6 +55,47 @@
       console.log(vm.currentWeek);
 
     }
+
+    function displayDate(date) {
+
+      var dateString = moment(date).format('dddd, DD/MM/YYYY');
+
+      if (isToday(date)) {
+        return 'Сегодня, ' + dateString;
+      }
+
+      if (isTomorrow(date)) {
+        return 'Завтра, ' + dateString;
+      }
+
+      if (isYesterday(date)) {
+        return 'Вчера, ' + dateString;
+      }
+
+      return _.capitalize(dateString);
+
+    }
+
+    function colorDate(date) {
+
+      var dayOfWeek = moment(date).format('d');
+
+      return (isToday(date)) ? 'blue' : (dayOfWeek == 0 || dayOfWeek == 6) ? 'red' : '';
+
+    }
+
+    function isToday(date) {
+      return date.getDate() == vm.todayDate.getDate();
+    }
+
+    function isTomorrow(date) {
+      return date.getDate() == vm.todayDate.getDate() + 1;
+    }
+
+    function isYesterday(date) {
+      return date.getDate() == vm.todayDate.getDate() - 1;
+    }
+
   }
 
   angular.module('webPage')
