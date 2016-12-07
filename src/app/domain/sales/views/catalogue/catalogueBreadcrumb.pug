@@ -4,8 +4,11 @@ span.pull-right(uib-dropdown is-open='saleOrdersOpen')
     =' '
     span.caret
 
-<<<<<<< HEAD
-  ul.dropdown-menu(uib-dropdown-menu sa-click-outside outside-if='saleOrdersOpen')
+  ul.dropdown-menu.scroll-y(
+  uib-dropdown-menu
+  resize
+  style='height: {{windowHeight - offsetTop - 15}}px'
+  )
     li
       a(href ng-click='vm.setSaleOrderClick()' angular-ripple) Новый Заказ
     li.divider(ng-if='vm.draftSaleOrders.length')
@@ -16,35 +19,6 @@ span.pull-right(uib-dropdown is-open='saleOrdersOpen')
           .right {{ draft.totalCost | number:2 }} ₽
         .gray
           small {{ draft.outlet.address }}
-=======
-  .dropdown-menu(uib-dropdown-menu style='width: 280px; padding: 0')
-    section(
-    resize
-    style='height: {{windowHeight - offsetTop - 15}}px; overflow: scroll'
-    )
-      li(
-      style='padding: 5px'
-      ng-class='{"active-order": vm.saleOrderId === draft.id}'
-      )
-        a(
-        href
-        ng-click='vm.setSaleOrderClick()'
-        ) Новый Заказ
-
-      li.divider(ng-if='vm.draftSaleOrders.length' style='margin:0')
-
-      li(
-      ng-repeat='draft in vm.draftSaleOrders| orderBy:"-ts" track by draft.id'
-      ng-class='{"active-order": vm.saleOrderId === draft.id}'
-      style='padding: 5px; border-bottom: 1px silver solid;'
-      )
-        a(href ng-click='vm.setSaleOrderClick(draft)')
-          .display-flex
-            .flex-1 {{ draft.outlet.name }}
-            .right {{draft.totalCost? draft.totalCost : 0 | number:2 }} ₽
-          .gray
-            small {{ draft.outlet.address }}
->>>>>>> saleOrders
 
 li(uib-dropdown is-open='priceTypesOpen')
   a(href uib-dropdown-toggle)
@@ -59,6 +33,4 @@ li(uib-dropdown is-open='priceTypesOpen')
 li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
   a(href ng-click='vm.articleGroupClick(ancestor)' angular-ripple) {{ ancestor.name }}
 
-//li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
-
-li.active(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroupsDropDown.html'")
+li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}

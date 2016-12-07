@@ -3,21 +3,13 @@
   strong {{stock.article.pieceVolume}}л
   small.gray x {{stock.article.packageRel}}
 
-<<<<<<< HEAD
-  // TODO: maybe should be a dropdown
-  strong.pull-right(ng-if='vm.saleOrder')
-    a(href stm-click='orderedVolume' click-payload='stock') {{ vm.orderedVolumeFull(stock) }}
-=======
   strong.pull-right
     a(href
+    ng-if='vm.saleOrder'
     uib-popover-template="'app/domain/sales/views/saleOrder/saleOrderPosition.popover.html'"
-    popover-append-to-body
     popover-trigger='outsideClick'
     popover-placement='auto bottom-right'
     ) {{ vm.orderedVolumeFull(stock) }}
-
-
->>>>>>> saleOrders
 
 .article-name-second(title='{{stock.article.name}}')
   small {{stock.article.preName}}
