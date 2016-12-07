@@ -49,3 +49,13 @@
 .active-order {
   background-color: $active-order
 }
+
+.sale-order-info {
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  #comment-input {
+    margin-bottom: 5px;
+  }
+}
