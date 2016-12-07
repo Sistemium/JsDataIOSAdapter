@@ -1,7 +1,7 @@
 .alert.alert-default
   .row
     .col-xs-6.col-sm-6
-      p.sale-order-info Продавец:
+      p.sale-order-info ТП:
         =' '
         strong.hidden-xs {{vm.saleOrder.salesman.shortName}}
         strong.visible-xs-inline {{vm.saleOrder.salesman.tinyName}}
@@ -22,7 +22,7 @@
         )
 
           strong {{ vm.saleOrder.positions.length | number:0 }}
-          span позиций
+          span {{ vm.saleOrder.positionsCountRu() }}
 
           span на сумму
           strong {{ vm.saleOrder.totalCost | number:2 }}
