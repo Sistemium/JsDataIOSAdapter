@@ -41,9 +41,19 @@
     $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 
       console.log(toState, toParams, fromState, fromParams);
-      vm.fromState = fromState;
-      vm.toParams = toParams;
-      controllerInit(toParams);
+
+      if (fromState.name) {
+
+        vm.fromState = fromState;
+        vm.toParams = toParams;
+        controllerInit(toParams);
+
+      } else {
+
+        $state.go('sales.schedule');
+
+      }
+
 
     });
 
