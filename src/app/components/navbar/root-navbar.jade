@@ -1,4 +1,4 @@
-h2.root-navbar-items.root-navbar.display-flex(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
+h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
   a(href ui-sref='home' ng-class='{disabled: vm.isRootState}')
     b.glyphicon.glyphicon-home
@@ -6,7 +6,7 @@ h2.root-navbar-items.root-navbar.display-flex(ng-hide='vm.hide' ng-class='{disab
   a(href ng-click='vm.rootClick()' ng-class='{disabled: vm.isRootState}')
    | {{ vm.title }}
 
-  .flex-1
+  .separator
 
   fullscreen-menu(ng-show='vm.isRootState')
 
