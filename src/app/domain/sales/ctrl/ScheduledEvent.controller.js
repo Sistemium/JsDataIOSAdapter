@@ -68,7 +68,10 @@
 
       if (vm.creatingMode) {
 
-        vm.dateStart = params.date;
+        vm.scheduledEvent = ScheduledEvent.inject({
+          salesmanId: vm.selectedSalesmanId,
+          dateStart: params.date
+        });
 
       } else {
 
