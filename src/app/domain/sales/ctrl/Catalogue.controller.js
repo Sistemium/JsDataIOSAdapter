@@ -78,7 +78,7 @@
 
     $scope.$watch(
       isWideScreen,
-      (newValue, oldValue) => vm.isWideScreen = newValue
+      newValue => vm.isWideScreen = newValue
     );
 
 
