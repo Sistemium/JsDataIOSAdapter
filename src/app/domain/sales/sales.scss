@@ -43,6 +43,8 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
       display: none;
     }
     margin-bottom: $margin-bottom-xs;
+    background: none !important;
+    border-color: #ccc !important;
   }
 
   .xs-ancestors {
