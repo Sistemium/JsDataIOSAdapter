@@ -99,6 +99,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 }
 
 .catalogue {
+
   .breadcrumb {
     > li.ancestor, > li.active {
       @media (max-width: $screen-xs-max) {
@@ -106,4 +107,11 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
       }
     }
   }
+
+  .popover {
+    @media (min-width: $screen-sm-min) {
+      max-width: 400px;
+    }
+  }
+
 }
