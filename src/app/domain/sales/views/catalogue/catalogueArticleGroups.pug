@@ -16,12 +16,16 @@
 button.btn.btn-default.btn-block.collapser(
 type='button'
 ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
-) {{ vm.currentArticleGroup.name || 'Все товары'}}
+)
+  span {{ vm.currentArticleGroup.name || 'Все товары'}}
+  span.caret
 
-.block-to-collapse(
+.block-to-collapse.scroll-y(
 uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
 collapsed='vm.isArticleGroupsCollapsingDone=true'
 expanding='vm.isArticleGroupsCollapsingDone=false'
+resize='groups'
+style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
 )
   ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
     a.list-group-item(
@@ -33,9 +37,7 @@ expanding='vm.isArticleGroupsCollapsingDone=false'
         i.glyphicon.glyphicon-menu-left
       span {{ancestor.name}}
 
-  ul.list-group.scroll-y(
-  resize='groups'
-  style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
+  ul.list-group(
   )
     a.list-group-item(
     no-angular-ripple
