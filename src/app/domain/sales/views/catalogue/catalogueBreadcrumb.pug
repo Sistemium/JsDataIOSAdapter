@@ -30,7 +30,9 @@ li(uib-dropdown is-open='priceTypesOpen')
     li(ng-repeat='priceType in vm.priceTypes track by priceType.id' ng-class='{active: vm.currentPriceType.name == priceType.name}')
       a(href ng-click='vm.priceTypeClick(priceType)' angular-ripple) {{priceType.name}}
 
-li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
+li.ancestor(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
   a(href ng-click='vm.articleGroupClick(ancestor)' angular-ripple) {{ ancestor.name }}
 
 li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
+
+

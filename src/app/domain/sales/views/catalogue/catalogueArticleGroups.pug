@@ -13,18 +13,38 @@
     a(ng-click='vm.clearSearchClick()' href)
       i.glyphicon.glyphicon-remove
 
-ul.list-group.scroll-y.hidden-xs(
-resize='groups'
-style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
+button.btn.btn-default.btn-block.collapser(
+type='button'
+ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
+) {{ vm.currentArticleGroup.name || 'Все товары'}}
+
+.block-to-collapse(
+uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
+collapsed='vm.isArticleGroupsCollapsingDone=true'
+expanding='vm.isArticleGroupsCollapsingDone=false'
 )
-  a.list-group-item(
-  angular-ripple
-  ng-class='{active: vm.currentArticleGroup.id === elem.id}'
-  href
-  ng-click='vm.articleGroupClick(elem)'
-  ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+  ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
+    a.list-group-item(
+    ng-repeat='ancestor in vm.ancestors track by ancestor.id'
+    href
+    ng-click='vm.articleGroupClick(ancestor)'
+    )
+      span
+        i.glyphicon.glyphicon-menu-left
+      span {{ancestor.name}}
+
+  ul.list-group.scroll-y(
+  resize='groups'
+  style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
   )
-    span.badge(ng-if='!elem.children.length && vm.articleGroupIds[elem.id].length')
-      | {{vm.articleGroupIds[elem.id].length}}
-    i.glyphicon.glyphicon-menu-right.pull-right(ng-if='elem.children.length')
-    span {{elem.name}}
+    a.list-group-item(
+    no-angular-ripple
+    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
+    href
+    ng-click='vm.articleGroupClick(elem)'
+    ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+    )
+      span.badge(ng-if='!elem.children.length && vm.articleGroupIds[elem.id].length')
+        | {{vm.articleGroupIds[elem.id].length}}
+      i.glyphicon.glyphicon-menu-right.pull-right(ng-if='elem.children.length')
+      span {{elem.name}}
