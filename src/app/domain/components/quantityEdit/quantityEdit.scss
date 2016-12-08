@@ -12,7 +12,14 @@
 
   .boxes, .bottles {
     @extend .flex-1;
-    margin: 5px;
+  }
+
+  .boxes {
+    margin-right: 7px;
+  }
+
+  .bottles {
+    margin-left: 7px;
   }
 
   a {
