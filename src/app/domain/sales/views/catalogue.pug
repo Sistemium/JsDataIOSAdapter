@@ -5,21 +5,11 @@ section.catalogue.spaced(cg-busy='vm.cgBusy')
   ol.breadcrumb(ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'")
 
   section.row
+
     #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
+
     #scroll-articles.col-sm-8.scroll-y(
     resize='articles'
     style='height: {{articles.windowHeight - articles.offsetTop - 5}}px'
+    ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
     )
-
-      .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
-        | Нет подходящих товаров
-
-      ul.list-group.vr-parent(vs-repeat vs-size='vm.articleRowHeight(stock)' vs-scroll-parent="#scroll-articles")
-        .list-group-item.display-flex.flex-align-center(ng-repeat='stock in vm.stock track by stock.id')
-
-          .flex-1(ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'")
-
-          .display-flex.flex-align-center(
-          ng-if='vm.currentState=="saleOrder"'
-          ng-include="'app/domain/sales/views/saleOrder/saleOrderPosition.edit.html'"
-          )

@@ -2,7 +2,9 @@
 
 (function () {
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth) {
+  const SHORT_TIMEOUT = 100;
+
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG) {
 
     let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
     let {Article, Stock, ArticleGroup, PriceType, SaleOrder} = Schema.models();
@@ -35,7 +37,9 @@
 
     });
 
-    vm.setBusy(findAll());
+    vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
+
+    onStateChange($state.name, $state.params);
 
     /*
      Listeners
@@ -58,8 +62,6 @@
         saleOrderTotalsClick();
       }
     });
-
-    onStateChange($state.name, $state.params);
 
     SalesmanAuth.watchCurrent($scope, salesman => {
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
@@ -85,7 +87,10 @@
     function saleOrderTotalsClick() {
       vm.showOnlyOrdered = true;
       vm.setBusy($q.all(
-        _.map(vm.saleOrder.positions, pos => Article.loadRelations(pos.articleId, 'Stock'))
+        _.map(
+          _.filter(vm.saleOrder.positions, pos => !_.get(pos, 'article.stock')),
+          pos => Article.loadRelations(pos.articleId, 'Stock')
+        )
       ))
         .then(() => {
           filterStock();
@@ -173,8 +178,11 @@
       ])
         .then(() => {
           vm.currentPriceType = PriceType.meta.getDefault();
+          DEBUG('currentPriceType');
           filterStock();
+          DEBUG('filterStock');
           setCurrentArticleGroup(currentArticleGroupId);
+          DEBUG('setCurrentArticleGroup');
         });
     }
 
@@ -220,7 +228,11 @@
         articleGroup = _.isObject(articleGroupOrId) ? null : ArticleGroup.get(articleGroupOrId);
       }
 
+      DEBUG('setCurrentArticleGroup');
+
       let ownStock = getStockByArticlesOfGroup(articleGroup);
+
+      DEBUG('setCurrentArticleGroup', 'getStockByArticlesOfGroup');
 
       let filter = {
         articleGroupId: _.get(articleGroup, 'id') || null
@@ -229,7 +241,12 @@
       vm.currentArticleGroup = articleGroup;
 
       let groupIds = articleGroupIds(ownStock);
+
+      DEBUG('setCurrentArticleGroup', 'articleGroupIds');
+
       let children = _.filter(ArticleGroup.filter(filter), hasArticlesOrGroupsInStock(groupIds));
+
+      DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock');
 
       // TODO show only saleOrder positions and sort by deviceCts if user clicks 'show saleOrder'
       vm.stock = ownStock;
@@ -247,6 +264,8 @@
         vm.articleGroups = _.filter(ArticleGroup.filter({
           articleGroupId: articleGroup.articleGroupId
         }), hasArticlesOrGroupsInStock(groupIds));
+
+        DEBUG('setCurrentArticleGroup', '!children.length');
 
       } else {
         vm.articleGroups = null;
@@ -269,7 +288,7 @@
     function hasArticlesOrGroupsInStock(groupIds) {
       return (articleGroup) => {
         return groupIds[articleGroup.id]
-          || _.find(articleGroup.descendants(), item => groupIds[item.id])
+          || articleGroup.hasDescendants(groupIds);
       }
     }
 

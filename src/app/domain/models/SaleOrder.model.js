@@ -34,7 +34,9 @@
       },
 
       fieldTypes: {
-        date: 'date'
+        date: 'date',
+        totalCost: 'decimal',
+        totalCostDoc: 'decimal'
       },
 
       beforeCreateInstance: function (model, attrs) {

@@ -8,7 +8,8 @@
     .value('cgBusyDefaults',{
       message:'Идет загрузка',
       delay: 100,
-      minDuration: 300
+      minDuration: 300,
+      templateUrl: 'app/components/busy/busy.html'
     });
 
 })();

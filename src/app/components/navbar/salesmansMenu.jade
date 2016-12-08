@@ -1,18 +1,21 @@
-.salesman-menu(uib-dropdown ng-if='vm.isSalesState' resize='rootNavbar')
+.salesman-menu(
+uib-dropdown
+ng-if='vm.isSalesState'
+is-open='vm.isOpen'
+)
   a(
   href uib-dropdown-toggle
   ng-class="{disabled: !vm.isEnabled}"
   )
-    span(ng-if='!rootNavbar.xsWidth') {{vm.selectedSalesman ? vm.selectedSalesman.shortName : 'Выберите ТП'}}
-    span(ng-if='rootNavbar.xsWidth')  {{vm.selectedSalesman ? vm.selectedSalesman.tinyName : 'Выберите ТП'}}
+    span {{ vm.toggleLabel() }}
     span.caret
 
-  ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+  ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu sa-click-outside outside-if='vm.isOpen')
     li(ng-if='vm.selectedSalesman')
-      a(href ng-click='vm.noneClick()') Отменить выбор
+      a(href ng-click='vm.noneClick()' angular-ripple) Отменить выбор
     li.divider(ng-if='vm.selectedSalesman')
     li(
     ng-repeat='salesman in vm.salesmans track by salesman.id'
     ng-class='{active: vm.selectedSalesman.id == salesman.id}'
     )
-      a(href ng-click='vm.salesmanClick(salesman)') {{salesman.shortName}}
+      a(href ng-click='vm.salesmanClick(salesman)' angular-ripple) {{salesman.shortName}}

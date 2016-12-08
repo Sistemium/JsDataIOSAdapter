@@ -1,4 +1,5 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .territory {
   h5 > a.lead {
@@ -62,6 +63,10 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
       color: #777777;
     }
 
+    [angular-ripple] {
+      overflow: visible;
+    }
+
     button + button {
       margin-top: 4px;
     }
@@ -78,3 +83,8 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 }
 
+.catalogue-sale-order {
+  .address {
+    @extend .ellipsis;
+  }
+}

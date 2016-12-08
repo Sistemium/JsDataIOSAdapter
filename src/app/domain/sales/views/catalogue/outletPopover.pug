@@ -1,27 +1,25 @@
-div.stm-searcher.form-group.has-feedback
+.stm-searcher.form-group.has-feedback
 
-  label(for="search-input")
+  label(for="search-outlet")
     i.glyphicon.glyphicon-search
 
-  input#search-input.form-control(
+  input#search-outlet.form-control(
   type='search'
   placeholder='Поиск'
-  aria-describedby='search-input'
   ng-model='vm.search'
-  ng-model-options='{debounce: 100}'
   )
 
   span.form-control-feedback(ng-hide='!vm.search' )
-    a(ng-click='vm.clearSearchClick()' href)
+    a(ng-click='vm.clearSearchOutletClick("search-outlet")' href)
       i.glyphicon.glyphicon-remove
 
-section(
+.scroll-y(
 resize
-style='height: {{windowHeight - offsetTop - 15}}px; overflow: scroll'
+style='max-height: {{windowHeight - offsetTop - 15}}px'
 )
 
-  div(ng-repeat='outlet in vm.outlets track by outlet.id')
-    a(href ng-click='vm.setOutlet(outlet)')
-      p {{outlet.name}}
-      p.gray {{outlet.fullAddress}}
-    hr
+  .option(ng-repeat='outlet in vm.outlets | filter:vm.search track by outlet.id')
+    a(href ng-click='vm.searchOutletClick(outlet)')
+      .name {{::outlet.name}}
+      .gray
+        small {{::outlet.address}}

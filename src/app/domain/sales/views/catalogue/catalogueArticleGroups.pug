@@ -18,6 +18,7 @@ resize='groups'
 style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
 )
   a.list-group-item(
+  angular-ripple
   ng-class='{active: vm.currentArticleGroup.id === elem.id}'
   href
   ng-click='vm.articleGroupClick(elem)'

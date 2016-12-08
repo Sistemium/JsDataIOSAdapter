@@ -1,28 +1,50 @@
-.article-name-first
-  strong {{stock.article.firstName}}
-  strong {{stock.article.pieceVolume}}л
-  small.gray x {{stock.article.packageRel}}
+.alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
+  | Нет подходящих товаров
 
-  strong.pull-right
-    a(href
-    uib-popover-template="'app/domain/sales/views/saleOrder/saleOrderPosition.popover.html'"
-    popover-append-to-body
-    popover-trigger='outsideClick'
-    popover-placement='auto bottom-right'
-    ) {{ vm.orderedVolumeFull(stock) }}
+ul.list-group.vr-parent(
+vs-repeat
+vs-excess='4'
+vs-size='vm.articleRowHeight(stock)'
+vs-scroll-parent="#scroll-articles"
+)
+  .list-group-item.display-flex.flex-align-center(ng-repeat='stock in vm.stock track by stock.id')
 
+    .flex-1
+      .article-name-first
+        strong {{::stock.article.firstName}}
+        strong {{::stock.article.pieceVolume}}л
+        small.gray x {{::stock.article.packageRel}}
 
+        strong.pull-right
+          a(href
+          ng-if='vm.saleOrder'
+          uib-popover-template="'app/domain/sales/views/saleOrder/saleOrderPosition.popover.html'"
+          popover-trigger='outsideClick'
+          popover-placement='auto bottom-right'
+          ) {{ vm.orderedVolumeFull(stock) }}
 
-.article-name-second(title='{{stock.article.name}}')
-  small(ng-if='stock.article.lastName') {{stock.article.preName}}
-  // TODO: check if lastName could be null
-  small {{stock.article.lastName || stock.article.name}}
+      .article-name-second(title='{{stock.article.name}}')
+        small {{::stock.article.preName}}
+        // TODO: check if lastName could be null
+        small {{::stock.article.lastName}}
 
-.article-name-third
-  //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
-  //small {{ vm.articleRowHeight(stock) }}
-  small.gray(ng-if='stock.displayVolume') ~{{stock.displayVolume}}
-  small.red(ng-if='!stock.displayVolume') Нет в наличии
-  small {{vm.prices[stock.articleId] | number:2}} ₽
+      .article-name-third
+        //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
+        //small {{ vm.articleRowHeight(stock) }}
+        small.gray(ng-if='stock.volume') ~{{::stock.displayVolume}}
+        small.red(ng-if='!stock.volume') Нет в наличии
+        small {{::vm.prices[stock.articleId] | number:2}} ₽
 
+    .right(ng-if='vm.saleOrder')
 
+        button.btn.btn-default(
+        stm-click='kPlusButton'
+        click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
+        angular-ripple
+        ) +К
+
+        button.btn.btn-default(
+        stm-click='bPlusButton'
+        click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
+        angular-ripple
+        ) +Б
