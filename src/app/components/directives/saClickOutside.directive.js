@@ -2,6 +2,8 @@
 
 (function () {
 
+  const BIND_ON = 'touchstart';
+
   function saClickOutside($document, $parse, IOS) {
 
     return {
@@ -12,25 +14,26 @@
 
         if (!IOS.isIos()) return;
 
-        let evaluateOnClick = $parse(attrs.saClickOutside);
-        let alwaysOutside = angular.isDefined(attrs.alwaysOutside);
+        let evaluateOnClick = $parse(attrs.saClickOutside || `${attrs.outsideIf}=false`);
+        let outsideIf = attrs.outsideIf && $parse(attrs.outsideIf);
 
-        let clicker = (e) => {
-          if (alwaysOutside || el !== e.target && !el[0].contains(e.target)) {
+        function clicker (domEvent) {
+          if (outsideIf && outsideIf(scope)) {
+            _.result(domEvent, 'preventDefault');
             scope.$apply(() => evaluateOnClick(scope));
           }
-        };
+        }
 
-        $document.on('touchstart', clicker);
+        $document.on(BIND_ON, clicker);
 
-        scope.$on('$destroy', () => { $document.unbind('click', clicker); })
+        scope.$on('$destroy', () => { $document.off(BIND_ON, clicker); })
 
       }
     }
 
   }
 
-  angular.module('sistemium')
+  angular.module('ngTouch')
     .directive('saClickOutside', saClickOutside);
 
 })();

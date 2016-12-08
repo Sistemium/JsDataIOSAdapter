@@ -22,7 +22,8 @@
     "angular-moment": "1.0.0-beta.6",
     "angular-bootstrap-toggle-switch": "^0.5.6",
     "ya-map": "angular-yandex-map#^1.0.9",
-    "angular-i18n": "^1.5.3"
+    "angular-i18n": "^1.5.3",
+    "angular-ripple": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.2"

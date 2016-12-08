@@ -35,10 +35,6 @@
     padding-left: 10px;
   }
 
-  .list-group-item {
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
 
   .sorter-handle {
     margin-left: -10px;
@@ -79,6 +75,10 @@
     &:focus, &:hover, &:active {
       outline: none;
     }
+  }
+
+  .dropdown li a {
+    padding: 7px 20px;
   }
 
 }

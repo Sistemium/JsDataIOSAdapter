@@ -1,32 +1,32 @@
-span.pull-right(uib-dropdown)
+span.pull-right(uib-dropdown is-open='saleOrdersOpen')
   a(href uib-dropdown-toggle)
     | Заказ
     =' '
     span.caret
 
-  ul.dropdown-menu(uib-dropdown-menu)
+  ul.dropdown-menu(uib-dropdown-menu sa-click-outside outside-if='saleOrdersOpen')
     li
-      a(href ng-click='vm.setSaleOrderClick()') Новый Заказ
+      a(href ng-click='vm.setSaleOrderClick()' angular-ripple) Новый Заказ
     li.divider(ng-if='vm.draftSaleOrders.length')
     li(ng-repeat='draft in vm.draftSaleOrders track by draft.id' ng-class='{active: vm.saleOrderId === draft.id}')
-      a(href ng-click='vm.setSaleOrderClick(draft)')
+      a(href ng-click='vm.setSaleOrderClick(draft)' angular-ripple)
         .display-flex
           .flex-1 {{ draft.outlet.name }}
           .right {{ draft.totalCost | number:2 }} ₽
         .gray
           small {{ draft.outlet.address }}
 
-li(uib-dropdown)
+li(uib-dropdown is-open='priceTypesOpen')
   a(href uib-dropdown-toggle)
     | {{vm.currentPriceType.name || 'Выберите тип цен'}}
     =' '
     span.caret
 
-  ul.dropdown-menu(uib-dropdown-menu)
+  ul.dropdown-menu(uib-dropdown-menu sa-click-outside outside-if='priceTypesOpen')
     li(ng-repeat='priceType in vm.priceTypes track by priceType.id' ng-class='{active: vm.currentPriceType.name == priceType.name}')
-      a(href ng-click='vm.priceTypeClick(priceType)') {{priceType.name}}
+      a(href ng-click='vm.priceTypeClick(priceType)' angular-ripple) {{priceType.name}}
 
 li(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
-  a(href ng-click='vm.articleGroupClick(ancestor)') {{ ancestor.name }}
+  a(href ng-click='vm.articleGroupClick(ancestor)' angular-ripple) {{ ancestor.name }}
 
 li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}

@@ -4,7 +4,7 @@
   angular
     .module('webPage', [
       'ngAnimate',
-      'ngTouch',
+      // 'ngTouch',
       'ngSanitize',
       'ngMessages',
       'ngAria',
@@ -21,6 +21,7 @@
       'vs-repeat',
       'jsd',
       'toggle-switch',
+      'angularRipple',
       'angularMoment'
     ]);
 

@@ -52,6 +52,14 @@
           return res;
 
         },
+        hasDescendants: function (ids) {
+          let children = this.children;
+
+          if (_.find(children, item => ids[item.id])) return true;
+
+          return _.find(children, item => item.hasDescendants(ids));
+
+        },
         stockArticles: function (stockCache) {
           return _.get(stockCache[this.id], 'length');
         }

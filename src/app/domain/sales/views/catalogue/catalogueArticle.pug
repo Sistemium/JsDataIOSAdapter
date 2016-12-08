@@ -4,13 +4,13 @@
   small.gray x {{stock.article.packageRel}}
 
   // TODO: maybe should be a dropdown
-  strong.pull-right
+  strong.pull-right(ng-if='vm.saleOrder')
     a(href stm-click='orderedVolume' click-payload='stock') {{ vm.orderedVolumeFull(stock) }}
 
 .article-name-second(title='{{stock.article.name}}')
-  small(ng-if='stock.article.lastName') {{stock.article.preName}}
+  small {{stock.article.preName}}
   // TODO: check if lastName could be null
-  small {{stock.article.lastName || stock.article.name}}
+  small {{stock.article.lastName}}
 
 .article-name-third
   //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
