@@ -20,6 +20,6 @@ style='max-height: {{windowHeight - offsetTop - 15}}px'
 
   .option(ng-repeat='outlet in vm.outlets | filter:vm.search track by outlet.id')
     a(href ng-click='vm.searchOutletClick(outlet)')
-      .name {{outlet.name}}
+      .name {{::outlet.name}}
       .gray
-        small {{outlet.address}}
+        small {{::outlet.address}}
