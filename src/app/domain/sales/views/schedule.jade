@@ -11,7 +11,7 @@ ng-style='{height: (windowHeight - offsetTop) + "px"}'
           h4(ng-class='vm.colorDate(day)') {{ vm.displayDate(day) }}
           .flex-1
           .content-float-right
-            button.btn.btn-success(ng-click='vm.createScheduledEvent(day)')
+            button.btn.btn-default(ng-click='vm.createScheduledEvent(day)')
               i.glyphicon.glyphicon-plus
 
     tbody
