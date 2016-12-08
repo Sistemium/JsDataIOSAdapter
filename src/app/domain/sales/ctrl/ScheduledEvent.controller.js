@@ -112,7 +112,14 @@
     }
 
     function cancelChanges() {
-      console.log('cancelChanges');
+
+      cleanup();
+      controllerInit(vm.toParams);
+
+    }
+
+    function cleanup() {
+      _.isObject(vm.scheduledEvent) && ScheduledEvent.eject(vm.scheduledEvent);
     }
 
     function closeView() {
@@ -122,12 +129,7 @@
         ConfirmModal.show({
           text: `Закрыть карточку события?`
         })
-          .then(function () {
-
-            console.log('have to destroy created object');
-            quit();
-
-          });
+          .then(() => quit());
 
       } else {
         quit();
@@ -136,7 +138,10 @@
     }
 
     function quit() {
+
+      vm.creatingMode && cleanup();
       $state.go(vm.fromState);
+
     }
 
   }
