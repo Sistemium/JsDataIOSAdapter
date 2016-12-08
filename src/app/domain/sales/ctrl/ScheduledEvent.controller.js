@@ -80,10 +80,6 @@
 
             console.log(scheduledEvent);
             vm.scheduledEvent = scheduledEvent;
-            vm.dateStart = scheduledEvent.dateStart;
-            vm.outlet = scheduledEvent.outlet;
-            vm.purpose = scheduledEvent.purpose;
-            vm.schedule = scheduledEvent.schedule;
 
           });
 
@@ -97,7 +93,7 @@
     }
 
     function searchOutletClick(outlet) {
-      vm.outlet = outlet;
+      vm.scheduledEvent.outlet = outlet;
       vm.isOpenOutletPopover = false;
     }
 
