@@ -30,9 +30,17 @@ section
   a(href ng-if='!vm.scheduledEvent.schedulePurpose') Описание
 
 hr
-section
-  span(ng-if='vm.scheduledEvent.schedule') {{ vm.schedule.name }}
-  a(href ng-if='!vm.scheduledEvent.schedule') Периодичность
+section.display-flex
+  span Периодичность
+  .flex-1.content-float-right
+    toggle-switch(
+    ng-model="vm.isPeriodicEvent"
+    ng-change='vm.changePeriodic()'
+    on-label="Да"
+    off-label="Нет"
+    )
+section(ng-if='vm.isPeriodicEvent')
+  span TEST TEST TEST
 
 hr
 .display-flex
