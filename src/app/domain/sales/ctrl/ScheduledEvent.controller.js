@@ -2,16 +2,19 @@
 
 (function () {
 
-  function ScheduledEventController(Schema, saControllerHelper, $scope, SalesmanAuth, $state, ConfirmModal) {
+  function ScheduledEventController(Schema, saControllerHelper, $scope, SalesmanAuth, $state, ConfirmModal, saEtc) {
 
     const {Schedule} = Schema.models();
     const {SchedulePurpose} = Schema.models();
     const {ScheduledEvent} = Schema.models();
+    const {Outlet} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
+      searchOutletClick,
+      clearSearchOutletClick,
       saveScheduledEvent,
       eventHaveChanges,
       cancelChanges,
@@ -24,7 +27,15 @@
      */
 
     SalesmanAuth.watchCurrent($scope, salesman => {
+
       vm.selectedSalesmanId = _.get(salesman, 'id');
+
+      Outlet.findAll(SalesmanAuth.makeFilter());
+      let filter = {
+        orderBy: ['name']
+      };
+      vm.rebindAll(Outlet, filter, 'vm.outlets');
+
     });
 
     $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
@@ -65,6 +76,16 @@
 
       }
 
+    }
+
+    function clearSearchOutletClick(id) {
+      vm.search = '';
+      saEtc.focusElementById(id);
+    }
+
+    function searchOutletClick(outlet) {
+      vm.outlet = outlet;
+      vm.isOpenOutletPopover = false;
     }
 
     function saveScheduledEvent() {
