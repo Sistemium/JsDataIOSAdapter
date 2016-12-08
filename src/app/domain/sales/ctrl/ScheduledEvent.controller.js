@@ -104,9 +104,9 @@
     function eventHaveChanges() {
 
       if (vm.creatingMode) {
-        return !_.isUndefined(vm.scheduledEvent);
+        return !_.isUndefined(vm.scheduledEvent.outlet);
       } else {
-        return (vm.outlet !== vm.scheduledEvent.outlet || vm.purpose !== vm.scheduledEvent.purpose || vm.schedule !== vm.scheduledEvent.schedule);
+        return true;
       }
 
     }
