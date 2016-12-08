@@ -2,7 +2,7 @@
 
   .flex-1
 
-  h2 {{ vm.dateStart | amUtc | amLocal | amDateFormat:'DD/MM/YYYY' }}
+  h2 {{ vm.scheduledEvent.dateStart | amUtc | amLocal | amDateFormat:'DD/MM/YYYY' }}
 
   .flex-1.content-float-right
     a(href ng-click='vm.closeView()')
@@ -18,21 +18,21 @@ section
   popover-is-open='vm.isOpenOutletPopover'
   )
     .name
-      span {{ vm.outlet.name }}
-      span(ng-if='!vm.outlet.id') Выберите точку
+      span {{ vm.scheduledEvent.outlet.name }}
+      span(ng-if='!vm.scheduledEvent.outlet.id') Выберите точку
       span.caret
     .address
-      small {{vm.outlet.address}}
+      small {{vm.scheduledEvent.outlet.address}}
 
 hr
 section
-  span(ng-if='vm.schedulePurpose') {{ vm.schedulePurpose.name }}
-  a(href ng-if='!vm.schedulePurpose') Описание
+  span(ng-if='vm.scheduledEvent.schedulePurpose') {{ vm.schedulePurpose.name }}
+  a(href ng-if='!vm.scheduledEvent.schedulePurpose') Описание
 
 hr
 section
-  span(ng-if='vm.schedule') {{ vm.schedule.name }}
-  a(href ng-if='!vm.schedule') Периодичность
+  span(ng-if='vm.scheduledEvent.schedule') {{ vm.schedule.name }}
+  a(href ng-if='!vm.scheduledEvent.schedule') Периодичность
 
 hr
 .display-flex
