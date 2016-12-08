@@ -38,15 +38,14 @@ hr
 .display-flex
   .flex-1
   .content-float-right
-    button.btn.btn-success.ml-10(
-    ng-if='vm.eventHaveChanges()'
-    ng-click='vm.saveScheduledEvent()'
-    ) Сохранить
-    button.btn.btn-warning.ml-10(
-    ng-if='vm.eventHaveChanges()'
-    ng-click='vm.cancelChanges()'
-    ) Отменить
-    button.btn.btn-success.ml-10(
-    ng-if='!vm.eventHaveChanges()'
-    ng-click='vm.closeView()'
-    ) Закрыть
+    section(ng-if='vm.eventHaveChanges()')
+      button.btn.btn-warning.ml-10(
+      ng-click='vm.cancelChanges()'
+      ) Отменить
+      button.btn.btn-success.ml-10(
+      ng-click='vm.saveScheduledEvent()'
+      ) Сохранить
+  section(ng-if='!vm.eventHaveChanges()')
+      button.btn.btn-success.ml-10(
+      ng-click='vm.closeView()'
+      ) Закрыть
