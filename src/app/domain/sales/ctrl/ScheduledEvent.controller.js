@@ -58,7 +58,7 @@
 
       if (vm.creatingMode) {
 
-        vm.date = params.date;
+        vm.dateStart = params.date;
 
       } else {
 
@@ -67,7 +67,7 @@
 
             console.log(scheduledEvent);
             vm.scheduledEvent = scheduledEvent;
-            vm.date = scheduledEvent.date;
+            vm.dateStart = scheduledEvent.dateStart;
             vm.outlet = scheduledEvent.outlet;
             vm.purpose = scheduledEvent.purpose;
             vm.schedule = scheduledEvent.schedule;

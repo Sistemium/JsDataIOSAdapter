@@ -2,7 +2,7 @@
 
   .flex-1
 
-  h2 {{ vm.date | amUtc | amLocal | amDateFormat:'DD/MM/YYYY' }}
+  h2 {{ vm.dateStart | amUtc | amLocal | amDateFormat:'DD/MM/YYYY' }}
 
   .flex-1.content-float-right
     a(href ng-click='vm.closeView()')
