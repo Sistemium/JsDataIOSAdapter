@@ -6,8 +6,17 @@
     width: 60px;
   }
 
-  > * {
+  .inputs {
+    @extend .display-flex;
+  }
+
+  .boxes, .bottles {
+    @extend .flex-1;
     margin: 5px;
+  }
+
+  a {
+    display: block;
   }
 
 }
