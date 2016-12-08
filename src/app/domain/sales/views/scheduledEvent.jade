@@ -10,18 +10,29 @@
 
 hr
 section
-  span(ng-if='vm.outlet') {{ vm.outlet.name }}, {{ vm.outlet.address }}
-  a(href ng-if='!vm.outlet') Добавить точку
+  a(
+  href
+  uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
+  popover-trigger='outsideClick'
+  popover-placement='auto bottom-left'
+  popover-is-open='vm.isOpenOutletPopover'
+  )
+    .name
+      span {{ vm.outlet.name }}
+      span(ng-if='!vm.outlet.id') Выберите точку
+      span.caret
+    .address
+      small {{vm.outlet.address}}
 
 hr
 section
   span(ng-if='vm.schedulePurpose') {{ vm.schedulePurpose.name }}
-  a(href ng-if='!vm.schedulePurpose') Добавить описание
+  a(href ng-if='!vm.schedulePurpose') Описание
 
 hr
 section
   span(ng-if='vm.schedule') {{ vm.schedule.name }}
-  a(href ng-if='!vm.schedule') Добавить периодичность
+  a(href ng-if='!vm.schedule') Периодичность
 
 hr
 .display-flex
