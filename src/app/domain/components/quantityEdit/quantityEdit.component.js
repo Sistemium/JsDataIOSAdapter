@@ -6,19 +6,21 @@
 
     bindings: {
       stock: '=',
-      saleOrder: '='
+      saleOrder: '=',
+      price: '='
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEdit.html',
 
-    controller: function ($scope, IOS) {
+    controller: function ($scope, IOS, Schema) {
+
+      const {SaleOrderPosition} = Schema.models();
 
       let vm = this;
 
       let positions = _.get(vm.saleOrder, 'positions');
       let position = _.find(positions, {articleId: vm.stock.articleId});
-
-      let article = position.article;
+      let article = vm.stock.article;
 
       _.assign(vm, {
 
@@ -37,6 +39,17 @@
 
       setQty();
 
+      if (!position) {
+        position = SaleOrderPosition.createInstance({
+          saleOrderId: vm.saleOrder.id,
+          articleId: article.id,
+          price: vm.price,
+          priceDoc: vm.price,
+          priceOrigin: vm.price,
+          volume: 0
+        });
+      }
+
       /*
        Listeners
        */
@@ -47,15 +60,22 @@
        Functions
        */
 
-      function onQtyChange(newValues) {
-        position.volume = (newValues[0] * position.article.packageRel || 0) + (newValues[1] || 0);
-        position.updateCost();
-        vm.saleOrder.updateTotalCost();
+      function onQtyChange(newValues, oldValues) {
+        if (newValues[1] != oldValues[1] || newValues[0] != oldValues[0]) {
+          let volume  = parseInt(newValues[0] * position.article.packageRel || 0)
+            + parseInt(newValues[1] || 0);
+          position.volume = _.max([0, volume]);
+          injectPosition();
+          position.updateCost();
+          vm.saleOrder.updateTotalCost();
+        }
       }
 
       function changeVolume(addVolume) {
         position.volume += addVolume;
+        position.volume = _.max([0, position.volume]);
         setQty();
+        injectPosition();
       }
 
       function setQty() {
@@ -64,6 +84,12 @@
           boxes: boxPcs.box,
           bottles: boxPcs.pcs
         });
+      }
+
+      function injectPosition() {
+        if (!position.id) {
+          SaleOrderPosition.inject(position);
+        }
       }
 
     },
