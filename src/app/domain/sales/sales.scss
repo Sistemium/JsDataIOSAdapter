@@ -128,8 +128,16 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 .catalogue-sale-order {
 
+  .outlet {
+    min-width: 0;
+  }
+
   .address {
     @extend .ellipsis;
+  }
+
+  .totals {
+    min-width: 7em;
   }
 
   @media (max-width: $screen-xs) {
