@@ -46,24 +46,34 @@ section.mt(ng-if='vm.isPeriodicEvent')
     select='vm.weekly = true'
     deselect='vm.weekly = false'
     )
-      .mt.ml-15 Каждую среду
+      section.mt.ml-15
+        span {{ vm.weekDayEveryWord }}
+        button.btn.btn-primary.ml-10(
+        href
+        uib-popover-template="'app/domain/sales/views/scheduleWeekDaysPopover.html'"
+        popover-trigger='outsideClick'
+        popover-placement='auto right'
+        popover-is-open='vm.isOpenWeekDayPopover'
+        )
+          .name
+            span {{ vm.weekDay }}
     uib-tab(
     heading='Ежемесячно'
     select='vm.monthly = true'
     deselect='vm.monthly = false'
     )
       section.mt.ml-15
-        span Каждый месяц,
-        button.btn.btn-primary(
+        span Каждое
+        button.btn.btn-primary.ml-10(
         href
         uib-popover-template="'app/domain/sales/views/scheduleMonthDaysPopover.html'"
         popover-trigger='outsideClick'
-        popover-placement='auto right'
+        popover-placement='auto left'
         popover-is-open='vm.isOpenMonthDayPopover'
         )
           .name
             span {{ vm.monthDay }}
-        span.ml-10 числа
+        span.ml-10 число
 
 hr
 .display-flex

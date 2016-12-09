@@ -14,8 +14,10 @@
     vm.use({
 
       monthDays: [...Array(32).keys()].slice(1),
-      weekDays: [...Array(7).keys()],
+      //weekDays: [...Array(7).keys()],
+      weekDays: ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье'],
       setMonthDay,
+      setWeekDay,
       searchOutletClick,
       clearSearchOutletClick,
       saveScheduledEvent,
@@ -97,7 +99,23 @@
     function postInit() {
 
       vm.monthDay = moment(vm.scheduledEvent.dateStart).format('D');
-      vm.weekDay = moment(vm.scheduledEvent.dateStart).format('dddd');
+      processWeekDay(moment(vm.scheduledEvent.dateStart).format('e'));
+
+    }
+
+    function processWeekDay(wd) {
+
+      if (_.includes('245', wd)) {
+
+        vm.weekDayEveryWord = 'Каждую';
+        vm.weekDay = vm.weekDays[wd].replace(/.$/,"у");
+
+      } else {
+
+        vm.weekDayEveryWord = (wd == '6') ? 'Каждое' : 'Каждый';
+        vm.weekDay = vm.weekDays[wd];
+
+      }
 
     }
 
@@ -115,6 +133,13 @@
 
       vm.monthDay = md;
       vm.isOpenMonthDayPopover = false;
+
+    }
+
+    function setWeekDay(wd) {
+
+      processWeekDay(wd);
+      vm.isOpenWeekDayPopover = false;
 
     }
 
