@@ -5,6 +5,6 @@ style='max-height: {{windowHeight - offsetTop - 15}}px'
   .option(ng-repeat='md in vm.monthDays')
     a(
     href
-    ng-click='vm.monthDay = md'
+    ng-click='vm.setMonthDay(md)'
     )
       .name {{ md }}

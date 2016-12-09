@@ -15,6 +15,7 @@
 
       monthDays: [...Array(32).keys()].slice(1),
       weekDays: [...Array(7).keys()],
+      setMonthDay,
       searchOutletClick,
       clearSearchOutletClick,
       saveScheduledEvent,
@@ -108,6 +109,13 @@
     function searchOutletClick(outlet) {
       vm.scheduledEvent.outlet = outlet;
       vm.isOpenOutletPopover = false;
+    }
+
+    function setMonthDay(md) {
+
+      vm.monthDay = md;
+      vm.isOpenMonthDayPopover = false;
+
     }
 
     function saveScheduledEvent() {
