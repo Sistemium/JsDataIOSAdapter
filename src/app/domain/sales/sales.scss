@@ -160,3 +160,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   }
 
 }
+
+.caret {
+  @extend .turnable;
+}

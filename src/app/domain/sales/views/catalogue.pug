@@ -12,6 +12,5 @@ section.catalogue.spaced(cg-busy='vm.cgBusy')
     resize='articles'
     style='height: {{articles.windowHeight - articles.offsetTop - 5}}px'
     ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
-    ng-show='vm.isWideScreen || vm.isArticleGroupsCollapsingDone'
+    ng-show='vm.isWideScreen || !vm.isArticleGroupsExpanded'
     )
-    //ng-class='{"move-away-y": vm.isArticleGroupsExpanded}'

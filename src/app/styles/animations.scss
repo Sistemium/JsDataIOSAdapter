@@ -1,9 +1,28 @@
+$short-duration: 0.5s;
+
 .collapsing {
 
   -webkit-transition-timing-function: ease-in !important;
   transition-timing-function: ease-in !important;
 
-  -webkit-transition-duration: 0.5s;
-  transition-duration: 0.5s;
+  -webkit-transition-duration: $short-duration;
+  transition-duration: $short-duration;
 
+}
+
+.turnable {
+
+  -webkit-transition: $short-duration linear;
+  transition: $short-duration linear;
+
+  &.turn-90-counter-clock {
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+  }
+
+}
+
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  transition: all linear $short-duration;
 }

@@ -19,12 +19,11 @@ type='button'
 ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
 )
   span {{ vm.currentArticleGroup.name || 'Все товары'}}
-  span.caret
+  span.caret(ng-class='{"turn-90-counter-clock": vm.isArticleGroupsExpanded}')
 
 .block-to-collapse.scroll-y(
 uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
 collapsed='vm.isArticleGroupsCollapsingDone=true'
-expanding='vm.isArticleGroupsCollapsingDone=false'
 resize='groups'
 style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
 )
