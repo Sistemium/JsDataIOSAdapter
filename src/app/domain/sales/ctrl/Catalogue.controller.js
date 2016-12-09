@@ -269,8 +269,6 @@
 
       } else if (articleGroup && articleGroup.articleGroup) {
 
-        vm.isArticleGroupsExpanded = false;
-
         ownStock = getStockByArticlesOfGroup(articleGroup.articleGroup);
         groupIds = articleGroupIds(ownStock);
 

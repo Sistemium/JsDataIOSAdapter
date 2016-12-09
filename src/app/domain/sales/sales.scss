@@ -54,11 +54,38 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
     }
   }
 
+  .block-to-collapse {
+
+    position: absolute;
+    z-index: 1000;
+
+    background: white;
+
+    margin-right: 15px;
+    margin-left: 15px;
+
+    right: 0;
+    left: 0;
+  }
+
+}
+
+.iOS {
+  #article-groups {
+    .block-to-collapse {
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+  }
 }
 
 #scroll-articles {
 
   max-height: 100%;
+
+  &.ng-hide:not(.ng-hide-animate) {
+    display: block !important;
+  }
 
   .right {
 
