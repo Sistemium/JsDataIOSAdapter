@@ -52,17 +52,18 @@ section.mt(ng-if='vm.isPeriodicEvent')
     select='vm.monthly = true'
     deselect='vm.monthly = false'
     )
-      span Каждый месяц,
-      a(
-      href
-      uib-popover-template="'app/domain/sales/views/scheduleMonthDaysPopover.html'"
-      popover-trigger='outsideClick'
-      popover-placement='auto bottom-left'
-      popover-is-open='vm.isOpenMonthDayPopover'
-      )
-        .name
-          span {{ vm.monthDay }}
-      span числа
+      section.mt.ml-15
+        span Каждый месяц,
+        button.btn.btn-primary(
+        href
+        uib-popover-template="'app/domain/sales/views/scheduleMonthDaysPopover.html'"
+        popover-trigger='outsideClick'
+        popover-placement='auto right'
+        popover-is-open='vm.isOpenMonthDayPopover'
+        )
+          .name
+            span {{ vm.monthDay }}
+        span.ml-10 числа
 
 hr
 .display-flex
