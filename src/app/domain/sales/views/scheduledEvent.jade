@@ -39,8 +39,22 @@ section.display-flex
     on-label="Да"
     off-label="Нет"
     )
-section(ng-if='vm.isPeriodicEvent')
-  span TEST TEST TEST
+section.mt(ng-if='vm.isPeriodicEvent')
+  uib-tabset
+    uib-tab(
+    heading='Еженедельно'
+    select='vm.weekly = true'
+    deselect='vm.weekly = false'
+    )
+      .mt.ml-15 Каждую среду
+    uib-tab(
+    heading='Ежемесячно'
+    select='vm.monthly = true'
+    deselect='vm.monthly = false'
+    )
+      .mt.ml-15 Каждое
+      select(class="form-control" ng-model="vm.monthlyDay" ng-options="day in [1,2,3,4,5,6,7,8,9,10]")
+      span число
 
 hr
 .display-flex
