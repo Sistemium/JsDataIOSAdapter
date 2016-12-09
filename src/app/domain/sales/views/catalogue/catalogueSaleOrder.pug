@@ -10,7 +10,7 @@
       popover-is-open='vm.isOpenOutletPopover'
       )
         .name
-          span {{ vm.saleOrder.outlet.name }}
+          span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
           span(ng-if='!vm.saleOrder.outlet.id') Выберите клиента
           span.caret
         .address
