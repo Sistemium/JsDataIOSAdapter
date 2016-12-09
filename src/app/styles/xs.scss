@@ -46,6 +46,11 @@ $margin-bottom-xs-minus: 7px;
     padding: $margin-bottom-xs;
   }
 
+  .breadcrumb {
+    padding-left: $margin-bottom-xs;
+    padding-right: $margin-bottom-xs;
+  }
+
   .list-group-item {
     padding: $margin-bottom-xs-minus $margin-bottom-xs;
   }
