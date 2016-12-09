@@ -88,6 +88,10 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
     @extend a.disabled;
   }
 
+  &.animate-show.ng-hide-remove {
+    transition: all ease-in 0.5s;
+  }
+
   .right {
 
     margin-left: 1em;

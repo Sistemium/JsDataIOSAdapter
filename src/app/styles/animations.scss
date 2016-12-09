@@ -23,6 +23,7 @@ $short-duration: 0.5s;
 }
 
 
-.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+.animate-show.ng-hide-add,
+.animate-show.ng-hide-remove {
   transition: all linear $short-duration;
 }
