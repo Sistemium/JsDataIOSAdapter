@@ -1,7 +1,7 @@
 .alert.alert-default.catalogue-sale-order
-  .row.display-flex
+  .display-flex
 
-    h4.col-xs-7
+    h4.outlet
       a(
       href
       uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
@@ -16,13 +16,14 @@
         .address
           small {{vm.saleOrder.outlet.address}}
 
-    .col-xs-5.text-right(ng-if='vm.saleOrder.positions.length')
+    .totals.text-right.flex-1(ng-if='vm.saleOrder.positions.length')
       a(href stm-click='saleOrderTotals')
 
         strong {{ vm.saleOrder.positions.length | number:0 }}
         span {{ vm.saleOrder.positionsCountRu() }}
 
-        span на сумму
+        = ' '
+        span.hidden-xs на сумму
         strong {{ vm.saleOrder.totalCost | number:2 }}
         span ₽
 

@@ -122,9 +122,25 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 }
 
 .catalogue-sale-order {
+
   .address {
     @extend .ellipsis;
   }
+
+  @media (max-width: $screen-xs) {
+
+    .display-flex,
+    .display-flex > * {
+      display: block;
+    }
+
+    .totals {
+      margin-top: $margin-bottom-xs;
+    }
+
+  }
+
+
 }
 
 .catalogue {
