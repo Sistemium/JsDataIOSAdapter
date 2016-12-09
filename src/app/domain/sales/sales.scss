@@ -14,6 +14,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
 }
 
 navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
@@ -35,19 +36,56 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 #article-groups {
 
-  ul {
-    margin-bottom: 0;
-    @media (max-width: $screen-xs-max) {
-      max-height: 100px !important;
-      margin-bottom: $margin-bottom-xs;
+  margin-bottom: 0;
+
+  .collapser {
+    @media (min-width: $screen-sm-min) {
+      display: none;
+    }
+    margin-bottom: $margin-bottom-xs;
+    background: none !important;
+    border-color: #ccc !important;
+  }
+
+  .xs-ancestors {
+    margin-bottom: $margin-bottom-xs;
+    @media (min-width: $screen-sm-min) {
+      display: none;
     }
   }
 
+  .block-to-collapse {
+
+    position: absolute;
+    z-index: 1000;
+
+    background: white;
+
+    margin-right: 15px;
+    margin-left: 15px;
+
+    right: 0;
+    left: 0;
+  }
+
+}
+
+.iOS {
+  #article-groups {
+    .block-to-collapse {
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+  }
 }
 
 #scroll-articles {
 
   max-height: 100%;
+
+  &.ng-hide:not(.ng-hide-animate) {
+    display: block !important;
+  }
 
   .right {
 
@@ -87,4 +125,22 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   .address {
     @extend .ellipsis;
   }
+}
+
+.catalogue {
+
+  .breadcrumb {
+    > li.ancestor, > li.active {
+      @media (max-width: $screen-xs-max) {
+        display: none;
+      }
+    }
+  }
+
+  .popover {
+    @media (min-width: $screen-sm-min) {
+      max-width: 400px;
+    }
+  }
+
 }

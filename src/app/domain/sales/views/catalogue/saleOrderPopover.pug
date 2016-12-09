@@ -1,0 +1,19 @@
+.scroll-y(
+resize
+style='max-height: {{windowHeight - offsetTop - 15}}px'
+)
+  .option
+    a(href ng-click='vm.setSaleOrderClick()' angular-ripple) Новый Заказ
+  .divider(ng-if='vm.draftSaleOrders.length')
+  .option(ng-repeat='draft in vm.draftSaleOrders track by draft.id' ng-class='{active: vm.saleOrderId === draft.id}')
+    a(
+    href
+    ng-click='vm.isSaleOrderPopoverOpen=false'
+    stm-click='setSaleOrder' click-payload='draft'
+    angular-ripple
+    )
+      .display-flex
+        .flex-1 {{ draft.outlet.name }}
+        .right {{ draft.totalCost | number:2 }} ₽
+      .gray
+        small {{ draft.outlet.address }}

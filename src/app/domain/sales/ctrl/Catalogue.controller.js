@@ -23,6 +23,7 @@
       search: $state.params.q || '',
       saleOrderId: $state.params.saleOrderId,
       isOpenOutletPopover: false,
+      isWideScreen: isWideScreen(),
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -75,6 +76,12 @@
       (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
     );
 
+    $scope.$watch(
+      isWideScreen,
+      newValue => vm.isWideScreen = newValue
+    );
+
+
     /*
      Handlers
      */
@@ -126,6 +133,10 @@
     /*
      Functions
      */
+
+    function isWideScreen() {
+      return !saMedia.xsWidth && !saMedia.xxsWidth;
+    }
 
     function articleRowHeight(stock) {
 

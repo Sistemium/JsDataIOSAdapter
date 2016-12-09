@@ -6,8 +6,24 @@
     width: 60px;
   }
 
-  > * {
-    margin: 5px;
+  .inputs {
+    @extend .display-flex;
+  }
+
+  .boxes, .bottles {
+    @extend .flex-1;
+  }
+
+  .boxes {
+    margin-right: 7px;
+  }
+
+  .bottles {
+    margin-left: 7px;
+  }
+
+  a {
+    display: block;
   }
 
 }

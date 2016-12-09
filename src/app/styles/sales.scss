@@ -40,12 +40,22 @@
   min-height: 35px;
 }
 
-//li.active {
-//  .gray {
-//    color: white;
-//  }
-//}
+li.active {
+  .gray {
+    color: white;
+  }
+}
 
 .active-order {
   background-color: $active-order
+}
+
+.sale-order-info {
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  #comment-input {
+    margin-bottom: 5px;
+  }
 }
