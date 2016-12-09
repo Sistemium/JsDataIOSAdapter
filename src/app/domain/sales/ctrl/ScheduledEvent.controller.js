@@ -13,6 +13,8 @@
 
     vm.use({
 
+      monthDays: [...Array(32).keys()].slice(1),
+      weekDays: [...Array(7).keys()],
       searchOutletClick,
       clearSearchOutletClick,
       saveScheduledEvent,
@@ -73,6 +75,8 @@
           dateStart: params.date
         });
 
+        postInit();
+
       } else {
 
         vm.setBusy(ScheduledEvent.find(scheduledEventId, {bypassCache: true}), 'Загрузка события')
@@ -81,9 +85,18 @@
             console.log(scheduledEvent);
             vm.scheduledEvent = scheduledEvent;
 
+            postInit();
+
           });
 
       }
+
+    }
+
+    function postInit() {
+
+      vm.monthDay = moment(vm.scheduledEvent.dateStart).format('D');
+      vm.weekDay = moment(vm.scheduledEvent.dateStart).format('dddd');
 
     }
 

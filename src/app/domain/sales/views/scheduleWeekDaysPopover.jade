@@ -1,0 +1,9 @@
+.scroll-y(
+resize
+style='max-height: {{windowHeight - offsetTop - 15}}px'
+)
+  .option(ng-repeat='wd in vm.weekDays')
+    a(href ng-click='vm.selectWeekDay(wd)')
+      .name {{ wd }}
+      .gray
+        small 666

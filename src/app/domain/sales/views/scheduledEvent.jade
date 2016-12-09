@@ -52,9 +52,17 @@ section.mt(ng-if='vm.isPeriodicEvent')
     select='vm.monthly = true'
     deselect='vm.monthly = false'
     )
-      .mt.ml-15 Каждое
-      select(class="form-control" ng-model="vm.monthlyDay" ng-options="day in [1,2,3,4,5,6,7,8,9,10]")
-      span число
+      span Каждый месяц,
+      a(
+      href
+      uib-popover-template="'app/domain/sales/views/scheduleMonthDaysPopover.html'"
+      popover-trigger='outsideClick'
+      popover-placement='auto bottom-left'
+      popover-is-open='vm.isOpenMonthDayPopover'
+      )
+        .name
+          span {{ vm.monthDay }}
+      span числа
 
 hr
 .display-flex
