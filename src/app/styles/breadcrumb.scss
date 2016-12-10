@@ -25,9 +25,14 @@ $breadcrumb-padding: 8px;
 }
 
 .breadcrumb {
+
+  min-height: 35px;
+
   padding-top: $breadcrumb-padding;
   padding-bottom: $breadcrumb-padding;
+
   > * {
     vertical-align: text-top;
   }
+
 }
