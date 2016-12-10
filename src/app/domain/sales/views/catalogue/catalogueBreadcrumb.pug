@@ -1,13 +1,6 @@
-span.pull-right(uib-dropdown is-open='saleOrdersOpen')
-  a(
-  href
-  uib-popover-template="'app/domain/sales/views/catalogue/saleOrderPopover.html'"
-  popover-trigger='outsideClick'
-  popover-placement='auto bottom-right'
-  popover-is-open='vm.isSaleOrderPopoverOpen'
-  )
+span.pull-right(ng-if='vm.currentState!=="saleOrder"')
+  sale-order-popover(items='vm.draftSaleOrders')
     span Заказ
-    span.caret
 
 li(uib-dropdown is-open='priceTypesOpen')
   a(href uib-dropdown-toggle)

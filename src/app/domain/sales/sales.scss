@@ -128,6 +128,8 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 .catalogue-sale-order {
 
+  @extend .display-flex;
+
   .outlet {
     min-width: 0;
   }
@@ -142,8 +144,9 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
   @media (max-width: $screen-xs) {
 
-    .display-flex,
-    .display-flex > * {
+    display: block;
+
+    > * {
       display: block;
     }
 
@@ -177,4 +180,21 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 .caret {
   @extend .turnable;
+}
+
+.sale-order-popover {
+  .new-item {
+
+    padding-bottom: 12px;
+    text-align: right;
+
+    a > span {
+      float: right;
+      margin-top: 2px;
+    }
+
+    i {
+      font-size: 19px;
+    }
+  }
 }
