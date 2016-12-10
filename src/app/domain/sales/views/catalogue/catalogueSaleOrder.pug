@@ -26,20 +26,3 @@
         strong {{ vm.saleOrder.totalCost | number:2 }}
         span ₽
       span(ng-if='!vm.saleOrder.positions.length') В заказе нет позиций
-
-
-  //hr(style='border-color: #e0e0e0')
-
-  //.row
-    .col-md-6.col-sm-6.col-xs-12.col-lg-6
-      input#comment-input.form-control(
-      type='text'
-      ng-if='vm.newOrder'
-      placeholder='Комментарий'
-      aria-describedby='comment-input'
-      ng-model='vm.saleOrder.commentText'
-      ng-model-options='{debounce: 100}'
-      )
-    .col-md-6.col-sm-6.col-xs-12.col-lg-6.text-right
-      button.btn.btn-success(type='button' ng-click='vm.saveOrder()') Сохранить
-      button.btn.btn-danger(type='button' ng-click='vm.deleteOrder()') Удалить
