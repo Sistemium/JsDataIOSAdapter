@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema) {
 
-    Schema.register({
+    let model = Schema.register({
 
       name: 'ArticleGroup',
 
@@ -27,10 +27,10 @@
         }
       },
 
-      meta: {
-      },
+      meta: {},
 
       methods: {
+
         ancestors: function () {
           let res = [];
 
@@ -42,27 +42,16 @@
           return res;
 
         },
+
         descendants: function () {
-          let res = this.children;
-
-          _.each(res, item => {
-            Array.prototype.push.apply(res, item.descendants());
-          });
-
-          return res;
-
+          let id = this.id;
+          return _.filter(model.getAll(), item => _.map(item.ancestors(), 'id').indexOf(id) > -1);
         },
+
         hasDescendants: function (ids) {
-          let children = this.children;
-
-          if (_.find(children, item => ids[item.id])) return true;
-
-          return _.find(children, item => item.hasDescendants(ids));
-
-        },
-        stockArticles: function (stockCache) {
-          return _.get(stockCache[this.id], 'length');
+          return _.find(this.descendants(), item => ids[item.id]);
         }
+
       }
 
     });
