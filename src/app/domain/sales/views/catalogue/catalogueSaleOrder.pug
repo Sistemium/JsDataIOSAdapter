@@ -16,7 +16,10 @@
         small {{vm.saleOrder.outlet.address}}
 
   .totals.text-right.flex-1
-    sale-order-popover(items='$parent.vm.draftSaleOrders')
+    sale-order-popover(
+    items='$parent.vm.draftSaleOrders'
+    active-id='vm.saleOrder.id'
+    )
       span.spaced(ng-if='vm.saleOrder.positions.length')
         strong {{ vm.saleOrder.positions.length | number:0 }}
         span {{ vm.saleOrder.positionsCountRu() }}

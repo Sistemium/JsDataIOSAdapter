@@ -6,7 +6,8 @@
     .component('saleOrderPopover', {
 
       bindings: {
-        items: '='
+        items: '=',
+        activeId: '=?'
       },
 
       transclude: true,

@@ -14,7 +14,7 @@ style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
 
   .option(
   ng-repeat='draft in vm.items track by draft.id'
-  ng-class='{active: vm.saleOrderId === draft.id}'
+  ng-class='{active: vm.activeId === draft.id}'
   )
     a(
     href
