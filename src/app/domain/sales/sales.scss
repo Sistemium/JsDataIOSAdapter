@@ -210,3 +210,10 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   }
 
 }
+
+.sale-orders {
+  .scroll-y {
+    // TODO: find out why form in saleOrderDetails.pug doesn't fit width
+    overflow-x: hidden;
+  }
+}
