@@ -101,14 +101,18 @@
       vm.monthDay = moment(vm.scheduledEvent.dateStart).format('D');
       processWeekDay(moment(vm.scheduledEvent.dateStart).format('e'));
 
+      vm.outlet = vm.scheduledEvent.outlet;
+
     }
 
     function processWeekDay(wd) {
 
+      vm.wdNumber = wd;
+
       if (_.includes('245', wd)) {
 
         vm.weekDayEveryWord = 'Каждую';
-        vm.weekDay = vm.weekDays[wd].replace(/.$/,"у");
+        vm.weekDay = vm.weekDays[wd].replace(/.$/, "у");
 
       } else {
 
@@ -125,7 +129,7 @@
     }
 
     function searchOutletClick(outlet) {
-      vm.scheduledEvent.outlet = outlet;
+      vm.outlet = outlet;
       vm.isOpenOutletPopover = false;
     }
 
@@ -144,13 +148,70 @@
     }
 
     function saveScheduledEvent() {
+
       console.log('saveScheduledEvent');
+
+      if (!eventHaveChanges()) return;
+
+      if (vm.creatingMode) {
+
+        if (vm.isPeriodicEvent) {
+          processingPeriodicData();
+        }
+
+        if (_.isObject(vm.outlet)) {
+          vm.scheduledEvent.outlet = vm.outlet;
+        }
+
+        ScheduledEvent.save(vm.scheduledEvent)
+          .then(() => quit())
+          .catch((error) => {
+            console.log(error);
+          });
+
+      }
+
+    }
+
+    function processingPeriodicData() {
+
+      var periodicEventCode = periodicEventCodeFn();
+      console.log(periodicEventCode);
+
+      if (!_.isUndefined(periodicEventCode)) {
+
+        var codeDic = {code: periodicEventCode};
+
+        Schedule.findAll(codeDic)
+          .then((schedules) => {
+
+            var schedule = _.head(schedules);
+
+            if (_.isUndefined(schedule)) {
+
+              Schedule.create(codeDic)
+                .then((schedule) => {
+                  vm.scheduledEvent.schedule = schedule;
+                });
+
+            } else {
+              vm.scheduledEvent.schedule = schedule;
+            }
+
+          });
+
+      }
+
+    }
+
+    function periodicEventCodeFn() {
+      return (vm.weekly) ? 'weekly.' + vm.wdNumber : (vm.monthly) ? 'monthly.' + vm.monthDay : undefined;
     }
 
     function eventHaveChanges() {
 
       if (vm.creatingMode) {
-        return !_.isUndefined(vm.scheduledEvent.outlet);
+        return !_.isUndefined(vm.outlet) || vm.isPeriodicEvent;
       } else {
         return true;
       }
@@ -165,17 +226,25 @@
     }
 
     function cleanup() {
+
       _.isObject(vm.scheduledEvent) && ScheduledEvent.eject(vm.scheduledEvent);
+      vm.isPeriodicEvent = false;
+
     }
 
     function closeView() {
 
-      if (vm.creatingMode) {
+      if (vm.creatingMode && eventHaveChanges()) {
 
         ConfirmModal.show({
           text: `Закрыть карточку события?`
         })
-          .then(() => quit());
+          .then(() => {
+
+            cleanup();
+            quit();
+
+          });
 
       } else {
         quit();
@@ -184,10 +253,7 @@
     }
 
     function quit() {
-
-      vm.creatingMode && cleanup();
       $state.go(vm.fromState);
-
     }
 
   }

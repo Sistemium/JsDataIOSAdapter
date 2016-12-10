@@ -18,11 +18,11 @@ section
   popover-is-open='vm.isOpenOutletPopover'
   )
     .name
-      span {{ vm.scheduledEvent.outlet.name }}
-      span(ng-if='!vm.scheduledEvent.outlet.id') Выберите точку
+      span {{ vm.outlet.name }}
+      span(ng-if='!vm.outlet.id') Выберите точку
       span.caret
     .address
-      small {{vm.scheduledEvent.outlet.address}}
+      small {{vm.outlet.address}}
 
 hr
 section
@@ -52,7 +52,7 @@ section.mt(ng-if='vm.isPeriodicEvent')
         href
         uib-popover-template="'app/domain/sales/views/scheduleWeekDaysPopover.html'"
         popover-trigger='outsideClick'
-        popover-placement='auto right'
+        popover-placement='auto bottom'
         popover-is-open='vm.isOpenWeekDayPopover'
         )
           .name
@@ -68,7 +68,7 @@ section.mt(ng-if='vm.isPeriodicEvent')
         href
         uib-popover-template="'app/domain/sales/views/scheduleMonthDaysPopover.html'"
         popover-trigger='outsideClick'
-        popover-placement='auto left'
+        popover-placement='auto bottom'
         popover-is-open='vm.isOpenMonthDayPopover'
         )
           .name
@@ -76,7 +76,7 @@ section.mt(ng-if='vm.isPeriodicEvent')
         span.ml-10 число
 
 hr
-.display-flex
+.display-flex.mt
   .flex-1
   .content-float-right
     section(ng-if='vm.eventHaveChanges()')
