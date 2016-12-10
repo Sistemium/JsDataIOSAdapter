@@ -170,7 +170,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   }
 
   .popover {
-    min-width: 250px;
+
     @media (min-width: $screen-sm-min) {
       max-width: 400px;
     }
@@ -183,6 +183,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 }
 
 .sale-order-popover {
+  min-width: 250px;
   .new-item {
 
     padding-bottom: 12px;
