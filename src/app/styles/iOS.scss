@@ -102,3 +102,7 @@ body.iOS {
 ::-webkit-scrollbar, *::-webkit-scrollbar {
   display: none;
 }
+
+a, button {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
