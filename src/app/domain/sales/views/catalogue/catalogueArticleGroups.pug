@@ -41,7 +41,6 @@ style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
   )
     // TODO: find why click on Baikal does not collapse
     a.list-group-item(
-    no-angular-ripple
     ng-class='{active: vm.currentArticleGroup.id === elem.id}'
     href
     ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'

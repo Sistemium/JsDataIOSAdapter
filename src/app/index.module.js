@@ -21,7 +21,6 @@
       'vs-repeat',
       'jsd',
       'toggle-switch',
-      'angularRipple',
       'angularMoment'
     ]);
 

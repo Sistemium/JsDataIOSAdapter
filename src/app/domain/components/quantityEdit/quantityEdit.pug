@@ -4,7 +4,7 @@
 
     .boxes
 
-      a.btn.btn-link(ng-click='vm.incrementBoxes()' angular-ripple) +К
+      a.btn.btn-link(ng-click='vm.incrementBoxes()') +К
 
       input.form-control.text-center(
       ng-attr-type='{{vm.type}}'
@@ -15,11 +15,11 @@
       maxlength='3'
       )
 
-      a.btn.btn-link(ng-click='vm.decrementBoxes()' angular-ripple) -К
+      a.btn.btn-link(ng-click='vm.decrementBoxes()') -К
 
     .bottles
 
-      a.btn.btn-link(ng-click='vm.incrementBottles()' angular-ripple) +Б
+      a.btn.btn-link(ng-click='vm.incrementBottles()') +Б
 
       input.form-control.text-center(
       ng-attr-type='{{vm.type}}'
@@ -30,6 +30,6 @@
       maxlength='3'
       )
 
-      a.btn.btn-link(ng-click='vm.decrementBottles()' angular-ripple) -Б
+      a.btn.btn-link(ng-click='vm.decrementBottles()') -Б
 
   a.btn.btn-link(ng-click='vm.deleteClick()') Удалить
