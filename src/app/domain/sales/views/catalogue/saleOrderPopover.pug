@@ -1,11 +1,17 @@
-.scroll-y(
-resize
-style='max-height: {{windowHeight - offsetTop - 15}}px'
+.scroll-y.sale-order-popover(
+resize='popover'
+style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
 )
-  .option
-    a(href ng-click='vm.setSaleOrderClick()' angular-ripple) Новый Заказ
-  .divider(ng-if='vm.draftSaleOrders.length')
-  .option(ng-repeat='draft in vm.draftSaleOrders track by draft.id' ng-class='{active: vm.saleOrderId === draft.id}')
+  .option.new-item
+    a(
+    href stm-click='setSaleOrder'
+    angular-ripple
+    ng-click='vm.isSaleOrderPopoverOpen=false'
+    )
+      i.glyphicon.glyphicon-plus
+      span Добавить новый Заказ
+  .divider(ng-if='vm.items.length')
+  .option(ng-repeat='draft in vm.items track by draft.id' ng-class='{active: vm.saleOrderId === draft.id}')
     a(
     href
     ng-click='vm.isSaleOrderPopoverOpen=false'
