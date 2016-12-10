@@ -1,16 +1,22 @@
 .popover {
+
   .option {
 
     padding: 8px 0;
-    border-bottom: solid 1px lightgray;
+
+    & + .option, & + .divider {
+      border-top: solid 1px lightgray;
+    }
 
     a {
       display: block;
     }
 
-    &:last-of-type {
-      border-bottom: none;
-    }
 
   }
+
+  .divider {
+    margin-top: 4px;
+  }
+
 }

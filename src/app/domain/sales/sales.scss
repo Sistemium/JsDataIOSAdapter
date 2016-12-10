@@ -132,6 +132,12 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
   .outlet {
     min-width: 0;
+    .popover {
+      input {
+        margin-top: 8px;
+        min-width: 250px;
+      }
+    }
   }
 
   .address {
@@ -183,10 +189,13 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 }
 
 .sale-order-popover {
-  min-width: 250px;
+
+  .divider {
+    min-width: 250px;
+  }
+
   .new-item {
 
-    padding-bottom: 12px;
     text-align: right;
 
     a > span {
@@ -197,5 +206,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
     i {
       font-size: 19px;
     }
+
   }
+
 }
