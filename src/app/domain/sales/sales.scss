@@ -57,7 +57,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   .block-to-collapse {
 
     position: absolute;
-    z-index: 1000;
+    z-index: 2;
 
     background: white;
 
@@ -197,6 +197,11 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   .new-item {
 
     text-align: right;
+
+    a {
+      display: inline-block;
+      padding: 4px 8px;
+    }
 
     a > span {
       float: right;
