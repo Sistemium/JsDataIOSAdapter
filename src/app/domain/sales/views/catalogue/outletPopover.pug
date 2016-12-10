@@ -18,10 +18,10 @@
 .scroll-y(
 resize
 style='max-height: {{windowHeight - offsetTop - 15}}px'
+vs-repeat='55'
 )
-
   .option(ng-repeat='outlet in vm.outlets | filter:vm.search track by outlet.id')
-    a(href ng-click='vm.searchOutletClick(outlet)')
+    a(href stm-click='searchOutlet' click-payload='outlet')
       .name {{::outlet.name}}
-      .gray
+      .gray.address
         small {{::outlet.address}}

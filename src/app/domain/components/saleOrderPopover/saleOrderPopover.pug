@@ -21,8 +21,8 @@ style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
     ng-click='vm.isSaleOrderPopoverOpen=false'
     stm-click='setSaleOrder' click-payload='draft'
     )
-      .display-flex
+      .name.display-flex
         .flex-1 {{ draft.outlet.name }}
         .right {{ draft.totalCost | number:2 }} ₽
-      .gray
+      .address.gray
         small {{ draft.outlet.address }}

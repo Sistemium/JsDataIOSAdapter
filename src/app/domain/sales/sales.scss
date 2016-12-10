@@ -176,9 +176,9 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   }
 
   .popover {
-
     @media (min-width: $screen-sm-min) {
-      max-width: 400px;
+      max-width: 370px;
+      width: 370px;
     }
   }
 
@@ -186,34 +186,6 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 .caret {
   @extend .turnable;
-}
-
-.sale-order-popover {
-
-  .divider {
-    min-width: 250px;
-  }
-
-  .new-item {
-
-    text-align: right;
-
-    a {
-      display: inline-block;
-      padding: 4px 8px;
-    }
-
-    a > span {
-      float: right;
-      margin-top: 2px;
-    }
-
-    i {
-      font-size: 19px;
-    }
-
-  }
-
 }
 
 .sale-orders {
