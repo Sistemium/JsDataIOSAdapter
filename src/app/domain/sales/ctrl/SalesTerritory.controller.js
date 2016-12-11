@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SalesTerritoryController(Schema, Helpers, $state, SalesmanAuth, $scope) {
+  function SalesTerritoryController(Schema, Helpers, $state, SalesmanAuth, $scope, DEBUG) {
 
     const {Outlet, Partner} = Schema.models();
     const {saMedia, saControllerHelper, saEtc} = Helpers;
@@ -13,6 +13,8 @@
     let rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
 
     vm.use({
+
+      partnersSorted: [],
 
       refresh,
       partnerClick,
@@ -32,13 +34,33 @@
 
     SalesmanAuth.watchCurrent($scope, refresh);
 
-    Partner.bindAll(false, $scope, 'vm.partners', setupHash);
+    Partner.bindAll({
+    }, $scope, 'vm.partnersData', () => {
+
+      let outletsByPartner = _.groupBy(Outlet.getAll(), 'partnerId');
+
+      vm.partnersSorted = _.orderBy(
+        _.map(vm.partnersData, partner => {
+          return {
+            id: partner.id,
+            shortName: partner.shortName,
+            name: name,
+            outlets: outletsByPartner[partner.id]
+          };
+        }),
+        ['shortName', 'name']
+      );
+      setupHash();
+    });
 
     $scope.$on('rootClick', () => $state.go(rootState));
 
     $scope.$watch(
       () => saMedia.xsWidth || saMedia.xxsWidth,
-      (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
+      (newValue, oldValue) => {
+        DEBUG('saMedia$watch');
+        newValue != oldValue && $scope.$broadcast('vsRepeatTrigger');
+      }
     );
 
     /*
@@ -66,13 +88,29 @@
     function refresh(salesman) {
 
       let filter = SalesmanAuth.makeFilter();
+      let bySalesman = filter.salesmanId ? {
+        'ANY outletSalesmanContracts': {
+          'salesmanId': {
+            '==': filter.salesmanId
+          }
+        }
+      } : {};
       vm.salesman = salesman;
 
+      let outletFilter = _.assign({where: bySalesman}, filter);
+
+      DEBUG('refresh', 'start');
+
       vm.setBusy(
-        Outlet.findAll(filter, {bypassCache: true, limit: 3000})
-          .then(outlets => Partner.findAll(filter, {bypassCache: true, limit: 3000}).then(() => outlets))
+        Outlet.findAll(outletFilter, {bypassCache: true, limit: 3000})
+          .then(outlets => {
+            DEBUG('refresh', 'outlets');
+            return Partner.findAll(filter, {bypassCache: true, limit: 3000})
+              .then(() => outlets);
+          })
       )
         .then(outlets => {
+          DEBUG('refresh', 'partners');
           if (!vm.salesman) return;
           let filter = {
             where: {
@@ -82,8 +120,11 @@
             }
           };
           Outlet.ejectAll(filter);
+          DEBUG('refresh', 'outlets ejectAll');
           filter.where.id.notIn = _.uniq(_.map(outlets, 'partnerId'));
+          DEBUG('refresh', 'uniq');
           Partner.ejectAll(filter);
+          DEBUG('refresh', 'partners ejectAll');
           saEtc.scrolTopElementById(SCROLL_MAIN);
         })
         .catch(e => console.error(e));
@@ -106,9 +147,12 @@
     }
 
     function hashButtons(hash) {
+
+        //| orderBy:["shortName", "name"] | filter:vm.filter
+
       var hashRe = new RegExp('^' + _.escapeRegExp(hash), 'i');
 
-      var partners = _.filter(vm.partners, (p) => hashRe.test(p.shortName));
+      var partners = _.filter(vm.partnersSorted, (p) => hashRe.test(p.shortName));
 
       var grouped = _.groupBy(partners, (p) => _.upperFirst(p.shortName.substr(0, hash.length + 1).toLowerCase()));
 
@@ -126,8 +170,10 @@
     }
 
     function setupHash() {
+      DEBUG('setupHash', 'start');
+      vm.partners = vm.partnersSorted;
       vm.hashButtons = hashButtons('');
-      //console.log(vm.hashButtons);
+      DEBUG('setupHash', 'end');
     }
 
     function hashClick(btn) {
@@ -139,6 +185,12 @@
       } else {
         vm.currentHash = label;
       }
+
+      vm.partners = vm.currentHash
+        ? _.filter(vm.partnersSorted, vm.filter)
+        : vm.partnersSorted;
+
+      saEtc.scrolTopElementById(SCROLL_MAIN);
 
     }
 
