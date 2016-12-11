@@ -18,7 +18,7 @@ button.btn.btn-default.btn-block.collapser(
 type='button'
 ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
 )
-  span {{ vm.currentArticleGroup.name || 'Все товары'}}
+  span {{ ::vm.currentArticleGroup.name || 'Все товары'}}
   span.caret(ng-class='{"turn-90-counter-clock": vm.isArticleGroupsExpanded}')
 
 .block-to-collapse.scroll-y(
@@ -35,7 +35,7 @@ style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
     )
       span
         i.glyphicon.glyphicon-menu-left
-      span {{ancestor.name}}
+      span {{::ancestor.name}}
 
   ul.list-group(
   )
@@ -48,7 +48,7 @@ style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
     ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
     )
       span.badge(ng-if='vm.articleGroupIds[elem.id]')
-        span {{vm.articleGroupIds[elem.id].length}}
+        span {{::vm.articleGroupIds[elem.id].length}}
         span(ng-if='elem.children.length') +
       i.glyphicon.glyphicon-menu-right.pull-right(ng-if='elem.children.length && !vm.articleGroupIds[elem.id]')
-      span {{elem.name}}
+      span {{::elem.name}}
