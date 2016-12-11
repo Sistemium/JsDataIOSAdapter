@@ -103,6 +103,6 @@ body.iOS {
   display: none;
 }
 
-a, button {
+a, button, .clickable {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
 }
