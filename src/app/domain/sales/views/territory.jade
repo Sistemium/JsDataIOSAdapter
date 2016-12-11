@@ -26,8 +26,8 @@ hr(ng-hide='vm.hideHashes')
   section#scroll-main(
   style='height: {{territory.windowHeight - territory.offsetTop - 5}}px;'
   )
-    .vr-parent(vs-repeat vs-size='vm.rowHeight(p)' vs-scroll-parent="#scroll-main")
-      section(ng-repeat='p in vm.partners | orderBy:["shortName", "name"] | filter:vm.filter track by p.id')
+    .vr-parent(vs-repeat vs-size-fn='vm.rowHeight' vs-scroll-parent="#scroll-main")
+      section(ng-repeat='p in vm.partners track by p.id')
         h5
           a.lead(ng-class='vm.partnerLinkClass' href ng-click='vm.partnerClick(p)') {{ ::p.shortName }}
 
