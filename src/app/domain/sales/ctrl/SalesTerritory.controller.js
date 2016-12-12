@@ -42,7 +42,7 @@
         _.map(vm.partnersData, partner =>
           _.assign(
             _.pick(partner, ['name', 'shortName', 'id']),
-            {outlets: outletsByPartner[partner.id]})),
+            {outlets: outletsByPartner[partner.id] || []})),
         ['shortName', 'name']
       );
 
@@ -92,6 +92,9 @@
           }
         }
       } : {};
+
+      // TODO: show user-created outlets (with no contract)
+
       vm.salesman = salesman;
 
       let outletFilter = _.assign({where: bySalesman}, filter);
