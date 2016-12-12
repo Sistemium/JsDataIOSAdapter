@@ -34,28 +34,25 @@
 
     SalesmanAuth.watchCurrent($scope, refresh);
 
-    Partner.bindAll({
-    }, $scope, 'vm.partnersData', () => {
+    vm.rebindAll(Partner, {}, 'vm.partnersData', () => {
 
       let outletsByPartner = _.groupBy(Outlet.getAll(), 'partnerId');
 
       vm.partnersSorted = _.orderBy(
-        _.map(vm.partnersData, partner => {
-          return {
-            id: partner.id,
-            shortName: partner.shortName,
-            name: name,
-            outlets: outletsByPartner[partner.id]
-          };
-        }),
+        _.map(vm.partnersData, partner =>
+          _.assign(
+            _.pick(partner, ['name', 'shortName', 'id']),
+            {outlets: outletsByPartner[partner.id]})),
         ['shortName', 'name']
       );
+
       setupHash();
+
     });
 
-    $scope.$on('rootClick', () => $state.go(rootState));
+    vm.onScope('rootClick', () => $state.go(rootState));
 
-    $scope.$watch(
+    vm.watchScope(
       () => saMedia.xsWidth || saMedia.xxsWidth,
       (newValue, oldValue) => {
         DEBUG('saMedia$watch');
@@ -147,8 +144,6 @@
     }
 
     function hashButtons(hash) {
-
-        //| orderBy:["shortName", "name"] | filter:vm.filter
 
       var hashRe = new RegExp('^' + _.escapeRegExp(hash), 'i');
 
