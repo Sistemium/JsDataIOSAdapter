@@ -17,6 +17,8 @@
         }
       },
 
+      watchChanges: false,
+
       meta: {},
 
       methods: {}
