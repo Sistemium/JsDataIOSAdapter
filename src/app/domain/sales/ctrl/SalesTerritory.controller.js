@@ -39,10 +39,13 @@
       let outletsByPartner = _.groupBy(Outlet.getAll(), 'partnerId');
 
       vm.partnersSorted = _.orderBy(
-        _.map(vm.partnersData, partner =>
-          _.assign(
-            _.pick(partner, ['name', 'shortName', 'id']),
-            {outlets: outletsByPartner[partner.id] || []})),
+        _.filter(
+          _.map(vm.partnersData, partner =>
+            _.assign(
+              _.pick(partner, ['name', 'shortName', 'id']),
+              {outlets: outletsByPartner[partner.id]})),
+          'outlets'
+        ),
         ['shortName', 'name']
       );
 
