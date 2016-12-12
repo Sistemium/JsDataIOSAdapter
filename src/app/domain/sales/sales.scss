@@ -1,20 +1,52 @@
 @import "../../styles/variables";
-@import "../../styles/mixins";
 
 .territory {
+
   h5 > a.lead {
     color: $dark-blue;
     font-weight: 500;
     text-transform: uppercase;
   }
 
-  .vr-parent .address {
-    overflow: hidden;
-    text-align: right;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .vr-parent {
+
+    .address {
+      overflow: hidden;
+      text-align: right;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .item {
+      padding: 7px 0;
+      border-bottom: solid 1px $border-gray;
+      @media (max-width: $screen-xs-max) {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+
+.visits {
+
+  .visitPhotos {
+    @media (max-width: $screen-xs) {
+      .thumbnail {
+        margin-bottom: $margin-bottom-xs;
+      }
+    }
   }
 
+  h3.outlet {
+    //@extend .ellipsis;
+    small {
+      @media (max-width: $screen-xs) {
+        display: block;
+        margin: $margin-bottom-xs 0 0;
+      }
+    }
+  }
 }
 
 navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
@@ -37,6 +69,10 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 #article-groups {
 
   margin-bottom: 0;
+
+  .caret {
+    @extend .turnable;
+  }
 
   .collapser {
     @media (min-width: $screen-sm-min) {
@@ -165,7 +201,6 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
   }
 
-
 }
 
 .catalogue {
@@ -186,10 +221,6 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 }
 
-.caret {
-  @extend .turnable;
-}
-
 .sale-orders {
   // TODO: find out why form in saleOrderDetails.pug doesn't fit width
   form.form-horizontal {
@@ -198,4 +229,8 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
       margin: 0 15px;
     }
   }
+}
+
+.tab-pane .questionGroup {
+  overflow-x: hidden;
 }
