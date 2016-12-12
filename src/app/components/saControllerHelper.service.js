@@ -54,7 +54,10 @@
       return _.assign(vm,{
 
         use: (helper) => use.call(vm, helper, scope),
-        onScope: (event, callback) => managedOn.call(vm, scope, event, callback),
+        onScope: (event, callback) => {
+          managedOn.call(vm, scope, event, callback);
+          return vm;
+        },
         watchScope: (expr, callback) => {
           scope.$watch(expr, callback);
           return vm;
