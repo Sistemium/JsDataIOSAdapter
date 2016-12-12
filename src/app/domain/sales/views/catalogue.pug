@@ -2,7 +2,10 @@ section.catalogue.spaced(cg-busy='vm.cgBusy')
 
   .ui-view
 
-  ol.breadcrumb(ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'")
+  ol.breadcrumb(
+  ng-hide='!vm.isWideScreen && vm.saleOrder'
+  ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'"
+  )
 
   section.row
 

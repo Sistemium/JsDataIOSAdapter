@@ -2,10 +2,9 @@ span.pull-right(ng-if='vm.currentState!=="saleOrder"')
   sale-order-popover(items='vm.draftSaleOrders')
     span Заказ
 
-li(uib-dropdown is-open='priceTypesOpen')
+li(uib-dropdown is-open='priceTypesOpen' ng-disabled='vm.saleOrder')
   a(href uib-dropdown-toggle)
-    | {{vm.currentPriceType.name || 'Выберите тип цен'}}
-    =' '
+    span {{vm.currentPriceType.name || 'Выберите тип цен'}}
     span.caret
 
   ul.dropdown-menu(uib-dropdown-menu sa-click-outside outside-if='priceTypesOpen')

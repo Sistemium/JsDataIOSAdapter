@@ -27,3 +27,10 @@
   }
 
 }
+
+
+.dropdown[disabled] {
+  .caret {
+    display: none;
+  }
+}
