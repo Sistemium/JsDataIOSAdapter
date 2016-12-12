@@ -18,7 +18,7 @@ button.btn.btn-default.btn-block.collapser(
 type='button'
 ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
 )
-  span {{ ::vm.currentArticleGroup.name || 'Все товары'}}
+  span {{ vm.currentArticleGroup.name || 'Все товары'}}
   span.caret(ng-class='{"turn-90-counter-clock": vm.isArticleGroupsExpanded}')
 
 .block-to-collapse.scroll-y(
