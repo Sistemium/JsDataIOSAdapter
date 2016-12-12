@@ -8,7 +8,7 @@
 
     return (scope, element, attrs) => {
 
-      var property = attrs.resize ? (scope[attrs.resize] = {}) : scope;
+      let property = attrs.resize ? (scope[attrs.resize] = {}) : scope;
 
       function getWindowDimensions() {
         var offset = $uibPosition.offset(element);
@@ -26,8 +26,11 @@
         });
       }
 
-      var un = scope.$watch(getWindowDimensions, setValues, true);
-      var apply = _.throttle(() => scope.$apply(), 200);
+      let un = scope.$watch(getWindowDimensions, setValues, true);
+      let apply = _.throttle(() => {
+        // console.warn('throttle');
+        scope.$apply();
+      }, 1000, {leading: false});
 
       angular.element($window)
         .bind('resize', apply);
