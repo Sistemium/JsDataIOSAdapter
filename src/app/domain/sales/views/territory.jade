@@ -26,8 +26,8 @@ hr(ng-hide='vm.hideHashes')
   section#scroll-main(
   style='height: {{territory.windowHeight - territory.offsetTop - 5}}px;'
   )
-    .vr-parent(vs-repeat vs-size-fn='vm.rowHeight' vs-scroll-parent="#scroll-main")
-      section(ng-repeat='p in vm.partners track by p.id')
+    .vr-parent(vs-repeat vs-size-fn='vm.rowHeight' vs-scroll-parent="#scroll-main" vs-excess='7')
+      .item.partner(ng-repeat='p in vm.partners track by p.id')
         h5
           a.lead(ng-class='vm.partnerLinkClass' href ng-click='vm.partnerClick(p)') {{ ::p.shortName }}
 
@@ -36,4 +36,3 @@ hr(ng-hide='vm.hideHashes')
             i.glyphicon.glyphicon-map-marker
           a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
 
-        hr
