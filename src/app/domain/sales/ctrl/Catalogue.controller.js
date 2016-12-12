@@ -7,13 +7,13 @@
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG) {
 
     let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
-    let {Article, Stock, ArticleGroup, PriceType, SaleOrder} = Schema.models();
+    let {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
 
     let currentArticleGroupId = $state.params.articleGroupId || null;
-    let sortedStock = [];
+    let sortedStock;
 
     vm.use({
 
@@ -22,6 +22,7 @@
       articleGroupIds: {},
       search: $state.params.q || '',
       saleOrderId: $state.params.saleOrderId,
+      saleOrderPositions: false,
       isOpenOutletPopover: false,
       isWideScreen: isWideScreen(),
 
@@ -48,17 +49,18 @@
 
     vm.rebindAll(PriceType, null, 'vm.priceTypes');
 
-    $scope.$on(
+    vm.onScope(
       'rootClick',
       () => $state.go('sales.catalogue')
         .then(() => setCurrentArticleGroup(null))
     );
 
-    $scope.$watch('vm.search', (newValue, oldValue) => {
+    vm.watchScope('vm.search', (newValue, oldValue) => {
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
-    $scope.$watch('vm.saleOrder.id', (newValue, oldValue) => {
+    vm.watchScope('vm.saleOrder.id', (newValue, oldValue) => {
+      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions');
       if (newValue != oldValue && vm.showOnlyOrdered) {
         saleOrderTotalsClick();
       }
@@ -71,12 +73,12 @@
       SaleOrder.findAllWithRelations(filter)('Outlet');
     });
 
-    $scope.$watch(
+    vm.watchScope(
       () => saMedia.smWidth || saMedia.xxsWidth,
       (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
     );
 
-    $scope.$watch(
+    vm.watchScope(
       isWideScreen,
       newValue => vm.isWideScreen = newValue
     );
@@ -157,8 +159,8 @@
     }
 
     function orderedVolumeFull(stock) {
-      let positions = _.get(vm.saleOrder, 'positions');
-      if (!positions) return;
+      let positions = vm.saleOrderPositions;
+      if (!_.get(positions, 'length')) return;
       let position = _.find(positions, {articleId: stock.articleId});
       if (!position) return;
 
@@ -188,11 +190,16 @@
         PriceType.findAllWithRelations()('Price', null, null, options)
       ])
         .then(() => {
+
+          DEBUG('findAll');
+          ArticleGroup.meta.setupCaches();
+          DEBUG('findAll', 'setupCaches');
           vm.currentPriceType = PriceType.meta.getDefault();
-          DEBUG('currentPriceType');
+          DEBUG('findAll', 'currentPriceType');
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
-          DEBUG('setCurrentArticleGroup');
+          DEBUG('findAll', 'setCurrentArticleGroup');
+
         });
     }
 
@@ -200,7 +207,10 @@
 
       DEBUG('filterStock', 'start');
 
-      sortedStock = _.orderBy(Stock.getAll(), 'article.name');
+      let stockCache = _.map(
+        _.orderBy(Stock.getAll(), 'article.name'),
+        stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
+      );
 
       DEBUG('filterStock', 'orderBy');
 
@@ -226,7 +236,7 @@
 
       DEBUG('filterStock', 'vm.prices');
 
-      sortedStock = _.filter(sortedStock, stock => vm.prices[stock.articleId]);
+      sortedStock = _.filter(stockCache, stock => vm.prices[stock.articleId]);
 
       DEBUG('filterStock', 'end');
 
@@ -262,7 +272,10 @@
 
       let childGroups = _.filter(ArticleGroup.getAll(), filter);
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock0');
+
       let children = _.filter(childGroups, hasArticlesOrGroupsInStock(groupIds));
+
+      // let children = _.filter(childGroups, group);
 
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock');
 
@@ -357,7 +370,9 @@
     }
 
     function articleGroupIds(stock) {
-      return _.groupBy(stock, 'article.articleGroupId');
+      return _.groupBy(stock, item => {
+        return _.get(item, 'article.articleGroupId');
+      });
     }
 
   }
