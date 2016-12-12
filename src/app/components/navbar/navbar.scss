@@ -9,7 +9,7 @@
   > .separator {
     @extend .flex-1;
   }
-  
+
   .dropdown {
     font-size: 15px;
     margin-top: 3px;
@@ -29,6 +29,9 @@
 
   .fullscreen-menu {
     font-size: 24px;
+    @media (max-width: $screen-xs-max) {
+      font-size: 20px;
+    }
   }
 
   > a + a {
