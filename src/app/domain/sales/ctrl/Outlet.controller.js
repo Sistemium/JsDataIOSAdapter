@@ -36,7 +36,8 @@
       toggleVisitsSection,
       confirmLocationYesClick,
       confirmLocationNoClick,
-      updateLocationClick
+      updateLocationClick,
+      onStateChange
 
     });
 
@@ -54,6 +55,28 @@
         });
 
     });
+
+    /*
+     Functions
+     */
+
+    function onStateChange (to) {
+
+      var isRootState = (to.name === rootState);
+      var disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
+
+      _.assign(vm, {
+        isRootState,
+        disableNavs,
+        partnerNavClass: {
+          disabled: !isRootState && disableNavs || /visits.*/.test(rootState)
+        },
+        outletNavClass: {
+          disabled: disableNavs
+        }
+      });
+
+    }
 
     function currentFilter() {
       return SalesmanAuth.makeFilter({
@@ -85,7 +108,7 @@
 
     function takePhoto() {
       return PhotoHelper.takePhoto('OutletPhoto', {outletId: vm.outlet.id}, vm.thumbnails)
-        .then(()=> vm.collapsePhotosSection = false);
+        .then(() => vm.collapsePhotosSection = false);
     }
 
     function importThumbnail(op) {
@@ -131,7 +154,7 @@
       vm.outlet.location = vm.updatedLocation;
       vm.busyMessage = 'Сохранение геопозиции…';
       vm.busy = Outlet.save(vm.outlet)
-        .then(()=>{
+        .then(() => {
           vm.shouldConfirmUpdateLocation = false;
           vm.markers = false;
           makeOutletMarker();
@@ -172,14 +195,14 @@
 
       vm.map = {
         yaCenter: mapsHelper.yLatLng(location),
-        afterMapInit: ()=>{
+        afterMapInit: () => {
           makeOutletMarker();
         }
       };
 
     }
 
-    function makeOutletMarker () {
+    function makeOutletMarker() {
       vm.startMarker = mapsHelper.yMarkerConfig({
         id: 'outletLocation',
         location: vm.outlet.location,
@@ -207,30 +230,9 @@
       return $state.go('^.editOutlet', {id: vm.outlet.id});
     }
 
-    refresh();
-
-    $scope.$on('$stateChangeSuccess', function (e, to) {
-
-      var isRootState = (to.name === rootState);
-      var disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
-
-      _.assign(vm, {
-        isRootState,
-        disableNavs,
-        partnerNavClass: {
-          disabled: !isRootState && disableNavs || /visits.*/.test(rootState)
-        },
-        outletNavClass: {
-          disabled: disableNavs
-        }
-      });
-
-    });
-
   }
 
   angular.module('webPage')
-    .controller('OutletController', OutletController)
-  ;
+    .controller('OutletController', OutletController);
 
 }());
