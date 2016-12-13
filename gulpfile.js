@@ -4,7 +4,8 @@ require('sistemium-gulp')
   .config({
     ngModule: 'webPage',
     browserSync: {
-      ghostMode: false
+      ghostMode: false,
+      reloadOnRestart: false,
     },
     build: {
       replace: {
