@@ -39,9 +39,25 @@
           //   foreignKey: 'outlet'
           // }
         }
+      },
+
+      meta: {
+        salesmanFilter
       }
 
     });
+
+    function salesmanFilter(filter) {
+      let bySalesman = filter.salesmanId ? {
+        'ANY outletSalesmanContracts': {
+          'salesmanId': {
+            '==': filter.salesmanId
+          }
+        }
+      } : {};
+
+      return _.assign({where: bySalesman}, filter);
+    }
 
   });
 

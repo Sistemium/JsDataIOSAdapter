@@ -45,7 +45,7 @@
      */
 
     SalesmanAuth.watchCurrent($scope, () => {
-      Outlet.findAll(SalesmanAuth.makeFilter());
+      Outlet.findAll(Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter()));
       let filter = {
         orderBy: ['name']
       };
