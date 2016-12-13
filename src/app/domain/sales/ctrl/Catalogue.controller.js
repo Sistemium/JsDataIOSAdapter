@@ -25,6 +25,7 @@
       saleOrderPositions: false,
       isOpenOutletPopover: false,
       isWideScreen: isWideScreen(),
+      saleOrderPositionByArticle: {},
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -60,7 +61,7 @@
     });
 
     vm.watchScope('vm.saleOrder.id', (newValue, oldValue) => {
-      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions');
+      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', cacheSaleOrderPositions);
       if (newValue != oldValue && vm.showOnlyOrdered) {
         saleOrderTotalsClick();
       }
@@ -136,6 +137,16 @@
      Functions
      */
 
+    function cacheSaleOrderPositions() {
+
+      vm.saleOrderPositionByArticle = {};
+
+      let grouped = _.groupBy(vm.saleOrderPositions, 'articleId');
+
+      _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
+
+    }
+
     function isWideScreen() {
       return !saMedia.xsWidth && !saMedia.xxsWidth;
     }
@@ -159,9 +170,7 @@
     }
 
     function orderedVolumeFull(stock) {
-      let positions = vm.saleOrderPositions;
-      if (!_.get(positions, 'length')) return;
-      let position = _.find(positions, {articleId: stock.articleId});
+      let position = vm.saleOrderPositionByArticle[stock.articleId];
       if (!position) return;
 
       return position.article.boxPcs(position.volume).full;
