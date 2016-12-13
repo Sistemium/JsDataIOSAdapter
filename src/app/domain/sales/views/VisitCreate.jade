@@ -30,7 +30,7 @@ h3.pull-right.clear-right(ng-if='vm.buttons.length')
   ng-repeat='b in vm.buttons track by b.label'
   ng-click='vm[b.clickFn]()'
   )
-    i(ng-class='b.fa')
+    i(ng-if='b.fa' ng-class='b.fa')
     span {{ b.label }}
 
 
