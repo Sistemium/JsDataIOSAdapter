@@ -234,3 +234,9 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 .tab-pane .questionGroup {
   overflow-x: hidden;
 }
+
+.ui-view.partner, .ui-view.outlet {
+  > .scroll-y {
+    width: 100%;
+  }
+}
