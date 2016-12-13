@@ -1,5 +1,7 @@
+@import "../../styles/variables";
+
 .stm-searcher {
-  label {
+  label:first-child {
     position: absolute;
     top: 1px;
     left: 0;
@@ -19,6 +21,14 @@
   }
   .form-control-feedback {
     pointer-events: inherit;
+  }
+  label.form-control-feedback {
+    color: $primary-color;
+    &:focus, &:hover, &:active {
+      color: $primary-color;
+      text-decoration: none;
+      outline: none;
+    }
   }
 }
 
