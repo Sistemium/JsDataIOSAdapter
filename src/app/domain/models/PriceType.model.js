@@ -23,6 +23,8 @@
         }
       },
 
+      watchChanges: false,
+
       meta: {
 
         getDefault: function () {

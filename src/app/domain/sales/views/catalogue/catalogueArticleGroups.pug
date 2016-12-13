@@ -4,27 +4,51 @@
   input#search-input.form-control(
   type='search'
   placeholder='Поиск'
+  select-on-focus
   aria-describedby='search-input'
   ng-model='vm.search'
-  ng-model-options='{debounce: 400}'
+  ng-model-options='{debounce: 600}'
   )
 
   span.form-control-feedback(ng-hide='!vm.search' )
     a(ng-click='vm.clearSearchClick()' href)
       i.glyphicon.glyphicon-remove
 
-ul.list-group.scroll-y(
+button.btn.btn-default.btn-block.collapser(
+type='button'
+ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
+)
+  span {{ vm.currentArticleGroup.name || 'Все товары'}}
+  span.caret(ng-class='{"turn-90-counter-clock": vm.isArticleGroupsExpanded}')
+
+.block-to-collapse.scroll-y(
+uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
+collapsed='vm.isArticleGroupsCollapsingDone=true'
 resize='groups'
 style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
 )
-  a.list-group-item(
-  angular-ripple
-  ng-class='{active: vm.currentArticleGroup.id === elem.id}'
-  href
-  ng-click='vm.articleGroupClick(elem)'
-  ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+  ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
+    a.list-group-item(
+    ng-repeat='ancestor in vm.ancestors track by ancestor.id'
+    href
+    ng-click='vm.articleGroupClick(ancestor)'
+    )
+      span
+        i.glyphicon.glyphicon-menu-left
+      span {{::ancestor.name}}
+
+  ul.list-group(
   )
-    span.badge(ng-if='!elem.children.length && vm.articleGroupIds[elem.id].length')
-      | {{vm.articleGroupIds[elem.id].length}}
-    i.glyphicon.glyphicon-menu-right.pull-right(ng-if='elem.children.length')
-    span {{elem.name}}
+    // TODO: find why click on Baikal does not collapse
+    a.list-group-item(
+    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
+    href
+    ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
+    stm-click='articleGroup' click-payload='elem'
+    ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+    )
+      span.badge(ng-if='::vm.articleGroupIds[elem.id]')
+        span {{::vm.articleGroupIds[elem.id].length}}
+        span(ng-if='::elem.children.length') +
+      i.glyphicon.glyphicon-menu-right.pull-right(ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]')
+      span {{::elem.name}}

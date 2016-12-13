@@ -2,25 +2,18 @@ section.catalogue.spaced(cg-busy='vm.cgBusy')
 
   .ui-view
 
-  ol.breadcrumb(ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'")
+  ol.breadcrumb(
+  ng-hide='!vm.isWideScreen && vm.saleOrder'
+  ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'"
+  )
 
   section.row
+
     #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
 
-    #scroll-articles.col-sm-8.scroll-y(
+    #scroll-articles.col-sm-8.scroll-y.animate-show(
     resize='articles'
-    style='height: {{articles.windowHeight - articles.offsetTop - 5}}px;'
+    style='height: {{articles.windowHeight - articles.offsetTop - 5}}px'
+    ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
+    ng-show='vm.isWideScreen || !vm.isArticleGroupsExpanded'
     )
-
-      .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
-        | Нет подходящих товаров
-
-      ul.list-group.vr-parent(vs-repeat vs-excess='4' vs-size='vm.articleRowHeight(stock)' vs-scroll-parent="#scroll-articles")
-        .list-group-item.display-flex.flex-align-center(ng-repeat='stock in vm.stock track by stock.id')
-
-          .flex-1(ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'")
-
-          .display-flex.flex-align-center(
-          ng-if='vm.saleOrder'
-          ng-include="'app/domain/sales/views/saleOrder/saleOrderPosition.edit.html'"
-          )

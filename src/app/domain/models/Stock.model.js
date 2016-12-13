@@ -17,6 +17,8 @@
         }
       },
 
+      watchChanges: false,
+
       fieldTypes: {
         volume: 'int'
       }

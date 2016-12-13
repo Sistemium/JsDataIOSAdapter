@@ -34,6 +34,8 @@
         }
       },
 
+      watchChanges: false,
+
       computed: {
         preName: ['name', function (name) {
           var m = name.match(/[^"]+/);

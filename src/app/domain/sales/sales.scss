@@ -1,17 +1,51 @@
 @import "../../styles/variables";
 
 .territory {
+
   h5 > a.lead {
     color: $dark-blue;
     font-weight: 500;
     text-transform: uppercase;
   }
 
-  .vr-parent .address {
-    overflow: hidden;
-    text-align: right;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .vr-parent {
+
+    .address {
+      overflow: hidden;
+      text-align: right;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .item {
+      padding: 7px 0;
+      border-bottom: solid 1px $border-gray;
+      @media (max-width: $screen-xs-max) {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+
+.visits {
+
+  .visitPhotos {
+    @media (max-width: $screen-xs) {
+      .thumbnail {
+        margin-bottom: $margin-bottom-xs;
+      }
+    }
+  }
+
+  h3.outlet {
+    //@extend .ellipsis;
+    small {
+      @media (max-width: $screen-xs) {
+        display: block;
+        margin: $margin-bottom-xs 0 0;
+      }
+    }
   }
 }
 
@@ -34,19 +68,65 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 #article-groups {
 
-  ul {
-    margin-bottom: 0;
-    @media (max-width: $screen-xs-max) {
-      max-height: 100px !important;
-      margin-bottom: $margin-bottom-xs;
+  margin-bottom: 0;
+
+  .caret {
+    @extend .turnable;
+  }
+
+  .collapser {
+    @media (min-width: $screen-sm-min) {
+      display: none;
+    }
+    margin-bottom: $margin-bottom-xs;
+    background: none !important;
+    border-color: #ccc !important;
+  }
+
+  .xs-ancestors {
+    margin-bottom: $margin-bottom-xs;
+    @media (min-width: $screen-sm-min) {
+      display: none;
     }
   }
 
+  .block-to-collapse {
+
+    position: absolute;
+    z-index: 2;
+
+    background: white;
+
+    margin-right: 15px;
+    margin-left: 15px;
+
+    right: 0;
+    left: 0;
+  }
+
+}
+
+.iOS {
+  #article-groups {
+    .block-to-collapse {
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+  }
 }
 
 #scroll-articles {
 
   max-height: 100%;
+
+  &.ng-hide:not(.ng-hide-animate) {
+    display: block !important;
+    @extend a.disabled;
+  }
+
+  &.animate-show.ng-hide-remove {
+    transition: all ease-in 0.5s;
+  }
 
   .right {
 
@@ -82,3 +162,75 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 }
 
+.catalogue-sale-order {
+
+  @extend .display-flex;
+
+  .outlet {
+    min-width: 0;
+    .popover {
+      input {
+        margin-top: 8px;
+        min-width: 250px;
+      }
+      @media (min-width: $screen-sm-min) {
+        width: 370px;
+      }
+    }
+  }
+
+  .address {
+    @extend .ellipsis;
+  }
+
+  .totals {
+    min-width: 7em;
+  }
+
+  @media (max-width: $screen-xs) {
+
+    display: block;
+
+    > * {
+      display: block;
+    }
+
+    .totals {
+      margin-top: $margin-bottom-xs;
+    }
+
+  }
+
+}
+
+.catalogue {
+
+  .breadcrumb {
+    > li.ancestor, > li.active {
+      @media (max-width: $screen-xs-max) {
+        display: none;
+      }
+    }
+  }
+
+  .popover {
+    @media (min-width: $screen-sm-min) {
+      max-width: 370px;
+    }
+  }
+
+}
+
+.sale-orders {
+  // TODO: find out why form in saleOrderDetails.pug doesn't fit width
+  form.form-horizontal {
+    margin: 0 10px;
+    @media (max-width: $screen-xs-max) {
+      margin: 0 15px;
+    }
+  }
+}
+
+.tab-pane .questionGroup {
+  overflow-x: hidden;
+}

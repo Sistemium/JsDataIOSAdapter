@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema) {
 
-    Schema.register({
+    let model = Schema.register({
 
       name: 'ArticleGroup',
 
@@ -27,45 +27,100 @@
         }
       },
 
+      watchChanges: false,
+
       meta: {
+        setupCaches
+      },
+
+      computed: {
+        ancestorsCache: ['id', 'articleGroupId', setACache],
+        descendantsCache: ['id', 'articleGroupId', setDCache]
       },
 
       methods: {
-        ancestors: function () {
-          let res = [];
 
-          if (this.articleGroupId) {
-            res.push(this.articleGroup);
-            Array.prototype.push.apply(res, this.articleGroup.ancestors());
-          }
+        ancestors,
+        descendants,
 
-          return res;
-
-        },
-        descendants: function () {
-          let res = this.children;
-
-          _.each(res, item => {
-            Array.prototype.push.apply(res, item.descendants());
-          });
-
-          return res;
-
-        },
         hasDescendants: function (ids) {
-          let children = this.children;
-
-          if (_.find(children, item => ids[item.id])) return true;
-
-          return _.find(children, item => item.hasDescendants(ids));
-
-        },
-        stockArticles: function (stockCache) {
-          return _.get(stockCache[this.id], 'length');
+          return _.find(this.descendantsCache, item => ids[item]);
         }
+
       }
 
     });
+
+    let cacheA = {};
+    let cacheD = {};
+
+    function descendants() {
+      return model.getAll(this.descendantsCache);
+    }
+
+    function ancestors(articleGroup) {
+
+      articleGroup = articleGroup || this;
+
+      let res = [];
+
+      if (articleGroup.articleGroupId) {
+        res.push(articleGroup.articleGroup);
+        Array.prototype.push.apply(res, ancestors(articleGroup.articleGroup));
+      }
+
+      return res;
+
+    }
+
+    function setCache(store, id, articleGroupId) {
+      let cache = store[id];
+      if (!cache) {
+        cache = store[id] = []
+      }
+      articleGroupId && cache.indexOf(articleGroupId) === -1 && cache.push(articleGroupId);
+      return cache;
+    }
+
+    function setACache(id) {
+
+      let ownCache = setCache(cacheA, id);
+
+      // setCache(cacheD, parent, id);
+      //
+      // _.each(cacheD[id], descendant => {
+      //   setCache(cacheA, descendant, parent);
+      //   setCache(cacheD, descendant, parent);
+      // });
+      // _.each(parent && cacheA[parent], ancestor => ancestor && setCaches(id, ancestor));
+
+      return ownCache;
+
+    }
+
+    function setDCache(id) {
+
+      let ownCache = setCache(cacheD, id);
+
+      // let ancestors = cacheD[id] || parent && [parent];
+      // _.each(ownCache, descendant => ownCache.push(descendant));
+      // _.each(cacheA[id], ancestor => setDCache(id, ancestor));
+
+      return ownCache;
+    }
+
+    function setupCaches() {
+      let data = model.getAll();
+
+      _.each(data, item => {
+        _.each(item.ancestors(), ancestor => {
+          setCache(cacheA, item.id, ancestor.id);
+          setCache(cacheD, ancestor.id, item.id);
+        });
+
+      });
+
+    }
 
   });
 

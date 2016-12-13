@@ -6,8 +6,9 @@ button {
   }
   .glyphicon {
     top: 2px;
-    left: 1px;
+    //left: 1px;
   }
+  outline-style: none !important;
 }
 
 .buttons-container {
@@ -44,9 +45,13 @@ a[disabled], [disabled] a {
 a.disabled, .disabled a {
   pointer-events: none;
   cursor: not-allowed;
-  -moz-filter:    grayscale(100%);
-  -ms-filter:     grayscale(100%);
-  -o-filter:      grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
   filter: gray;
   -webkit-filter: grayscale(100%);
+}
+
+.disable-click {
+  pointer-events: none;
 }

@@ -1,0 +1,27 @@
+.sale-order-popover {
+
+  .divider {
+    min-width: 250px;
+  }
+
+  .new-item {
+
+    text-align: right;
+
+    a {
+      display: inline-block;
+      padding: 4px 8px;
+    }
+
+    a > span {
+      float: right;
+      margin-top: 2px;
+    }
+
+    i {
+      font-size: 19px;
+    }
+
+  }
+
+}

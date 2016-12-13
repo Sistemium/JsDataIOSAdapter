@@ -11,11 +11,11 @@
   transform: scale(0);
 }
 
-.iOS {
-  .angular-ripple.animate {
-    animation: ripple 0.35s linear;
-  }
+
+.angular-ripple.animate {
+  animation: ripple 0.35s linear;
 }
+
 
 @keyframes ripple {
   100% {

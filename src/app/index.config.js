@@ -32,7 +32,7 @@
       console.log('Auth', res);
 
       var appConfig =
-          InitService.localDevMode ? {} :
+          //InitService.localDevMode ? {} :
           {
             url: {
               socket: 'https://socket2.sistemium.com'

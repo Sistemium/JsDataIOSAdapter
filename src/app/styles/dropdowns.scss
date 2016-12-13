@@ -1,0 +1,36 @@
+@import "variables";
+
+.popover {
+
+  .option {
+
+    padding: 8px 0;
+
+    & + .option, & + .divider {
+      border-top: solid 1px lightgray;
+    }
+
+    a {
+      display: block;
+    }
+
+    // TODO: experimental
+    &.active {
+      font-weight: bold;
+      @extend .disabled;
+    }
+
+  }
+
+  .divider {
+    margin-top: 4px;
+  }
+
+}
+
+
+.dropdown[disabled] {
+  .caret {
+    display: none;
+  }
+}

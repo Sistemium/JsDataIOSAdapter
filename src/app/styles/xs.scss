@@ -23,7 +23,7 @@ $margin-bottom-xs-minus: 7px;
   }
 
   h4, .h4 {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .clear-both-xs {
@@ -44,6 +44,11 @@ $margin-bottom-xs-minus: 7px;
 
   .alert {
     padding: $margin-bottom-xs;
+  }
+
+  .breadcrumb {
+    padding-left: $margin-bottom-xs;
+    padding-right: $margin-bottom-xs;
   }
 
   .list-group-item {
