@@ -13,6 +13,9 @@
         single: 'Клиент'
       },
 
+      // TODO check if it's not breaking editing
+      watchChanges: false,
+
       relations: {
         hasOne: {
           Partner: {
