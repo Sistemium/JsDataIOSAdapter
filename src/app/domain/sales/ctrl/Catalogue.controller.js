@@ -36,8 +36,7 @@
       onStateChange,
 
       orderedVolumeFull,
-      articleRowHeight,
-      articlesScrollerFn
+      articleRowHeight
 
     });
 
@@ -89,13 +88,6 @@
     /*
      Handlers
      */
-
-    function articlesScrollerFn(resize, element) {
-      if ($scope.hasInputInFocus) {
-        return;
-      }
-      element.css({'max-height': (resize.windowHeight - resize.offsetTop - 5)+'px'});
-    }
 
     function clearSearchClick() {
       vm.search = '';
