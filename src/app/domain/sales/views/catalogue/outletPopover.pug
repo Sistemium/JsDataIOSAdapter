@@ -12,12 +12,11 @@
   )
 
   span.form-control-feedback(ng-hide='!vm.search' )
-    a(ng-click='vm.clearSearchOutletClick("search-outlet")' href)
+    a(ng-click='vm.search=""' href)
       i.glyphicon.glyphicon-remove
 
 .scroll-y(
-resize
-style='max-height: {{windowHeight - offsetTop - 15}}px'
+resize resize-offset-top='15'
 vs-repeat='55'
 )
   .option(ng-repeat='outlet in vm.outlets | filter:vm.search track by outlet.id')

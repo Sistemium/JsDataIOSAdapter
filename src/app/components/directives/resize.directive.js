@@ -14,9 +14,11 @@
         scope.resizeFn = scope.$eval(attrs.resizeFn);
       }
 
+      let offsetTopMinus = attrs.resizeOffsetTop ? parseInt(attrs.resizeOffsetTop) : 0;
+
       function resizeOffsetTop(newValue) {
         if (!newValue || newValue.disableResize) return;
-        element.css({'max-height': (newValue.windowHeight - newValue.offsetTop) + 'px'});
+        element.css({'max-height': (newValue.windowHeight - newValue.offsetTop - offsetTopMinus) + 'px'});
       }
 
       function getWindowDimensions() {
