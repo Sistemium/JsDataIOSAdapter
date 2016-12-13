@@ -99,7 +99,6 @@
 
     function clearSearchClick() {
       vm.search = '';
-      saEtc.focusElementById('search-input');
     }
 
     function saleOrderTotalsClick() {
