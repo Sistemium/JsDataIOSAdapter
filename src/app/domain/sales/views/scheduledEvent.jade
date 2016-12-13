@@ -9,20 +9,21 @@
       i.glyphicon.glyphicon-remove
 
 hr
-section
-  a(
-  href
-  uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
-  popover-trigger='outsideClick'
-  popover-placement='auto bottom-left'
-  popover-is-open='vm.isOpenOutletPopover'
-  )
-    .name
-      span {{ vm.outlet.name }}
-      span(ng-if='!vm.outlet.id') Выберите точку
-      span.caret
-    .address
-      small {{vm.outlet.address}}
+.catalogue-sale-order
+  section.outlet
+    a(
+    href
+    uib-popover-template="'app/domain/sales/views/catalogue/outletPopover.html'"
+    popover-trigger='outsideClick'
+    popover-placement='auto bottom-left'
+    popover-is-open='vm.isOpenOutletPopover'
+    )
+      .name
+        span {{ vm.outlet.name }}
+        span(ng-if='!vm.outlet.id') Выберите точку
+        span.caret
+      .address
+        small {{vm.outlet.address}}
 
 hr
 section
