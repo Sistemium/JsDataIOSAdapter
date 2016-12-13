@@ -176,7 +176,7 @@
     }
 
     function findAll() {
-      let options = {limit: 6000};
+      let options = {limit: 10000};
       let volumeNotZero = {
         volume: {
           '>': 0
@@ -196,7 +196,7 @@
           }
         }, options),
         PriceType.findAll(),
-        Price.meta.cachedFindAll()
+        Price.meta.cachedFindAll(options)
       ])
         .then(() => {
 

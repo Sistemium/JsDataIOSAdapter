@@ -24,9 +24,9 @@
       notify: false,
 
       meta: {
-        cachedFindAll: function() {
+        cachedFindAll: function(options) {
           if (Price.meta.data) return $q.resolve();
-          return Price.findAll({}, {cacheResponse: false})
+          return Price.findAll({}, _.assign({cacheResponse: false}, options))
             .then(data => Price.meta.data = _.groupBy(data, 'priceTypeId'));
         }
       }
