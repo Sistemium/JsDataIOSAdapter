@@ -14,11 +14,16 @@
         scope.resizeFn = scope.$eval(attrs.resizeFn);
       }
 
+      function resizeOffsetTop(newValue) {
+        if (!newValue || newValue.disableResize) return;
+        element.css({'max-height': (newValue.windowHeight - newValue.offsetTop) + 'px'});
+      }
+
       function getWindowDimensions() {
         let offset = $uibPosition.offset(element);
-        let bodyRect = $window.document.body.getBoundingClientRect();
+        //let bodyRect = $window.document.body.getBoundingClientRect();
         return {
-          windowHeight: $window.innerHeight - bodyRect.top,
+          windowHeight: $window.innerHeight,// - bodyRect.top,
           windowWidth: $window.innerWidth,
           offsetTop: offset ? offset.top : 0,
           disableResize: scope.hasInputInFocus
@@ -26,7 +31,7 @@
       }
 
       function setValues(newValue) {
-        if (newValue.disableResize) return;
+        if (!newValue || newValue.disableResize) return;
         _.assign(property, newValue);
         _.assign(property, {
           xsWidth: _.get(newValue, 'windowWidth') < SCREEN_XS_MAX
@@ -34,7 +39,11 @@
         if (scope.resizeFn) scope.resizeFn(property, element);
       }
 
-      let un = scope.$watch(getWindowDimensions, _.throttle(setValues, 200), true);
+      let un = scope.$watch(
+        getWindowDimensions,
+        angular.isDefined(attrs.resizeOffsetTop) ? resizeOffsetTop : setValues,
+        true
+      );
 
       let apply = _.throttle(() => {
         scope.$apply();
