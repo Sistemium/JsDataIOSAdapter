@@ -29,6 +29,10 @@
 
       watchChanges: false,
 
+      useClass: false,
+      instanceEvents: false,
+      notify: false,
+
       meta: {
         setupCaches
       },
