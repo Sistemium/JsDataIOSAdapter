@@ -2,7 +2,10 @@
 
 (function () {
 
-  function autoFocus($timeout) {
+  function autoFocus($timeout, IOS) {
+
+    var ios = IOS.isIos();
+
     return {
 
       restrict: 'AC',
@@ -16,7 +19,7 @@
         let value = _scope.autoFocus;
         let element = _element[0];
 
-        if (value === 'false'){
+        if (value === 'false' || ios){
           return;
         }
 
