@@ -2,14 +2,13 @@
 
 (function () {
 
-  function ScheduledEventController(Schema, saControllerHelper, $scope, SalesmanAuth, $state, ConfirmModal, saEtc) {
+  function ScheduledEventController(Schema, Helpers, $scope, SalesmanAuth, $state, ConfirmModal) {
 
-    const {Schedule} = Schema.models();
-    const {SchedulePurpose} = Schema.models();
-    const {ScheduledEvent} = Schema.models();
-    const {Outlet} = Schema.models();
+    const {Schedule, SchedulePurpose, ScheduledEvent, Outlet} = Schema.models();
+    const {saControllerHelper, ClickHelper, saEtc} = Helpers;
 
-    let vm = saControllerHelper.setup(this, $scope);
+    let vm = saControllerHelper.setup(this, $scope)
+      .use(ClickHelper);
 
     vm.use({
 
