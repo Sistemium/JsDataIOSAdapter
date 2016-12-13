@@ -2,9 +2,9 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, $q) {
 
-    Schema.register({
+    const Price = Schema.register({
 
       name: 'Price',
 
@@ -18,10 +18,18 @@
       },
 
       watchChanges: false,
+      useClass: false,
+      instanceEvents: false,
+      linkRelations: false,
+      notify: false,
 
-      meta: {},
-
-      methods: {}
+      meta: {
+        cachedFindAll: function() {
+          if (Price.meta.data) return $q.resolve();
+          return Price.findAll({}, {cacheResponse: false})
+            .then(data => Price.meta.data = _.groupBy(data, 'priceTypeId'));
+        }
+      }
 
     });
 

@@ -2,12 +2,12 @@
 
 (function () {
 
-  const SHORT_TIMEOUT = 100;
+  const SHORT_TIMEOUT = 0;
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG) {
 
     let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
-    let {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition} = Schema.models();
+    let {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -204,7 +204,8 @@
             'ANY stocks': volumeNotZero
           }
         }, options),
-        PriceType.findAllWithRelations()('Price', null, null, options)
+        PriceType.findAll(),
+        Price.meta.cachedFindAll()
       ])
         .then(() => {
 
@@ -234,13 +235,14 @@
       let prices;
       let useCustomPrice = !!vm.currentPriceType.parent;
       let discount = 1;
+      let priceType = vm.currentPriceType;
 
       if (useCustomPrice) {
-        prices = _.groupBy(vm.currentPriceType.parent.prices, 'articleId');
+        priceType = vm.currentPriceType.parent;
         discount += vm.currentPriceType.discountPercent / 100;
-      } else {
-        prices = _.groupBy(vm.currentPriceType.prices, 'articleId');
       }
+
+      prices = _.groupBy(priceType.prices(), 'articleId');
 
       DEBUG('filterStock', 'prices');
 
