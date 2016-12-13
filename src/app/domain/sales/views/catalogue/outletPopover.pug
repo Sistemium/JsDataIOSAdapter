@@ -1,31 +1,12 @@
 .stm-searcher.form-group.has-feedback
-<<<<<<< HEAD
-  label(for="search-outlet")
-    i.glyphicon.glyphicon-search
-=======
 
   label(for="search-outlet")
     i.glyphicon.glyphicon-search
 
->>>>>>> saleOrdersMerged
   input#search-outlet.form-control(
   type='search'
   placeholder='Поиск'
   ng-model='vm.search'
-<<<<<<< HEAD
-  )
-  span.form-control-feedback(ng-hide='!vm.search' )
-    a(ng-click='vm.clearSearchOutletClick("search-outlet")' href)
-      i.glyphicon.glyphicon-remove
-.scroll-y(
-resize
-style='max-height: {{windowHeight - offsetTop - 15}}px'
-)
-  .option(ng-repeat='outlet in vm.outlets | filter:vm.search track by outlet.id')
-    a(href ng-click='vm.searchOutletClick(outlet)')
-      .name {{::outlet.name}}
-      .gray
-=======
   select-on-focus
   auto-focus='select'
   )
@@ -43,5 +24,4 @@ vs-repeat='55'
     a(href stm-click='searchOutlet' click-payload='outlet')
       .name {{::outlet.name}}
       .gray.address
->>>>>>> saleOrdersMerged
         small {{::outlet.address}}
