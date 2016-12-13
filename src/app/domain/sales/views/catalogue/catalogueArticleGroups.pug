@@ -24,8 +24,7 @@ ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
 .block-to-collapse.scroll-y(
 uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
 collapsed='vm.isArticleGroupsCollapsingDone=true'
-resize='groups'
-style='max-height: {{groups.windowHeight - groups.offsetTop - 5}}px;'
+resize='groups' resize-fn='vm.articlesScrollerFn'
 )
   ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
     a.list-group-item(

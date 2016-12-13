@@ -12,8 +12,7 @@ section.catalogue.spaced(cg-busy='vm.cgBusy')
     #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
 
     #scroll-articles.col-sm-8.scroll-y.animate-show(
-    resize='articles'
-    style='height: {{articles.windowHeight - articles.offsetTop - 5}}px'
+    resize='articlesScroller' resize-fn='vm.articlesScrollerFn'
     ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
     ng-show='vm.isWideScreen || !vm.isArticleGroupsExpanded'
     )
