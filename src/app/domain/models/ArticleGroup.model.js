@@ -86,43 +86,45 @@
       return cache;
     }
 
-    function setACache(id) {
+    function setACache(id, parent) {
 
-      let ownCache = setCache(cacheA, id);
+      let ownCache = setCache(cacheA, id, parent);
 
-      // setCache(cacheD, parent, id);
-      //
-      // _.each(cacheD[id], descendant => {
-      //   setCache(cacheA, descendant, parent);
-      //   setCache(cacheD, descendant, parent);
-      // });
-      // _.each(parent && cacheA[parent], ancestor => ancestor && setCaches(id, ancestor));
+      setCache(cacheD, parent, id);
+
+      _.each(cacheA[parent], ancestor => {
+        setCache(cacheA, id, ancestor);
+        setCache(cacheD, ancestor, id);
+      });
+
+      _.each(cacheD[id], descendant => {
+        setCache(cacheA, descendant, id);
+        _.each(cacheA[id], ancestor => {
+          setCache(cacheD, ancestor, descendant);
+          setCache(cacheA, descendant, ancestor);
+        });
+      });
 
       return ownCache;
 
     }
 
     function setDCache(id) {
-
-      let ownCache = setCache(cacheD, id);
-
-      // let ancestors = cacheD[id] || parent && [parent];
-      // _.each(ownCache, descendant => ownCache.push(descendant));
-      // _.each(cacheA[id], ancestor => setDCache(id, ancestor));
-
-      return ownCache;
+      return setCache(cacheD, id);
     }
 
     function setupCaches() {
       let data = model.getAll();
 
-      _.each(data, item => {
-        _.each(item.ancestors(), ancestor => {
-          setCache(cacheA, item.id, ancestor.id);
-          setCache(cacheD, ancestor.id, item.id);
-        });
+      // _.each(data, item => {
+      //   _.each(item.ancestors(), ancestor => {
+      //     setCache(cacheA, item.id, ancestor.id);
+      //     setCache(cacheD, ancestor.id, item.id);
+      //   });
+      //
+      // });
 
-      });
+      console.log (data);
 
     }
 
