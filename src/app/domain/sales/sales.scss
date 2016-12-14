@@ -81,6 +81,9 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
     margin-bottom: $margin-bottom-xs;
     background: none !important;
     border-color: #ccc !important;
+    .caret {
+      top: -1px;
+    }
   }
 
   .xs-ancestors {
