@@ -185,15 +185,15 @@
 
       return $q.all([
         ArticleGroup.findAll({}, options),
-        Stock.findAll({
-          volumeNotZero: true,
-          where: volumeNotZero
-        }, options),
         Article.findAll({
           volumeNotZero: true,
           where: {
             'ANY stocks': volumeNotZero
           }
+        }, options),
+        Stock.findAll({
+          volumeNotZero: true,
+          where: volumeNotZero
         }, options),
         PriceType.findAll(),
         Price.meta.cachedFindAll(options)
@@ -213,10 +213,10 @@
 
       DEBUG('filterStock', 'start');
 
-      let stockCache = _.map(
-        _.orderBy(Stock.getAll(), 'article.name'),
+      let stockCache = _.orderBy(_.map(
+        Stock.getAll(),
         stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
-      );
+      ), 'article.name');
 
       DEBUG('filterStock', 'orderBy');
 
