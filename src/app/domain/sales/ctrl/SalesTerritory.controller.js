@@ -171,10 +171,9 @@
     }
 
     function setupHash() {
-      DEBUG('setupHash', 'start');
       vm.partners = vm.partnersSorted;
       vm.hashButtons = hashButtons('');
-      DEBUG('setupHash', 'end');
+      filterPartners();
     }
 
     function hashClick(btn) {
@@ -187,12 +186,21 @@
         vm.currentHash = label;
       }
 
+      filterPartners();
+
+    }
+
+    function filterPartners() {
       vm.partners = vm.currentHash
         ? _.filter(vm.partnersSorted, vm.filter)
         : vm.partnersSorted;
 
-      saEtc.scrolTopElementById(SCROLL_MAIN);
+      if (vm.currentHash && !vm.partners.length) {
+        vm.currentHash = '';
+        filterPartners();
+      }
 
+      saEtc.scrolTopElementById(SCROLL_MAIN);
     }
 
   }
