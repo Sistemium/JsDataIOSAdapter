@@ -18,6 +18,9 @@
       },
 
       watchChanges: false,
+      useClass: false,
+      instanceEvents: false,
+      notify: false,
 
       fieldTypes: {
         volume: 'int'

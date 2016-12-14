@@ -147,6 +147,9 @@
         parsed.pageSize = params.limit;
       }
 
+      if (params.startPage) {
+        parsed.startPage = params.startPage;
+      }
       if (params.offset) {
         parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
       }

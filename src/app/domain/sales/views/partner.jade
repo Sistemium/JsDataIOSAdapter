@@ -2,7 +2,7 @@ h3.pull-left(
 ng-if='vm.disableNavs'
 )
   span {{ vm.partner.name }}
-  = ' '
+
   small
     a.ml-em(
     href
@@ -15,8 +15,11 @@ ng-if='vm.disableNavs'
     )
       i.glyphicon.glyphicon-edit
 
-section.ui-view
+
+section.ui-view.partner
+
   hr.clear-both
+
   .header-button
     h4.pull-left
       span(
@@ -28,6 +31,10 @@ section.ui-view
     button.btn.ml-em.btn-success.pull-right.btn-sm(
     ng-click='vm.newOutletClick()'
     ) Новая точка
+
+  .scroll-y(
+  resize resize-offset-top
+  )
     table.table.table-striped.clear-both.table-hover(
     ng-hide='vm.collapseOutletsSection || !vm.outlets.length'
     )
@@ -46,4 +53,5 @@ section.ui-view
             a {{ outlet.address }}
           td.number {{ outlet.visits.length | number: 0 }}
           td.number {{ vm.outletLastVisitDate[outlet.id] | amUtc | amLocal | amCalendar }}
-    hr.clear-both
+
+  hr.clear-both

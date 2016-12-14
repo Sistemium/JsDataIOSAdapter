@@ -9,12 +9,12 @@
       name: 'PriceType',
 
       relations: {
-        hasMany: {
-          Price: {
-            localField: 'prices',
-            foreignKey: 'priceTypeId'
-          }
-        },
+        // hasMany: {
+        //   Price: {
+        //     localField: 'prices',
+        //     foreignKey: 'priceTypeId'
+        //   }
+        // },
         hasOne: {
           PriceType: {
             localField: 'parent',
@@ -46,7 +46,11 @@
 
       },
 
-      methods: {}
+      methods: {
+        prices: function () {
+          return Schema.model('Price').meta.data[this.id];
+        }
+      }
 
     });
 
