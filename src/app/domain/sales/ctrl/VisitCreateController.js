@@ -4,9 +4,9 @@
 
   const REQUIRED_ACCURACY = 100;
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, Helpers) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, Helpers) {
 
-    var {mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
+    var {ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
 
     var vm = saControllerHelper.setup(this, $scope);
 

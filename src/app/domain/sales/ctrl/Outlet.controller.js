@@ -2,11 +2,11 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, Helpers) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers) {
 
     // TODO: allow to add/change location for an existing outlet
 
-    const {PhotoHelper, mapsHelper, LocationHelper, toastr, saControllerHelper} = Helpers;
+    const {PhotoHelper, LocationHelper, toastr, saControllerHelper} = Helpers;
     const {Outlet, Visit, OutletPhoto, Location} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope);
