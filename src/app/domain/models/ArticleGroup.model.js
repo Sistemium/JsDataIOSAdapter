@@ -34,7 +34,6 @@
       notify: false,
 
       meta: {
-        setupCaches
       },
 
       computed: {
@@ -63,18 +62,8 @@
     }
 
     function ancestors(articleGroup) {
-
       articleGroup = articleGroup || this;
-
-      let res = [];
-
-      if (articleGroup.articleGroupId) {
-        res.push(articleGroup.articleGroup);
-        Array.prototype.push.apply(res, ancestors(articleGroup.articleGroup));
-      }
-
-      return res;
-
+      return model.getAll(articleGroup.ancestorsCache);
     }
 
     function setCache(store, id, articleGroupId) {
@@ -111,21 +100,6 @@
 
     function setDCache(id) {
       return setCache(cacheD, id);
-    }
-
-    function setupCaches() {
-      let data = model.getAll();
-
-      // _.each(data, item => {
-      //   _.each(item.ancestors(), ancestor => {
-      //     setCache(cacheA, item.id, ancestor.id);
-      //     setCache(cacheD, ancestor.id, item.id);
-      //   });
-      //
-      // });
-
-      console.log (data);
-
     }
 
   });

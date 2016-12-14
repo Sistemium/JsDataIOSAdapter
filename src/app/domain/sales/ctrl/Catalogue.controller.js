@@ -200,11 +200,8 @@
       ])
         .then(() => {
 
-          DEBUG('findAll');
-          ArticleGroup.meta.setupCaches();
-          DEBUG('findAll', 'setupCaches');
+          DEBUG('findAll', 'finish');
           vm.currentPriceType = PriceType.meta.getDefault();
-          DEBUG('findAll', 'currentPriceType');
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
           DEBUG('findAll', 'setCurrentArticleGroup');
