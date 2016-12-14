@@ -3,8 +3,8 @@ resize='popover'
 style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
 )
   .option.new-item
-    a.btn.btn-success(
-    href stm-click='setSaleOrder'
+    button.btn.btn-success(
+    stm-click='setSaleOrder'
     ng-click='vm.isSaleOrderPopoverOpen=false'
     )
       i.glyphicon.glyphicon-plus

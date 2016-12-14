@@ -8,19 +8,21 @@
 
     text-align: right;
 
-    a {
+    .btn {
       display: inline-block;
       padding: 4px 8px;
+      width: 100%;
+      span {
+        top: -2px;
+        position: relative;
+        display: inline-block;
+      }
+      i {
+        font-size: 19px;
+      }
     }
 
-    a > span {
-      float: right;
-      margin-top: 2px;
-    }
 
-    i {
-      font-size: 19px;
-    }
 
   }
 
