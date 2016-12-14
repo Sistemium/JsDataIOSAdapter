@@ -216,7 +216,7 @@
       let stockCache = _.orderBy(_.map(
         Stock.getAll(),
         stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
-      ), 'article.name');
+      ), item => item.article && item.article.name);
 
       DEBUG('filterStock', 'orderBy');
 
