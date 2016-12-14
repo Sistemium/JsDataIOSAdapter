@@ -47,7 +47,7 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
         tr
           th(ng-if='!vm.currentSalesman') ТП
           th Точка
-          th Создан
+          th.hidden-xs Создан
           th.number Стоимость
           th.number Позиций
       tbody
@@ -59,8 +59,8 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
           td
             div {{ item.outlet.name }}
             .gray {{ item.outlet.address }}
-          td {{ item.deviceCts | amUtc | amLocal | amCalendar }}
+          td.hidden-xs {{ item.deviceCts | amUtc | amLocal | amCalendar }}
           td.number {{ item.totalCost | number:2 }}
-          td.number {{ item.agg.cnt | number:0 }}
+          td.number {{ item.positions.length | number:0 }}
 
   .alert.alert-info.centered(ng-show='!vm.data.length') Нет заказов на указанную дату
