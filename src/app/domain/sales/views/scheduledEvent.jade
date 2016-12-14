@@ -64,7 +64,7 @@ section.mt(ng-if='vm.isPeriodicEvent')
     deselect='vm.monthly = false'
     )
       section.mt.ml-15
-        span Каждое
+        span Каждого
         button.btn.btn-primary.ml-10(
         href
         uib-popover-template="'app/domain/sales/views/scheduleMonthDaysPopover.html'"
@@ -74,7 +74,11 @@ section.mt(ng-if='vm.isPeriodicEvent')
         )
           .name
             span {{ vm.monthDay }}
-        span.ml-10 число
+        span.ml-10 числа
+      section.ml-15.red(ng-if='vm.monthDay > 28')
+        span(ng-if='vm.monthDay == 29') Напоминание не сработает в феврале в невисокосные года
+        span(ng-if='vm.monthDay > 29 && vm.monthDay < 31') Напоминание не сработает в феврале
+        span(ng-if='vm.monthDay == 31') Напоминание будет срабатывать не каждый месяц
 
 hr
 .display-flex.mt
