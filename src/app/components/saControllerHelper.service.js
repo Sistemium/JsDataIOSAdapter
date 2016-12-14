@@ -83,6 +83,10 @@
 
         setBusy: (promise, message) => {
 
+          if (_.isArray(promise)) {
+            promise = $q.all(promise);
+          }
+
           if (!busyArray.length) {
 
             // console.info('setBusy make new');
