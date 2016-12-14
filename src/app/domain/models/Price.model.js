@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, $q) {
+  angular.module('Models').run(function (Schema) {
 
     const Price = Schema.register({
 
@@ -18,17 +18,18 @@
       },
 
       watchChanges: false,
-      useClass: false,
+      // useClass: false,
       instanceEvents: false,
-      linkRelations: false,
+      // linkRelations: false,
       notify: false,
 
+
+      cachedFindAll: function(filter, options) {
+        return Schema.config.cachedFindAll.call(Price, filter, options)
+          .then(data => Price.meta.data = _.groupBy(data, 'priceTypeId'));
+      },
+
       meta: {
-        cachedFindAll: function(options) {
-          if (Price.meta.data) return $q.resolve();
-          return Price.findAll({}, _.assign({cacheResponse: false}, options))
-            .then(data => Price.meta.data = _.groupBy(data, 'priceTypeId'));
-        }
       }
 
     });
