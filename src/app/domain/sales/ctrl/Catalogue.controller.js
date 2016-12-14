@@ -184,19 +184,19 @@
       };
 
       return $q.all([
-        ArticleGroup.findAll({}, options),
-        Article.findAll({
+        PriceType.findAll(),
+        ArticleGroup.cachedFindAll({}, options),
+        Article.cachedFindAll({
           volumeNotZero: true,
           where: {
             'ANY stocks': volumeNotZero
           }
         }, options),
-        Stock.findAll({
+        Stock.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
         }, options),
-        PriceType.findAll(),
-        Price.meta.cachedFindAll(options)
+        Price.cachedFindAll(options)
       ])
         .then(() => {
 
@@ -220,24 +220,19 @@
 
       DEBUG('filterStock', 'orderBy');
 
-      let prices;
-      let useCustomPrice = !!vm.currentPriceType.parent;
       let discount = 1;
       let priceType = vm.currentPriceType;
 
-      if (useCustomPrice) {
+      if (vm.currentPriceType.parent) {
         priceType = vm.currentPriceType.parent;
         discount += vm.currentPriceType.discountPercent / 100;
       }
 
-      prices = _.groupBy(priceType.prices(), 'articleId');
-
       DEBUG('filterStock', 'prices');
 
       vm.prices = {};
-      _.each(prices, (val, key) => {
-        vm.prices[key] = val[0].price * discount
-      });
+
+      _.each(priceType.prices(), price => vm.prices[price.articleId] = price.price * discount);
 
       _.each(_.get(vm, 'saleOrder.positions'), pos => vm.prices[pos.articleId] = pos.price);
 

@@ -9,12 +9,12 @@
       name: 'PriceType',
 
       relations: {
-        // hasMany: {
-        //   Price: {
-        //     localField: 'prices',
-        //     foreignKey: 'priceTypeId'
-        //   }
-        // },
+        hasMany: {
+          // Price: {
+          //   localField: 'prices',
+          //   foreignKey: 'priceTypeId'
+          // }
+        },
         hasOne: {
           PriceType: {
             localField: 'parent',
@@ -31,7 +31,7 @@
           let id = localStorageService.get('PriceType.default');
           let res = id && model.get(id);
           if (!res) {
-            res = _.first(model.filter({limit: 1}))
+            res = _.first(model.filter({limit: 1}));
             if (res) {
               model.meta.setDefault(res);
             }

@@ -2,9 +2,9 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, $q) {
+  angular.module('Models').run(function (Schema) {
 
-    const Stock = Schema.register ({
+    Schema.register ({
 
       name: 'Stock',
 
@@ -23,11 +23,6 @@
       notify: false,
 
       meta: {
-        cachedFindAll: function(filter, options) {
-          if (Stock.meta.data) return $q.resolve(Stock.meta.data);
-          return Stock.findAll(filter, _.assign({cacheResponse: false, limit: 10000}, options))
-            .then(data => Stock.meta.data = data);
-        }
       },
 
       fieldTypes: {

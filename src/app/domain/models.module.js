@@ -23,7 +23,7 @@
     return Schema.models();
   }
 
-  function Schema(saSchema, $http, $window, DEBUG, $q) {
+  function Schema(saSchema, $http, $window, DEBUG, $q, DS) {
 
     function loadPaged(resource, filter, opts) {
 
@@ -68,11 +68,34 @@
 
     }
 
+    function cachedFindAll(resource, filter, options) {
+
+      let store = DS.store[resource.name];
+
+      if (store.collection.length) return $q.resolve(store.collection);
+
+      return resource.findAll(filter, _.defaults({cacheResponse: false}, options))
+        .then(res => {
+
+          // TODO: check for duplicates
+          Array.prototype.push.apply(store.collection, res);
+          _.each(res, item => store.index[item.id] = item);
+
+          return store.collection;
+
+        });
+    }
+
     return $window.saSchema = saSchema({
 
       getCount,
+
       loadPaged: function (filter, options) {
         return loadPaged(this, filter, options)
+      },
+
+      cachedFindAll: function (filter, options) {
+        return cachedFindAll(this, filter, options)
       }
 
     });

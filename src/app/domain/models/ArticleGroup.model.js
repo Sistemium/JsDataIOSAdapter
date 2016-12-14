@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema) {
 
-    let model = Schema.register({
+    const ArticleGroup = Schema.register({
 
       name: 'ArticleGroup',
 
@@ -58,12 +58,12 @@
     let cacheD = {};
 
     function descendants() {
-      return model.getAll(this.descendantsCache);
+      return ArticleGroup.getAll(this.descendantsCache);
     }
 
     function ancestors(articleGroup) {
       articleGroup = articleGroup || this;
-      return model.getAll(articleGroup.ancestorsCache);
+      return ArticleGroup.getAll(articleGroup.ancestorsCache);
     }
 
     function setCache(store, id, articleGroupId) {
