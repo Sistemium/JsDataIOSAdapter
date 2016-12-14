@@ -89,6 +89,9 @@
       });
     }
 
+    DS.defaults.watchChanges = false;
+    $window.saDS = DS;
+
   }
 
 }());
