@@ -28,9 +28,26 @@
 
 }
 
-
 .dropdown[disabled] {
   .caret {
     display: none;
   }
+}
+
+span.caret {
+
+  font-family: 'Glyphicons Halflings';
+  font-size: 9px;
+
+  border: none !important;
+
+  width: auto;
+  height: auto;
+  position: relative;
+  top: 2px;
+
+  &:before {
+    content: "\e252"
+  }
+
 }
