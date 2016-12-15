@@ -92,9 +92,9 @@
           return {
             box: box,
             pcs: pcs,
-            full: ((box || half) ? (box||'') + (half&&'½') + ' к' : '')
+            full: (box || half ? `${box||''}${half&&'½'||''} к` : '')
             + (box && pcs && ' ' || '')
-            + (pcs && !half ? pcs + ' б' : '')
+            + (pcs && !half ? `${pcs} б` : '')
           }
 
         }
