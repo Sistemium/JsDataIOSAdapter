@@ -39,6 +39,11 @@ resize resize-offset-top='5'
 
   ul.list-group(
   )
+    .list-group-item.hidden-xs.active(
+    ng-if='vm.currentArticleGroup.children.length && !vm.articleGroupIds[vm.currentArticleGroup.id]'
+    )
+      span {{ vm.currentArticleGroup.name }}
+
     // TODO: find why click on Baikal does not collapse
     a.list-group-item(
     ng-class='{active: vm.currentArticleGroup.id === elem.id}'

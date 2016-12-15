@@ -88,7 +88,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
   .xs-ancestors {
     margin-bottom: $margin-bottom-xs;
-    @media (min-width: $screen-sm-min) {
+    @media (orientation: portrait) and (min-width: $screen-sm-min) {
       display: none;
     }
   }
@@ -216,10 +216,14 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 .catalogue {
 
   .breadcrumb {
-    > li.ancestor, > li.active {
-      @media (max-width: $screen-xs-max) {
-        display: none;
-      }
+    @media (max-width: $screen-xs-max) {
+      display: none;
+    }
+  }
+
+  &.saleOrder .breadcrumb {
+    @media (orientation: landscape) {
+      display: none;
     }
   }
 
