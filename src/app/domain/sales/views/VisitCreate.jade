@@ -31,7 +31,7 @@ h3.pull-right.clear-right(ng-if='vm.buttons.length')
   ng-click='vm[b.clickFn]()'
   )
     i(ng-if='b.fa' ng-class='b.fa')
-    span {{ b.label }}
+    span(ng-if='b.label') {{ b.label }}
 
 
 hr.clear-both
