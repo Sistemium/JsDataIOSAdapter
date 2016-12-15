@@ -105,6 +105,13 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
     right: 0;
     left: 0;
+
+    @media (orientation: portrait) and (min-width: $screen-sm-min) {
+      .hidden-xs {
+        display: none;
+      }
+    }
+
   }
 
 }
