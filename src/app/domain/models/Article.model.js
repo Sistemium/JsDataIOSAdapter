@@ -87,13 +87,14 @@
           var rel = this.packageRel;
           var box = Math.floor(volume / rel) || 0;
           var pcs = volume - box * rel;
+          let half = pcs*2 === rel;
 
           return {
             box: box,
             pcs: pcs,
-            full: (box ? box + ' к' : '')
+            full: ((box || half) ? (box||'') + (half&&'½') + ' к' : '')
             + (box && pcs && ' ' || '')
-            + (pcs ? pcs + ' б' : '')
+            + (pcs && !half ? pcs + ' б' : '')
           }
 
         }
