@@ -40,7 +40,7 @@
       decrementBoxes: () => changeVolume(-article.packageRel),
       decrementBottles: () => changeVolume(-1),
       deleteClick,
-      incrementHalfBoxes: () => changeVolume(article.packageRel/2)
+      incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel/2))
 
     });
 
