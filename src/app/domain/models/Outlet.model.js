@@ -13,6 +13,9 @@
         single: 'Клиент'
       },
 
+      // TODO check if it's not breaking editing
+      watchChanges: false,
+
       relations: {
         hasOne: {
           Partner: {
@@ -39,9 +42,25 @@
           //   foreignKey: 'outlet'
           // }
         }
+      },
+
+      meta: {
+        salesmanFilter
       }
 
     });
+
+    function salesmanFilter(filter) {
+      let bySalesman = filter.salesmanId ? {
+        'ANY outletSalesmanContracts': {
+          'salesmanId': {
+            '==': filter.salesmanId
+          }
+        }
+      } : {};
+
+      return _.assign({where: bySalesman}, filter);
+    }
 
   });
 

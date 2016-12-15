@@ -10,10 +10,10 @@
 
       relations: {
         hasMany: {
-          Price: {
-            localField: 'prices',
-            foreignKey: 'priceTypeId'
-          }
+          // Price: {
+          //   localField: 'prices',
+          //   foreignKey: 'priceTypeId'
+          // }
         },
         hasOne: {
           PriceType: {
@@ -23,13 +23,15 @@
         }
       },
 
+      watchChanges: false,
+
       meta: {
 
         getDefault: function () {
           let id = localStorageService.get('PriceType.default');
           let res = id && model.get(id);
           if (!res) {
-            res = _.first(model.filter({limit: 1}))
+            res = _.first(model.filter({limit: 1}));
             if (res) {
               model.meta.setDefault(res);
             }
@@ -44,7 +46,11 @@
 
       },
 
-      methods: {}
+      methods: {
+        prices: function () {
+          return Schema.model('Price').meta.data[this.id];
+        }
+      }
 
     });
 

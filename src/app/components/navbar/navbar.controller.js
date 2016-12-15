@@ -1,43 +1,34 @@
 'use strict';
 
 (function () {
-  function NavbarController(Auth, Menu, $scope, $state, $timeout, $rootScope, saControllerHelper) {
 
-    var vm = saControllerHelper.setup(this, $scope);
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, $state, $timeout) {
+
+    const DEFAULT_TITLE = 'Главное меню';
+    const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
       auth: Auth,
       menu: Menu.root(),
-
-      isCollapsed: true,
-      selectedSalesman: undefined,
-
-      onBrandClick: () => {
-        if (vm.currentItem) {
-          $state.go(vm.currentItem.state)
-        }
-      },
-      onProfileClick: () => $state.go(Auth.profileState),
-      rootClick: () => $rootScope.$broadcast('rootClick')
+      rootClick: () => $rootScope.$broadcast('rootClick'),
+      onStateChange
 
     });
 
-    $scope.$on('$stateChangeSuccess', (e, to) => {
+    $timeout(1000).then(()=> !vm.title && onStateChange($state.current));
 
-      vm.hide = !!_.get(to, 'data.hideTopBar');
-      vm.hideNavs = !!_.get(to, 'data.hideNavs');
-      vm.title = _.get(to, 'data.title') || 'Главное меню';
-      vm.isRootState = (to.name === 'home');
+    function onStateChange(to) {
 
-      var item = _.find(vm.menu.items, function (item) {
-        return to.name && _.startsWith(to.name, item.state);
+      vm.use({
+        hide: !!_.get(to, 'data.hideTopBar'),
+        hideNavs: !!_.get(to, 'data.hideNavs'),
+        title: _.get(to, 'data.title') || DEFAULT_TITLE,
+        isRootState: to.name === 'home',
+        currentItem: _.find(vm.menu.items, item => to.name && _.startsWith(to.name, item.state))
       });
 
-      $timeout(() => vm.isCollapsed = true, 500);
-      vm.currentItem = item;
-
-    });
+    }
 
   }
 

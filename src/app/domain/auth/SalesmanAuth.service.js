@@ -101,9 +101,13 @@
     }
 
     function watchCurrent(scope, callback) {
+      let un1 = scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
+      let un2 = scope.$on(LOGOUT_EVENT, () => callback(null));
       callback(currentSalesman);
-      scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
-      scope.$on(LOGOUT_EVENT, () => callback(null));
+      scope.$on('$destroy', ()=>{
+        un1();
+        un2();
+      });
       return service;
     }
 

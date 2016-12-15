@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema) {
 
-    Schema.register({
+    const ArticleGroup = Schema.register({
 
       name: 'ArticleGroup',
 
@@ -27,45 +27,80 @@
         }
       },
 
+      watchChanges: false,
+
+      useClass: false,
+      instanceEvents: false,
+      notify: false,
+
       meta: {
       },
 
+      computed: {
+        ancestorsCache: ['id', 'articleGroupId', setACache],
+        descendantsCache: ['id', 'articleGroupId', setDCache]
+      },
+
       methods: {
-        ancestors: function () {
-          let res = [];
 
-          if (this.articleGroupId) {
-            res.push(this.articleGroup);
-            Array.prototype.push.apply(res, this.articleGroup.ancestors());
-          }
+        ancestors,
+        descendants,
 
-          return res;
-
-        },
-        descendants: function () {
-          let res = this.children;
-
-          _.each(res, item => {
-            Array.prototype.push.apply(res, item.descendants());
-          });
-
-          return res;
-
-        },
         hasDescendants: function (ids) {
-          let children = this.children;
-
-          if (_.find(children, item => ids[item.id])) return true;
-
-          return _.find(children, item => item.hasDescendants(ids));
-
-        },
-        stockArticles: function (stockCache) {
-          return _.get(stockCache[this.id], 'length');
+          return _.find(this.descendantsCache, item => ids[item]);
         }
+
       }
 
     });
+
+    let cacheA = {};
+    let cacheD = {};
+
+    function descendants() {
+      return ArticleGroup.getAll(this.descendantsCache);
+    }
+
+    function ancestors(articleGroup) {
+      articleGroup = articleGroup || this;
+      return ArticleGroup.getAll(articleGroup.ancestorsCache);
+    }
+
+    function setCache(store, id, articleGroupId) {
+      let cache = store[id];
+      if (!cache) {
+        cache = store[id] = []
+      }
+      articleGroupId && cache.indexOf(articleGroupId) === -1 && cache.push(articleGroupId);
+      return cache;
+    }
+
+    function setACache(id, parent) {
+
+      let ownCache = setCache(cacheA, id, parent);
+
+      setCache(cacheD, parent, id);
+
+      _.each(cacheA[parent], ancestor => {
+        setCache(cacheA, id, ancestor);
+        setCache(cacheD, ancestor, id);
+      });
+
+      _.each(cacheD[id], descendant => {
+        setCache(cacheA, descendant, id);
+        _.each(cacheA[id], ancestor => {
+          setCache(cacheD, ancestor, descendant);
+          setCache(cacheA, descendant, ancestor);
+        });
+      });
+
+      return ownCache;
+
+    }
+
+    function setDCache(id) {
+      return setCache(cacheD, id);
+    }
 
   });
 

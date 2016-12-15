@@ -28,6 +28,14 @@
         cost: 'decimal',
         volume: 'int',
         backVolume: 'int'
+      },
+
+      aggregables: ['cost', 'volume'],
+
+      methods: {
+        updateCost: function () {
+          return this.cost = this.price * this.volume;
+        }
       }
 
     });

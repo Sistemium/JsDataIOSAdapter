@@ -17,6 +17,14 @@
         }
       },
 
+      watchChanges: false,
+      useClass: false,
+      instanceEvents: false,
+      notify: false,
+
+      meta: {
+      },
+
       fieldTypes: {
         volume: 'int'
       }

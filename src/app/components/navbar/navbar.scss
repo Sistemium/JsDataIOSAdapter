@@ -2,6 +2,14 @@
 
 .root-navbar {
 
+  @extend .display-flex;
+
+  margin-top: $margin-bottom-xs;
+
+  > .separator {
+    @extend .flex-1;
+  }
+
   .dropdown {
     font-size: 15px;
     margin-top: 3px;
@@ -21,22 +29,22 @@
 
   .fullscreen-menu {
     font-size: 24px;
+    @media (max-width: $screen-xs-max) {
+      font-size: 20px;
+    }
   }
-}
 
-h2.root-navbar {
-  margin-top: $margin-bottom-xs;
-}
-
-.root-navbar + hr {
-  margin-top: 12px;
-}
-
-.root-navbar-items > a + a{
-  margin-left: 35px;
-  @media (max-width: $screen-xs-max) {
-    margin-left: 10px;
+  > a + a {
+    margin-left: 35px;
+    @media (max-width: $screen-xs-max) {
+      margin-left: 10px;
+    }
   }
+
+  & + hr {
+    margin-top: 12px;
+  }
+
 }
 
 @media (min-width: 768px) {
@@ -53,6 +61,7 @@ h2.root-navbar {
 
     }
   }
+
 }
 
 @media (min-width: 768px) {

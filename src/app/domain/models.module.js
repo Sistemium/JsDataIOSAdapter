@@ -2,61 +2,118 @@
 
 (function () {
 
-  var basePath = window.localStorage.getItem('JSData.BasePath')
-    || location.protocol === 'https:' && '/api/dev/'
-    || 'https://api.sistemium.com/v4d/dev/'
-  ;
+  let basePath = window.localStorage.getItem('JSData.BasePath')
+      || location.protocol === 'https:' && '/api/dev/'
+      || 'https://api.sistemium.com/v4d/dev/'
+    ;
 
   angular.module('Models', ['sistemium'])
-
-    .config(function (DSHttpAdapterProvider) {
-      angular.extend(DSHttpAdapterProvider.defaults, {
-        basePath: basePath
-      });
-    })
-
+    .config(ModelsConfig)
     .service('Schema', Schema)
+    .service('models', Models)
+    .run(registerAdapters);
 
-    .service('models', function (Schema) {
-      return Schema.models();
-    })
-
-    .run (registerAdapters)
-  ;
-
-  function Schema (saSchema,$http) {
-    return saSchema({
-      getCount: function (resource,params) {
-
-        return $http
-
-          .get(
-            basePath + '/' + resource.endpoint,
-            {
-              params: angular.extend({
-                'agg:': 'count'
-              }, params || {})
-            }
-          )
-
-          .then(function (res) {
-            return parseInt(res.headers('x-aggregate-count'));
-          })
-          ;
-
-      }
+  function ModelsConfig(DSHttpAdapterProvider) {
+    angular.extend(DSHttpAdapterProvider.defaults, {
+      basePath: basePath
     });
   }
 
-  function registerAdapters ($window, DS, IosAdapter, SocketAdapter, Schema, InitService) {
+  function Models(Schema) {
+    return Schema.models();
+  }
+
+  function Schema(saSchema, $http, $window, DEBUG, $q, DS) {
+
+    function loadPaged(resource, filter, opts) {
+
+      let options = _.defaults({
+        startPage: opts.startPage || 1,
+        bypassCache: true
+      }, opts);
+      let pageSize = options.limit = options.limit || 1500;
+
+      return resource.findAll(filter, options)
+        .then(res => {
+
+          DEBUG('Got', res.length, 'of', resource.name, 'at page', options.startPage);
+
+          if (res.length >= pageSize) {
+            if (options.startPage > 20) {
+              return $q.reject(`Page limit reached on querying "${resource.name}"`);
+            }
+            return loadPaged(
+              resource,
+              filter,
+              _.assign(options, {startPage: options.startPage + 1})
+            ).then(res2 => {
+              Array.prototype.push.apply(res, res2);
+              return res;
+            });
+          }
+
+          return res;
+
+        });
+
+    }
+
+    function getCount(resource, params) {
+
+      let url = `${basePath}/${resource.endpoint}`;
+      let qs = {params: _.assign({'agg:': 'count'}, params || {})};
+
+      return $http.get(url, qs)
+        .then(res => parseInt(res.headers('x-aggregate-count')));
+
+    }
+
+    function cachedFindAll(resource, filter, options) {
+
+      let store = DS.store[resource.name];
+
+      if (store.collection.length) return $q.resolve(store.collection);
+
+      return resource.findAll(filter, _.defaults({cacheResponse: false}, options))
+        .then(res => {
+
+          // TODO: check for duplicates
+          Array.prototype.push.apply(store.collection, res);
+          _.each(res, item => store.index[item.id] = item);
+
+          return store.collection;
+
+        });
+    }
+
+    return $window.saSchema = saSchema({
+
+      getCount,
+
+      loadPaged: function (filter, options) {
+        return loadPaged(this, filter, options)
+      },
+
+      cachedFindAll: function (filter, options) {
+        return cachedFindAll(this, filter, options)
+      }
+
+    });
+
+  }
+
+  function registerAdapters($window, DS, IosAdapter, SocketAdapter, Schema, InitService) {
 
     if ($window.webkit) {
-      DS.registerAdapter('ios', new IosAdapter (Schema), {default: true});
+      DS.registerAdapter('ios', new IosAdapter(Schema), {default: true});
     } else {
-      InitService.then (function(app){
+      InitService.then(app => {
         DS.registerAdapter('socket', new SocketAdapter({pool: app.org}), {default: true});
       });
     }
+
+    DS.defaults.watchChanges = false;
+    $window.saDS = DS;
 
   }
 

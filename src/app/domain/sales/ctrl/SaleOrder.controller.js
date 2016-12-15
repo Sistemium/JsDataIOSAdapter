@@ -5,7 +5,7 @@
   function SaleOrderController(Schema, $scope, saControllerHelper, SalesmanAuth, $state) {
 
     let vm = saControllerHelper.setup(this, $scope);
-    let {SaleOrder} = Schema.models();
+    let {SaleOrder, Outlet, SaleOrderPosition} = Schema.models();
 
     vm.use({
 
@@ -22,7 +22,9 @@
       nextDayAvailable,
 
       itemClick,
-      newItemClick
+      newItemClick,
+
+      onStateChange
 
     });
 
@@ -36,8 +38,20 @@
     $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
     /*
+     Handlers
+     */
+
+    function onStateChange(to) {
+      if (!/sales.saleOrders/.test(to.name)) cleanup();
+    }
+
+    /*
      Functions
      */
+
+    function cleanup() {
+      SaleOrderPosition.ejectAll();
+    }
 
     function setDate(newValue) {
 
@@ -53,13 +67,37 @@
     function getData(salesman) {
 
       vm.currentSalesman = salesman;
+      let date = moment(vm.selectedDate).format('YYYY-MM-DD');
 
-      let filter = SalesmanAuth.makeFilter({
-        date: moment(vm.selectedDate).format('YYYY-MM-DD')
-      });
+      let filter = SalesmanAuth.makeFilter({date});
+
+      let bySalesman = filter.salesmanId ? {
+          'ANY outletSalesmanContracts': {
+            'salesmanId': {
+              '==': filter.salesmanId
+            }
+          }
+        } : {};
+
+      let saleOrderPositionsFilter = {
+        date,
+        where: {
+          'ANY saleOrder': {
+            date: {
+              '==': date
+            }
+          }
+        }
+      };
+
+      if (salesman) {
+        saleOrderPositionsFilter.where['ANY saleOrder'].salesmanId = {'==': salesman.id};
+      }
 
       vm.setBusy(
-        SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet']),
+        [Outlet.findAll(_.assign({where: bySalesman}, filter))
+          .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
+          SaleOrderPosition.findAll(saleOrderPositionsFilter)],
         'Загрузка данных дня'
       );
 

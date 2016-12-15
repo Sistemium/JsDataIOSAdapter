@@ -9,7 +9,7 @@ ng-hide='vm.hideHashes'
   ng-repeat-start='btn in vm.hashButtons track by btn.label'
   ng-click='vm.hashClick(btn)'
   ng-class='btn.match.test(vm.currentHash) ? "btn-primary" : "btn-default"'
-  ) {{ btn.label }}
+  ) {{ ::btn.label }}
 
   button.btn.margin(
   ng-repeat-end
@@ -17,7 +17,7 @@ ng-hide='vm.hideHashes'
   ng-class='{"btn-primary": subbtn.label === vm.currentHash}'
   ng-click='vm.hashClick(subbtn)'
   ng-if='btn.match.test(vm.currentHash) && btn.buttons.length > 1'
-  ) {{ subbtn.label }}
+  ) {{ ::subbtn.label }}
 
 hr(ng-hide='vm.hideHashes')
 
@@ -26,14 +26,13 @@ hr(ng-hide='vm.hideHashes')
   section#scroll-main(
   style='height: {{territory.windowHeight - territory.offsetTop - 5}}px;'
   )
-    .vr-parent(vs-repeat vs-size='vm.rowHeight(p)' vs-scroll-parent="#scroll-main")
-      section(ng-repeat='p in vm.partners | orderBy:["shortName", "name"] | filter:vm.filter track by p.id')
+    .vr-parent(vs-repeat vs-size-fn='vm.rowHeight' vs-scroll-parent="#scroll-main" vs-excess='7')
+      .item.partner(ng-repeat='p in vm.partners track by p.id')
         h5
-          a.lead(ng-class='vm.partnerLinkClass' href ng-click='vm.partnerClick(p)') {{ p.shortName }}
+          a.lead(ng-class='vm.partnerLinkClass' href ng-click='vm.partnerClick(p)') {{ ::p.shortName }}
 
         p.address(ng-repeat='o in p.outlets | orderBy:"address"')
           a.green(ng-if='o.locationId')
             i.glyphicon.glyphicon-map-marker
-          a.ml-5(href ng-click='vm.outletClick(o)') {{ o.address }}
+          a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
 
-        hr

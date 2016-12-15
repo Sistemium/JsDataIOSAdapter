@@ -13,16 +13,16 @@ h3.pull-right.with-map
   )
     i.glyphicon.glyphicon-map-marker
 
-h3.clear-left.pull-left
+h3.clear-left.pull-left.visit
 
   span.text-danger(ng-if='vm.creatingMode') Новый визит
-  span.gray(ng-if='vm.showSalesman') {{ vm.visit.salesman.tinyName }}
   span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+  small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ({{ vm.visit.salesman.tinyName }})
   small
     a.ml-5(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
       i.glyphicon.glyphicon-trash
 
-h3.pull-right.clear-right
+h3.pull-right.clear-right(ng-if='vm.buttons.length')
   button.btn.ml-10(
   type='button'
   ng-class='b.class || "btn-default"'
@@ -30,18 +30,23 @@ h3.pull-right.clear-right
   ng-repeat='b in vm.buttons track by b.label'
   ng-click='vm[b.clickFn]()'
   )
-    i(ng-class='b.fa')
+    i(ng-if='b.fa' ng-class='b.fa')
     span {{ b.label }}
 
 
 hr.clear-both
 
-section.fow-fluid.mt(ng-if='vm.visit.photos.length')
+.fow-fluid.visitPhotos(ng-if='vm.visit.photos.length')
   .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
     a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
       img(ng-src='{{vm.thumbnails[pic.id]}}')
 
-section.clear-both(cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}' ng-class='{mt: !vm.visit.photos.length}')
+section.clear-both.scroll-y(
+cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}'
+ng-class='{mt: !vm.visit.photos.length}'
+resize='tabset'
+ng-style='{"max-height": (tabset.windowHeight - tabset.offsetTop - 5) + "px"}'
+)
 
   uib-tabset.nav-tabs-right(active="active")
     uib-tab(
@@ -50,11 +55,11 @@ section.clear-both(cg-busy='{promise: vm.busy, message: vm.busyMessage || "За�
     heading="{{qs.name}}"
     disable="qs.isInvalid"
     )
-      section(ng-repeat='grp in qs.questionGroups | orderBy:"name" track by grp.id' ng-if='vm.answers')
+      .questionGroup(ng-repeat='grp in qs.questionGroups | orderBy:"name" track by grp.id' ng-if='vm.answers')
         h3
           .lead {{ grp.name }}
-        .form.form-horizontal
-          .form-group.row-fluid(ng-repeat='qst in grp.questions | orderBy:"name" track by qst.id')
+        .form-horizontal
+          .form-group(ng-repeat='qst in grp.questions | orderBy:"name" track by qst.id')
             label.control-label.col-xs-6.col-sm-9.col-md-10 {{ qst.name }}
             .col-xs-6.col-sm-3.col-md-2(ng-switch="qst.dataType.code")
               sa-number-spinner(

@@ -4,9 +4,9 @@
 
   const REQUIRED_ACCURACY = 100;
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, Helpers) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, Helpers) {
 
-    var {mapsHelper, ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
+    var {ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
 
     var vm = saControllerHelper.setup(this, $scope);
 
@@ -37,7 +37,7 @@
 
     });
 
-    var {Visit, Location, Outlet} = Schema.models();
+    var {Visit, Location} = Schema.models();
 
     var VQS = Schema.model('VisitQuestionSet');
     var VQ = Schema.model('VisitQuestion');
@@ -47,13 +47,9 @@
     var visitId = $state.params.visitId;
     var outletId = $state.params.id;
 
-    Outlet.loadRelations(outletId, ['partner']);
-
     var rootState = _.first($state.current.name.match(/sales\.[^.]+/)) || 'sales.territory';
 
     var answersByQuestion = {};
-
-    var salesman = SalesmanAuth.getCurrentUser();
 
     var yaLatLng = mapsHelper.yLatLng;
 
@@ -238,7 +234,7 @@
         VQS.findAllWithRelations({isEnabled: true})('VisitQuestionGroup')
           .then(vm.importData('questionSets')),
         VQ.findAllWithRelations()('VisitQuestionDataType')
-      ]).then(function () {
+      ]).then(() => {
         return Visit.find(visitId)
           .then(vm.importData('visit'))
           .then(function (visit) {
@@ -250,75 +246,81 @@
               .then(initMap);
             return visit;
           })
-          .then(function (visit) {
-            return VA.findAll({
-              visitId: visit.id
-            }).then(function () {
-              var index = _.groupBy(visit.answers, 'questionId');
-
-              answersByQuestion = _.mapValues(index, function (ansArray) {
-                return ansArray[0];
-              });
-
-              vm.answers = _.mapValues(answersByQuestion, function (ans) {
-
-                if (!ans.data) {
-                  return ans.data;
-                }
-
-                switch (_.get(ans, 'question.dataType.code')) {
-                  case 'date': {
-                    return moment(ans.data, 'YYYY-MM-DD').toDate();
-                  }
-                  case 'boolean': {
-                    return (ans.data == '1');
-                  }
-                }
-
-                return ans.data;
-
-              });
-
-            });
-          });
-      });
+          .then(visit => VA.findAll({
+            visitId: visit.id
+          }));
+      })
+        .then(postRefresh)
+        .catch(err => console.error(err));
 
     } else {
 
-      vm.visit = Visit.inject({
-        date: date,
-        outletId: outletId,
-        salesmanId: salesman.id
-      });
+      SalesmanAuth.watchCurrent($scope, salesman => {
 
-      vm.busy = getLocation()
-        .then(function (res) {
+        if (!salesman) return;
 
-          if ($scope['$$destroyed']) {
-            return;
-          }
-
-          vm.visit.checkInLocationId = res.id;
-
-          return Visit.save(vm.visit)
-            .then(visit => {
-              $state.go('.', {visitId: visit.id})
-            });
-
-        }, function (err) {
-
-          if ($scope['$$destroyed']) {
-            return;
-          }
-
-          console.error(err);
-          toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
-          $state.go('^');
-
+        vm.visit = Visit.inject({
+          date: date,
+          outletId: outletId,
+          salesmanId: salesman.id
         });
+
+        vm.busy = getLocation()
+          .then(function (res) {
+
+            if ($scope['$$destroyed']) {
+              return;
+            }
+
+            vm.visit.checkInLocationId = res.id;
+
+            return Visit.save(vm.visit)
+              .then(visit => {
+                $state.go('.', {visitId: visit.id})
+              });
+
+          }, function (err) {
+
+            if ($scope['$$destroyed']) {
+              return;
+            }
+
+            console.error(err);
+            toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
+            $state.go('^');
+
+          });
+      })
 
     }
 
+    function postRefresh() {
+      var index = _.groupBy(vm.visit.answers, 'questionId');
+
+      answersByQuestion = _.mapValues(index, function (ansArray) {
+        return ansArray[0];
+      });
+
+      vm.answers = _.mapValues(answersByQuestion, function (ans) {
+
+        if (!ans.data) {
+          return ans.data;
+        }
+
+        switch (_.get(ans, 'question.dataType.code')) {
+          case 'date': {
+            return moment(ans.data, 'YYYY-MM-DD').toDate();
+          }
+          case 'boolean': {
+            return (ans.data == '1');
+          }
+        }
+
+        return ans.data;
+
+      });
+
+    }
 
     $scope.$on('$destroy', function () {
 

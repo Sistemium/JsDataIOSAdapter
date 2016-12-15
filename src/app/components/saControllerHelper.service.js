@@ -54,7 +54,10 @@
       return _.assign(vm,{
 
         use: (helper) => use.call(vm, helper, scope),
-        onScope: (event, callback) => managedOn.call(vm, scope, event, callback),
+        onScope: (event, callback) => {
+          managedOn.call(vm, scope, event, callback);
+          return vm;
+        },
         watchScope: (expr, callback) => {
           scope.$watch(expr, callback);
           return vm;
@@ -79,6 +82,10 @@
         },
 
         setBusy: (promise, message) => {
+
+          if (_.isArray(promise)) {
+            promise = $q.all(promise);
+          }
 
           if (!busyArray.length) {
 

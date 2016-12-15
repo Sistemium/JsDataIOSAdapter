@@ -1,4 +1,4 @@
-h3.pull-left.max-width-75p
+h3.pull-left.outlet.max-width-75p
   a.inherit-colors(href ui-sref='^.partner({id: vm.outlet.partner.id})' ng-class='vm.partnerNavClass') {{ vm.outlet.partner.name }}
   = ' '
   small
@@ -6,7 +6,7 @@ h3.pull-left.max-width-75p
     a.ml-em(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState && vm.isEditable')
       i.glyphicon.glyphicon-edit
 
-section.ui-view
+section.ui-view.outlet
 
   h3.pull-right.with-map
     button.btn.ml-5.btn-default(ng-click='vm.takePhoto()')
@@ -43,6 +43,7 @@ section.ui-view
     ng-disabled='!vm.currentSalesman'
     ) Новый визит
 
+  .scroll-y(resize resize-offset-top)
     table.table.table-striped.clear-both.table-hover(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
       thead
         tr
@@ -57,4 +58,4 @@ section.ui-view
           td.number {{ visit.photos.length | number: 0 }}
           td.number {{ visit.answers.length | number: 0 }}
 
-    hr.clear-both
+  hr.clear-both

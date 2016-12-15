@@ -2,18 +2,23 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, saControllerHelper, ClickHelper, Schema, $q) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth) {
 
-    let {SaleOrder, SaleOrderPosition} = Schema.models('SaleOrder');
+    const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
+    const {saControllerHelper, ClickHelper, saEtc} = Helpers;
+
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
+
     let saleOrderId = $state.params.saleOrderId;
 
     vm.use({
 
       kPlusButtonClick,
       bPlusButtonClick,
-      orderedVolumeClick: stock => console.warn(stock)
+      searchOutletClick,
+      clearSearchOutletClick,
+      saveOrder
 
     });
 
@@ -26,12 +31,35 @@
         })
         .catch(error => console.error(error));
     } else {
+
+      vm.saleOrder = SaleOrder.inject({
+        salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
+        date: moment().add(1, 'days').format('YYYY-MM-DD')
+      });
+
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
 
     /*
-    Handlers
+     Listeners
      */
+
+    SalesmanAuth.watchCurrent($scope, () => {
+      Outlet.findAll(Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter()));
+      let filter = {
+        orderBy: ['name']
+      };
+      vm.rebindAll(Outlet, filter, 'vm.outlets');
+    });
+
+    /*
+     Handlers
+     */
+
+    function clearSearchOutletClick(id) {
+      vm.search = '';
+      saEtc.focusElementById(id);
+    }
 
     function kPlusButtonClick(data) {
       addPositionVolume(data.stock.articleId, data.stock.article.packageRel, data.price);
@@ -41,12 +69,27 @@
       addPositionVolume(data.stock.articleId, 1, data.price);
     }
 
+    function searchOutletClick(outlet) {
+      vm.saleOrder.outlet = outlet;
+      vm.isOpenOutletPopover = false;
+    }
+
     /*
-    Functions
+     Functions
      */
 
-    function addPositionVolume (articleId, volume, price) {
+    function saveOrder() {
+      SaleOrder.create(vm.saleOrder)
+        .then(() => $q.all(
+          _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
+        ))
+        .catch(e => console.error(e));
+    }
+
+    function addPositionVolume(articleId, volume, price) {
+
       let position = _.find(vm.saleOrder.positions, {articleId: articleId});
+
       if (!position) {
         position = SaleOrderPosition.createInstance({
           saleOrderId: vm.saleOrder.id,
@@ -55,11 +98,15 @@
           priceDoc: price,
           articleId: articleId
         });
+        vm.saleOrder.totalCost = 0;
+        SaleOrderPosition.inject(position);
       }
+
       position.volume += volume;
-      position.cost = position.volume * price;
-      vm.saleOrder.totalCost += volume * price;
-      SaleOrderPosition.inject(position);
+
+      position.updateCost();
+      vm.saleOrder.updateTotalCost();
+
     }
 
   }

@@ -13,6 +13,9 @@
         single: 'Контрагент'
       },
 
+      // TODO check if it's not breaking editing
+      watchChanges: false,
+
       relations: {
         hasOne: {
           LegalForm: {

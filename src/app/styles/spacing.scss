@@ -1,4 +1,4 @@
-.spaced div, h4, h3, h2, h1, a {
+.spaced div, .spaced, h4, h3, h2, h1, a, button {
 
   > * + strong,
   > * + span,
@@ -25,6 +25,9 @@
 
 }
 
+span.caret, .btn span.caret {
+  margin-left: 4px;
+}
 
 .alert h4 {
   margin: 0;
