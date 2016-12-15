@@ -7,7 +7,8 @@
     bindings: {
       stock: '=',
       saleOrder: '=',
-      price: '='
+      price: '=',
+      popoverOpen: '=?'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEdit.html',
@@ -30,12 +31,16 @@
 
     _.assign(vm, {
 
+      article,
+      showBottles: vm.stock.article.packageRel > 1,
       type: IOS.isIos() ? 'number' : 'text',
 
       incrementBoxes: () => changeVolume(article.packageRel),
       incrementBottles: () => changeVolume(1),
       decrementBoxes: () => changeVolume(-article.packageRel),
-      decrementBottles: () => changeVolume(-1)
+      decrementBottles: () => changeVolume(-1),
+      deleteClick,
+      incrementHalfBoxes: () => changeVolume(article.packageRel/2)
 
     });
 
@@ -65,6 +70,17 @@
     /*
      Functions
      */
+
+    function deleteClick() {
+      if (position.id && !vm.deleteConfirmation) {
+        return vm.deleteConfirmation = true;
+      }
+      if (position.id) {
+        SaleOrderPosition.eject(position);
+        vm.saleOrder.updateTotalCost();
+      }
+      if (vm.popoverOpen) vm.popoverOpen = false;
+    }
 
     function onQtyChange(newValues, oldValues) {
       if (newValues[1] != oldValues[1] || newValues[0] != oldValues[0]) {

@@ -19,6 +19,7 @@ vs-scroll-parent="#scroll-articles"
           a(href
           ng-if='vm.saleOrder'
           uib-popover-template="'app/domain/sales/views/saleOrder/saleOrderPosition.popover.html'"
+          popover-is-open='stock.isArticlePopoverOpen'
           popover-trigger='outsideClick'
           popover-placement='auto bottom-right'
           )

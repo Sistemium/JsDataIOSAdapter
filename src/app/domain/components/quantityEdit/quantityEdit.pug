@@ -2,7 +2,7 @@
 
   .inputs
 
-    .boxes
+    .boxes(ng-class='{"one-input": !vm.showBottles}')
 
       a.btn.btn-link(ng-click='vm.incrementBoxes()') +К
 
@@ -18,7 +18,7 @@
 
       a.btn.btn-link(ng-click='vm.decrementBoxes()') -К
 
-    .bottles
+    .bottles(ng-if='vm.showBottles')
 
       a.btn.btn-link(ng-click='vm.incrementBottles()') +Б
 
@@ -34,4 +34,15 @@
 
       a.btn.btn-link(ng-click='vm.decrementBottles()') -Б
 
-  a.btn.btn-link(ng-click='vm.deleteClick()') Удалить
+  .extras
+
+    button.btn.btn-link(
+    ng-if='vm.stock.article.packageRel % 2 !== 1'
+    ng-click='vm.incrementHalfBoxes()'
+    ) +½К
+
+    button.btn.btn-link.delete(
+    ng-click='vm.deleteClick()'
+    ng-class='{confirmation: vm.deleteConfirmation}'
+    )
+      i.glyphicon.glyphicon-trash

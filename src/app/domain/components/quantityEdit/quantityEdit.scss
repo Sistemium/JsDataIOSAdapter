@@ -1,9 +1,11 @@
+@import "../../../styles/variables";
+
 .quantity-edit {
 
-  //max-width: 130px;
-
   input {
-    width: 60px;
+    width: 40px;
+    margin: 0 auto;
+    padding: 5px;
   }
 
   .inputs {
@@ -12,6 +14,10 @@
 
   .boxes, .bottles {
     @extend .flex-1;
+  }
+
+  .one-input {
+    margin-right: 0 !important;
   }
 
   .boxes {
@@ -26,12 +32,12 @@
     display: block;
   }
 
-}
+  .extras{
+    border-top: solid thin $border-gray;
+  }
 
+  .delete.confirmation {
+    color: $state-danger-text;
+  }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  /* display: none; <- Crashes Chrome on hover */
-  -webkit-appearance: none;
-  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }

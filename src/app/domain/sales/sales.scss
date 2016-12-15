@@ -167,6 +167,17 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
       font-size: 10px;
       margin-right: 4px;
     }
+    .popover-content {
+      padding: 0;
+      .quantity-edit {
+        .inputs {
+          padding: 3px 10px;
+        }
+        .extras {
+          padding: 0 10px;
+        }
+      }
+    }
   }
 
   .article-name-second {
