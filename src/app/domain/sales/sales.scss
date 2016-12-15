@@ -106,7 +106,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
     right: 0;
     left: 0;
 
-    @media (orientation: portrait) and (min-width: $screen-sm-min) {
+    @media (orientation: portrait) and (min-width: $screen-sm) {
       .hidden-xs {
         display: none;
       }
@@ -223,8 +223,10 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 .catalogue {
 
   .breadcrumb {
-    @media (max-width: $screen-xs-max) {
-      display: none;
+    > li.ancestor, > li.active {
+      @media (max-width: $screen-xs-max) {
+        display: none;
+      }
     }
   }
 
