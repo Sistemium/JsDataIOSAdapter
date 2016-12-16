@@ -78,8 +78,7 @@
         return vm.deleteConfirmation = true;
       }
       if (position.id) {
-        SaleOrderPosition.eject(position);
-        vm.saleOrder.updateTotalCost();
+        changeVolume(-position.volume);
       }
       if (vm.popoverOpen) vm.popoverOpen = false;
     }
@@ -126,9 +125,10 @@
     }
 
     function savePosition() {
+      let options = {cacheResponse: false};
       if (position.volume > 0) {
-        SaleOrderPosition.save(position)
-          .then(() => SaleOrder.save(vm.saleOrder))
+        SaleOrderPosition.save(position, options)
+          .then(() => SaleOrder.save(vm.saleOrder, options))
           .catch(errorHandler('Позиция не сохранена.'));
       } else {
         SaleOrderPosition.destroy(position)
