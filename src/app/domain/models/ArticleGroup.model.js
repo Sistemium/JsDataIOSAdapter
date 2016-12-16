@@ -28,8 +28,8 @@
       },
 
       watchChanges: false,
+      resetHistoryOnInject: false,
 
-      useClass: false,
       instanceEvents: false,
       notify: false,
 

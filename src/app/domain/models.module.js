@@ -112,7 +112,11 @@
       });
     }
 
-    DS.defaults.watchChanges = false;
+    _.assign(DS.defaults, {
+      watchChanges: false,
+      instanceEvents: false
+    });
+
     $window.saDS = DS;
 
   }
