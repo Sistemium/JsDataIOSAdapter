@@ -19,9 +19,9 @@
   };
 
   /** @ngInject */
-  function quantityEditController($scope, IOS, Schema) {
+  function quantityEditController($scope, IOS, Schema, toastr) {
 
-    const {SaleOrderPosition} = Schema.models();
+    const {SaleOrderPosition, SaleOrder} = Schema.models();
 
     let vm = this;
 
@@ -61,6 +61,8 @@
       });
     }
 
+    const debouncedSave = _.debounce(savePosition, 500);
+
     /*
      Listeners
      */
@@ -90,6 +92,7 @@
         injectPosition();
         position.updateCost();
         vm.saleOrder.updateTotalCost();
+        debouncedSave();
       }
     }
 
@@ -111,6 +114,32 @@
     function injectPosition() {
       if (!position.id) {
         SaleOrderPosition.inject(position);
+      }
+    }
+
+    function errorHandler(text) {
+      return function (err) {
+        toastr.error(text, 'Ошибка');
+        SaleOrderPosition.revert(position);
+        SaleOrder.revert(position.saleOrderId);
+      }
+    }
+
+    function savePosition() {
+      if (position.volume > 0) {
+        SaleOrderPosition.save(position)
+          .then(() => SaleOrder.save(vm.saleOrder))
+          .catch(errorHandler('Позиция не сохранена.'));
+      } else {
+        SaleOrderPosition.destroy(position)
+          .then(() => SaleOrder.save(vm.saleOrder))
+          .then(() => {
+            position = null;
+          })
+          .catch(err => {
+            SaleOrderPosition.inject(position);
+            errorHandler('Позиция не удалена.')(err)
+          });
       }
     }
 
