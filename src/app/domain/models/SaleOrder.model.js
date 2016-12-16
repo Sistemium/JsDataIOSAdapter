@@ -39,10 +39,8 @@
         totalCostDoc: 'decimal'
       },
 
-      beforeCreateInstance: function (model, attrs) {
-        attrs.id || _.defaults(attrs, {
-          processing: 'draft'
-        });
+      defaultValues: {
+        processing: 'draft'
       },
 
       methods: {
