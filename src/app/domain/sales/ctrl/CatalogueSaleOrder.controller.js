@@ -5,7 +5,7 @@
   function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
-    const {saControllerHelper, ClickHelper, saEtc} = Helpers;
+    const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -24,11 +24,8 @@
 
     if (saleOrderId) {
       SaleOrder.find(saleOrderId)
-        .then(saleOrder => {
-          vm.saleOrder = saleOrder;
-          return SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition')
-            .then(() => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))));
-        })
+        .then(saleOrder => SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition'))
+        .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
         .catch(error => console.error(error));
     } else {
 
@@ -52,9 +49,31 @@
       vm.rebindAll(Outlet, filter, 'vm.outlets');
     });
 
+    vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder');
+    vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderChange, 500));
+
     /*
      Handlers
      */
+
+    function onSaleOrderChange() {
+
+      if (!vm.saleOrder) return;
+
+      let positions = _.filter(vm.saleOrder.positions, SaleOrderPosition.hasChanges);
+
+      if (!positions.length) return;
+
+      $q.all(_.map(positions, savePosition))
+        .then(() => SaleOrder.save(saleOrderId, {nocacheResponse: false}))
+        .catch(e => {
+          console.error(e);
+          toastr.error('Ошибка сохранения заказа!');
+          _.each(positions, SaleOrderPosition.revert);
+          SaleOrder.revert(vm.saleOrder);
+        });
+
+    }
 
     function clearSearchOutletClick(id) {
       vm.search = '';
@@ -84,6 +103,18 @@
           _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
         ))
         .catch(e => console.error(e));
+    }
+
+    function savePosition(position) {
+
+      let options =  {keepChanges: ['cost', 'volume']};
+
+      if (position.volume > 0) {
+        return SaleOrderPosition.unCachedSave(position, options);
+      } else {
+        return SaleOrderPosition.destroy(position);
+      }
+
     }
 
     function addPositionVolume(articleId, volume, price) {
