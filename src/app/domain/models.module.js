@@ -23,7 +23,7 @@
     return Schema.models();
   }
 
-  function Schema(saSchema, $http, $window, DEBUG, $q, DS) {
+  function Schema(saSchema, $http, $window, DEBUG, $q, DS, DSUtils) {
 
     function loadPaged(resource, filter, opts) {
 
@@ -86,6 +86,21 @@
         });
     }
 
+    function unCachedSave(definition, _id, options) {
+
+      let resource = DS.store[definition.name];
+
+      let id = _.get(_id, 'id') || _id;
+
+      return definition.save(id, _.assign({cacheResponse: false}, options))
+        .then(serverItem => {
+          let localItem = resource.index[id];
+          _.assign(localItem, _.omit(serverItem, options.keepChanges));
+          resource.saved[id] = DSUtils.updateTimestamp(resource.saved[id]);
+          resource.previousAttributes[id] = DSUtils.copy(serverItem, null, null, null, definition.relationFields);
+        })
+    }
+
     return $window.saSchema = saSchema({
 
       getCount,
@@ -96,6 +111,10 @@
 
       cachedFindAll: function (filter, options) {
         return cachedFindAll(this, filter, options)
+      },
+
+      unCachedSave: function (filter, options) {
+        return unCachedSave(this, filter, options)
       }
 
     });
