@@ -4,7 +4,7 @@
 
   const SHORT_TIMEOUT = 0;
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS) {
 
     let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
     let {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
@@ -16,6 +16,8 @@
     let sortedStock;
 
     vm.use({
+
+      debounce: IOS.isIos() ? 600 : 200,
 
       currentArticleGroup: null,
       ancestors: [],
@@ -361,7 +363,7 @@
       }
 
       if (vm.search) {
-        let reg = new RegExp(_.escapeRegExp(vm.search), 'ig');
+        let reg = new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'ig');
         articles = _.filter(articles, article => reg.test(article.name));
       }
 
