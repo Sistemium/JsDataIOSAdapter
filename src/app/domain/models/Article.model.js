@@ -93,7 +93,7 @@
             box: box,
             pcs: pcs,
             full: (box || half ? `${box||''}${half&&'½'||''} к` : '')
-            + (box && pcs && ' ' || '')
+            + (box && pcs && !half && ' ' || '')
             + (pcs && !half ? `${pcs} б` : '')
           }
 
