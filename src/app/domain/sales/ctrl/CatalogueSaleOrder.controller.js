@@ -65,7 +65,7 @@
       if (!positions.length) return;
 
       $q.all(_.map(positions, savePosition))
-        .then(() => SaleOrder.save(saleOrderId, {nocacheResponse: false}))
+        .then(() => SaleOrder.unCachedSave(vm.saleOrder, {keepChanges: ['totalCost']}))
         .catch(e => {
           console.error(e);
           toastr.error('Ошибка сохранения заказа!');
@@ -107,7 +107,7 @@
 
     function savePosition(position) {
 
-      let options =  {keepChanges: ['cost', 'volume']};
+      let options = {keepChanges: ['cost', 'volume']};
 
       if (position.volume > 0) {
         return SaleOrderPosition.unCachedSave(position, options);
