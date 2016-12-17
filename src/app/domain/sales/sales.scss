@@ -186,6 +186,12 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
   .article-name-third {
     text-align: right;
+    small span.gray {
+      margin: 0 4px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
 
 }

@@ -35,6 +35,13 @@ vs-scroll-parent="#scroll-articles"
         //small {{ vm.articleRowHeight(stock) }}
         small.gray(ng-if='stock.volume') ~{{::stock.displayVolume}}
         small.red(ng-if='!stock.volume') Нет в наличии
+        small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
+          span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
+          span.gray
+            | =
+          span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
+          span.gray
+            | x
         small {{vm.prices[stock.articleId] | number:2}} ₽
 
     .right(ng-if='vm.saleOrder')
