@@ -2,10 +2,16 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, IOS) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
+
+    let SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
+
+    if (IOS.isIos()) {
+      SUBSCRIPTIONS.push('RecordStatus');
+    }
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -52,9 +58,13 @@
     vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder');
     vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderChange, 500));
 
-    $scope.$on('$destroy', Sockets.jsDataSubscribe(['SaleOrder', 'SaleOrderPosition']));
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(SUBSCRIPTIONS));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
+
+    $scope.$on('$destroy', () => {
+      SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
+    });
 
     /*
      Handlers
@@ -82,18 +92,52 @@
     function onJSData(event) {
 
       DEBUG('onJSData', event);
+
       let id = _.get(event, 'data.id');
+
       if (!id) return;
 
-      if (event.resource === 'SaleOrder' && id === saleOrderId) {
+      if (event.resource === 'RecordStatus') {
+        id = _.get(event, 'data.objectXid');
+        return id && SaleOrderPosition.eject(id);
+      }
 
-        SaleOrder.find(id, {bypassCache: true, cacheResponse: false})
-          .then(updatedSaleOrder => {
-            if (updatedSaleOrder.ts > vm.saleOrder.ts) {
-              SaleOrder.inject(updatedSaleOrder);
-              return SaleOrderPosition.findAll({saleOrderId: id}, {bypassCache: true});
-            }
-          });
+      if (event.resource === 'SaleOrder') {
+
+        if (event.data.deviceCts) {
+
+          DEBUG('onJSData IOS injecting', event.resource);
+          Schema.model(event.resource).find(id, {bypassCache: true});
+
+        } else if (id === saleOrderId) {
+
+          SaleOrder.find(id, {bypassCache: true, cacheResponse: false})
+            .then(updated => {
+              if (updated.ts > vm.saleOrder.ts) {
+                SaleOrder.inject(updated);
+              }
+            });
+
+        } else {
+          SaleOrder.find(id, {bypassCache: true})
+        }
+      } else if (event.resource === 'SaleOrderPosition') {
+
+        if (event.data.saleOrderId === saleOrderId) {
+          return SaleOrderPosition.find(id, {bypassCache: true});
+        } else {
+          return SaleOrderPosition.find(id, {bypassCache: true, cacheResponse: false})
+            .then(updated => {
+              if (updated.saleOrderId === saleOrderId) {
+                let existing = SaleOrderPosition.get(id);
+                if (!SaleOrderPosition.get(id) || updated.ts > existing.ts) {
+                  SaleOrderPosition.inject(updated);
+                } else {
+                  DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
+                }
+              }
+            });
+        }
 
       }
 

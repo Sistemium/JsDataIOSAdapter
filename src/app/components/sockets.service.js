@@ -20,9 +20,7 @@ angular.module('core.services')
           if (subscription.event === 'jsData:update') {
             subscription.callback ({
               resource: e.entity,
-              data: {
-                id: e.xid
-              }
+              data: e.data || {id: e.xid}
             });
           }
         });
