@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
@@ -23,8 +23,8 @@
     });
 
     if (saleOrderId) {
-      SaleOrder.find(saleOrderId)
-        .then(saleOrder => SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition'))
+      SaleOrder.find(saleOrderId, {bypassCache: true})
+        .then(saleOrder => SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition', {bypassCache: true}))
         .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
         .catch(error => console.error(error));
     } else {
@@ -52,6 +52,10 @@
     vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder');
     vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderChange, 500));
 
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['SaleOrder', 'SaleOrderPosition']));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
+
     /*
      Handlers
      */
@@ -72,6 +76,36 @@
           _.each(positions, SaleOrderPosition.revert);
           SaleOrder.revert(vm.saleOrder);
         });
+
+    }
+
+    function onJSData(event) {
+
+      DEBUG('onJSData', event);
+      let id = _.get(event, 'data.id');
+      if (!id) return;
+
+      if (event.resource === 'SaleOrder' && id === saleOrderId) {
+
+        SaleOrder.find(id, {bypassCache: true, cacheResponse: false})
+          .then(updatedSaleOrder => {
+            if (updatedSaleOrder.ts > vm.saleOrder.ts) {
+              SaleOrder.inject(updatedSaleOrder);
+              return SaleOrderPosition.findAll({saleOrderId: id}, {bypassCache: true});
+            }
+          });
+
+      }
+
+    }
+
+    function onJSDataDestroy(event) {
+
+      DEBUG('onJSDataDestroy', event);
+      let id = _.get(event, 'data.id');
+      if (!id) return;
+
+      if (event.resource === 'SaleOrderPosition') SaleOrderPosition.eject(id);
 
     }
 
