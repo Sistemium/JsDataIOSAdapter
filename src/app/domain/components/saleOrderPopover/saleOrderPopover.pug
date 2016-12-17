@@ -3,7 +3,7 @@ resize='popover'
 style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
 )
   .option.new-item
-    button.btn.btn-success(
+    button.btn.btn-primary(
     stm-click='setSaleOrder'
     ng-click='vm.isSaleOrderPopoverOpen=false'
     )
@@ -23,6 +23,6 @@ style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
     )
       .name.display-flex
         .flex-1 {{ ::draft.outlet.name }}
-        .right {{ ::draft.totalCost | number:2 }} ₽
+        .right {{ draft.totalCost | number:2 }} ₽
       .address.gray
         small {{ ::draft.outlet.address }}
