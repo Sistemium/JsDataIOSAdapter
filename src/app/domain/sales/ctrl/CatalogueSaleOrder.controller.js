@@ -121,6 +121,7 @@
         } else {
           SaleOrder.find(id, {bypassCache: true})
         }
+
       } else if (event.resource === 'SaleOrderPosition') {
 
         if (event.data.saleOrderId === saleOrderId) {
