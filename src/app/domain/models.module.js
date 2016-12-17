@@ -92,12 +92,20 @@
 
       let id = _.get(_id, 'id') || _id;
 
+      function shouldKeep(key) {
+        return (options.keepChanges||[]).indexOf(key) >= 0;
+      }
+
       return definition.save(id, _.assign({cacheResponse: false}, options))
         .then(serverItem => {
+
           let localItem = resource.index[id];
-          _.assign(localItem, _.omit(serverItem, options.keepChanges));
+
+          DSUtils.forOwn(serverItem, (val, key) => shouldKeep(key) || (localItem[key] = val));
+
           resource.saved[id] = DSUtils.updateTimestamp(resource.saved[id]);
           resource.previousAttributes[id] = DSUtils.copy(serverItem, null, null, null, definition.relationFields);
+
         })
     }
 
