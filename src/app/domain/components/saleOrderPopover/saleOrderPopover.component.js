@@ -7,7 +7,8 @@
 
       bindings: {
         items: '=',
-        activeId: '=?'
+        activeId: '=?',
+        popoverPlacement: '@'
       },
 
       transclude: true,
@@ -23,7 +24,7 @@
       let vm = this;
 
       _.assign(vm, {
-
+        popoverPlacement: vm.popoverPlacement || 'auto bottom-right'
       });
 
     }

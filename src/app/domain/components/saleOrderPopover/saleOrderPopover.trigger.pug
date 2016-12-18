@@ -2,7 +2,7 @@ a(
 href
 uib-popover-template="'app/domain/components/saleOrderPopover/saleOrderPopover.html'"
 popover-trigger='outsideClick'
-popover-placement='auto bottom-right'
+popover-placement='{{vm.popoverPlacement}}'
 popover-is-open='vm.isSaleOrderPopoverOpen'
 )
   ng-transclude
