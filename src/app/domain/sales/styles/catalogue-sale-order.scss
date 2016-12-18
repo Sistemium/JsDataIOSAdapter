@@ -19,7 +19,7 @@
 
   .form {
     padding: 15px;
-    @media (max-width: $screen-xs) {
+    @media (max-width: $screen-xs-max) {
       padding: $margin-bottom-xs;
     }
   }
@@ -43,9 +43,15 @@
   min-width: 0;
 
   & + .menu {
-    margin-left: 1em;
+    margin-left: 15px;
     font-size: 22px;
     margin-top: 4px;
+  }
+
+  @media (max-width: $screen-xs-max) {
+    & + .menu {
+      margin-left: 10px;
+    }
   }
 
   .outlet {
