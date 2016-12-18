@@ -1,0 +1,56 @@
+@import "../../../styles/variables";
+
+.catalogue-sale-order {
+
+  @extend .display-flex;
+
+  .outlet {
+    min-width: 0;
+    .popover {
+      input {
+        margin-top: 8px;
+        min-width: 250px;
+      }
+      @media (min-width: $screen-sm-min) {
+        width: 370px;
+      }
+    }
+  }
+
+  sale-order-popover > a {
+    @extend .display-flex;
+    //align-items: flex-end;
+    > ng-transclude {
+      min-width: 0;
+    }
+    > .caret {
+      flex: 1;
+    }
+    .strong {
+      color: inherit;
+    }
+  }
+
+  .address {
+    @extend .ellipsis;
+  }
+
+  .totals {
+    min-width: 7em;
+  }
+
+  @media (max-width: $screen-xs) {
+
+    display: block;
+
+    > * {
+      display: block;
+    }
+
+    .totals {
+      margin-top: $margin-bottom-xs;
+    }
+
+  }
+
+}

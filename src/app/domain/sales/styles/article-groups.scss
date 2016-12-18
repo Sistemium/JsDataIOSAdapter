@@ -1,0 +1,61 @@
+@import "../../../styles/variables";
+
+#article-groups {
+
+  margin-bottom: 0;
+
+  .caret {
+    @extend .turnable;
+  }
+
+  .collapser {
+    @media (min-width: $screen-sm-min) {
+      display: none;
+    }
+    margin-bottom: $margin-bottom-xs;
+    background: none !important;
+    border-color: #ccc !important;
+    .caret {
+      top: 0;
+    }
+  }
+
+  .xs-ancestors {
+    margin-bottom: $margin-bottom-xs;
+    @media (orientation: portrait) and (min-width: $screen-sm-min) {
+      display: none;
+    }
+  }
+
+  .block-to-collapse {
+
+    position: absolute;
+    z-index: 2;
+
+    background: white;
+
+    margin-right: 15px;
+    margin-left: 15px;
+
+    right: 0;
+    left: 0;
+
+    @media (orientation: portrait) and (min-width: $screen-sm) {
+      .hidden-xs {
+        display: none;
+      }
+    }
+
+  }
+
+}
+
+
+.iOS {
+  #article-groups {
+    .block-to-collapse {
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+  }
+}

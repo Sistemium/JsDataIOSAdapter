@@ -1,0 +1,72 @@
+@import "../../../styles/variables";
+
+#scroll-articles {
+
+  max-height: 100%;
+
+  &.ng-hide:not(.ng-hide-animate) {
+    display: block !important;
+    @extend a.disabled;
+  }
+
+  &.animate-show.ng-hide-remove {
+    transition: all ease-in 0.5s;
+  }
+
+  .right {
+
+    margin-left: 1em;
+    text-align: right;
+
+    button {
+      padding: 3px 5px;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 3px;
+      display: block;
+      color: #777777;
+    }
+
+    [angular-ripple] {
+      overflow: visible;
+    }
+
+    button + button {
+      margin-top: 4px;
+    }
+
+  }
+
+  .article-name-first {
+    .caret {
+      font-size: 10px;
+      margin-right: 4px;
+    }
+    .popover-content {
+      padding: 0;
+      .quantity-edit {
+        .inputs {
+          padding: 3px 10px;
+        }
+        .extras {
+          padding: 0 10px;
+        }
+      }
+    }
+  }
+
+  .article-name-second {
+    color: gray;
+  }
+
+  .article-name-third {
+    text-align: right;
+    small span.gray {
+      margin: 0 4px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+}

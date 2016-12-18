@@ -1,0 +1,25 @@
+@import "../../../styles/variables";
+
+.catalogue {
+
+  .breadcrumb {
+    > li.ancestor, > li.active {
+      @media (max-width: $screen-xs-max) {
+        display: none;
+      }
+    }
+  }
+
+  &.saleOrder .breadcrumb {
+    @media (orientation: landscape) {
+      display: none;
+    }
+  }
+
+  .popover {
+    @media (min-width: $screen-sm-min) {
+      max-width: 370px;
+    }
+  }
+
+}
