@@ -1,0 +1,25 @@
+h4.outlet
+  sale-order-popover(
+  items='$parent.vm.draftSaleOrders'
+  active-id='vm.saleOrder.id'
+  popover-placement='auto bottom-left'
+  )
+    .name
+      span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+      span(ng-if='!vm.saleOrder.outlet.id') Выберите клиента
+      small на
+      small.strong {{ vm.saleOrder.date }}
+      // TODO: show date with amCalendar
+    .address
+      small {{vm.saleOrder.outlet.address}}
+
+.totals.text-right.flex-1
+  a(href stm-click='saleOrderTotals')
+    span.spaced(ng-if='vm.saleOrder.positions.length')
+      strong {{ vm.saleOrder.positions.length | number:0 }}
+      span {{ vm.saleOrder.positionsCountRu() }}
+      = ''
+      span.hidden-xs на сумму
+      strong {{ vm.saleOrder.totalCost | number:2 }}
+      span ₽
+    span(ng-if='!vm.saleOrder.positions.length') В заказе нет позиций

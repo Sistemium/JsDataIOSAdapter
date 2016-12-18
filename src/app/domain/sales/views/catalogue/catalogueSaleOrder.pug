@@ -4,32 +4,8 @@
 
     .catalogue-sale-order.flex-1.spaced(
     ng-class='{disabled:saleOrderExpanded}'
+    ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderHeader.html'"
     )
-      h4.outlet
-        sale-order-popover(
-        items='$parent.vm.draftSaleOrders'
-        active-id='vm.saleOrder.id'
-        popover-placement='auto bottom-left'
-        )
-          .name
-            span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
-            span(ng-if='!vm.saleOrder.outlet.id') Выберите клиента
-            small на
-            small.strong {{ vm.saleOrder.date }}
-            // TODO: show date with amCalendar
-          .address
-            small {{vm.saleOrder.outlet.address}}
-
-      .totals.text-right.flex-1
-        a(href stm-click='saleOrderTotals')
-          span.spaced(ng-if='vm.saleOrder.positions.length')
-            strong {{ vm.saleOrder.positions.length | number:0 }}
-            span {{ vm.saleOrder.positionsCountRu() }}
-            = ''
-            span.hidden-xs на сумму
-            strong {{ vm.saleOrder.totalCost | number:2 }}
-            span ₽
-          span(ng-if='!vm.saleOrder.positions.length') В заказе нет позиций
 
     .menu
       a(
@@ -44,31 +20,5 @@
   )
     form.form.form-horizontal.scroll-y(
     resize resize-offset-top='4'
+    ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderForm.html'"
     )
-      .form-group.form-group-switch
-        label.control-label.col-sm-9.col-xs-7 Скидки в накладную
-        .col-sm-3.col-xs-5
-          toggle-switch(
-          ng-model="vm.saleOrder.docDiscounts"
-          on-label="Да"
-          off-label="Нет"
-          )
-
-      .form-group.form-group-switch
-        label.control-label.col-sm-9.col-xs-7 Оплата по факту
-        .col-sm-3.col-xs-5
-          toggle-switch(
-          ng-model="vm.saleOrder.cashOnShipment"
-          on-label="Да"
-          off-label="Нет"
-          )
-
-      .form-group
-        label.control-label.col-sm-4(for='commentText') Комментарий
-        .col-sm-8
-          input#commentText.form-control(ng-model='vm.saleOrder.commentText')
-
-      .form-group
-        label.control-label.col-sm-4(for='commentExpeditor') Комментарий водителю
-        .col-sm-8
-          input#commentExpeditor.form-control(ng-model='vm.saleOrder.commentExpeditor')
