@@ -27,7 +27,9 @@
       saveOrder,
       nextDayClick,
       prevDayClick,
-      datepickerOptions: $scope.datepickerOptions
+      datepickerOptions: $scope.datepickerOptions,
+      saleOrderDoneClick,
+      saleOrderSaveDraftClick
 
     });
 
@@ -37,10 +39,12 @@
     });
 
     if (saleOrderId) {
-      SaleOrder.find(saleOrderId, {bypassCache: true})
-        .then(saleOrder => SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition', {bypassCache: true}))
-        .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
-        .catch(error => console.error(error));
+      vm.setBusy(
+        SaleOrder.find(saleOrderId, {bypassCache: true})
+          .then(saleOrder => SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition', {bypassCache: true}))
+          .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
+          .catch(error => console.error(error))
+      );
     } else {
 
       vm.saleOrder = SaleOrder.inject({
@@ -86,6 +90,14 @@
     /*
      Handlers
      */
+
+    function saleOrderDoneClick() {
+      $scope.$parent.saleOrderExpanded = false;
+    }
+
+    function saleOrderSaveDraftClick() {
+      $scope.$parent.saleOrderExpanded = false;
+    }
 
     function nextDayClick() {
       vm.saleOrderDate = moment(vm.saleOrderDate).add(1, 'day').toDate();

@@ -29,12 +29,12 @@
 
 .animate-show.ng-hide-add,
 .animate-show.ng-hide-remove {
-  transition: all linear $short-duration;
+  //transition: all linear $short-duration;
 }
 
 .scalable {
   -webkit-transition: $short-duration linear;
-  transition: $short-duration linear;
+  transition: transform $short-duration linear;
   &.scale-y-50 {
     -webkit-transform: scale(1, 1.5);
     transform: scale(1, 1.5);

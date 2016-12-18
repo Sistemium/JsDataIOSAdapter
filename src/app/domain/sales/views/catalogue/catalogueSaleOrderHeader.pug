@@ -16,7 +16,7 @@ h4.outlet
 .totals.text-right.flex-1(
 ng-class='{disabled:saleOrderExpanded}'
 )
-  a(href stm-click='saleOrderTotals')
+  a.animate-show(href stm-click='saleOrderTotals' ng-hide='vm.busy')
     span.spaced(ng-if='vm.saleOrder.positions.length')
       strong {{ vm.saleOrder.positions.length | number:0 }}
       span {{ vm.saleOrder.positionsCountRu() }}
@@ -24,4 +24,4 @@ ng-class='{disabled:saleOrderExpanded}'
       span.hidden-xs на сумму
       strong {{ vm.saleOrder.totalCost | number:2 }}
       span ₽
-    span(ng-if='!vm.saleOrder.positions.length') В заказе нет позиций
+    span(ng-if='!vm.busy && !vm.saleOrder.positions.length') В заказе нет позиций
