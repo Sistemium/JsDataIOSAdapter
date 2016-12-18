@@ -96,10 +96,12 @@
     }
 
     function saleOrderTotalsClick() {
-      vm.showOnlyOrdered = true;
+
+      vm.showOnlyOrdered = !vm.showOnlyOrdered;
+
       vm.setBusy($q.all(
         _.map(
-          _.filter(vm.saleOrder.positions, pos => !_.get(pos, 'article.stock')),
+          _.filter(vm.saleOrder.positions, pos => !Stock.filter({articleId: pos.articleId}).length),
           pos => Article.loadRelations(pos.articleId, 'Stock')
         )
       ))
@@ -354,7 +356,7 @@
 
       if (vm.showOnlyOrdered) {
         let ids = _.map(vm.saleOrder.positions, 'articleId');
-        articles = _.filter(articles, article => ids.indexOf(article.articleGroupId) > -1);
+        articles = _.filter(articles, article => ids.indexOf(article.id) > -1);
       }
 
       if (articleGroup) {
