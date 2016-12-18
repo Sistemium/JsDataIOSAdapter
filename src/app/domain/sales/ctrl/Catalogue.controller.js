@@ -134,6 +134,8 @@
         vm.showOnlyOrdered = false;
       }
 
+      $scope.saleOrderExpanded = false;
+
     }
 
     /*

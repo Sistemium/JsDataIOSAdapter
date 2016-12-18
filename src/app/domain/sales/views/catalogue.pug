@@ -1,6 +1,6 @@
-section.catalogue.spaced(
+section(
 cg-busy='vm.cgBusy'
-ng-class='vm.currentState'
+ng-class='["catalogue", vm.currentState]'
 )
 
   .ui-view
@@ -10,12 +10,14 @@ ng-class='vm.currentState'
   ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'"
   )
 
-  section.row
+  section.row.animate-show(
+  ng-show='!vm.saleOrderId || !saleOrderExpanded'
+  )
 
     #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
 
     #scroll-articles.col-sm-8.scroll-y.animate-show(
     resize resize-offset-top='5' resize-property='height'
     ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
-    ng-show='vm.isWideScreen || !vm.isArticleGroupsExpanded'
+    ng-show='(vm.isWideScreen || !vm.isArticleGroupsExpanded)'
     )

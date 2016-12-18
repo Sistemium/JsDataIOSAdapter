@@ -22,4 +22,14 @@
     }
   }
 
+  > .animate-show {
+    &.ng-hide:not(.ng-hide-animate) {
+      display: block !important;
+      @extend a.disabled;
+    }
+    &.ng-hide {
+      opacity: 0.2;
+    }
+  }
+
 }

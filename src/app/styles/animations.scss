@@ -20,10 +20,23 @@ $short-duration: 0.5s;
     transform: rotate(-90deg);
   }
 
-}
+  &.turn-180-counter-clock {
+    -webkit-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+  }
 
+}
 
 .animate-show.ng-hide-add,
 .animate-show.ng-hide-remove {
   transition: all linear $short-duration;
+}
+
+.scalable {
+  -webkit-transition: $short-duration linear;
+  transition: $short-duration linear;
+  &.scale-y-50 {
+    -webkit-transform: scale(1, 1.5);
+    transform: scale(1, 1.5);
+  }
 }
