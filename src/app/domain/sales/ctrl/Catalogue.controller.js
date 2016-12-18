@@ -18,7 +18,7 @@
     vm.use({
 
       debounce: IOS.isIos() ? 600 : 200,
-      showOnlyOrdered: $state.params.ordered ==='true',
+      showOnlyOrdered: $state.params.ordered === 'true',
 
       currentArticleGroup: null,
       ancestors: [],
@@ -93,14 +93,15 @@
       vm.search = '';
     }
 
-    function saleOrderTotalsClick() {
+    function saleOrderTotalsClick(showOnlyOrdered) {
 
-      vm.showOnlyOrdered = !vm.showOnlyOrdered;
+      vm.showOnlyOrdered = showOnlyOrdered || !vm.showOnlyOrdered;
 
       vm.setBusy($q.all(
         _.map(
-          _.filter(vm.saleOrder.positions, pos => !Stock.filter({articleId: pos.articleId}).length),
-          pos => Article.loadRelations(pos.articleId, 'Stock')
+          _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.filter({articleId: pos.articleId}).length),
+          pos => Article.find(pos.articleId)
+            .then(article => Article.loadRelations(article, 'Stock'))
         )
       ))
         .then(() => {
@@ -149,7 +150,7 @@
       _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
 
       if (vm.showOnlyOrdered && newPositions && newPositions.length) {
-        setCurrentArticleGroup(vm.currentArticleGroup);
+        saleOrderTotalsClick(true);
       }
 
     }
@@ -322,7 +323,11 @@
 
       scrollArticlesTop();
 
-      $state.go('.', {articleGroupId: filter.articleGroupId, q: vm.search, ordered: vm.showOnlyOrdered||null}, {notify: false});
+      $state.go('.', {
+        articleGroupId: filter.articleGroupId,
+        q: vm.search,
+        ordered: vm.showOnlyOrdered || null
+      }, {notify: false});
 
     }
 
