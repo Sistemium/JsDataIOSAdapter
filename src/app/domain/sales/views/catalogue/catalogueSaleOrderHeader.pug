@@ -1,6 +1,6 @@
 h4.outlet
   sale-order-popover(
-  items='$parent.vm.draftSaleOrders'
+  items='draftSaleOrders'
   active-id='vm.saleOrder.id'
   popover-placement='auto bottom-left'
   )
@@ -13,7 +13,9 @@ h4.outlet
     .address
       small {{vm.saleOrder.outlet.address}}
 
-.totals.text-right.flex-1
+.totals.text-right.flex-1(
+ng-class='{disabled:saleOrderExpanded}'
+)
   a(href stm-click='saleOrderTotals')
     span.spaced(ng-if='vm.saleOrder.positions.length')
       strong {{ vm.saleOrder.positions.length | number:0 }}

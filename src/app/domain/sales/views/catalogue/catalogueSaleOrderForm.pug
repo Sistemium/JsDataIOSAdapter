@@ -1,6 +1,36 @@
+.form-group
+  label.control-label.col-md-9.col-sm-8 Дата доставки
+  .col-md-3.col-sm-4
+    .input-group
+      span.input-group-btn
+        button.btn.btn-default(
+        ng-click='vm.prevDayClick()'
+        )
+          i.glyphicon.glyphicon-chevron-left
+      span.form-control.text-center(
+      uib-datepicker-popup
+      ng-model='vm.saleOrderDate'
+      datepicker-options='vm.datepickerOptions'
+      is-open='datepickerPopupOpened'
+      datepicker-append-to-body='false'
+      no-show-button-bar='false'
+      on-open-focus='false'
+      ng-required='true'
+      current-text='Сегодня'
+      close-text='Закрыть'
+      clear-text='Ближайший день доставки'
+      ng-click='datepickerPopupOpened = !datepickerPopupOpened'
+      ) {{ vm.saleOrder.date | amDateFormat:'DD/MM/YYYY, dd' }}
+      span.input-group-btn
+        button.btn.btn-default(
+        ng-click='vm.nextDayClick()'
+        )
+          i.glyphicon.glyphicon-chevron-right
+
+
 .form-group.form-group-switch
-  label.control-label.col-sm-9.col-xs-7 Скидки в накладную
-  .col-sm-3.col-xs-5
+  label.control-label.col-md-9.col-sm-8.col-xs-7 Скидки в накладную
+  .col-md-3.col-sm-4
     toggle-switch(
     ng-model='vm.saleOrder.docDiscounts'
     on-label='Да'
@@ -8,20 +38,21 @@
     )
 
 .form-group.form-group-switch
-  label.control-label.col-sm-9.col-xs-7 Оплата по факту
-  .col-sm-3.col-xs-5
+  label.control-label.col-md-9.col-sm-8.col-xs-7 Оплата по факту
+  .col-md-3.col-sm-4
     toggle-switch(
     ng-model='vm.saleOrder.cashOnShipment'
     on-label='Да'
     off-label='Нет'
     )
 
+
 .form-group
-  label.control-label.col-sm-4(for='commentText') Комментарий
-  .col-sm-8
+  label.control-label.col-md-3.col-sm-4(for='commentText') Комментарий
+  .col-md-9.col-sm-8
     input#commentText.form-control(ng-model='vm.saleOrder.commentText')
 
 .form-group
-  label.control-label.col-sm-4(for='commentExpeditor') Комментарий водителю
-  .col-sm-8
+  label.control-label.col-md-3.col-sm-4(for='commentExpeditor') Комментарий водителю
+  .col-md-9.col-sm-8
     input#commentExpeditor.form-control(ng-model='vm.saleOrder.commentExpeditor')

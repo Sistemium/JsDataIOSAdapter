@@ -1,9 +1,8 @@
-.alert.alert-default
+.alert.alert-default(ng-class='{"sale-order-expanded": saleOrderExpanded}')
 
   .display-flex
 
     .catalogue-sale-order.flex-1.spaced(
-    ng-class='{disabled:saleOrderExpanded}'
     ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderHeader.html'"
     )
 

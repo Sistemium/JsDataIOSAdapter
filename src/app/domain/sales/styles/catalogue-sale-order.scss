@@ -1,5 +1,21 @@
 @import "../../../styles/variables";
 
+.sale-order-expanded {
+
+  .name {
+    small {
+      opacity: 0;
+    }
+  }
+}
+
+.name {
+  small {
+    transition: all linear $short-duration*2;
+    opacity: 1;
+  }
+}
+
 .sale-order-collapsible {
 
   .form-group:first-of-type {
@@ -18,10 +34,28 @@
   }
 
   .form {
+
     padding: 15px;
+    height: 360px;
+
     @media (max-width: $screen-xs-max) {
       padding: $margin-bottom-xs;
     }
+
+    .uib-datepicker-popup {
+
+      .uib-button-bar {
+        button.btn.uib-datepicker-current[type] {
+          display: none;
+        }
+        button.btn.uib-clear {
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+        }
+      }
+
+    }
+
   }
 
   position: absolute;

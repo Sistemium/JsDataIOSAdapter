@@ -7,9 +7,27 @@
   }
 }
 
-
-.ats-switch {
+.ats-switch, .uib-datepicker-popup, .uib-datepicker-popup * {
+  outline: none;
   &:active, &:focus {
     outline: none;
   }
+}
+
+.uib-datepicker-popup {
+
+  .uib-datepicker {
+    button.btn.btn-default {
+      border-color: white;
+    }
+  }
+
+  .uib-button-bar {
+    button.btn.uib-close.btn-success {
+      background-color: white;
+      border-color: white;
+      color: black;
+    }
+  }
+
 }

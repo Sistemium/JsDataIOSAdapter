@@ -55,3 +55,8 @@ a.disabled, .disabled a {
 .disable-click {
   pointer-events: none;
 }
+
+
+.iOS a:hover, a:focus {
+  color: #4290d0;
+}

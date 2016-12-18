@@ -72,7 +72,7 @@
     SalesmanAuth.watchCurrent($scope, salesman => {
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
       vm.currentSalesman = salesman;
-      vm.rebindAll(SaleOrder, filter, 'vm.draftSaleOrders');
+      vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
       SaleOrder.findAllWithRelations(filter)('Outlet');
     });
 

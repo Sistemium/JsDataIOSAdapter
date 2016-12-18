@@ -24,8 +24,16 @@
       bPlusButtonClick,
       searchOutletClick,
       clearSearchOutletClick,
-      saveOrder
+      saveOrder,
+      nextDayClick,
+      prevDayClick,
+      datepickerOptions: $scope.datepickerOptions
 
+    });
+
+    _.assign(vm.datepickerOptions, {
+      minDate: moment().add(1, 'day').toDate(),
+      initDate: moment().add(1, 'day').toDate()
     });
 
     if (saleOrderId) {
@@ -55,8 +63,17 @@
       vm.rebindAll(Outlet, filter, 'vm.outlets');
     });
 
-    vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder');
+    vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', () => {
+      if (!vm.saleOrder) return;
+      vm.saleOrderDate = moment(vm.saleOrder.date).toDate();
+    });
+
     vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderChange, 500));
+
+    vm.watchScope('vm.saleOrderDate', date => {
+      if (!date || !vm.saleOrder) return;
+      vm.saleOrder.date = moment(date).format('YYYY-MM-DD');
+    });
 
     $scope.$on('$destroy', Sockets.jsDataSubscribe(SUBSCRIPTIONS));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
@@ -69,6 +86,14 @@
     /*
      Handlers
      */
+
+    function nextDayClick() {
+      vm.saleOrderDate = moment(vm.saleOrderDate).add(1, 'day').toDate();
+    }
+
+    function prevDayClick() {
+      vm.saleOrderDate = moment(vm.saleOrderDate).add(-1, 'day').toDate();
+    }
 
     function onSaleOrderChange() {
 
