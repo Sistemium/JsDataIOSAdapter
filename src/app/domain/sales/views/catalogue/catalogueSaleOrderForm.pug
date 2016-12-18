@@ -5,6 +5,7 @@
       span.input-group-btn
         button.btn.btn-default(
         ng-click='vm.prevDayClick()'
+        ng-disabled='vm.saleOrderDate <= vm.datepickerOptions.minDate'
         )
           i.glyphicon.glyphicon-chevron-left
       span.form-control.text-center(

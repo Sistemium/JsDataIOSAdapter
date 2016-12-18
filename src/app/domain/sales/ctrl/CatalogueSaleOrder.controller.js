@@ -27,16 +27,15 @@
       saveOrder,
       nextDayClick,
       prevDayClick,
-      datepickerOptions: $scope.datepickerOptions,
       saleOrderDoneClick,
       saleOrderSaveDraftClick
 
     });
 
-    _.assign(vm.datepickerOptions, {
+    vm.datepickerOptions = _.defaults({
       minDate: moment().add(1, 'day').toDate(),
       initDate: moment().add(1, 'day').toDate()
-    });
+    }, $scope.datepickerOptions);
 
     if (saleOrderId) {
       vm.setBusy(
@@ -75,7 +74,8 @@
     vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderChange, 500));
 
     vm.watchScope('vm.saleOrderDate', date => {
-      if (!date || !vm.saleOrder) return;
+      if (!vm.saleOrder) return;
+      if (!date) date = vm.saleOrderDate = vm.datepickerOptions.minDate;
       vm.saleOrder.date = moment(date).format('YYYY-MM-DD');
     });
 
@@ -100,7 +100,10 @@
     }
 
     function nextDayClick() {
-      vm.saleOrderDate = moment(vm.saleOrderDate).add(1, 'day').toDate();
+      vm.saleOrderDate = _.max([
+        moment(vm.datepickerOptions.minDate),
+        moment(vm.saleOrderDate).add(1, 'day')
+      ]).toDate();
     }
 
     function prevDayClick() {

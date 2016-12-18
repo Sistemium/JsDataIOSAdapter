@@ -11,7 +11,7 @@
 
 .name {
   small {
-    transition: all linear $short-duration*1.5;
+    transition: opacity linear $short-duration*1.5;
     opacity: 1;
   }
 }
@@ -57,17 +57,24 @@
         button.btn.uib-clear {
           border-top-left-radius: 3px;
           border-bottom-left-radius: 3px;
+          &.btn-danger {
+            background-color: $primary-color;
+            border-color: $primary-color;
+          }
         }
       }
 
     }
 
     .buttons {
+
       text-align: right;
       padding: $margin-bottom-xs*2;
+
       @media (max-width: $screen-xs-max) {
         padding: $margin-bottom-xs;
       }
+
       border-top: solid 1px darken($border-gray, 5);
       position: absolute;
       bottom: 0;
@@ -166,6 +173,7 @@
 
     .totals {
       margin-top: $margin-bottom-xs;
+      text-align: left;
     }
 
   }

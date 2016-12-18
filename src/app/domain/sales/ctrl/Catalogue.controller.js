@@ -18,6 +18,7 @@
     vm.use({
 
       debounce: IOS.isIos() ? 600 : 200,
+      showOnlyOrdered: $state.params.ordered ==='true',
 
       currentArticleGroup: null,
       ancestors: [],
@@ -62,11 +63,8 @@
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
-    vm.watchScope('vm.saleOrder.id', (newValue, oldValue) => {
+    vm.watchScope('vm.saleOrder.id', newValue => {
       vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', cacheSaleOrderPositions);
-      if (newValue != oldValue && vm.showOnlyOrdered) {
-        saleOrderTotalsClick();
-      }
     });
 
     SalesmanAuth.watchCurrent($scope, salesman => {
@@ -142,13 +140,17 @@
      Functions
      */
 
-    function cacheSaleOrderPositions() {
+    function cacheSaleOrderPositions(ev, newPositions) {
 
       vm.saleOrderPositionByArticle = {};
 
       let grouped = _.groupBy(vm.saleOrderPositions, 'articleId');
 
       _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
+
+      if (vm.showOnlyOrdered && newPositions && newPositions.length) {
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
 
     }
 
@@ -320,7 +322,7 @@
 
       scrollArticlesTop();
 
-      $state.go('.', {articleGroupId: filter.articleGroupId, q: vm.search}, {notify: false});
+      $state.go('.', {articleGroupId: filter.articleGroupId, q: vm.search, ordered: vm.showOnlyOrdered||null}, {notify: false});
 
     }
 

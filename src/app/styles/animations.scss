@@ -29,7 +29,7 @@
 
 .animate-show.ng-hide-add,
 .animate-show.ng-hide-remove {
-  //transition: all linear $short-duration;
+  transition: opacity linear $short-duration;
 }
 
 .scalable {

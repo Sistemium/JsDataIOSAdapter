@@ -20,7 +20,7 @@
           children: [
             {
               name: 'saleOrder',
-              url: '/saleOrder/{saleOrderId}',
+              url: '/saleOrder/{saleOrderId}?ordered',
               templateUrl: 'app/domain/sales/views/catalogue/catalogueSaleOrder.html',
               controller: 'CatalogueSaleOrderController',
               controllerAs: 'vm'
