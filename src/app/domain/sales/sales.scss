@@ -48,20 +48,7 @@
     }
   }
 
-  .uib-datepicker-popup {
-
-    .uib-button-bar {
-      button.btn.uib-datepicker-current {
-        border-top-right-radius: 3px;
-        border-bottom-right-radius: 3px;
-        width: 100%;
-      }
-      button.btn.uib-clear {
-        display: none;
-      }
-    }
-
-  }
+  @extend .uib-datepicker-no-clear;
 
 }
 
@@ -89,6 +76,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   form.form-horizontal {
     margin: 0 15px;
   }
+  @extend .uib-datepicker-no-clear;
 }
 
 .iOS .sale-orders {
