@@ -45,6 +45,13 @@
     margin-top: 12px;
   }
 
+  a.home {
+    font-size: 27px;
+    @media (max-width: $screen-xs-max) {
+      font-size: 20px;
+    }
+  }
+
 }
 
 @media (min-width: 768px) {
