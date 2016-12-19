@@ -1,21 +1,5 @@
 @import "../../../styles/variables";
 
-.sale-order-expanded {
-
-  .name {
-    small {
-      opacity: 0;
-    }
-  }
-}
-
-.name {
-  small {
-    transition: opacity linear $short-duration*1.5;
-    opacity: 1;
-  }
-}
-
 .sale-order-collapsible {
 
   //.form-group:first-of-type {

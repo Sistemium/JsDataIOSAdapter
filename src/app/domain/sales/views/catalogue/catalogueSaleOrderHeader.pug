@@ -6,10 +6,12 @@ h4.outlet
   )
     .name
       span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
-      span(ng-if='!vm.saleOrder.outlet.id') Выберите клиента
-      small на
-      small.strong {{ vm.saleOrder.date }}
-      // TODO: show date with amCalendar
+      span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+      span.animate-show.spaced(ng-hide='saleOrderExpanded')
+        small на
+        small.strong {{ vm.saleOrder.date }}
+        // TODO: show date with amCalendar but without time
+
     .address
       small {{vm.saleOrder.outlet.address}}
 
