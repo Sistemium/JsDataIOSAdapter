@@ -222,6 +222,11 @@
 
       DEBUG('filterStock', 'start');
 
+      let discount = 1;
+      let priceType = vm.currentPriceType;
+
+      if (!vm.currentPriceType) return;
+
       let stockCache = _.orderBy(_.map(
         Stock.getAll(),
         stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
@@ -229,8 +234,6 @@
 
       DEBUG('filterStock', 'orderBy');
 
-      let discount = 1;
-      let priceType = vm.currentPriceType;
 
       if (vm.currentPriceType.parent) {
         priceType = vm.currentPriceType.parent;
