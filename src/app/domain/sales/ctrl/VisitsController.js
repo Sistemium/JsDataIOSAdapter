@@ -79,17 +79,13 @@
 
       var filter = salesmanFilter();
 
-      vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
-        .then(() => {
+      vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов');
 
-          vm.rebindAll(Visit, filter, 'vm.visits', () => {
+      vm.rebindAll(Visit, filter, 'vm.visits', () => {
+        markDaysWithVisits();
+        vm.datepickerOptions = datepickerOptions();
+      });
 
-            markDaysWithVisits();
-            vm.datepickerOptions = datepickerOptions();
-
-          });
-
-        });
 
     }
 
