@@ -25,9 +25,9 @@
   > .animate-show {
     &.ng-hide:not(.ng-hide-animate) {
       display: block !important;
-      @extend a.disabled;
     }
     &.ng-hide {
+      @extend a.disabled;
       opacity: 0.2;
     }
   }
