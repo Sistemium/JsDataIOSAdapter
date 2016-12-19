@@ -154,7 +154,7 @@
     }
 
     function newItemClick() {
-      $state.go('.create');
+      $state.go('sales.catalogue.saleOrder');
     }
 
   }
