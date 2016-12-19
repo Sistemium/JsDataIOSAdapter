@@ -47,6 +47,22 @@
       }
     }
   }
+
+  .uib-datepicker-popup {
+
+    .uib-button-bar {
+      button.btn.uib-datepicker-current {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+        width: 100%;
+      }
+      button.btn.uib-clear {
+        display: none;
+      }
+    }
+
+  }
+
 }
 
 navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
