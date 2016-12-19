@@ -7,9 +7,12 @@
     let vm = saControllerHelper.setup(this, $scope);
     let {SaleOrderPosition, SaleOrder} = Schema.models();
 
-    vm.use({});
+    vm.use({
+      saleOrderEditUnlockClick: () => vm.editingState = !vm.editingState
+    });
 
     getPositions();
+
 
     /*
      Listeners
@@ -25,11 +28,14 @@
       vm.setBusy(getData());
     }
 
+
     function getData() {
       return SaleOrder.find($state.params.id)
         .then(saleOrder => SaleOrder.loadRelations(saleOrder))
         .then(saleOrder => {
-          return $q.all(_.map(saleOrder.positions, position => SaleOrderPosition.loadRelations(position)));
+          return $q.all(_.map(saleOrder.positions, position => {
+            SaleOrderPosition.loadRelations(position);
+          }));
         })
     }
 
