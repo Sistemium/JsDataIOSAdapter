@@ -3,3 +3,23 @@
   //overflow-x:
   -webkit-overflow-scrolling: touch;
 }
+
+.scroll-bar {
+
+  &::-webkit-scrollbar:vertical {
+    -webkit-appearance: none;
+    width: 30px;
+    display: block;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: darken($gray-background-color, 10);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: $gray-background-color;
+  }
+
+}
