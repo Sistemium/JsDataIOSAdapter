@@ -7,7 +7,8 @@
     bindings: {
       article: '=',
       saleOrder: '=',
-      price: '='
+      price: '=',
+      positionsCache: '=?'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEdit.html',
@@ -25,9 +26,14 @@
     _.assign(vm, {
 
       boxPcs: () => {
-        let position = _.find(vm.saleOrder.positions, {articleId: vm.article.id});
+
+        let position = vm.positionsCache ?
+          vm.positionsCache[vm.article.id] :
+          _.find(vm.saleOrder.positions, {articleId: vm.article.id});
+
         if (!position || !position.volume) return;
         return vm.article.boxPcs(position.volume).full;
+
       }
 
     });

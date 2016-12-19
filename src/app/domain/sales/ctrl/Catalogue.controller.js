@@ -37,8 +37,6 @@
       clearSearchClick,
 
       onStateChange,
-
-      orderedVolumeFull,
       articleRowHeight
 
     });
@@ -175,13 +173,6 @@
       }
 
       return (length > lastBreak || nameLength > nameBreak) ? 99 : 80;
-    }
-
-    function orderedVolumeFull(stock) {
-      let position = vm.saleOrderPositionByArticle[stock.articleId];
-      if (!position) return;
-
-      return position.article.boxPcs(position.volume).full;
     }
 
     function findAll() {
