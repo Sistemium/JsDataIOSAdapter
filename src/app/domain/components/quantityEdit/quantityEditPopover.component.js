@@ -40,7 +40,7 @@
       decrementBoxes: () => changeVolume(-article.packageRel),
       decrementBottles: () => changeVolume(-1),
       deleteClick,
-      incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel/2))
+      incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel / 2))
 
     });
 
@@ -83,7 +83,7 @@
 
     function onQtyChange(newValues, oldValues) {
       if (newValues[1] != oldValues[1] || newValues[0] != oldValues[0]) {
-        let volume  = parseInt(newValues[0] * position.article.packageRel || 0)
+        let volume = parseInt(newValues[0] * position.article.packageRel || 0)
           + parseInt(newValues[1] || 0);
         position.volume = _.max([0, volume]);
         injectPosition();
