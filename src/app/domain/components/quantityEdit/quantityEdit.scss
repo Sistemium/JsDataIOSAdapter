@@ -41,3 +41,15 @@
   }
 
 }
+
+.disabled {
+  .quantity-edit {
+    a {
+      color: $black;
+      font-weight: normal;
+    }
+    .caret {
+      display: none;
+    }
+  }
+}
