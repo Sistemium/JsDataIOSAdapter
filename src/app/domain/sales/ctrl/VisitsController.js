@@ -6,6 +6,9 @@
 
     const {Visit} = Schema.models();
 
+    let maxDate;
+    let minDate;
+
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
@@ -31,7 +34,7 @@
     /*
      Listeners
      */
-    
+
     SalesmanAuth.watchCurrent($scope, salesman => {
 
       vm.selectedSalesmanId = _.get(salesman, 'id');
@@ -63,9 +66,12 @@
         vm.selectedDate = new Date();
       }
 
+      maxDate = new Date();
+      maxDate.setHours(0, 0, 0, 0);
+
       filterVisitsBySelectedDate();
 
-      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')}, {notify: false});
+      $state.go('.', {date: dateFormatted(vm.selectedDate)}, {notify: false});
 
     }
 
@@ -76,10 +82,10 @@
       vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
         .then(() => {
 
-          Visit.bindAll(filter, $scope, 'vm.visits', () => {
+          vm.rebindAll(Visit, filter, 'vm.visits', () => {
 
-            vm.datepickerOptions = datepickerOptions();
             markDaysWithVisits();
+            vm.datepickerOptions = datepickerOptions();
 
           });
 
@@ -87,31 +93,23 @@
 
     }
 
+    function dateFormatted(date) {
+      return moment(date).format('YYYY-MM-DD');
+    }
+
     function markDaysWithVisits() {
 
-      var visitDays = _.map(vm.visits, (visit) => {
-        return _.truncate(_.get(visit, 'deviceCts'), {'separator': ' ', length: '10', omission: ''});
-      });
+      vm.events = _.groupBy(vm.visits, 'date');
 
-      vm.events = [{
-        date: maxDate(),
-        status: 'today'
-      }];
+      vm.events [dateFormatted(maxDate)] = {status: 'today'};
 
-      _.forEach(visitDays, (visitDay) => {
-
-        vm.events.push({
-          date: new Date(visitDay),
-          status: 'haveVisit'
-        });
-
-      });
+      minDate = moment(_.min(_.map(vm.events, (visits, date) => date))).toDate();
 
     }
 
     function filterVisitsBySelectedDate() {
 
-      var dateFilter = {date: moment(vm.selectedDate).format('YYYY-MM-DD')};
+      var dateFilter = {date: dateFormatted(vm.selectedDate)};
       var filter = salesmanFilter(dateFilter);
 
       vm.setBusy(
@@ -139,10 +137,6 @@
 
     }
 
-    function previousDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) > minDate()) : false;
-    }
-
     function selectNextDay() {
 
       if (!nextDayAvailable()) return;
@@ -153,39 +147,20 @@
 
     }
 
+    function previousDayAvailable() {
+      return vm.selectedDate && vm.selectedDate > minDate;
+    }
+
     function nextDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) < maxDate()) : false;
-    }
-
-    function maxDate() {
-
-      var maxDate = new Date();
-      maxDate.setHours(0, 0, 0, 0);
-
-      return maxDate;
-
-    }
-
-    function minDate() {
-
-      if (!vm.visits || vm.visits.length == 0) return maxDate();
-
-      var firstVisitDate = _.get(_.first(_.sortBy(vm.visits, 'deviceCts')), 'deviceCts');
-      firstVisitDate = _.truncate(firstVisitDate, {'separator': ' ', length: '10', omission: ''});
-
-      var minDate = new Date(firstVisitDate);
-      minDate.setHours(0, 0, 0, 0);
-
-      return minDate;
-
+      return vm.selectedDate && vm.selectedDate < maxDate;
     }
 
     function datepickerOptions() {
 
       return {
         customClass: getDayClass,
-        maxDate: maxDate(),
-        minDate: minDate(),
+        maxDate,
+        minDate,
         startingDay: 1,
         showWeeks: false
       };
@@ -194,26 +169,15 @@
 
     function getDayClass(data) {
 
-      var date = data.date,
-        mode = data.mode;
+      let {date, mode} = data;
 
       if (mode === 'day') {
 
-        var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
-
-        for (var i = 0; i < vm.events.length; i++) {
-
-          var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
-
-          if (dayToCheck === currentDay) {
-            return vm.events[i].status;
-          }
-
-        }
+        let event = vm.events[dateFormatted(dateFormatted(date))];
+        if (!event) return;
+        return _.isArray(event) ? 'haveVisit' : event.status;
 
       }
-
-      return '';
 
     }
 
