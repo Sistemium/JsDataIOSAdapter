@@ -77,7 +77,7 @@
 
     function findVisits() {
 
-      var filter = salesmanFilter();
+      let filter = salesmanFilter();
 
       vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов');
 
@@ -105,8 +105,8 @@
 
     function filterVisitsBySelectedDate() {
 
-      var dateFilter = {date: dateFormatted(vm.selectedDate)};
-      var filter = salesmanFilter(dateFilter);
+      let dateFilter = {date: dateFormatted(vm.selectedDate)};
+      let filter = salesmanFilter(dateFilter);
 
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
@@ -127,7 +127,7 @@
 
       if (!previousDayAvailable()) return;
 
-      var previousDay = vm.selectedDate;
+      let previousDay = vm.selectedDate;
       previousDay.setDate(previousDay.getDate() - 1);
       vm.selectedDate = new Date(previousDay);
 
@@ -137,7 +137,7 @@
 
       if (!nextDayAvailable()) return;
 
-      var nextDay = vm.selectedDate;
+      let nextDay = vm.selectedDate;
       nextDay.setDate(nextDay.getDate() + 1);
       vm.selectedDate = new Date(nextDay);
 
