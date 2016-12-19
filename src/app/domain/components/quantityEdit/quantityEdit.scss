@@ -32,7 +32,7 @@
     display: block;
   }
 
-  .extras{
+  .extras {
     border-top: solid thin $border-gray;
   }
 
@@ -40,6 +40,21 @@
     color: $state-danger-text;
   }
 
+}
+
+.quantity-edit {
+  .popover-content {
+
+    padding: 0;
+
+    .inputs {
+      padding: 3px 10px;
+    }
+    .extras {
+      padding: 0 10px;
+    }
+
+  }
 }
 
 .disabled {
