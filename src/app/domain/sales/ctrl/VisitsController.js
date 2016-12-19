@@ -39,8 +39,8 @@
     SalesmanAuth.watchCurrent($scope, salesman => {
 
       vm.selectedSalesmanId = _.get(salesman, 'id');
-      findVisits();
-      filterVisitsBySelectedDate();
+      findVisits()
+        .then(filterVisitsBySelectedDate);
 
     });
 
@@ -80,12 +80,12 @@
 
       let filter = salesmanFilter();
 
-      vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов');
-
       vm.rebindAll(Visit, filter, 'vm.visits', () => {
         markDaysWithVisits();
         vm.datepickerOptions = datepickerOptions();
       });
+
+      return vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов');
 
     }
 
