@@ -1,7 +1,13 @@
 #scroll-main(resize ng-style='{height: (windowHeight - offsetTop) + "px"}')
 
   // display saleOrder fields
+
+
+
   form.form-horizontal
+
+    .buttons.text-right
+      button.btn.btn-default(ng-click='vm.saleOrderEditUnlockClick()') Редактировать
 
     .form-group
       label.col-sm-3.control-label(for='ouletName') Торговая точка
@@ -36,11 +42,16 @@
         th.number Количество
         th.number Цена
         th.number.hidden-xs Стоимость
-    tbody
+    tbody(ng-class='{disabled: !vm.editingState}')
       tr.clickable(
       ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
       )
         td {{ item.article.name }}
-        td.number {{ item.volume | number:0 }}
+        td.number
+          quantity-edit(
+          sale-order='vm.saleOrder'
+          article='item.article'
+          price='item.price'
+          )
         td.number {{ item.price | number:2 }}
         td.number.hidden-xs {{ item.cost | number:2}}
