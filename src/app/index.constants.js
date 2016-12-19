@@ -16,6 +16,10 @@
       templateUrl: 'app/components/busy/busy.html'
     })
 
+    .run(moment => {
+      moment.defaultFormat = 'YYYY-MM-DD';
+    })
+
     .run($rootScope => {
       $rootScope.datepickerOptions = {
         showWeeks: false

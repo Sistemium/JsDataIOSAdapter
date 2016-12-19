@@ -90,7 +90,7 @@
     }
 
     function dateFormatted(date) {
-      return moment(date).format('YYYY-MM-DD');
+      return moment(date).format();
     }
 
     function markDaysWithVisits() {

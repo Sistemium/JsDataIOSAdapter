@@ -59,7 +59,7 @@
         vm.selectedDate = new Date();
       }
 
-      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')});
+      $state.go('.', {date: moment(vm.selectedDate).format()});
 
     }
 
@@ -67,7 +67,7 @@
     function getData(salesman) {
 
       vm.currentSalesman = salesman;
-      let date = moment(vm.selectedDate).format('YYYY-MM-DD');
+      let date = moment(vm.selectedDate).format();
 
       let filter = SalesmanAuth.makeFilter({date});
 

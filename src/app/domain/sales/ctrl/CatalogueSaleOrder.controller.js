@@ -48,7 +48,7 @@
 
       vm.saleOrder = SaleOrder.inject({
         salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
-        date: moment().add(1, 'days').format('YYYY-MM-DD')
+        date: moment().add(1, 'days').format()
       });
 
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
@@ -76,7 +76,7 @@
     vm.watchScope('vm.saleOrderDate', date => {
       if (!vm.saleOrder) return;
       if (!date) date = vm.saleOrderDate = vm.datepickerOptions.minDate;
-      vm.saleOrder.date = moment(date).format('YYYY-MM-DD');
+      vm.saleOrder.date = moment(date).format();
     });
 
     $scope.$on('$destroy', Sockets.jsDataSubscribe(SUBSCRIPTIONS));
