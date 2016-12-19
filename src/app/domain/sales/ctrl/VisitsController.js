@@ -8,6 +8,7 @@
 
     let maxDate;
     let minDate;
+    let events;
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -86,7 +87,6 @@
         vm.datepickerOptions = datepickerOptions();
       });
 
-
     }
 
     function dateFormatted(date) {
@@ -95,11 +95,10 @@
 
     function markDaysWithVisits() {
 
-      vm.events = _.groupBy(vm.visits, 'date');
+      events = _.groupBy(vm.visits, 'date');
+      events [dateFormatted(maxDate)] = {status: 'today'};
 
-      vm.events [dateFormatted(maxDate)] = {status: 'today'};
-
-      minDate = moment(_.min(_.map(vm.events, (visits, date) => date))).toDate();
+      minDate = moment(_.min(_.map(events, (visits, date) => date))).toDate();
 
     }
 
@@ -169,7 +168,7 @@
 
       if (mode === 'day') {
 
-        let event = vm.events[dateFormatted(dateFormatted(date))];
+        let event = events [dateFormatted(dateFormatted(date))];
         if (!event) return;
         return _.isArray(event) ? 'haveVisit' : event.status;
 
