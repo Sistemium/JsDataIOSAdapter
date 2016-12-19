@@ -15,16 +15,12 @@ vs-scroll-parent="#scroll-articles"
         strong {{::stock.article.pieceVolume}}л
         small.gray x {{::stock.article.packageRel}}
 
-        strong.pull-right
-          a(href
-          ng-if='vm.saleOrder'
-          uib-popover-template="'app/domain/sales/views/saleOrder/saleOrderPosition.popover.html'"
-          popover-is-open='stock.isArticlePopoverOpen'
-          popover-trigger='outsideClick'
-          popover-placement='auto bottom-right'
-          )
-            span {{ vm.orderedVolumeFull(stock) }}
-            span.caret
+        quantity-edit.pull-right(
+        ng-if='vm.saleOrder'
+        article='stock.article'
+        sale-order='vm.saleOrder'
+        price='vm.prices[stock.articleId]'
+        )
 
       .article-name-second(title='{{stock.article.name}}')
         small {{::stock.article.preName}}
@@ -46,12 +42,12 @@ vs-scroll-parent="#scroll-articles"
 
     .right(ng-if='vm.saleOrder')
 
-        button.btn.btn-default(
-        stm-click='kPlusButton'
-        click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
-        ) +К
+      button.btn.btn-default(
+      stm-click='kPlusButton'
+      click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
+      ) +К
 
-        button.btn.btn-default(
-        stm-click='bPlusButton'
-        click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
-        ) +Б
+      button.btn.btn-default(
+      stm-click='bPlusButton'
+      click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
+      ) +Б

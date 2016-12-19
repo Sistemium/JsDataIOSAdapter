@@ -1,47 +1,11 @@
-fieldset.quantity-edit
+strong
+  a(
+  href
+  uib-popover-template="'app/domain/components/quantityEdit/quantityEditPopover.trigger.html'"
+  popover-is-open='vm.popoverOpen'
+  popover-trigger='outsideClick'
+  popover-placement='auto bottom-right'
+  )
+    span {{ vm.boxPcs() }}
+    span.caret
 
-  .inputs
-
-    .boxes(ng-class='{"one-input": !vm.showBottles}')
-
-      a.btn.btn-link(ng-click='vm.incrementBoxes()') +К
-
-      input.form-control.text-center(
-      ng-attr-type='{{vm.type}}'
-      select-on-focus
-      placeholder='К'
-      track-focused
-      ng-model='vm.boxes'
-      ng-model-options='{debounce: 300}'
-      maxlength='3'
-      )
-
-      a.btn.btn-link(ng-click='vm.decrementBoxes()') -К
-
-    .bottles(ng-if='vm.showBottles')
-
-      a.btn.btn-link(ng-click='vm.incrementBottles()') +Б
-
-      input.form-control.text-center(
-      ng-attr-type='{{vm.type}}'
-      select-on-focus
-      placeholder='Б'
-      track-focused
-      ng-model='vm.bottles'
-      ng-model-options='{debounce: 300}'
-      maxlength='3'
-      )
-
-      a.btn.btn-link(ng-click='vm.decrementBottles()') -Б
-
-  .extras
-
-    button.btn.btn-link(
-    ng-click='vm.incrementHalfBoxes()'
-    ) +½К
-
-    button.btn.btn-link.delete(
-    ng-click='vm.deleteClick()'
-    ng-class='{confirmation: vm.deleteConfirmation}'
-    )
-      i.glyphicon.glyphicon-trash
