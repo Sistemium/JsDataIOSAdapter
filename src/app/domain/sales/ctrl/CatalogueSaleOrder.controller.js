@@ -93,6 +93,11 @@
 
     function saleOrderDoneClick() {
       $scope.$parent.saleOrderExpanded = false;
+      let msg = `Заказ для "${vm.saleOrder.outlet.name}" отправлен в обработку`;
+      $state.go('^')
+        .then(() => {
+          toastr.info(msg);
+        });
     }
 
     function saleOrderSaveDraftClick() {
