@@ -27,11 +27,14 @@
 
       boxPcs: () => {
 
+        if (!vm.article) return;
+
         let position = vm.positionsCache ?
           vm.positionsCache[vm.article.id] :
           _.find(vm.saleOrder.positions, {articleId: vm.article.id});
 
         if (!position || !position.volume) return;
+
         return vm.article.boxPcs(position.volume).full;
 
       }
