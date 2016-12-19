@@ -2,15 +2,35 @@
 
 .sale-order-collapsible {
 
-  //.form-group:first-of-type {
-  //  margin-top: 15px;
-  //  @media (max-width: $screen-xs) {
-  //    margin-top: $margin-bottom-xs;
-  //  }
-  //}
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
-  .form-group:last-of-type {
-    margin-bottom: 0;
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+
+  background-color: $gray-background-color;
+  border: solid 1px $gray-background-color;
+
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+
+  .form-group {
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 3px;
+      label {
+        font-size: 12px;
+        font-weight: normal;
+        padding-top: 0;
+      }
+    }
+
   }
 
   label {
@@ -19,79 +39,40 @@
 
   .form {
 
-    min-height: 360px;
-    padding: 15px 15px $margin-bottom-xs*7;
+    overflow-x: hidden;
+    padding: 15px;
 
     @media (max-width: $screen-xs-max) {
-      padding-right: $margin-bottom-xs;
-      padding-left: $margin-bottom-xs;
-      padding-top: $margin-bottom-xs;
-    }
-
-    @media (max-width: $screen-xs) {
-      padding-bottom: $margin-bottom-xs*9;
-    }
-
-    .uib-datepicker-popup {
-
-      .uib-button-bar {
-        button.btn.uib-datepicker-current[type] {
-          display: none;
-        }
-        button.btn.uib-clear {
-          border-top-left-radius: 3px;
-          border-bottom-left-radius: 3px;
-          &.btn-danger {
-            background-color: $primary-color;
-            border-color: $primary-color;
-          }
-        }
-      }
-
-    }
-
-    .buttons {
-
-      text-align: right;
-      padding: $margin-bottom-xs*2;
-
-      @media (max-width: $screen-xs-max) {
-        padding: $margin-bottom-xs;
-      }
-
-      border-top: solid 1px darken($border-gray, 5);
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      background-color: $gray-background-color;
-      z-index: 3;
-
-      @media (max-width: $screen-xs) {
-        button {
-          display: block;
-          width: 100%;
-        }
-        button + button {
-          margin-top: $margin-bottom-xs;
-        }
-      ;
-      }
-
+      padding: $margin-bottom-xs/2 $margin-bottom-xs;
     }
 
   }
 
-  position: absolute;
-  z-index: 5;
+  .buttons {
 
-  background-color: #f5f5f5;
-  border: solid 1px #f5f5f5;
-  left: 0;
-  right: 0;
+    text-align: right;
 
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
+    margin-top: $margin-bottom-xs/2;
+    padding: $margin-bottom-xs $margin-bottom-xs*2;
+
+    @media (max-width: $screen-xs) {
+      padding: $margin-bottom-xs;
+    }
+
+    border-top: solid 1px darken($border-gray, 5);
+    background-color: $gray-background-color;
+
+    @media (max-width: $screen-xs) {
+      button {
+        display: block;
+        width: 100%;
+      }
+      button + button {
+        margin-top: $margin-bottom-xs;
+      }
+    }
+
+  }
 
 }
 
@@ -101,14 +82,14 @@
   min-width: 0;
 
   & + .menu {
-    margin-left: 15px;
+    margin-left: 30px;
     font-size: 22px;
     margin-top: 4px;
   }
 
   @media (max-width: $screen-xs-max) {
     & + .menu {
-      margin-left: 10px;
+      margin-left: 20px;
     }
   }
 
@@ -156,6 +137,7 @@
     }
 
     .totals {
+      font-size: 12px;
       margin-top: $margin-bottom-xs;
       text-align: left;
     }

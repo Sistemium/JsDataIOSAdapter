@@ -18,6 +18,10 @@
   uib-collapse='!saleOrderExpanded'
   )
     form.form.form-horizontal.scroll-y(
-    resize resize-offset-top='4'
+    resize resize-offset-top='60' resize-offset-top-xs='100'
     ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderForm.html'"
     )
+    .buttons
+      button.btn.btn-success.btn-sm(stm-click='saleOrderSaveDraft') Сохранить черновик
+      button.btn.btn-primary.btn-sm(stm-click='saleOrderDone') Отправить в обработку
+

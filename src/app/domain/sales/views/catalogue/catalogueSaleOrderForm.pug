@@ -13,13 +13,13 @@
       ng-model='vm.saleOrderDate'
       datepicker-options='vm.datepickerOptions'
       is-open='datepickerPopupOpened'
-      datepicker-append-to-body='false'
+      datepicker-append-to-body='true'
       no-show-button-bar='false'
       on-open-focus='false'
       ng-required='true'
-      current-text='Сегодня'
+      current-text=''
       close-text='Закрыть'
-      clear-text='Ближайший день доставки'
+      clear-text='Ближайшая доставка'
       ng-click='datepickerPopupOpened = !datepickerPopupOpened'
       ) {{ vm.saleOrder.date | amDateFormat:'DD/MM/YYYY, dd' }}
       span.input-group-btn
@@ -30,7 +30,7 @@
 
 
 .form-group.form-group-switch
-  label.control-label.col-md-9.col-sm-8 Скидки в накладную
+  label.control-label.col-md-9.col-sm-8 Скидки в накладную?
   .col-md-3.col-sm-4
     toggle-switch(
     ng-model='vm.saleOrder.docDiscounts'
@@ -39,7 +39,7 @@
     )
 
 .form-group.form-group-switch
-  label.control-label.col-md-9.col-sm-8 Оплата по факту
+  label.control-label.col-md-9.col-sm-8 Оплата по факту?
   .col-md-3.col-sm-4
     toggle-switch(
     ng-model='vm.saleOrder.cashOnShipment'
@@ -58,6 +58,7 @@
   .col-md-9.col-sm-8
     input#commentExpeditor.form-control(ng-model='vm.saleOrder.commentExpeditor')
 
-.buttons
-  button.btn.btn-success.btn-sm(stm-click='saleOrderSaveDraft') Сохранить черновик
-  button.btn.btn-primary.btn-sm(stm-click='saleOrderDone') Отправить в обработку
+.form-group
+  label.control-label.col-md-3.col-sm-4(for='commentExpeditor2') Комментарий водителю
+  .col-md-9.col-sm-8
+    input#commentExpeditor2.form-control(ng-model='vm.saleOrder.commentExpeditor')
