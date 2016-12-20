@@ -124,3 +124,22 @@
 
   }
 }
+
+salesmans-menu {
+  .popover-content {
+    padding: 0;
+
+    .cancel-button {
+      margin-top: 5px;
+    }
+
+    .option {
+      padding: 1px 10px;
+      a {
+        display: block;
+        padding: 7px 0;
+        color: $black;
+      }
+    }
+  }
+}

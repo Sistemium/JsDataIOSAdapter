@@ -20,6 +20,13 @@
       @extend .disabled;
     }
 
+    &.current {
+      background-color: #4290d0;
+      &.current > a {
+        color: white;
+      }
+    }
+
   }
 
   .divider {

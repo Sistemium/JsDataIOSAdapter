@@ -1,8 +1,8 @@
-button.btn.btn-link(
+a(
+href
 uib-popover-template="'app/components/navbar/salesmanPopover.html'"
 popover-placement='bottom-right'
 popover-trigger='outsideClick'
-ng-show='vm.isSalesState'
 popover-is-open='vm.isOpen'
 )
   span {{ vm.toggleLabel() }}
