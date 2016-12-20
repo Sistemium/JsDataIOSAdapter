@@ -1,7 +1,7 @@
 .sale-order-popover {
 
-  .divider {
-    min-width: 250px;
+  .option {
+    //min-width: 260px;
   }
 
   .new-item {
@@ -9,7 +9,7 @@
     text-align: right;
 
     .btn {
-      display: inline-block;
+      display: block;
       padding: 4px 8px;
       width: 100%;
       span {
@@ -22,8 +22,10 @@
       }
     }
 
+  }
 
-
+  .address {
+    @extend .ellipsis;
   }
 
 }
