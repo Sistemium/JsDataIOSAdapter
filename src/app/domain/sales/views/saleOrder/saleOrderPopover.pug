@@ -13,7 +13,7 @@ resize resize-offset-top='25'
 
   .option(
   ng-repeat='draft in draftSaleOrders track by draft.id'
-  ng-class='{active: vm.saleOrderId === draft.id}'
+  ng-class='{active: vm.saleOrder.id === draft.id}'
   )
     a(
     href
