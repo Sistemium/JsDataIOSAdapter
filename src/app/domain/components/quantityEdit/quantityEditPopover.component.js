@@ -8,7 +8,8 @@
       article: '=',
       saleOrder: '=',
       price: '=',
-      popoverOpen: '=?'
+      popoverOpen: '=?',
+      position: '=?'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEditPopover.html',
@@ -25,13 +26,13 @@
 
     let vm = this;
 
-    let article = vm.article;
-    let positions = _.get(vm.saleOrder, 'positions');
-    let position = _.find(positions, {articleId: article.id});
+    let saleOrder = vm.saleOrder || _.get(vm.position, 'saleOrder');
+    let article = vm.article || _.get(vm.position, 'article');
+    let position = vm.position || _.find(_.get(saleOrder, 'positions'), {articleId: article.id});
+    let price = vm.price || _.get(vm.position, 'price')
 
     _.assign(vm, {
 
-      article,
       showBottles: article.packageRel > 1,
       type: IOS.isIos() ? 'number' : 'text',
 
@@ -52,11 +53,11 @@
 
     if (!position) {
       position = SaleOrderPosition.createInstance({
-        saleOrderId: vm.saleOrder.id,
+        saleOrderId: saleOrder.id,
         articleId: article.id,
-        price: vm.price,
-        priceDoc: vm.price,
-        priceOrigin: vm.price,
+        price: price,
+        priceDoc: price,
+        priceOrigin: price,
         volume: 0
       });
     }
@@ -88,7 +89,7 @@
         position.volume = _.max([0, volume]);
         injectPosition();
         position.updateCost();
-        vm.saleOrder.updateTotalCost();
+        saleOrder.updateTotalCost();
       }
     }
 

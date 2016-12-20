@@ -5,10 +5,11 @@
   const quantityEdit = {
 
     bindings: {
-      article: '=',
-      saleOrder: '=',
-      price: '=',
-      positionsCache: '=?'
+      article: '=?',
+      saleOrder: '=?',
+      price: '=?',
+      positionsCache: '=?',
+      position: '=?'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEdit.html',
@@ -27,15 +28,21 @@
 
       boxPcs: () => {
 
-        if (!vm.article) return;
+        let position = vm.position;
 
-        let position = vm.positionsCache ?
-          vm.positionsCache[vm.article.id] :
-          _.find(vm.saleOrder.positions, {articleId: vm.article.id});
+        let article = vm.article || _.get(position, 'article');
+
+        if (!article) return;
+
+        if (!position) {
+          position = vm.positionsCache ?
+            vm.positionsCache[article.id] :
+            _.find(vm.saleOrder.positions, {articleId: article.id});
+        }
 
         if (!position || !position.volume) return;
 
-        return vm.article.boxPcs(position.volume).full;
+        return article.boxPcs(position.volume).full;
 
       }
 
