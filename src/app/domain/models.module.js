@@ -71,15 +71,27 @@
     function cachedFindAll(resource, filter, options) {
 
       let store = DS.store[resource.name];
+      let queryHash = DSUtils.toJson(filter);
+      let completed = store.queryData[queryHash];
 
-      if (store.collection.length) return $q.resolve(store.collection);
+      if (completed) return $q.resolve(resource.filter(filter));
 
       return resource.findAll(filter, _.defaults({cacheResponse: false}, options))
         .then(res => {
 
-          // TODO: check for duplicates
-          Array.prototype.push.apply(store.collection, res);
-          _.each(res, item => store.index[item.id] = item);
+          // TODO: check if it's all correct
+
+          _.each(res, item => {
+            let existing = store.index[item.id];
+            if (existing) {
+              DSUtils.forOwn(item, (val, key) => existing[key] = val);
+            } else {
+              store.index[item.id] = item;
+              store.collection.push(item);
+            }
+          });
+
+          store.queryData[queryHash] = {$$injected: true};
 
           return store.collection;
 
