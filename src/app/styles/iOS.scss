@@ -81,6 +81,11 @@
     padding: 7px 20px;
   }
 
+  a.list-group-item:hover:not(.active) {
+    background-color: white;
+    color: #555;
+  }
+
 }
 
 body.iOS {
