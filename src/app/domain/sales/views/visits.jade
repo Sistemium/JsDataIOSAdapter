@@ -11,7 +11,7 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
         ng-required='true'
         close-text='Закрыть'
         current-text='Выбрать сегодня'
-        clear-text='Очистить'
+        clear-text='false'
         ng-click='vm.openDatepicker()'
         ) {{ vm.selectedDate | amUtc | amLocal | amDateFormat:'DD/MM/YYYY, dd' }}
         span.input-group-btn

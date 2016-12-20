@@ -10,7 +10,6 @@
           i.glyphicon.glyphicon-chevron-left
       span.form-control.text-center(
       uib-datepicker-popup
-      datepicker-popup-template-url='app/domain/components/datePicker/datePickerPopup.html'
       ng-model='vm.saleOrderDate'
       datepicker-options='vm.datepickerOptions'
       is-open='datepickerPopupOpened'
@@ -18,7 +17,7 @@
       no-show-button-bar='false'
       on-open-focus='false'
       ng-required='true'
-      current-text=''
+      current-text='false'
       close-text='Закрыть'
       clear-text='Ближайшая доставка'
       ng-click='datepickerPopupOpened = !datepickerPopupOpened'
