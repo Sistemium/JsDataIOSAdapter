@@ -13,6 +13,10 @@
     transition: all ease-in 0.5s;
   }
 
+  .list-group-item {
+    min-height: 80px;
+  }
+
   .right {
 
     margin-left: 1em;
