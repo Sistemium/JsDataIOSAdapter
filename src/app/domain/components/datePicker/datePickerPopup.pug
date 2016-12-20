@@ -10,13 +10,13 @@ dropdown-nested
     span.btn-group.pull-left
       button.btn.btn-sm.btn-info.uib-datepicker-current(
       type='button'
-      ng-if='::getText("today")'
-      ng-click='select("today", $event)'
-      ng-disabled='isDisabled("today")'
+      ng-if='getText("current")!="false"'
+      ng-click='select("current", $event)'
+      ng-disabled='isDisabled("current")'
       ) {{ getText('current') }}
       button.btn.btn-sm.btn-warning.uib-clear(
       type='button'
-      ng-if='::getText("clear")'
+      ng-if='getText("clear")!="false"'
       ng-click='select(null, $event)'
       ) {{ getText('clear') }}
     button.btn.btn-sm.btn-default.pull-right.uib-close(
