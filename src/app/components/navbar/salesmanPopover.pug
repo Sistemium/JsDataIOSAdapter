@@ -1,0 +1,13 @@
+.cancel-button(ng-if='vm.selectedSalesman')
+  button.btn-primary.btn.btn-block(href ng-click='vm.noneClick()') Отменить выбор
+
+.scroll-y.salesman-popover(
+resize
+resize-offset-top='25'
+)
+
+  .option(
+  ng-repeat='salesman in vm.salesmans track by salesman.id'
+  ng-class='{active: vm.selectedSalesman.id == salesman.id}'
+  )
+    a(href ng-click='vm.salesmanClick(salesman)') {{salesman.shortName}}
