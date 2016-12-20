@@ -20,7 +20,7 @@ vs-scroll-parent="#scroll-articles"
         article='stock.article'
         sale-order='vm.saleOrder'
         price='vm.prices[stock.articleId]'
-        positions-cache='vm.saleOrderPositionByArticle'
+        position='vm.saleOrderPositionByArticle[stock.articleId]'
         )
 
       .article-name-second(title='{{stock.article.name}}')
