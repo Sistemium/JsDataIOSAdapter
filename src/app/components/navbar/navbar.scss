@@ -14,12 +14,19 @@
     text-decoration: none;
   }
 
+  salesmans-menu {
+    button {
+      padding-bottom: 0;
+    }
+  }
+
   .cancel-button {
     margin-bottom: 5px;
   }
 
   .salesman-popover {
     min-width: 175px;
+
   }
 
   .fullscreen-menu {
