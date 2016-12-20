@@ -15,7 +15,7 @@ h4.outlet
     .address
       small {{vm.saleOrder.outlet.address}}
 
-.totals.text-right.flex-1(
+.totals(
 ng-class='{disabled: saleOrderExpanded || !vm.saleOrder.positions.length}'
 )
   a.animate-show(href stm-click='saleOrderTotals' ng-hide='vm.busy')

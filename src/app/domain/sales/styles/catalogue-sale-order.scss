@@ -127,6 +127,8 @@
 
   .totals {
     margin-right: 15px;
+    flex: 1;
+    text-align: right;
   }
 
   @media (max-width: $screen-xs) {
