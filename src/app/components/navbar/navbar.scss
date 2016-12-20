@@ -14,10 +14,8 @@
     text-decoration: none;
   }
 
-  salesmans-menu {
-    button {
-      padding-bottom: 0;
-    }
+  salesmans-menu > button {
+    padding-bottom: 0;
   }
 
   .cancel-button {
@@ -26,7 +24,6 @@
 
   .salesman-popover {
     min-width: 175px;
-
   }
 
   .fullscreen-menu {
