@@ -48,10 +48,6 @@
       )
         td {{ item.article.name }}
         td.number
-          quantity-edit(
-          sale-order='vm.saleOrder'
-          article='item.article'
-          price='item.price'
-          )
+          quantity-edit(position='item')
         td.number {{ item.price | number:2 }}
         td.number.hidden-xs {{ item.cost | number:2}}
