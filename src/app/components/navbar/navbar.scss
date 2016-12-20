@@ -14,18 +14,6 @@
     text-decoration: none;
   }
 
-  salesmans-menu > button {
-    padding-bottom: 0;
-  }
-
-  .cancel-button {
-    margin-bottom: 5px;
-  }
-
-  .salesman-popover {
-    min-width: 175px;
-  }
-
   .fullscreen-menu {
     font-size: 24px;
     @media (max-width: $screen-xs-max) {
@@ -126,11 +114,16 @@
 }
 
 salesmans-menu {
+
+  .salesman-popover {
+    min-width: 175px;
+  }
+
   .popover-content {
     padding: 0;
 
     .cancel-button {
-      margin-top: 5px;
+      margin: 4px 0;
     }
 
     .option {

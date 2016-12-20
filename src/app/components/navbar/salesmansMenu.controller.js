@@ -30,12 +30,15 @@
     }
 
     function salesmanClick(salesman) {
+
+      vm.isOpen = false;
+
       if (!salesman || _.get(vm, 'selectedSalesman.id') === salesman.id) {
         return SalesmanAuth.logout();
       }
+
       SalesmanAuth.login(salesman);
 
-      vm.isOpen = false;
     }
 
     function onDataChange(e, data) {
