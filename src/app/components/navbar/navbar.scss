@@ -10,21 +10,16 @@
     @extend .flex-1;
   }
 
-  .dropdown {
-    font-size: 15px;
-    margin-top: 3px;
-  }
-
   a:hover, a:focus {
     text-decoration: none;
   }
 
-  .dropdown {
-    .disabled {
-      .caret {
-        display: none;
-      }
-    }
+  .cancel-button {
+    margin-bottom: 5px;
+  }
+
+  .salesman-popover {
+    min-width: 175px;
   }
 
   .fullscreen-menu {
