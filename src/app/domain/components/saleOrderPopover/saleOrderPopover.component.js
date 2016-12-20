@@ -19,11 +19,14 @@
 
     });
 
-    function saleOrderPopoverController() {
+    function saleOrderPopoverController($scope) {
 
       let vm = this;
 
+      $scope.draftSaleOrders = vm.items;
+
       _.assign(vm, {
+        saleOrderId: vm.activeId,
         popoverPlacement: vm.popoverPlacement || 'auto bottom-right'
       });
 

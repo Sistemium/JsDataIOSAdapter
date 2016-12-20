@@ -4,7 +4,7 @@ resize resize-offset-top='25'
   .option.new-item
     button.btn.btn-primary(
     stm-click='setSaleOrder'
-    ng-click='vm.isSaleOrderPopoverOpen=false'
+    ng-click='isPopoverOpen=false'
     )
       i.glyphicon.glyphicon-plus
       span Добавить новый Заказ
@@ -12,8 +12,8 @@ resize resize-offset-top='25'
   .divider(ng-if='vm.items.length')
 
   .option(
-  ng-repeat='draft in vm.items track by draft.id'
-  ng-class='{active: vm.activeId === draft.id}'
+  ng-repeat='draft in draftSaleOrders track by draft.id'
+  ng-class='{active: vm.saleOrderId === draft.id}'
   )
     a(
     href

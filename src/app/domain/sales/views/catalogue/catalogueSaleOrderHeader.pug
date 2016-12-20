@@ -1,19 +1,21 @@
-h4.outlet
-  sale-order-popover(
-  items='draftSaleOrders'
-  active-id='vm.saleOrder.id'
+h4.popovers
+  a.popover-trigger(
+  href
+  uib-popover-template='saleOrderExpanded ? "app/domain/sales/views/catalogue/outletPopover.html": "app/domain/components/saleOrderPopover/saleOrderPopover.html"'
   popover-placement='auto bottom-left'
+  popover-is-open='vm.isSaleOrderPopoverOpen'
   )
-    .name
-      span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
-      span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
-      span.animate-show.spaced(ng-hide='saleOrderExpanded')
-        small на
-        small.strong {{ vm.saleOrder.date }}
-        // TODO: show date with amCalendar but without time
-
-    .address
-      small {{vm.saleOrder.outlet.address}}
+    .outlet
+      .name
+        span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+        span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+        span.animate-show.spaced(ng-hide='saleOrderExpanded')
+          small на
+          small.strong {{ vm.saleOrder.date }}
+          // TODO: show date with amCalendar but without time
+      .address
+        small {{vm.saleOrder.outlet.address}}
+    span.caret
 
 .totals(
 ng-class='{disabled: saleOrderExpanded || !vm.saleOrder.positions.length}'
