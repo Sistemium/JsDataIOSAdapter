@@ -11,7 +11,8 @@
       salesmanClick,
       noneClick: SalesmanAuth.logout,
       onStateChange,
-      toggleLabel
+      toggleLabel,
+      isOpen: false
     });
 
     SalesmanAuth
@@ -34,6 +35,8 @@
         return SalesmanAuth.logout();
       }
       SalesmanAuth.login(salesman);
+
+      vm.isOpen = false;
     }
 
     function onStateChange(state) {
