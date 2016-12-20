@@ -29,6 +29,9 @@
     &.ng-hide {
       @extend a.disabled;
       opacity: 0.2;
+      .scroll-y {
+        overflow-y: hidden;
+      }
     }
   }
 
