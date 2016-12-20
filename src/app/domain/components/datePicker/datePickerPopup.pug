@@ -11,8 +11,8 @@ dropdown-nested
       button.btn.btn-sm.btn-info.uib-datepicker-current(
       type='button'
       ng-if='getText("current")!="false"'
-      ng-click='select("current", $event)'
-      ng-disabled='isDisabled("current")'
+      ng-click='select("today", $event)'
+      ng-disabled='isDisabled("today")'
       ) {{ getText('current') }}
       button.btn.btn-sm.btn-warning.uib-clear(
       type='button'
