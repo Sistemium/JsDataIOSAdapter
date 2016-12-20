@@ -7,7 +7,7 @@
     padding: 8px 0;
 
     & + .option, & + .divider {
-      border-top: solid 1px lightgray;
+      border-top: solid 1px $border-gray;
     }
 
     a {
