@@ -19,7 +19,10 @@
 resize resize-offset-top='15'
 vs-repeat='55'
 )
-  .option(ng-repeat='outlet in vm.outlets | filter:vm.outletSearch track by outlet.id')
+  .option(
+  ng-class='{active: vm.saleOrder.outlet.id === outlet.id}'
+  ng-repeat='outlet in vm.outlets | filter:vm.outletSearch track by outlet.id'
+  )
     a(href stm-click='searchOutlet' click-payload='outlet' ng-click='vm.isSaleOrderPopoverOpen=false')
       .name {{::outlet.name}}
       .gray.address
