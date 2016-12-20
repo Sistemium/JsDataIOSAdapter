@@ -8,8 +8,9 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
   .separator
 
-  fullscreen-menu(ng-show='vm.isRootState')
+  fullscreen-menu(ng-if='vm.isRootState')
 
-  salesmans-menu
+  small(ng-if='vm.isSalesState')
+    salesmans-menu
 
 hr

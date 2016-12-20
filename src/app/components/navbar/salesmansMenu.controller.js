@@ -10,7 +10,6 @@
       isEnabled: false,
       salesmanClick,
       noneClick: SalesmanAuth.logout,
-      onStateChange,
       toggleLabel,
       isOpen: false
     });
@@ -37,10 +36,6 @@
       SalesmanAuth.login(salesman);
 
       vm.isOpen = false;
-    }
-
-    function onStateChange(state) {
-      vm.isSalesState = _.startsWith(state.name, 'sales.');
     }
 
     function onDataChange(e, data) {

@@ -25,7 +25,8 @@
         hideNavs: !!_.get(to, 'data.hideNavs'),
         title: _.get(to, 'data.title') || DEFAULT_TITLE,
         isRootState: to.name === 'home',
-        currentItem: _.find(vm.menu.items, item => to.name && _.startsWith(to.name, item.state))
+        currentItem: _.find(vm.menu.items, item => to.name && _.startsWith(to.name, item.state)),
+        isSalesState: _.startsWith(to.name, 'sales.')
       });
 
     }
