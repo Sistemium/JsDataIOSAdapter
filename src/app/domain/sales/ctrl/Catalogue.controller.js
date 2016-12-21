@@ -272,19 +272,14 @@
       vm.currentArticleGroup = articleGroup;
 
       let groupIds = articleGroupIds(ownStock);
-
       DEBUG('setCurrentArticleGroup', 'articleGroupIds');
 
       let childGroups = _.filter(ArticleGroup.getAll(), filter);
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock0');
 
       let children = _.filter(childGroups, hasArticlesOrGroupsInStock(groupIds));
-
-      // let children = _.filter(childGroups, group);
-
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock');
 
-      // TODO show only saleOrder positions and sort by deviceCts if user clicks 'show saleOrder'
       vm.stock = ownStock;
 
       if (children.length) {
