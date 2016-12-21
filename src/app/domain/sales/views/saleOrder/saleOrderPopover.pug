@@ -22,6 +22,6 @@ resize resize-offset-top='25'
     )
       .name.display-flex
         .flex-1 {{ ::draft.outlet.name }}
-        .right {{ draft.totalCost | number:2 }} ₽
+        .right {{ draft.totalCost || 0 | number:2 }} ₽
       .address.gray
         small {{ ::draft.outlet.address }}

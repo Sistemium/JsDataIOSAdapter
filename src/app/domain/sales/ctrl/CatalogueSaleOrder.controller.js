@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, IOS) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, IOS, $timeout) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
@@ -28,7 +28,8 @@
       nextDayClick,
       prevDayClick,
       saleOrderDoneClick,
-      saleOrderSaveDraftClick
+      saleOrderSaveDraftClick,
+      deleteSaleOrderClick
 
     });
 
@@ -42,11 +43,17 @@
         SaleOrder.find(saleOrderId, {bypassCache: true})
           .then(saleOrder => SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition', {bypassCache: true}))
           .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
-          .catch(error => console.error(error))
+          .catch(error => {
+            console.error(error);
+            if (error.error === 404) {
+              toastr.error('Заказ не найден');
+              $state.go('.', {saleOrderId: null});
+            }
+          })
       );
     } else {
 
-      vm.saleOrder = SaleOrder.inject({
+      vm.saleOrder = SaleOrder.createInstance({
         salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
         date: moment().add(1, 'days').format()
       });
@@ -71,7 +78,9 @@
       vm.saleOrderDate = moment(vm.saleOrder.date).toDate();
     });
 
-    vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderChange, 500));
+    vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderCostChange, 500));
+
+    vm.watchScope('vm.saleOrder.outletId', onSaleOrderChange);
 
     vm.watchScope('vm.saleOrderDate', date => {
       if (!vm.saleOrder) return;
@@ -116,6 +125,27 @@
     }
 
     function onSaleOrderChange() {
+
+      if (!vm.saleOrder) return;
+
+
+      if (vm.saleOrder.outlet) {
+
+        let busy = SaleOrder.create(vm.saleOrder);
+
+        if (!vm.saleOrderId) {
+          busy
+            .then(saleOrder => $state.go('.', {saleOrderId: saleOrder.id}))
+            .catch(err => toastr.error(angular.toJson(err)));
+        }
+
+        vm.setBusy(busy);
+
+      }
+
+    }
+
+    function onSaleOrderCostChange() {
 
       if (!vm.saleOrder) return;
 
@@ -215,6 +245,22 @@
     function searchOutletClick(outlet) {
       vm.saleOrder.outlet = outlet;
       vm.isOpenOutletPopover = false;
+    }
+
+    function deleteSaleOrderClick() {
+
+      vm.confirmDeleteSaleOrder = !vm.confirmDeleteSaleOrder;
+
+      if (!vm.confirmDeleteSaleOrder) {
+        vm.confirmDeleteSaleOrder = false;
+        SaleOrder.destroy(saleOrderId)
+          .then(() => $state.go('^'))
+          .catch(err => toastr.error(angular.toJson(err)));
+      } else {
+        $timeout(2000)
+          .then(()=> vm.confirmDeleteSaleOrder = false);
+      }
+
     }
 
     /*

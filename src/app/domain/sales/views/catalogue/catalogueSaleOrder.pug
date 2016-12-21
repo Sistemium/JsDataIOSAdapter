@@ -22,6 +22,12 @@
     ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderForm.html'"
     )
     .buttons
+      button.btn.btn-sm.delete-button(
+      stm-click='deleteSaleOrder'
+      ng-class='vm.confirmDeleteSaleOrder ? "btn-danger" : "btn-warning"'
+      ng-blur='vm.confirmDeleteSaleOrder = false'
+      )
+        i.glyphicon.glyphicon-trash
       button.btn.btn-success.btn-sm(stm-click='saleOrderSaveDraft') Сохранить черновик
       button.btn.btn-primary.btn-sm(stm-click='saleOrderDone') Отправить в обработку
 
