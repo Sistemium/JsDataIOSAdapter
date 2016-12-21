@@ -22,20 +22,24 @@
     ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderForm.html'"
     )
     .buttons
-      button.btn.btn-sm.delete-button(
+
+      button.btn.delete-sale-order-btn(
       stm-click='deleteSaleOrder'
       ng-class='vm.confirmDeleteSaleOrder ? "btn-danger" : "btn-warning"'
       ng-blur='vm.confirmDeleteSaleOrder = false'
       )
         i.glyphicon.glyphicon-trash
 
-      button.btn.btn-success.btn-sm(
-      stm-click='saleOrderSaveDraft'
-      ng-disabled='!vm.saleOrder.isValid()'
-      ) Сохранить черновик
+      //Test span
+      span.show-xs.flex-divider
 
-      button.btn.btn-primary.btn-sm(
-      stm-click='saleOrderDone'
-      ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
-      ) Отправить в обработку
+      .sale-order-main-buttons
+        button.btn.btn-success.btn-sm(
+        stm-click='saleOrderSaveDraft'
+        ng-disabled='!vm.saleOrder.isValid()'
+        ) Сохранить черновик
 
+        button.btn.btn-primary.btn-sm(
+        stm-click='saleOrderDone'
+        ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
+        ) Отправить в обработку
