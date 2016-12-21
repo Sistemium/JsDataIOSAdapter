@@ -73,7 +73,7 @@
     });
 
     vm.watchScope(
-      () => saMedia.smWidth || saMedia.xxsWidth,
+      () => saMedia.xxsWidth,
       (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
     );
 
