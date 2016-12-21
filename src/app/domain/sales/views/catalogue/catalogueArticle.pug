@@ -9,7 +9,7 @@ vs-scroll-parent="#scroll-articles"
 )
   .list-group-item.display-flex.flex-align-center.spaced(ng-repeat='stock in vm.stock track by stock.id')
 
-    .flex-1(style='min-width:0')
+    .flex-1.article-wrapper
 
       .article-name-first
         strong {{::stock.article.firstName}}
@@ -22,7 +22,7 @@ vs-scroll-parent="#scroll-articles"
       position='vm.saleOrderPositionByArticle[stock.articleId]'
       )
 
-      .article-info(style='display: inline')
+      .article-info
         strong {{::stock.article.pieceVolume}}л
         small.gray x {{::stock.article.packageRel}}
 

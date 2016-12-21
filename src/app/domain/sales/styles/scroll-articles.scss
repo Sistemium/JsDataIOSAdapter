@@ -62,6 +62,14 @@
     }
   }
 
+  .article-wrapper {
+    min-width: 0;
+  }
+
+  .article-info {
+    display: inline;
+  }
+
   .article-name-first {
     @extend .ellipsis;
     display: inline;
