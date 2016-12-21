@@ -11,14 +11,15 @@
 
       auth: Auth,
       menu: Menu.root(),
-      rootClick: () => $rootScope.$broadcast('rootClick'),
-      onStateChange
+      rootClick: () => $rootScope.$broadcast('rootClick')
 
     });
 
     $timeout(1000).then(()=> !vm.title && onStateChange($state.current));
 
-    function onStateChange(to) {
+    $rootScope.$on('$stateChangeStart', onStateChange);
+
+    function onStateChange(event, to) {
 
       vm.use({
         hide: !!_.get(to, 'data.hideTopBar'),
