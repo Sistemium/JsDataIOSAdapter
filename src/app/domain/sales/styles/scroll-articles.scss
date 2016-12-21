@@ -41,17 +41,6 @@
 
   }
 
-  .article-name-first {
-    .caret {
-      font-size: 10px;
-      margin-right: 4px;
-    }
-  }
-
-  .article-name-second {
-    color: gray;
-  }
-
   .article-name-third {
     text-align: right;
     small span.gray {
@@ -63,6 +52,7 @@
   }
 
   .article-wrapper {
+    @extend .flex-1;
     min-width: 0;
   }
 
@@ -71,18 +61,39 @@
   }
 
   .article-name-first {
+
+    .caret {
+      font-size: 10px;
+      margin-right: 4px;
+    }
+
     @extend .ellipsis;
     display: inline;
   }
 
   .article-name-second {
-    @extend .ellipsis;
+    color: gray;
+
+    div {
+
+      @extend .ellipsis;
+
+      .tooltip-inner {
+        overflow: visible;
+        white-space: normal;
+      }
+    }
+
   }
 
   @media (max-width: 480px) {
     .article-name-first {
       display: block;
     }
+  }
+
+  .pointer-cursor {
+    cursor: pointer;
   }
 
 }
