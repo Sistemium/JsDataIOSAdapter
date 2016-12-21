@@ -41,7 +41,8 @@
 
       vm.setBusy(
         SaleOrder.find(saleOrderId, {bypassCache: true})
-          .then(saleOrder => SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition', {bypassCache: true}))
+          .then(() => SaleOrder.loadRelations(saleOrderId, 'Outlet'))
+          .then(() => SaleOrder.loadRelations(saleOrderId, 'SaleOrderPosition', {bypassCache: true}))
           .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
           .catch(error => {
             console.error(error);
