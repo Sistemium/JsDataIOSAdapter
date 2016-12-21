@@ -157,22 +157,8 @@
       return !saMedia.xsWidth && !saMedia.xxsWidth;
     }
 
-    function articleRowHeight(stock) {
-
-      let breakPoint = !(saMedia.smWidth || saMedia.xxsWidth);
-
-      let length = _.get(stock, 'article.lastName.length') + _.get(stock, 'article.preName.length');
-      let nameLength = _.get(stock, 'article.firstName.length');
-
-      let nameBreak = breakPoint ? 60 : 45;
-      let lastBreak = breakPoint ? 90 : 70;
-
-      if (vm.saleOrder) {
-        nameBreak -= 7;
-        lastBreak -= 10;
-      }
-
-      return (length > lastBreak || nameLength > nameBreak) ? 99 : 80;
+    function articleRowHeight() {
+      return saMedia.xxsWidth ? 94 : 80;
     }
 
     function findAll() {
