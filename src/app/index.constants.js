@@ -20,6 +20,12 @@
       uibDatepickerPopupConfig.datepickerPopupTemplateUrl = 'app/domain/components/datePicker/datePickerPopup.html';
     })
 
+    .config($uibTooltipProvider => {
+      $uibTooltipProvider.options({
+        placement: 'auto bottom-left'
+      });
+    })
+
     .run(moment => {
       moment.defaultFormat = 'YYYY-MM-DD';
     })
