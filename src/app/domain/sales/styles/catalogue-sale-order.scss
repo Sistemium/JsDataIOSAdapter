@@ -49,7 +49,23 @@
 
   }
 
+  .flex-divider {
+    flex: 0.03;
+  }
+
+  .sale-order-main-buttons {
+    flex: 0.9;
+  }
+
+  .delete-sale-order-btn {
+    flex: 0.1;
+  }
+
   .buttons {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
     text-align: right;
 
