@@ -169,21 +169,19 @@
         }
       };
 
-      return $q.all([
-        PriceType.findAll(),
-        ArticleGroup.cachedFindAll({}, options),
-        Article.cachedFindAll({
+      return PriceType.findAll()
+        .then(() => ArticleGroup.cachedFindAll({}, options))
+        .then(() => Article.cachedFindAll({
           volumeNotZero: true,
           where: {
             'ANY stocks': volumeNotZero
           }
-        }, options),
-        Stock.cachedFindAll({
+        }, options))
+        .then(() => Stock.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
-        }, options),
-        Price.cachedFindAll(options)
-      ])
+        }, options))
+        .then(() => Price.cachedFindAll(options))
         .then(() => {
 
           DEBUG('findAll', 'finish');
