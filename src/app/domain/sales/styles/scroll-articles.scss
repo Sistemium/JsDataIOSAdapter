@@ -31,10 +31,6 @@
       color: #777777;
     }
 
-    [angular-ripple] {
-      overflow: visible;
-    }
-
     button + button {
       margin-top: 4px;
     }
@@ -73,27 +69,18 @@
 
   .article-name-second {
     color: gray;
+    @extend .ellipsis;
 
-    div {
-
-      @extend .ellipsis;
-
-      .tooltip-inner {
-        overflow: visible;
-        white-space: normal;
-      }
+    .tooltip-inner {
+      overflow: visible;
+      white-space: normal;
     }
-
   }
 
   @media (max-width: 480px) {
     .article-name-first {
       display: block;
     }
-  }
-
-  .pointer-cursor {
-    cursor: pointer;
   }
 
 }

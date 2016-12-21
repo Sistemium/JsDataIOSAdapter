@@ -2,9 +2,7 @@
   | Нет подходящих товаров
 
 ul.list-group.vr-parent(
-vs-repeat
-vs-excess='4'
-vs-size-fn='vm.articleRowHeight'
+vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
 )
   .list-group-item.display-flex.flex-align-center.spaced(ng-repeat='stock in vm.stock track by stock.id')
@@ -26,23 +24,11 @@ vs-scroll-parent="#scroll-articles"
         strong {{::stock.article.pieceVolume}}л
         small.gray x {{::stock.article.packageRel}}
 
-      .article-name-second(title='{{::stock.article.name}}')
-        div(
-        ng-if='!vm.isWideScreen'
-        tooltip-popup-close-delay='0'
-        uib-tooltip='{{::stock.article.name}}'
-        tooltip-placement='bottom-left'
-        ng-class='{"pointer-cursor": !vm.isWideScreen}'
-        )
-          small {{::stock.article.preName}}
-          small {{::stock.article.lastName}}
-
-        div(
-        ng-if='vm.isWideScreen'
-        )
-          small {{::stock.article.preName}}
-          small {{::stock.article.lastName}}
-
+      .article-name-second(
+      uib-tooltip='{{::stock.article.name}}'
+      )
+        small {{::stock.article.preName}}
+        small {{::stock.article.lastName}}
 
       .article-name-third
         //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
