@@ -9,19 +9,22 @@ vs-scroll-parent="#scroll-articles"
 )
   .list-group-item.display-flex.flex-align-center.spaced(ng-repeat='stock in vm.stock track by stock.id')
 
-    .flex-1
+    .flex-1(style='min-width:0')
+
       .article-name-first
         strong {{::stock.article.firstName}}
+
+      quantity-edit.pull-right(
+      ng-if='vm.saleOrder'
+      article='stock.article'
+      sale-order='vm.saleOrder'
+      price='vm.prices[stock.articleId]'
+      position='vm.saleOrderPositionByArticle[stock.articleId]'
+      )
+
+      .article-info(style='display: inline')
         strong {{::stock.article.pieceVolume}}л
         small.gray x {{::stock.article.packageRel}}
-
-        quantity-edit.pull-right(
-        ng-if='vm.saleOrder'
-        article='stock.article'
-        sale-order='vm.saleOrder'
-        price='vm.prices[stock.articleId]'
-        position='vm.saleOrderPositionByArticle[stock.articleId]'
-        )
 
       .article-name-second(title='{{stock.article.name}}')
         small {{::stock.article.preName}}
