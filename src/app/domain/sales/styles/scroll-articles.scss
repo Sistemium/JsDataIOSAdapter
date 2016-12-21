@@ -62,4 +62,19 @@
     }
   }
 
+  .article-name-first {
+    @extend .ellipsis;
+    display: inline;
+  }
+
+  .article-name-second {
+    @extend .ellipsis;
+  }
+
+  @media (max-width: 480px) {
+    .article-name-first {
+      display: block;
+    }
+  }
+
 }
