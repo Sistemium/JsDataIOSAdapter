@@ -8,7 +8,7 @@ h4.popovers
     .outlet
       .name
         span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
-        span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+        span(ng-if='!vm.saleOrder.outlet.id') {{ saleOrderExpanded ? 'Выберите клиента' : 'Новый заказ' }}
         span.animate-show.spaced(ng-hide='saleOrderExpanded')
           small на
           small.strong {{ vm.saleOrder.date }}

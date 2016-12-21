@@ -131,7 +131,7 @@
         vm.showOnlyOrdered = false;
       }
 
-      $scope.saleOrderExpanded = false;
+      if (vm.currentState === 'catalogue') $scope.saleOrderExpanded = false;
 
     }
 

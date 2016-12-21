@@ -68,6 +68,8 @@
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
 
+    $timeout().then(() => $scope.$parent.saleOrderExpanded = !saleOrderId);
+
     /*
      Listeners
      */
@@ -187,6 +189,9 @@
 
       if (event.resource === 'RecordStatus') {
         id = _.get(event, 'data.objectXid');
+        if (_.get(event, 'data.name') === 'SaleOrder') {
+          return SaleOrder.eject(id);
+        }
         return id && SaleOrderPosition.eject(id);
       }
 

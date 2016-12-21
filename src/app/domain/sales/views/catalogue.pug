@@ -11,7 +11,7 @@ ng-class='["catalogue", vm.currentState]'
   )
 
   section.row.animate-show(
-  ng-show='!vm.saleOrderId || !saleOrderExpanded'
+  ng-show='!saleOrderExpanded'
   )
 
     #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
