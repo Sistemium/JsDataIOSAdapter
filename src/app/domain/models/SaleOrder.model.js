@@ -50,7 +50,12 @@
 
         positionsCountRu: function () {
           return wDict[Language.countableState(this.positions.length)];
+        },
+
+        isValid: function () {
+          return this.outletId && this.salesmanId && this.date;
         }
+
       }
 
     });
