@@ -2,7 +2,7 @@ fieldset.quantity-edit-popover
 
   .inputs
 
-    .boxes(ng-class='{"one-input": !vm.showBottles}')
+    .boxes(ng-if='vm.showBottles')
 
       a.btn.btn-link(ng-click='vm.incrementBoxes()') +К
 
@@ -18,7 +18,7 @@ fieldset.quantity-edit-popover
 
       a.btn.btn-link(ng-click='vm.decrementBoxes()') -К
 
-    .bottles(ng-if='vm.showBottles')
+    .bottles
 
       a.btn.btn-link(ng-click='vm.incrementBottles()') +Б
 

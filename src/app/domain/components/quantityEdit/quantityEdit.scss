@@ -16,16 +16,15 @@
     @extend .flex-1;
   }
 
-  .one-input {
-    margin-right: 0 !important;
-  }
-
   .boxes {
     margin-right: 7px;
   }
 
   .bottles {
     margin-left: 7px;
+    &:first-child {
+      margin-left: 0;
+    }
   }
 
   a {
