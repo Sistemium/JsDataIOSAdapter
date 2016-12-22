@@ -20,7 +20,7 @@ fieldset.quantity-edit-popover
 
     .bottles
 
-      a.btn.btn-link(ng-click='vm.incrementBottles()') +Б
+      a.btn.btn-link(ng-click='vm.incrementBottles()') +{{vm.bottleLabel}}
 
       input.form-control.text-center(
       ng-attr-type='{{vm.type}}'
@@ -32,12 +32,13 @@ fieldset.quantity-edit-popover
       maxlength='3'
       )
 
-      a.btn.btn-link(ng-click='vm.decrementBottles()') -Б
+      a.btn.btn-link(ng-click='vm.decrementBottles()') -{{vm.bottleLabel}}
 
   .extras
 
     button.btn.btn-link(
     ng-click='vm.incrementHalfBoxes()'
+    ng-if='vm.showBottles'
     ) +½К
 
     button.btn.btn-link.delete(
