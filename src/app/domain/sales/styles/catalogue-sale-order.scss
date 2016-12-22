@@ -1,5 +1,23 @@
 @import "../../../styles/variables";
 
+#catalogue-sale-order {
+  .header {
+
+    @extend .display-flex;
+
+    @media (max-width: $screen-xs) {
+      min-height: 60px;
+    }
+    @media (min-width: $screen-xs) {
+      min-height: 35px;
+    }
+    @media (min-width: $screen-sm) {
+      min-height: 38px;
+    }
+
+  }
+}
+
 .sale-order-collapsible {
 
   overflow-y: auto;
@@ -96,6 +114,7 @@
 .catalogue-sale-order {
 
   @extend .display-flex;
+  flex: 1;
   min-width: 0;
 
   & + .menu {
