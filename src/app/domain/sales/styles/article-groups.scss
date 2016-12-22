@@ -34,6 +34,43 @@
     }
   }
 
+  .left-caret-button {
+    color: #555;
+    min-width: 35px;
+    max-width: 35px;
+    border-right: 1px solid #ddd;
+  }
+
+  .left-caret-button-name {
+    color: #555;
+    text-align: left;
+    flex: 1;
+    padding-left: 4px;
+    @extend .ellipsis
+  }
+
+  .category-buttons {
+    display: flex;
+  }
+
+  .nav-buttons {
+    display: flex;
+    padding: 0;
+  }
+
+  // TODO STYLES
+
+  .category-buttons {
+    a {
+      color: #555
+    }
+    button {
+      min-width: 35px;
+      max-width: 35px;
+      color: #555;
+    }
+  }
+
   .block-to-collapse {
 
     position: absolute;
@@ -58,7 +95,6 @@
   }
 
 }
-
 
 .iOS {
   #article-groups {
