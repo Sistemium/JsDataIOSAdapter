@@ -53,6 +53,22 @@
     setQty();
 
     if (!position) {
+      createPosition();
+    }
+
+    /*
+     Listeners
+     */
+
+    $scope.$watchGroup(['vm.boxes', 'vm.bottles'], onQtyChange);
+    $scope.$watch('vm.position.id', onPositionChange);
+
+    /*
+     Functions
+     */
+
+    function createPosition() {
+
       position = SaleOrderPosition.createInstance({
         saleOrderId: saleOrder.id,
         articleId: article.id,
@@ -61,17 +77,14 @@
         priceOrigin: price,
         volume: 0
       });
+
     }
 
-    /*
-     Listeners
-     */
-
-    $scope.$watchGroup(['vm.boxes', 'vm.bottles'], onQtyChange);
-
-    /*
-     Functions
-     */
+    function onPositionChange(newPositionId, oldPositionId) {
+      if (!newPositionId && oldPositionId) {
+        createPosition();
+      }
+    }
 
     function deleteClick() {
       if (position.id && !vm.deleteConfirmation) {
