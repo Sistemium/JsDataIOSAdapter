@@ -113,7 +113,9 @@
 
 .catalogue-sale-order {
 
+  @extend .spaced;
   @extend .display-flex;
+
   flex: 1;
   min-width: 0;
 
@@ -167,6 +169,9 @@
   }
 
   .totals {
+    .has-positions{
+      @extend .spaced;
+    }
     margin-right: 15px;
     flex: 1;
     text-align: right;
