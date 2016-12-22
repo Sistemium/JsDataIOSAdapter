@@ -158,7 +158,7 @@
     }
 
     function articleRowHeight() {
-      return saMedia.xxsWidth ? 94 : 80;
+      return 80;
     }
 
     function findAll() {
