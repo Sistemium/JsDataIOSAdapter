@@ -3,6 +3,7 @@ resize resize-offset-top='25'
 )
   .option.new-item
     button.btn.btn-primary(
+    ng-disabled='vm.saleOrder && !vm.saleOrder.id'
     stm-click='setSaleOrder'
     ng-click='isPopoverOpen=false'
     )

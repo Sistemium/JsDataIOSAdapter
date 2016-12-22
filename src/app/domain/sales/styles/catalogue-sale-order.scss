@@ -170,8 +170,12 @@
   }
 
   .totals {
-    .has-positions{
+    min-height: 18px;
+    .has-positions {
       @extend .spaced;
+    }
+    .no-positions > span {
+      color: $gray;
     }
     margin-right: 15px;
     flex: 1;
