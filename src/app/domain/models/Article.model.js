@@ -68,6 +68,9 @@
         }],
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
+        }],
+        pcsLabel: ['pieceVolume', function(pieceVolume) {
+          return pieceVolume ? 'б' : 'шт';
         }]
       },
 
@@ -94,7 +97,7 @@
             pcs: pcs,
             full: (box || half ? `${box||''}${half&&'½'||''} к` : '')
             + (box && pcs && !half && ' ' || '')
-            + (pcs && !half ? `${pcs} б` : '')
+            + (pcs && !half ? `${pcs} ${this.pcsLabel}` : '')
           }
 
         }
