@@ -53,18 +53,16 @@
   }
 
   .article-info {
-    display: inline;
+    flex: 1
   }
 
   .article-name-first {
-
-    .caret {
-      font-size: 10px;
-      margin-right: 4px;
-    }
-
     @extend .ellipsis;
-    display: inline;
+    display: flex;
+
+    .name-first {
+      @extend .ellipsis;
+    }
   }
 
   .article-name-second {
@@ -74,12 +72,6 @@
     .tooltip-inner {
       overflow: visible;
       white-space: normal;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .article-name-first {
-      display: block;
     }
   }
 
