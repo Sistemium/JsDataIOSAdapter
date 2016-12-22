@@ -73,7 +73,7 @@
     });
 
     vm.watchScope(
-      () => saMedia.xxsWidth,
+      isWideScreen,
       (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
     );
 
@@ -158,7 +158,7 @@
     }
 
     function articleRowHeight() {
-      return 80;
+      return isWideScreen() ? 80 : 74;
     }
 
     function findAll() {

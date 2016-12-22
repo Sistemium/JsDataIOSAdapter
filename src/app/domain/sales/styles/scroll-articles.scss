@@ -15,6 +15,9 @@
 
   .list-group-item {
     min-height: 80px;
+    @media (max-width: $screen-xs-max) {
+      min-height: 74px;
+    }
   }
 
   .right {
