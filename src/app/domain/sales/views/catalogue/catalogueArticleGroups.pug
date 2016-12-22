@@ -28,14 +28,17 @@ collapsed='vm.isArticleGroupsCollapsingDone=true'
 resize resize-offset-top='5'
 )
   ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
-    a.list-group-item(
-    ng-repeat='ancestor in vm.ancestors track by ancestor.id'
-    href
-    ng-click='vm.articleGroupClick(ancestor)'
-    )
-      span
+
+    .list-group-item.btn-group.nav-buttons(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
+
+      button.btn.btn-xs.btn-link.left-caret-button(
+      ng-click='vm.articleGroupClick(ancestor, true, true)'
+      )
         i.glyphicon.glyphicon-menu-left
-      span {{::ancestor.name}}
+
+      button.btn.btn-block.btn-link.left-caret-button-name(
+      ng-click='vm.articleGroupClick(ancestor)'
+      ) {{::ancestor.name}}
 
   // FIXME: copy-pasted
   ul.list-group.xs-ancestors(ng-if='!vm.currentArticleGroup && vm.showOnlyOrdered')
@@ -62,15 +65,23 @@ resize resize-offset-top='5'
       span {{ vm.currentArticleGroup.name }}
 
     // TODO: find why click on Baikal does not collapse
-    a.list-group-item(
-    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
-    href
-    ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
-    stm-click='articleGroup' click-payload='elem'
-    ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
-    )
-      span.badge(ng-if='::vm.articleGroupIds[elem.id]')
-        span {{::vm.articleGroupIds[elem.id].length}}
-        span(ng-if='::elem.children.length') +
-      i.glyphicon.glyphicon-menu-right.pull-right(ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]')
-      span {{::elem.name}}
+
+    .list-group-item.category-buttons(ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id')
+      a.flex-1(
+      ng-class='{active: vm.currentArticleGroup.id === elem.id}'
+      href
+      ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
+      stm-click='articleGroup' click-payload='elem'
+      )
+        span.badge.pull-right(ng-if='::vm.articleGroupIds[elem.id]')
+          span {{::vm.articleGroupIds[elem.id].length}}
+          span(ng-if='::elem.children.length') +
+        span {{::elem.name }}
+
+      button.btn.btn-xs.btn-link.btn-block(
+      ng-click='vm.isArticleGroupsExpanded = false'
+      stm-click='articleGroup' click-payload='[elem, true]'
+      href
+      ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
+      )
+        i.glyphicon.glyphicon-menu-right
