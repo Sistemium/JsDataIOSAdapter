@@ -19,6 +19,10 @@
   .popover {
     @media (min-width: $screen-sm-min) {
       max-width: 370px;
+      min-width: 370px;
+    }
+    @media (max-width: $screen-xs-max) {
+      min-width: 276px
     }
   }
 
