@@ -67,16 +67,15 @@
 
   }
 
-  .flex-divider {
-    flex: 0.03;
-  }
-
   .sale-order-main-buttons {
-    flex: 0.9;
+    flex: 1;
   }
 
   .delete-sale-order-btn {
-    flex: 0.1;
+
+    @media (max-width: $screen-xs) {
+      margin-right: $margin-bottom-xs;
+    }
   }
 
   .buttons {
@@ -98,9 +97,11 @@
     background-color: $gray-background-color;
 
     @media (max-width: $screen-xs) {
-      button {
-        display: block;
-        width: 100%;
+      .sale-order-main-buttons {
+        button {
+          display: block;
+          width: 100%;
+        }
       }
       button + button {
         margin-top: $margin-bottom-xs;
