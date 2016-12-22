@@ -210,9 +210,13 @@
                 SaleOrder.inject(updated);
               }
             });
-
         } else {
           SaleOrder.find(id, {bypassCache: true})
+            .catch(err => {
+              if (err.error ===404){
+                SaleOrder.eject(saleOrderId)
+              }
+            });
         }
 
       } else if (event.resource === 'SaleOrderPosition') {
@@ -243,7 +247,13 @@
       let id = _.get(event, 'data.id');
       if (!id) return;
 
-      if (event.resource === 'SaleOrderPosition') SaleOrderPosition.eject(id);
+      if (SUBSCRIPTIONS.indexOf(event.resource) > -1) {
+        Schema.model(event.resource).eject(id);
+        if (id === saleOrderId) {
+          toastr.error('Заказ удален');
+          $state.go('^');
+        }
+      }
 
     }
 
