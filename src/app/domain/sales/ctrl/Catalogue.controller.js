@@ -231,16 +231,27 @@
 
     }
 
-    function setCurrentArticleGroup(articleGroupOrId) {
+    function setCurrentArticleGroup(articleGroupOrId, mouseEvent, needToCollapse) {
 
-      let articleGroup = articleGroupOrId;
+      //init
 
-      if (_.get(articleGroupOrId, 'showAll')) {
+      let needsToBeCollapsed;
+      let articleGroup;
+
+      if (articleGroupOrId.length) {
+        articleGroup = articleGroupOrId[0];
+        needsToBeCollapsed = articleGroupOrId[1]
+      } else {
+        articleGroup = articleGroupOrId;
+        needsToBeCollapsed = needToCollapse
+      }
+
+      if (_.get(articleGroup, 'showAll')) {
         vm.showOnlyOrdered = false;
       }
 
-      if (articleGroupOrId && !articleGroupOrId.id) {
-        articleGroup = _.isObject(articleGroupOrId) ? null : ArticleGroup.get(articleGroupOrId);
+      if (articleGroup && !articleGroup.id) {
+        articleGroup = _.isObject(articleGroup) ? null : ArticleGroup.get(articleGroup);
       }
 
       DEBUG('setCurrentArticleGroup');
@@ -301,6 +312,10 @@
         q: vm.search,
         ordered: vm.showOnlyOrdered || null
       }, {notify: false});
+
+      if (needsToBeCollapsed) {
+        vm.isArticleGroupsExpanded = false;
+      }
 
     }
 
