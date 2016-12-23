@@ -34,14 +34,32 @@
     }
   }
 
+  // TODO refactor styles
+
   .left-caret-button {
     color: #555;
     min-width: 35px;
     max-width: 35px;
-    border-right: 1px solid #ddd;
+    text-align: center;
+    padding: 7px 10px;
+    i {
+      top: 2px;
+    }
   }
 
-  .left-caret-button-name {
+  // TODO refactor styles
+
+  .right-caret-button, .right-caret-button-badge {
+    color: #555;
+    text-align: center;
+    padding: 7px 10px;
+    i {
+      top: 2px;
+    }
+  }
+
+  .left-caret-button-name, .right-caret-button-name {
+    padding: 7px 10px;
     color: #555;
     text-align: left;
     flex: 1;
@@ -49,26 +67,30 @@
     @extend .ellipsis
   }
 
-  .category-buttons {
-    display: flex;
+  .nav-buttons a:hover {
+    background: #e6e6e6;
+    text-decoration: none;
+    cursor: pointer;
+    border-color: darken(#e6e6e6, 10%) !important;
+    color: #ffffff;
+  }
+
+  .left-caret-button:hover, .right-caret-button:hover {
+    background: darken(#e6e6e6, 10%) !important;
+    border-color: darken(#e6e6e6, 20%) !important;
+  }
+
+  .custom-active {
+    background-color: #337ab7;
+    a {
+      color: #fff;
+    }
+
   }
 
   .nav-buttons {
     display: flex;
     padding: 0;
-  }
-
-  // TODO STYLES
-
-  .category-buttons {
-    a {
-      color: #555
-    }
-    button {
-      min-width: 35px;
-      max-width: 35px;
-      color: #555;
-    }
   }
 
   .block-to-collapse {
