@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log) {
+  angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log, IosParser) {
 
     var ios = $window.webkit;
     var requests = {};
@@ -42,28 +42,7 @@
 
       function iosParser(data, entity) {
 
-        var model = schema.model(entity);
-        var fieldTypes = model && model.fieldTypes;
-
-
-        _.each(data, function (row) {
-
-          _.each(fieldTypes, function (type, field) {
-
-            row [field] = (function (v) {
-              switch (type) {
-                case 'int':
-                  return parseInt(v) || 0;
-                case 'decimal':
-                  return parseFloat(v) || 0;
-                case 'date':
-                  return v ? v.substr(0, 10) : null;
-              }
-            })(row[field]);
-
-          });
-
-        });
+        IosParser.parseArray(data, schema.model(entity))
 
       }
 
