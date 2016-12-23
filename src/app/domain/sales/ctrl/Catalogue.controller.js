@@ -373,7 +373,7 @@
 
   }
 
-  angular.module('webPage')
+  angular.module('Sales')
     .controller('CatalogueController', CatalogueController);
 
 }());
