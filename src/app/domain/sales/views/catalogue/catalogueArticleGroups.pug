@@ -67,9 +67,11 @@ resize resize-offset-top='5'
 
     // TODO: find why click on Baikal does not collapse
 
-    .list-group-item.category-buttons(ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id')
+    .list-group-item.category-buttons(
+    ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
+    )
       a.flex-1(
-      ng-class='{active: vm.currentArticleGroup.id === elem.id}'
       href
       ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
       stm-click='articleGroup' click-payload='elem'
