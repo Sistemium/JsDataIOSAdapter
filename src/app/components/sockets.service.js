@@ -1,46 +1,76 @@
 'use strict';
 
+(function () {
+
 angular.module('core.services')
-  .service('iosSockets', function ($window, toastr, $q, IOS) {
+  .service('iosSockets', function ($window, toastr, $q, IOS, DEBUG, IosParser, Schema, $rootScope) {
 
-    var SUBSCRIBE = 'subscribe';
-    var CALLBACK = 'iosSocketsJsDataSubscribe';
-    var DATACALLBACK = 'iosSocketsJsDataSubscribeData';
+    const SUBSCRIBE = 'subscribe';
+    const CALLBACK = 'iosSocketsJsDataSubscribe';
+    const DATACALLBACK = 'iosSocketsJsDataSubscribeData';
 
-    var ons = [];
+    const ons = [];
+    const subscriptions = {};
+
+    let subscribed = [];
 
     function subscribeDataCallback(data) {
-      _.each(data, function (e) {
 
-        console.info(angular.toJson({
-          data: data, ons: ons.length
-        }), 'subscribeDataCallback');
+      if (!data) return;
 
-        _.each(ons, function (subscription) {
-          if (subscription.event === 'jsData:update') {
-            subscription.callback({
-              resource: e.entity,
-              data: e.data || {id: e.xid}
-            });
-          }
+      let model = Schema.model(_.get(data[0], 'entity'));
+
+      if (!model) return console.error('iosSockets:subscribeDataCallback:', 'no model');
+
+      let subscriptions = _.filter(ons, {event: 'jsData:update'});
+
+      let index = {};
+
+      _.each(data, e => {
+
+        if (e.data) {
+          IosParser.parseObject(e.data, model);
+        }
+
+        index[e.xid] = e.data;
+
+        _.each(subscriptions, subscription =>
+          subscription.callback({
+            resource: e.entity,
+            data: e.data || {id: e.xid}
+          })
+        );
+
+      });
+
+      DEBUG('subscribeDataCallback:', data);
+
+      subscriptions = _.filter(ons, {event: 'jsData:update:finished'});
+
+      _.each(subscriptions, subscription => {
+
+        subscription.callback({
+          model,
+          data,
+          index
         });
 
       });
-    }
 
-    var subscribed = [];
+    }
 
     function subscribeCallback(msg, data) {
       subscribed = data.entities;
       //toastr.info(angular.toJson(data),'subscribeCallback');
     }
 
-    $window[DATACALLBACK] = subscribeDataCallback;
+    $window[DATACALLBACK] = data => $rootScope.$apply(() => subscribeDataCallback(data));
+
     $window[CALLBACK] = subscribeCallback;
 
     function onFn(event, callback) {
 
-      var subscription = {
+      const subscription = {
         event: event,
         callback: callback
       };
@@ -53,53 +83,53 @@ angular.module('core.services')
 
     }
 
-    var subscriptions = {};
+    function jsDataSubscribe(filter) {
+
+      let id = uuid.v4();
+
+      subscriptions[id] = {
+        id: id,
+        filter: filter
+      };
+
+      IOS.handler(SUBSCRIBE).postMessage({
+        entities: filter,
+        callback: CALLBACK,
+        dataCallback: DATACALLBACK
+      });
+
+      return function () {
+
+        delete subscriptions[id];
+
+        let unsub = [];
+        _.each(subscriptions, function (val) {
+          Array.prototype.push.apply(unsub, val.filter);
+        });
+
+        if (_.difference(subscribed, unsub)) {
+          IOS.handler(SUBSCRIBE).postMessage({
+            entities: unsub,
+            callback: CALLBACK,
+            dataCallback: DATACALLBACK
+          });
+        }
+      };
+    }
 
     return {
-      init: function () {
 
-      },
       on: onFn,
       onJsData: onFn,
-      jsDataSubscribe: function (filter) {
+      jsDataSubscribe,
 
-        var id = uuid.v4();
+      init: x => x,
+      emitQ: () => $q.reject(false)
 
-        subscriptions[id] = {
-          id: id,
-          filter: filter
-        };
-
-        IOS.handler(SUBSCRIBE).postMessage({
-          entities: filter,
-          callback: CALLBACK,
-          dataCallback: DATACALLBACK
-        });
-
-        return function () {
-          delete subscriptions[id];
-          var unsub = [];
-          _.each(subscriptions, function (val) {
-            Array.prototype.push.apply(unsub, val.filter);
-          });
-
-          if (_.difference(subscribed, unsub)) {
-            IOS.handler(SUBSCRIBE).postMessage({
-              entities: unsub,
-              callback: CALLBACK,
-              dataCallback: DATACALLBACK
-            });
-          }
-        };
-      },
-      emitQ: function () {
-        return $q(function (resolve, reject) {
-          reject(false);
-        });
-      }
     };
 
   })
+
   .service('Sockets', function (saSockets, $window, iosSockets) {
 
     if ($window.webkit) {
@@ -110,3 +140,5 @@ angular.module('core.services')
     }
 
   });
+
+})();
