@@ -7,11 +7,7 @@
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
 
-    let SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
-
-    if (IOS.isIos()) {
-      SUBSCRIPTIONS.push('RecordStatus');
-    }
+    const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -86,7 +82,6 @@
       vm.saleOrder.date = moment(date).format();
     });
 
-    $scope.$on('$destroy', Sockets.jsDataSubscribe(SUBSCRIPTIONS));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
 
@@ -336,7 +331,7 @@
 
   }
 
-  angular.module('webPage')
+  angular.module('Sales')
     .controller('CatalogueSaleOrderController', CatalogueSaleOrderController);
 
 })();

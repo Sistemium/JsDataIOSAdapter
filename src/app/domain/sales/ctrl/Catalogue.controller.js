@@ -4,12 +4,12 @@
 
   const SHORT_TIMEOUT = 0;
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
 
-    let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
-    let {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
+    const {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
+    const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
 
-    let vm = saControllerHelper.setup(this, $scope)
+    const vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
 
     let currentArticleGroupId = $state.params.articleGroupId || null;
@@ -38,8 +38,7 @@
       articleGroupAndCollapseClick,
 
       onStateChange,
-      articleRowHeight,
-
+      articleRowHeight
 
     });
 
@@ -84,19 +83,52 @@
       newValue => vm.isWideScreen = newValue
     );
 
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
 
     /*
      Handlers
      */
 
+
     function articleGroupAndCollapseClick(item) {
-      console.error(item);
       vm.isArticleGroupsExpanded = false;
       setCurrentArticleGroup(item);
     }
 
+    function onJSData(event) {
+      if (event.resource === 'Stock') {
+        if (_.get(event, 'data.articleId')) {
+          Stock.inject(event.data);
+        }
+      }
+    }
+
+    function onJSDataFinished(event) {
+
+      DEBUG('onJSDataFinished:', event);
+
+      if (_.get(event, 'model.name') === 'Stock') {
+
+        DEBUG('onJSDataFinished:reloadStock');
+
+        _.each(vm.stock, stock => {
+          let updated = event.index[stock.id];
+          if (!updated) return;
+          stock.volume = updated.volume;
+          stock.displayVolume = updated.displayVolume;
+        });
+
+      }
+    }
+
     function clearSearchClick() {
       vm.search = '';
+    }
+
+    function reloadVisible() {
+      filterStock();
+      return setCurrentArticleGroup(vm.currentArticleGroup);
     }
 
     function saleOrderTotalsClick(showOnlyOrdered) {
@@ -110,10 +142,7 @@
             .then(article => Article.loadRelations(article, 'Stock'))
         )
       ))
-        .then(() => {
-          filterStock();
-          return setCurrentArticleGroup(vm.currentArticleGroup);
-        })
+        .then(reloadVisible)
         .catch(error => console.error(error));
     }
 
