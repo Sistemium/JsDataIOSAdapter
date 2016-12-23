@@ -32,8 +32,7 @@ resize resize-offset-top='5'
     .list-group-item.nav-buttons(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
 
       a.left-caret-button(
-      ng-click='vm.isArticleGroupsExpanded = false'
-      stm-click='articleGroup' click-payload='ancestor'
+      stm-click='articleGroupAndCollapse' click-payload='ancestor'
       )
         i.glyphicon.glyphicon-menu-left
 
@@ -82,8 +81,7 @@ resize resize-offset-top='5'
         span {{::elem.name }}
 
       a.right-caret-button(
-      ng-click='vm.isArticleGroupsExpanded = false'
-      stm-click='articleGroup' click-payload='elem'
+      stm-click='articleGroupAndCollapse' click-payload='elem'
       href
       ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
       )
