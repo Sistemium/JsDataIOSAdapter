@@ -29,15 +29,15 @@ resize resize-offset-top='5'
 )
   ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
 
-    .list-group-item.btn-group.nav-buttons(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
+    .list-group-item.nav-buttons(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
 
-      button.btn.btn-xs.btn-link.left-caret-button(
+      a.left-caret-button(
       ng-click='vm.isArticleGroupsExpanded = false'
       stm-click='articleGroup' click-payload='ancestor'
       )
         i.glyphicon.glyphicon-menu-left
 
-      button.btn.btn-block.btn-link.left-caret-button-name(
+      a.left-caret-button-name(
       stm-click='articleGroup' click-payload='ancestor'
       ) {{::ancestor.name}}
 
@@ -67,11 +67,11 @@ resize resize-offset-top='5'
 
     // TODO: find why click on Baikal does not collapse
 
-    .list-group-item.category-buttons(
+    .list-group-item.nav-buttons(
     ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
-    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
+    ng-class='{"custom-active": vm.currentArticleGroup.id === elem.id}'
     )
-      a.flex-1(
+      a.right-caret-button-name(
       href
       ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
       stm-click='articleGroup' click-payload='elem'
@@ -81,7 +81,7 @@ resize resize-offset-top='5'
           span(ng-if='::elem.children.length') +
         span {{::elem.name }}
 
-      button.btn.btn-xs.btn-link.btn-block(
+      a.right-caret-button(
       ng-click='vm.isArticleGroupsExpanded = false'
       stm-click='articleGroup' click-payload='elem'
       href
