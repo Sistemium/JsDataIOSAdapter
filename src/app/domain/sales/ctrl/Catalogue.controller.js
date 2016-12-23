@@ -35,9 +35,11 @@
       setSaleOrderClick,
       saleOrderTotalsClick,
       clearSearchClick,
+      articleGroupAndCollapseClick,
 
       onStateChange,
-      articleRowHeight
+      articleRowHeight,
+
 
     });
 
@@ -86,6 +88,12 @@
     /*
      Handlers
      */
+
+    function articleGroupAndCollapseClick(item) {
+      console.error(item);
+      vm.isArticleGroupsExpanded = false;
+      setCurrentArticleGroup(item);
+    }
 
     function clearSearchClick() {
       vm.search = '';
