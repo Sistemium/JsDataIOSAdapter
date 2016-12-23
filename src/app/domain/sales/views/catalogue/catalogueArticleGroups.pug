@@ -68,12 +68,12 @@ resize resize-offset-top='5'
 
     .list-group-item.nav-buttons(
     ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
-    ng-class='{"custom-active": vm.currentArticleGroup.id === elem.id}'
     )
       a.right-caret-button-name(
       href
       ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
       stm-click='articleGroup' click-payload='elem'
+      ng-class='{"active-category": vm.currentArticleGroup.id === elem.id}'
       )
         span.badge.pull-right(ng-if='::vm.articleGroupIds[elem.id]')
           span {{::vm.articleGroupIds[elem.id].length}}
