@@ -114,6 +114,7 @@
 
 .catalogue-sale-order {
 
+  // FIXME: this is too generic, could space options in popovers
   @extend .spaced;
   @extend .display-flex;
 
