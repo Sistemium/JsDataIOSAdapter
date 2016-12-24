@@ -10,13 +10,15 @@ vs-scroll-parent="#scroll-articles"
     .article-wrapper
 
       .article-name-first
+        // TODO: filtering options in tooltip (allow user to show only the articles with the same firstName)
         strong.name-first(
-        uib-tooltip='{{::stock.article.name}}'
+        uib-tooltip='{{::stock.article.firstName}}'
         ) {{::stock.article.firstName}}
         span
         .article-info(
         ng-class='::{gray: stock.article.firstName.length}'
         )
+          // TODO: allow user to show only the articles with the same pieceVolume rounded to 1/10
           strong {{::stock.article.pieceVolume}}л
           small.gray x {{::stock.article.packageRel}}
           span
