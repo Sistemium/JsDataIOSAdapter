@@ -4,6 +4,7 @@
 ul.list-group.vr-parent(
 vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
+before-tag-name='li'
 )
   .list-group-item.display-flex.flex-align-center.spaced(ng-repeat='stock in vm.stock track by stock.id')
 
