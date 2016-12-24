@@ -74,7 +74,9 @@
       let queryHash = DSUtils.toJson(filter);
       let completed = store.queryData[queryHash];
 
-      if (completed) return $q.resolve(resource.filter(filter));
+      if (completed && !_.get(options, 'bypassCache')) {
+        return $q.resolve(resource.filter(filter));
+      }
 
       return resource.findAll(filter, _.defaults({cacheResponse: false}, options))
         .then(res => {
@@ -91,9 +93,11 @@
             }
           });
 
-          store.queryData[queryHash] = {$$injected: true};
+          if (!_.get(options, 'bypassCache')) {
+            store.queryData[queryHash] = {$$injected: true};
+          }
 
-          return store.collection;
+          return res;
 
         });
     }
@@ -105,7 +109,7 @@
       let id = _.get(_id, 'id') || _id;
 
       function shouldKeep(key) {
-        return (options.keepChanges||[]).indexOf(key) >= 0;
+        return (options.keepChanges || []).indexOf(key) >= 0;
       }
 
       return definition.save(id, _.assign({cacheResponse: false}, options))
@@ -137,7 +141,7 @@
         return unCachedSave(this, filter, options)
       },
 
-      primaryIndex: function() {
+      primaryIndex: function () {
         return DS.store[this.name].index;
       }
 
