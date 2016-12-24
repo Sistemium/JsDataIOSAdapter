@@ -1,7 +1,7 @@
 .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
   | Нет подходящих товаров
 
-ul.list-group.vr-parent(
+ul.list-group.round-corners-by-type.vr-parent(
 vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
 before-tag-name='li'
