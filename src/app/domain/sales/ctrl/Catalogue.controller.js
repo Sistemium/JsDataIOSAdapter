@@ -176,6 +176,8 @@
 
     function cacheSaleOrderPositions(ev, newPositions) {
 
+      let oldCache = vm.saleOrderPositionByArticle || {};
+
       vm.saleOrderPositionByArticle = {};
 
       let grouped = _.groupBy(vm.saleOrderPositions, 'articleId');
@@ -183,7 +185,9 @@
       _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
 
       if (vm.showOnlyOrdered && newPositions && newPositions.length) {
-        saleOrderTotalsClick(true);
+        if (_.filter(newPositions, pos => oldCache[pos.articleId]).length){
+          saleOrderTotalsClick(true);
+        }
       }
 
     }

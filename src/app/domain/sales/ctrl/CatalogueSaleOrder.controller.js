@@ -227,7 +227,7 @@
             .then(updated => {
               if (updated.saleOrderId === saleOrderId) {
                 let existing = getPosition(updated.articleId);
-                if (existing && SaleOrderPosition.hasChanges(existing)) {
+                if (existing && (SaleOrderPosition.hasChanges(existing) || updated.ts <= existing.ts)) {
                   DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
                 } else {
                   SaleOrderPosition.inject(updated);
