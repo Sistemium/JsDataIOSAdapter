@@ -20,7 +20,7 @@
   href
   ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
   )
-    span {{ vm.currentArticleGroup.name || vm.showOnlyOrdered && 'Товары заказа' || 'Все товары' | cleanName}}
+    span {{ vm.currentArticleGroup.displayName || vm.showOnlyOrdered && 'Товары заказа' || 'Все товары' }}
     span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
 
 
@@ -40,7 +40,7 @@ resize resize-offset-top='5'
 
       a(
       stm-click='articleGroupAndCollapse' click-payload='ancestor'
-      ) {{::ancestor.name}}
+      ) {{::ancestor.displayName}}
 
   // FIXME: copy-pasted
   ul.list-group.xs-ancestors(ng-if='!vm.currentArticleGroup && vm.showOnlyOrdered')
@@ -51,7 +51,7 @@ resize resize-offset-top='5'
     )
       span
         i.glyphicon.glyphicon-menu-left
-      span {{::ancestor.name}}
+      span {{::ancestor.displayName}}
 
   ul.list-group(
   )
@@ -65,7 +65,7 @@ resize resize-offset-top='5'
     ng-if='vm.currentArticleGroup.children.length && !vm.articleGroupIds[vm.currentArticleGroup.id]'
     ng-click='vm.isArticleGroupsExpanded=false'
     )
-      span {{ vm.currentArticleGroup.name }}
+      span {{ vm.currentArticleGroup.displayName }}
 
     // TODO: find why click on Baikal does not collapse
 
@@ -81,7 +81,7 @@ resize resize-offset-top='5'
         span.badge.pull-right(ng-if='::vm.articleGroupIds[elem.id]')
           span {{::vm.articleGroupIds[elem.id].length}}
           span(ng-if='::elem.children.length') +
-        span {{::elem.name }}
+        span {{::elem.displayName }}
 
       a.chevron(
       stm-click='articleGroup' click-payload='elem'

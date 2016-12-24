@@ -185,7 +185,7 @@
       _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
 
       if (vm.showOnlyOrdered && newPositions && newPositions.length) {
-        if (_.filter(newPositions, pos => oldCache[pos.articleId]).length){
+        if (_.filter(newPositions, pos => oldCache[pos.id]).length){
           saleOrderTotalsClick(true);
         }
       }
@@ -353,10 +353,10 @@
 
     function setAncestors(articleGroup) {
 
-      vm.ancestors = [{name: 'Все товары', showAll: true}];
+      vm.ancestors = [{displayName: 'Все товары', showAll: true}];
 
       if (vm.showOnlyOrdered) {
-        vm.ancestors.push({name: 'Товары заказа', id: false});
+        vm.ancestors.push({displayName: 'Товары заказа', id: false});
       }
 
       if (articleGroup) {

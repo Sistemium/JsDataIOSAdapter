@@ -22,8 +22,8 @@ li(uib-dropdown is-open='priceTypesOpen' ng-disabled='vm.saleOrder')
 li.ancestor(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
   a(
   href ng-click='vm.articleGroupClick(ancestor)'
-  ) {{ ancestor.name }}
+  ) {{ ancestor.displayName }}
 
-li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
+li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.displayName }}
 
 
