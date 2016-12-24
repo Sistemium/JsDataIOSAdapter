@@ -34,91 +34,65 @@
     }
   }
 
-  // TODO refactor styles
+  // TODO: this all should be only in xs
 
-  .left-caret-button {
-    color: $article-nav-menu-text-color;
-    min-width: 35px;
-    max-width: 35px;
-    padding: 10px 20px;
-    cursor: pointer;
+  .list-group-item.with-a-inside {
 
-    @media (max-width: 767px) {
-      padding: 8px 20px;
-    }
-
-    i {
-      top: 2px;
-      right: 6px;
-    }
-
-  }
-
-  // TODO refactor styles
-
-  .right-caret-button, .right-caret-button-badge {
-    color: $article-nav-menu-text-color;
-    text-align: center;
-    padding: 10px 12px;
-    i {
-      top: 2px;
-    }
-    @media (max-width: 767px) {
-      padding: 8px 12px;
-    }
-  }
-
-  .left-caret-button-name, .right-caret-button-name {
-    padding: 10px 12px;
-    color: $article-nav-menu-text-color;
-    text-align: left;
-    flex: 1;
-
-    @extend .ellipsis;
-
-    @media (max-width: 767px) {
-      padding: 8px 12px;
-    }
-
-  }
-
-  .left-caret-button-name:hover {
-    background: $gray-background-color;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .nav-buttons a.right-caret-button-name:hover {
-    background: $gray-background-color;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .left-caret-button:hover, .right-caret-button:hover {
-    background: darken($gray-background-color, 10%) !important;
-  }
-
-  .active-category, .active-category:hover {
-    background-color: #337ab7;
-    color: #fff;
-    text-decoration: none;
-
-    span.badge {
-      background-color: #fff;
-      color: #337ab7;
-    }
-  }
-
-  .nav-buttons a.right-caret-button-name.active-category:hover {
-    background-color: #337ab7;
-    text-decoration: none;
-    cursor: pointer;
-    color: #fff;
-  }
-
-  .nav-buttons {
+    overflow: hidden;
     display: flex;
+    align-items: stretch;
     padding: 0;
+
+    a {
+
+      cursor: pointer;
+      padding: 10px 15px;
+      color: $article-nav-menu-text-color;
+
+      @media (max-width: $screen-xs-max) {
+        padding: 7px 10px;
+      }
+
+    }
+
+    &.active {
+
+      a, a:hover {
+        color: #fff;
+        text-decoration: none;
+        span.badge {
+          background-color: #fff;
+          color: #337ab7;
+        }
+      }
+
+    }
+
+    &:not(.active) a:hover {
+      background: $gray-background-color;
+      text-decoration: none;
+    }
+
+    a.chevron {
+
+      // this is to align vertically when name is more than 1 line
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .glyphicon {
+        top: 0;
+      }
+
+    }
+
+    a:not(.chevron) {
+      flex: 1;
+      &:not(:first-child) {
+        padding-left: 0;
+      }
+    }
+
   }
 
   .block-to-collapse {
