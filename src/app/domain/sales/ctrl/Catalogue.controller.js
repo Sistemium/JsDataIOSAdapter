@@ -98,15 +98,30 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
+      DEBUG('jsData:updateCollection', e);
       if (e.resource === 'Stock') {
-        let options = {limit: 10000};
-        Stock.cachedFindAll({volumeNotZero: true}, options);
-        // TODO: nullify not updated
-        onJSDataFinished({
-          model: Stock,
-          index: Stock.primaryIndex(),
-          data: Stock.getAll()
-        });
+
+        let options = {
+          limit: 10000,
+          bypassCache: true,
+          offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+        };
+
+        Stock.cachedFindAll({}, options)
+          .then(res => {
+
+            let index = {};
+
+            _.each(res, item => index[item.id] = item);
+
+            onJSDataFinished({
+              model: Stock,
+              index: index,
+              data: res
+            });
+
+          });
+
       }
     }));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
@@ -135,6 +150,8 @@
 
         DEBUG('onJSDataFinished:reloadStock');
 
+        let count = event.data.length;
+
         _.each(vm.stock, stock => {
           let updated = event.index[stock.id];
           if (!updated) return;
@@ -142,13 +159,13 @@
           stock.displayVolume = updated.displayVolume;
         });
 
-        let count = event.data.length;
-
-        toastr.info(
-          `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
-          'Обновление данных',
-          {timeOut: 15000}
-        );
+        if (count) {
+          toastr.info(
+            `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
+            'Обновление данных',
+            {timeOut: 15000}
+          );
+        }
 
       }
     }
