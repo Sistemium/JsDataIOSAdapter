@@ -8,19 +8,14 @@
       display: none;
     }
 
-    text-align: right;
-    padding: 8px;
-
-    //font-size: 14px;
-    //font-weight: 500;
-    //line-height: 1.1;
-
-    //margin-bottom: 10px;
+    text-align: left;
+    //padding: 8px;
 
     .caret {
       @extend .turnable;
       top: 1px;
     }
+
   }
 
   .breadcrumb {
