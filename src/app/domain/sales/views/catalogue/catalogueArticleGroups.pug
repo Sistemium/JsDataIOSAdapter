@@ -59,8 +59,9 @@ resize resize-offset-top='5'
     )
       span Товары заказа
 
-    .list-group-item.hidden-xs.active(
+    a.list-group-item.active(
     ng-if='vm.currentArticleGroup.children.length && !vm.articleGroupIds[vm.currentArticleGroup.id]'
+    ng-click='vm.isArticleGroupsExpanded=false'
     )
       span {{ vm.currentArticleGroup.name }}
 
