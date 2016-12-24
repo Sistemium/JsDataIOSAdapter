@@ -25,6 +25,11 @@
     transform: rotate(-180deg);
   }
 
+  &.flip-vertical {
+    -webkittransform: scale(1, -1);
+    transform: scale(1, -1);
+  }
+
 }
 
 .animate-show.ng-hide-add,

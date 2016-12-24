@@ -2,6 +2,27 @@
 
 .catalogue {
 
+  .collapser {
+
+    @media (min-width: $screen-sm-min) {
+      display: none;
+    }
+
+    text-align: right;
+    padding: 8px;
+
+    //font-size: 14px;
+    //font-weight: 500;
+    //line-height: 1.1;
+
+    //margin-bottom: 10px;
+
+    .caret {
+      @extend .turnable;
+      top: 1px;
+    }
+  }
+
   .breadcrumb {
     > li.ancestor, > li.active {
       @media (max-width: $screen-xs-max) {

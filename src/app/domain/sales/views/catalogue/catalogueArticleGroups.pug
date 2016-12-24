@@ -15,12 +15,14 @@
     a(ng-click='vm.clearSearchClick()' href)
       i.glyphicon.glyphicon-remove
 
-button.btn.btn-default.btn-block.collapser(
-type='button'
-ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
-)
-  span {{ vm.currentArticleGroup.name || vm.showOnlyOrdered && 'Товары заказа' || 'Все товары'}}
-  span.caret(ng-class='{"turn-90-counter-clock": vm.isArticleGroupsExpanded}')
+.alert.alert-default.collapser
+  a(
+  href
+  ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
+  )
+    span {{ vm.currentArticleGroup.name || vm.showOnlyOrdered && 'Товары заказа' || 'Все товары' | cleanName}}
+    span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
+
 
 .block-to-collapse.scroll-y(
 uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'

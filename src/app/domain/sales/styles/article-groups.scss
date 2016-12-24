@@ -4,10 +4,6 @@
 
   margin-bottom: 0;
 
-  .caret {
-    @extend .turnable;
-  }
-
   @media (min-width: $screen-sm-min) {
     padding-right: 5px;
     .block-to-collapse {
@@ -15,16 +11,31 @@
     }
   }
 
-  .collapser {
-    @media (min-width: $screen-sm-min) {
-      display: none;
+  .stm-searcher {
+  }
+
+  .block-to-collapse {
+
+    position: absolute;
+    z-index: 2;
+
+    background: white;
+    clear: both;
+
+    left: 15px;
+    right: 15px;
+
+    @media (min-width: $screen-xs-max) {
+      right: -5px;
+      padding-right: 5px;
     }
-    margin-bottom: $margin-bottom-xs;
-    background: none !important;
-    border-color: #ccc !important;
-    .caret {
-      top: 0;
+
+    @media (orientation: portrait) and (min-width: $screen-sm) {
+      .hidden-xs {
+        display: none;
+      }
     }
+
   }
 
   .xs-ancestors {
@@ -90,29 +101,6 @@
       flex: 1;
       &:not(:first-child) {
         padding-left: 0;
-      }
-    }
-
-  }
-
-  .block-to-collapse {
-
-    position: absolute;
-    z-index: 2;
-
-    background: white;
-
-    left: 15px;
-    right: 15px;
-
-    @media (min-width: $screen-xs-max) {
-      right: -5px;
-      padding-right: 5px;
-    }
-
-    @media (orientation: portrait) and (min-width: $screen-sm) {
-      .hidden-xs {
-        display: none;
       }
     }
 
