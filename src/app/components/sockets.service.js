@@ -20,7 +20,7 @@ angular.module('core.services')
 
       let model = Schema.model(_.get(data[0], 'entity'));
 
-      if (!model) return console.error('iosSockets:subscribeDataCallback:', 'no model');
+      //if (!model) return console.error('iosSockets:subscribeDataCallback:', 'no model');
 
       let subscriptions = _.filter(ons, {event: 'jsData:update'});
 
@@ -28,7 +28,7 @@ angular.module('core.services')
 
       _.each(data, e => {
 
-        if (e.data) {
+        if (e.data && model) {
           IosParser.parseObject(e.data, model);
         }
 
@@ -44,6 +44,9 @@ angular.module('core.services')
       });
 
       DEBUG('subscribeDataCallback:', data);
+
+      // TODO: maybe should continue;
+      if (!model) return;
 
       subscriptions = _.filter(ons, {event: 'jsData:update:finished'});
 
