@@ -21,7 +21,7 @@
     }
 
     &.current {
-      background-color: #4290d0;
+      background-color: $active-color;
       &.current > a {
         color: white;
       }
