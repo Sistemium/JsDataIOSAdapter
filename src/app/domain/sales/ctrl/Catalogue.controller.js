@@ -97,6 +97,18 @@
     );
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
+      if (e.resource === 'Stock') {
+        let options = {limit: 10000};
+        Stock.cachedFindAll({volumeNotZero: true}, options);
+        // TODO: nullify not updated
+        onJSDataFinished({
+          model: Stock,
+          index: Stock.primaryIndex(),
+          data: Stock.getAll()
+        });
+      }
+    }));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
 
     /*

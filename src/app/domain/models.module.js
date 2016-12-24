@@ -135,6 +135,10 @@
 
       unCachedSave: function (filter, options) {
         return unCachedSave(this, filter, options)
+      },
+
+      primaryIndex: function() {
+        return DS.store[this.name].index;
       }
 
     });
