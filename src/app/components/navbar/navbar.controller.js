@@ -15,9 +15,10 @@
 
     });
 
-    $timeout(1000).then(()=> !vm.title && onStateChange($state.current));
+    //$timeout(1000).then(()=> !vm.title && onStateChange($state.current));
+    $scope.$on('$stateChangeStart', onStateChange);
 
-    $rootScope.$on('$stateChangeStart', onStateChange);
+    // $scope.$on('$stateChangeSuccess', onStateChange);
 
     function onStateChange(event, to) {
 
