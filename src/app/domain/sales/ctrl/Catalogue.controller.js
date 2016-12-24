@@ -70,7 +70,7 @@
 
         cacheSaleOrderPositions();
 
-        if (afretChangeOrder && newPositions && newPositions.length) {
+        if (afretChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
           saleOrderTotalsClick(true);
           afretChangeOrder = false;
         }
