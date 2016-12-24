@@ -45,7 +45,7 @@
 
       methods: {
         updateTotalCost: function () {
-          this.totalCost = Schema.aggregate('cost').sum(this.positions);
+          this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
         },
 
         positionsCountRu: function () {
