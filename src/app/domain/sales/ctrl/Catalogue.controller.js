@@ -63,7 +63,20 @@
     });
 
     vm.watchScope('vm.saleOrder.id', newValue => {
-      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', cacheSaleOrderPositions);
+
+      let afretChangeOrder = true;
+
+      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
+
+        cacheSaleOrderPositions();
+
+        if (afretChangeOrder && newPositions && newPositions.length) {
+          saleOrderTotalsClick(true);
+          afretChangeOrder = false;
+        }
+
+      });
+
     });
 
     SalesmanAuth.watchCurrent($scope, salesman => {
@@ -174,21 +187,13 @@
      Functions
      */
 
-    function cacheSaleOrderPositions(ev, newPositions) {
-
-      let oldCache = vm.saleOrderPositionByArticle || {};
+    function cacheSaleOrderPositions() {
 
       vm.saleOrderPositionByArticle = {};
 
       let grouped = _.groupBy(vm.saleOrderPositions, 'articleId');
 
       _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
-
-      if (vm.showOnlyOrdered && newPositions && newPositions.length) {
-        if (_.filter(newPositions, pos => oldCache[pos.id]).length){
-          saleOrderTotalsClick(true);
-        }
-      }
 
     }
 
