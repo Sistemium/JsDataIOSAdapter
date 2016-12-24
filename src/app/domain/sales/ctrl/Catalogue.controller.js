@@ -384,7 +384,7 @@
       }
 
       if (vm.search) {
-        let reg = new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'ig');
+        let reg = new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
         articles = _.filter(articles, article => reg.test(article.name));
       }
 
