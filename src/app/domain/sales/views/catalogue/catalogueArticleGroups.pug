@@ -32,12 +32,12 @@ resize resize-offset-top='5'
     .list-group-item.nav-buttons(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
 
       a.left-caret-button(
-      stm-click='articleGroupAndCollapse' click-payload='ancestor'
+      stm-click='articleGroup' click-payload='ancestor'
       )
         i.glyphicon.glyphicon-menu-left
 
       a.left-caret-button-name(
-      stm-click='articleGroup' click-payload='ancestor'
+      stm-click='articleGroupAndCollapse' click-payload='ancestor'
       ) {{::ancestor.name}}
 
   // FIXME: copy-pasted
@@ -71,8 +71,8 @@ resize resize-offset-top='5'
     )
       a.right-caret-button-name(
       href
-      ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
-      stm-click='articleGroup' click-payload='elem'
+      ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id] || elem.children.length && !vm.articleGroupIds[elem.id]'
+      stm-click='articleGroupAndCollapse' click-payload='elem'
       ng-class='{"active-category": vm.currentArticleGroup.id === elem.id}'
       )
         span.badge.pull-right(ng-if='::vm.articleGroupIds[elem.id]')
@@ -81,7 +81,7 @@ resize resize-offset-top='5'
         span {{::elem.name }}
 
       a.right-caret-button(
-      stm-click='articleGroupAndCollapse' click-payload='elem'
+      stm-click='articleGroup' click-payload='elem'
       href
       ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
       )
