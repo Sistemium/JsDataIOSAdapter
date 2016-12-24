@@ -6,7 +6,7 @@
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
 
-    const {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
+    const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
     const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -129,6 +129,10 @@
           stock.volume = updated.volume;
           stock.displayVolume = updated.displayVolume;
         });
+
+        let count = event.data.length;
+
+        toastr.info(`Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`, 'Обновление данных');
 
       }
     }

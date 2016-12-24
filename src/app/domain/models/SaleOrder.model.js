@@ -43,14 +43,16 @@
         processing: 'draft'
       },
 
+      meta: {
+        positionsCountRu
+      },
+
       methods: {
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
         },
 
-        positionsCountRu: function () {
-          return wDict[Language.countableState(this.positions.length)];
-        },
+        positionsCountRu,
 
         isValid: function () {
           return this.outletId && this.salesmanId && this.date;
@@ -59,6 +61,10 @@
       }
 
     });
+
+    function positionsCountRu(count) {
+      return wDict[Language.countableState(count || this.positions.length)];
+    }
 
   });
 
