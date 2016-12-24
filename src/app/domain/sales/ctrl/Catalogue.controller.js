@@ -106,8 +106,6 @@
 
     function onJSDataFinished(event) {
 
-      DEBUG('onJSDataFinished:', event);
-
       if (_.get(event, 'model.name') === 'Stock') {
 
         DEBUG('onJSDataFinished:reloadStock');
