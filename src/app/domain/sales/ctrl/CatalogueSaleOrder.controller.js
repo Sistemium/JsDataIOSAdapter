@@ -182,13 +182,7 @@
 
       if (!id) return;
 
-      if (event.resource === 'RecordStatus') {
-        id = _.get(event, 'data.objectXid');
-        if (_.get(event, 'data.name') === 'SaleOrder') {
-          return SaleOrder.eject(id);
-        }
-        return id && SaleOrderPosition.eject(id);
-      }
+      let {data, resource} = event;
 
       if (event.resource === 'SaleOrder') {
 
