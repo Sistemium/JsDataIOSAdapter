@@ -16,7 +16,7 @@ angular.module('core.services')
 
     function subscribeDataCallback(data) {
 
-      if (!data) return;
+      if (!data || !data.length) return;
 
       let model = Schema.model(_.get(data[0], 'entity'));
 
