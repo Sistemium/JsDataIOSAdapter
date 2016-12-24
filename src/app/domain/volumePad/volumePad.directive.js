@@ -74,6 +74,7 @@
       disableButton: function (button, data) {
 
         if (button.label === 'К') {
+          // TODO: maybe need no g
           if (/К/g.test (data)) {
             return true;
           }
