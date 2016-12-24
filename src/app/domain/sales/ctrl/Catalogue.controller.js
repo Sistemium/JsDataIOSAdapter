@@ -132,7 +132,11 @@
 
         let count = event.data.length;
 
-        toastr.info(`Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`, 'Обновление данных');
+        toastr.info(
+          `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
+          'Обновление данных',
+          {timeOut: 15000}
+        );
 
       }
     }
