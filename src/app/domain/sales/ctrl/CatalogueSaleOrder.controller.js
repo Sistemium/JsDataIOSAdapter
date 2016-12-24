@@ -184,43 +184,53 @@
 
       let {data, resource} = event;
 
-      if (event.resource === 'SaleOrder') {
+      if (resource === 'SaleOrder') {
 
-        if (event.data.deviceCts) {
+        if (SaleOrder.hasChanges(id)) {
+          return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder');
+        }
 
-          DEBUG('onJSData IOS injecting', event.resource);
-          Schema.model(event.resource).find(id, {bypassCache: true});
+        if (data.deviceCts) {
 
-        } else if (id === saleOrderId) {
+          DEBUG('onJSData IOS injecting', resource);
+          Schema.model(resource).inject(data);
 
-          SaleOrder.find(id, {bypassCache: true, cacheResponse: false})
-            .then(updated => {
-              if (updated.ts > vm.saleOrder.ts) {
-                SaleOrder.inject(updated);
-              }
-            });
         } else {
+
           SaleOrder.find(id, {bypassCache: true})
             .catch(err => {
               if (err.error ===404){
                 SaleOrder.eject(saleOrderId)
               }
             });
+
         }
 
-      } else if (event.resource === 'SaleOrderPosition') {
+      } else if (resource === 'SaleOrderPosition') {
 
-        if (event.data.saleOrderId === saleOrderId) {
-          return SaleOrderPosition.find(id, {bypassCache: true});
-        } else {
+        if (data.saleOrderId === saleOrderId) {
+          // IOS
+
+          let position = getPosition(data.articleId);
+
+          if (position && SaleOrderPosition.hasChanges(position)) {
+            return DEBUG('CatalogueSaleOrder:onJSData', 'ignore position');
+          }
+
+          DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
+
+          return SaleOrderPosition.inject(data);
+
+        } else if (!data.saleOrderId) {
+          // not IOS
           return SaleOrderPosition.find(id, {bypassCache: true, cacheResponse: false})
             .then(updated => {
               if (updated.saleOrderId === saleOrderId) {
-                let existing = SaleOrderPosition.get(id);
-                if (!SaleOrderPosition.get(id) || updated.ts > existing.ts) {
-                  SaleOrderPosition.inject(updated);
-                } else {
+                let existing = getPosition(updated.articleId);
+                if (existing && SaleOrderPosition.hasChanges(existing)) {
                   DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
+                } else {
+                  SaleOrderPosition.inject(updated);
                 }
               }
             });
@@ -300,9 +310,13 @@
 
     }
 
+    function getPosition(articleId) {
+      return _.find(vm.saleOrder.positions, {articleId: articleId});
+    }
+
     function addPositionVolume(articleId, volume, price) {
 
-      let position = _.find(vm.saleOrder.positions, {articleId: articleId});
+      let position = getPosition(articleId);
 
       if (!position) {
         position = SaleOrderPosition.createInstance({
@@ -320,6 +334,9 @@
 
       position.updateCost();
       vm.saleOrder.updateTotalCost();
+
+      // position.ts = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+      // console.warn(position.ts);
 
     }
 
