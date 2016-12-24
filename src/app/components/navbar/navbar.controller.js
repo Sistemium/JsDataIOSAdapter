@@ -2,7 +2,7 @@
 
 (function () {
 
-  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, $state, $timeout) {
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper) {
 
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
@@ -15,10 +15,7 @@
 
     });
 
-    //$timeout(1000).then(()=> !vm.title && onStateChange($state.current));
     $scope.$on('$stateChangeStart', onStateChange);
-
-    // $scope.$on('$stateChangeSuccess', onStateChange);
 
     function onStateChange(event, to) {
 
