@@ -45,8 +45,6 @@
     }
   }
 
-  // TODO: this all should be only in xs
-
   .list-group-item.with-a-inside {
 
     overflow: hidden;
@@ -101,6 +99,18 @@
       flex: 1;
       &:not(:first-child) {
         padding-left: 0;
+      }
+      @include responsive-only(gt-xs) {
+        &:not(:last-child) {
+          margin-right: -44px;
+        }
+      }
+    }
+
+    .chevron + a:not(.chevron) {
+      @include responsive-only(gt-xs) {
+        margin-left: -44px;
+        padding-left: 44px;
       }
     }
 
