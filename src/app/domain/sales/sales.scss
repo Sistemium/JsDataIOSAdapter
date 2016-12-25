@@ -62,6 +62,13 @@
     border: none;
   }
 
+
+}
+
+.visit {
+  > * + * {
+    margin-left: 6px;
+  }
 }
 
 navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {

@@ -24,13 +24,10 @@ section.ui-view.partner
     h4.pull-left
       span(
       ng-class='{disabled: !vm.outlets.length}'
-      ) Точки
-        span(
-        ng-if='vm.outlets.length'
-        ) &nbsp({{vm.outlets.length}})
+      ) Точки:
     button.btn.ml-em.btn-success.pull-right.btn-sm(
     ng-click='vm.newOutletClick()'
-    ) Новая точка
+    ) Добавить точку
 
   .scroll-y(
   resize resize-offset-top
@@ -53,5 +50,3 @@ section.ui-view.partner
             a {{ outlet.address }}
           td.number {{ outlet.visits.length | number: 0 }}
           td.number {{ vm.outletLastVisitDate[outlet.id] | amUtc | amLocal | amCalendar }}
-
-  hr.clear-both
