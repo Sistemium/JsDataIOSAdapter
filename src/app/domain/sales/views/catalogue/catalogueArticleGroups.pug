@@ -62,7 +62,7 @@ resize resize-offset-top='5'
       span Товары заказа
 
     a.list-group-item.active(
-    ng-if='!vm.noMoreChildren'
+    ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName'
     ng-click='vm.isArticleGroupsExpanded=false'
     )
       span {{ vm.currentArticleGroup.displayName }}
