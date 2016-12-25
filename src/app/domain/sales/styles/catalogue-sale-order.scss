@@ -20,7 +20,7 @@
 
 }
 
-.showOnlyOrdered #catalogue-sale-order .totals {
+.showOnlyOrdered #catalogue-sale-order:not(.sale-order-expanded) .totals {
 
   a {
     background-color: $primary-color;
