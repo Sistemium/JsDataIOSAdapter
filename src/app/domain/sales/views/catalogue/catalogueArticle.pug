@@ -15,7 +15,6 @@ before-tag-name='li'
         strong.name-first(
         uib-tooltip='{{::stock.article.firstName}}'
         ) {{::stock.article.firstName}}
-        span
         .article-info(
         ng-class='::{gray: stock.article.firstName.length}'
         )
@@ -24,7 +23,7 @@ before-tag-name='li'
           small.gray x {{::stock.article.packageRel}}
           span
 
-        quantity-edit.pull-right(
+        quantity-edit(
         ng-if='vm.saleOrder'
         article='stock.article'
         sale-order='vm.saleOrder'

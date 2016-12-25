@@ -56,17 +56,29 @@
     min-width: 0;
   }
 
-  .article-info {
-    flex: 1
-  }
-
   .article-name-first {
-    @extend .ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     display: flex;
+
+    min-width: 0;
 
     .name-first {
       @extend .ellipsis;
+      flex-shrink: 1;
     }
+    .article-info {
+      margin-left: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      flex-grow: 1
+    }
+    quantity-edit {
+      flex-shrink: 0;
+      text-align: right;
+      white-space: nowrap;
+    }
+
   }
 
   .article-name-second {
