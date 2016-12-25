@@ -39,14 +39,15 @@ resize resize-offset-top='5'
         i.glyphicon.glyphicon-menu-left
 
       a(
+      href
       stm-click='articleGroupAndCollapse' click-payload='ancestor'
       ) {{::ancestor.displayName}}
 
   // FIXME: copy-pasted
   ul.list-group.xs-ancestors(ng-if='!vm.currentArticleGroup && vm.showOnlyOrdered')
     a.list-group-item(
-    ng-repeat='ancestor in vm.ancestors|limitTo:1 track by ancestor.id'
     href
+    ng-repeat='ancestor in vm.ancestors|limitTo:1 track by ancestor.id'
     ng-click='vm.articleGroupClick(ancestor)'
     )
       span
@@ -62,6 +63,7 @@ resize resize-offset-top='5'
       span Товары заказа
 
     a.list-group-item.active(
+    href
     ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName'
     ng-click='vm.isArticleGroupsExpanded=false'
     )
@@ -84,8 +86,8 @@ resize resize-offset-top='5'
         span {{::elem.displayName }}
 
       a.chevron(
-      stm-click='articleGroup' click-payload='elem'
       href
+      stm-click='articleGroup' click-payload='elem'
       ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
       )
         i.glyphicon.glyphicon-menu-right
