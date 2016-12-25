@@ -1,6 +1,6 @@
 section(
 cg-busy='vm.cgBusy'
-ng-class='["catalogue", vm.currentState]'
+ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
 )
 
   .ui-view
