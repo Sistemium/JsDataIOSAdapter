@@ -4,7 +4,7 @@
 
   margin-bottom: 0;
 
-  @media (min-width: $screen-sm-min) {
+  @include responsive-only(gt-xs){
     padding-right: 5px;
     .block-to-collapse {
       margin-right: 5px;
@@ -25,12 +25,12 @@
     left: 15px;
     right: 15px;
 
-    @media (min-width: $screen-xs-max) {
+    @include responsive-only(gt-xs){
       right: -5px;
       padding-right: 5px;
     }
 
-    @media (orientation: portrait) and (min-width: $screen-sm) {
+    @include responsive-only(gt-xs, portrait){
       .hidden-xs {
         display: none;
       }
@@ -40,7 +40,7 @@
 
   .xs-ancestors {
     margin-bottom: $margin-bottom-xs;
-    @media (orientation: portrait) and (min-width: $screen-sm-min) {
+    @include responsive-only(gt-xs, portrait){
       display: none;
     }
   }
@@ -60,7 +60,7 @@
       padding: 10px 15px;
       color: $article-nav-menu-text-color;
 
-      @media (max-width: $screen-xs-max) {
+      @include responsive-only(lt-sm){
         padding: 7px 10px;
       }
 
@@ -113,7 +113,7 @@
     .block-to-collapse {
       left: 10px;
       right: 10px;
-      @media (min-width: $screen-xs-max) {
+      @include responsive-only(gt-xs) {
         right: -5px;
         padding-right: 5px;
       }
