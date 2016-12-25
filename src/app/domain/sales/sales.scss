@@ -53,6 +53,9 @@
         margin: $margin-bottom-xs 0 0;
       }
     }
+    @include responsive-only(xxs) {
+      margin-bottom: 0;
+    }
   }
 
   hr {
