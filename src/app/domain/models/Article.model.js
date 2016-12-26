@@ -9,16 +9,22 @@
       name: 'Article',
 
       relations: {
+
         belongsTo: {
           ArticleGroup: {
             localField: 'ArticleGroup',
             localKey: 'articleGroupId'
           }
         },
+
         hasOne: {
           Stock: {
             localField: 'stock',
             foreignKey: 'articleId'
+          },
+          ArticlePicture: {
+            localField: 'avatar',
+            localKey: 'avatarPictureId'
           }
         },
 
