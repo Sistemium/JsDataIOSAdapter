@@ -29,7 +29,9 @@ uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
 collapsed='vm.isArticleGroupsCollapsingDone=true'
 resize resize-offset-top='5'
 )
-  ul.list-group.xs-ancestors
+  ul.list-group.xs-ancestors(
+  ng-if='vm.currentArticleGroup || vm.showOnlyOrdered'
+  )
 
     .list-group-item.with-a-inside(
     ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id'
