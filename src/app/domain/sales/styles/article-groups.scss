@@ -30,12 +30,6 @@
       padding-right: 5px;
     }
 
-    @include responsive-only(gt-xs, portrait){
-      .hidden-xs {
-        display: none;
-      }
-    }
-
   }
 
   .xs-ancestors {
