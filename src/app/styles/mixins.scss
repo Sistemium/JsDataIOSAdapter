@@ -4,6 +4,12 @@
   text-overflow: ellipsis;
 }
 
+.center-vertical {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 @mixin responsive-only($media, $orientation: false) {
 
   @if $orientation  {

@@ -84,10 +84,7 @@
 
     a.chevron {
 
-      // this is to align vertically when name is more than 1 line
-      display: flex;
-      flex-direction: row;
-      align-items: center;
+      @extend .center-vertical;
 
       .glyphicon {
         top: 0;
