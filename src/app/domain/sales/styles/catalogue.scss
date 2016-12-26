@@ -4,7 +4,7 @@
 
   .collapser {
 
-    @media (min-width: $screen-sm-min) {
+    @include responsive-only(gt-xs) {
       display: none;
     }
 
@@ -34,7 +34,7 @@
 
   .breadcrumb {
     > li.ancestor, > li.active {
-      @media (max-width: $screen-xs-max) {
+      @include responsive-only(lt-sm) {
         display: none;
       }
     }
@@ -47,11 +47,11 @@
   }
 
   .popover {
-    @media (min-width: $screen-sm-min) {
+    @include responsive-only(gt-xs) {
       max-width: 370px;
       min-width: 370px;
     }
-    @media (max-width: $screen-xs-max) {
+    @include responsive-only(lt-sm) {
       min-width: 276px
     }
   }
