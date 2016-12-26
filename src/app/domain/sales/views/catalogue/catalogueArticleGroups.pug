@@ -31,7 +31,9 @@ resize resize-offset-top='5'
 )
   ul.list-group.xs-ancestors
 
-    .list-group-item.with-a-inside(ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id')
+    .list-group-item.with-a-inside(
+    ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id'
+    )
 
       a.chevron(
       stm-click='articleGroup' click-payload='ancestor'
