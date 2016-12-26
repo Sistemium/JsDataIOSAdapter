@@ -20,8 +20,8 @@
   href
   ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
   )
-    span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
     span {{ vm.currentArticleGroup.displayName || vm.showOnlyOrdered && 'Товары заказа' || 'Все товары' }}
+    span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
 
 
 .block-to-collapse.scroll-y(
