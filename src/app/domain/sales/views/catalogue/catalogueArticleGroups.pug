@@ -29,9 +29,9 @@ uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
 collapsed='vm.isArticleGroupsCollapsingDone=true'
 resize resize-offset-top='5'
 )
-  ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
+  ul.list-group.xs-ancestors
 
-    .list-group-item.with-a-inside(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
+    .list-group-item.with-a-inside(ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id')
 
       a.chevron(
       stm-click='articleGroup' click-payload='ancestor'
@@ -43,33 +43,15 @@ resize resize-offset-top='5'
       stm-click='articleGroupAndCollapse' click-payload='ancestor'
       ) {{::ancestor.displayName}}
 
-  // FIXME: copy-pasted
-  ul.list-group.xs-ancestors(ng-if='!vm.currentArticleGroup && vm.showOnlyOrdered')
-    a.list-group-item(
-    href
-    ng-repeat='ancestor in vm.ancestors|limitTo:1 track by ancestor.id'
-    ng-click='vm.articleGroupClick(ancestor)'
-    )
-      span
-        i.glyphicon.glyphicon-menu-left
-      span {{::ancestor.displayName}}
-
   ul.list-group(
   )
-    // FIXME: copy-pasted
-    .list-group-item.active(
-    ng-if='!vm.currentArticleGroup && vm.showOnlyOrdered'
-    )
-      span Товары заказа
 
     a.list-group-item.active(
     href
-    ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName'
+    ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName || !vm.currentArticleGroup && vm.showOnlyOrdered'
     ng-click='vm.isArticleGroupsExpanded=false'
     )
-      span {{ vm.currentArticleGroup.displayName }}
-
-    // TODO: find why click on Baikal does not collapse
+      span {{ vm.currentArticleGroup.displayName || 'Товары заказа' }}
 
     .list-group-item.with-a-inside(
     ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
@@ -77,7 +59,6 @@ resize resize-offset-top='5'
     )
       a(
       href
-      ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id] || elem.children.length && !vm.articleGroupIds[elem.id]'
       stm-click='articleGroupAndCollapse' click-payload='elem'
       )
         span.badge.pull-right(ng-if='::vm.articleGroupIds[elem.id]')
