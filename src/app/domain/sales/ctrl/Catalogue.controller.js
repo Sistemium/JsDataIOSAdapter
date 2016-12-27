@@ -29,6 +29,7 @@
       isOpenOutletPopover: false,
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
+      showImages: false,
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
