@@ -64,15 +64,15 @@
 
     vm.watchScope('vm.saleOrder.id', newValue => {
 
-      let afretChangeOrder = true;
+      let afterChangeOrder = true;
 
       vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
 
         cacheSaleOrderPositions();
 
-        if (afretChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
+        if (afterChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
           saleOrderTotalsClick(true);
-          afretChangeOrder = false;
+          afterChangeOrder = false;
         }
 
       });
