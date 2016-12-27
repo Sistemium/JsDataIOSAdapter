@@ -6,6 +6,10 @@
 
     const {Visit} = Schema.models();
 
+    let maxDate;
+    let minDate;
+    let events;
+
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
@@ -31,12 +35,12 @@
     /*
      Listeners
      */
-    
+
     SalesmanAuth.watchCurrent($scope, salesman => {
 
       vm.selectedSalesmanId = _.get(salesman, 'id');
-      findVisits();
-      filterVisitsBySelectedDate();
+      findVisits()
+        .then(filterVisitsBySelectedDate);
 
     });
 
@@ -63,56 +67,45 @@
         vm.selectedDate = new Date();
       }
 
+      maxDate = new Date();
+      maxDate.setHours(0, 0, 0, 0);
+
       filterVisitsBySelectedDate();
 
-      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')}, {notify: false});
+      $state.go('.', {date: dateFormatted(vm.selectedDate)}, {notify: false});
 
     }
 
     function findVisits() {
 
-      var filter = salesmanFilter();
+      let filter = salesmanFilter();
 
-      vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов')
-        .then(() => {
+      vm.rebindAll(Visit, filter, 'vm.visits', () => {
+        markDaysWithVisits();
+        vm.datepickerOptions = datepickerOptions();
+      });
 
-          Visit.bindAll(filter, $scope, 'vm.visits', () => {
+      return vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов');
 
-            vm.datepickerOptions = datepickerOptions();
-            markDaysWithVisits();
+    }
 
-          });
-
-        });
-
+    function dateFormatted(date) {
+      return moment(date).format();
     }
 
     function markDaysWithVisits() {
 
-      var visitDays = _.map(vm.visits, (visit) => {
-        return _.truncate(_.get(visit, 'deviceCts'), {'separator': ' ', length: '10', omission: ''});
-      });
+      events = _.groupBy(vm.visits, 'date');
+      events [dateFormatted(maxDate)] = {status: 'today'};
 
-      vm.events = [{
-        date: maxDate(),
-        status: 'today'
-      }];
-
-      _.forEach(visitDays, (visitDay) => {
-
-        vm.events.push({
-          date: new Date(visitDay),
-          status: 'haveVisit'
-        });
-
-      });
+      minDate = moment(_.min(_.map(events, (visits, date) => date))).toDate();
 
     }
 
     function filterVisitsBySelectedDate() {
 
-      var dateFilter = {date: moment(vm.selectedDate).format('YYYY-MM-DD')};
-      var filter = salesmanFilter(dateFilter);
+      let dateFilter = {date: dateFormatted(vm.selectedDate)};
+      let filter = salesmanFilter(dateFilter);
 
       vm.setBusy(
         Visit.findAllWithRelations(filter, {bypassCache: true})(
@@ -133,59 +126,36 @@
 
       if (!previousDayAvailable()) return;
 
-      var previousDay = vm.selectedDate;
+      let previousDay = vm.selectedDate;
       previousDay.setDate(previousDay.getDate() - 1);
       vm.selectedDate = new Date(previousDay);
 
-    }
-
-    function previousDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) > minDate()) : false;
     }
 
     function selectNextDay() {
 
       if (!nextDayAvailable()) return;
 
-      var nextDay = vm.selectedDate;
+      let nextDay = vm.selectedDate;
       nextDay.setDate(nextDay.getDate() + 1);
       vm.selectedDate = new Date(nextDay);
 
     }
 
+    function previousDayAvailable() {
+      return vm.selectedDate && vm.selectedDate > minDate;
+    }
+
     function nextDayAvailable() {
-      return vm.selectedDate ? (vm.selectedDate.setHours(0, 0, 0, 0) < maxDate()) : false;
-    }
-
-    function maxDate() {
-
-      var maxDate = new Date();
-      maxDate.setHours(0, 0, 0, 0);
-
-      return maxDate;
-
-    }
-
-    function minDate() {
-
-      if (!vm.visits || vm.visits.length == 0) return maxDate();
-
-      var firstVisitDate = _.get(_.first(_.sortBy(vm.visits, 'deviceCts')), 'deviceCts');
-      firstVisitDate = _.truncate(firstVisitDate, {'separator': ' ', length: '10', omission: ''});
-
-      var minDate = new Date(firstVisitDate);
-      minDate.setHours(0, 0, 0, 0);
-
-      return minDate;
-
+      return vm.selectedDate && vm.selectedDate < maxDate;
     }
 
     function datepickerOptions() {
 
       return {
         customClass: getDayClass,
-        maxDate: maxDate(),
-        minDate: minDate(),
+        maxDate,
+        minDate,
         startingDay: 1,
         showWeeks: false
       };
@@ -194,26 +164,15 @@
 
     function getDayClass(data) {
 
-      var date = data.date,
-        mode = data.mode;
+      let {date, mode} = data;
 
       if (mode === 'day') {
 
-        var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
-
-        for (var i = 0; i < vm.events.length; i++) {
-
-          var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
-
-          if (dayToCheck === currentDay) {
-            return vm.events[i].status;
-          }
-
-        }
+        let event = events [dateFormatted(dateFormatted(date))];
+        if (!event) return;
+        return _.isArray(event) ? 'haveVisit' : event.status;
 
       }
-
-      return '';
 
     }
 

@@ -1,0 +1,37 @@
+h4.popovers
+  a.popover-trigger(
+  href
+  uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
+  popover-is-open='vm.isSaleOrderPopoverOpen'
+  ng-disabled='saleOrderExpanded'
+  )
+    .outlet
+      .name
+        span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+        span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+        span.animate-show.spaced
+          small на
+          small.strong {{ vm.saleOrder.date }}
+          // TODO: show date with amCalendar but without time
+      .address
+        small {{vm.saleOrder.outlet.address}}
+    span.caret
+
+.totals
+  span.animate-show(ng-hide='vm.busy')
+    a.has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded' href stm-click='saleOrderTotals')
+      strong {{ vm.saleOrder.positions.length | number:0 }}
+      span {{ vm.saleOrder.positionsCountRu() }}
+      span на сумму
+      strong {{ vm.saleOrder.totalCost | number:2 }}
+      span ₽
+    span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
+      span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
+      a(
+      href
+      ng-if='!vm.saleOrder.outletId || saleOrderExpanded'
+      popover-is-open='vm.isOutletPopoverOpen'
+      uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
+      )
+        span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
+        span.caret

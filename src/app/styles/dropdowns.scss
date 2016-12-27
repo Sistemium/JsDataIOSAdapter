@@ -7,7 +7,7 @@
     padding: 8px 0;
 
     & + .option, & + .divider {
-      border-top: solid 1px lightgray;
+      border-top: solid 1px $border-gray;
     }
 
     a {
@@ -20,6 +20,13 @@
       @extend .disabled;
     }
 
+    &.current {
+      background-color: $active-color;
+      &.current > a {
+        color: white;
+      }
+    }
+
   }
 
   .divider {
@@ -28,7 +35,7 @@
 
 }
 
-.dropdown[disabled] {
+.dropdown[disabled], .disabled, [disabled] {
   .caret {
     display: none;
   }

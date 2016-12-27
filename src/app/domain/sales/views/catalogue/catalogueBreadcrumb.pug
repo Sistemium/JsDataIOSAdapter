@@ -1,6 +1,12 @@
 span.pull-right(ng-if='vm.currentState!=="saleOrder"')
-  sale-order-popover(items='vm.draftSaleOrders')
+  a(
+  href
+  uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
+  popover-placement='auto bottom-left'
+  popover-is-open='vm.isSaleOrderPopoverOpen'
+  )
     span Заказ
+    span.caret
 
 li(uib-dropdown is-open='priceTypesOpen' ng-disabled='vm.saleOrder')
   a(href uib-dropdown-toggle)
@@ -16,8 +22,8 @@ li(uib-dropdown is-open='priceTypesOpen' ng-disabled='vm.saleOrder')
 li.ancestor(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
   a(
   href ng-click='vm.articleGroupClick(ancestor)'
-  ) {{ ancestor.name }}
+  ) {{ ancestor.displayName }}
 
-li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.name }}
+li.active(ng-if='vm.currentArticleGroup') {{ vm.currentArticleGroup.displayName }}
 
 

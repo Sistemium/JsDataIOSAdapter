@@ -18,7 +18,8 @@
       },
 
       watchChanges: false,
-      useClass: false,
+      resetHistoryOnInject: false,
+
       instanceEvents: false,
       notify: false,
 

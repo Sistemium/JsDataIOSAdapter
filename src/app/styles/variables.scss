@@ -1,10 +1,17 @@
 @import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/variables.scss";
+@import "mixins";
 
+$active-color: #337ab7;
 $navbar-padding-vertical: 15px;
-$black: lighten(black, 5%);
+$black: #333333;
 $blue: $sab-blue;
 $dark-blue: darken($blue, 10%);
-
+$gray: gray;
 
 $margin-bottom-xs: 10px;
 $border-gray: #eee;
+
+$short-duration: 0.5s;
+$gray-background-color: #f5f5f5;
+
+$article-nav-menu-text-color: #555;

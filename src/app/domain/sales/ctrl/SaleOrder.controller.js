@@ -7,6 +7,8 @@
     let vm = saControllerHelper.setup(this, $scope);
     let {SaleOrder, Outlet, SaleOrderPosition} = Schema.models();
 
+    let maxDate = setMaxDate();
+
     vm.use({
 
       visits: [],
@@ -59,7 +61,7 @@
         vm.selectedDate = new Date();
       }
 
-      $state.go('.', {date: moment(vm.selectedDate).format('YYYY-MM-DD')});
+      $state.go('.', {date: moment(vm.selectedDate).format()});
 
     }
 
@@ -67,7 +69,7 @@
     function getData(salesman) {
 
       vm.currentSalesman = salesman;
-      let date = moment(vm.selectedDate).format('YYYY-MM-DD');
+      let date = moment(vm.selectedDate).format();
 
       let filter = SalesmanAuth.makeFilter({date});
 
@@ -95,7 +97,7 @@
       }
 
       vm.setBusy(
-        [Outlet.findAll(_.assign({where: bySalesman}, filter))
+        [Outlet.findAll(_.assign({where: bySalesman}, _.omit(filter, 'date')))
           .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
           SaleOrderPosition.findAll(saleOrderPositionsFilter)],
         'Загрузка данных дня'
@@ -123,25 +125,24 @@
 
     function datepickerOptions() {
 
-
       return {
-        maxDate: maxDate(),
+        maxDate,
         startingDay: 1,
         showWeeks: false
       };
 
     }
 
-    function maxDate() {
+    function setMaxDate() {
 
-      var maxDate = moment().add(7, 'days').toDate();
+      maxDate = moment().add(7, 'days').toDate();
       maxDate.setHours(0, 0, 0, 0);
       return maxDate;
 
     }
 
     function nextDayAvailable() {
-      return vm.selectedDate.setHours(0, 0, 0, 0) < maxDate();
+      return vm.selectedDate < maxDate;
     }
 
     function openDatepicker() {
@@ -153,7 +154,7 @@
     }
 
     function newItemClick() {
-      $state.go('.create');
+      $state.go('sales.catalogue.saleOrder');
     }
 
   }

@@ -30,6 +30,13 @@
 
 .visits {
 
+  .questionSets {
+    @include responsive-only(gt-xs) {
+      margin-top: 10px;
+    }
+  }
+
+
   .visitPhotos {
     @media (max-width: $screen-xs) {
       .thumbnail {
@@ -46,6 +53,21 @@
         margin: $margin-bottom-xs 0 0;
       }
     }
+    @include responsive-only(xxs) {
+      margin-bottom: 0;
+    }
+  }
+
+  hr {
+    border: none;
+  }
+
+
+}
+
+.visit {
+  > * + * {
+    margin-left: 6px;
   }
 }
 
@@ -66,176 +88,14 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   color: black;
 }
 
-#article-groups {
 
-  margin-bottom: 0;
-
-  .caret {
-    @extend .turnable;
-  }
-
-  .collapser {
-    @media (min-width: $screen-sm-min) {
-      display: none;
-    }
-    margin-bottom: $margin-bottom-xs;
-    background: none !important;
-    border-color: #ccc !important;
-    .caret {
-      top: 0;
-    }
-  }
-
-  .xs-ancestors {
-    margin-bottom: $margin-bottom-xs;
-    @media (min-width: $screen-sm-min) {
-      display: none;
-    }
-  }
-
-  .block-to-collapse {
-
-    position: absolute;
-    z-index: 2;
-
-    background: white;
-
-    margin-right: 15px;
-    margin-left: 15px;
-
-    right: 0;
-    left: 0;
-  }
-
-}
-
-.iOS {
-  #article-groups {
-    .block-to-collapse {
-      margin-right: 10px;
-      margin-left: 10px;
-    }
-  }
-}
-
-#scroll-articles {
-
-  max-height: 100%;
-
-  &.ng-hide:not(.ng-hide-animate) {
-    display: block !important;
-    @extend a.disabled;
-  }
-
-  &.animate-show.ng-hide-remove {
-    transition: all ease-in 0.5s;
-  }
-
-  .right {
-
-    margin-left: 1em;
-    text-align: right;
-
-    button {
-      padding: 3px 5px;
-      font-size: 13px;
-      line-height: 1.5;
-      border-radius: 3px;
-      display: block;
-      color: #777777;
-    }
-
-    [angular-ripple] {
-      overflow: visible;
-    }
-
-    button + button {
-      margin-top: 4px;
-    }
-
-  }
-
-  .article-name-first {
-    .caret {
-      font-size: 10px;
-      margin-right: 4px;
-    }
-  }
-
-  .article-name-second {
-    color: gray;
-  }
-
-  .article-name-third {
-    text-align: right;
-  }
-
-}
-
-.catalogue-sale-order {
-
-  @extend .display-flex;
-
-  .outlet {
-    min-width: 0;
-    .popover {
-      input {
-        margin-top: 8px;
-        min-width: 250px;
-      }
-      @media (min-width: $screen-sm-min) {
-        width: 370px;
-      }
-    }
-  }
-
-  .address {
-    @extend .ellipsis;
-  }
-
-  .totals {
-    min-width: 7em;
-  }
-
-  @media (max-width: $screen-xs) {
-
-    display: block;
-
-    > * {
-      display: block;
-    }
-
-    .totals {
-      margin-top: $margin-bottom-xs;
-    }
-
-  }
-
-}
-
-.catalogue {
-
-  .breadcrumb {
-    > li.ancestor, > li.active {
-      @media (max-width: $screen-xs-max) {
-        display: none;
-      }
-    }
-  }
-
-  .popover {
-    @media (min-width: $screen-sm-min) {
-      max-width: 370px;
-    }
-  }
-
-}
 
 .sale-orders {
   // TODO: find out why form in saleOrderDetails.pug doesn't fit width
   form.form-horizontal {
     margin: 0 15px;
   }
+  @extend .uib-datepicker-no-clear;
 }
 
 .iOS .sale-orders {

@@ -9,16 +9,22 @@
       name: 'Article',
 
       relations: {
+
         belongsTo: {
           ArticleGroup: {
             localField: 'ArticleGroup',
             localKey: 'articleGroupId'
           }
         },
+
         hasOne: {
           Stock: {
             localField: 'stock',
             foreignKey: 'articleId'
+          },
+          ArticlePicture: {
+            localField: 'avatar',
+            localKey: 'avatarPictureId'
           }
         },
 
@@ -35,8 +41,8 @@
       },
 
       watchChanges: false,
+      resetHistoryOnInject: false,
 
-      useClass: false,
       instanceEvents: false,
       notify: false,
 
@@ -68,6 +74,9 @@
         }],
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
+        }],
+        pcsLabel: ['pieceVolume', function(pieceVolume) {
+          return pieceVolume ? 'б' : 'шт';
         }]
       },
 
@@ -85,15 +94,16 @@
         boxPcs: function (volume) {
 
           var rel = this.packageRel;
-          var box = Math.floor(volume / rel) || 0;
+          var box = rel > 1 ? Math.floor(volume / rel) : 0;
           var pcs = volume - box * rel;
+          let half = pcs*2 === rel;
 
           return {
             box: box,
             pcs: pcs,
-            full: (box ? box + ' к' : '')
-            + (box && pcs && ' ' || '')
-            + (pcs ? pcs + ' б' : '')
+            full: (box || half ? `${box||''}${half&&'½'||''} к` : '')
+            + (box && pcs && !half && ' ' || '')
+            + (pcs && !half ? `${pcs} ${this.pcsLabel}` : '')
           }
 
         }

@@ -42,7 +42,7 @@
 
       if (!IOS.isIos()) {
         angular.extend(appConfig, {
-          // jsDataPrefix: res.account.org + '/'
+          jsDataPrefix: res.account.org + '/',
           org: res.account.org
         });
       }

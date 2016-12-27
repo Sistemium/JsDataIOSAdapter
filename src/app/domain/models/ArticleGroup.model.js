@@ -2,7 +2,9 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, $filter) {
+
+    const cleanName = $filter('cleanName');
 
     const ArticleGroup = Schema.register({
 
@@ -28,8 +30,8 @@
       },
 
       watchChanges: false,
+      resetHistoryOnInject: false,
 
-      useClass: false,
       instanceEvents: false,
       notify: false,
 
@@ -37,6 +39,7 @@
       },
 
       computed: {
+        displayName: ['name', cleanName],
         ancestorsCache: ['id', 'articleGroupId', setACache],
         descendantsCache: ['id', 'articleGroupId', setDCache]
       },

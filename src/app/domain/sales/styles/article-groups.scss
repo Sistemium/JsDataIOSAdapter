@@ -1,0 +1,123 @@
+@import "../../../styles/variables";
+
+#article-groups {
+
+  margin-bottom: 0;
+
+  @include responsive-only(gt-xs){
+    padding-right: 5px;
+    .block-to-collapse {
+      margin-right: 5px;
+    }
+  }
+
+  .stm-searcher {
+  }
+
+  .block-to-collapse {
+
+    position: absolute;
+    z-index: 2;
+
+    background: white;
+    clear: both;
+
+    left: 15px;
+    right: 15px;
+
+    @include responsive-only(gt-xs){
+      right: -5px;
+      padding-right: 5px;
+    }
+
+  }
+
+  .xs-ancestors {
+    margin-bottom: $margin-bottom-xs;
+    @include responsive-only(gt-xs, portrait){
+      display: none;
+    }
+  }
+
+  .list-group-item.with-a-inside {
+
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+
+    a {
+
+      cursor: pointer;
+      padding: 10px 15px;
+      color: $article-nav-menu-text-color;
+
+      @include responsive-only(lt-sm){
+        padding: 7px 10px;
+      }
+
+    }
+
+    &.active {
+
+      a, a:hover {
+        color: #fff;
+        text-decoration: none;
+        span.badge {
+          background-color: #fff;
+          color: $active-color;
+        }
+      }
+
+    }
+
+    &:not(.active) a:hover {
+      background: $gray-background-color;
+      text-decoration: none;
+    }
+
+    a.chevron {
+
+      @extend .center-vertical;
+
+      .glyphicon {
+        top: 0;
+      }
+
+    }
+
+    a:not(.chevron) {
+      flex: 1;
+      &:not(:first-child) {
+        padding-left: 0;
+      }
+      @include responsive-only(gt-xs) {
+        &:not(:last-child) {
+          margin-right: -44px;
+        }
+      }
+    }
+
+    .chevron + a:not(.chevron) {
+      @include responsive-only(gt-xs) {
+        margin-left: -44px;
+        padding-left: 44px;
+      }
+    }
+
+  }
+
+}
+
+.iOS {
+  #article-groups {
+    .block-to-collapse {
+      left: 10px;
+      right: 10px;
+      @include responsive-only(gt-xs) {
+        right: -5px;
+        padding-right: 5px;
+      }
+    }
+  }
+}

@@ -3,3 +3,36 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.center-vertical {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@mixin responsive-only($media, $orientation: false) {
+
+  @if $orientation  {
+    @if $media == xxs {
+      @media (max-width: $screen-xs) and (orientation: $orientation) { @content; }
+    }
+    @else if $media == lt-sm {
+      @media (max-width: $screen-xs-max) and (orientation: $orientation) { @content; }
+    }
+    @else if $media == gt-xs {
+      @media (min-width: $screen-sm-min) and (orientation: $orientation) { @content; }
+    }
+  }
+  @else {
+    @if $media == xxs {
+      @media (max-width: $screen-xs) { @content; }
+    }
+    @else if $media == lt-sm {
+      @media (max-width: $screen-xs-max) { @content; }
+    }
+    @else if $media == gt-xs {
+      @media (min-width: $screen-sm-min) { @content; }
+    }
+  }
+
+}

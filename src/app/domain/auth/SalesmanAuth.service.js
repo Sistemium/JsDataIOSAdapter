@@ -56,6 +56,8 @@
         redirectTo = false;
       }
 
+      return user;
+
     }
 
     function init() {
@@ -69,7 +71,9 @@
           let salesmanId = localStorageService.get(LOCAL_STORAGE_KEY);
           let res = salesmanId && _.find(data, {id: salesmanId});
 
-          return login(res || data.length === 1 && _.first(data));
+          login(res || data.length === 1 && _.first(data));
+
+          return service;
 
         });
 
@@ -97,6 +101,8 @@
       }));
 
       $rootScope.$on('$destroy', $rootScope.$on('auth-logout', logout));
+
+      return initPromise;
 
     }
 

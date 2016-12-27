@@ -1,0 +1,222 @@
+@import "../../../styles/variables";
+
+#catalogue-sale-order {
+
+  .header {
+
+    @extend .display-flex;
+
+    @media (max-width: $screen-xs) {
+      min-height: 60px;
+    }
+    @media (min-width: $screen-xs) {
+      min-height: 35px;
+    }
+    @media (min-width: $screen-sm) {
+      min-height: 38px;
+    }
+
+  }
+
+}
+
+.showOnlyOrdered #catalogue-sale-order:not(.sale-order-expanded) .totals {
+
+  a {
+    background-color: $active-color;
+    color: #fff;
+    padding: 3px 6px;
+    margin: -3px 0;
+    border-radius: 3px;
+    display: inline-block;
+    text-align: center;
+  }
+
+}
+
+.sale-order-collapsible {
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+
+  background-color: $gray-background-color;
+  border: solid 1px $gray-background-color;
+
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+
+  .form-group {
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: $screen-xs-max) {
+      margin-bottom: 3px;
+      label {
+        font-size: 12px;
+        font-weight: normal;
+        padding-top: 0;
+      }
+    }
+
+  }
+
+  label {
+    color: gray;
+  }
+
+  .form {
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 15px;
+
+    @media (max-width: $screen-xs-max) {
+      padding: $margin-bottom-xs/2 $margin-bottom-xs;
+    }
+
+  }
+
+  .sale-order-main-buttons {
+    flex: 1;
+  }
+
+  .delete-sale-order-btn {
+
+    @media (max-width: $screen-xs) {
+      margin-right: $margin-bottom-xs;
+    }
+  }
+
+  .buttons {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    text-align: right;
+
+    margin-top: $margin-bottom-xs/2;
+    padding: $margin-bottom-xs $margin-bottom-xs*2;
+
+    @media (max-width: $screen-xs) {
+      padding: $margin-bottom-xs;
+    }
+
+    border-top: solid 1px darken($border-gray, 5);
+    background-color: $gray-background-color;
+
+    @media (max-width: $screen-xs) {
+      .sale-order-main-buttons {
+        button {
+          display: block;
+          width: 100%;
+        }
+      }
+      button + button {
+        margin-top: $margin-bottom-xs;
+      }
+    }
+
+  }
+
+}
+
+.catalogue-sale-order {
+
+  // FIXME: this is too generic, could space options in popovers
+  @extend .spaced;
+  @extend .display-flex;
+
+  flex: 1;
+  min-width: 0;
+
+  & + .menu {
+    margin-left: 15px;
+    font-size: 22px;
+    margin-top: 4px;
+  }
+
+  @media (max-width: $screen-xs-max) {
+    & + .menu {
+      margin-left: 5px;
+    }
+  }
+
+  .popovers {
+
+    @extend .display-flex;
+    min-width: 0;
+    margin-right: 15px;
+
+    .popover-trigger {
+
+      @extend .display-flex;
+      flex: 1;
+      min-width: 0;
+
+      .strong {
+        color: inherit;
+      }
+
+      .outlet {
+        min-width: 0;
+      }
+
+    }
+
+    .popover {
+      input {
+        margin-top: 8px;
+        min-width: 250px;
+      }
+      @media (min-width: $screen-sm-min) {
+        width: 370px;
+      }
+    }
+  }
+
+  .address {
+    @extend .ellipsis;
+  }
+
+  .totals {
+
+    min-height: 18px;
+    margin-right: 15px;
+    text-align: right;
+    flex: 1;
+
+    .has-positions {
+      @extend .spaced;
+    }
+
+    .no-positions > span {
+      color: $gray;
+    }
+
+  }
+
+  @media (max-width: $screen-xs) {
+
+    display: block;
+
+    > * {
+      display: block;
+    }
+
+    .totals {
+      font-size: 12px;
+      margin-top: $margin-bottom-xs;
+      text-align: left;
+    }
+
+  }
+
+}

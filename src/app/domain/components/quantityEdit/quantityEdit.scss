@@ -1,9 +1,11 @@
-.quantity-edit {
+@import "../../../styles/variables";
 
-  //max-width: 130px;
+.quantity-edit-popover {
 
   input {
-    width: 60px;
+    width: 40px;
+    margin: 4px auto;
+    padding: 5px;
   }
 
   .inputs {
@@ -20,18 +22,52 @@
 
   .bottles {
     margin-left: 7px;
+    &:first-child {
+      margin-left: 0;
+    }
   }
 
   a {
     display: block;
   }
 
+  .extras {
+    border-top: solid thin $border-gray;
+    text-align: center;
+  }
+
+  .delete.confirmation {
+    color: $state-danger-text;
+  }
+
 }
 
+.quantity-edit {
+  .popover-content {
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  /* display: none; <- Crashes Chrome on hover */
-  -webkit-appearance: none;
-  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    padding: 0;
+
+    .inputs {
+      padding: 4px 10px;
+    }
+    .extras {
+      padding: 0 10px;
+    }
+
+  }
+  div.popover {
+    min-width: 0;
+  }
+}
+
+.disabled {
+  .quantity-edit {
+    a {
+      color: $black;
+      font-weight: normal;
+    }
+    .caret {
+      display: none;
+    }
+  }
 }

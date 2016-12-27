@@ -2,10 +2,12 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, IOS, $timeout) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
-    const {saControllerHelper, ClickHelper, saEtc} = Helpers;
+    const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
+
+    const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -18,43 +20,241 @@
       bPlusButtonClick,
       searchOutletClick,
       clearSearchOutletClick,
-      saveOrder
+      nextDayClick,
+      prevDayClick,
+      saleOrderDoneClick,
+      saleOrderSaveDraftClick,
+      deleteSaleOrderClick
 
     });
 
+    vm.datepickerOptions = _.defaults({
+      minDate: moment().add(1, 'day').toDate(),
+      initDate: moment().add(1, 'day').toDate()
+    }, $scope.datepickerOptions);
+
     if (saleOrderId) {
-      SaleOrder.find(saleOrderId)
-        .then(saleOrder => {
-          vm.saleOrder = saleOrder;
-          return SaleOrder.loadRelations(saleOrder, 'SaleOrderPosition')
-            .then(() => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))));
-        })
-        .catch(error => console.error(error));
+
+      vm.setBusy(
+        SaleOrder.find(saleOrderId, {bypassCache: true})
+          .then(() => SaleOrder.loadRelations(saleOrderId, 'Outlet'))
+          .then(() => SaleOrder.loadRelations(saleOrderId, 'SaleOrderPosition', {bypassCache: true}))
+          .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
+          .catch(error => {
+            console.error(error);
+            if (error.error === 404) {
+              toastr.error('Заказ не найден');
+              $state.go('.', {saleOrderId: null});
+            }
+          })
+      );
+
+      vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', () => {
+        if (!vm.saleOrder) return;
+        vm.saleOrderDate = moment(vm.saleOrder.date).toDate();
+      });
+
     } else {
 
-      vm.saleOrder = SaleOrder.inject({
+      vm.saleOrder = SaleOrder.createInstance({
         salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
-        date: moment().add(1, 'days').format('YYYY-MM-DD')
+        date: moment().add(1, 'days').format()
       });
 
       // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
 
+    $timeout().then(() => $scope.$parent.saleOrderExpanded = !saleOrderId);
+
     /*
      Listeners
      */
 
-    SalesmanAuth.watchCurrent($scope, () => {
-      Outlet.findAll(Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter()));
-      let filter = {
-        orderBy: ['name']
-      };
-      vm.rebindAll(Outlet, filter, 'vm.outlets');
+    SalesmanAuth.watchCurrent($scope, onSalesmanChange);
+
+    vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderCostChange, 500));
+
+    $scope.$watchGroup(['vm.saleOrder.outletId', 'vm.saleOrder.salesmanId'], onSaleOrderChange);
+
+    vm.watchScope('vm.saleOrderDate', date => {
+      if (!vm.saleOrder) return;
+      if (!date) date = vm.saleOrderDate = vm.datepickerOptions.minDate;
+      vm.saleOrder.date = moment(date).format();
+    });
+
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
+
+    $scope.$on('$destroy', () => {
+      SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
     });
 
     /*
      Handlers
      */
+
+    function onSalesmanChange(salesman) {
+
+      Outlet.findAll(Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter()));
+
+      let filter = {
+        orderBy: ['name']
+      };
+
+      vm.rebindAll(Outlet, filter, 'vm.outlets');
+
+      if (!vm.saleOrder) return;
+
+      if (!vm.saleOrder.salesmanId) {
+        vm.saleOrder.salesmanId = _.get(salesman, 'id');
+      }
+
+    }
+
+    function saleOrderDoneClick() {
+      $scope.$parent.saleOrderExpanded = false;
+      let msg = `Заказ для "${vm.saleOrder.outlet.name}" отправлен в обработку`;
+      $state.go('^')
+        .then(() => {
+          toastr.info(msg);
+        });
+    }
+
+    function saleOrderSaveDraftClick() {
+      $scope.$parent.saleOrderExpanded = false;
+    }
+
+    function nextDayClick() {
+      vm.saleOrderDate = _.max([
+        moment(vm.datepickerOptions.minDate),
+        moment(vm.saleOrderDate).add(1, 'day')
+      ]).toDate();
+    }
+
+    function prevDayClick() {
+      vm.saleOrderDate = moment(vm.saleOrderDate).add(-1, 'day').toDate();
+    }
+
+    function onSaleOrderChange() {
+
+      if (!vm.saleOrder) return;
+
+      if (vm.saleOrder.isValid()) {
+
+        let busy = SaleOrder.create(vm.saleOrder);
+
+        if (!vm.saleOrderId) {
+          busy
+            .then(saleOrder => $state.go('.', {saleOrderId: saleOrder.id}))
+            .catch(err => toastr.error(angular.toJson(err)));
+        }
+
+        vm.setBusy(busy);
+
+      }
+
+    }
+
+    function onSaleOrderCostChange() {
+
+      if (!vm.saleOrder) return;
+
+      let positions = _.filter(vm.saleOrder.positions, SaleOrderPosition.hasChanges);
+
+      if (!positions.length) return;
+
+      $q.all(_.map(positions, savePosition))
+        .then(() => SaleOrder.unCachedSave(vm.saleOrder, {keepChanges: ['totalCost']}))
+        .catch(e => {
+          console.error(e);
+          toastr.error('Ошибка сохранения заказа!');
+          _.each(positions, SaleOrderPosition.revert);
+          SaleOrder.revert(vm.saleOrder);
+        });
+
+    }
+
+    function onJSData(event) {
+
+      DEBUG('onJSData', event);
+
+      let id = _.get(event, 'data.id');
+
+      if (!id) return;
+
+      let {data, resource} = event;
+
+      if (resource === 'SaleOrder') {
+
+        if (SaleOrder.hasChanges(id)) {
+          return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder');
+        }
+
+        if (data.deviceCts) {
+
+          DEBUG('onJSData IOS injecting', resource);
+          Schema.model(resource).inject(data);
+
+        } else {
+
+          SaleOrder.find(id, {bypassCache: true})
+            .catch(err => {
+              if (err.error ===404){
+                SaleOrder.eject(saleOrderId)
+              }
+            });
+
+        }
+
+      } else if (resource === 'SaleOrderPosition') {
+
+        if (data.saleOrderId === saleOrderId) {
+          // IOS
+
+          let position = getPosition(data.articleId);
+
+          if (position && SaleOrderPosition.hasChanges(position)) {
+            return DEBUG('CatalogueSaleOrder:onJSData', 'ignore position');
+          }
+
+          DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
+
+          return SaleOrderPosition.inject(data);
+
+        } else if (!data.saleOrderId) {
+          // not IOS
+          return SaleOrderPosition.find(id, {bypassCache: true, cacheResponse: false})
+            .then(updated => {
+              if (updated.saleOrderId === saleOrderId) {
+                let existing = getPosition(updated.articleId);
+                if (existing && (SaleOrderPosition.hasChanges(existing) || updated.ts <= existing.ts)) {
+                  DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
+                } else {
+                  SaleOrderPosition.inject(updated);
+                }
+              }
+            });
+        }
+
+      }
+
+    }
+
+    function onJSDataDestroy(event) {
+
+      DEBUG('onJSDataDestroy', event);
+      let id = _.get(event, 'data.id');
+      if (!id) return;
+
+      if (SUBSCRIPTIONS.indexOf(event.resource) > -1) {
+        Schema.model(event.resource).eject(id);
+        if (id === saleOrderId) {
+          toastr.error('Заказ удален');
+          $state.go('^');
+        }
+      }
+
+    }
 
     function clearSearchOutletClick(id) {
       vm.search = '';
@@ -74,21 +274,49 @@
       vm.isOpenOutletPopover = false;
     }
 
+    function deleteSaleOrderClick() {
+
+      if (!vm.saleOrder.id) {
+        return $state.go('^');
+      }
+
+      vm.confirmDeleteSaleOrder = !vm.confirmDeleteSaleOrder;
+
+      if (!vm.confirmDeleteSaleOrder) {
+        vm.confirmDeleteSaleOrder = false;
+        SaleOrder.destroy(saleOrderId)
+          .then(() => $state.go('^'))
+          .catch(err => toastr.error(angular.toJson(err)));
+      } else {
+        $timeout(2000)
+          .then(() => vm.confirmDeleteSaleOrder = false);
+      }
+
+    }
+
     /*
      Functions
      */
 
-    function saveOrder() {
-      SaleOrder.create(vm.saleOrder)
-        .then(() => $q.all(
-          _.map(vm.saleOrder.positions, position => SaleOrderPosition.create(position))
-        ))
-        .catch(e => console.error(e));
+    function savePosition(position) {
+
+      let options = {keepChanges: ['cost', 'volume']};
+
+      if (position.volume > 0) {
+        return SaleOrderPosition.unCachedSave(position, options);
+      } else {
+        return SaleOrderPosition.destroy(position);
+      }
+
+    }
+
+    function getPosition(articleId) {
+      return _.find(vm.saleOrder.positions, {articleId: articleId});
     }
 
     function addPositionVolume(articleId, volume, price) {
 
-      let position = _.find(vm.saleOrder.positions, {articleId: articleId});
+      let position = getPosition(articleId);
 
       if (!position) {
         position = SaleOrderPosition.createInstance({
@@ -107,11 +335,14 @@
       position.updateCost();
       vm.saleOrder.updateTotalCost();
 
+      // position.ts = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+      // console.warn(position.ts);
+
     }
 
   }
 
-  angular.module('webPage')
+  angular.module('Sales')
     .controller('CatalogueSaleOrderController', CatalogueSaleOrderController);
 
 })();

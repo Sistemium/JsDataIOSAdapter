@@ -15,6 +15,10 @@
   }
   input {
     padding-left: 30px;
+    border-color: #ddd;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
   }
   &.has-feedback label ~ .form-control-feedback {
     top: 1px;

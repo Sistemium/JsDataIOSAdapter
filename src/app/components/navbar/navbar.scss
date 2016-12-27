@@ -10,21 +10,8 @@
     @extend .flex-1;
   }
 
-  .dropdown {
-    font-size: 15px;
-    margin-top: 3px;
-  }
-
   a:hover, a:focus {
     text-decoration: none;
-  }
-
-  .dropdown {
-    .disabled {
-      .caret {
-        display: none;
-      }
-    }
   }
 
   .fullscreen-menu {
@@ -37,12 +24,19 @@
   > a + a {
     margin-left: 35px;
     @media (max-width: $screen-xs-max) {
-      margin-left: 10px;
+      margin-left: 15px;
     }
   }
 
   & + hr {
     margin-top: 12px;
+  }
+
+  a.home {
+    font-size: 27px;
+    @media (max-width: $screen-xs-max) {
+      font-size: 20px;
+    }
   }
 
 }
@@ -117,4 +111,35 @@
     }
 
   }
+}
+
+salesmans-menu {
+
+  padding-top: 2px;
+  font-size: 14px;
+
+  .salesman-popover {
+    min-width: 175px;
+  }
+
+  .popover-content {
+    padding: 0;
+
+    .cancel-button {
+      margin: 4px 0;
+    }
+
+    .option {
+      padding: 1px 10px;
+      a {
+        display: block;
+        padding: 7px 0;
+        color: $black;
+      }
+    }
+  }
+}
+
+.root-navbar + hr  {
+  border: none;
 }

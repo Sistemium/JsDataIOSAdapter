@@ -31,11 +31,11 @@
       var parsed = _.assign({},params);
 
       if (params.limit) {
-        parsed.pageSize = params.limit;
+        parsed['x-page-size:'] = params.limit;
       }
 
       if (params.offset) {
-        parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
+        parsed['x-start-page:'] = Math.ceil(params.offset / (params.limit || 1)) + 1;
       }
 
       var where = params.where;

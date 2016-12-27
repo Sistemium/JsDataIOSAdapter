@@ -10,8 +10,8 @@
       isEnabled: false,
       salesmanClick,
       noneClick: SalesmanAuth.logout,
-      onStateChange,
-      toggleLabel
+      toggleLabel,
+      isOpen: false
     });
 
     SalesmanAuth
@@ -30,14 +30,15 @@
     }
 
     function salesmanClick(salesman) {
+
+      vm.isOpen = false;
+
       if (!salesman || _.get(vm, 'selectedSalesman.id') === salesman.id) {
         return SalesmanAuth.logout();
       }
-      SalesmanAuth.login(salesman);
-    }
 
-    function onStateChange(state) {
-      vm.isSalesState = _.startsWith(state.name, 'sales.');
+      SalesmanAuth.login(salesman);
+
     }
 
     function onDataChange(e, data) {
@@ -46,7 +47,7 @@
 
   }
 
-  angular.module('webPage')
+  angular.module('Sales')
     .controller('SalesmansMenuController', salesmansMenuController);
 
 })();

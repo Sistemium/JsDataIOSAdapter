@@ -1,11 +1,11 @@
 .scroll-y.sale-order-popover(
-resize='popover'
-style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
+resize resize-offset-top='25'
 )
   .option.new-item
-    button.btn.btn-success(
+    button.btn.btn-primary(
+    ng-disabled='vm.saleOrder && !vm.saleOrder.id'
     stm-click='setSaleOrder'
-    ng-click='vm.isSaleOrderPopoverOpen=false'
+    ng-click='isPopoverOpen=false'
     )
       i.glyphicon.glyphicon-plus
       span Добавить новый Заказ
@@ -13,8 +13,8 @@ style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
   .divider(ng-if='vm.items.length')
 
   .option(
-  ng-repeat='draft in vm.items track by draft.id'
-  ng-class='{active: vm.activeId === draft.id}'
+  ng-repeat='draft in draftSaleOrders track by draft.id'
+  ng-class='{active: vm.saleOrder.id === draft.id}'
   )
     a(
     href
@@ -23,6 +23,6 @@ style='max-height: {{popover.windowHeight - popover.offsetTop - 25}}px'
     )
       .name.display-flex
         .flex-1 {{ ::draft.outlet.name }}
-        .right {{ ::draft.totalCost | number:2 }} ₽
+        .right {{ draft.totalCost || 0 | number:2 }} ₽
       .address.gray
         small {{ ::draft.outlet.address }}

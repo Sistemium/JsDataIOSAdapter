@@ -25,8 +25,11 @@
           Location: {
             localField: 'location',
             localKey: 'locationId'
+          },
+          OutletPhoto: {
+            localField: 'avatar',
+            localKey: 'avatarPictureId'
           }
-
         },
         hasMany: {
           OutletPhoto: {

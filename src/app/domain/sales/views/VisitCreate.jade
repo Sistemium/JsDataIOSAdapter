@@ -13,16 +13,16 @@ h3.pull-right.with-map
   )
     i.glyphicon.glyphicon-map-marker
 
-h3.clear-left.pull-left.visit
+h4.clear-left.pull-left.visit
 
-  span.text-danger(ng-if='vm.creatingMode') Новый визит
+  span(ng-class='vm.creatingMode ? "text-danger" : "gray"') {{ vm.creatingMode ? 'Новый визит' : 'Визит' }}
   span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
   small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ({{ vm.visit.salesman.tinyName }})
   small
-    a.ml-5(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
+    a(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
       i.glyphicon.glyphicon-trash
 
-h3.pull-right.clear-right(ng-if='vm.buttons.length')
+.buttons.pull-right.clear-right(ng-if='vm.buttons.length')
   button.btn.ml-10(
   type='button'
   ng-class='b.class || "btn-default"'
@@ -31,10 +31,10 @@ h3.pull-right.clear-right(ng-if='vm.buttons.length')
   ng-click='vm[b.clickFn]()'
   )
     i(ng-if='b.fa' ng-class='b.fa')
-    span {{ b.label }}
+    span(ng-if='b.label') {{ b.label }}
 
 
-hr.clear-both
+.clear-both
 
 .fow-fluid.visitPhotos(ng-if='vm.visit.photos.length')
   .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
@@ -48,7 +48,7 @@ resize='tabset'
 ng-style='{"max-height": (tabset.windowHeight - tabset.offsetTop - 5) + "px"}'
 )
 
-  uib-tabset.nav-tabs-right(active="active")
+  uib-tabset.nav-tabs-right.questionSets(active="active")
     uib-tab(
     index="$index + 1"
     ng-repeat="qs in vm.questionSets | orderBy:['ord','name'] track by qs.id"

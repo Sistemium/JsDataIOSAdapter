@@ -4,18 +4,21 @@
 
   const SHORT_TIMEOUT = 0;
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
 
-    let {ClickHelper, saEtc, saControllerHelper, saMedia} = Helpers;
-    let {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
+    const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
+    const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
 
-    let vm = saControllerHelper.setup(this, $scope)
+    const vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
 
     let currentArticleGroupId = $state.params.articleGroupId || null;
     let sortedStock;
 
     vm.use({
+
+      debounce: IOS.isIos() ? 600 : 200,
+      showOnlyOrdered: $state.params.ordered === 'true',
 
       currentArticleGroup: null,
       ancestors: [],
@@ -32,10 +35,9 @@
       setSaleOrderClick,
       saleOrderTotalsClick,
       clearSearchClick,
+      articleGroupAndCollapseClick,
 
       onStateChange,
-
-      orderedVolumeFull,
       articleRowHeight
 
     });
@@ -60,22 +62,32 @@
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
-    vm.watchScope('vm.saleOrder.id', (newValue, oldValue) => {
-      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', cacheSaleOrderPositions);
-      if (newValue != oldValue && vm.showOnlyOrdered) {
-        saleOrderTotalsClick();
-      }
+    vm.watchScope('vm.saleOrder.id', newValue => {
+
+      let afretChangeOrder = true;
+
+      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
+
+        cacheSaleOrderPositions();
+
+        if (afretChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
+          saleOrderTotalsClick(true);
+          afretChangeOrder = false;
+        }
+
+      });
+
     });
 
     SalesmanAuth.watchCurrent($scope, salesman => {
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
       vm.currentSalesman = salesman;
-      vm.rebindAll(SaleOrder, filter, 'vm.draftSaleOrders');
+      vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
       SaleOrder.findAllWithRelations(filter)('Outlet');
     });
 
     vm.watchScope(
-      () => saMedia.smWidth || saMedia.xxsWidth,
+      isWideScreen,
       (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
     );
 
@@ -84,27 +96,101 @@
       newValue => vm.isWideScreen = newValue
     );
 
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
+      DEBUG('jsData:updateCollection', e);
+      if (e.resource === 'Stock') {
+
+        let options = {
+          limit: 10000,
+          bypassCache: true,
+          offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+        };
+
+        Stock.cachedFindAll({}, options)
+          .then(res => {
+
+            let index = {};
+
+            _.each(res, item => index[item.id] = item);
+
+            onJSDataFinished({
+              model: Stock,
+              index: index,
+              data: res
+            });
+
+          });
+
+      }
+    }));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
 
     /*
      Handlers
      */
 
+
+    function articleGroupAndCollapseClick(item) {
+      vm.isArticleGroupsExpanded = false;
+      setCurrentArticleGroup(item);
+    }
+
+    function onJSData(event) {
+      if (event.resource === 'Stock') {
+        if (_.get(event, 'data.articleId')) {
+          Stock.inject(event.data);
+        }
+      }
+    }
+
+    function onJSDataFinished(event) {
+
+      if (_.get(event, 'model.name') === 'Stock') {
+
+        DEBUG('onJSDataFinished:reloadStock');
+
+        let count = event.data.length;
+
+        _.each(vm.stock, stock => {
+          let updated = event.index[stock.id];
+          if (!updated) return;
+          stock.volume = updated.volume;
+          stock.displayVolume = updated.displayVolume;
+        });
+
+        if (count) {
+          toastr.info(
+            `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
+            'Обновление данных',
+            {timeOut: 15000}
+          );
+        }
+
+      }
+    }
+
     function clearSearchClick() {
       vm.search = '';
     }
 
-    function saleOrderTotalsClick() {
-      vm.showOnlyOrdered = true;
+    function reloadVisible() {
+      filterStock();
+      return setCurrentArticleGroup(vm.currentArticleGroup);
+    }
+
+    function saleOrderTotalsClick(showOnlyOrdered) {
+
+      vm.showOnlyOrdered = showOnlyOrdered || !vm.showOnlyOrdered;
+
       vm.setBusy($q.all(
         _.map(
-          _.filter(vm.saleOrder.positions, pos => !_.get(pos, 'article.stock')),
-          pos => Article.loadRelations(pos.articleId, 'Stock')
+          _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.filter({articleId: pos.articleId}).length),
+          pos => Article.find(pos.articleId)
+            .then(article => Article.loadRelations(article, 'Stock'))
         )
       ))
-        .then(() => {
-          filterStock();
-          return setCurrentArticleGroup(vm.currentArticleGroup);
-        })
+        .then(reloadVisible)
         .catch(error => console.error(error));
     }
 
@@ -130,6 +216,8 @@
         vm.showOnlyOrdered = false;
       }
 
+      if (vm.currentState === 'catalogue') $scope.saleOrderExpanded = false;
+
     }
 
     /*
@@ -150,29 +238,8 @@
       return !saMedia.xsWidth && !saMedia.xxsWidth;
     }
 
-    function articleRowHeight(stock) {
-
-      let breakPoint = !(saMedia.smWidth || saMedia.xxsWidth);
-
-      let length = _.get(stock, 'article.lastName.length') + _.get(stock, 'article.preName.length');
-      let nameLength = _.get(stock, 'article.firstName.length');
-
-      let nameBreak = breakPoint ? 60 : 45;
-      let lastBreak = breakPoint ? 90 : 70;
-
-      if (vm.saleOrder) {
-        nameBreak -= 7;
-        lastBreak -= 10;
-      }
-
-      return (length > lastBreak || nameLength > nameBreak) ? 99 : 80;
-    }
-
-    function orderedVolumeFull(stock) {
-      let position = vm.saleOrderPositionByArticle[stock.articleId];
-      if (!position) return;
-
-      return position.article.boxPcs(position.volume).full;
+    function articleRowHeight() {
+      return isWideScreen() ? 80 : 74;
     }
 
     function findAll() {
@@ -183,21 +250,19 @@
         }
       };
 
-      return $q.all([
-        PriceType.findAll(),
-        ArticleGroup.cachedFindAll({}, options),
-        Article.cachedFindAll({
+      return PriceType.findAll()
+        .then(() => ArticleGroup.cachedFindAll({}, options))
+        .then(() => Article.cachedFindAll({
           volumeNotZero: true,
           where: {
             'ANY stocks': volumeNotZero
           }
-        }, options),
-        Stock.cachedFindAll({
+        }, options))
+        .then(() => Stock.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
-        }, options),
-        Price.cachedFindAll(options)
-      ])
+        }, options))
+        .then(() => Price.cachedFindAll(options))
         .then(() => {
 
           DEBUG('findAll', 'finish');
@@ -213,6 +278,11 @@
 
       DEBUG('filterStock', 'start');
 
+      let discount = 1;
+      let priceType = vm.currentPriceType;
+
+      if (!vm.currentPriceType) return;
+
       let stockCache = _.orderBy(_.map(
         Stock.getAll(),
         stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
@@ -220,8 +290,6 @@
 
       DEBUG('filterStock', 'orderBy');
 
-      let discount = 1;
-      let priceType = vm.currentPriceType;
 
       if (vm.currentPriceType.parent) {
         priceType = vm.currentPriceType.parent;
@@ -269,19 +337,14 @@
       vm.currentArticleGroup = articleGroup;
 
       let groupIds = articleGroupIds(ownStock);
-
       DEBUG('setCurrentArticleGroup', 'articleGroupIds');
 
       let childGroups = _.filter(ArticleGroup.getAll(), filter);
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock0');
 
       let children = _.filter(childGroups, hasArticlesOrGroupsInStock(groupIds));
-
-      // let children = _.filter(childGroups, group);
-
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock');
 
-      // TODO show only saleOrder positions and sort by deviceCts if user clicks 'show saleOrder'
       vm.stock = ownStock;
 
       if (children.length) {
@@ -314,7 +377,11 @@
 
       scrollArticlesTop();
 
-      $state.go('.', {articleGroupId: filter.articleGroupId, q: vm.search}, {notify: false});
+      $state.go('.', {
+        articleGroupId: filter.articleGroupId,
+        q: vm.search,
+        ordered: vm.showOnlyOrdered || null
+      }, {notify: false});
 
     }
 
@@ -328,10 +395,10 @@
 
     function setAncestors(articleGroup) {
 
-      vm.ancestors = [{name: 'Все товары', showAll: true}];
+      vm.ancestors = [{displayName: 'Все товары', showAll: true}];
 
       if (vm.showOnlyOrdered) {
-        vm.ancestors.push({name: 'Товары заказа', id: false});
+        vm.ancestors.push({displayName: 'Товары заказа', id: false});
       }
 
       if (articleGroup) {
@@ -352,7 +419,7 @@
 
       if (vm.showOnlyOrdered) {
         let ids = _.map(vm.saleOrder.positions, 'articleId');
-        articles = _.filter(articles, article => ids.indexOf(article.articleGroupId) > -1);
+        articles = _.filter(articles, article => ids.indexOf(article.id) > -1);
       }
 
       if (articleGroup) {
@@ -361,7 +428,7 @@
       }
 
       if (vm.search) {
-        let reg = new RegExp(_.escapeRegExp(vm.search), 'ig');
+        let reg = new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
         articles = _.filter(articles, article => reg.test(article.name));
       }
 
@@ -379,7 +446,7 @@
 
   }
 
-  angular.module('webPage')
+  angular.module('Sales')
     .controller('CatalogueController', CatalogueController);
 
 }());

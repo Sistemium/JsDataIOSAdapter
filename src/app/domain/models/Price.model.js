@@ -18,7 +18,7 @@
       },
 
       watchChanges: false,
-      // useClass: false,
+      resetHistoryOnInject: false,
       instanceEvents: false,
       // linkRelations: false,
       notify: false,

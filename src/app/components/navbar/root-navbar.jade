@@ -1,15 +1,16 @@
 h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
-  a(href ui-sref='home' ng-class='{disabled: vm.isRootState}')
+  a.home(href ui-sref='home' ng-class='{disabled: vm.isRootState}')
     b.glyphicon.glyphicon-home
 
   a(href ng-click='vm.rootClick()' ng-class='{disabled: vm.isRootState}')
-   | {{ vm.title }}
+    | {{ vm.title }}
 
   .separator
 
   fullscreen-menu(ng-show='vm.isRootState')
 
-  salesmans-menu
+  salesmans-menu(ng-if='vm.isSalesState')
+
 
 hr

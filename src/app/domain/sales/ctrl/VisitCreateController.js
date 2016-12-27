@@ -43,7 +43,7 @@
     var VQ = Schema.model('VisitQuestion');
     var VA = Schema.model('VisitAnswer');
 
-    var date = moment().format('YYYY-MM-DD');
+    var date = moment().format();
     var visitId = $state.params.visitId;
     var outletId = $state.params.id;
 

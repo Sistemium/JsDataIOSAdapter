@@ -1,0 +1,73 @@
+@import "../../../styles/variables";
+
+.catalogue {
+
+  .collapser {
+
+    @include responsive-only(gt-xs) {
+      display: none;
+    }
+
+    padding: 0;
+
+    a {
+
+      @extend .display-flex;
+      padding: 8px 10px;
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      span:first-child {
+        @extend .ellipsis;
+        flex: 1;
+      }
+
+      .caret {
+        @extend .turnable;
+        top: 1px;
+      }
+
+    }
+
+  }
+
+  .breadcrumb {
+    > li.ancestor, > li.active {
+      @include responsive-only(lt-sm) {
+        display: none;
+      }
+    }
+  }
+
+  &.saleOrder .breadcrumb {
+    @media (orientation: landscape) {
+      display: none;
+    }
+  }
+
+  .popover {
+    @include responsive-only(gt-xs) {
+      max-width: 370px;
+      min-width: 370px;
+    }
+    @include responsive-only(lt-sm) {
+      min-width: 276px
+    }
+  }
+
+  > .animate-show {
+    &.ng-hide:not(.ng-hide-animate) {
+      display: block !important;
+    }
+    &.ng-hide {
+      @extend a.disabled;
+      opacity: 0.2;
+      .scroll-y {
+        overflow-y: hidden;
+      }
+    }
+  }
+
+}

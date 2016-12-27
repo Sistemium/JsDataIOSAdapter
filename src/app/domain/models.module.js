@@ -23,7 +23,7 @@
     return Schema.models();
   }
 
-  function Schema(saSchema, $http, $window, DEBUG, $q, DS) {
+  function Schema(saSchema, $http, $window, DEBUG, $q, DS, DSUtils) {
 
     function loadPaged(resource, filter, opts) {
 
@@ -71,19 +71,58 @@
     function cachedFindAll(resource, filter, options) {
 
       let store = DS.store[resource.name];
+      let queryHash = DSUtils.toJson(filter);
+      let completed = store.queryData[queryHash];
 
-      if (store.collection.length) return $q.resolve(store.collection);
+      if (completed && !_.get(options, 'bypassCache')) {
+        return $q.resolve(resource.filter(filter));
+      }
 
       return resource.findAll(filter, _.defaults({cacheResponse: false}, options))
         .then(res => {
 
-          // TODO: check for duplicates
-          Array.prototype.push.apply(store.collection, res);
-          _.each(res, item => store.index[item.id] = item);
+          // TODO: check if it's all correct
 
-          return store.collection;
+          _.each(res, item => {
+            let existing = store.index[item.id];
+            if (existing) {
+              DSUtils.forOwn(item, (val, key) => existing[key] = val);
+            } else {
+              store.index[item.id] = item;
+              store.collection.push(item);
+            }
+          });
+
+          if (!_.get(options, 'bypassCache')) {
+            store.queryData[queryHash] = {$$injected: true};
+          }
+
+          return res;
 
         });
+    }
+
+    function unCachedSave(definition, _id, options) {
+
+      let resource = DS.store[definition.name];
+
+      let id = _.get(_id, 'id') || _id;
+
+      function shouldKeep(key) {
+        return (options.keepChanges || []).indexOf(key) >= 0;
+      }
+
+      return definition.save(id, _.assign({cacheResponse: false}, options))
+        .then(serverItem => {
+
+          let localItem = resource.index[id];
+
+          DSUtils.forOwn(serverItem, (val, key) => shouldKeep(key) || (localItem[key] = val));
+
+          resource.saved[id] = DSUtils.updateTimestamp(resource.saved[id]);
+          resource.previousAttributes[id] = DSUtils.copy(serverItem, null, null, null, definition.relationFields);
+
+        })
     }
 
     return $window.saSchema = saSchema({
@@ -96,6 +135,14 @@
 
       cachedFindAll: function (filter, options) {
         return cachedFindAll(this, filter, options)
+      },
+
+      unCachedSave: function (filter, options) {
+        return unCachedSave(this, filter, options)
+      },
+
+      primaryIndex: function () {
+        return DS.store[this.name].index;
       }
 
     });
@@ -112,7 +159,11 @@
       });
     }
 
-    DS.defaults.watchChanges = false;
+    _.assign(DS.defaults, {
+      watchChanges: false,
+      instanceEvents: false
+    });
+
     $window.saDS = DS;
 
   }

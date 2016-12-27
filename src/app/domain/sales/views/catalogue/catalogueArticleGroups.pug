@@ -8,47 +8,71 @@
   track-focused
   aria-describedby='search-input'
   ng-model='vm.search'
-  ng-model-options='{debounce: 600}'
+  ng-model-options='{debounce: vm.debounce}'
   )
 
   span.form-control-feedback(ng-hide='!vm.search' )
     a(ng-click='vm.clearSearchClick()' href)
       i.glyphicon.glyphicon-remove
 
-button.btn.btn-default.btn-block.collapser(
-type='button'
-ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
-)
-  span {{ vm.currentArticleGroup.name || 'Все товары'}}
-  span.caret(ng-class='{"turn-90-counter-clock": vm.isArticleGroupsExpanded}')
+.alert.alert-default.collapser
+  a(
+  href
+  ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
+  )
+    span {{ vm.currentArticleGroup.displayName || vm.showOnlyOrdered && 'Товары заказа' || 'Все товары' }}
+    span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
+
 
 .block-to-collapse.scroll-y(
 uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
 collapsed='vm.isArticleGroupsCollapsingDone=true'
 resize resize-offset-top='5'
 )
-  ul.list-group.xs-ancestors(ng-hide='!vm.currentArticleGroup')
-    a.list-group-item(
-    ng-repeat='ancestor in vm.ancestors track by ancestor.id'
-    href
-    ng-click='vm.articleGroupClick(ancestor)'
+  ul.list-group.xs-ancestors(
+  ng-if='vm.currentArticleGroup || vm.showOnlyOrdered'
+  )
+
+    .list-group-item.with-a-inside(
+    ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id'
     )
-      span
+
+      a.chevron(
+      stm-click='articleGroup' click-payload='ancestor'
+      )
         i.glyphicon.glyphicon-menu-left
-      span {{::ancestor.name}}
+
+      a(
+      href
+      stm-click='articleGroupAndCollapse' click-payload='ancestor'
+      ) {{::ancestor.displayName}}
 
   ul.list-group(
   )
-    // TODO: find why click on Baikal does not collapse
-    a.list-group-item(
-    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
+
+    a.list-group-item.active(
     href
-    ng-click='vm.isArticleGroupsExpanded = !vm.articleGroupIds[elem.id]'
-    stm-click='articleGroup' click-payload='elem'
-    ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+    ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName || !vm.currentArticleGroup && vm.showOnlyOrdered'
+    ng-click='vm.isArticleGroupsExpanded=false'
     )
-      span.badge(ng-if='::vm.articleGroupIds[elem.id]')
-        span {{::vm.articleGroupIds[elem.id].length}}
-        span(ng-if='::elem.children.length') +
-      i.glyphicon.glyphicon-menu-right.pull-right(ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]')
-      span {{::elem.name}}
+      span {{ vm.currentArticleGroup.displayName || 'Товары заказа' }}
+
+    .list-group-item.with-a-inside(
+    ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
+    )
+      a(
+      href
+      stm-click='articleGroupAndCollapse' click-payload='elem'
+      )
+        span.badge.pull-right(ng-if='::vm.articleGroupIds[elem.id]')
+          span {{::vm.articleGroupIds[elem.id].length}}
+          span(ng-if='::elem.children.length') +
+        span {{::elem.displayName }}
+
+      a.chevron(
+      href
+      stm-click='articleGroup' click-payload='elem'
+      ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
+      )
+        i.glyphicon.glyphicon-menu-right

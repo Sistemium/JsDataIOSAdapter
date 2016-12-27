@@ -1,0 +1,92 @@
+@import "../../../styles/variables";
+
+#scroll-articles {
+
+  max-height: 100%;
+
+  &.ng-hide:not(.ng-hide-animate) {
+    display: block !important;
+    @extend a.disabled;
+  }
+
+  &.animate-show.ng-hide-remove {
+    transition: all ease-in 0.5s;
+  }
+
+  .list-group-item {
+    min-height: 80px;
+    @media (max-width: $screen-xs-max) {
+      min-height: 74px;
+    }
+  }
+
+  .right {
+
+    margin-left: 1em;
+    text-align: right;
+
+    button {
+      padding: 3px 5px;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 3px;
+      display: block;
+      color: #777777;
+      width: 100%;
+    }
+
+    button + button {
+      margin-top: 4px;
+    }
+
+  }
+
+  .article-name-third {
+    text-align: right;
+    small span.gray {
+      margin: 0 4px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .article-wrapper {
+    @extend .flex-1;
+    min-width: 0;
+  }
+
+  .article-name-first {
+
+    display: flex;
+
+    .name-first {
+      @extend .ellipsis;
+      flex-shrink: 1;
+    }
+
+    .article-info {
+      margin-left: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      flex-grow: 1
+    }
+
+    quantity-edit {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+  }
+
+  .article-name-second {
+    color: gray;
+    @extend .ellipsis;
+
+    .tooltip-inner {
+      overflow: visible;
+      white-space: normal;
+    }
+  }
+
+}

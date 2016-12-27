@@ -5,20 +5,24 @@
   function resize($window, $uibPosition, $timeout) {
 
     const SCREEN_XS_MAX = 768;
+    const SCREEN_SM_MIN = 480;
 
     return (scope, element, attrs) => {
 
       let property = attrs.resize ? (scope[attrs.resize] = {}) : scope;
 
-      if (attrs.resizeFn){
+      if (attrs.resizeFn) {
         scope.resizeFn = scope.$eval(attrs.resizeFn);
       }
 
+      scope.resizeProperty = attrs.resizeProperty || 'max-height';
       let offsetTopMinus = attrs.resizeOffsetTop ? parseInt(attrs.resizeOffsetTop) : 0;
+      let offsetTopMinusXs = attrs.resizeOffsetTopXs ? parseInt(attrs.resizeOffsetTopXs) : offsetTopMinus;
 
       function resizeOffsetTop(newValue) {
+        let offset = newValue.windowWidth > SCREEN_SM_MIN ? offsetTopMinus : offsetTopMinusXs;
         if (!newValue || newValue.disableResize) return;
-        element.css({'max-height': (newValue.windowHeight - newValue.offsetTop - offsetTopMinus) + 'px'});
+        element.css(scope.resizeProperty, (newValue.windowHeight - newValue.offsetTop - offset) + 'px');
       }
 
       function getWindowDimensions() {
@@ -54,7 +58,7 @@
       angular.element($window)
         .bind('resize', apply);
 
-      scope.$on('$destroy', ()=> {
+      scope.$on('$destroy', () => {
         un();
         angular.element($window)
           .unbind('resize', apply);
