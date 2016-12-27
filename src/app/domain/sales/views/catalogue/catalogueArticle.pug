@@ -1,15 +1,27 @@
 .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
   | Нет подходящих товаров
 
+// TODO: fix button placement
+button.btn.btn-primary(ng-click='vm.showImages = !vm.showImages') {{vm.showImages ? 'Убрать фото' : 'Показать фото'}}
+
 ul.list-group.round-corners-by-type.vr-parent(
 vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
 before-tag-name='li'
 )
-  .list-group-item.display-flex.flex-align-center.spaced(ng-repeat='stock in vm.stock track by stock.id')
+  .list-group-item.display-flex.flex-align-center.spaced(
+  ng-repeat='stock in vm.stock track by stock.id'
+  ng-class='{"item-padding": vm.showImages}'
+  )
+
+
+    // TODO: fix stock.article.avatar.thumbnailSrc ?
+    img(
+    ng-if='vm.showImages'
+    ng-src='{{stock.article.avatar.thumbnailSrc || "/images/question_mark.png"}}'
+    )
 
     .article-wrapper
-
       .article-name-first
         // TODO: filtering options in tooltip (allow user to show only the articles with the same firstName)
         strong.name-first(
@@ -49,7 +61,8 @@ before-tag-name='li'
           span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
           span.gray
             | x
-        small {{vm.prices[stock.articleId] | number:2}} ₽
+        small {{vm.prices[stock.articleId] | number:2}}
+          span ₽
 
     .right(ng-if='vm.saleOrder')
 
