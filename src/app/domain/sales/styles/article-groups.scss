@@ -4,7 +4,7 @@
 
   margin-bottom: 0;
 
-  @include responsive-only(gt-xs){
+  @include responsive-only(gt-xs) {
     padding-right: 5px;
     .block-to-collapse {
       margin-right: 5px;
@@ -25,7 +25,7 @@
     left: 15px;
     right: 15px;
 
-    @include responsive-only(gt-xs){
+    @include responsive-only(gt-xs) {
       right: -5px;
       padding-right: 5px;
     }
@@ -34,7 +34,7 @@
 
   .xs-ancestors {
     margin-bottom: $margin-bottom-xs;
-    @include responsive-only(gt-xs, portrait){
+    @include responsive-only(gt-xs, portrait) {
       display: none;
     }
   }
@@ -52,7 +52,7 @@
       padding: 10px 15px;
       color: $article-nav-menu-text-color;
 
-      @include responsive-only(lt-sm){
+      @include responsive-only(lt-sm) {
         padding: 7px 10px;
       }
 
