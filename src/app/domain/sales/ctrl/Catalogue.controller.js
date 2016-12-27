@@ -259,6 +259,7 @@
             'ANY stocks': volumeNotZero
           }
         }, options))
+        .then(() => ArticlePicture.findAll())
         .then(() => Stock.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
