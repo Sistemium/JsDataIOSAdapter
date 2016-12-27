@@ -9,6 +9,20 @@
     @extend a.disabled;
   }
 
+  img {
+
+    width: 70px;
+    height: 68px;
+    margin-left: -10px;
+    object-fit: contain;
+
+    @include responsive-only(lt-sm) {
+      max-width: 60px;
+      max-height: 58px;
+    }
+
+  }
+
   &.animate-show.ng-hide-remove {
     transition: all ease-in 0.5s;
   }
