@@ -52,6 +52,7 @@
      */
 
     vm.rebindAll(PriceType, null, 'vm.priceTypes');
+    //vm.rebindAll(ArticlePicture, null, 'vm.articlePictures');
 
     vm.onScope(
       'rootClick',
