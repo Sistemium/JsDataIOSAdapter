@@ -1,0 +1,15 @@
+// Images thumbnail
+.thumbnails(class='{{ baseClass }}')
+  .thumbnails(ng-repeat='i in images' style='outline: 0')
+    img(
+    ng-click='vm.thumbnailClick(i, $index)' ng-mouseover='setHovered(i)' ng-if='i'
+    ng-src='{{ i.thumbnailSrc || "/images/question_mark.png" }}'
+    ng-class='{{ thumbClass }}'
+    ng-attr-alt='Image {{ $index + 1 }}'
+    )
+    img(
+    ng-if='!i'
+    ng-src='{{"/images/question_mark.png" }}'
+    ng-class='{{ thumbClass }}'
+    )
+

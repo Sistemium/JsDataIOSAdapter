@@ -1,0 +1,61 @@
+// TODO: convert from angular material to bootstrap
+
+// On open image
+.ng-gallery.ng-gallery-fullscreen.no-select(ng-show='opened' layout='row' layout-align='center center' style='display: flex; flex-direction: row; justify-content: center;')
+
+  .left-right-chevron(flex layout='row' layout-align='start center' hide-xs)
+    .material-icons(ng-click='prevImage()' ng-show='images.length > 1') chevron_left
+
+  .main-view(style='flex: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center')
+
+    //.window-controls.visible-xs-block(show-xs hide style='flex: 0.1; flex-direction: row')
+      p.photo-counter {{index + 1}}/{{images.length}}
+      span(flex)
+      //i.material-icons(ng-if='isDeletable' ng-click='deleteClick()' ng-class="{confirm : confirmDelete}") delete
+      //i.material-icons(ng-click='closeGallery()') close
+
+    div(ng-if='loading' style='top: 50%; position: fixed; width: 200px; height: 4%;')
+      .progress-bar.progress-bar-striped.active(role='progressbar', aria-valuenow='100', aria-valuemin='0', aria-valuemax='100', style='width: 100%')
+        span.sr-only Загружается
+
+    // Photo div
+
+    div(
+    style='flex-direction: column; justify-content: center; align-items: center; height: 80%'
+    md-swipe-left='nextImage()'
+    md-swipe-right='prevImage()'
+    md-swipe-up='closeGallery()'
+    )
+      img.fullsize(
+      style='height: 100%; width: 100%'
+      ondragstart='return false;'
+      ng-click='closeGallery()'
+      draggable='false'
+      ng-src='{{ img }}'
+      ng-if='!loading'
+      )
+
+
+    .image-info(hide-xs style='flex: 0.25;')
+
+      p.photo-counter-gt-sm {{index + 1}}/{{images.length}}
+
+      .ng-gallery-content(unselectable='on', ng-show='opened')
+        .ng-thumbnails-wrapper
+          .ng-thumbnails
+            div(ng-repeat='i in images track by i.id')
+              img(
+              style='object-fit: contain; background: white; outline: 0; border: 1px solid black'
+              draggable='false'
+              ng-src='{{ i.thumbnailSrc }}'
+              ng-class='{active : index === $index}'
+              ng-click='changeImage($index)'
+              )
+
+  .left-right-chevron(layout-align='end center' hide-xs style='display: flex;')
+    i.glyphicon.glyphicon-chevron-left(ng-click='nextImage()' ng-show='images.length > 1')
+
+  .window-controls(hide-xs style='position: fixed; right: 0')
+    i.glyphicon.glyphicon-remove(ng-click='closeGallery()')
+  // i.material-icons(ng-if='isDeletable' ng-click='deleteClick()' ng-class="{confirm : confirmDelete}") delete
+
