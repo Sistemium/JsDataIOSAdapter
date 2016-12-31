@@ -16,10 +16,22 @@ before-tag-name='li'
 
 
     // TODO: fix stock.article.avatar.thumbnailSrc ?
-    img(
-    ng-if='vm.showImages'
-    ng-src='{{stock.article.avatar.thumbnailSrc || "/images/question_mark.png"}}'
+
+
+    ng-gallery(
+    images='[stock.article.avatar]'
+    thumbs-num='1'
     )
+
+    // Modal image display
+
+    //img(
+    //style='cursor: pointer; outline:0; border: 1px solid red'
+    //ng-if='vm.showImages'
+    //ng-click='vm.openFullScreen(stock)'
+    //ng-src='{{stock.article.avatar.thumbnailSrc || "/images/question_mark.png"}}'
+    //)
+
 
     .article-wrapper
       .article-name-first
