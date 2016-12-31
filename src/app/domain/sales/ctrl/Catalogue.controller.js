@@ -4,7 +4,7 @@
 
   const SHORT_TIMEOUT = 0;
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
+  function CatalogueController(Schema, $scope, $state, $q, $uibModal, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, $document) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
     const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price, ArticlePicture} = Schema.models();
@@ -37,6 +37,7 @@
       saleOrderTotalsClick,
       clearSearchClick,
       articleGroupAndCollapseClick,
+      openFullScreen,
 
       onStateChange,
       articleRowHeight
@@ -225,6 +226,33 @@
     /*
      Functions
      */
+
+    function openFullScreen(stock) {
+
+      let articlePhoto = stock.article.avatar;
+
+
+      if (articlePhoto) {
+        var parentElem = angular.element($document[0].getElementsByTagName('body'));
+
+        var modalInstance = $uibModal.open({
+          animation: true,
+          ariaLabelledBy: 'modal-title',
+          ariaDescribedBy: 'modal-body',
+          templateUrl: 'app/domain/sales/views/fullScreenModal.html',
+          controller: 'FullScreenController',
+          controllerAs: 'vm',
+          size: 'lg',
+          appendTo: parentElem,
+          resolve: {
+            photos: function () {
+              return stock.article.avatar;
+            }
+          }
+        });
+      }
+
+    }
 
     function cacheSaleOrderPositions() {
 
@@ -452,4 +480,29 @@
   angular.module('Sales')
     .controller('CatalogueController', CatalogueController);
 
+
+  angular.module('Sales').controller('FullScreenController', function ($uibModalInstance, photos) {
+
+    var vm = this;
+    vm.photos = photos;
+
+
+    // vm.items = items;
+    // vm.selected = {
+    //   item: vm.items[0]
+    // };
+    //
+    // vm.ok = function () {
+    //   $uibModalInstance.close($ctrl.selected.item);
+    // };
+    //
+
+    vm.close = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+
+  });
+
+
 }());
+
