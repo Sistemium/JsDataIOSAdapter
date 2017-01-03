@@ -2,12 +2,12 @@
 
 (function () {
 
-  const REQUIRED_ACCURACY = 100;
+  const REQUIRED_ACCURACY = 150;
 
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, Helpers) {
 
     const {ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
-    const yaLatLng = mapsHelper.yLatLng;
+    const {yLatLng, distanceFn} = mapsHelper;
 
     const {Visit, Location} = Schema.models();
     const VQS = Schema.model('VisitQuestionSet');
@@ -118,23 +118,33 @@
         });
 
         vm.busy = getLocation()
-          .then(function (res) {
+          .then(res => {
 
             // If use went out to another state before the promise is resolved
             if ($scope['$$destroyed']) return;
 
             vm.visit.checkInLocationId = res.id;
 
+            let outletLocation = _.get(vm.visit, 'outlet.location');
+
+            if (outletLocation) {
+              let distance = distanceFn(yLatLng(outletLocation), yLatLng(res));
+              toastr.success(
+                `Расстояние до точки ${Math.round(distance)} м.`,
+                'Успешное начало визита',
+                {timeOut: 10000}
+              );
+            }
+
             return Visit.save(vm.visit)
               .then(visit => {
                 $state.go('.', {visitId: visit.id})
               });
 
-          }, function (err) {
+          })
+          .catch(err => {
 
-            if ($scope['$$destroyed']) {
-              return;
-            }
+            if ($scope['$$destroyed']) return;
 
             console.error(err);
             toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
@@ -193,7 +203,7 @@
       }
 
       vm.map = {
-        yaCenter: yaLatLng(checkIn),
+        yaCenter: yLatLng(checkIn),
         afterMapInit: function () {
 
           vm.startMarker = mapsHelper.yMarkerConfig({
