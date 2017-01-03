@@ -7,7 +7,10 @@
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
-    const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price} = Schema.models();
+    const {
+      Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
+      CatalogueAlert
+    } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -38,13 +41,17 @@
       articleGroupAndCollapseClick,
 
       onStateChange,
-      articleRowHeight
+      articleRowHeight,
+      alertCheck,
+      alertTriggers: _.groupBy(CatalogueAlert.getAll(), 'articleGroupId')
 
     });
 
     vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
 
     onStateChange($state.name, $state.params);
+
+    // delete vm.alertCheck;
 
     /*
      Listeners
@@ -442,6 +449,26 @@
       return _.groupBy(stock, item => {
         return _.get(item, 'article.articleGroupId');
       });
+    }
+
+    function alertCheck(stock) {
+
+      if (!vm.genericAlertShown) {
+        vm.genericAlertShown = true;
+        _.each(vm.alertTriggers[null], trigger => trigger.show());
+      }
+
+      let id = stock.article && stock.article.articleGroupId;
+
+      if (!id) return;
+
+      let triggers = vm.alertTriggers[id];
+
+      if (triggers) {
+        _.each(triggers, trigger => trigger.show());
+        delete vm.alertTriggers[id];
+      }
+
     }
 
   }

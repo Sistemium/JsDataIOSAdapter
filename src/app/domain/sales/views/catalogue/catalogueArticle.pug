@@ -40,6 +40,7 @@ before-tag-name='li'
       .article-name-third
         //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
         //small {{ vm.articleRowHeight(stock) }}
+        span {{ vm.alertCheck(stock) }}
         small.gray(ng-if='stock.volume') ~{{stock.displayVolume}}
         small.red(ng-if='!stock.volume') Нет в наличии
         small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
