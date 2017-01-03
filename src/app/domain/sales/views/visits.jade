@@ -66,6 +66,7 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
           td
             div {{ visit.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
             div {{ visit.duration() }}
+            div {{ vm.outletDistance(visit) }}
           td.number.hidden-xs {{ visit.photos.length | number: 0 }}
           td.number.hidden-xs {{ visit.answers.length | number: 0 }}
 

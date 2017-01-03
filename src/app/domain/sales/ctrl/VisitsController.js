@@ -2,9 +2,11 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper, mapsHelper, $filter) {
 
-    const {Visit} = Schema.models();
+    const {Visit, Outlet} = Schema.models();
+    const {yLatLng, distanceFn} = mapsHelper;
+    const numberFilter = $filter('number');
 
     let maxDate;
     let minDate;
@@ -28,7 +30,8 @@
       openDatepicker,
 
       visitClick,
-      newVisitClick
+      newVisitClick,
+      outletDistance
 
     });
 
@@ -61,6 +64,15 @@
      Functions
      */
 
+    function outletDistance(visit) {
+      let outletLocation = _.get(visit, 'outlet.location');
+      if (outletLocation) {
+        let res = distanceFn(yLatLng(outletLocation), yLatLng(visit.checkInLocation));
+        return `${numberFilter(res, 0)}м.`
+      }
+    }
+
+
     function setDate(newValue) {
 
       if (!angular.isObject(newValue)) {
@@ -85,7 +97,10 @@
         vm.datepickerOptions = datepickerOptions();
       });
 
-      return vm.setBusy(Visit.findAll(filter, {bypassCache: true}), 'Загрузка данных визитов');
+      return vm.setBusy(
+        Visit.findAll(filter, {bypassCache: true}),
+        'Загрузка данных визитов'
+      );
 
     }
 
@@ -114,7 +129,11 @@
         'Загрузка данных дня'
       );
 
-      vm.rebindAll(Visit, filter, 'vm.selectedDayVisits');
+      vm.rebindAll(Visit, filter, 'vm.selectedDayVisits', () => {
+        _.map(vm.selectedDayVisits, visit => {
+          return Outlet.loadRelations(visit.outlet, 'Location');
+        })
+      });
 
     }
 
