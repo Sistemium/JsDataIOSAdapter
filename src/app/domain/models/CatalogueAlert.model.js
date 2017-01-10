@@ -6,7 +6,7 @@
 
     const defaultOptions = {timeOut: 10000};
 
-    const CatalogueAlert = Schema.register({
+    Schema.register({
 
       name: 'CatalogueAlert',
 
