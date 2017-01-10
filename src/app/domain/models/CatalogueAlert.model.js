@@ -20,6 +20,7 @@
       },
 
       meta: {},
+      omit: ['lastShown'],
 
       methods: {
 
@@ -31,10 +32,6 @@
       }
 
     });
-
-    _.map([
-    ], i => CatalogueAlert.inject(i));
-
 
   });
 
