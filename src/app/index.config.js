@@ -5,10 +5,10 @@
     .module('webPage')
     .run(run)
     .service('DEBUG', debugService)
-    .config(function(localStorageServiceProvider){
+    .config(function (localStorageServiceProvider) {
       localStorageServiceProvider.setPrefix('stg');
     })
-    .run(function(amMoment) {
+    .run(function (amMoment) {
       amMoment.changeLocale('ru');
     })
   ;
@@ -25,7 +25,8 @@
 
     InitService
       .then(Sockets.init)
-      .then(saApp.init);
+      .then(saApp.init)
+      .catch(error => localStorageService.set('error', angular.toJson(error)));
 
     Auth.init(IOS.isIos() ? IOS.init() : phaService).then(function (res) {
 
@@ -52,14 +53,14 @@
       //sockAuth();
       InitService.then(() => Sockets.on('connect', sockAuth));
 
-      function sockAuth () {
+      function sockAuth() {
         var accessToken = Auth.getAccessToken();
         if (!accessToken) {
           return;
         }
         Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
           DEBUG('Socket authorization:', ack);
-          $rootScope.$broadcast ('socket:authorized');
+          $rootScope.$broadcast('socket:authorized');
         });
       }
 
@@ -73,7 +74,7 @@
             PickerAuth.login(p, lastState);
           });
       } else if (lastState) {
-        $state.go(lastState.name,lastState.params);
+        $state.go(lastState.name, lastState.params);
       }
 
       $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
