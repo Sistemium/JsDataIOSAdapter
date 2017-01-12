@@ -18,7 +18,7 @@
             localField: 'article',
             localKey: 'articleId'
           },
-          Picture: {
+          ArticlePicture: {
             localField: 'picture',
             localKey: 'pictureId'
           }
