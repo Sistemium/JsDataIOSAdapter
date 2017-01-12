@@ -7,7 +7,7 @@
     Schema.register({
 
       name: 'Location',
-      endpoint: 'CoreLocation',
+      endpoint: 'Location',
 
       labels: {
         multiple: 'Геометки',
