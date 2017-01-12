@@ -21,7 +21,7 @@
       }
     };
 
-    state.init = function (fn) {
+    me.init = function (fn) {
       isInitialized = true;
 
       if (angular.isFunction(fn)) {
@@ -33,24 +33,27 @@
       $rootScope.$broadcast(me.initializedEvent, state);
     };
 
-    state.then = function (fn) {
-      return $q(function (resolve) {
+    let initPromise = $q(function (resolve) {
 
-        var un;
+      let un;
 
-        function respond() {
-          resolve(fn(state));
-          if (angular.isFunction(un)) {
-            un();
-          }
+      function respond() {
+        if (angular.isFunction(un)) {
+          un();
         }
+        resolve(state);
+      }
 
-        if (isInitialized) {
-          respond();
-        } else {
-          un = $rootScope.$on(me.initializedEvent, respond);
-        }
-      });
+      if (isInitialized) {
+        respond();
+      } else {
+        un = $rootScope.$on(me.initializedEvent, respond);
+      }
+
+    });
+
+    me.then = function (fn) {
+      return (isInitialized ? $q.resolve(state) : initPromise).then(fn);
     };
 
     return angular.extend(me, state);

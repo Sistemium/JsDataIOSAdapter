@@ -50,7 +50,7 @@
       InitService.init(appConfig);
 
       //sockAuth();
-      Sockets.on('connect', sockAuth);
+      InitService.then(() => Sockets.on('connect', sockAuth));
 
       function sockAuth () {
         var accessToken = Auth.getAccessToken();
