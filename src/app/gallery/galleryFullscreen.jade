@@ -1,33 +1,36 @@
-// TODO: convert from angular material to bootstrap
-
 // On open image
-.ng-gallery.ng-gallery-fullscreen.no-select(ng-show='opened' layout='row' layout-align='center center' style='display: flex; flex-direction: row; justify-content: center;')
+.ng-gallery.ng-gallery-fullscreen.no-select(ng-show='opened')
 
-  .left-right-chevron(flex layout='row' layout-align='start center' hide-xs)
-    .material-icons(ng-click='prevImage()' ng-show='images.length > 1') chevron_left
+  .left-right-chevron.hidden-xs(
+  ng-show='imagesAll.length > 1'
+  )
+    i.glyphicon.glyphicon-chevron-left.btn-lg(ng-click='prevImage()')
 
-  .main-view(style='flex: 1; display: flex; flex-direction: column; justify-content: space-between; align-items: center')
-
-    //.window-controls.visible-xs-block(show-xs hide style='flex: 0.1; flex-direction: row')
-      p.photo-counter {{index + 1}}/{{images.length}}
-      span(flex)
-      //i.material-icons(ng-if='isDeletable' ng-click='deleteClick()' ng-class="{confirm : confirmDelete}") delete
-      //i.material-icons(ng-click='closeGallery()') close
-
-    div(ng-if='loading' style='top: 50%; position: fixed; width: 200px; height: 4%;')
-      .progress-bar.progress-bar-striped.active(role='progressbar', aria-valuenow='100', aria-valuemin='0', aria-valuemax='100', style='width: 100%')
-        span.sr-only Загружается
+  .main-view
 
     // Photo div
 
-    div(
-    style='flex-direction: column; justify-content: center; align-items: center; height: 80%'
+    div.visible-xs-inline
+      p.photo-counter {{index + 1}}/{{imagesAll.length}}
+
+    // TODO: Swipes
+
+    .main-photo-block(
     md-swipe-left='nextImage()'
     md-swipe-right='prevImage()'
     md-swipe-up='closeGallery()'
     )
+
+      .progress-bar-wrapper(ng-if='loading')
+        .progress-bar.progress-bar-striped.active(
+        role='progressbar'
+        aria-valuenow='100'
+        aria-valuemin='0'
+        aria-valuemax='100'
+        )
+          span.sr-only Загружается
+
       img.fullsize(
-      style='height: 100%; width: 100%'
       ondragstart='return false;'
       ng-click='closeGallery()'
       draggable='false'
@@ -35,27 +38,38 @@
       ng-if='!loading'
       )
 
+    .image-info.hidden-xs
 
-    .image-info(hide-xs style='flex: 0.25;')
+      p.photo-counter-gt-sm.hidden-xs {{index + 1}}/{{imagesAll.length}}
 
-      p.photo-counter-gt-sm {{index + 1}}/{{images.length}}
-
-      .ng-gallery-content(unselectable='on', ng-show='opened')
+      .ng-gallery-content(
+      ng-show='opened'
+      )
         .ng-thumbnails-wrapper
-          .ng-thumbnails
-            div(ng-repeat='i in images track by i.id')
+          .ng-thumbnails(
+          ng-class='imagesAll.length < 7 ? "flex-center" : "" '
+          vs-horizontal
+          vs-autoresize
+          vs-repeat
+          )
+            .image-wrapper(
+            ng-repeat='i in imagesAll track by $index'
+            )
               img(
-              style='object-fit: contain; background: white; outline: 0; border: 1px solid black'
               draggable='false'
               ng-src='{{ i.thumbnailSrc }}'
-              ng-class='{active : index === $index}'
-              ng-click='changeImage($index)'
+              ng-class='{active : index === i.id}'
+              ng-click='changeImage(i.id)'
               )
 
-  .left-right-chevron(layout-align='end center' hide-xs style='display: flex;')
-    i.glyphicon.glyphicon-chevron-left(ng-click='nextImage()' ng-show='images.length > 1')
 
-  .window-controls(hide-xs style='position: fixed; right: 0')
-    i.glyphicon.glyphicon-remove(ng-click='closeGallery()')
-  // i.material-icons(ng-if='isDeletable' ng-click='deleteClick()' ng-class="{confirm : confirmDelete}") delete
+  .left-right-chevron.hidden-xs(
+  ng-mouseenter='showNavElems = true'
+  ng-show='imagesAll.length > 1'
+  )
+    i.glyphicon.glyphicon-chevron-right.btn-lg(ng-click='nextImage()')
+
+  .window-controls
+    i.glyphicon.glyphicon-remove.btn-lg(ng-click='closeGallery()')
+
 
