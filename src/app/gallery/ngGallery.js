@@ -77,10 +77,6 @@
           scope.thumbsNum = 11;
         }
 
-        function querySelectorAll(q) {
-          return element[0].querySelectorAll(q);
-        }
-
         function hideElement() {
           $timeout(function () {
             scope.showNavElems = false;
