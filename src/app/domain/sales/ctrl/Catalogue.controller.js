@@ -30,6 +30,7 @@
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
       showImages: false,
+      stockWithPicIndex: [],
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -37,7 +38,6 @@
       saleOrderTotalsClick,
       clearSearchClick,
       articleGroupAndCollapseClick,
-      openFullScreen,
 
       onStateChange,
       articleRowHeight
@@ -227,32 +227,37 @@
      Functions
      */
 
-    function openFullScreen(stock) {
 
-      let articlePhoto = stock.article.avatar;
+    function getFilteredArticlesPhotos() {
 
+      vm.categoryPhotos = [];
+      vm.stockWithPicIndex = [];
+      var idx = 0;
+      var pic;
 
-      if (articlePhoto) {
-        var parentElem = angular.element($document[0].getElementsByTagName('body'));
+      vm.stock.forEach(function (item) {
 
-        var modalInstance = $uibModal.open({
-          animation: true,
-          ariaLabelledBy: 'modal-title',
-          ariaDescribedBy: 'modal-body',
-          templateUrl: 'app/domain/sales/views/fullScreenModal.html',
-          controller: 'FullScreenController',
-          controllerAs: 'vm',
-          size: 'lg',
-          appendTo: parentElem,
-          resolve: {
-            photos: function () {
-              return stock.article.avatar;
-            }
-          }
-        });
-      }
+        pic = _.get(item, 'article.avatar');
+
+        if (pic) {
+          var obj = Object.assign({}, item);
+          obj.photoId = idx;
+          vm.stockWithPicIndex.push(obj);
+          var objPhoto = Object.assign({}, item.article.avatar);
+          objPhoto.id = idx;
+          vm.categoryPhotos.push(objPhoto);
+          idx++;
+        } else {
+          var obj = Object.assign({}, item);
+          vm.stockWithPicIndex.push(obj);
+        }
+
+      });
+      vm.stock = vm.stockWithPicIndex;
+      vm.stockWithPicIndex = [];
 
     }
+
 
     function cacheSaleOrderPositions() {
 
@@ -377,6 +382,9 @@
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock');
 
       vm.stock = ownStock;
+
+
+      getFilteredArticlesPhotos();
 
       if (children.length) {
 
