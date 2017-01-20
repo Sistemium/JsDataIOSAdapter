@@ -4,7 +4,7 @@
 
   const SHORT_TIMEOUT = 0;
 
-  function CatalogueController(Schema, $scope, $state, $q, $uibModal, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, $document) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
     const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price, ArticlePicture} = Schema.models();
@@ -248,7 +248,7 @@
           vm.categoryPhotos.push(objPhoto);
           idx++;
         } else {
-          var obj = Object.assign({}, item);
+          obj = Object.assign({}, item);
           vm.stockWithPicIndex.push(obj);
         }
 
