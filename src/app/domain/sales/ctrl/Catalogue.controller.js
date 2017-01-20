@@ -481,28 +481,5 @@
     .controller('CatalogueController', CatalogueController);
 
 
-  angular.module('Sales').controller('FullScreenController', function ($uibModalInstance, photos) {
-
-    var vm = this;
-    vm.photos = photos;
-
-
-    // vm.items = items;
-    // vm.selected = {
-    //   item: vm.items[0]
-    // };
-    //
-    // vm.ok = function () {
-    //   $uibModalInstance.close($ctrl.selected.item);
-    // };
-    //
-
-    vm.close = function () {
-      $uibModalInstance.dismiss('cancel');
-    };
-
-  });
-
-
 }());
 
