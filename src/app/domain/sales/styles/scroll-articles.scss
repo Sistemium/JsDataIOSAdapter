@@ -9,18 +9,25 @@
     @extend a.disabled;
   }
 
+  /* Styles for ng-gallery thumbnail*/
+
   img {
 
+    outline: 0;
     width: 70px;
     height: 68px;
-    margin-left: -10px;
     object-fit: contain;
+    margin-right: 5px;
 
     @include responsive-only(lt-sm) {
       max-width: 60px;
       max-height: 58px;
     }
 
+  }
+  img.no-image {
+    pointer-events: none;
+    filter: brightness(2);
   }
 
   &.animate-show.ng-hide-remove {
