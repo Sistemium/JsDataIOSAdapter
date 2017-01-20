@@ -4,8 +4,7 @@
 
   angular.module('webPage').directive('ngGallery', ngGallery);
 
-
-  // ToastHelper  inject if needed
+  // inject ToastHelper if needed
   function ngGallery($document, $timeout, $q, $templateRequest, $compile) {
 
     var defaults = {
@@ -32,7 +31,8 @@
       restrict: 'EA',
 
       scope: {
-        images: '=',
+        imagesAll: '=',
+        thumbImage: '=',
         thumbsNum: '@',
         hideOverflow: '=',
         imageHoveredFn: '&',
@@ -43,6 +43,7 @@
       controller: [
         '$scope',
         function ($scope) {
+
 
           var vm = this;
 
@@ -80,15 +81,20 @@
           return element[0].querySelectorAll(q);
         }
 
-        var $body = $document.find('body');
-        var $thumbwrapper;// = angular.element(querySelectorAll('.ng-thumbnails-wrapper'));
-        var $thumbnails;// = angular.element(querySelectorAll('.ng-thumbnails'));
+        function hideElement() {
+          $timeout(function () {
+            scope.showNavElems = false;
+          }, 2000);
+        }
 
+        hideElement();
+
+        var $body = $document.find('body');
+
+        scope.showNavElems = true;
         scope.index = 0;
         scope.opened = false;
-        scope.thumb_wrapper_width = 0;
-        scope.thumbs_width = 0;
-        scope.clickCount = 0;
+        scope.firstOpen = true;
 
         var loadImage = function (i) {
 
@@ -110,7 +116,7 @@
           scope.loading = true;
 
           $timeout(function () {
-            image.src = scope.images[i].smallSrc;
+            image.src = scope.imagesAll[i].smallSrc;
           });
 
 
@@ -122,9 +128,11 @@
             //defineClass(_.get(resp, 'naturalWidth'), _.get(resp, 'naturalHeight'));
             scope.img = resp.src;
             scope.id = scope.description;
+
+            // Uncommnet if needed
             smartScroll(scope.index);
           });
-          scope.description = scope.images[i].id || '';
+          scope.description = scope.imagesAll[i].id || '';
           scope.confirmDelete = false;
         };
 
@@ -144,17 +152,24 @@
 
           scope.index += 1;
 
-          if (scope.index === scope.images.length) {
+          if (scope.index === scope.imagesAll.length) {
             scope.index = 0;
           }
 
           showImage(scope.index);
         };
 
+        scope.hideElements = function () {
+          scope.showNavElems = true;
+          hideElement();
+        };
+
         scope.prevImage = function () {
+
+          scope.hideNavElems = false;
           scope.index -= 1;
           if (scope.index < 0) {
-            scope.index = scope.images.length - 1;
+            scope.index = scope.imagesAll.length - 1;
           }
           showImage(scope.index);
         };
@@ -183,15 +198,6 @@
 
           $timeout(function () {
 
-            $thumbwrapper = angular.element(querySelectorAll('.ng-thumbnails-wrapper'));
-            $thumbnails = angular.element(querySelectorAll('.ng-thumbnails'));
-
-            var calculatedWidth = calculateThumbsWidth();
-            scope.thumbs_width = calculatedWidth.width;
-            //Add 1px, otherwise some browsers move the last image into a new line
-            var thumbnailsWidth = calculatedWidth.width + 1;
-            $thumbnails.css({width: thumbnailsWidth + 'px'});
-            $thumbwrapper.css({width: calculatedWidth.visible_width + 'px'});
             smartScroll(scope.index);
 
           });
@@ -204,7 +210,7 @@
 
         scope.deletePhoto = function () {
 
-          var imageModel = scope.images[scope.index];
+          var imageModel = scope.imagesAll[scope.index];
 
           if (imageModel) {
             imageModel.DSDestroy()
@@ -233,6 +239,7 @@
           if (!scope.opened) {
             return;
           }
+
           var which = event.which;
           if (which === keys_codes.esc) {
             scope.closeGallery();
@@ -245,40 +252,29 @@
           scope.$apply();
         });
 
-        var calculateThumbsWidth = function () {
-
-          var width = 0;
-          var visible_width = 0;
-
-          angular.forEach($thumbnails.find('img'), function (thumb) {
-            width += thumb.clientWidth;
-            width += 10; // margin-right
-            visible_width = thumb.clientWidth + 10;
-          });
-          scope.width = width;
-          scope.visibleWidth = visible_width * scope.thumbsNum;
-          return {
-            width: width,
-            visible_width: visible_width * scope.thumbsNum
-          };
-        };
 
         var smartScroll = function (index) {
-          $timeout(function () {
 
-            if (!_.first($thumbwrapper)) {
-              return;
+          $timeout(function () {
+            var thumbWrapper = document.querySelectorAll('.ng-thumbnails');
+
+            // TODO: Refactor if statement
+
+            if (index != 0 && ((scope.imagesAll.length - 7) != index) && scope.firstOpen == false) {
+              thumbWrapper[0].scrollLeft = 68 * index + 2;
+            } else {
+              if ((scope.imagesAll.length - 7) == index) {
+                thumbWrapper[0].scrollLeft = 68 * index + 4;
+              } else {
+                thumbWrapper[0].scrollLeft = 68 * index;
+              }
+
             }
 
-            var len = scope.images.length,
-              width = scope.thumbs_width,
-              item_scroll = parseInt(width / len, 10),
-              i = index + 1,
-              s = Math.ceil(len / i);
+            scope.firstOpen = false;
 
-            $thumbwrapper[0].scrollLeft = 0;
-            $thumbwrapper[0].scrollLeft = i * item_scroll - (s * item_scroll);
-          }, 100);
+          }, 50);
+
         };
 
       }
