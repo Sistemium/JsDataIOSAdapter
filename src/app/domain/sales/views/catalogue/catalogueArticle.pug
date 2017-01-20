@@ -4,22 +4,21 @@
 // TODO: fix button placement
 button.btn.btn-primary(ng-click='vm.showImages = !vm.showImages') {{vm.showImages ? 'Убрать фото' : 'Показать фото'}}
 
+
 ul.list-group.round-corners-by-type.vr-parent(
 vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
 before-tag-name='li'
 )
+
   .list-group-item.display-flex.flex-align-center.spaced(
   ng-repeat='stock in vm.stock track by stock.id'
   ng-class='{"item-padding": vm.showImages}'
   )
 
-
-    // TODO: fix stock.article.avatar.thumbnailSrc ?
-
-
     ng-gallery(
-    images='[stock.article.avatar]'
+    images-all='vm.categoryPhotos'
+    thumb-image='stock'
     thumbs-num='1'
     ng-if='vm.showImages'
     )
