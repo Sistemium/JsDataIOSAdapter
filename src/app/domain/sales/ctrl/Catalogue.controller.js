@@ -4,7 +4,7 @@
 
   const SHORT_TIMEOUT = 0;
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
     const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price, ArticlePicture} = Schema.models();
@@ -29,7 +29,7 @@
       isOpenOutletPopover: false,
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
-      showImages: false,
+      showImages: localStorageService.get('showImages') || false,
       stockWithPicIndex: [],
 
       articleGroupClick: setCurrentArticleGroup,
@@ -38,6 +38,7 @@
       saleOrderTotalsClick,
       clearSearchClick,
       articleGroupAndCollapseClick,
+      togglePhotoViewClick,
 
       onStateChange,
       articleRowHeight
@@ -133,6 +134,12 @@
      Handlers
      */
 
+    function togglePhotoViewClick() {
+
+      vm.showImages = !vm.showImages;
+      localStorageService.set('showImages', vm.showImages);
+
+    }
 
     function articleGroupAndCollapseClick(item) {
       vm.isArticleGroupsExpanded = false;
