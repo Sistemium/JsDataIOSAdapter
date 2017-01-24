@@ -126,7 +126,7 @@
             scope.id = scope.description;
 
             // Uncommnet if needed
-            smartScroll(scope.index);
+            // smartScroll(scope.index);
           });
           scope.description = scope.imagesAll[i].id || '';
           scope.confirmDelete = false;
@@ -269,7 +269,7 @@
 
             scope.firstOpen = false;
 
-          }, 50);
+          }, 100);
 
         };
 
