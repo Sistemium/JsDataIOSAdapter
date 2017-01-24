@@ -1,10 +1,6 @@
 .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
   | Нет подходящих товаров
-
-// TODO: fix button placement
-button.btn.btn-primary(ng-click='vm.showImages = !vm.showImages') {{vm.showImages ? 'Убрать фото' : 'Показать фото'}}
-
-
+  
 ul.list-group.round-corners-by-type.vr-parent(
 vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
