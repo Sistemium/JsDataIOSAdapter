@@ -28,12 +28,16 @@
 
       computed: {
         shortName: ['name', function (name) {
-          var m = name.match (/^[^ ]+ [^ ]+/);
+          var m = name.match(/^[^ ]+ [^ ]+/);
           return m ? m[0] : null;
         }],
         tinyName: ['name', function (name) {
-          var m = name.match (/^[^ ]+[ ]+./);
-          return m ? (m[0]+'.') : null;
+          var m = name.match(/^[^ ]+[ ]+./);
+          return m ? (m[0] + '.') : null;
+        }],
+        initials: ['name', function (name) {
+          var m = name.match(/[А-Я]/g);
+          return m ? (m[0] + '.' + m[1] + '.') : null;
         }]
       },
 
