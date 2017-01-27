@@ -37,7 +37,7 @@
         }],
         initials: ['name', function (name) {
           var m = name.match(/[А-Я]/g);
-          return m ? (m[0] + '.' + m[1] + '.') : null;
+          return m ? (m[0] + '' + m[1]) : null;
         }]
       },
 
