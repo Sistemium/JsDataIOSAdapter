@@ -5,16 +5,17 @@
   margin-bottom: 0;
 
   @include responsive-only(gt-xs) {
-    padding-right: 5px;
+    padding-right: 0; // 5px
     .block-to-collapse {
-      margin-right: 5px;
+      //margin-right: 5px;
+      padding-right: 5px !important;
     }
   }
 
   .block-to-collapse {
 
     position: absolute;
-    z-index: 2;
+    z-index: 2; //2
 
     background: white;
     clear: both;
@@ -24,7 +25,8 @@
 
     @include responsive-only(gt-xs) {
       right: -5px;
-      padding-right: 5px;
+      padding-right: 0; //5px
+
     }
 
   }
