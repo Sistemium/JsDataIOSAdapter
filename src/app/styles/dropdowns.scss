@@ -10,9 +10,6 @@
       border-top: solid 1px $border-gray;
     }
 
-    a {
-      display: block;
-    }
 
     // TODO: experimental
     &.active {
@@ -22,9 +19,16 @@
 
     &.current {
       background-color: $active-color;
-      &.current > a {
+      border-radius: 4px;
+      border: none;
+
+      &.current > span {
         color: white;
       }
+    }
+
+    &.current + div {
+      border: none;
     }
 
   }
