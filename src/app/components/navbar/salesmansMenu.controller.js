@@ -27,7 +27,7 @@
       if (vm.selectedSalesman) {
         return saMedia.xxsWidth ? vm.selectedSalesman.initials : vm.selectedSalesman.tinyName;
       }
-      return 'Выберите ТП';
+      return saMedia.xxsWidth ? false : 'Выберите ТП';
     }
 
     function salesmanClick(salesman) {
