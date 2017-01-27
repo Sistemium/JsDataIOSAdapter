@@ -64,8 +64,25 @@
   }
 
   .article-name-third {
-    overflow-x: scroll;
-    text-align: right;
+
+    display: flex;
+    justify-content: flex-end;
+
+    & > div {
+      display: flex;
+      overflow: scroll;
+
+      & > i.red {
+        padding-left: 1px;
+        top: 0;
+      }
+
+      & > small.gray > span {
+        white-space: nowrap;
+      }
+
+    }
+
     small span.gray {
       margin: 0 4px;
       &:last-child {
