@@ -12,7 +12,7 @@
       auth: Auth,
       menu: Menu.root(),
       rootClick: () => $rootScope.$broadcast('rootClick'),
-      showImages: localStorageService.get('showImages') || false,
+      showImages: localStorageService.get('showImages') || false
 
     });
 
