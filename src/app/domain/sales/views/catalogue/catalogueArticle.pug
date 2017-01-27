@@ -1,6 +1,6 @@
 .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
   | Нет подходящих товаров
-  
+
 ul.list-group.round-corners-by-type.vr-parent(
 vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
@@ -48,19 +48,19 @@ before-tag-name='li'
         small {{::stock.article.lastName}}
 
       .article-name-third
-        //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
-        //small {{ vm.articleRowHeight(stock) }}
-        small.gray(ng-if='stock.volume') ~{{stock.displayVolume}}
-        small.red(ng-if='!stock.volume') Нет в наличии
-        small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
-          span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
-          span.gray
-            | =
-          span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
-          span.gray
-            | x
-        small {{vm.prices[stock.articleId] | number:2}}
-          span ₽
+        div
+          i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
+          small.gray(ng-if='stock.volume')
+            span ~{{stock.displayVolume}}
+          small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
+            span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
+            span.gray
+              | =
+            span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
+            span.gray
+              | x
+          small {{vm.prices[stock.articleId] | number:2}}
+            span ₽
 
     .right(ng-if='vm.saleOrder')
 
