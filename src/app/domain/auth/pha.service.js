@@ -10,20 +10,18 @@
       url = 'https://api.sistemium.com/pha/auth',
       logoffUrl = 'https://api.sistemium.com/pha/logoff',
       rolesUrl = 'https://api.sistemium.com/pha/roles',
-      ID
-      ;
+      ID;
 
     var me = {};
 
     function auth(mobileNumber) {
       return $http
         .post(url, null, {params: {mobileNumber: mobileNumber}})
-        .success(function (res) {
-          if (res && res.ID) {
-            ID = res.ID;
+        .then(function (res) {
+          if (res.data && res.data.ID) {
+            ID = res.data.ID;
           }
-        })
-        ;
+        });
     }
 
     function logoff(token) {
@@ -33,8 +31,7 @@
             'Authorization': token
           },
           timeout: 4000
-        })
-        ;
+        });
     }
 
     function confirm(code) {

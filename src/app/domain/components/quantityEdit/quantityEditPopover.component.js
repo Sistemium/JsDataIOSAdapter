@@ -5,11 +5,11 @@
   const quantityEditPopover = {
 
     bindings: {
-      article: '=',
-      saleOrder: '=',
-      price: '=',
-      popoverOpen: '=?',
-      position: '=?'
+      article: '<',
+      saleOrder: '<',
+      price: '<',
+      popoverOpen: '<',
+      position: '<'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEditPopover.html',

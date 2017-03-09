@@ -5,11 +5,17 @@
     .module('webPage')
     .run(run)
     .service('DEBUG', debugService)
-    .config(function (localStorageServiceProvider) {
+    .config(localStorageServiceProvider => {
       localStorageServiceProvider.setPrefix('stg');
     })
-    .run(function (amMoment) {
+    .run(amMoment => {
       amMoment.changeLocale('ru');
+    })
+    .config($locationProvider => {
+      $locationProvider.hashPrefix('');
+    })
+    .config($compileProvider => {
+      $compileProvider.preAssignBindingsEnabled(true);
     })
   ;
 

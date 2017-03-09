@@ -5,10 +5,10 @@
   const quantityEdit = {
 
     bindings: {
-      article: '=?',
-      saleOrder: '=?',
-      price: '=?',
-      position: '=?'
+      article: '<',
+      saleOrder: '<',
+      price: '<',
+      position: '<'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEdit.html',
@@ -18,7 +18,6 @@
 
   };
 
-  /** @ngInject */
   function quantityEditController() {
 
     let vm = this;

@@ -20,11 +20,15 @@
 
     $window[speakerCallBackFn] = speakerCallBack;
 
-    IOS.getDevicePlatform().then(function (devicePlatform) {
-      if (/iPhone/.test(devicePlatform)) {
-        // rate = 0.2;
-      }
-    });
+    IOS.getDevicePlatform()
+      .then(devicePlatform => {
+        if (/iPhone/.test(devicePlatform)) {
+          // rate = 0.2;
+        }
+      })
+      .catch(()=>{
+        // We're not under ios
+      });
 
     function speaker(text) {
       return $q(function (resolve) {
