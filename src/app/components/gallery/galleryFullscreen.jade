@@ -30,7 +30,7 @@
       ondragstart='return false;'
       ng-click='closeGallery()'
       draggable='false'
-      ng-src='{{ img }}'
+      ng-src='{{ currentImageSrc }}'
       ng-if='!loading'
       )
 
@@ -49,13 +49,13 @@
           vs-repeat
           )
             .image-wrapper(
-            ng-repeat='i in imagesAll track by i.id'
+            ng-repeat='image in imagesAll track by image.id'
             )
               img(
               draggable='false'
-              ng-src='{{ i.thumbnailSrc }}'
-              ng-class='{active : index === i.id}'
-              ng-click='changeImage(i.id)'
+              ng-src='{{ image.thumbnailSrc }}'
+              ng-class='{active : currentImage.id === image.id}'
+              ng-click='changeImage(image, $index)'
               )
 
 

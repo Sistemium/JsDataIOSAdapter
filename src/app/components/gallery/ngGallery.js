@@ -2,9 +2,31 @@
 
 (function () {
 
-  angular.module('webPage').directive('ngGallery', ngGallery);
+  angular.module('webPage')
+    .directive('ngGallery', ngGallery);
 
-  // inject ToastHelper if needed
+  function GalleryController($scope) {
+
+    const vm = this;
+
+    _.assign(vm, {
+
+      thumbnailClick: function (img) {
+
+        if (!img) return;
+
+        $scope.index = $scope.imagesAll.indexOf(img);
+
+        const fn = $scope.thumbnailClickFn() || $scope.openGallery;
+
+        return _.isFunction(fn) && fn(img);
+
+      }
+
+    });
+
+  }
+
   function ngGallery($document, $timeout, $q, $templateRequest, $compile) {
 
     var defaults = {
@@ -40,28 +62,7 @@
         isDeletable: '='
       },
 
-      controller: [
-        '$scope',
-        function ($scope) {
-
-
-          var vm = this;
-
-          $scope.$on('openGallery', function (e, args) {
-            $scope.openGallery(args.index);
-          });
-
-          vm.thumbnailClick = function (img, index) {
-
-            var fn = $scope.thumbnailClickFn() || $scope.openGallery;
-
-            if (_.isFunction(fn)) {
-              fn(index, img);
-            }
-
-          }
-        }
-      ],
+      controller: GalleryController,
 
       controllerAs: 'vm',
 
@@ -92,45 +93,44 @@
         scope.opened = false;
         scope.firstOpen = true;
 
-        var loadImage = function (i) {
+        function loadImage(img) {
 
-          var deferred = $q.defer();
-          var image = new Image();
+          return $q((resolve, reject) => {
 
-          image.onload = function () {
-            scope.loading = false;
-            if (this.complete === false || this.naturalWidth === 0) {
-              deferred.reject();
-            }
-            deferred.resolve(image);
-          };
+            const image = new Image();
 
-          image.onerror = function () {
-            deferred.reject();
-          };
+            scope.loading = true;
 
-          scope.loading = true;
+            image.onload = function () {
+              scope.loading = false;
+              if (this.complete === false || this.naturalWidth === 0) {
+                reject();
+              }
+              resolve(image);
+            };
 
-          $timeout(function () {
-            image.src = scope.imagesAll[i].smallSrc;
+            image.onerror = function (err) {
+              reject(err);
+            };
+
+            image.src = img.smallSrc;
+
           });
 
+        }
 
-          return deferred.promise;
-        };
+        function showImage(img) {
 
-        var showImage = function (i) {
-          loadImage(scope.index).then(function (resp) {
-            //defineClass(_.get(resp, 'naturalWidth'), _.get(resp, 'naturalHeight'));
-            scope.img = resp.src;
-            scope.id = scope.description;
+          loadImage(img)
+            .then(function (res) {
+              scope.currentImageSrc = res.src;
+              // scope.id = img.name;
+              // smartScroll(scope.index);
+            });
 
-            // Uncommnet if needed
-            // smartScroll(scope.index);
-          });
-          scope.description = scope.imagesAll[i].id || '';
           scope.confirmDelete = false;
-        };
+
+        }
 
         var fullscreenElement;
 
@@ -139,9 +139,9 @@
         //  width >= height ? scope.useWide = true : scope.useTall = true;
         //};
 
-        scope.changeImage = function (i) {
-          scope.index = i;
-          showImage(i);
+        scope.changeImage = function (img, index) {
+          scope.index = index;
+          showImage(img);
         };
 
         scope.nextImage = function () {
@@ -176,27 +176,21 @@
           }
         };
 
-        scope.openGallery = function (i) {
+        scope.openGallery = function (image) {
 
           $templateRequest('app/components/gallery/galleryFullscreen.html')
             .then(function (html) {
-              var template = angular.element(html);
+              let template = angular.element(html);
               $body.append(template);
               fullscreenElement = $compile(template)(scope);
             });
 
-          if (angular.isDefined(i)) {
-            scope.index = i;
-            showImage(scope.index);
-          }
-
           scope.opened = true;
 
-          $timeout(function () {
+          $timeout(smartScroll);
 
-            smartScroll(scope.index);
+          return angular.isDefined(image) && showImage(image);
 
-          });
         };
 
         scope.closeGallery = function () {
@@ -249,10 +243,13 @@
         });
 
 
-        var smartScroll = function (index) {
+        function smartScroll () {
 
           $timeout(function () {
-            var thumbWrapper = document.querySelectorAll('.ng-thumbnails');
+
+            let index = scope.index;
+
+            let thumbWrapper = document.querySelectorAll('.ng-thumbnails');
 
             // TODO: Refactor if statement
 
@@ -271,7 +268,7 @@
 
           }, 100);
 
-        };
+        }
 
       }
     };
