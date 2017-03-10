@@ -170,6 +170,7 @@
               let template = angular.element(html);
               $body.append(template);
               fullscreenElement = $compile(template)(scope);
+              $body.bind('keydown', onKeyDown);
             });
 
           scope.opened = true;
@@ -180,10 +181,15 @@
 
         };
 
-        scope.closeGallery = function () {
+        function cleanup() {
           scope.opened = false;
-          fullscreenElement.remove();
-        };
+          $body.unbind('keydown', onKeyDown);
+          fullscreenElement && fullscreenElement.remove();
+        }
+
+        scope.$on('$destroy', cleanup);
+
+        scope.closeGallery = cleanup;
 
         scope.deletePhoto = function () {
 
@@ -212,12 +218,14 @@
           scope.confirmDelete = !scope.confirmDelete;
         };
 
-        $body.bind('keydown', function (event) {
+        function onKeyDown (event) {
+
           if (!scope.opened) {
-            return;
+            return console.error('!scope.opened');
           }
 
-          var which = event.which;
+          let which = event.which;
+
           if (which === keys_codes.esc) {
             scope.closeGallery();
           } else if (which === keys_codes.right || which === keys_codes.enter) {
@@ -227,8 +235,8 @@
           }
 
           scope.$apply();
-        });
 
+        }
 
         function smartScroll () {
 
@@ -253,7 +261,7 @@
 
             scope.firstOpen = false;
 
-          }, 100);
+          }, 0);
 
         }
 
