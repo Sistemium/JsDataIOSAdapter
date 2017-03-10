@@ -48,12 +48,9 @@ before-tag-name='li'
         small {{::stock.article.lastName}}
 
       .article-name-third
-<<<<<<< HEAD
-        //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
-        //small {{ vm.articleRowHeight(stock) }}
-        span {{ vm.alertCheck(stock) }}
-        small.gray(ng-if='stock.volume') ~{{stock.displayVolume}}
-        small.red(ng-if='!stock.volume') Нет в наличии
+        i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
+        small.gray(ng-if='stock.volume')
+          span ~{{stock.displayVolume}}
         small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
           span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
           span.gray
@@ -61,22 +58,8 @@ before-tag-name='li'
           span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
           span.gray
             | x
-        small {{vm.prices[stock.articleId] | number:2}} ₽
-=======
-        div
-          i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
-          small.gray(ng-if='stock.volume')
-            span ~{{stock.displayVolume}}
-          small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
-            span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
-            span.gray
-              | =
-            span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
-            span.gray
-              | x
-          small {{vm.prices[stock.articleId] | number:2}}
-            span ₽
->>>>>>> GalleryTest
+        small {{vm.prices[stock.articleId] | number:2}}
+          span ₽
 
     .right(ng-if='vm.saleOrder')
 

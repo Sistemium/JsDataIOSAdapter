@@ -7,14 +7,11 @@
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
-<<<<<<< HEAD
     const {
       Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
-      CatalogueAlert
+      CatalogueAlert,
+      ArticlePicture
     } = Schema.models();
-=======
-    const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price, ArticlePicture} = Schema.models();
->>>>>>> GalleryTest
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -57,8 +54,6 @@
     vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
 
     onStateChange($state.name, $state.params);
-
-    // delete vm.alertCheck;
 
     /*
      Listeners
@@ -526,6 +521,4 @@
   angular.module('Sales')
     .controller('CatalogueController', CatalogueController);
 
-
 }());
-
