@@ -75,16 +75,16 @@
     function getImageSrc(picture, size) {
 
       return IOS.isIos() ? IOS.getPicture(picture.id, size)
-        .then(function (data) {
-          return 'data:image/jpeg;base64,' + data;
-        }) : $q(function (resolve) {
-        switch (size) {
-          case 'resized':
-            return resolve(picture.href && picture.href.replace(/(.*\/)(.*)(\..{3,4})$/, '$1smallImage$3'));
-          default:
-            return resolve(picture.thumbnailHref);
-        }
-      });
+          .then(function (data) {
+            return 'data:image/jpeg;base64,' + data;
+          }) : $q(function (resolve) {
+          switch (size) {
+            case 'resized':
+              return resolve(picture.href && picture.href.replace(/(.*\/)(.*)(\..{3,4})$/, '$1smallImage$3'));
+            default:
+              return resolve(picture.thumbnailHref);
+          }
+        });
 
     }
 
