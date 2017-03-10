@@ -1,5 +1,5 @@
 // Images thumbnail
-.thumbnails(class='{{ baseClass }}')
+.thumbnails(ng-class='baseClass')
   img(
   ng-click='vm.thumbnailClick(thumbImage, thumbImage.photoId)'
   ng-mouseover='setHovered(thumbImage)'
@@ -12,6 +12,6 @@
   img.no-image(
   ng-if='!thumbImage.article.avatar'
   ng-src='{{"/images/placeholder.png" }}'
-  ng-class='{{ thumbClass }}'
+  ng-class='thumbClass'
   draggable='false'
   )

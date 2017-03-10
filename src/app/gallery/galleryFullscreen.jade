@@ -49,7 +49,7 @@
           vs-repeat
           )
             .image-wrapper(
-            ng-repeat='i in imagesAll track by $index'
+            ng-repeat='i in imagesAll track by i.id'
             )
               img(
               draggable='false'
