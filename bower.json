@@ -28,6 +28,11 @@
     "angular-mocks": "~1.6.3"
   },
   "overrides": {
+    "js-data": {
+      "main": [
+        "dist/keep/js-data-debug.js"
+      ]
+    },
     "bootstrap-sass": {
       "main": [
         "assets/javascripts/bootstrap.js"
