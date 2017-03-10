@@ -51,22 +51,25 @@
       margin-bottom: -9px;
     }
   }
-
-  @media (min-width: 760px) {
-    .container {
-      width: 310px;
-    }
-  }
-
+ 
   @media (min-width: 768px) {
     .container {
       width: 758px;
     }
   }
-
   @media (min-width: 992px) {
     .container {
+      width: 982px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
       width: 1014px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .container {
+      width: 1190px;
     }
   }
 
