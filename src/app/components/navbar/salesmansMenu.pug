@@ -6,5 +6,6 @@ popover-placement='bottom-right'
 popover-trigger='outsideClick'
 popover-is-open='vm.isOpen'
 )
-  span {{ vm.toggleLabel() }}
-  span.caret()
+  span(ng-if='vm.toggleLabel()') {{ vm.toggleLabel() }}
+  span.glyphicon.glyphicon-user(ng-if='!vm.toggleLabel()')
+  span.caret

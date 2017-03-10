@@ -56,7 +56,7 @@ p.list-group-item-text {
   label {
     margin-right: 0.25em;
   }
-  span+label{
+  span + label {
     margin-left: 0.5em;
   }
 }
@@ -103,7 +103,6 @@ p.list-group-item-text {
   padding: 6px;
 }
 
-
 .header-button {
   h4 {
     margin-top: 3px;
@@ -130,4 +129,8 @@ p.list-group-item-text {
 
 small i.glyphicon {
   font-size: 80%;
+}
+
+.border-radius-10 {
+  border-radius: 10px;
 }

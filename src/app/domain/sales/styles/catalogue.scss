@@ -34,6 +34,9 @@
   }
 
   .breadcrumb {
+
+    margin-bottom: 11px;
+
     > li.ancestor, > li.active {
       @include responsive-only(lt-sm) {
         display: none;

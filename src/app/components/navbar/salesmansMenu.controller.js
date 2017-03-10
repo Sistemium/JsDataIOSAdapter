@@ -12,6 +12,7 @@
       noneClick: SalesmanAuth.logout,
       toggleLabel,
       isOpen: false
+
     });
 
     SalesmanAuth
@@ -24,9 +25,9 @@
 
     function toggleLabel() {
       if (vm.selectedSalesman) {
-        return saMedia.xxsWidth ? vm.selectedSalesman.tinyName : vm.selectedSalesman.shortName;
+        return saMedia.xxsWidth ? vm.selectedSalesman.initials : vm.selectedSalesman.tinyName;
       }
-      return 'Выберите ТП';
+      return saMedia.xxsWidth ? false : 'Выберите ТП';
     }
 
     function salesmanClick(salesman) {

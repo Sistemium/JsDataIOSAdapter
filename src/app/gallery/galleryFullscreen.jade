@@ -1,0 +1,71 @@
+// On open image
+.ng-gallery.ng-gallery-fullscreen.no-select(ng-show='opened')
+
+  .left-right-chevron.hidden-xs(
+  ng-show='imagesAll.length > 1'
+  )
+    i.glyphicon.glyphicon-chevron-left.btn-lg(ng-click='prevImage()')
+
+  .main-view
+
+    // Photo div
+
+    div.visible-xs-inline
+      p.photo-counter {{index + 1}}/{{imagesAll.length}}
+
+    // TODO: Swipes
+
+    .main-photo-block(
+    md-swipe-left='nextImage()'
+    md-swipe-right='prevImage()'
+    md-swipe-up='closeGallery()'
+    )
+
+
+      div(ng-if='loading')
+        svg.spinner(width='100px', height='100px', viewbox='0 0 66 66')
+          circle.path(fill='none', stroke-width='6', stroke-linecap='round', cx='33', cy='33', r='30')
+
+      img.fullsize(
+      ondragstart='return false;'
+      ng-click='closeGallery()'
+      draggable='false'
+      ng-src='{{ img }}'
+      ng-if='!loading'
+      )
+
+    .image-info.hidden-xs
+
+      p.photo-counter-gt-sm.hidden-xs {{index + 1}}/{{imagesAll.length}}
+
+      .ng-gallery-content(
+      ng-show='opened'
+      )
+        .ng-thumbnails-wrapper
+          .ng-thumbnails(
+          ng-class='imagesAll.length < 7 ? "flex-center" : "" '
+          vs-horizontal
+          vs-autoresize
+          vs-repeat
+          )
+            .image-wrapper(
+            ng-repeat='i in imagesAll track by $index'
+            )
+              img(
+              draggable='false'
+              ng-src='{{ i.thumbnailSrc }}'
+              ng-class='{active : index === i.id}'
+              ng-click='changeImage(i.id)'
+              )
+
+
+  .left-right-chevron.hidden-xs(
+  ng-mouseenter='showNavElems = true'
+  ng-show='imagesAll.length > 1'
+  )
+    i.glyphicon.glyphicon-chevron-right.btn-lg(ng-click='nextImage()')
+
+  .window-controls
+    i.glyphicon.glyphicon-remove.btn-lg(ng-click='closeGallery()')
+
+

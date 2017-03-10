@@ -5,7 +5,7 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
 
   .ui-view
 
-  ol.breadcrumb(
+  ol.breadcrumb.border-radius-10(
   ng-hide='!vm.isWideScreen && vm.saleOrder'
   ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'"
   )

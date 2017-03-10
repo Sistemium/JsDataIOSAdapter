@@ -4,13 +4,17 @@
 
   const SHORT_TIMEOUT = 0;
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
+<<<<<<< HEAD
     const {
       Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
       CatalogueAlert
     } = Schema.models();
+=======
+    const {Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price, ArticlePicture} = Schema.models();
+>>>>>>> GalleryTest
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -32,6 +36,8 @@
       isOpenOutletPopover: false,
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
+      showImages: localStorageService.get('showImages') || false,
+      stockWithPicIndex: [],
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -39,6 +45,7 @@
       saleOrderTotalsClick,
       clearSearchClick,
       articleGroupAndCollapseClick,
+      togglePhotoViewClick,
 
       onStateChange,
       articleRowHeight,
@@ -58,6 +65,7 @@
      */
 
     vm.rebindAll(PriceType, null, 'vm.priceTypes');
+    //vm.rebindAll(ArticlePicture, null, 'vm.articlePictures');
 
     vm.onScope(
       'rootClick',
@@ -71,15 +79,15 @@
 
     vm.watchScope('vm.saleOrder.id', newValue => {
 
-      let afretChangeOrder = true;
+      let afterChangeOrder = true;
 
       vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
 
         cacheSaleOrderPositions();
 
-        if (afretChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
+        if (afterChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
           saleOrderTotalsClick(true);
-          afretChangeOrder = false;
+          afterChangeOrder = false;
         }
 
       });
@@ -137,6 +145,12 @@
      Handlers
      */
 
+    function togglePhotoViewClick() {
+
+      vm.showImages = !vm.showImages;
+      localStorageService.set('showImages', vm.showImages);
+
+    }
 
     function articleGroupAndCollapseClick(item) {
       vm.isArticleGroupsExpanded = false;
@@ -231,6 +245,38 @@
      Functions
      */
 
+
+    function getFilteredArticlesPhotos() {
+
+      vm.categoryPhotos = [];
+      vm.stockWithPicIndex = [];
+      var idx = 0;
+      var pic;
+
+      vm.stock.forEach(function (item) {
+
+        pic = _.get(item, 'article.avatar');
+
+        if (pic) {
+          var obj = Object.assign({}, item);
+          obj.photoId = idx;
+          vm.stockWithPicIndex.push(obj);
+          var objPhoto = Object.assign({}, item.article.avatar);
+          objPhoto.id = idx;
+          vm.categoryPhotos.push(objPhoto);
+          idx++;
+        } else {
+          obj = Object.assign({}, item);
+          vm.stockWithPicIndex.push(obj);
+        }
+
+      });
+      vm.stock = vm.stockWithPicIndex;
+      vm.stockWithPicIndex = [];
+
+    }
+
+
     function cacheSaleOrderPositions() {
 
       vm.saleOrderPositionByArticle = {};
@@ -265,6 +311,7 @@
             'ANY stocks': volumeNotZero
           }
         }, options))
+        .then(() => ArticlePicture.findAll())
         .then(() => Stock.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
@@ -353,6 +400,9 @@
       DEBUG('setCurrentArticleGroup', 'hasArticlesOrGroupsInStock');
 
       vm.stock = ownStock;
+
+
+      getFilteredArticlesPhotos();
 
       if (children.length) {
 
@@ -476,4 +526,6 @@
   angular.module('Sales')
     .controller('CatalogueController', CatalogueController);
 
+
 }());
+

@@ -6,10 +6,20 @@ vs-repeat='{{vm.articleRowHeight()}}'
 vs-scroll-parent="#scroll-articles"
 before-tag-name='li'
 )
-  .list-group-item.display-flex.flex-align-center.spaced(ng-repeat='stock in vm.stock track by stock.id')
+
+  .list-group-item.display-flex.flex-align-center.spaced(
+  ng-repeat='stock in vm.stock track by stock.id'
+  ng-class='{"item-padding": vm.showImages}'
+  )
+
+    ng-gallery(
+    images-all='vm.categoryPhotos'
+    thumb-image='stock'
+    thumbs-num='1'
+    ng-if='vm.showImages'
+    )
 
     .article-wrapper
-
       .article-name-first
         // TODO: filtering options in tooltip (allow user to show only the articles with the same firstName)
         strong.name-first(
@@ -38,6 +48,7 @@ before-tag-name='li'
         small {{::stock.article.lastName}}
 
       .article-name-third
+<<<<<<< HEAD
         //small ({{stock.article.firstName.length}} {{stock.article.lastName.length + stock.article.preName.length}})
         //small {{ vm.articleRowHeight(stock) }}
         span {{ vm.alertCheck(stock) }}
@@ -51,6 +62,21 @@ before-tag-name='li'
           span.gray
             | x
         small {{vm.prices[stock.articleId] | number:2}} ₽
+=======
+        div
+          i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
+          small.gray(ng-if='stock.volume')
+            span ~{{stock.displayVolume}}
+          small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
+            span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
+            span.gray
+              | =
+            span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
+            span.gray
+              | x
+          small {{vm.prices[stock.articleId] | number:2}}
+            span ₽
+>>>>>>> GalleryTest
 
     .right(ng-if='vm.saleOrder')
 

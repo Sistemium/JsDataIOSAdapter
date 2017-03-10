@@ -1,0 +1,17 @@
+// Images thumbnail
+.thumbnails(class='{{ baseClass }}')
+  img(
+  ng-click='vm.thumbnailClick(thumbImage, thumbImage.photoId)'
+  ng-mouseover='setHovered(thumbImage)'
+  ng-if='thumbImage.article.avatar'
+  ng-src='{{ thumbImage.article.avatar.thumbnailSrc}}'
+  ng-class='{{ thumbClass }}'
+  ng-attr-alt='Image {{ $index + 1 }}'
+  draggable='false'
+  )
+  img.no-image(
+  ng-if='!thumbImage.article.avatar'
+  ng-src='{{"/images/placeholder.png" }}'
+  ng-class='{{ thumbClass }}'
+  draggable='false'
+  )
