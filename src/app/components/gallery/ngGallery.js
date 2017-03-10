@@ -10,7 +10,7 @@
     var defaults = {
       baseClass: 'ng-gallery',
       thumbClass: 'ng-thumb',
-      templateUrl: 'app/gallery/galleryTemplate.html'
+      templateUrl: 'app/components/gallery/galleryTemplate.html'
     };
 
     var keys_codes = {
