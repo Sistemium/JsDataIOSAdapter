@@ -2,23 +2,26 @@
 
 // Border flickering problem solving css
 
-@media (min-width: 992px) {
-  .container {
-    width: 980px;
-  }
-}
+// TODO: something smarter than hardcode
+// FIXME: wrong width under iOS
 
-@media (min-width: 768px) and (max-width: 991px) {
-  section > .col-sm-4 {
-    max-width: 249px !important;
-  }
-}
-
-@media (min-width: 992px) {
-  section > .col-sm-4 {
-    max-width: 325px !important;
-  }
-}
+//@media (min-width: 992px) {
+//  .container {
+//    width: 980px;
+//  }
+//}
+//
+//@media (min-width: 768px) and (max-width: 991px) {
+//  section > .col-sm-4 {
+//    max-width: 249px !important;
+//  }
+//}
+//
+//@media (min-width: 992px) {
+//  section > .col-sm-4 {
+//    max-width: 325px !important;
+//  }
+//}
 
 // end
 
