@@ -178,7 +178,7 @@
 
         scope.openGallery = function (i) {
 
-          $templateRequest('app/gallery/galleryFullscreen.html')
+          $templateRequest('app/components/gallery/galleryFullscreen.html')
             .then(function (html) {
               var template = angular.element(html);
               $body.append(template);
