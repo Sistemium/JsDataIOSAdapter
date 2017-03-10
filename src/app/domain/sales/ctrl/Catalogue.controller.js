@@ -243,7 +243,7 @@
 
     function getFilteredArticlesPhotos() {
 
-      vm.categoryPhotos = _.filter(_.map(vm.stock, 'article.avatar'));
+      vm.categoryPhotos = _.uniq(_.filter(_.map(vm.stock, 'article.avatar')));
 
     }
 
