@@ -26,6 +26,10 @@
     align-items: center;
     min-height: 33px;
 
+    & > * {
+      @extend .rounded-borders;
+    }
+
     & > .dropdown-salesman-menu {
       display: flex;
       flex-flow: column nowrap;

@@ -1,7 +1,7 @@
 .stm-searcher.form-group.has-feedback
   label(for="search-input")
     i.glyphicon.glyphicon-search
-  input#search-input.form-control.border-radius-10(
+  input#search-input.form-control(
   type='search'
   placeholder='Поиск'
   select-on-focus
@@ -14,7 +14,8 @@
   span.form-control-feedback(ng-hide='!vm.search' )
     a(ng-click='vm.clearSearchClick()' href)
       i.glyphicon.glyphicon-remove
-.alert.alert-default.collapser.border-radius-10
+
+.alert.alert-default.collapser
   a(
   href
   ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'

@@ -2,11 +2,17 @@
 
 .catalogue {
 
+  #search-input {
+    @extend .rounded-borders;
+  }
+
   .collapser {
 
     @include responsive-only(gt-xs) {
       display: none;
     }
+
+    @extend .rounded-borders;
 
     padding: 0;
 
@@ -35,6 +41,7 @@
 
   .breadcrumb {
 
+    @extend .rounded-borders;
     margin-bottom: 11px;
 
     > li.ancestor, > li.active {

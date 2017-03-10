@@ -12,7 +12,7 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
   .settings-nav(ng-if='vm.isSalesState')
 
-    .settings-block.border-radius-10(
+    .settings-block(
     ng-if='vm.isCatalogueState'
     popover-animation='true'
     uib-popover-template="'app/components/navbar/cog.html'"
@@ -21,6 +21,6 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
     )
       i.glyphicon.glyphicon-cog
 
-    .dropdown-salesman-menu.border-radius-10
+    .dropdown-salesman-menu
       salesmans-menu
 hr

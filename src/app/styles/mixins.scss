@@ -10,6 +10,10 @@
   align-items: center;
 }
 
+.rounded-borders {
+  border-radius: 10px;
+}
+
 @mixin responsive-only($media, $orientation: false) {
 
   @if $orientation  {

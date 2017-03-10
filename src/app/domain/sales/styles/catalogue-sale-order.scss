@@ -26,6 +26,8 @@
 
   margin-bottom: 11px;
 
+  @extend .rounded-borders;
+
   .header {
 
     @extend .display-flex;
