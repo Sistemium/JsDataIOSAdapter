@@ -243,31 +243,7 @@
 
     function getFilteredArticlesPhotos() {
 
-      vm.categoryPhotos = [];
-      vm.stockWithPicIndex = [];
-      var idx = 0;
-      var pic;
-
-      vm.stock.forEach(function (item) {
-
-        pic = _.get(item, 'article.avatar');
-
-        if (pic) {
-          var obj = Object.assign({}, item);
-          obj.photoId = idx;
-          vm.stockWithPicIndex.push(obj);
-          var objPhoto = Object.assign({}, item.article.avatar);
-          objPhoto.id = idx;
-          vm.categoryPhotos.push(objPhoto);
-          idx++;
-        } else {
-          obj = Object.assign({}, item);
-          vm.stockWithPicIndex.push(obj);
-        }
-
-      });
-      vm.stock = vm.stockWithPicIndex;
-      vm.stockWithPicIndex = [];
+      vm.categoryPhotos = _.filter(_.map(vm.stock, 'article.avatar'));
 
     }
 
