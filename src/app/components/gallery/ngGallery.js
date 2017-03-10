@@ -145,30 +145,17 @@
         };
 
         scope.nextImage = function () {
-
-          scope.index += 1;
-
-          if (scope.index === scope.imagesAll.length) {
-            scope.index = 0;
-          }
-
-          showImage(scope.index);
+          setImageByIndex(scope.index + 1);
         };
 
-        scope.hideElements = function () {
-          scope.showNavElems = true;
-          hideElement();
-        };
 
         scope.prevImage = function () {
-
-          scope.hideNavElems = false;
-          scope.index -= 1;
-          if (scope.index < 0) {
-            scope.index = scope.imagesAll.length - 1;
-          }
-          showImage(scope.index);
+          setImageByIndex(scope.index - 1);
         };
+
+        function setImageByIndex(index) {
+          showImage(scope.imagesAll[scope.index = (scope.imagesAll.length + index) % scope.imagesAll.length]);
+        }
 
         scope.setHovered = function (image) {
           if (_.isFunction(scope.imageHoveredFn())) {
