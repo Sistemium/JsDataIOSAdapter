@@ -1,70 +1,59 @@
-// On open image
 .ng-gallery.ng-gallery-fullscreen.no-select(ng-show='opened')
 
-  .left-right-chevron.hidden-xs(
+  .left-right-chevron(
   ng-show='imagesAll.length > 1'
   )
-    i.glyphicon.glyphicon-chevron-left.btn-lg(ng-click='prevImage()')
+    i.glyphicon.glyphicon-chevron-left.btn-lg(ng-click='vm.prevImageClick()')
 
   .main-view
-
-    // Photo div
-
-    div.visible-xs-inline
-      p.photo-counter {{index + 1}}/{{imagesAll.length}}
 
     // TODO: Swipes
 
     .main-photo-block(
-    md-swipe-left='nextImage()'
-    md-swipe-right='prevImage()'
-    md-swipe-up='closeGallery()'
+    md-swipe-left='vm.nextImageClick()'
+    md-swipe-right='vm.prevImageClick()'
+    md-swipe-up='vm.closeGalleryClick()'
     )
 
-
-      div(ng-if='loading')
+      .loading-circle(ng-if='loading')
         svg.spinner(width='100px', height='100px', viewbox='0 0 66 66')
           circle.path(fill='none', stroke-width='6', stroke-linecap='round', cx='33', cy='33', r='30')
 
       img.fullsize(
       ondragstart='return false;'
-      ng-click='closeGallery()'
+      ng-click='vm.closeGalleryClick()'
       draggable='false'
       ng-src='{{ currentImageSrc }}'
       ng-if='!loading'
       )
 
     .image-info.hidden-xs
-
       p.photo-counter-gt-sm.hidden-xs {{index + 1}}/{{imagesAll.length}}
 
-      .ng-gallery-content(
-      ng-show='opened'
+    .ng-thumbnails-wrapper
+      #ng-thumbnails-scroll(
+      ng-class='imagesAll.length < 7 ? "flex-center" : "" '
+      vs-horizontal
+      vs-autoresize
+      vs-repeat
       )
-        .ng-thumbnails-wrapper
-          .ng-thumbnails(
-          ng-class='imagesAll.length < 7 ? "flex-center" : "" '
-          vs-horizontal
-          vs-autoresize
-          vs-repeat
+        .image-wrapper(
+        ng-repeat='image in imagesAll track by image.id'
+        )
+          img(
+          draggable='false'
+          ng-src='{{ image.thumbnailSrc }}'
+          ng-class='{active : currentImage.id === image.id}'
+          ng-click='vm.fullScreenThumbnailClick(image)'
           )
-            .image-wrapper(
-            ng-repeat='image in imagesAll track by image.id'
-            )
-              img(
-              draggable='false'
-              ng-src='{{ image.thumbnailSrc }}'
-              ng-class='{active : currentImage.id === image.id}'
-              ng-click='changeImage(image, $index)'
-              )
 
 
-  .left-right-chevron.hidden-xs(
+  .left-right-chevron(
   ng-show='imagesAll.length > 1'
   )
-    i.glyphicon.glyphicon-chevron-right.btn-lg(ng-click='nextImage()')
+    i.glyphicon.glyphicon-chevron-right.btn-lg(ng-click='vm.nextImageClick()')
 
   .window-controls
-    i.glyphicon.glyphicon-remove.btn-lg(ng-click='closeGallery()')
+    i.glyphicon.glyphicon-remove.btn-lg(ng-click='vm.closeGalleryClick()')
 
 
