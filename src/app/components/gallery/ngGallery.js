@@ -14,22 +14,8 @@
 
     _.assign(vm, {
 
-      thumbnailClick: function (img) {
-
-        if (!img) return;
-
-        $scope.index = $scope.imagesAll.indexOf(img);
-
-        const fn = $scope.thumbnailClickFn() || openGallery;
-
-        return _.isFunction(fn) && fn(img);
-
-      },
-
-      fullScreenThumbnailClick: function (img) {
-        $scope.index = $scope.imagesAll.indexOf(img);
-        showImage(img);
-      },
+      thumbnailClick,
+      fullScreenThumbnailClick,
 
       nextImageClick: setNextImage,
       prevImageClick: setPrevImage,
@@ -46,6 +32,22 @@
      Functions
      */
 
+    function thumbnailClick (img) {
+
+      if (!img) return;
+
+      $scope.index = $scope.imagesAll.indexOf(img);
+
+      const fn = $scope.thumbnailClickFn() || openGallery;
+
+      return _.isFunction(fn) && fn(img);
+
+    }
+
+    function fullScreenThumbnailClick (img) {
+      $scope.index = $scope.imagesAll.indexOf(img);
+      showImage(img);
+    }
 
     function deleteCurrentImage() {
 
@@ -218,6 +220,7 @@
     }
 
     return {
+
       restrict: 'EA',
 
       scope: {
@@ -266,6 +269,9 @@
         };
 
       }
+
     };
+
   }
+
 })();
