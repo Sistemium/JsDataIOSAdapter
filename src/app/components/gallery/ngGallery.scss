@@ -43,6 +43,8 @@
     justify-content: space-between;
     align-items: center;
 
+    min-width: 0;
+
     .photo-counter {
       margin: 13px auto;
       font-weight: bold;
@@ -86,73 +88,61 @@
         margin: 1px;
         font-weight: bold;
       }
+    }
 
-      .ng-gallery-content {
-        min-width: 100px;
-        max-width: 520px;
-        padding: 15px;
+    .ng-thumbnails-wrapper {
+      min-width: 100px;
+      max-width: 520px;
+      padding: 15px;
+      width: 100%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
 
-        .ng-thumbnails-wrapper {
-          width: 400px;
-          height: 76px;
-          text-align: center;
-          //position: fixed;
-          bottom: 20px;
-          left: 0;
-          right: 0;
-          margin-left: auto;
-          margin-right: auto;
-
-          > .ng-thumbnails {
-
-            width: 100%;
-            height: 70px;
-
-            .image-wrapper {
-              border-radius: 4px;
-              background: white;
-              width: 70px;
-              height: 70px;
-              border: 1px solid grey;
-              margin-right: 2px;
-
-              img {
-                width: 66px;
-                height: 66px;
-                cursor: pointer;
-                opacity: 0.5;
-                object-fit: contain;
-                padding: 2px;
-              }
-
-              img:hover, img.active {
-                opacity: 1;
-              }
-
-            }
-
-          }
-
-        }
-
-        .ng-thumbnails-wrapper {
-          width: 100%;
-
-          .ng-thumbnails {
-            flex-flow: row nowrap;
-            display: flex;
-            overflow: auto;
-          }
-        }
+      @include responsive-only(lt-sm) {
+        display: none;
       }
 
     }
+
+    #ng-thumbnails-scroll {
+
+      width: 100%;
+      height: 70px;
+      flex-flow: row nowrap;
+      display: flex;
+      overflow: auto;
+
+      .image-wrapper {
+        border-radius: 4px;
+        background: white;
+        width: 70px;
+        height: 70px;
+        border: 1px solid grey;
+        margin-right: 2px;
+
+        img {
+          width: 66px;
+          height: 66px;
+          cursor: pointer;
+          opacity: 0.5;
+          object-fit: contain;
+          padding: 2px;
+        }
+
+        img:hover, img.active {
+          opacity: 1;
+        }
+
+      }
+
+    }
+
   }
 
   .flex-center {
     justify-content: center;
   }
-
 
   $offset: 187;
   $duration: 1.4s;
@@ -162,37 +152,43 @@
   }
 
   @keyframes rotator {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(270deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(270deg);
+    }
   }
 
   .path {
     stroke-dasharray: $offset;
     stroke-dashoffset: 0;
     transform-origin: center;
-    animation:
-      dash $duration ease-in-out infinite,
-      colors ($duration*4) ease-in-out infinite;
+    animation: dash $duration ease-in-out infinite,
+    colors ($duration*4) ease-in-out infinite;
   }
 
   @keyframes colors {
-    0% { stroke: $active-color; }
-    100% { stroke: lighten($active-color, 20%); }
+    0% {
+      stroke: $active-color;
+    }
+    100% {
+      stroke: lighten($active-color, 20%);
+    }
   }
 
   @keyframes dash {
-    0% { stroke-dashoffset: $offset; }
+    0% {
+      stroke-dashoffset: $offset;
+    }
     50% {
       stroke-dashoffset: $offset/4;
-      transform:rotate(135deg);
+      transform: rotate(135deg);
     }
     100% {
       stroke-dashoffset: $offset;
-      transform:rotate(450deg);
+      transform: rotate(450deg);
     }
   }
-
-
-
 
 }
