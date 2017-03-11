@@ -1,4 +1,4 @@
-.ng-gallery.ng-gallery-fullscreen.no-select(ng-show='opened')
+.ng-gallery.ng-gallery-fullscreen
 
   .left-right-chevron(
   ng-show='imagesAll.length > 1'
@@ -27,8 +27,8 @@
       ng-if='!loading'
       )
 
-    .image-info.hidden-xs
-      p.photo-counter-gt-sm.hidden-xs {{index + 1}}/{{imagesAll.length}}
+    .image-info
+      p.photo-counter-gt-sm {{index + 1}}/{{imagesAll.length}}
 
     .ng-thumbnails-wrapper
       #ng-thumbnails-scroll(
@@ -37,14 +37,15 @@
       vs-autoresize
       vs-repeat
       )
-        .image-wrapper(
+        a.ng-thumbnail(
+        href
+        ng-click='vm.fullScreenThumbnailClick(image)'
+        ng-class='{active : vm.currentImage.id === image.id}'
         ng-repeat='image in imagesAll track by image.id'
         )
           img(
           draggable='false'
           ng-src='{{ image.thumbnailSrc }}'
-          ng-class='{active : currentImage.id === image.id}'
-          ng-click='vm.fullScreenThumbnailClick(image)'
           )
 
 

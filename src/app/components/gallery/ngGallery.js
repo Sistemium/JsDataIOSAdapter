@@ -130,6 +130,8 @@
       $scope.loading = true;
       $scope.confirmDelete = false;
 
+      vm.currentImage = img;
+
       loadImage(img)
         .then(function (res) {
           $scope.currentImageSrc = res.src;

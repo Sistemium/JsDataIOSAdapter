@@ -15,6 +15,8 @@
     color: black;
   }
 
+  @extend .no-select;
+
 }
 
 .ng-gallery {
@@ -88,6 +90,9 @@
         margin: 1px;
         font-weight: bold;
       }
+      @include responsive-only(lt-sm) {
+        display: none;
+      }
     }
 
     .ng-thumbnails-wrapper {
@@ -113,12 +118,13 @@
       display: flex;
       overflow: auto;
 
-      .image-wrapper {
+      .ng-thumbnail {
+
         border-radius: 4px;
         background: white;
         width: 70px;
         height: 70px;
-        border: 1px solid grey;
+        border: 1px solid $border-gray;
         margin-right: 2px;
 
         img {
@@ -130,8 +136,11 @@
           padding: 2px;
         }
 
-        img:hover, img.active {
-          opacity: 1;
+        &:hover, &.active {
+          border-color: darken($border-gray, 20%);
+          img {
+            opacity: 1;
+          }
         }
 
       }
