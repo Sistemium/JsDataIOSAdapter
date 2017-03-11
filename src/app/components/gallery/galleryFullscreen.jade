@@ -10,7 +10,9 @@
   .main-view
 
     // TODO: Swipes
-    .main-photo-block(
+    a.main-photo-block(
+    href
+    ng-click='vm.closeGalleryClick()'
     md-swipe-left='vm.nextImageClick()'
     md-swipe-right='vm.prevImageClick()'
     md-swipe-up='vm.closeGalleryClick()'
@@ -23,7 +25,6 @@
 
       img.fullsize(
       ondragstart='return false;'
-      ng-click='vm.closeGalleryClick()'
       draggable='false'
       ng-src='{{ currentImageSrc }}'
       ng-if='!loading'
