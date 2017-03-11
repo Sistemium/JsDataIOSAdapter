@@ -1,20 +1,22 @@
 .ng-gallery.ng-gallery-fullscreen
 
-  .left-right-chevron(
+  a.left-right-chevron(
+  href
+  ng-click='vm.prevImageClick()'
   ng-show='imagesAll.length > 1'
   )
-    i.glyphicon.glyphicon-chevron-left.btn-lg(ng-click='vm.prevImageClick()')
+    i.glyphicon.glyphicon-chevron-left.btn-lg
 
   .main-view
 
     // TODO: Swipes
-
     .main-photo-block(
     md-swipe-left='vm.nextImageClick()'
     md-swipe-right='vm.prevImageClick()'
     md-swipe-up='vm.closeGalleryClick()'
     )
 
+      // TODO: move to a separate component
       .loading-circle(ng-if='loading')
         svg.spinner(width='100px', height='100px', viewbox='0 0 66 66')
           circle.path(fill='none', stroke-width='6', stroke-linecap='round', cx='33', cy='33', r='30')
@@ -28,7 +30,8 @@
       )
 
     .image-info
-      p.photo-counter-gt-sm {{index + 1}}/{{imagesAll.length}}
+      p.name(ng-if='vm.currentImage.name') {{ vm.currentImage.name }}
+      p.index {{index + 1}} / {{imagesAll.length}}
 
     .ng-thumbnails-wrapper
       #ng-thumbnails-scroll(
@@ -49,12 +52,17 @@
           )
 
 
-  .left-right-chevron(
+  a.left-right-chevron(
+  href
   ng-show='imagesAll.length > 1'
+  ng-click='vm.nextImageClick()'
   )
-    i.glyphicon.glyphicon-chevron-right.btn-lg(ng-click='vm.nextImageClick()')
+    i.glyphicon.glyphicon-chevron-right.btn-lg
 
-  .window-controls
-    i.glyphicon.glyphicon-remove.btn-lg(ng-click='vm.closeGalleryClick()')
+  a.window-controls(
+  href
+  ng-click='vm.closeGalleryClick()'
+  )
+    i.glyphicon.glyphicon-remove.btn-lg
 
 
