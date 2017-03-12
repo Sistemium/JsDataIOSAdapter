@@ -14,7 +14,13 @@
 
     let saleOrderId = $state.params.saleOrderId;
 
+    // TODO: consider weekends
+    let nextWorkDay = moment().add(1, 'day').toDate();
+
     vm.use({
+
+      saleOrderMinDate: nextWorkDay,
+      saleOrderInitDate: nextWorkDay,
 
       kPlusButtonClick,
       bPlusButtonClick,
@@ -27,11 +33,6 @@
       deleteSaleOrderClick
 
     });
-
-    vm.datepickerOptions = _.defaults({
-      minDate: moment().add(1, 'day').toDate(),
-      initDate: moment().add(1, 'day').toDate()
-    }, $scope.datepickerOptions);
 
     if (saleOrderId) {
 

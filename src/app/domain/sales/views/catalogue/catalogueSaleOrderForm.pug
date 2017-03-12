@@ -1,33 +1,10 @@
 .form-group
   label.control-label.col-md-9.col-sm-8 Дата доставки
-  .col-md-3.col-sm-4
-    .input-group
-      span.input-group-btn
-        button.btn.btn-default(
-        ng-click='vm.prevDayClick()'
-        ng-disabled='vm.saleOrderDate <= vm.datepickerOptions.minDate'
-        )
-          i.glyphicon.glyphicon-chevron-left
-      span.form-control.text-center(
-      uib-datepicker-popup
-      ng-model='vm.saleOrderDate'
-      datepicker-options='vm.datepickerOptions'
-      is-open='datepickerPopupOpened'
-      datepicker-append-to-body='true'
-      no-show-button-bar='false'
-      on-open-focus='false'
-      ng-required='true'
-      current-text='false'
-      close-text='Закрыть'
-      clear-text='Ближайшая доставка'
-      ng-click='datepickerPopupOpened = !datepickerPopupOpened'
-      ) {{ vm.saleOrder.date | amDateFormat:'DD/MM/YYYY, dd' }}
-      span.input-group-btn
-        button.btn.btn-default(
-        ng-click='vm.nextDayClick()'
-        )
-          i.glyphicon.glyphicon-chevron-right
-
+  sab-date-picker.col-md-3.col-sm-4(
+  value='vm.saleOrder.date'
+  min-date='vm.saleOrderMinDate'
+  init-date='vm.saleOrderInitDate'
+  )
 
 .form-group.form-group-switch
   label.control-label.col-md-9.col-sm-8 Скидки в накладную?
