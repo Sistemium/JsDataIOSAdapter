@@ -1,0 +1,29 @@
+.input-group
+
+  span.input-group-btn
+    button.btn.btn-default(
+    ng-click='vm.prevDayClick()'
+    ng-disabled='vm.date <= vm.datepickerOptions.minDate'
+    )
+      i.glyphicon.glyphicon-chevron-left
+
+  span.form-control.text-center(
+  uib-datepicker-popup
+  ng-model='vm.date'
+  datepicker-options='vm.datepickerOptions'
+  is-open='datepickerPopupOpened'
+  datepicker-append-to-body='true'
+  no-show-button-bar='false'
+  on-open-focus='false'
+  ng-required='true'
+  current-text='false'
+  close-text='Закрыть'
+  clear-text='Ближайшая доставка'
+  ng-click='datepickerPopupOpened = !datepickerPopupOpened'
+  ) {{ vm.date | amDateFormat:'DD/MM/YYYY, dd' }}
+
+  span.input-group-btn
+    button.btn.btn-default(
+    ng-click='vm.nextDayClick()'
+    )
+      i.glyphicon.glyphicon-chevron-right
