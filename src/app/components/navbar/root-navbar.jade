@@ -10,12 +10,12 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
   fullscreen-menu(ng-show='vm.isRootState')
 
-  .settings-nav(ng-if='vm.isSalesState')
+  .sales-navs(ng-if='vm.isSalesState')
 
-    .settings-block(
+    .catalogue-settings(
     ng-if='vm.isCatalogueState'
     popover-animation='true'
-    uib-popover-template="'app/components/navbar/cog.html'"
+    uib-popover-template="'app/components/navbar/catalogueSettingsPopover.html'"
     popover-trigger='outsideClick'
     popover-placement='bottom-right'
     )

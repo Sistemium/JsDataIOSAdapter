@@ -42,7 +42,7 @@
       saleOrderTotalsClick,
       clearSearchClick,
       articleGroupAndCollapseClick,
-      togglePhotoViewClick,
+      toggleShowImagesClick,
 
       onStateChange,
       articleRowHeight,
@@ -140,10 +140,10 @@
      Handlers
      */
 
-    function togglePhotoViewClick() {
+    function toggleShowImagesClick() {
 
-      vm.showImages = !vm.showImages;
-      localStorageService.set('showImages', vm.showImages);
+      // TODO: define SalesSettings service
+      localStorageService.set('showImages', vm.showImages = !vm.showImages);
 
     }
 
