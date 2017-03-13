@@ -1,43 +1,49 @@
-.alert.alert-default#catalogue-sale-order(
-ng-class='{"sale-order-expanded": saleOrderExpanded}'
-)
-  .header
+sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
 
-    .catalogue-sale-order(
-    ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderHeader.html'"
+  popovers
+    a.popover-trigger(
+    href
+    uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
+    popover-is-open='vm.isSaleOrderPopoverOpen'
+    ng-disabled='saleOrderExpanded'
     )
+      .outlet
+        .name
+          span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+          span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+          span.animate-show.spaced
+            small на
+            small.strong {{ vm.saleOrder.date }}
+            // TODO: show date with amCalendar but without time
+        .address
+          small {{vm.saleOrder.outlet.address}}
+      span.caret
 
-    .menu
+  totals.animate-show(ng-hide='vm.busy')
+    a.has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded' href stm-click='saleOrderTotals')
+      strong {{ vm.saleOrder.positions.length | number:0 }}
+      span {{ vm.saleOrder.positionsCountRu() }}
+      span на сумму
+      strong {{ vm.saleOrder.totalCost | number:2 }}
+      span ₽
+    span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
+      span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
       a(
-      href ng-click='$parent.saleOrderExpanded = !$parent.saleOrderExpanded'
+      href
+      ng-if='!vm.saleOrder.outletId || saleOrderExpanded'
+      popover-is-open='vm.isOutletPopoverOpen'
+      uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
       )
-        i.scalable.glyphicon.glyphicon-menu-hamburger(
-        ng-class='{"scale-y-50": saleOrderExpanded}'
-        )
+        span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
+        span.caret
 
-  .sale-order-collapsible(
-  uib-collapse='!saleOrderExpanded'
-  )
-    form.form.form-horizontal(
-    resize resize-offset-top='60' resize-offset-top-xs='100'
-    ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderForm.html'"
-    )
-    .buttons
+  buttons
+    button.btn.btn-success.btn-sm(
+    stm-click='saleOrderSaveDraft'
+    ng-disabled='!vm.saleOrder.isValid()'
+    ) Сохранить черновик
 
-      button.btn.delete-sale-order-btn(
-      stm-click='deleteSaleOrder'
-      ng-class='vm.confirmDeleteSaleOrder ? "btn-danger" : "btn-warning"'
-      ng-blur='vm.confirmDeleteSaleOrder = false'
-      )
-        i.glyphicon.glyphicon-trash
-
-      .sale-order-main-buttons
-        button.btn.btn-success.btn-sm(
-        stm-click='saleOrderSaveDraft'
-        ng-disabled='!vm.saleOrder.isValid()'
-        ) Сохранить черновик
-
-        button.btn.btn-primary.btn-sm(
-        stm-click='saleOrderDone'
-        ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
-        ) Отправить в обработку
+    button.btn.btn-primary.btn-sm(
+    stm-click='saleOrderDone'
+    ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
+    ) Отправить в обработку

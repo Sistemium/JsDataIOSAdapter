@@ -5,8 +5,8 @@
 
       bindings: {
         value: '=',
-        minDate: '=',
-        initDate: '='
+        minDate: '<',
+        initDate: '<'
       },
 
       templateUrl: 'app/components/sabDatePicker/sabDatePicker.html',

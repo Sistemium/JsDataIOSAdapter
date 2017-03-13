@@ -1,51 +1,69 @@
-#scroll-main(resize ng-style='{height: (windowHeight - offsetTop) + "px"}')
+.sale-order-details
 
-  // display saleOrder fields
+  //.buttons.text-right(ng-include='"app/domain/sales/views/saleOrder/saleOrderMenu.html"')
 
-  form.form-horizontal
+  sale-order-alert(expanded='saleOrderExpanded' sale-order='vm.saleOrder')
 
-    .buttons.text-right
-      button.btn.btn-default(ng-click='vm.saleOrderEditUnlockClick()') Редактировать
+    popovers
 
-    .form-group
-      label.col-sm-3.control-label(for='ouletName') Торговая точка
-      .col-sm-9
-        #ouletName.form-control {{vm.saleOrder.outlet.name}}
-
-    .form-group(ng-if='vm.saleOrder.commentText')
-      label.col-sm-3.control-label(for='comment') Комментарий
-      .col-sm-9
-        #comment.form-control {{vm.saleOrder.commentText}}
-
-    .form-group
-      label.col-sm-3.control-label(for='date') Дата
-      .col-sm-9
-        #date.form-control {{vm.saleOrder.date}}
-
-    .form-group
-      label.col-sm-3.control-label(for='salesMan') ТП
-      .col-sm-9
-        #salesMan.form-control {{vm.saleOrder.salesman.name}}
-
-    .form-group
-      label.col-sm-3.control-label(for='price') Стоимость
-      .col-sm-9
-        #price.form-control {{vm.saleOrder.totalCost | number: 2}} ₽
-
-
-  table.table.table-striped.clear-both.table-hover(ng-if='vm.saleOrder.positions.length')
-    thead
-      tr
-        th Товар
-        th.number Количество
-        th.number Цена
-        th.number.hidden-xs Стоимость
-    tbody(ng-class='{disabled: !vm.editingState}')
-      tr.clickable(
-      ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
+      a.popover-trigger(
+      href
+      uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
+      popover-is-open='vm.isSaleOrderPopoverOpen'
+      ng-disabled='saleOrderExpanded'
       )
-        td {{ item.article.name }}
-        td.number
-          quantity-edit(position='item')
-        td.number {{ item.price | number:2 }}
-        td.number.hidden-xs {{ item.cost | number:2}}
+        .outlet
+          .name
+            span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+            span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+            span.animate-show.spaced
+              small на
+              small.strong {{ vm.saleOrder.date }}
+              // TODO: show date with amCalendar but without time
+          .address
+            small {{vm.saleOrder.outlet.address}}
+        span.caret
+
+    totals.animate-show(ng-hide='vm.busy')
+      span.has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded')
+        strong {{ vm.saleOrder.positions.length | number:0 }}
+        span {{ vm.saleOrder.positionsCountRu() }}
+        span на сумму
+        strong {{ vm.saleOrder.totalCost | number:2 }}
+        span ₽
+      span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
+        span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
+        a(
+        href
+        ng-if='!vm.saleOrder.outletId || saleOrderExpanded'
+        popover-is-open='vm.isOutletPopoverOpen'
+        uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
+        )
+          span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
+          span.caret
+      a.toggle-edit(href ng-click='vm.toggleEditClick()')
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+
+
+  .scroll-y.animate-show(
+  resize resize-offset-top='5' resize-property='height'
+  ng-show='!saleOrderExpanded'
+  )
+    table.table.table-striped.clear-both.table-hover(
+    ng-if='vm.saleOrder.positions.length'
+    )
+      thead
+        tr
+          th Товар
+          th.number Количество
+          th.number.hidden-xs Цена
+          th.number.hidden-xs Стоимость
+      tbody(ng-class='{disabled: !vm.editing}')
+        tr.clickable(
+        ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
+        )
+          td {{ item.article.name }}
+          td.number
+            quantity-edit(position='item')
+          td.number.hidden-xs {{ item.price | number:2 }}
+          td.number.hidden-xs {{ item.cost | number:2}}

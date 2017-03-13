@@ -25,11 +25,13 @@
 
 // end
 
-#catalogue-sale-order {
+sale-order-alert {
 
   margin-bottom: 11px;
 
-  @extend .rounded-borders;
+  .alert{
+    @extend .rounded-borders;
+  }
 
   .header {
 
@@ -49,7 +51,7 @@
 
 }
 
-.showOnlyOrdered #catalogue-sale-order:not(.sale-order-expanded) .totals {
+.showOnlyOrdered .alert.sale-order:not(.sale-order-expanded) .totals {
 
   a {
     background-color: $active-color;
@@ -157,7 +159,7 @@
 
 }
 
-.catalogue-sale-order {
+.alert.sale-order .sale-order-header {
 
   // FIXME: this is too generic, could space options in popovers
   @extend .spaced;
