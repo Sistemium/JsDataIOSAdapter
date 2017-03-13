@@ -1,0 +1,27 @@
+.alert.alert-default.sale-order(ng-class='{"sale-order-expanded": vm.saleOrderExpanded}')
+
+  .header
+    .sale-order-header
+      h4.popovers(ng-transclude='popovers')
+      .totals(ng-transclude='totals')
+    .menu
+      a(href ng-click='vm.saleOrderExpanded = !vm.saleOrderExpanded')
+        i.scalable.glyphicon.glyphicon-menu-hamburger(ng-class='{"scale-y-50": vm.saleOrderExpanded}')
+
+  .sale-order-collapsible(uib-collapse='!vm.saleOrderExpanded')
+
+    form.form.form-horizontal(
+    resize resize-offset-top='60' resize-offset-top-xs='100'
+    ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderForm.html'"
+    )
+
+    .buttons
+
+      button.btn.delete-sale-order-btn(
+      ng-click='vm.deleteSaleOrderClick()'
+      ng-class='vm.confirmDelete ? "btn-danger" : "btn-warning"'
+      ng-blur='vm.confirmDelete = false'
+      )
+        i.glyphicon.glyphicon-trash
+
+      .sale-order-main-buttons(ng-transclude='buttons')
