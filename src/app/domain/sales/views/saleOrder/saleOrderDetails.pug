@@ -41,6 +41,8 @@
         )
           span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
           span.caret
+      a.toggle-edit(href ng-click='vm.toggleEditClick()')
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
 
   .scroll-y.animate-show(
