@@ -40,7 +40,8 @@
       },
 
       defaultValues: {
-        processing: 'draft'
+        processing: 'draft',
+        docDiscounts: true
       },
 
       meta: {

@@ -24,6 +24,15 @@
     off-label='Нет'
     )
 
+.form-group.form-group-switch
+  label.control-label.col-md-9.col-sm-8 Без подсказки?
+  .col-md-3.col-sm-4
+    toggle-switch(
+    ng-model='vm.saleOrder.spoilerNotNeeded'
+    on-label='Да'
+    off-label='Нет'
+    )
+
 .form-group
   label.control-label.col-md-3.col-sm-4(for='commentText') Комментарий
   .col-md-9.col-sm-8
