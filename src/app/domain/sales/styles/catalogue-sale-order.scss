@@ -231,14 +231,19 @@ sale-order-alert {
       }
     }
 
-    .has-positions .info {
-      display: inline;
-    }
-
     .no-positions > span {
       color: $gray;
     }
 
+  }
+
+  totals {
+    display: block;
+    width: 100%;
+  }
+
+  popovers {
+    min-width: 0;
   }
 
   @media (max-width: $screen-xs) {
@@ -249,7 +254,7 @@ sale-order-alert {
       display: block;
     }
 
-    .totals {
+    totals {
       font-size: 12px;
       margin-top: $margin-bottom-xs;
       text-align: left;

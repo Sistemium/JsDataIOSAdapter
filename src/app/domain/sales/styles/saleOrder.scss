@@ -1,7 +1,22 @@
 .sale-order-details {
 
-  sale-order-alert .totals .toggle-edit {
-    margin-left: 10px;
+  sale-order-alert .totals {
+
+    .toggle-edit {
+      margin-left: 6px;
+    }
+
+    .has-positions {
+
+      white-space: nowrap;
+
+      .info {
+        display: inline;
+        white-space: normal;
+      }
+
+    }
+
   }
 
   #scroll-main {

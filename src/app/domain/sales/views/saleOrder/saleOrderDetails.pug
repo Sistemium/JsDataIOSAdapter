@@ -34,7 +34,7 @@
           span на сумму
           strong {{ vm.saleOrder.totalCost | number:2 }}
           span ₽
-
+        | &nbsp;
         a.toggle-edit(href ng-click='vm.toggleEditClick()')
           i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
