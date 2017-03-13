@@ -50,11 +50,11 @@
 
 
 
-  .scroll-y.animate-show(
+  .animate-show#scroll-main(
   resize resize-offset-top='5' resize-property='height'
   ng-show='!saleOrderExpanded'
   )
-    table.table.table-striped.clear-both.table-hover(
+    table.table.table-striped.table-hover(
     ng-if='vm.saleOrder.positions.length'
     )
       thead
