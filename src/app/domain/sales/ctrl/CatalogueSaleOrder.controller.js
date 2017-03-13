@@ -29,8 +29,7 @@
       nextDayClick,
       prevDayClick,
       saleOrderDoneClick,
-      saleOrderSaveDraftClick,
-      deleteSaleOrderClick
+      saleOrderSaveDraftClick
 
     });
 
@@ -273,26 +272,6 @@
     function searchOutletClick(outlet) {
       vm.saleOrder.outlet = outlet;
       vm.isOpenOutletPopover = false;
-    }
-
-    function deleteSaleOrderClick() {
-
-      if (!vm.saleOrder.id) {
-        return $state.go('^');
-      }
-
-      vm.confirmDeleteSaleOrder = !vm.confirmDeleteSaleOrder;
-
-      if (!vm.confirmDeleteSaleOrder) {
-        vm.confirmDeleteSaleOrder = false;
-        SaleOrder.destroy(saleOrderId)
-          .then(() => $state.go('^'))
-          .catch(err => toastr.error(angular.toJson(err)));
-      } else {
-        $timeout(2000)
-          .then(() => vm.confirmDeleteSaleOrder = false);
-      }
-
     }
 
     /*
