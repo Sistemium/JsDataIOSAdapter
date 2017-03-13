@@ -3,7 +3,7 @@
 .catalogue {
 
   #search-input {
-    @extend .rounded-borders;
+    @extend %rounded-borders;
   }
 
   .collapser {
@@ -12,7 +12,7 @@
       display: none;
     }
 
-    @extend .rounded-borders;
+    @extend %rounded-borders;
 
     padding: 0;
 
@@ -41,7 +41,7 @@
 
   .breadcrumb {
 
-    @extend .rounded-borders;
+    @extend %rounded-borders;
     margin-bottom: 11px;
 
     > li.ancestor, > li.active {

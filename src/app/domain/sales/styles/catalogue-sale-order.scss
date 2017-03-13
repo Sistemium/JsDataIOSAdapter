@@ -30,7 +30,7 @@ sale-order-alert {
   margin-bottom: 11px;
 
   .alert{
-    @extend .rounded-borders;
+    @extend %rounded-borders;
   }
 
   .header {
