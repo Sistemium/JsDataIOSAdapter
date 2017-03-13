@@ -30,7 +30,7 @@
   "overrides": {
     "js-data": {
       "main": [
-        "dist/keep/js-data-debug.js"
+        "dist/js-data-debug.js"
       ]
     },
     "bootstrap-sass": {
