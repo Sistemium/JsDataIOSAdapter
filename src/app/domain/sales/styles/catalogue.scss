@@ -66,6 +66,9 @@
       min-width: 276px
     }
   }
+}
+
+.catalogue, .sale-order-details {
 
   > .animate-show {
     &.ng-hide:not(.ng-hide-animate) {

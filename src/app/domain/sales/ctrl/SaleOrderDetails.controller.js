@@ -4,15 +4,33 @@
 
   function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q) {
 
-    let vm = saControllerHelper.setup(this, $scope);
-    let {SaleOrderPosition, SaleOrder} = Schema.models();
+    const vm = saControllerHelper.setup(this, $scope);
+    const {SaleOrderPosition, SaleOrder} = Schema.models();
+
+    // TODO: consider weekends
+    const nextWorkDay = moment().add(1, 'day').toDate();
 
     vm.use({
-      saleOrderEditUnlockClick: () => vm.editingState = !vm.editingState
+
+      saleOrderMinDate: nextWorkDay,
+      saleOrderInitDate: nextWorkDay,
+
+      toggleEditClick: () => vm.editing = !vm.editing,
+      nextDayClick,
+      prevDayClick
+
     });
 
-    getPositions();
+    /*
+     Init
+     */
 
+    vm.datepickerOptions = _.defaults({
+      minDate: moment().add(1, 'day').toDate(),
+      initDate: moment().add(1, 'day').toDate()
+    }, $scope.datepickerOptions);
+
+    vm.setBusy(getData());
 
     /*
      Listeners
@@ -24,19 +42,27 @@
      Functions
      */
 
-    function getPositions() {
-      vm.setBusy(getData());
+    function nextDayClick() {
+      vm.saleOrder.date = _.max([
+        moment(vm.datepickerOptions.minDate),
+        moment(vm.saleOrder.date).add(1, 'day')
+      ]).toDate();
     }
 
+    function prevDayClick() {
+      vm.saleOrderDate = moment(vm.saleOrderDate).add(-1, 'day').toDate();
+    }
 
     function getData() {
+
       return SaleOrder.find($state.params.id)
         .then(saleOrder => SaleOrder.loadRelations(saleOrder))
         .then(saleOrder => {
           return $q.all(_.map(saleOrder.positions, position => {
-            SaleOrderPosition.loadRelations(position);
-          }));
+            SaleOrderPosition.loadRelations(position)
+          }))
         })
+
     }
 
   }
