@@ -29,10 +29,14 @@
 
     const vm = this;
 
-    _.assign(vm, {
-      deleteSaleOrderClick
-    });
+    // TODO: consider weekends
+    const nextWorkDay = moment().add(1, 'day').toDate();
 
+    _.assign(vm, {
+      deleteSaleOrderClick,
+      saleOrderMinDate: moment().toDate(),
+      saleOrderInitDate: nextWorkDay
+    });
 
     function deleteSaleOrderClick() {
 

@@ -14,20 +14,12 @@
 
     let saleOrderId = $state.params.saleOrderId;
 
-    // TODO: consider weekends
-    let nextWorkDay = moment().add(1, 'day').toDate();
-
     vm.use({
-
-      saleOrderMinDate: moment().toDate(),
-      saleOrderInitDate: nextWorkDay,
 
       kPlusButtonClick,
       bPlusButtonClick,
       searchOutletClick,
       clearSearchOutletClick,
-      nextDayClick,
-      prevDayClick,
       saleOrderDoneClick,
       saleOrderSaveDraftClick
 
@@ -76,12 +68,6 @@
 
     $scope.$watchGroup(['vm.saleOrder.outletId', 'vm.saleOrder.salesmanId'], onSaleOrderChange);
 
-    vm.watchScope('vm.saleOrderDate', date => {
-      if (!vm.saleOrder) return;
-      if (!date) date = vm.saleOrderDate = vm.datepickerOptions.minDate;
-      vm.saleOrder.date = moment(date).format();
-    });
-
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
 
@@ -122,17 +108,6 @@
 
     function saleOrderSaveDraftClick() {
       $scope.$parent.saleOrderExpanded = false;
-    }
-
-    function nextDayClick() {
-      vm.saleOrderDate = _.max([
-        moment(vm.datepickerOptions.minDate),
-        moment(vm.saleOrderDate).add(1, 'day')
-      ]).toDate();
-    }
-
-    function prevDayClick() {
-      vm.saleOrderDate = moment(vm.saleOrderDate).add(-1, 'day').toDate();
     }
 
     function onSaleOrderChange() {

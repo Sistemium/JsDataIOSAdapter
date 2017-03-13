@@ -7,28 +7,15 @@
     const vm = saControllerHelper.setup(this, $scope);
     const {SaleOrderPosition, SaleOrder} = Schema.models();
 
-    // TODO: consider weekends
-    const nextWorkDay = moment().add(1, 'day').toDate();
-
     vm.use({
 
-      saleOrderMinDate: nextWorkDay,
-      saleOrderInitDate: nextWorkDay,
-
-      toggleEditClick: () => vm.editing = !vm.editing,
-      nextDayClick,
-      prevDayClick
+      toggleEditClick: () => vm.editing = !vm.editing
 
     });
 
     /*
      Init
      */
-
-    vm.datepickerOptions = _.defaults({
-      minDate: moment().add(1, 'day').toDate(),
-      initDate: moment().add(1, 'day').toDate()
-    }, $scope.datepickerOptions);
 
     vm.setBusy(getData());
 
@@ -41,17 +28,6 @@
     /*
      Functions
      */
-
-    function nextDayClick() {
-      vm.saleOrder.date = _.max([
-        moment(vm.datepickerOptions.minDate),
-        moment(vm.saleOrder.date).add(1, 'day')
-      ]).toDate();
-    }
-
-    function prevDayClick() {
-      vm.saleOrderDate = moment(vm.saleOrderDate).add(-1, 'day').toDate();
-    }
 
     function getData() {
 

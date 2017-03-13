@@ -43,6 +43,7 @@
 
       $scope.$watch('vm.date', (nv, ov) => {
         if (ov == nv) return;
+        if (!nv) vm.date = vm.datepickerOptions.initDate;
         vm.value = moment(vm.date).format('YYYY-MM-DD');
       });
 
