@@ -27,9 +27,8 @@
 
 sale-order-alert {
 
-  margin-bottom: 11px;
-
   .alert{
+    margin-bottom: 11px;
     @extend %rounded-borders;
   }
 

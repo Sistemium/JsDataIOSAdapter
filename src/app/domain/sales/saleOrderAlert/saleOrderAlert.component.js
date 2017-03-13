@@ -13,9 +13,6 @@
       bindings: {
         saleOrderExpanded: '=expanded',
         saleOrder: '='
-        // formTitle: '@',
-        // nameField: '@',
-        // showButtons: '=?'
       },
 
       controller: saleOrderAlertController,
