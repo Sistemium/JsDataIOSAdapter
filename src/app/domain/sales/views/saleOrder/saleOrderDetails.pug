@@ -26,18 +26,19 @@
 
     totals.animate-show(ng-hide='vm.busy')
 
-      span.has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded')
+      .has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded')
 
-        strong {{ vm.saleOrder.positions.length | number:0 }}
-        span {{ vm.saleOrder.positionsCountRu() }}
-        span на сумму
-        strong {{ vm.saleOrder.totalCost | number:2 }}
-        span ₽
+        .info
+          strong {{ vm.saleOrder.positions.length | number:0 }}
+          span {{ vm.saleOrder.positionsCountRu() }}
+          span на сумму
+          strong {{ vm.saleOrder.totalCost | number:2 }}
+          span ₽
 
         a.toggle-edit(href ng-click='vm.toggleEditClick()')
           i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
-      span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
+      .no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
         span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
         a(
         href

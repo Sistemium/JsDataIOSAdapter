@@ -223,8 +223,16 @@ sale-order-alert {
     text-align: right;
     flex: 1;
 
-    .has-positions {
-      @extend .spaced;
+    totals > * {
+      display: block;
+
+      & + * {
+        display: none;
+      }
+    }
+
+    .has-positions .info {
+      display: inline;
     }
 
     .no-positions > span {

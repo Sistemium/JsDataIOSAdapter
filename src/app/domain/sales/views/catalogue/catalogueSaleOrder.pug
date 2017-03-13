@@ -20,12 +20,14 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
       span.caret
 
   totals.animate-show(ng-hide='vm.busy')
+
     a.has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded' href stm-click='saleOrderTotals')
       strong {{ vm.saleOrder.positions.length | number:0 }}
       span {{ vm.saleOrder.positionsCountRu() }}
       span на сумму
       strong {{ vm.saleOrder.totalCost | number:2 }}
       span ₽
+
     span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
       span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
       a(
