@@ -19,7 +19,7 @@
 
     vm.use({
 
-      saleOrderMinDate: nextWorkDay,
+      saleOrderMinDate: moment().toDate(),
       saleOrderInitDate: nextWorkDay,
 
       kPlusButtonClick,
