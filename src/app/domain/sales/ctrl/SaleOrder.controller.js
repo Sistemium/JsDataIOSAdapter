@@ -7,21 +7,15 @@
     let vm = saControllerHelper.setup(this, $scope);
     let {SaleOrder, Outlet, SaleOrderPosition} = Schema.models();
 
-    let maxDate = setMaxDate();
-
     vm.use({
 
       visits: [],
       data: [],
 
-      selectedDate: moment($state.params.date).toDate(),
-
-      datepickerPopup: {opened: false},
-      datepickerOptions: datepickerOptions(),
-      openDatepicker,
-      selectPreviousDay,
-      selectNextDay,
-      nextDayAvailable,
+      date: $state.params.date,
+      initDate: moment().add(1, 'days').toDate(),
+      // TODO support maxDate in sabDatePicker
+      maxDate: moment().add(7, 'days').toDate(),
 
       itemClick,
       newItemClick,
@@ -37,7 +31,7 @@
      */
 
     $scope.$on('rootClick', () => $state.go('sales.saleOrders'));
-    $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
+    $scope.$watch('vm.date', _.debounce(setDate, 300));
 
     /*
      Handlers
@@ -57,19 +51,19 @@
 
     function setDate(newValue) {
 
-      if (!angular.isObject(newValue)) {
-        vm.selectedDate = new Date();
+      if (!newValue) {
+        newValue = moment().format();
       }
 
-      $state.go('.', {date: moment(vm.selectedDate).format()});
+      $state.go('.', {date: newValue});
 
     }
-
 
     function getData(salesman) {
 
       vm.currentSalesman = salesman;
-      let date = moment(vm.selectedDate).format();
+
+      let date = moment(vm.date).format();
 
       let filter = SalesmanAuth.makeFilter({date});
 
@@ -105,48 +99,6 @@
 
       vm.rebindAll(SaleOrder, filter, 'vm.data');
 
-    }
-
-    function selectPreviousDay() {
-
-      let previousDay = vm.selectedDate;
-      previousDay.setDate(previousDay.getDate() - 1);
-      vm.selectedDate = new Date(previousDay);
-
-    }
-
-    function selectNextDay() {
-
-      let nextDay = vm.selectedDate;
-      nextDay.setDate(nextDay.getDate() + 1);
-      vm.selectedDate = new Date(nextDay);
-
-    }
-
-    function datepickerOptions() {
-
-      return {
-        maxDate,
-        startingDay: 1,
-        showWeeks: false
-      };
-
-    }
-
-    function setMaxDate() {
-
-      maxDate = moment().add(7, 'days').toDate();
-      maxDate.setHours(0, 0, 0, 0);
-      return maxDate;
-
-    }
-
-    function nextDayAvailable() {
-      return vm.selectedDate < maxDate;
-    }
-
-    function openDatepicker() {
-      vm.datepickerPopup.opened = true;
     }
 
     function itemClick(item) {

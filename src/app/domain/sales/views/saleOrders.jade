@@ -1,39 +1,17 @@
 section.ui-view.sale-orders(cg-busy='vm.cgBusy')
 
   .row.datepicker-with-buttons
-    .col-sm-9.col-md-10
-      .input-group
-        span.form-control(
-        uib-datepicker-popup
-        ng-model='vm.selectedDate'
-        is-open='vm.datepickerPopup.opened'
-        datepicker-options='vm.datepickerOptions'
-        ng-required='true'
-        close-text='Закрыть'
-        current-text='Сегодня'
-        clear-text='Очистить'
-        ng-click='vm.openDatepicker()'
-        ) {{ vm.selectedDate | amUtc | amLocal | amDateFormat:'DD/MM/YYYY, dd' }}
-        span.input-group-btn
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.selectPreviousDay()'
-          )
-            i.glyphicon.glyphicon-chevron-left
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.openDatepicker()'
-          )
-            i.glyphicon.glyphicon-calendar
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.selectNextDay()'
-          ng-disabled='!vm.nextDayAvailable()'
-          )
-            i.glyphicon.glyphicon-chevron-right
-    .col-sm-3.col-md-2
+
+    sab-date-picker.col-sm-4.col-lg-3(
+    value='vm.date'
+    init-date='vm.initDate'
+    )
+
+    .col-sm-3.col-lg-2.col-sm-offset-5.col-lg-offset-7
       .buttons
-        button.btn.btn-block.btn-success.pull-right(ng-click='vm.newItemClick($event)') Новый Заказ
+        button.btn.btn-block.btn-primary(ng-click='vm.newItemClick($event)')
+          i.glyphicon.glyphicon-plus
+          span Добавить заказ
 
   hr.clear-both
 
