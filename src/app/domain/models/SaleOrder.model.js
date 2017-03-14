@@ -23,6 +23,14 @@
           Outlet: {
             localField: 'outlet',
             localKey: 'outletId'
+          },
+          Contract: {
+            localField: 'contract',
+            localKey: 'contractId'
+          },
+          PriceType: {
+            localField: 'priceType',
+            localKey: 'priceTypeId'
           }
         },
         hasMany: {
@@ -56,7 +64,11 @@
         positionsCountRu,
 
         isValid: function () {
-          return this.outletId && this.salesmanId && this.date;
+          return this.date &&
+            this.outletId &&
+            this.salesmanId &&
+            this.contractId &&
+            this.priceTypeId;
         }
 
       }

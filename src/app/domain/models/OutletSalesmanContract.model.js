@@ -17,6 +17,14 @@
           Salesman: {
             localField: 'salesman',
             localKey: 'salesmanId'
+          },
+          Contract: {
+            localField: 'contract',
+            localKey: 'contractId'
+          },
+          PriceType: {
+            localField: 'priceType',
+            localKey: 'priceTypeId'
           }
         }
       }

@@ -39,6 +39,10 @@
           Visit: {
             localField: 'visits',
             foreignKey: 'outletId'
+          },
+          SaleOrder: {
+            localField: 'saleOrders',
+            foreignKey: 'outletId'
           }
           // PickingRequest: {
           //   localField: 'pickingOrders',

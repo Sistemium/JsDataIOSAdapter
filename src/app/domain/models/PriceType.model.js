@@ -14,6 +14,10 @@
           //   localField: 'prices',
           //   foreignKey: 'priceTypeId'
           // }
+          SaleOrder: {
+            localField: 'saleOrders',
+            foreignKey: 'priceTypeId'
+          }
         },
         hasOne: {
           PriceType: {
