@@ -81,17 +81,14 @@
 
     function onSalesmanChange(salesman) {
 
-      Outlet.findAll(Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter()));
-
-      let filter = {
-        orderBy: ['name']
-      };
-
-      vm.rebindAll(Outlet, filter, 'vm.outlets');
+      Outlet.findAll(Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter()))
+        .then(data => {
+          vm.outlets = _.orderBy(data, 'name');
+        });
 
       if (!vm.saleOrder) return;
 
-      if (!vm.saleOrder.salesmanId) {
+      if (!vm.saleOrder.salesmanId || !vm.saleOrder.id) {
         vm.saleOrder.salesmanId = _.get(salesman, 'id');
       }
 
@@ -120,7 +117,10 @@
 
         if (!vm.saleOrderId) {
           busy
-            .then(saleOrder => $state.go('.', {saleOrderId: saleOrder.id}))
+            .then(saleOrder => {
+              $state.go('.', {saleOrderId: saleOrder.id}, {notify: false});
+              vm.saleOrderId = saleOrder.id;
+            })
             .catch(err => toastr.error(angular.toJson(err)));
         }
 
