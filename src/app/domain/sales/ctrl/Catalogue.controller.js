@@ -76,6 +76,10 @@
 
       let afterChangeOrder = true;
 
+      if (vm.saleOrder && vm.saleOrder.priceTypeId !== _.get(vm, 'currentPriceType.id')) {
+        priceTypeClick(vm.saleOrder.priceType);
+      }
+
       vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
 
         cacheSaleOrderPositions();
