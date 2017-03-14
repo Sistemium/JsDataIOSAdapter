@@ -87,7 +87,7 @@
 
     }
 
-    $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
+    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, from) {
 
       if (!roles) {
         if (next.name !== 'auth') {
@@ -108,6 +108,12 @@
         if (_.get(next,'data.auth') === 'pickerAuth') {
           me.profileState = 'picker';
         }
+      }
+
+      let needRoles = _.get(next, 'data.auth');
+
+      if (needRoles && !event[needRoles]) {
+        console.warn(`Should be prevented state change to ${next.name} from ${from.name} by ${needRoles}`);
       }
 
     });

@@ -12,7 +12,7 @@
 
     let currentSalesman;
     let redirectTo;
-    let initPromise;
+    let initPromise = true;
     let isAuthorized;
 
     let service = {
@@ -31,6 +31,33 @@
       isLoggedIn: () => !!currentSalesman
 
     };
+
+
+    $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
+
+      let needRoles = _.get(next, 'data.auth');
+
+      if (needRoles === 'SalesmanAuth') {
+
+        event[needRoles] = true;
+
+        if (!isAuthorized) {
+          event.preventDefault();
+        }
+
+        if (initPromise) {
+          redirectTo = {
+            state: next,
+            params: nextParams
+          };
+        } else {
+          // TODO: maybe add toast with error message
+        }
+
+      }
+
+    }));
+
 
     function logout() {
       currentSalesman = undefined;
@@ -62,6 +89,8 @@
 
     function init() {
 
+      // console.info('SalesmanAuth init');
+
       initPromise = Salesman.findAll()
         .then(data => {
 
@@ -76,29 +105,6 @@
           return service;
 
         });
-
-      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
-
-        let needRoles = _.get(next, 'data.auth');
-
-        if (needRoles === 'SalesmanAuth') {
-
-          if (!isAuthorized) {
-            event.preventDefault();
-          }
-
-          if (initPromise) {
-            redirectTo = {
-              state: next,
-              params: nextParams
-            };
-          } else {
-            // TODO: maybe add toast with error message
-          }
-
-        }
-
-      }));
 
       $rootScope.$on('$destroy', $rootScope.$on('auth-logout', logout));
 
@@ -136,7 +142,7 @@
 
   }
 
-  angular.module('Sales')
+  angular.module('core.services')
     .service('SalesmanAuth', SalesmanAuth);
 
 })();
