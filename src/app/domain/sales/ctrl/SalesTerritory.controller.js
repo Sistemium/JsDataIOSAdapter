@@ -88,19 +88,11 @@
     function refresh(salesman) {
 
       let filter = SalesmanAuth.makeFilter();
-      let bySalesman = filter.salesmanId ? {
-        'ANY outletSalesmanContracts': {
-          'salesmanId': {
-            '==': filter.salesmanId
-          }
-        }
-      } : {};
+      let outletFilter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
 
       // TODO: show user-created outlets (with no contract)
 
       vm.salesman = salesman;
-
-      let outletFilter = _.assign({where: bySalesman}, filter);
 
       DEBUG('refresh', 'start');
 
