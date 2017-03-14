@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, Language) {
+  angular.module('Models').run(function (Schema, Language, $q, DEBUG) {
 
     const wDict = {
       w1: 'позиция',
@@ -10,7 +10,7 @@
       w50: 'позиций'
     };
 
-    Schema.register({
+    const SaleOrder = Schema.register({
 
       name: 'SaleOrder',
 
@@ -71,6 +71,41 @@
             this.salesmanId &&
             this.contractId &&
             this.priceTypeId;
+        },
+
+        safeSave: function onSaleOrderChange() {
+
+          const {SaleOrderPosition} = Schema.models();
+
+          if (!this.isValid()) return $q.reject();
+
+          if (!this.id) {
+            return SaleOrder.create(this);
+          }
+
+          let positions = _.filter(this.positions, SaleOrderPosition.hasChanges);
+
+          return $q.all(_.map(positions, SaleOrderPosition.safeSave))
+            .then(() => {
+
+              if (!SaleOrder.hasChanges(this)) return;
+
+              let changes = _.get(SaleOrder.changes(this), 'changed');
+              let changedKeys = _.keys(_.omit(changes, Schema.nonUserFields));
+
+              if (!changedKeys) return;
+
+              DEBUG('SaleOrder.safeSave changedKeys:', changedKeys);
+
+              return SaleOrder.unCachedSave(this, {keepChanges: changedKeys});
+
+            })
+            .catch(err => {
+              _.each(positions, SaleOrderPosition.revert);
+              SaleOrder.revert(this);
+              return $q.reject(err)
+            });
+
         }
 
       }

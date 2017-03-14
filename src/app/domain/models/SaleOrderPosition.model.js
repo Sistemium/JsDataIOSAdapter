@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema) {
 
-    Schema.register({
+    const SaleOrderPosition = Schema.register({
 
       name: 'SaleOrderPosition',
 
@@ -35,7 +35,20 @@
       methods: {
         updateCost: function () {
           return this.cost = parseFloat((this.price * this.volume).toFixed(2));
+        },
+
+        safeSave: function () {
+
+          let options = {keepChanges: ['cost', 'volume']};
+
+          if (this.volume > 0) {
+            return SaleOrderPosition.unCachedSave(this, options);
+          } else {
+            return SaleOrderPosition.destroy(this);
+          }
+
         }
+
       }
 
     });
