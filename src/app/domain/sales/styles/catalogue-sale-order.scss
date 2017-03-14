@@ -195,11 +195,9 @@ sale-order-alert {
     text-align: right;
     flex: 1;
 
-    totals > * {
-      display: block;
-
+    totals > *, .no-positions > * {
       & + * {
-        display: none;
+        display: none !important;
       }
     }
 
