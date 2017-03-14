@@ -2,7 +2,7 @@
 
 sale-order-alert {
 
-  .alert{
+  .alert {
     margin-bottom: 11px;
     @extend %rounded-borders;
   }
@@ -195,10 +195,8 @@ sale-order-alert {
     text-align: right;
     flex: 1;
 
-    totals > *, .no-positions > * {
-      & + * {
-        display: none !important;
-      }
+    totals > * + *, .no-positions > * + a {
+      display: none !important;
     }
 
     .no-positions > span {
