@@ -5,7 +5,7 @@
   function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q) {
 
     const vm = saControllerHelper.setup(this, $scope);
-    const {SaleOrderPosition, SaleOrder} = Schema.models();
+    const {SaleOrderPosition, SaleOrder, Contract, PriceType} = Schema.models();
 
     vm.use({
 
@@ -34,10 +34,15 @@
       return SaleOrder.find($state.params.id)
         .then(saleOrder => SaleOrder.loadRelations(saleOrder))
         .then(saleOrder => {
+
+          Contract.find(saleOrder.contractId);
+          PriceType.find(saleOrder.priceTypeId);
+
           return $q.all(_.map(saleOrder.positions, position => {
             SaleOrderPosition.loadRelations(position)
           }))
         })
+        .catch(e => console.error(e));
 
     }
 
