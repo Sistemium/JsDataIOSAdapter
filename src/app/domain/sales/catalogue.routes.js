@@ -14,7 +14,8 @@
           controllerAs: 'vm',
 
           data: {
-            title: 'Каталог'
+            title: 'Каталог',
+            auth: 'SalesmanAuth'
           },
 
           children: [
