@@ -23,11 +23,15 @@
      Listeners
      */
 
-    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder');
+    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', _.debounce(safeSave,700));
 
     /*
      Functions
      */
+
+    function safeSave () {
+      return vm.saleOrder && vm.saleOrder.safeSave();
+    }
 
     function getData() {
 

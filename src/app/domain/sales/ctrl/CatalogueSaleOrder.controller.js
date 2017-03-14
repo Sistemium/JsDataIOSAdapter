@@ -106,46 +106,22 @@
 
     function onSaleOrderChange() {
 
-      if (!vm.saleOrder) return;
+      if (!vm.saleOrder || !vm.saleOrder.isValid()) return;
 
-      if (!vm.saleOrder.isValid()) return;
-
-      if (!saleOrderId) {
-
-        let busy = SaleOrder.create(vm.saleOrder);
-
-        busy
-          .then(saleOrder => {
+      let busy = vm.saleOrder.safeSave()
+        .then(saleOrder => {
+          if (!saleOrderId) {
             $state.go('.', {saleOrderId: saleOrder.id}, {notify: false});
             saleOrderId = saleOrder.id;
             bindToChanges();
             $scope.$emit('setSaleOrder', saleOrder);
-          })
-          .catch(err => toastr.error(angular.toJson(err)));
+          }
+        });
 
-        return vm.setBusy(busy);
-
-      }
-
-      let positions = _.filter(vm.saleOrder.positions, SaleOrderPosition.hasChanges);
-
-      // if (!positions.length) return;
-
-      $q.all(_.map(positions, savePosition))
-        .then(() => {
-
-          let changes = SaleOrder.changes(saleOrderId);
-
-          if (!changes) return;
-
-          return SaleOrder.unCachedSave(vm.saleOrder, {keepChanges: _.keys(changes.changed)});
-
-        })
+      return vm.setBusy(busy)
         .catch(e => {
           console.error(e);
-          toastr.error('Ошибка сохранения заказа!');
-          _.each(positions, SaleOrderPosition.revert);
-          SaleOrder.revert(vm.saleOrder);
+          toastr.error('Ошибка сохранения заказа');
         });
 
     }
@@ -270,18 +246,6 @@
       } else {
         unbindToChanges = $scope.$watch(() => _.pick(vm.saleOrder, requiredColumns), onSaleOrderChange, true);
       }
-    }
-
-    function savePosition(position) {
-
-      let options = {keepChanges: ['cost', 'volume']};
-
-      if (position.volume > 0) {
-        return SaleOrderPosition.unCachedSave(position, options);
-      } else {
-        return SaleOrderPosition.destroy(position);
-      }
-
     }
 
     function getPosition(articleId) {
