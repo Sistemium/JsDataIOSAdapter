@@ -72,6 +72,11 @@
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
+    $scope.$on('setSaleOrder', (event, saleOrder) => {
+      vm.saleOrder = saleOrder;
+      vm.saleOrderId = saleOrder && saleOrder.id;
+    });
+
     vm.watchScope('vm.saleOrder.id', newValue => {
 
       let afterChangeOrder = true;

@@ -29,7 +29,7 @@
 
       vm.setBusy(
         SaleOrder.find(saleOrderId, {bypassCache: true})
-          .then(() => SaleOrder.loadRelations(saleOrderId, 'Outlet'))
+          .then(() => SaleOrder.loadRelations(saleOrderId, ['Outlet', 'Contract']))
           .then(() => SaleOrder.loadRelations(saleOrderId, 'SaleOrderPosition', {bypassCache: true}))
           .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
           .catch(error => {
@@ -41,11 +41,6 @@
           })
       );
 
-      vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', () => {
-        if (!vm.saleOrder) return;
-        vm.saleOrderDate = moment(vm.saleOrder.date).toDate();
-      });
-
     } else {
 
       vm.saleOrder = SaleOrder.createInstance({
@@ -53,7 +48,6 @@
         date: moment().add(1, 'days').format()
       });
 
-      // TODO: createInstance and setup with SalesmanAuth.getCurrentUser(), date: today()+1
     }
 
     $timeout().then(() => $scope.$parent.saleOrderExpanded = !saleOrderId);
@@ -62,11 +56,11 @@
      Listeners
      */
 
+    bindToChanges();
+
     SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
-    vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderCostChange, 500));
-
-    $scope.$watchGroup(['vm.saleOrder.outletId', 'vm.saleOrder.salesmanId'], onSaleOrderChange);
+    // vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderCostChange, 500));
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
@@ -81,7 +75,9 @@
 
     function onSalesmanChange(salesman) {
 
-      Outlet.findAll(Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter()))
+      let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
+
+      Outlet.findAll(filter)
         .then(data => {
           vm.outlets = _.orderBy(data, 'name');
         });
@@ -107,39 +103,44 @@
       $scope.$parent.saleOrderExpanded = false;
     }
 
+
     function onSaleOrderChange() {
 
       if (!vm.saleOrder) return;
 
-      if (vm.saleOrder.isValid()) {
+      if (!vm.saleOrder.isValid()) return;
+
+      if (!saleOrderId) {
 
         let busy = SaleOrder.create(vm.saleOrder);
 
-        if (!vm.saleOrderId) {
-          busy
-            .then(saleOrder => {
-              $state.go('.', {saleOrderId: saleOrder.id}, {notify: false});
-              vm.saleOrderId = saleOrder.id;
-            })
-            .catch(err => toastr.error(angular.toJson(err)));
-        }
+        busy
+          .then(saleOrder => {
+            $state.go('.', {saleOrderId: saleOrder.id}, {notify: false});
+            saleOrderId = saleOrder.id;
+            bindToChanges();
+            $scope.$emit('setSaleOrder', saleOrder);
+          })
+          .catch(err => toastr.error(angular.toJson(err)));
 
-        vm.setBusy(busy);
+        return vm.setBusy(busy);
 
       }
 
-    }
-
-    function onSaleOrderCostChange() {
-
-      if (!vm.saleOrder) return;
-
       let positions = _.filter(vm.saleOrder.positions, SaleOrderPosition.hasChanges);
 
-      if (!positions.length) return;
+      // if (!positions.length) return;
 
       $q.all(_.map(positions, savePosition))
-        .then(() => SaleOrder.unCachedSave(vm.saleOrder, {keepChanges: ['totalCost']}))
+        .then(() => {
+
+          let changes = SaleOrder.changes(saleOrderId);
+
+          if (!changes) return;
+
+          return SaleOrder.unCachedSave(vm.saleOrder, {keepChanges: _.keys(changes.changed)});
+
+        })
         .catch(e => {
           console.error(e);
           toastr.error('Ошибка сохранения заказа!');
@@ -174,7 +175,7 @@
 
           SaleOrder.find(id, {bypassCache: true})
             .catch(err => {
-              if (err.error ===404){
+              if (err.error === 404) {
                 SaleOrder.eject(saleOrderId)
               }
             });
@@ -252,6 +253,24 @@
     /*
      Functions
      */
+
+    let unbindToChanges;
+    const requiredColumns = ['outletId', 'salesmanId', 'date', 'contractId', 'priceTypeId'];
+
+    function bindToChanges() {
+      if (saleOrderId) {
+
+        if (unbindToChanges) unbindToChanges();
+
+        vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', _.debounce(() => {
+          if (!vm.saleOrder) return;
+          if (SaleOrder.hasChanges(vm.saleOrder.id)) onSaleOrderChange();
+        }, 700));
+
+      } else {
+        unbindToChanges = $scope.$watch(() => _.pick(vm.saleOrder, requiredColumns), onSaleOrderChange, true);
+      }
+    }
 
     function savePosition(position) {
 
