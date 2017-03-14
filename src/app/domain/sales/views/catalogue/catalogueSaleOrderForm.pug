@@ -1,4 +1,12 @@
 .form-group
+  .col-sm-12.sale-order-contract
+    span.gray ТП {{ vm.saleOrder.salesman.tinyName }}
+    outlet-salesman-contract-popover(
+    ng-if='vm.saleOrder.salesmanId && vm.saleOrder.outletId'
+    sale-order='vm.saleOrder'
+    )
+
+.form-group
   label.control-label.col-md-9.col-sm-8 Дата доставки
   sab-date-picker.col-md-3.col-sm-4(
   value='vm.saleOrder.date'
@@ -38,7 +46,7 @@
   .col-md-9.col-sm-8
     input#commentText.form-control(ng-model='vm.saleOrder.commentText')
 
-.form-group
+//.form-group
   label.control-label.col-md-3.col-sm-4(for='commentExpeditor') Комментарий водителю
   .col-md-9.col-sm-8
     input#commentExpeditor.form-control(ng-model='vm.saleOrder.commentExpeditor')

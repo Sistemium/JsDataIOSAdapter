@@ -1,0 +1,7 @@
+.sale-order-contract-popover
+  .option(
+  ng-repeat='option in vm.data track by option.id'
+  ng-class='{active: vm.currentOption.id === option.id}'
+  )
+    a(href ng-click='vm.optionClick(option)')
+      span {{ ::option.contract.name }} ({{ option.priceType.name }})
