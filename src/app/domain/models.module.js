@@ -143,7 +143,9 @@
 
       primaryIndex: function () {
         return DS.store[this.name].index;
-      }
+      },
+
+      nonUserFields: ['ts', 'cts', 'deviceTs', 'deviceCts', 'deviceAts', 'lts']
 
     });
 
