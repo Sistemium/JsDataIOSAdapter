@@ -128,8 +128,6 @@
 
     function onJSData(event) {
 
-      DEBUG('onJSData', event);
-
       let id = _.get(event, 'data.id');
 
       if (!id) return;
@@ -137,6 +135,8 @@
       let {data, resource} = event;
 
       if (resource === 'SaleOrder') {
+
+        DEBUG('onJSData SaleOrder', event);
 
         if (SaleOrder.hasChanges(id)) {
           return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder');
