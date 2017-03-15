@@ -26,6 +26,9 @@ button {
 }
 
 .datepicker-with-buttons {
+
+  padding: 5px 0;
+
   .buttons {
     @media (max-width: $screen-xs-max) {
       margin-top: 6px;
@@ -34,6 +37,7 @@ button {
       }
     }
   }
+
 }
 
 a[disabled], [disabled] a {
