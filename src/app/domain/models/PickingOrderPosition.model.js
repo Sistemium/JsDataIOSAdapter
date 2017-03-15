@@ -52,10 +52,10 @@
           }
         },
 
-        fieldTypes: {
-          volume: 'int',
-          ord: 'int'
-        },
+        // fieldTypes: {
+          // volume: 'int',
+          // ord: 'int'
+        // },
 
         methods: {
 

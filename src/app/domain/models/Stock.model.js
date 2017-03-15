@@ -26,9 +26,9 @@
       meta: {
       },
 
-      fieldTypes: {
-        volume: 'int'
-      }
+      // fieldTypes: {
+      //   volume: 'int'
+      // }
 
     });
 

@@ -80,10 +80,10 @@
         }]
       },
 
-      fieldTypes: {
-        packageRel: 'int',
-        pieceVolume: 'decimal'
-      },
+      // fieldTypes: {
+        // packageRel: 'int',
+        // pieceVolume: 'decimal'
+      // },
 
       methods: {
 

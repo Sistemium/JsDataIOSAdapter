@@ -23,10 +23,10 @@
           }
         },
 
-        fieldTypes: {
+        // fieldTypes: {
           // code, productionInfo
-          volume: 'int'
-        },
+          // volume: 'int'
+        // },
 
         methods: {
           boxPcs: function () {

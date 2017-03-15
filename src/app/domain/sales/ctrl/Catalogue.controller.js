@@ -188,7 +188,7 @@
           toastr.info(
             `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
             'Обновление данных',
-            {timeOut: 15000}
+            {timeOut: 5000}
           );
         }
 

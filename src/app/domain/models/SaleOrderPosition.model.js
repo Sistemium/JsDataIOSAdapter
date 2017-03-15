@@ -21,14 +21,14 @@
         }
       },
 
-      fieldTypes: {
-        price: 'decimal',
-        priceDoc: 'decimal',
-        priceOrigin: 'decimal',
-        cost: 'decimal',
-        volume: 'int',
-        backVolume: 'int'
-      },
+      // fieldTypes: {
+        // price: 'decimal',
+        // priceDoc: 'decimal',
+        // priceOrigin: 'decimal',
+        // cost: 'decimal',
+        // volume: 'int',
+        // backVolume: 'int'
+      // },
 
       aggregables: ['cost', 'volume'],
 
