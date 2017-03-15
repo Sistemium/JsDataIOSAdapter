@@ -424,7 +424,7 @@
 
 
     function hasArticlesOrGroupsInStock(groupIds) {
-      return (articleGroup) => {
+      return articleGroup => {
         return groupIds[articleGroup.id]
           || articleGroup.hasDescendants(groupIds);
       }
