@@ -4,22 +4,26 @@
 
   function IosParser() {
 
+    function parserByCode(code, v) {
+      switch (code) {
+        case 'int':
+          return parseInt(v) || 0;
+        case 'decimal':
+          return parseFloat(v) || 0;
+        case 'date':
+          return v ? v.substr(0, 10) : null;
+      }
+    }
+
     function parseObject(row, model) {
 
       const fieldTypes = model && model.fieldTypes;
 
-      _.each(fieldTypes, (type, field) => {
+      _.each(fieldTypes, (parser, field) => {
 
-        row [field] = (function (v) {
-          switch (type) {
-            case 'int':
-              return parseInt(v) || 0;
-            case 'decimal':
-              return parseFloat(v) || 0;
-            case 'date':
-              return v ? v.substr(0, 10) : null;
-          }
-        })(row[field]);
+        let value = row[field];
+        // TODO: remove parserByCode support to speed up
+        row [field] = _.isFunction(parser) ? parser(value) : parserByCode(parser, value);
 
       });
 
