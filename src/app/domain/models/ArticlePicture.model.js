@@ -48,13 +48,12 @@
 
         switch ($window.location.protocol) {
           case 'http:'  :
-          case 'https:' : return () => {
+          case 'https:' :
 
             // we are in iOS but not under manifest, pechalka
-            console.log('we are in iOS but not under manifest, pechalka');
-            return imageSrc;
+            // console.log('we are in iOS but not under manifest, pechalka');
+            return 'images/placeholder.png';
 
-          };
           case 'file:'  : return '../../../../pictures/' + imagePath;
         }
 
