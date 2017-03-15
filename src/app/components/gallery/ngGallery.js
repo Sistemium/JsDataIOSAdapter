@@ -91,7 +91,7 @@
     function openGallery(image) {
 
       $templateRequest('app/components/gallery/galleryFullscreen.html')
-        .then(function (html) {
+        .then((html) => {
           let template = angular.element(html);
           $body.append(template);
           fullscreenElement = $compile(template)($scope);
@@ -135,7 +135,7 @@
       vm.currentImage = img;
 
       loadImage(img)
-        .then(function (res) {
+        .then((res) => {
           $scope.currentImageSrc = res.src;
           // scope.id = img.name;
           // smartScroll(scope.index);
@@ -178,7 +178,7 @@
 
     function scrollThumbnailsToCurrent() {
 
-      $timeout(function () {
+      $timeout(() => {
 
         let index = $scope.index;
 
@@ -262,7 +262,7 @@
         scope.opened = false;
         scope.firstOpen = true;
 
-        scope.setHovered = function (image) {
+        scope.setHovered = (image) => {
           if (_.isFunction(scope.imageHoveredFn())) {
             scope.imageHoveredFn()(image);
           }
