@@ -55,7 +55,7 @@
             return imageSrc;
 
           };
-          case 'file:'  : return '../../../../' + imagePath;
+          case 'file:'  : return '../../../../pictures/' + imagePath;
         }
 
       }
