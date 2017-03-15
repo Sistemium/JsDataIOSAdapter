@@ -93,8 +93,6 @@
               let changes = _.get(SaleOrder.changes(this), 'changed');
               let changedKeys = _.keys(_.omit(changes, Schema.nonUserFields));
 
-              if (!changedKeys) return;
-
               DEBUG('SaleOrder.safeSave changedKeys:', changedKeys);
 
               return SaleOrder.unCachedSave(this, {keepChanges: changedKeys});

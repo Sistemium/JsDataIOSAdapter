@@ -58,8 +58,7 @@ before-tag-name='li'
           span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
           span.gray
             | x
-        small {{vm.prices[stock.articleId] | number:2}}
-          span ₽
+        small {{vm.prices[stock.articleId] | number:2}} ₽
 
     .right(ng-if='vm.saleOrder')
 
