@@ -5,7 +5,11 @@
   ng-click='vm.thumbnailClick(thumbImage)'
   )
     img(
+<<<<<<< HEAD
     ng-src='{{ thumbImage && thumbImage.srcThumbnail || "images/bottle_placeholder.png" }}'
+=======
+    ng-src='{{ thumbImage && thumbImage.thumbnailSrc || "images/placeholder.png" }}'
+>>>>>>> origin/SaleOrders2
     ng-class='thumbClass'
     alt='Ошибка получения фото'
     draggable='false'
