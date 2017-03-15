@@ -119,7 +119,7 @@
           },
 
           onerror: reject,
-          src: img.smallSrc
+          src: img.srcFullscreen
 
         });
 
