@@ -42,9 +42,12 @@
       },
 
       fieldTypes: {
-        date: 'date',
-        totalCost: 'decimal',
-        totalCostDoc: 'decimal'
+        date: Schema.config.parseDate,
+        totalCost: Schema.config.parseDecimal,
+        totalCostDoc: Schema.config.parseDecimal,
+        cashOnShipment: Schema.config.parseBool,
+        docDiscounts: Schema.config.parseBool,
+        spoilerNotNeeded: Schema.config.parseBool
       },
 
       defaultValues: {
@@ -94,6 +97,9 @@
               let changedKeys = _.keys(_.omit(changes, Schema.nonUserFields));
 
               DEBUG('SaleOrder.safeSave changedKeys:', changedKeys);
+
+              // TODO: need investigation why this happens
+              if (!changedKeys.length) return;
 
               return SaleOrder.unCachedSave(this, {keepChanges: changedKeys});
 
