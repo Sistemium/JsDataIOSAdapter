@@ -88,7 +88,7 @@
 
           let positions = _.filter(this.positions, SaleOrderPosition.hasChanges);
 
-          return $q.all(_.map(positions, SaleOrderPosition.safeSave))
+          return $q.all(_.map(positions, position => position.safeSave()))
             .then(() => {
 
               if (!SaleOrder.hasChanges(this)) return;
