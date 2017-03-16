@@ -20,8 +20,8 @@
     margin-right: 10px;
 
     @include responsive-only(lt-sm) {
-      max-width: 60px;
-      max-height: 58px;
+      max-width: 49px;
+      max-height: 48px;
     }
 
   }
@@ -35,11 +35,32 @@
   }
 
   .list-group-item {
+
     min-height: 80px;
     @media (max-width: $screen-xs-max) {
       min-height: 74px;
     }
+    
     padding: 0 10px;
+
+    @include responsive-only(xxs) {
+      ng-gallery {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        img {
+          max-width: 40px;
+          max-height: 40px;
+        }
+
+      }
+
+      .article-wrapper {
+        margin-left: 40px
+      }
+
+    }
+
   }
 
   .right {
@@ -131,6 +152,10 @@
 
   .discount {
     color: green;
+  }
+
+  .nowrap {
+    white-space: nowrap;
   }
 
 }
