@@ -302,7 +302,8 @@
             vm.saleOrder.updateTotalCost();
           }
 
-        });
+        })
+        .catch(e => console.error(e));
 
     }
 
