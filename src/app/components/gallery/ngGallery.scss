@@ -98,11 +98,11 @@
       .index {
         font-weight: bold;
         margin-bottom: 0;
+        @include responsive-only(lt-sm) {
+          display: none;
+        }
       }
 
-      @include responsive-only(lt-sm) {
-        display: none;
-      }
 
     }
 
