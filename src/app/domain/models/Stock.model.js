@@ -24,7 +24,7 @@
       notify: false,
 
       meta: {
-      },
+      }
 
       // fieldTypes: {
       //   volume: 'int'
