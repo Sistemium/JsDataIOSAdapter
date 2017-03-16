@@ -257,11 +257,13 @@
       let position = getPosition(articleId);
 
       if (!position) {
+        // FIXME: duplicated with code in quantityEdit
         position = SaleOrderPosition.createInstance({
           saleOrderId: vm.saleOrder.id,
           volume: 0,
-          price: price,
-          priceDoc: price,
+          price: price.price,
+          priceDoc: price.price,
+          priceOrigin: price.priceOrigin,
           articleId: articleId
         });
         vm.saleOrder.totalCost = 0;

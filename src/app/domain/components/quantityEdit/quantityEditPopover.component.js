@@ -29,7 +29,7 @@
     let saleOrder = vm.saleOrder || _.get(vm.position, 'saleOrder');
     let article = vm.article || _.get(vm.position, 'article');
     let position = vm.position || _.find(_.get(saleOrder, 'positions'), {articleId: article.id});
-    let price = vm.price || _.get(vm.position, 'price');
+    let price = vm.price || _.pick(vm.position, ['price', 'priceOrigin', 'priceDoc']);
 
     _.assign(vm, {
 
@@ -72,9 +72,9 @@
       position = SaleOrderPosition.createInstance({
         saleOrderId: saleOrder.id,
         articleId: article.id,
-        price: price,
-        priceDoc: price,
-        priceOrigin: price,
+        price: price.price,
+        priceDoc: price.price,
+        priceOrigin: price.priceOrigin,
         volume: 0
       });
 

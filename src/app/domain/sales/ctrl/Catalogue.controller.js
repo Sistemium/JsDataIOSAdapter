@@ -10,7 +10,8 @@
     const {
       Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
       CatalogueAlert,
-      ArticlePicture
+      ArticlePicture,
+      ContractPriceGroup
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -35,6 +36,7 @@
       saleOrderPositionByArticle: {},
       showImages: localStorageService.get('showImages') || false,
       stockWithPicIndex: [],
+      discountsBy: {},
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -97,6 +99,8 @@
       });
 
     });
+
+    vm.watchScope('vm.saleOrder.contractId', setDiscounts);
 
     SalesmanAuth.watchCurrent($scope, salesman => {
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
@@ -250,6 +254,60 @@
      */
 
 
+    function setDiscounts(contractId) {
+
+      if (!contractId || !vm.prices || vm.discountsBy.contractId === contractId) return;
+
+      vm.discountsBy.contractId = contractId;
+
+      ContractPriceGroup.findAll({contractId}, {cacheResponse: false})
+        .then(data => {
+
+          vm.discounts = {};
+
+          let byPriceGroup = _.groupBy(data, 'priceGroupId');
+
+          _.each(vm.prices, (price, articleId) => {
+
+            let article = Article.get(articleId);
+            let priceGroupId = _.get(article, 'priceGroupId');
+            if (!priceGroupId) {
+              // TODO: sync with Article.loadRelations
+              return;
+            }
+
+            let contractDiscount = _.first(byPriceGroup[priceGroupId]);
+            if (!contractDiscount) return;
+
+            let {discount} = contractDiscount;
+
+            vm.discounts[articleId] = discount;
+            vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
+
+          });
+
+          DEBUG('setDiscounts end', contractId);
+
+          _.each(_.get(vm, 'saleOrder.positions'), pos => {
+            let price = vm.prices[pos.articleId];
+            if (!price) {
+              vm.prices[pos.articleId] = _.pick(pos, ['price', 'priceOrigin']);
+              console.warn(`setting prices from position ${pos.id}`)
+              return;
+            }
+            pos.price = price.price;
+            pos.priceOrigin = price.priceOrigin;
+            pos.updateCost();
+          });
+
+          if (vm.saleOrder) {
+            vm.saleOrder.updateTotalCost();
+          }
+
+        });
+
+    }
+
     function getFilteredArticlesPhotos() {
 
       vm.categoryPhotos = _.uniq(_.filter(_.map(vm.stock, 'article.avatar')));
@@ -334,15 +392,21 @@
 
       vm.prices = {};
 
-      _.each(priceType.prices(), price => vm.prices[price.articleId] = price.price * discount);
-
-      _.each(_.get(vm, 'saleOrder.positions'), pos => vm.prices[pos.articleId] = pos.price);
+      _.each(priceType.prices(), price => {
+        let priceOrigin = price.price * discount;
+        vm.prices[price.articleId] = {
+          price: priceOrigin,
+          priceOrigin
+        };
+      });
 
       DEBUG('filterStock', 'vm.prices');
 
       sortedStock = _.filter(stockCache, stock => vm.prices[stock.articleId]);
 
       DEBUG('filterStock', 'end');
+
+      setDiscounts(vm.saleOrder.contractId);
 
     }
 
