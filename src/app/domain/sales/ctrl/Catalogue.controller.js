@@ -11,7 +11,8 @@
       Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
       CatalogueAlert,
       ArticlePicture,
-      ContractPriceGroup
+      ContractPriceGroup,
+      ContractArticle
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -260,23 +261,29 @@
 
       vm.discountsBy.contractId = contractId;
 
-      ContractPriceGroup.findAll({contractId}, {cacheResponse: false})
-        .then(data => {
+      $q.all([
+        ContractArticle.findAll({contractId}, {cacheResponse: false}),
+        ContractPriceGroup.findAll({contractId}, {cacheResponse: false})
+      ])
+        .then(allData => {
 
           vm.discounts = {};
 
-          let byPriceGroup = _.groupBy(data, 'priceGroupId');
+          let byPriceGroup = _.groupBy(allData[1], 'priceGroupId');
+          let byArticleId = _.groupBy(allData[0], 'articleId');
 
           _.each(vm.prices, (price, articleId) => {
 
             let article = Article.get(articleId);
-            let priceGroupId = _.get(article, 'priceGroupId');
-            if (!priceGroupId) {
+
+            if (!article) {
               // TODO: sync with Article.loadRelations
               return;
             }
 
-            let contractDiscount = _.first(byPriceGroup[priceGroupId]);
+            let contractDiscount = _.first(byArticleId[articleId]) ||
+              _.first(byPriceGroup[_.get(article, 'priceGroupId')]);
+
             if (!contractDiscount) return;
 
             let {discount} = contractDiscount;
@@ -406,7 +413,7 @@
 
       DEBUG('filterStock', 'end');
 
-      setDiscounts(vm.saleOrder.contractId);
+      setDiscounts(_.get(vm.saleOrder, 'contractId'));
 
     }
 
