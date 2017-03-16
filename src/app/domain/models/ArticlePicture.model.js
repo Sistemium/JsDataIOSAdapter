@@ -27,37 +27,33 @@
 
       computed: {
 
-        srcThumbnail  : ['thumbnailSrc', 'thumbnailPath', (imageSrc, imagePath) => {
-          return actingImageSrc(imageSrc, imagePath);
+        // TODO: refactor with a decorator fn of PhotoHelper
+        srcThumbnail  : ['thumbnailSrc', 'thumbnailPath', 'href', (imageSrc, imagePath, href) => {
+          return actingImageSrc(imageSrc, imagePath, href, 'thumbnail');
         }],
-        srcFullscreen : ['smallSrc', 'resizedImagePath', (imageSrc, imagePath) => {
-          return actingImageSrc(imageSrc, imagePath);
+        srcFullscreen : ['smallSrc', 'resizedImagePath', 'href', (imageSrc, imagePath, href) => {
+          return actingImageSrc(imageSrc, imagePath, href, 'smallImage');
         }]
 
       }
 
     });
 
-    function actingImageSrc(imageSrc, imagePath) {
+    function actingImageSrc(imageSrc, imagePath, href, size) {
 
-      if (_.isString(imageSrc)) {
-
+      if (imageSrc) {
         return imageSrc;
-
-      } else  {
-
-        switch ($window.location.protocol) {
-          case 'http:'  :
-          case 'https:' :
-
-            // we are in iOS but not under manifest, pechalka
-            // console.log('we are in iOS but not under manifest, pechalka');
-            return 'images/placeholder.png';
-
-          case 'file:'  : return '../../../../pictures/' + imagePath;
-        }
-
       }
+
+      if (imagePath && $window.location.protocol === 'file:') {
+        return '../../../../pictures/' + imagePath;
+      }
+
+      if (href) {
+        return href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
+      }
+
+      return 'images/placeholder.png';
 
     }
 
