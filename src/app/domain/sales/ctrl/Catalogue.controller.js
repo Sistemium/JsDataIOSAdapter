@@ -12,7 +12,9 @@
       CatalogueAlert,
       ArticlePicture,
       ContractPriceGroup,
-      ContractArticle
+      ContractArticle,
+      PartnerPriceGroup,
+      PartnerArticle
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -101,7 +103,9 @@
 
     });
 
-    vm.watchScope('vm.saleOrder.contractId', setDiscounts);
+    vm.watchScope('vm.saleOrder.contractId', contractId => {
+      setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
+    });
 
     SalesmanAuth.watchCurrent($scope, salesman => {
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
@@ -255,43 +259,29 @@
      */
 
 
-    function setDiscounts(contractId) {
+    function setDiscounts(contractId, partnerId) {
 
-      if (!contractId || !vm.prices || vm.discountsBy.contractId === contractId) return;
+      if (!contractId || !partnerId || !vm.prices) return;
+
+      if (vm.discountsBy.partnerId === partnerId  && vm.discountsBy.contractId === contractId) return;
 
       vm.discountsBy.contractId = contractId;
+      vm.discountsBy.partnerId = partnerId;
 
       $q.all([
         ContractArticle.findAll({contractId}, {cacheResponse: false}),
-        ContractPriceGroup.findAll({contractId}, {cacheResponse: false})
+        ContractPriceGroup.findAll({contractId}, {cacheResponse: false}),
+        PartnerArticle.findAll({partnerId}, {cacheResponse: false}),
+        PartnerPriceGroup.findAll({partnerId}, {cacheResponse: false})
       ])
         .then(allData => {
 
           vm.discounts = {};
 
-          let byPriceGroup = _.groupBy(allData[1], 'priceGroupId');
-          let byArticleId = _.groupBy(allData[0], 'articleId');
+          // maybe noticeable faster to do one pass
 
-          _.each(vm.prices, (price, articleId) => {
-
-            let article = Article.get(articleId);
-
-            if (!article) {
-              // TODO: sync with Article.loadRelations
-              return;
-            }
-
-            let contractDiscount = _.first(byArticleId[articleId]) ||
-              _.first(byPriceGroup[_.get(article, 'priceGroupId')]);
-
-            if (!contractDiscount) return;
-
-            let {discount} = contractDiscount;
-
-            vm.discounts[articleId] = discount;
-            vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
-
-          });
+          setDiscountsWithModelData(allData[0], allData[1]);
+          setDiscountsWithModelData(allData[2], allData[3]);
 
           DEBUG('setDiscounts end', contractId);
 
@@ -312,6 +302,36 @@
           }
 
         });
+
+    }
+
+    function setDiscountsWithModelData(articleData, priceGroupData) {
+
+      let byArticleId = _.groupBy(articleData, 'articleId');
+      let byPriceGroup = _.groupBy(priceGroupData, 'priceGroupId');
+
+      _.each(vm.prices, (price, articleId) => {
+
+        let article = Article.get(articleId);
+
+        if (!article) {
+          // TODO: sync with Article.loadRelations
+          return;
+        }
+
+        let contractDiscount = _.first(byArticleId[articleId]) ||
+          _.first(byPriceGroup[_.get(article, 'priceGroupId')]);
+
+        if (!contractDiscount) return;
+
+        let {discount} = contractDiscount;
+
+        if (!discount) return;
+
+        vm.discounts[articleId] = discount;
+        vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
+
+      });
 
     }
 
@@ -413,7 +433,7 @@
 
       DEBUG('filterStock', 'end');
 
-      setDiscounts(_.get(vm.saleOrder, 'contractId'));
+      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'));
 
     }
 

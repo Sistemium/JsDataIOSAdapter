@@ -60,7 +60,7 @@ before-tag-name='li'
             | x
         small {{vm.prices[stock.articleId].price | number:2}} ₽
         small.discount(ng-if='vm.discounts[stock.articleId]')
-          | ({{vm.discounts[stock.articleId] < 0 ? '+' :'' }}{{ -vm.discounts[stock.articleId] | number }}%)
+          | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
 
     .right(ng-if='vm.saleOrder && vm.prices[stock.articleId]')
 
