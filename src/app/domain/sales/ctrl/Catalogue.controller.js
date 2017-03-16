@@ -40,6 +40,7 @@
       showImages: localStorageService.get('showImages') || false,
       stockWithPicIndex: [],
       discountsBy: {},
+      discounts: {},
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -263,7 +264,7 @@
 
       if (!contractId || !partnerId || !vm.prices) return;
 
-      if (vm.discountsBy.partnerId === partnerId  && vm.discountsBy.contractId === contractId) return;
+      if (vm.discountsBy.partnerId === partnerId && vm.discountsBy.contractId === contractId) return;
 
       vm.discountsBy.contractId = contractId;
       vm.discountsBy.partnerId = partnerId;
@@ -422,7 +423,7 @@
       _.each(priceType.prices(), price => {
         let priceOrigin = price.price * discount;
         vm.prices[price.articleId] = {
-          price: priceOrigin,
+          price: _.round(priceOrigin * (1 - (vm.discounts[price.articleId]||0) / 100.0), 2),
           priceOrigin
         };
       });
