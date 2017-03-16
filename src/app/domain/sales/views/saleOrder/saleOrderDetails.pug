@@ -71,5 +71,7 @@
           td {{ item.article.name }}
           td.number
             quantity-edit(position='item')
-          td.number.hidden-xs {{ item.price | number:2 }}
+          td.number.hidden-xs
+            span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ ::item.discountPercent() }}%)
+            span {{ item.price | number:2 }}
           td.number.hidden-xs {{ item.cost | number:2}}
