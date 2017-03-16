@@ -129,6 +129,7 @@
       flex-flow: row nowrap;
       display: flex;
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
 
       .ng-thumbnail {
 
