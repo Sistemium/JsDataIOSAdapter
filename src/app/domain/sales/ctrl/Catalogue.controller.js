@@ -14,7 +14,11 @@
       ContractPriceGroup,
       ContractArticle,
       PartnerPriceGroup,
-      PartnerArticle
+      PartnerArticle,
+      SalesmanOutletRestriction,
+      OutletRestriction,
+      Restriction,
+      RestrictionArticle
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -106,6 +110,7 @@
 
     vm.watchScope('vm.saleOrder.contractId', contractId => {
       setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
+      setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
     });
 
     SalesmanAuth.watchCurrent($scope, salesman => {
@@ -592,6 +597,38 @@
         delete vm.alertTriggers[id];
       }
 
+    }
+
+    function setRestrictions(salesmanId, outletId) {
+
+      vm.restrictedArticles = {};
+
+      if (!salesmanId || !outletId) return;
+
+      $q.all([
+        OutletRestriction.findAll({outletId}, {cacheResponse: false}),
+        SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
+        Restriction.findAll(),
+        RestrictionArticle.findAll()
+      ])
+        .then(res => {
+
+          let restrictionIds = _.uniq(_.union(_.map(res[0], 'restrictionId'), _.map(res[1], 'restrictionId')));
+
+          let restrictionArticles = res[3];
+
+          _.map(restrictionArticles, ra => {
+            let restrictionId = ra.restrictionId;
+            if (restrictionIds.indexOf(restrictionId) === -1) return;
+            vm.restrictedArticles[ra.articleId] = Restriction.get(restrictionId);
+          });
+
+          if (restrictionIds.length) {
+            toastr.info(_.map(Restriction.getAll(restrictionIds), 'name').join(', '), 'Применены запреты');
+          }
+
+        })
+        .catch(e => console.error(e));
     }
 
   }

@@ -10,6 +10,7 @@ before-tag-name='li'
   .list-group-item.display-flex.flex-align-center.spaced(
   ng-repeat='stock in vm.stock track by stock.id'
   ng-class='{"item-padding": vm.showImages}'
+  ng-disabled='vm.restrictedArticles[stock.articleId]'
   )
 
     ng-gallery(
@@ -48,6 +49,9 @@ before-tag-name='li'
         small {{::stock.article.lastName}}
 
       .article-name-third
+        small.red(
+        ng-if='vm.restrictedArticles[stock.articleId]'
+        ) Запрет {{ vm.restrictedArticles[stock.articleId].shortName }}
         i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
         small.gray.nowrap(ng-if='stock.volume')
           span ~{{stock.displayVolume}}
@@ -62,7 +66,10 @@ before-tag-name='li'
         small.discount(ng-if='vm.discounts[stock.articleId]')
           | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
 
-    .right(ng-if='vm.saleOrder && vm.prices[stock.articleId]')
+    fieldset.right(
+    ng-if='vm.saleOrder && vm.prices[stock.articleId]'
+    ng-disabled='vm.restrictedArticles[stock.articleId]'
+    )
 
       button.btn.btn-default(
       stm-click='kPlusButton'
