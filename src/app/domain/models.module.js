@@ -145,8 +145,6 @@
         return DS.store[this.name].index;
       },
 
-      nonUserFields: ['ts', 'cts', 'deviceTs', 'deviceCts', 'deviceAts', 'lts'],
-
       parseBool: val => val == 1,
       parseDecimal: val => parseFloat(val) || 0,
       parseInteger: val => parseInt(val) || 0,
@@ -158,18 +156,20 @@
 
   function registerAdapters($window, DS, IosAdapter, SocketAdapter, Schema, InitService) {
 
+    _.assign(DS.defaults, {
+      watchChanges: false,
+      instanceEvents: false,
+      omit: ['ts', 'cts', 'deviceTs', 'deviceCts', 'deviceAts', 'lts']
+    });
+
     if ($window.webkit) {
-      DS.registerAdapter('ios', new IosAdapter(Schema), {default: true});
+      const iosAdapter = new IosAdapter(Schema);
+      DS.registerAdapter('ios', iosAdapter, {default: true});
     } else {
       InitService.then(app => {
         DS.registerAdapter('socket', new SocketAdapter({pool: app.org}), {default: true});
       });
     }
-
-    _.assign(DS.defaults, {
-      watchChanges: false,
-      instanceEvents: false
-    });
 
     $window.saDS = DS;
 

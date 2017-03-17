@@ -290,7 +290,7 @@
             let price = vm.prices[pos.articleId];
             if (!price) {
               vm.prices[pos.articleId] = _.pick(pos, ['price', 'priceOrigin']);
-              console.warn(`setting prices from position ${pos.id}`)
+              console.warn(`setting prices from position ${pos.id}`);
               return;
             }
             pos.price = price.price;
@@ -298,7 +298,7 @@
             pos.updateCost();
           });
 
-          if (vm.saleOrder) {
+          if (_.get(vm.saleOrder, 'positions.length')) {
             vm.saleOrder.updateTotalCost();
           }
 

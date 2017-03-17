@@ -93,14 +93,16 @@
 
               if (!SaleOrder.hasChanges(this)) return;
 
-              let changes = _.get(SaleOrder.changes(this), 'changed');
-              let changedKeys = _.keys(_.omit(changes, Schema.nonUserFields));
+              let changedKeys = _.keys(_.get(SaleOrder.changes(this), 'changed'));
 
               DEBUG('SaleOrder.safeSave changedKeys:', changedKeys);
 
               // TODO: need investigation why this happens
-              if (!changedKeys.length) return;
+              if (!changedKeys.length) {
+                return console.warn('SaleOrder has changes but no changedKeys');
+              }
 
+              // TODO: maybe unCachedSave isn't necessary since used JSD omit
               return SaleOrder.unCachedSave(this, {keepChanges: changedKeys});
 
             })
