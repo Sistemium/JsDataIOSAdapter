@@ -49,7 +49,7 @@ before-tag-name='li'
 
       .article-name-third
         i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
-        small.gray(ng-if='stock.volume')
+        small.gray.nowrap(ng-if='stock.volume')
           span ~{{stock.displayVolume}}
         small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
           span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
@@ -58,7 +58,7 @@ before-tag-name='li'
           span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
           span.gray
             | x
-        small {{vm.prices[stock.articleId].price | number:2}} ₽
+        small.nowrap {{vm.prices[stock.articleId].price | number:2}} ₽
         small.discount(ng-if='vm.discounts[stock.articleId]')
           | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
 
