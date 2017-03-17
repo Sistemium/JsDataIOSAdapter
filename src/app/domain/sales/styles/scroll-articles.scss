@@ -73,6 +73,12 @@
 
   }
 
+  [disabled] .right {
+    * {
+      visibility: hidden;
+    }
+  }
+
   .right {
 
     margin-left: 1em;

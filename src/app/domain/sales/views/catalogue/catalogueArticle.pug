@@ -48,10 +48,9 @@ before-tag-name='li'
         small {{::stock.article.preName}}
         small {{::stock.article.lastName}}
 
-      .article-name-third
-        small.red(
-        ng-if='vm.restrictedArticles[stock.articleId]'
-        ) Запрет {{ vm.restrictedArticles[stock.articleId].shortName }}
+      .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
+        small.red Запрет "{{ vm.restrictedArticles[stock.articleId].name }}"
+      .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
         i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
         small.gray.nowrap(ng-if='stock.volume')
           span ~{{stock.displayVolume}}
@@ -66,9 +65,8 @@ before-tag-name='li'
         small.discount(ng-if='vm.discounts[stock.articleId]')
           | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
 
-    fieldset.right(
+    .right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId]'
-    ng-disabled='vm.restrictedArticles[stock.articleId]'
     )
 
       button.btn.btn-default(
