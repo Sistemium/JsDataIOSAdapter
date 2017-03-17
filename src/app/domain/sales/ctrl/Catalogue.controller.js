@@ -264,7 +264,8 @@
      Functions
      */
 
-
+    // TODO: move to a separate helper
+    
     function setDiscounts(contractId, partnerId) {
 
       if (!contractId || !partnerId || !vm.prices) return;
@@ -598,6 +599,8 @@
       }
 
     }
+
+    // TODO: move to a separate helper
 
     function setRestrictions(salesmanId, outletId) {
 
