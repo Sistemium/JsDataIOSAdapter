@@ -47,6 +47,14 @@
           // PickingRequest: {
           //   localField: 'pickingOrders',
           //   foreignKey: 'outlet'
+          // },
+          // OutletRestriction: {
+          //   localField: 'outletRestrictions',
+          //   foreignKey: 'outletId'
+          // },
+          // SalesmanOutletRestriction: {
+          //   localField: 'salesmanOutletRestrictions',
+          //   foreignKey: 'outletId'
           // }
         }
       },

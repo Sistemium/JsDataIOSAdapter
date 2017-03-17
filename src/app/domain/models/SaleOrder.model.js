@@ -103,7 +103,7 @@
               }
 
               // TODO: maybe unCachedSave isn't necessary since used JSD omit
-              return SaleOrder.unCachedSave(this, {keepChanges: changedKeys});
+              return SaleOrder.create(this);
 
             })
             .catch(err => {
