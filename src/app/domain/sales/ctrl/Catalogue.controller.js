@@ -265,7 +265,7 @@
      */
 
     // TODO: move to a separate helper
-    
+
     function setDiscounts(contractId, partnerId) {
 
       if (!contractId || !partnerId || !vm.prices) return;

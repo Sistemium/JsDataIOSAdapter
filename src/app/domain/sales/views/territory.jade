@@ -13,6 +13,8 @@ ng-hide='vm.hideHashes'
   ng-class='btn.match.test(vm.currentHash) ? "btn-primary" : "btn-default"'
   ) {{ ::btn.label }}
 
+  // TODO: hide sub buttons if them less than could be shown
+
   button.btn.margin(
   ng-repeat-end
   ng-repeat='subbtn in btn.buttons track by subbtn.label'
