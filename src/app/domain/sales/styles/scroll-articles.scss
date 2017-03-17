@@ -158,6 +158,8 @@
 
   .article-name-second {
     color: gray;
+    display: inline-block;
+    max-width: 100%;
     @extend .ellipsis;
 
     .tooltip-inner {
