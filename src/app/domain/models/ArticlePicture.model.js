@@ -53,7 +53,7 @@
         return href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
       }
 
-      return 'images/placeholder.png';
+      return null;
 
     }
 

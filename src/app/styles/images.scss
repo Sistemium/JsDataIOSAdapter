@@ -1,3 +1,5 @@
+@import "mixins";
+
 .thumbnail img.w-150 {
   max-width: 150px;
   max-height: 150px;
@@ -25,4 +27,13 @@
   min-height: 340px;
   max-height: 340px;
   padding-bottom: 40px;
+}
+
+img.placeholder {
+  opacity: 0.3;
+  background: url("images/placeholder.png") no-repeat center;
+  background-size: 50px;
+  @include responsive-only(xxs) {
+    background-size: 30px;
+  }
 }

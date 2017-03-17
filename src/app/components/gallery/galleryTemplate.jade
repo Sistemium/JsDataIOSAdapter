@@ -1,12 +1,11 @@
 .thumbnails(ng-class='baseClass')
   a(
   href
-  ng-disabled='!thumbImage'
+  ng-disabled='!thumbImage.srcThumbnail'
   ng-click='vm.thumbnailClick(thumbImage)'
   )
     img(
-    ng-src='{{ thumbImage && thumbImage.srcThumbnail || "images/placeholder.png" }}'
-    ng-class='thumbClass'
-    alt='Ошибка получения фото'
+    ng-src='{{ thumbImage && thumbImage.srcThumbnail }}'
+    ng-class='[thumbClass, !(thumbImage && thumbImage.srcThumbnail) ? "placeholder" : ""]'
     draggable='false'
     )
