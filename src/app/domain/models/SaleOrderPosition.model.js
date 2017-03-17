@@ -39,10 +39,10 @@
 
         safeSave: function () {
 
-          let options = {keepChanges: ['cost', 'volume']};
+          // let options = {keepChanges: ['cost', 'volume']};
 
           if (this.volume > 0) {
-            return SaleOrderPosition.unCachedSave(this, options);
+            return SaleOrderPosition.create(this);
           } else {
             return SaleOrderPosition.destroy(this);
           }
