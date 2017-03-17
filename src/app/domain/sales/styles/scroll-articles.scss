@@ -11,13 +11,23 @@
 
   /* Styles for ng-gallery thumbnail*/
 
+  .thumbnails {
+    margin-right: 10px;
+
+    a {
+      margin: 1px;
+    }
+
+  }
+
   img {
+
+    margin: -1px !important;
 
     outline: 0;
     width: 70px;
     height: 68px;
     object-fit: contain;
-    margin-right: 10px;
 
     @include responsive-only(lt-sm) {
       max-width: 49px;
@@ -40,7 +50,7 @@
     @media (max-width: $screen-xs-max) {
       min-height: 74px;
     }
-    
+
     padding: 0 10px;
 
     @include responsive-only(xxs) {
