@@ -19,6 +19,7 @@
             span.animate-show.spaced
               small на
               small.strong {{ vm.saleOrder.date }}
+              small.strong ({{ vm.saleOrder.workflow().label }})
               // TODO: show date with amCalendar but without time
           .address
             small {{vm.saleOrder.outlet.address}}
@@ -35,7 +36,10 @@
           strong {{ vm.saleOrder.totalCost | number:2 }}
           span ₽
         | &nbsp;
-        a.toggle-edit(href ng-click='vm.toggleEditClick()')
+        a.toggle-edit(
+        href ng-click='vm.toggleEditClick()'
+        ng-if='vm.saleOrder && vm.saleOrder.workflow().editable'
+        )
           i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
       .no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
@@ -49,6 +53,13 @@
           span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
           span.caret
 
+    buttons
+
+      button.btn.btn-primary.btn-sm(
+      ng-repeat='(destination, label) in vm.saleOrder.workflow().to'
+      ng-click='vm.setProcessingClick(destination)'
+      ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
+      ) {{ label }}
 
 
   .animate-show#scroll-main(

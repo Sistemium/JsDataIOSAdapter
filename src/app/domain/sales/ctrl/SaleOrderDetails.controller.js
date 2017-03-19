@@ -2,14 +2,16 @@
 
 (function () {
 
-  function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q) {
+  function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q, toastr) {
 
     const vm = saControllerHelper.setup(this, $scope);
     const {SaleOrderPosition, SaleOrder, Contract, PriceType} = Schema.models();
 
     vm.use({
 
-      toggleEditClick: () => vm.editing = !vm.editing
+      toggleEditClick: () => vm.editing = !vm.editing,
+
+      setProcessingClick,
 
     });
 
@@ -28,6 +30,12 @@
     /*
      Functions
      */
+
+    function setProcessingClick(processing) {
+
+      toastr.info(`processing: ${processing}`, 'Статус заказа изменен');
+
+    }
 
     function safeSave () {
       return vm.saleOrder && vm.saleOrder.safeSave();

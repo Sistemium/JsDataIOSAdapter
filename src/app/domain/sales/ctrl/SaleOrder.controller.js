@@ -19,7 +19,6 @@
 
       itemClick,
       newItemClick,
-
       onStateChange
 
     });
