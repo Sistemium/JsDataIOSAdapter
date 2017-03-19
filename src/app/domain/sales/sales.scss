@@ -98,3 +98,29 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
     width: 100%;
   }
 }
+
+.buttons {
+  button + button {
+    margin-left: $margin-bottom-xs;
+  }
+}
+
+
+.popovers {
+  .processing {
+
+    display: inline-block;
+    color: white;
+    background-color: gray;
+    border-radius: $border-radius/2;
+    border: solid 1px lighten(gray, 10%);
+    padding: 4px 8px;
+
+    &.blue {
+      color: white;
+      background-color: $primary-color;
+      border-color: lighten($primary-color, 10%);
+    }
+
+  }
+}
