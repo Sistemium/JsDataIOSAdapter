@@ -11,7 +11,8 @@
 
       toggleEditClick: () => vm.editing = !vm.editing,
 
-      setProcessingClick
+      setProcessingClick,
+      setSaleOrderClick
 
     });
 
@@ -25,11 +26,21 @@
      Listeners
      */
 
+    vm.watchScope('vm.saleOrder.date', newValue => {
+      if (!newValue) return;
+      vm.rebindAll(SaleOrder, {date: newValue}, 'draftSaleOrders');
+    });
+
     SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', _.debounce(safeSave,700));
 
     /*
      Functions
      */
+
+    function setSaleOrderClick(saleOrder) {
+      if (!saleOrder.id) return;
+      $state.go($state.current.name, {id: saleOrder.id}, {inherit: true});
+    }
 
     function setProcessingClick(processing) {
 
