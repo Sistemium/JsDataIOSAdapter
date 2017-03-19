@@ -2,7 +2,7 @@
 
 (function () {
 
-  function PhotoHelper(IOS, Schema, $q, ConfirmModal, toastr) {
+  function PhotoHelper(IOS, Schema, $q, ConfirmModal, toastr, $window) {
 
     function takePhoto(resourceName, data, thumbnailCache) {
 
@@ -88,11 +88,30 @@
 
     }
 
+    function actingImageSrc(imageSrc, imagePath, href, size) {
+
+      if (imageSrc) {
+        return imageSrc;
+      }
+
+      if (imagePath && $window.location.protocol === 'file:') {
+        return '../../../../pictures/' + imagePath;
+      }
+
+      if (href) {
+        return href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
+      }
+
+      return null;
+
+    }
+
     return {
       takePhoto,
       importThumbnail,
       thumbnailClick,
-      getImageSrc
+      getImageSrc,
+      actingImageSrc
     };
 
   }
