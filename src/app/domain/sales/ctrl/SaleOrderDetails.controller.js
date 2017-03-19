@@ -11,7 +11,7 @@
 
       toggleEditClick: () => vm.editing = !vm.editing,
 
-      setProcessingClick,
+      setProcessingClick
 
     });
 
