@@ -71,11 +71,9 @@ before-tag-name='li'
     )
 
       button.btn.btn-default(
-      stm-click='kPlusButton'
-      click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
+      ng-click='vm.kPlusButtonClick(stock)'
       ) +К
 
       button.btn.btn-default(
-      stm-click='bPlusButton'
-      click-payload='{stock: stock, price: vm.prices[stock.articleId]}'
+      ng-click='vm.kPlusButtonClick(stock)'
       ) +Б

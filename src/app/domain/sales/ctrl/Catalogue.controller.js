@@ -54,6 +54,9 @@
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
 
+      bPlusButtonClick,
+      kPlusButtonClick,
+
       onStateChange,
       articleRowHeight,
       alertCheck,
@@ -163,6 +166,14 @@
     /*
      Handlers
      */
+
+    function kPlusButtonClick(stock) {
+      $scope.$broadcast('kPlusButtonClick', stock.article, vm.prices[stock.articleId]);
+    }
+
+    function bPlusButtonClick(stock) {
+      $scope.$broadcast('bPlusButtonClick', stock.article, vm.prices[stock.articleId]);
+    }
 
     function toggleShowImagesClick() {
 

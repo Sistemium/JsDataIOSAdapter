@@ -16,8 +16,6 @@
 
     vm.use({
 
-      kPlusButtonClick,
-      bPlusButtonClick,
       searchOutletClick,
       clearSearchOutletClick,
       saleOrderDoneClick,
@@ -68,6 +66,9 @@
     $scope.$on('$destroy', () => {
       SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
     });
+
+    vm.onScope('kPlusButtonClick', kPlusButtonClick);
+    vm.onScope('bPlusButtonClick', bPlusButtonClick);
 
     /*
      Handlers
@@ -213,12 +214,12 @@
       saEtc.focusElementById(id);
     }
 
-    function kPlusButtonClick(data) {
-      addPositionVolume(data.stock.articleId, data.stock.article.packageRel, data.price);
+    function kPlusButtonClick(event, article, price) {
+      addPositionVolume(article.id, article.packageRel, price);
     }
 
-    function bPlusButtonClick(data) {
-      addPositionVolume(data.stock.articleId, 1, data.price);
+    function bPlusButtonClick(event, article, price) {
+      addPositionVolume(article.id, 1, price);
     }
 
     function searchOutletClick(outlet) {
