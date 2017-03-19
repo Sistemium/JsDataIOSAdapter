@@ -34,7 +34,7 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
         ng-click='vm.itemClick(item)'
         )
           td.processing {{ item.workflow().label }}
-          td(ng-if='!vm.currentSalesman') {{ item.salesman.tinyName }}
+          td.tinyName(ng-if='!vm.currentSalesman') {{ item.salesman.tinyName }}
           td
             div {{ item.outlet.name }}
             .gray {{ item.outlet.address }}
