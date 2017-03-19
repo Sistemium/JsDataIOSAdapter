@@ -75,9 +75,14 @@
      Handlers
      */
 
+    // FIXME: copy-pasted from SaleOrderDetails.controller
+
     function setProcessingClick(processing) {
 
-      toastr.info(`processing: ${processing}`, 'Статус заказа изменен');
+      vm.saleOrder.processing = processing;
+      vm.saleOrder.DSCreate()
+        .then(() => toastr.info(_.get(vm.saleOrder.workflow(), 'desc'), 'Статус заказа изменен'))
+        .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
 
     }
 
