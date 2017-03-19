@@ -46,6 +46,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
     ) Сохранить черновик
 
     button.btn.btn-primary.btn-sm(
-    stm-click='saleOrderDone'
+    ng-repeat='(destination, label) in vm.saleOrder.workflow().to'
+    ng-click='vm.setProcessingClick(destination)'
     ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
-    ) Отправить в обработку
+    ) {{ label }}

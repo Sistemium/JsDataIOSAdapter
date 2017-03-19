@@ -91,9 +91,11 @@
       }
 
       vm.setBusy(
-        [Outlet.findAll(_.assign({where: bySalesman}, _.omit(filter, 'date')))
-          .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
-          SaleOrderPosition.findAll(saleOrderPositionsFilter)],
+        [
+          Outlet.findAll(_.assign({where: bySalesman}, _.omit(filter, 'date')))
+            .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
+          SaleOrderPosition.findAll(saleOrderPositionsFilter)
+        ],
         'Загрузка данных дня'
       );
 

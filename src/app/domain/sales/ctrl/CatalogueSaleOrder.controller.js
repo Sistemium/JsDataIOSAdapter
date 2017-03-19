@@ -19,7 +19,8 @@
       searchOutletClick,
       clearSearchOutletClick,
       saleOrderDoneClick,
-      saleOrderSaveDraftClick
+      saleOrderSaveDraftClick,
+      setProcessingClick
 
     });
 
@@ -73,6 +74,12 @@
     /*
      Handlers
      */
+
+    function setProcessingClick(processing) {
+
+      toastr.info(`processing: ${processing}`, 'Статус заказа изменен');
+
+    }
 
     function onSalesmanChange(salesman) {
 

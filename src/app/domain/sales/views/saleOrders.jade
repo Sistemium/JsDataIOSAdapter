@@ -22,6 +22,7 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
     table.table.table-striped.clear-both.table-hover
       thead
         tr
+          th Статус
           th(ng-if='!vm.currentSalesman') ТП
           th Точка
           th.hidden-xs Создан
@@ -32,7 +33,8 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
         ng-click='vm.itemClick(item)'
         )
-          td(ng-if='!vm.currentSalesman') {{ item.salesman.shortName }}
+          td.processing {{ item.workflow().label }}
+          td(ng-if='!vm.currentSalesman') {{ item.salesman.tinyName }}
           td
             div {{ item.outlet.name }}
             .gray {{ item.outlet.address }}

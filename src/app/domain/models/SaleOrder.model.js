@@ -62,6 +62,11 @@
       },
 
       methods: {
+
+        workflow: function () {
+          return this.processing && Schema.workflowSaleOrder[this.processing];
+        },
+
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
         },
