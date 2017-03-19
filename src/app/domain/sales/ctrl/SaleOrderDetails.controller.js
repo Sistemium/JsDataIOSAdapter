@@ -54,8 +54,9 @@
           PriceType.find(saleOrder.priceTypeId);
 
           return $q.all(_.map(saleOrder.positions, position => {
-            SaleOrderPosition.loadRelations(position)
-          }))
+            return SaleOrderPosition.loadRelations(position)
+          }));
+
         })
         .catch(e => console.error(e));
 

@@ -1,4 +1,9 @@
-p.processingMessage(ng-if='vm.saleOrder.processingMessage') {{ vm.saleOrder.processingMessage }}
+.processingMessage(
+ng-if='vm.saleOrder.processingMessage'
+ng-class='vm.saleOrder.workflow().messageCls'
+)
+  i.glyphicon.glyphicon-warning-sign
+  span {{ vm.saleOrder.processingMessage }}
 
 .form-group
   .col-sm-12.sale-order-contract
