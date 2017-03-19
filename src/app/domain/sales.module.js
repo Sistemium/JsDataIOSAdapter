@@ -20,6 +20,13 @@
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
+          const Workflow = Schema.model('Workflow');
+
+          Workflow.findAll({code: 'SaleOrder.v2'})
+            .then(workflow => {
+              Schema.workflowSaleOrder = _.get(_.first(workflow), 'workflow');
+            });
+
         });
 
       function onRecordStatus(event) {
@@ -30,7 +37,7 @@
           Schema
             .model(event.data.name)
             .eject(event.data.objectXid);
-        } catch(e) {
+        } catch (e) {
           console.warn('onRecordStatus error:', e);
         }
 
