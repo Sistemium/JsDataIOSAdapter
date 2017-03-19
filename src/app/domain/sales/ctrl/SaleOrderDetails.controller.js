@@ -26,6 +26,13 @@
      Listeners
      */
 
+    // FIXME: copy-pasted from CatalogueSaleOrder.controller
+
+    vm.watchScope('vm.saleOrder.processingMessage', processingMessage => {
+      if (!processingMessage) return;
+      toastr.error(processingMessage);
+    });
+
     vm.watchScope('vm.saleOrder.date', newValue => {
       if (!newValue) return;
       vm.rebindAll(SaleOrder, {date: newValue}, 'draftSaleOrders');
@@ -46,7 +53,10 @@
 
       vm.saleOrder.processing = processing;
       vm.saleOrder.DSCreate()
-        .then(() => toastr.info(_.get(vm.saleOrder.workflow(), 'desc'), 'Статус заказа изменен'))
+        .then(saleOrder => {
+          let {desc, label} = _.result(saleOrder, 'workflow');
+          toastr.info(desc, `Статус заказа: ${label}`);
+        })
         .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
 
     }
