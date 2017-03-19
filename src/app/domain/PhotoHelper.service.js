@@ -88,18 +88,18 @@
 
     }
 
-    function actingImageSrc(imageSrc, imagePath, href, size) {
+    function actingImageSrc(picture, size) {
 
-      if (imageSrc) {
-        return imageSrc;
+      if (picture.imageSrc) {
+        return picture.imageSrc;
       }
 
-      if (imagePath && $window.location.protocol === 'file:') {
-        return '../../../../pictures/' + imagePath;
+      if (picture.imagePath && $window.location.protocol === 'file:') {
+        return '../../../../pictures/' + picture.imagePath;
       }
 
-      if (href) {
-        return href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
+      if (picture.href) {
+        return picture.href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
       }
 
       return null;

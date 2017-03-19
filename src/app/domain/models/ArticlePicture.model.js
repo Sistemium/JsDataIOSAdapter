@@ -27,13 +27,13 @@
 
       computed: {
 
-        // TODO: refactor with a decorator fn of PhotoHelper
-        srcThumbnail  : ['thumbnailSrc', 'thumbnailPath', 'href', (imageSrc, imagePath, href) => {
-          return PhotoHelper.actingImageSrc(imageSrc, imagePath, href, 'thumbnail');
-        }],
-        srcFullscreen : ['smallSrc', 'resizedImagePath', 'href', (imageSrc, imagePath, href) => {
-          return PhotoHelper.actingImageSrc(imageSrc, imagePath, href, 'smallImage');
-        }]
+        // arrow functions does not work correctly with 'this'
+        srcThumbnail  : function() {
+          return PhotoHelper.actingImageSrc(this, 'thumbnail');
+        },
+        srcFullscreen : function() {
+            return PhotoHelper.actingImageSrc(this, 'smallImage');
+        }
 
       }
 
