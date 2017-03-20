@@ -86,7 +86,7 @@
           th.number Количество
           th.number.hidden-xs Цена
           th.number.hidden-xs Стоимость
-      tbody(ng-class='{disabled: !vm.editing}')
+      tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflow().editable}')
         tr.clickable(
         ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
         )
