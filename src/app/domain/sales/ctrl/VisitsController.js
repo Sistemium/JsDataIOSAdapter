@@ -8,8 +8,8 @@
     const {yLatLng, distanceFn} = mapsHelper;
     const numberFilter = $filter('number');
 
-    let maxDate;
-    let minDate;
+    let today = moment().toDate();
+    today.setHours(0, 0, 0, 0);
     let events;
 
     let vm = saControllerHelper.setup(this, $scope);
@@ -21,6 +21,8 @@
 
       selectedDate: moment($state.params.date).toDate(),
       initDate: moment().add(1, 'days').toDate(),
+      maxDate: today,
+      minDate: today,
       selectPreviousDay,
       previousDayAvailable,
       selectNextDay,
@@ -80,8 +82,8 @@
         vm.selectedDate = new Date();
       }
 
-      maxDate = new Date();
-      maxDate.setHours(0, 0, 0, 0);
+      vm.maxDate = new Date();
+      vm.maxDate.setHours(0, 0, 0, 0);
 
       filterVisitsBySelectedDate();
 
@@ -112,9 +114,9 @@
     function markDaysWithVisits() {
 
       events = _.groupBy(vm.visits, 'date');
-      events [dateFormatted(maxDate)] = {status: 'today'};
+      events [dateFormatted(vm.maxDate)] = {status: 'today'};
 
-      minDate = moment(_.min(_.map(events, (visits, date) => date))).toDate();
+      vm.minDate = moment(_.min(_.map(events, (visits, date) => date))).toDate();
 
     }
 
@@ -164,19 +166,19 @@
     }
 
     function previousDayAvailable() {
-      return vm.selectedDate && vm.selectedDate > minDate;
+      return vm.selectedDate && vm.selectedDate > vm.minDate;
     }
 
     function nextDayAvailable() {
-      return vm.selectedDate && vm.selectedDate < maxDate;
+      return vm.selectedDate && vm.selectedDate < vm.maxDate;
     }
 
     function datepickerOptions() {
 
       return {
         customClass: getDayClass,
-        maxDate,
-        minDate,
+        maxDate: vm.maxDate,
+        minDate: vm.minDate,
         startingDay: 1,
         showWeeks: false
       };
