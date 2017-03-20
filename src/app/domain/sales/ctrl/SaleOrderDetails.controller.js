@@ -11,12 +11,8 @@
 
       toggleEditClick: () => vm.editing = !vm.editing,
 
-<<<<<<< HEAD
-      setProcessingClick
-=======
       setProcessingClick,
       setSaleOrderClick
->>>>>>> SaleOrders2
 
     });
 
