@@ -20,6 +20,7 @@
       selectedDayVisits: [],
 
       selectedDate: moment($state.params.date).toDate(),
+      initDate: moment().add(1, 'days').toDate(),
       selectPreviousDay,
       previousDayAvailable,
       selectNextDay,
