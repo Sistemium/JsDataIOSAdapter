@@ -80,10 +80,15 @@
     margin-bottom: 1px;
 
     &.blue, &.info {
-      background-color: $info-background-color;
-      // TODO: declare a variable with color transformation as in bootstrap
-      border-color: #bce8f1;
-      color: $info-color;
+      background-color: $state-info-bg;
+      border-color: $state-info-border;
+      color: $state-info-text;
+    }
+
+    &.green, &.success {
+      background-color: $state-success-bg;
+      border-color: $state-success-border;
+      color: $state-success-text;
     }
 
     i + span {
