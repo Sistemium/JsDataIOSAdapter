@@ -50,6 +50,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
 
   buttons
     button.btn.btn-success.btn-sm(
+    ng-if='vm.saleOrder.processing == "draft"'
     stm-click='saleOrderSaveDraft'
     ng-disabled='!vm.saleOrder.isValid()'
     ) Сохранить черновик
