@@ -64,7 +64,7 @@
       methods: {
 
         workflow: function () {
-          return this.processing && Schema.workflowSaleOrder[this.processing];
+          return Schema.workflowSaleOrder && Schema.workflowSaleOrder[this.processing];
         },
 
         updateTotalCost: function () {

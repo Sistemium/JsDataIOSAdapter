@@ -14,6 +14,14 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
           span.animate-show.spaced
             small на
             small.strong {{ vm.saleOrder.date }}
+            small.processing(
+            ng-class='[vm.saleOrder.workflow().cls, vm.saleOrder.processing]'
+            ) {{ vm.saleOrder.workflow().label }}
+            small(
+            ng-if='vm.saleOrder.processingMessage'
+            ng-class='vm.saleOrder.workflow().messageCls'
+            )
+              i.glyphicon.glyphicon-warning-sign
             // TODO: show date with amCalendar but without time
         .address
           small {{vm.saleOrder.outlet.address}}

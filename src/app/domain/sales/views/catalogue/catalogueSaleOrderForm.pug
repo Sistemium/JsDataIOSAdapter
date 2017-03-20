@@ -1,3 +1,12 @@
+.alert.alert-info.processingMessage(
+uib-alert
+ng-if='vm.saleOrder.processingMessage'
+close='vm.saleOrder.processingMessage = null'
+)
+  strong(ng-class='vm.saleOrder.workflow().messageCls')
+    i.glyphicon.glyphicon-warning-sign
+  span {{ vm.saleOrder.processingMessage }}
+
 .form-group
   .col-sm-12.sale-order-contract
     span.gray ТП {{ vm.saleOrder.salesman.tinyName }}

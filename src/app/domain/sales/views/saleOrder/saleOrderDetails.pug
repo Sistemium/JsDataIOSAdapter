@@ -1,4 +1,4 @@
-.sale-order-details
+.sale-order-details(cg-busy='vm.busy')
 
   //.buttons.text-right(ng-include='"app/domain/sales/views/saleOrder/saleOrderMenu.html"')
 
@@ -19,7 +19,18 @@
             span.animate-show.spaced
               small на
               small.strong {{ vm.saleOrder.date }}
-              small.strong ({{ vm.saleOrder.workflow().label }})
+
+              small.processing(
+              ng-class='[vm.saleOrder.workflow().cls, vm.saleOrder.processing]'
+              )
+                span {{ vm.saleOrder.workflow().label }}
+
+              small(
+              ng-if='vm.saleOrder.processingMessage'
+              ng-class='vm.saleOrder.workflow().messageCls'
+              )
+                i.glyphicon.glyphicon-warning-sign
+
               // TODO: show date with amCalendar but without time
           .address
             small {{vm.saleOrder.outlet.address}}
@@ -75,7 +86,7 @@
           th.number Количество
           th.number.hidden-xs Цена
           th.number.hidden-xs Стоимость
-      tbody(ng-class='{disabled: !vm.editing}')
+      tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflow().editable}')
         tr.clickable(
         ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
         )

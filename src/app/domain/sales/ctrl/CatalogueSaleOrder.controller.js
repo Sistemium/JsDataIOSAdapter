@@ -71,13 +71,26 @@
     vm.onScope('kPlusButtonClick', kPlusButtonClick);
     vm.onScope('bPlusButtonClick', bPlusButtonClick);
 
+    vm.watchScope('vm.saleOrder.processingMessage', processingMessage => {
+      if (!processingMessage) return;
+      toastr.error(processingMessage);
+    });
+
     /*
      Handlers
      */
 
+    // FIXME: copy-pasted from SaleOrderDetails.controller
+
     function setProcessingClick(processing) {
 
-      toastr.info(`processing: ${processing}`, 'Статус заказа изменен');
+      vm.saleOrder.processing = processing;
+      vm.saleOrder.DSCreate()
+        .then(saleOrder => {
+          let {desc, label} = _.result(saleOrder, 'workflow');
+          toastr.info(desc, `Статус заказа: ${label}`);
+        })
+        .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
 
     }
 
