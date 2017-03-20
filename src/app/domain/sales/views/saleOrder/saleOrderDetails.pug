@@ -24,12 +24,11 @@
               ng-class='[vm.saleOrder.workflow().cls, vm.saleOrder.processing]'
               )
                 span {{ vm.saleOrder.workflow().label }}
-
-              small(
-              ng-if='vm.saleOrder.processingMessage'
-              ng-class='vm.saleOrder.workflow().messageCls'
-              )
-                i.glyphicon.glyphicon-warning-sign
+                span(
+                ng-if='vm.saleOrder.processingMessage'
+                ng-class='vm.saleOrder.workflow().messageCls'
+                )
+                  i.glyphicon.glyphicon-warning-sign
 
               // TODO: show date with amCalendar but without time
           .address

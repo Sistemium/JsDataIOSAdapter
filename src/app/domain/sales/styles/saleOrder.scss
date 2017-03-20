@@ -71,18 +71,19 @@
   .processing {
 
     display: inline-block;
-    color: white;
-    background-color: gray;
+    color: $gray;
+    background-color: $gray-background-color;
     border-radius: $border-radius/2;
-    border: solid 1px lighten(gray, 10%);
+    border: solid 1px darken($gray-background-color, 10%);
     padding: 4px 8px;
     margin-top: 1px;
     margin-bottom: 1px;
 
-    &.blue {
-      color: white;
-      background-color: $active-color;
-      border-color: lighten($active-color, 3%);
+    &.blue, &.info {
+      background-color: $info-background-color;
+      // TODO: declare a variable with color transformation as in bootstrap
+      border-color: #bce8f1;
+      color: $info-color;
     }
 
     i + span {
@@ -93,7 +94,12 @@
 }
 
 .processing {
+
   span + span i {
     margin-left: $margin-bottom-xs/2;
+  }
+
+  &.blue {
+    color: $info-color;
   }
 }
