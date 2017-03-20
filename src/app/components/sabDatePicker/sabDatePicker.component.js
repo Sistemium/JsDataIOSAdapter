@@ -6,6 +6,7 @@
       bindings: {
         value: '=',
         minDate: '<',
+        maxDate: '<',
         initDate: '<',
         clearText: '@'
       },
@@ -33,6 +34,7 @@
 
       vm.datepickerOptions = _.defaults({
         minDate: vm.minDate,
+        maxDate: vm.maxDate,
         initDate: vm.initDate
       }, $scope.datepickerOptions);
 
@@ -58,7 +60,12 @@
     }
 
     function prevDayClick() {
-      vm.date = moment(vm.date).add(-1, 'day').toDate();
+
+      vm.date = _.min([
+        moment(vm.datepickerOptions.maxDate),
+        moment(vm.date).add(-1, 'day')
+      ]).toDate();
+
     }
 
   }

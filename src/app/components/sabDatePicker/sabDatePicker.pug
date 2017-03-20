@@ -25,5 +25,6 @@
   span.input-group-btn
     button.btn.btn-default(
     ng-click='vm.nextDayClick()'
+    ng-disabled='vm.date >= vm.datepickerOptions.maxDate'
     )
       i.glyphicon.glyphicon-chevron-right
