@@ -6,7 +6,11 @@
 
     Schema.register({
 
-      name: 'Workflow'
+      name: 'Workflow',
+
+      fieldTypes: {
+        workflow: Schema.config.parseJson
+      }
 
     });
 
