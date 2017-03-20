@@ -10,7 +10,7 @@ before-tag-name='li'
   .list-group-item.display-flex.flex-align-center.spaced(
   ng-repeat='stock in vm.stock track by stock.id'
   ng-class='{"item-padding": vm.showImages}'
-  ng-disabled='vm.restrictedArticles[stock.articleId]'
+  ng-disabled='vm.restrictedArticles[stock.articleId] || !vm.saleOrder.workflow().editable'
   )
 
     ng-gallery(

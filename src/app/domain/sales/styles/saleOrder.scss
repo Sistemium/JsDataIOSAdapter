@@ -50,8 +50,18 @@
 
     margin-bottom: $margin-bottom-xs;
 
-    i + span {
+    strong + span {
       margin-left: 1em;
+    }
+
+    padding-right: 15px;
+
+    @include responsive-only(lt-sm) {
+      padding-right: 10px;
+    }
+
+    button {
+      right: 0;
     }
 
   }
@@ -66,11 +76,13 @@
     border-radius: $border-radius/2;
     border: solid 1px lighten(gray, 10%);
     padding: 4px 8px;
+    margin-top: 1px;
+    margin-bottom: 1px;
 
     &.blue {
       color: white;
       background-color: $active-color;
-      border-color: lighten($active-color, 10%);
+      border-color: lighten($active-color, 3%);
     }
 
     i + span {

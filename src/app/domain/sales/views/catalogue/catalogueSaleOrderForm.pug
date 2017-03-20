@@ -1,8 +1,10 @@
-.processingMessage(
+.alert.alert-info.processingMessage(
+uib-alert
 ng-if='vm.saleOrder.processingMessage'
-ng-class='vm.saleOrder.workflow().messageCls'
+close='vm.saleOrder.processingMessage = null'
 )
-  i.glyphicon.glyphicon-warning-sign
+  strong(ng-class='vm.saleOrder.workflow().messageCls')
+    i.glyphicon.glyphicon-warning-sign
   span {{ vm.saleOrder.processingMessage }}
 
 .form-group
