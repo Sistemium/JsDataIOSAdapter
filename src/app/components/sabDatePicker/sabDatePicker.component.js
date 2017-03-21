@@ -52,6 +52,10 @@
 
     }
 
+    function dateWithoutTime(date) {
+      return moment(moment(date).format('YYYY-MM-DD')).toDate();
+    }
+
     function nextDayClick() {
       vm.date = _.max([
         moment(vm.datepickerOptions.minDate),
