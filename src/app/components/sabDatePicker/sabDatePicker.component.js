@@ -47,7 +47,13 @@
       $scope.$watch('vm.date', (nv, ov) => {
         if (ov == nv) return;
         if (!nv) vm.date = vm.datepickerOptions.initDate;
-        vm.value = moment(vm.date).format('YYYY-MM-DD');
+        vm.value = moment(vm.date).toDate();
+      });
+
+      $scope.$watch('vm.minDate', () => {
+        vm.datepickerOptions = _.defaults({
+          minDate: dateWithoutTime(vm.minDate)
+        }, vm.datepickerOptions);
       });
 
     }
