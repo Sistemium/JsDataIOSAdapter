@@ -8,6 +8,7 @@
         minDate: '<',
         maxDate: '<',
         initDate: '<',
+        customClass: '<',
         clearText: '@'
       },
 
@@ -35,7 +36,8 @@
       vm.datepickerOptions = _.defaults({
         minDate: dateWithoutTime(vm.minDate),
         maxDate: dateWithoutTime(vm.maxDate),
-        initDate: vm.initDate
+        initDate: vm.initDate,
+        customClass: vm.customClass
       }, $scope.datepickerOptions);
 
 
