@@ -41,13 +41,13 @@
 
       $scope.$watch('vm.value', (nv, ov) => {
         if (ov == nv) return;
-        vm.date = moment(vm.value).toDate();
+        vm.date = dateWithoutTime(vm.value);
       });
 
       $scope.$watch('vm.date', (nv, ov) => {
         if (ov == nv) return;
         if (!nv) vm.date = vm.datepickerOptions.initDate;
-        vm.value = moment(vm.date).toDate();
+        vm.value = dateWithoutTime(vm.date);
       });
 
       $scope.$watch('vm.minDate', () => {
