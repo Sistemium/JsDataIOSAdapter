@@ -27,6 +27,7 @@
       previousDayAvailable,
       selectNextDay,
       nextDayAvailable,
+      getDayClass,
 
       datepickerPopup: {opened: false},
       datepickerOptions: datepickerOptions(),
