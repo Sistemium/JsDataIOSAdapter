@@ -30,11 +30,11 @@
 
     function onInit() {
 
-      vm.date = moment(vm.value).toDate();
+      vm.date = dateWithoutTime(vm.value);
 
       vm.datepickerOptions = _.defaults({
-        minDate: vm.minDate,
-        maxDate: vm.maxDate,
+        minDate: dateWithoutTime(vm.minDate),
+        maxDate: dateWithoutTime(vm.maxDate),
         initDate: vm.initDate
       }, $scope.datepickerOptions);
 
