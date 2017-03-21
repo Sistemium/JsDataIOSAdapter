@@ -14,8 +14,8 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
           span.animate-show.spaced
             small на
             small.strong {{ vm.saleOrder.date }}
-            small.processing(
-            ng-class='[vm.saleOrder.workflow().cls, vm.saleOrder.processing]'
+            small(
+            ng-class='["processing", vm.saleOrder.workflow().cls, vm.saleOrder.processing]'
             )
               span {{ vm.saleOrder.workflow().label }}
               span(
