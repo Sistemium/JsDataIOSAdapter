@@ -45,8 +45,8 @@
         return imageSrc;
       }
 
-      if (imagePath && $window.location.protocol === 'file:') {
-        return '../../../../pictures/' + imagePath;
+      if ($window.location.protocol === 'file:') {
+        return imagePath ? '../../../../pictures/' + imagePath : null;
       }
 
       if (href) {
