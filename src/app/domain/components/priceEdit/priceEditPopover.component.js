@@ -53,7 +53,7 @@
 
       let price = parseFloat(newPrice);
 
-      if (!price || Math.abs(price - vm.position.price) < 0.01) return;
+      if (!price || _.round(Math.abs(price - vm.position.price), 2) < 0.01) return;
 
       vm.position.price = price;
       vm.position.updateCost();
