@@ -1,0 +1,11 @@
+.price-edit
+  a(
+  href
+  uib-popover-template="'app/domain/components/priceEdit/priceEditPopover.trigger.html'"
+  popover-is-open='vm.popoverOpen'
+  popover-trigger='outsideClick'
+  popover-placement='auto bottom-right'
+  ng-disabled='!vm.position'
+  )
+    span {{ vm.position ? vm.position.price : vm.prices.price }} ₽
+    span.caret

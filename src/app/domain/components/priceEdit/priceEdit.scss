@@ -1,0 +1,81 @@
+@import "../../../styles/variables";
+
+.price-edit-popover {
+
+  .btn-default {
+    background: none;
+  }
+
+  .inputs {
+    a.btn.btn-link {
+      display: none;
+    }
+  }
+
+  a {
+    display: block;
+  }
+
+  .form-control {
+    display: inline-block;
+    text-align: right;
+    width: 80px;
+    margin: 4px 0 4px 4px;
+    padding: 5px;
+  }
+
+  .form-group {
+    label {
+      font-weight: normal;
+    }
+    text-align: right;
+    margin: 0;
+  }
+
+  span.form-control {
+    border: none !important;
+    box-shadow: none;
+  }
+
+  .extras {
+    border-top: solid thin $border-gray;
+    //text-align: center;
+  }
+
+}
+
+
+// FIXME: copy-pasted from quantity-edit
+
+.price-edit {
+  .popover-content {
+
+    padding: 0;
+
+    .inputs {
+      padding: 4px 10px;
+    }
+    .extras {
+      text-align: center;
+      padding: 4px 10px;
+    }
+
+  }
+  div.popover {
+    min-width: 200px;
+  }
+
+}
+
+.disabled {
+  .price-edit {
+    a {
+      color: $black;
+      font-weight: normal;
+      filter: none;
+    }
+    .caret {
+      display: none;
+    }
+  }
+}

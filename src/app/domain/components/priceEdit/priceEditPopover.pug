@@ -1,0 +1,32 @@
+fieldset.price-edit-popover
+
+  .inputs
+
+    .price
+
+      a.btn.btn-link(ng-click='vm.incrementPrice()') +%
+
+      .form-group
+        label Со скидкой:
+        input.form-control#price-edit-price(
+        select-on-focus
+        track-focused
+        ng-model='vm.price'
+        ng-model-options='{debounce: 1000}'
+        )
+
+      a.btn.btn-link(ng-click='vm.decrementPrice()') -%
+
+    .priceOrigin
+
+      .form-group
+        label Без скидки:
+        = ' '
+        span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
+
+  .extras
+
+    button.btn(
+    ng-class='vm.position.isCompDiscount ? "btn-primary" : "btn-default"'
+    ng-click='vm.ksButtonClick()'
+    ) КС
