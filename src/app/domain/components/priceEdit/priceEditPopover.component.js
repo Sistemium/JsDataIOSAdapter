@@ -5,6 +5,7 @@
   const priceEditPopover = {
 
     bindings: {
+      prices: '<',
       popoverOpen: '<',
       position: '<'
     },

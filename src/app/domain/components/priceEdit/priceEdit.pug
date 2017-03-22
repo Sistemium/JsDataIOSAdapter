@@ -9,4 +9,9 @@
   ng-disabled='!vm.position'
   )
     span {{ vm.position ? vm.position.price : vm.prices.price }} ₽
+
+    small.discount(
+    ng-if='vm.discountPercent()'
+    ) ({{vm.discountPercent() > 0 ? '+' : '' }}{{ vm.discountPercent() | number }}%)
+
     span.caret

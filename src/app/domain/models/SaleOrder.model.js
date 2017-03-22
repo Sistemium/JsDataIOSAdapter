@@ -69,6 +69,7 @@
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
+          this.totalCostDoc = this.totalCost;
         },
 
         positionsCountRu,

@@ -71,11 +71,8 @@ before-tag-name='li'
         price-edit(
         prices='vm.prices[stock.articleId]'
         position='vm.saleOrderPositionByArticle[stock.articleId]'
+        discount='vm.discounts[stock.articleId]'
         )
-
-        small.discount(ng-if='vm.discounts[stock.articleId]')
-          | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
-
 
     .right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflow().editable'
