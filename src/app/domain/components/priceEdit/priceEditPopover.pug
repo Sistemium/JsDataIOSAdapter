@@ -10,6 +10,7 @@ fieldset.price-edit-popover
         label Со скидкой:
         input.form-control#price-edit-price(
         select-on-focus
+        ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
         track-focused
         ng-model='vm.price'
         ng-model-options='{debounce: 1000}'
