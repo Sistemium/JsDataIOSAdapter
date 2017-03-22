@@ -34,6 +34,7 @@
 
       methods: {
         updateCost: function () {
+          this.priceDoc = this.price;
           return this.cost = parseFloat((this.price * this.volume).toFixed(2));
         },
 
