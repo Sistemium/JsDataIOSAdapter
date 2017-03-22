@@ -67,7 +67,7 @@ before-tag-name='li'
           | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
 
     .right(
-    ng-if='vm.saleOrder && vm.prices[stock.articleId]'
+    ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflow().editable'
     )
 
       button.btn.btn-default(
