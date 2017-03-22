@@ -175,4 +175,19 @@
     white-space: nowrap;
   }
 
+  price-edit {
+    margin-left: 4px;
+    display: inline;
+    font-size: 85%;
+  }
+
+  .flag {
+    background: $active-color;
+    color: white;
+    display: inline-block;
+    padding: 2px;
+    border-radius: 3px;
+    margin: -2px 4px -2px 0;
+  }
+
 }

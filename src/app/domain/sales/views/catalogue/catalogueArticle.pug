@@ -51,20 +51,31 @@ before-tag-name='li'
 
       .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
         small.red Запрет "{{ vm.restrictedArticles[stock.articleId].name }}"
+
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
+
         i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
+
         small.gray.nowrap(ng-if='stock.volume')
           span ~{{stock.displayVolume}}
+
         small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
+          span.flag(ng-if='vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount') КС
           span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
           span.gray
             | =
           span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
           span.gray
             | x
-        small.nowrap {{vm.prices[stock.articleId].price | number:2}} ₽
+
+        price-edit(
+        prices='vm.prices[stock.articleId]'
+        position='vm.saleOrderPositionByArticle[stock.articleId]'
+        )
+
         small.discount(ng-if='vm.discounts[stock.articleId]')
           | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
+
 
     .right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflow().editable'
