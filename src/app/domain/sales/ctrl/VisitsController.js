@@ -20,7 +20,7 @@
       selectedDayVisits: [],
 
       selectedDate: moment($state.params.date).toDate(),
-      initDate: moment().add(1, 'days').toDate(),
+      initDate: moment().toDate(),
       maxDate: today,
       minDate: today,
       selectPreviousDay,
