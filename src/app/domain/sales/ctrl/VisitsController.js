@@ -90,7 +90,10 @@
       let filter = salesmanFilter(groupByFilter);
 
       vm.rebindAll(Visit, filter, 'vm.visits', () => {
+
+        console.log('vm.visits', vm.visits);
         markDaysWithVisits();
+
       });
 
       return vm.setBusy(
