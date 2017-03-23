@@ -74,13 +74,14 @@
 
       }
 
-      .fullsize {
+      img.fullsize {
         height: auto;
         overflow: auto;
         width: auto;
         margin: 1em;
         flex: 1;
         object-fit: contain;
+        max-width: 100%;
       }
 
     }

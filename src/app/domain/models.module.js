@@ -148,7 +148,8 @@
       parseBool: val => val == 1,
       parseDecimal: val => parseFloat(val) || 0,
       parseInteger: val => parseInt(val) || 0,
-      parseDate: val => val ? val.substr(0, 10) : null
+      parseDate: val => val ? val.substr(0, 10) : null,
+      parseJson: angular.fromJson
 
     });
 

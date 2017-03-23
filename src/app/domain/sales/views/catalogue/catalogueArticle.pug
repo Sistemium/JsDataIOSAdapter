@@ -10,7 +10,7 @@ before-tag-name='li'
   .list-group-item.display-flex.flex-align-center.spaced(
   ng-repeat='stock in vm.stock track by stock.id'
   ng-class='{"item-padding": vm.showImages}'
-  ng-disabled='vm.restrictedArticles[stock.articleId] || !vm.saleOrder.workflow().editable'
+  ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflow().editable'
   )
 
     ng-gallery(
@@ -32,7 +32,7 @@ before-tag-name='li'
           // TODO: allow user to show only the articles with the same pieceVolume rounded to 1/10
           strong {{::stock.article.pieceVolume}}л
           small.gray x {{::stock.article.packageRel}}
-          span
+          small.gray(ng-if='stock.article.factor > 1') : {{::stock.article.factor}}
 
         // TODO: allow removing restricted positions
         quantity-edit(
@@ -51,23 +51,31 @@ before-tag-name='li'
 
       .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
         small.red Запрет "{{ vm.restrictedArticles[stock.articleId].name }}"
+
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
+
         i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
+
         small.gray.nowrap(ng-if='stock.volume')
           span ~{{stock.displayVolume}}
+
         small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
+          span.flag(ng-if='vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount') КС
           span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
           span.gray
             | =
           span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
           span.gray
             | x
-        small.nowrap {{vm.prices[stock.articleId].price | number:2}} ₽
-        small.discount(ng-if='vm.discounts[stock.articleId]')
-          | ({{vm.discounts[stock.articleId] > 0 ? '' : '+' }}{{ -vm.discounts[stock.articleId] | number }}%)
+
+        price-edit(
+        prices='vm.prices[stock.articleId]'
+        position='vm.saleOrderPositionByArticle[stock.articleId]'
+        discount='vm.discounts[stock.articleId]'
+        )
 
     .right(
-    ng-if='vm.saleOrder && vm.prices[stock.articleId]'
+    ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflow().editable'
     )
 
       button.btn.btn-default(
@@ -75,5 +83,5 @@ before-tag-name='li'
       ) +К
 
       button.btn.btn-default(
-      ng-click='vm.kPlusButtonClick(stock)'
+      ng-click='vm.bPlusButtonClick(stock)'
       ) +Б
