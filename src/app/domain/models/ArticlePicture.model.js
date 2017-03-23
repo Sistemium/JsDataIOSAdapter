@@ -39,27 +39,6 @@
 
     });
 
-<<<<<<< HEAD
-=======
-    function actingImageSrc(imageSrc, imagePath, href, size) {
-
-      if (imageSrc) {
-        return imageSrc;
-      }
-
-      if ($window.location.protocol === 'file:') {
-        return imagePath ? '../../../../pictures/' + imagePath : null;
-      }
-
-      if (href) {
-        return href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
-      }
-
-      return null;
-
-    }
-
->>>>>>> SaleOrders2
   });
 
 })();
