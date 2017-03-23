@@ -23,15 +23,7 @@
       initDate: moment().toDate(),
       maxDate: today,
       minDate: today,
-      selectPreviousDay,
-      previousDayAvailable,
-      selectNextDay,
-      nextDayAvailable,
       getDayClass,
-
-      datepickerPopup: {opened: false},
-      datepickerOptions: datepickerOptions(),
-      openDatepicker,
 
       visitClick,
       newVisitClick,
@@ -99,7 +91,6 @@
 
       vm.rebindAll(Visit, filter, 'vm.visits', () => {
         markDaysWithVisits();
-        vm.datepickerOptions = datepickerOptions();
       });
 
       return vm.setBusy(
@@ -147,46 +138,6 @@
       return SalesmanAuth.makeFilter(filter);
     }
 
-    function selectPreviousDay() {
-
-      if (!previousDayAvailable()) return;
-
-      let previousDay = vm.selectedDate;
-      previousDay.setDate(previousDay.getDate() - 1);
-      vm.selectedDate = new Date(previousDay);
-
-    }
-
-    function selectNextDay() {
-
-      if (!nextDayAvailable()) return;
-
-      let nextDay = vm.selectedDate;
-      nextDay.setDate(nextDay.getDate() + 1);
-      vm.selectedDate = new Date(nextDay);
-
-    }
-
-    function previousDayAvailable() {
-      return vm.selectedDate && vm.selectedDate > vm.minDate;
-    }
-
-    function nextDayAvailable() {
-      return vm.selectedDate && vm.selectedDate < vm.maxDate;
-    }
-
-    function datepickerOptions() {
-
-      return {
-        customClass: getDayClass,
-        maxDate: vm.maxDate,
-        minDate: vm.minDate,
-        startingDay: 1,
-        showWeeks: false
-      };
-
-    }
-
     function getDayClass(data) {
 
       let {date, mode} = data;
@@ -199,10 +150,6 @@
 
       }
 
-    }
-
-    function openDatepicker() {
-      vm.datepickerPopup.opened = true;
     }
 
     function visitClick(visit) {

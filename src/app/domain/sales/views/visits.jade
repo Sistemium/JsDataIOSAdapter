@@ -11,44 +11,14 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
     clear-text='Выбрать сегодня'
     )
 
-  .row.datepicker-with-buttons
-    .col-sm-9.col-md-10
-      .input-group
-        span.form-control(
-        uib-datepicker-popup
-        ng-model='vm.selectedDate'
-        is-open='vm.datepickerPopup.opened'
-        datepicker-options='vm.datepickerOptions'
-        ng-required='true'
-        close-text='Закрыть'
-        current-text='Выбрать сегодня'
-        clear-text='false'
-        ng-click='vm.openDatepicker()'
-        ) {{ vm.selectedDate | amUtc | amLocal | amDateFormat:'DD/MM/YYYY, dd' }}
-        span.input-group-btn
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.selectPreviousDay()'
-          ng-disabled='!vm.previousDayAvailable()'
-          )
-            i.glyphicon.glyphicon-chevron-left
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.openDatepicker()'
-          )
-            i.glyphicon.glyphicon-calendar
-          button.btn.btn-default(
-          type='button'
-          ng-click='vm.selectNextDay()'
-          ng-disabled='!vm.nextDayAvailable()'
-          )
-            i.glyphicon.glyphicon-chevron-right
-    .col-sm-3.col-md-2
+    .col-sm-3.col-lg-2.col-sm-offset-5.col-lg-offset-7
       .buttons
-        button.btn.btn-block.btn-success.pull-right(
+        button.btn.btn-block.btn-primary(
         ng-click='vm.newVisitClick()'
         ng-disabled='!vm.selectedSalesmanId'
-        ) Новый визит
+        )
+          i.glyphicon.glyphicon-plus
+          span Новый визит
 
   hr.clear-both
 
