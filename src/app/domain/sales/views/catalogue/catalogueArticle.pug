@@ -32,7 +32,7 @@ before-tag-name='li'
           // TODO: allow user to show only the articles with the same pieceVolume rounded to 1/10
           strong {{::stock.article.pieceVolume}}л
           small.gray x {{::stock.article.packageRel}}
-          span
+          small.gray(ng-if='stock.article.factor > 1') : {{::stock.article.factor}}
 
         // TODO: allow removing restricted positions
         quantity-edit(
@@ -83,5 +83,5 @@ before-tag-name='li'
       ) +К
 
       button.btn.btn-default(
-      ng-click='vm.kPlusButtonClick(stock)'
+      ng-click='vm.bPlusButtonClick(stock)'
       ) +Б
