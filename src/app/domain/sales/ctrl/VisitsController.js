@@ -94,7 +94,8 @@
 
     function findVisits() {
 
-      let filter = salesmanFilter();
+      let groupByFilter = {groupBy: ['date']};
+      let filter = salesmanFilter(groupByFilter);
 
       vm.rebindAll(Visit, filter, 'vm.visits', () => {
         markDaysWithVisits();
