@@ -8,7 +8,7 @@
       article: '<',
       saleOrder: '<',
       price: '<',
-      popoverOpen: '<',
+      popoverOpen: '=',
       position: '<'
     },
 
@@ -108,10 +108,20 @@
     }
 
     function changeVolume(addVolume) {
+
       position.volume += addVolume;
       position.volume = _.max([0, position.volume]);
+
+      let factor = _.get(position, 'article.factor') || 1;
+      let notFactored = position.volume % factor;
+
+      if (notFactored) {
+        position.volume = position.volume - notFactored + (addVolume > 0 ? factor : 0);
+      }
+
       setQty();
       injectPosition();
+
     }
 
     function setQty() {

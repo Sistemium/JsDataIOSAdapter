@@ -6,7 +6,7 @@
 
     bindings: {
       prices: '<',
-      popoverOpen: '<',
+      popoverOpen: '=',
       position: '<'
     },
 
@@ -63,7 +63,8 @@
 
     function ksButtonClick() {
       vm.position.isCompDiscount = !vm.position.isCompDiscount;
-      vm.position.DSSave();
+      vm.position.DSSave()
+        .then(() => vm.popoverOpen = false);
     }
 
 

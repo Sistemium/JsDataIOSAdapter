@@ -10,7 +10,7 @@
   )
     span {{ vm.position ? vm.position.price : vm.prices.price }} ₽
 
-    small.discount(
+    span.discount(
     ng-if='vm.discountPercent()'
     ) ({{vm.discountPercent() > 0 ? '+' : '' }}{{ vm.discountPercent() | number }}%)
 

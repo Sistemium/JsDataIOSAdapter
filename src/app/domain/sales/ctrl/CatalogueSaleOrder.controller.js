@@ -293,6 +293,13 @@
 
       position.volume += volume;
 
+      let factor = _.get(position, 'article.factor') || 1;
+      let notFactored = position.volume % factor;
+
+      if (notFactored) {
+        position.volume = position.volume - notFactored + (volume > 0 ? factor : 0);
+      }
+
       position.updateCost();
       vm.saleOrder.updateTotalCost();
 
