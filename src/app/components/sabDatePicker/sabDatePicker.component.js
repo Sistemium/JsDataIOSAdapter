@@ -42,20 +42,28 @@
 
 
       $scope.$watch('vm.value', (nv, ov) => {
-        if (ov == nv) return;
+
+        // if (ov == nv) return; // suddenly comparing values via '==' stop working
+        if (moment(ov).isSame(nv, 'day')) return;
         vm.date = dateWithoutTime(vm.value);
+
       });
 
       $scope.$watch('vm.date', (nv, ov) => {
-        if (ov == nv) return;
+
+        // if (ov == nv) return; // suddenly comparing values via '==' stop working
+        if (moment(ov).isSame(nv, 'day')) return;
         if (!nv) vm.date = vm.datepickerOptions.initDate;
         vm.value = dateWithoutTime(vm.date);
+
       });
 
       $scope.$watch('vm.minDate', () => {
+
         vm.datepickerOptions = _.defaults({
           minDate: dateWithoutTime(vm.minDate)
         }, vm.datepickerOptions);
+
       });
 
     }
