@@ -129,14 +129,23 @@
       if (params.startPage) {
         parsed.startPage = params.startPage;
       }
+
       if (params.offset) {
         parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
       }
 
+      if (params.groupBy) {
+        parsed.groupBy = params.groupBy;
+      }
+
       delete params.limit;
       delete params.offset;
+      delete params.groupBy;
+
+      // should we add params.groupBy to socketAdapter.js?
 
       return parsed;
+
     }
 
     IosAdapter.prototype.findAll = function (resource, params, options) {
