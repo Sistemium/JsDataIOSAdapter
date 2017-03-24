@@ -86,6 +86,7 @@
     function findVisitDays() {
 
       return vm.setBusy(
+        // TODO: have to renew this at days and visits change
         Visit.groupBy(salesmanFilter(),['date'])
           .then(res => markDaysWithVisits(res)),
         'Загрузка данных визитов'
