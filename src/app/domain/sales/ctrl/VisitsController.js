@@ -98,12 +98,11 @@
       return moment(date).format();
     }
 
-    function markDaysWithVisits() {
+    function markDaysWithVisits(visitDays) {
 
-      events = _.groupBy(vm.visits, 'date');
+      events = _.keyBy(visitDays, 'date');
       events [dateFormatted(vm.maxDate)] = {status: 'today'};
-
-      vm.minDate = moment(_.min(_.map(events, (visits, date) => date))).toDate();
+      vm.minDate = moment(_.min(_.map(visitDays, 'date'))).toDate();
 
     }
 
