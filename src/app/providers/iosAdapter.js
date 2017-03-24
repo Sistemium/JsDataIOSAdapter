@@ -134,13 +134,8 @@
         parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
       }
 
-      if (params.groupBy) {
-        parsed.groupBy = params.groupBy;
-      }
-
       delete params.limit;
       delete params.offset;
-      delete params.groupBy;
 
       // should we add params.groupBy to socketAdapter.js?
 
