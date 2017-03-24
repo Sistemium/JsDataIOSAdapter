@@ -20,7 +20,8 @@
 
       itemClick,
       newItemClick,
-      onStateChange
+      onStateChange,
+      getDayClass
 
     });
 
@@ -115,6 +116,20 @@
 
       events = _.keyBy(saleOrderDays, 'date');
       events [moment().format('YYYY-MM-DD')] = {status: 'today'};
+
+    }
+
+    function getDayClass(data) {
+
+      let {date, mode} = data;
+
+      if (mode === 'day') {
+
+        let event = events [moment(date).format('YYYY-MM-DD')];
+        if (!event) return;
+        return event['count()'] ? 'haveVisit' : event.status;
+
+      }
 
     }
 
