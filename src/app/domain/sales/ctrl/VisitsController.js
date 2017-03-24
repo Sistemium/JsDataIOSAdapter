@@ -86,20 +86,9 @@
 
     function findVisits() {
 
-      let filter = salesmanFilter();
-
-      Visit.groupBy({filter},['date'])
-        .then(res => console.log('res', res));
-
-      vm.rebindAll(Visit, filter, 'vm.visits', () => {
-
-        console.log('vm.visits', vm.visits);
-        markDaysWithVisits();
-
-      });
-
       return vm.setBusy(
-        Visit.findAll(filter, {bypassCache: true}),
+        Visit.groupBy(salesmanFilter(),['date'])
+          .then(res => markDaysWithVisits(res)),
         'Загрузка данных визитов'
       );
 
