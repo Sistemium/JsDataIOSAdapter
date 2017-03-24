@@ -88,7 +88,7 @@
       return vm.setBusy(
         // TODO: have to renew this at days and visits change
         Visit.groupBy(salesmanFilter(),['date'])
-          .then(res => markDaysWithVisits(res)),
+          .then(res => eventsWithVisitDays(res)),
         'Загрузка данных визитов'
       );
 
@@ -98,7 +98,7 @@
       return moment(date).format();
     }
 
-    function markDaysWithVisits(visitDays) {
+    function eventsWithVisitDays(visitDays) {
 
       events = _.keyBy(visitDays, 'date');
       events [dateFormatted(vm.maxDate)] = {status: 'today'};
