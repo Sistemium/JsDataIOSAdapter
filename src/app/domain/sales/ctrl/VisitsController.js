@@ -38,7 +38,7 @@
     SalesmanAuth.watchCurrent($scope, salesman => {
 
       vm.selectedSalesmanId = _.get(salesman, 'id');
-      findVisits()
+      findVisitDays()
         .then(filterVisitsBySelectedDate);
 
     });
@@ -84,7 +84,7 @@
 
     }
 
-    function findVisits() {
+    function findVisitDays() {
 
       return vm.setBusy(
         Visit.groupBy(salesmanFilter(),['date'])
