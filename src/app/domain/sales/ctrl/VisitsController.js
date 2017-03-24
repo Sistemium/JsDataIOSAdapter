@@ -16,7 +16,6 @@
 
     vm.use({
 
-      visits: [],
       selectedDayVisits: [],
 
       selectedDate: moment($state.params.date).toDate(),
