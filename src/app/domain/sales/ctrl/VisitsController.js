@@ -86,8 +86,10 @@
 
     function findVisits() {
 
-      let groupByFilter = {groupBy: ['date']};
-      let filter = salesmanFilter(groupByFilter);
+      let filter = salesmanFilter();
+
+      Visit.groupBy({filter},['date'])
+        .then(res => console.log('res', res));
 
       vm.rebindAll(Visit, filter, 'vm.visits', () => {
 
