@@ -95,7 +95,9 @@
         [
           Outlet.findAll(_.assign({where: bySalesman}, _.omit(filter, 'date')))
             .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
-          SaleOrderPosition.findAll(saleOrderPositionsFilter)
+          SaleOrderPosition.findAll(saleOrderPositionsFilter),
+          SaleOrder.groupBy({filter}, ['date'])
+            .then(res => eventsWithSaleOrderDays(res))
         ],
         'Загрузка данных дня'
       );
