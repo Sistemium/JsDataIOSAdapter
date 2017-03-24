@@ -125,9 +125,18 @@
         })
     }
 
+    function groupBy(params, groupByColumns) {
+      let options = {
+        cacheResponse: false,
+        groupBy: groupByColumns
+      };
+      return this.findAll(params, options);
+    }
+
     return $window.saSchema = saSchema({
 
       getCount,
+      groupBy,
 
       loadPaged: function (filter, options) {
         return loadPaged(this, filter, options)
