@@ -120,7 +120,7 @@
 
     function paramsToOptions(params) {
 
-      var parsed = {};
+      let parsed = params;
 
       if (params.limit) {
         parsed.pageSize = params.limit;
@@ -150,7 +150,7 @@
 
     IosAdapter.prototype.findAll = function (resource, params, options) {
 
-      options = angular.extend(paramsToOptions(options), paramsToOptions(params));
+      options = _.assign(paramsToOptions(options), paramsToOptions(params));
 
       return requestFromIOS('findAll', resource.endpoint, params, angular.extend({
           pageSize: 1000,
