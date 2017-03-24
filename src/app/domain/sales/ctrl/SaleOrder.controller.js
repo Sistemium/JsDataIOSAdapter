@@ -9,7 +9,6 @@
 
     vm.use({
 
-      visits: [],
       data: [],
 
       date: $state.params.date,
