@@ -7,6 +7,8 @@
     let vm = saControllerHelper.setup(this, $scope);
     let {SaleOrder, Outlet, SaleOrderPosition} = Schema.models();
 
+    let events;
+
     vm.use({
 
       data: [],
@@ -107,6 +109,13 @@
 
     function newItemClick() {
       $state.go('sales.catalogue.saleOrder');
+    }
+
+    function eventsWithSaleOrderDays(saleOrderDays) {
+
+      events = _.keyBy(saleOrderDays, 'date');
+      events [moment().format('YYYY-MM-DD')] = {status: 'today'};
+
     }
 
   }
