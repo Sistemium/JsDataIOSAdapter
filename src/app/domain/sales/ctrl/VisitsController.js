@@ -139,7 +139,7 @@
 
         let event = events [dateFormatted(dateFormatted(date))];
         if (!event) return;
-        return _.isArray(event) ? 'haveVisit' : event.status;
+        return event['count()'] ? 'haveVisit' : event.status;
 
       }
 
