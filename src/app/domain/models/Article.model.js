@@ -4,15 +4,23 @@
 
   angular.module('Models').run(function (Schema) {
 
-    const re = /защищ[^ .]*[ .]*наим[^ .]*[ .]*места проис[^ ]*|защ[^ .]*[ .]*геогр[^ .]*[ .]*указ[^ ]*|геогр[^ .]*[ .]*указ[^ ]*|геогр[^ .]*[ .]*защ[^ ]* наим[^ ]*|геог[^ .]*[ .]*наим[^ ]*|защищ[^ .]*[ .]*наим[^ ]*/i;
+    const znmpRe = new RegExp([
+      'защ[^ .]*[ .]*наи[^ .]*[ .]+мест[^ .]*[ .]+проис[^ ]*',
+      'защ[^ .]*[ .]*гео[^ .]*[ .]+указ[^ .]*',
+      'защ[^ .]*[ .]*гео[^ .]*[ .]+наим[^ .]*',
+      'защ[^ .]*[ .]*наи[^ ]*',
+      'гео[^ .]*[ .]*защ[^ .]*[ .]+наим[^ ]*',
+      'гео[^ .]*[ .]*ука[^ ]*',
+      'гео[^ .]*[ .]*наи[^ ]*'
+    ].join('[.,]*|'));
 
     const tagRegs = [
       ['red', 'красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
       ['white', 'белое', /бел\.|белое/i],
       ['semiDry', 'п/сух', /полусухое|п\/сух\.?/ig],
       ['semiSweet', 'п/сл', /полусладкое|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
-      ['dry', 'сухое', /сухое|сух\./i],
-      ['sweet', 'сладкое', /сладк[^ ,]*|сладкое|сл\./i],
+      ['dry', 'сухое', /сухое|сух[.,]+|[ .,]+сух(?=[ ]|$)/i],
+      ['sweet', 'сладкое', /[ ]+сладк[^ ,]*|сладкое|сл\./i],
       ['brut', 'брют', /брют/i],
       ['gift', 'п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
     ];
@@ -61,41 +69,41 @@
 
       computed: {
         tags: ['name', tagger],
-        preName: ['name', function (name) {
-
-          let m = name.match(/[^"]+/);
-          let res = m  ? _.first(m) : _.first(name.match(/[^ ]/));
-
-          return _.trim(res);
-
-        }],
+        preName: ['name', preNameFn],
         firstName: ['name', function (name) {
-          var m = name.match(/"[^"]+"/);
+          let m = name.match(/"[^"]+"/);
           return (m && m.length) ? m[0] : null;
         }],
         category: ['name', function (name) {
-          var m = name.match(/^[^ ]*/);
+          let m = name.match(/^[^ ]*/);
           return (m && m.length) ? m[0].replace(/[^а-яa-z]/ig, ' ') : null;
         }],
         factory: ['name', function (name) {
-          var m = name.match(/[ ][^ ]+[ ]/);
+          let m = name.match(/[ ][^ ]+[ ]/);
           return (m && m.length) ? m[0].replace(/[^а-яa-z]/ig, ' ') : null;
         }],
-        lastName: ['name', 'firstName', 'preName', function (name, firstName) {
-          var m = name.match(/"[^"]+" (.+)(?=,[ \D])/);
-          m = (m && m.length > 1) ? m[1] : '';
+        lastName: ['name', 'firstName', 'preName', function (name, firstName, preName) {
+
+          name = rmTags(name);
+
+          name = _.replace(name, preName, '');
+          name = _.replace(name, firstName, '');
+
+          let re = new RegExp(`(.+)(?=,[ \D])`);
+          let m = name.match(re);
+
+          m = (m && m.length > 1) ? m[1] : name;
+
           if (!m && firstName) {
             m = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
           }
-          m = _.trim(m.replace(/^,[^ ]*/, ''));
-          let res = m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
-          res = _.replace(res, re, 'ЗНМП');
 
-          _.each(tagRegs, cfg => {
-            res = _.replace(res, cfg[2], '');
-          });
+          m = _.trim(m.replace(/^,[^ ]*/, ''));
+
+          let res = m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
 
           return _.trim(res);
+
         }],
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
@@ -150,6 +158,27 @@
       });
 
       return _.filter(res);
+
+    }
+
+    function rmTags(res) {
+
+      res = _.replace(res, znmpRe, 'ЗНМП ');
+
+      _.each(tagRegs, cfg => {
+        res = _.replace(res, cfg[2], ' ');
+      });
+
+      return _.trim(_.replace(res, /[ ]{2,}/g, ' '));
+
+    }
+
+    function preNameFn(name) {
+
+      let m = name.match(/[^"]+/);
+      let res = /"/.test(name) ? _.first(m) : _.first(name.match(/[^ ]+/));
+
+      return rmTags(res);
 
     }
 
