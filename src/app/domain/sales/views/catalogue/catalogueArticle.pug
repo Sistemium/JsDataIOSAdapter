@@ -20,7 +20,7 @@ before-tag-name='li'
     ng-if='vm.showImages'
     )
 
-    .article-wrapper
+    .article-wrapper(ng-class='{lowStock: stock.volume < vm.lowStockThreshold}')
       .article-name-first
         // TODO: filtering options in tooltip (allow user to show only the articles with the same firstName)
         strong.name-first(

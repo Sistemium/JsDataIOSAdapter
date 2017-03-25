@@ -3,6 +3,7 @@
 (function () {
 
   const SHORT_TIMEOUT = 0;
+  const LOW_STOCK_THRESHOLD = 24;
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService) {
 
@@ -31,6 +32,7 @@
 
       debounce: IOS.isIos() ? 600 : 200,
       showOnlyOrdered: $state.params.ordered === 'true',
+      lowStockThreshold: LOW_STOCK_THRESHOLD,
 
       currentArticleGroup: null,
       ancestors: [],
