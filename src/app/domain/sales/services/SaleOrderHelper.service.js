@@ -1,6 +1,6 @@
 (function () {
 
-  function SaleOrderHelper(Schema, DEBUG, Sockets, $state) {
+  function SaleOrderHelper(Schema, DEBUG, Sockets, $state, toastr) {
 
     const {SaleOrder, SaleOrderPosition} = Schema.models();
 
