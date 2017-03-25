@@ -89,6 +89,7 @@
         .then(saleOrder => {
           let {desc, label} = _.result(saleOrder, 'workflow');
           toastr.info(desc, `Статус заказа: ${label}`);
+          $scope.$parent.saleOrderExpanded = false;
         })
         .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
 
