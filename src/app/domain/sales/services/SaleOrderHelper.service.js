@@ -53,7 +53,9 @@
 
             DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
 
-            return SaleOrderPosition.inject(data);
+            position = SaleOrderPosition.inject(data);
+
+            SaleOrderPosition.loadRelations(position);
 
           } else if (!data.saleOrderId) {
             // not IOS
@@ -65,6 +67,7 @@
                     DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
                   } else {
                     SaleOrderPosition.inject(updated);
+                    SaleOrderPosition.loadRelations(updated);
                   }
                 }
               });
