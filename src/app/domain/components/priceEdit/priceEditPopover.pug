@@ -14,6 +14,7 @@ fieldset.price-edit-popover
         track-focused
         ng-model='vm.price'
         ng-model-options='{debounce: 1000}'
+        ng-readonly='!vm.editable'
         )
 
       a.btn.btn-link(ng-click='vm.decrementPrice()') -%
