@@ -48,6 +48,7 @@ before-tag-name='li'
       )
         small {{::stock.article.preName}}
         small {{::stock.article.lastName}}
+        small {{::stock.article.extraLabel}}
 
       .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
         small.red Запрет "{{ vm.restrictedArticles[stock.articleId].name }}"
