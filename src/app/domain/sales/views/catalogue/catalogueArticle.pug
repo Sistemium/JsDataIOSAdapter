@@ -46,6 +46,10 @@ before-tag-name='li'
       .article-name-second(
       uib-tooltip='{{::stock.article.name}}'
       )
+        small.tag(
+        ng-repeat='tag in stock.article.tags track by tag.code'
+        ng-class='tag.code'
+        ) {{ tag.label }}
         small {{::stock.article.preName}}
         small {{::stock.article.lastName}}
         small {{::stock.article.extraLabel}}
