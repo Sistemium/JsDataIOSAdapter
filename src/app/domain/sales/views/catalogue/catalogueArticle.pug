@@ -51,6 +51,7 @@ before-tag-name='li'
 
       .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
         small.red Запрет "{{ vm.restrictedArticles[stock.articleId].name }}"
+        small.gray {{ vm.prices[stock.articleId].price | number:2 }} ₽
 
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
 
