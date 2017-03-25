@@ -61,7 +61,10 @@ before-tag-name='li'
 
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
 
-        i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
+        i.red.glyphicon.glyphicon-warning-sign(
+        ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'
+        uib-tooltip='Нет в наличии'
+        )
 
         small.gray.nowrap(ng-if='stock.volume')
           span ~{{stock.displayVolume}}
