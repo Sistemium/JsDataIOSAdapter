@@ -197,17 +197,16 @@
   }
 
   .article-name-second small.tag {
-    color: $black;
+    color: $gray;
     font-weight: bold;
     border: solid 1px $border-gray;
     padding: 0 3px;
-    //margin-top: -2px;
-    //margin-bottom: -2px;
     display: inline-block;
     background: none;
     border-radius: 3px;
     &.gift {
       color: red;
+      text-transform: uppercase;
     }
   }
 
