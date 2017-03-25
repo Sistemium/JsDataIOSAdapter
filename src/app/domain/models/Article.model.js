@@ -6,16 +6,16 @@
 
     const re = /защищ[^ .]*[ .]*наим[^ .]*[ .]*места проис[^ ]*|защ[^ .]*[ .]*геогр[^ .]*[ .]*указ[^ ]*|геогр[^ .]*[ .]*указ[^ ]*|геогр[^ .]*[ .]*защ[^ ]* наим[^ ]*|геог[^ .]*[ .]*наим[^ ]*|защищ[^ .]*[ .]*наим[^ ]*/i;
 
-    const tagRegs = {
-      red: ['красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
-      dry: ['сухое', /сухое|сух\./i],
-      semiDry: ['п/сух', /п\/сух\./i],
-      sweet: ['сладкое', /сладкое|сл\./i],
-      semiSweet: ['п/сл', /п\/сл\./i],
-      brut: ['брют', /брют/i],
-      white: ['белое', /бел\.|белое/i],
-      gift: ['п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
-    };
+    const tagRegs = [
+      ['red', 'красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
+      ['white', 'белое', /бел\.|белое/i],
+      ['semiDry', 'п/сух', /п\/сух\./i],
+      ['semiSweet', 'п/сл', /п\/сл\./i],
+      ['dry', 'сухое', /сухое|сух\./i],
+      ['sweet', 'сладкое', /сладкое|сл\./i],
+      ['brut', 'брют', /брют/i],
+      ['gift', 'п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
+    ];
 
     Schema.register({
 
@@ -68,8 +68,8 @@
 
           res = _.replace(res, re, 'ЗНМП');
 
-          _.each(tagRegs, (cfg) => {
-            res = _.replace(res, cfg[1], '');
+          _.each(tagRegs, cfg => {
+            res = _.replace(res, cfg[2], '');
           });
 
           return _.trim(res);
@@ -97,8 +97,8 @@
           let res = m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
           res = _.replace(res, re, 'ЗНМП');
 
-          _.each(tagRegs, (cfg) => {
-            res = _.replace(res, cfg[1], '');
+          _.each(tagRegs, cfg => {
+            res = _.replace(res, cfg[2], '');
           });
 
           return _.trim(res);
@@ -145,11 +145,12 @@
 
     function tagger(name) {
 
-      let res = _.map(tagRegs, (cfg, code) => {
-        if (cfg[1].test(name)) {
+      let res = _.map(tagRegs, cfg => {
+        if (cfg[2].test(name)) {
+          name = _.replace(name, cfg[2], '');
           return {
-            code: code,
-            label: cfg[0]
+            code: cfg[0],
+            label: cfg[1]
           };
         }
       });
