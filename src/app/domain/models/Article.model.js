@@ -180,7 +180,7 @@
     }
 
     const wordsRe = /[a-zA-Zа-яА-ЯёЁ\/-]{2,}/g;
-    const delims = ['де', 'делла'];
+    const delims = ['де', 'делла', 'оф'];
 
     function firstNameFn(name) {
 
