@@ -7,8 +7,6 @@
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
 
-    const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
-
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper)
       .use(SaleOrderHelper);
@@ -61,8 +59,6 @@
     SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
     // vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderCostChange, 500));
-
-    $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
 
     $scope.$on('$destroy', () => {
       SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
@@ -145,22 +141,6 @@
           console.error(e);
           toastr.error('Ошибка сохранения заказа');
         });
-
-    }
-
-    function onJSDataDestroy(event) {
-
-      DEBUG('onJSDataDestroy', event);
-      let id = _.get(event, 'data.id');
-      if (!id) return;
-
-      if (SUBSCRIPTIONS.indexOf(event.resource) > -1) {
-        Schema.model(event.resource).eject(id);
-        if (id === saleOrderId) {
-          toastr.error('Заказ удален');
-          $state.go('^');
-        }
-      }
 
     }
 

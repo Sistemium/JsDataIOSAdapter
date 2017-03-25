@@ -74,10 +74,29 @@
 
       }
 
+      const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
+
+      function onJSDataDestroy(event) {
+
+        DEBUG('onJSDataDestroy', event);
+        let id = _.get(event, 'data.id');
+        if (!id) return;
+
+        if (SUBSCRIPTIONS.indexOf(event.resource) > -1) {
+          Schema.model(event.resource).eject(id);
+          if (id === saleOrderId) {
+            toastr.error('Заказ удален');
+            $state.go('^');
+          }
+        }
+
+      }
+
       function getPosition(articleId) {
         return vm.saleOrder && _.find(vm.saleOrder.positions, {articleId: articleId});
       }
 
+      $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
       $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
       _.defaults(vm, {});
