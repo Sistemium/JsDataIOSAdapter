@@ -584,7 +584,10 @@
 
       if (vm.search) {
         let reg = new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
-        articles = _.filter(articles, article => reg.test(article.name));
+        articles = _.filter(articles, article => {
+          // TODO: parse number and search by pieceVolume
+          return reg.test(article.name) || reg.test(article.preName) || reg.test(article.lastName);
+        });
       }
 
       let articleIds = _.groupBy(articles, 'id');
