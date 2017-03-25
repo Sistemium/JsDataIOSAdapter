@@ -2,9 +2,12 @@
 
 (function () {
 
-  function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q, toastr) {
+  function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q, toastr, SaleOrderHelper) {
 
-    const vm = saControllerHelper.setup(this, $scope);
+    const vm = saControllerHelper
+      .setup(this, $scope)
+      .use(SaleOrderHelper);
+
     const {SaleOrderPosition, SaleOrder, Contract, PriceType} = Schema.models();
 
     vm.use({

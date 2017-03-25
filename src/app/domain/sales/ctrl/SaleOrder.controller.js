@@ -2,9 +2,12 @@
 
 (function () {
 
-  function SaleOrderController(Schema, $scope, saControllerHelper, SalesmanAuth, $state) {
+  function SaleOrderController(Schema, $scope, saControllerHelper, SalesmanAuth, $state, SaleOrderHelper) {
 
-    let vm = saControllerHelper.setup(this, $scope);
+    let vm = saControllerHelper
+      .setup(this, $scope)
+      .use(SaleOrderHelper);
+
     let {SaleOrder, Outlet, SaleOrderPosition} = Schema.models();
 
     vm.use({
