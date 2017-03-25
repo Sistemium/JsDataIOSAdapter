@@ -70,10 +70,7 @@
       computed: {
         tags: ['name', tagger],
         preName: ['name', preNameFn],
-        firstName: ['name', function (name) {
-          let m = name.match(/"[^"]+"/);
-          return (m && m.length) ? m[0] : null;
-        }],
+        firstName: ['name', firstNameFn],
         category: ['name', function (name) {
           let m = name.match(/^[^ ]*/);
           return (m && m.length) ? m[0].replace(/[^а-яa-z]/ig, ' ') : null;
@@ -179,6 +176,35 @@
       let res = /"/.test(name) ? _.first(m) : _.first(name.match(/[^ ]+/));
 
       return rmTags(res);
+
+    }
+
+    const wordsRe = /[a-zA-Zа-яА-ЯёЁ\/-]{2,}/g;
+    const delims = ['де', 'делла'];
+
+    function firstNameFn(name) {
+
+      let m = name.match(/"[^"]+"/);
+      let res = _.first(m);
+
+      if (!res) {
+        let words = _.words(name, wordsRe);
+        let stop = false;
+        let found = false;
+        res = _.filter(words, (word, idx) => {
+
+          let upperFirst = word.match(/^[А-ЯA-Z].+/) || delims.indexOf(word) >= 0 && word;
+
+          found = found || idx > 0 && upperFirst;
+
+          stop = stop || found && !upperFirst;
+
+          return idx > 0 && !stop && upperFirst;
+
+        }).join(' ');
+      }
+
+      return res;
 
     }
 
