@@ -4,6 +4,8 @@
 
   angular.module('Models').run(function (Schema) {
 
+    const re = /защищ[^ .]*[ .]*наим[^ .]*[ .]*места проис[^ ]*|защ[^ .]*[ .]*геогр[^ .]*[ .]*указ[^ ]*|геогр[^ .]*[ .]*защ[^ ]* наим[^ ]*|геог[^ .]*[ .]*наим[^ ]*|защищ[^ .]*[ .]*наим[^ ]*/i;
+
     Schema.register({
 
       name: 'Article',
@@ -48,8 +50,10 @@
 
       computed: {
         preName: ['name', function (name) {
-          var m = name.match(/[^"]+/);
-          return (m && m.length) ? _.trim(m[0]) : null;
+          let m = name.match(/[^"]+/);
+          let res = (m && m.length) ? _.trim(m[0]) : null;
+          res = _.replace(res, re, 'ЗНМП');
+          return res;
         }],
         firstName: ['name', function (name) {
           var m = name.match(/"[^"]+"/);
@@ -67,10 +71,12 @@
           var m = name.match(/"[^"]+" (.+)(?=,[ \D])/);
           m = (m && m.length > 1) ? m[1] : '';
           if (!m && firstName) {
-           m = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
+            m = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
           }
-          m = _.trim(m.replace(/^,[^ ]*/,''));
-          return m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
+          m = _.trim(m.replace(/^,[^ ]*/, ''));
+          let res = m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
+          res = _.replace(res, re, 'ЗНМП');
+          return res;
         }],
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
