@@ -10,7 +10,7 @@
       ['red', 'красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
       ['white', 'белое', /бел\.|белое/i],
       ['semiDry', 'п/сух', /полусухое|п\/сух\.?/ig],
-      ['semiSweet', 'п/сл', /полусладкое|п\/сл.|п\/сл([ ])/ig],
+      ['semiSweet', 'п/сл', /полусладкое|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
       ['dry', 'сухое', /сухое|сух\./i],
       ['sweet', 'сладкое', /сладк[^ ,]*|сладкое|сл\./i],
       ['brut', 'брют', /брют/i],
@@ -64,13 +64,7 @@
         preName: ['name', function (name) {
 
           let m = name.match(/[^"]+/);
-          let res = (m && m.length) ? _.trim(m[0]) : null;
-
-          res = _.replace(res, re, 'ЗНМП');
-
-          _.each(tagRegs, cfg => {
-            res = _.replace(res, cfg[2], '');
-          });
+          let res = m  ? _.first(m) : _.first(name.match(/[^ ]/));
 
           return _.trim(res);
 
