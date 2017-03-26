@@ -119,6 +119,8 @@
 
     function eventsWithSaleOrderDays(saleOrderDays) {
 
+      // TODO: have to renew this at days and saleOrders change
+
       eventsGroupedByDate = _.groupBy(saleOrderDays, 'date');
       vm.minDate = moment(_.min(_.keys(eventsGroupedByDate))).toDate();
 
