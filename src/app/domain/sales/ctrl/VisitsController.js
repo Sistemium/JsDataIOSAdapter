@@ -22,6 +22,7 @@
       maxDate: today,
       minDate: today,
       getDayClass,
+      clearTextFn,
 
       visitClick,
       newVisitClick,
@@ -141,6 +142,13 @@
         return event['count()'] ? 'haveVisit' : event.status;
 
       }
+
+    }
+
+    function clearTextFn() {
+
+      vm.selectedDate = today();
+      return vm.selectedDate;
 
     }
 
