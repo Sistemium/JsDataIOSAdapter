@@ -126,11 +126,22 @@
     }
 
     function groupBy(params, groupByColumns) {
-      let options = {
-        cacheResponse: false,
-        groupBy: groupByColumns
-      };
-      return this.findAll(params, options);
+
+      return $q((resolve, reject) => {
+
+        let options = {
+          cacheResponse: false,
+          groupBy: groupByColumns,
+          afterFindAll: (options, data) => {
+            resolve(data);
+            return [];
+          }
+        };
+
+        return this.findAll(params, options);
+
+      });
+
     }
 
     return $window.saSchema = saSchema({
