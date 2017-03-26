@@ -138,7 +138,8 @@
           }
         };
 
-        return this.findAll(params, options);
+        this.findAll(params, options)
+          .catch(reject);
 
       });
 
