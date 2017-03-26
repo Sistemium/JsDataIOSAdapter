@@ -165,7 +165,7 @@
 
     function clearTextFn() {
 
-      vm.date = today;
+      vm.date = SaleOrder.meta.nextShipmentDate();
       return vm.date;
 
     }
