@@ -2,11 +2,13 @@
 
 (function () {
 
-  function salesmansMenuController(saControllerHelper, $scope, SalesmanAuth, saMedia) {
+  function salesmanMenuController(saControllerHelper, $scope, SalesmanAuth, saMedia) {
 
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
+
+      salesmen: null,
       isEnabled: false,
       salesmanClick,
       noneClick: SalesmanAuth.logout,
@@ -16,7 +18,7 @@
     });
 
     SalesmanAuth
-      .bindAll($scope, 'vm.salesmans', onDataChange)
+      .bindAll($scope, 'vm.salesmen', onDataChange)
       .watchCurrent($scope, salesman => vm.selectedSalesman = salesman);
 
     /*
@@ -49,6 +51,6 @@
   }
 
   angular.module('Sales')
-    .controller('SalesmansMenuController', salesmansMenuController);
+    .controller('SalesmanMenuController', salesmanMenuController);
 
 })();

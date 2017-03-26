@@ -145,7 +145,10 @@
       margin-left: 5px;
       white-space: nowrap;
       flex-shrink: 0;
-      flex-grow: 1
+      flex-grow: 1;
+      > *:last-child {
+        margin-right: 1em;
+      }
     }
 
     quantity-edit {
@@ -153,6 +156,12 @@
       white-space: nowrap;
     }
 
+  }
+
+  .lowStock {
+    .name-first, .article-info, .article-name-second {
+      opacity: 0.5;
+    }
   }
 
   .article-name-second {
@@ -182,12 +191,26 @@
   }
 
   .flag {
-    background: $active-color;
-    color: white;
+    background: $state-info-bg;
+    color: $state-info-text;
     display: inline-block;
-    padding: 2px;
+    padding: 2px 4px;
     border-radius: 3px;
     margin: -2px 4px -2px 0;
+  }
+
+  .article-name-second small.tag {
+    color: $gray;
+    font-weight: bold;
+    border: solid 1px $border-gray;
+    padding: 0 3px;
+    display: inline-block;
+    background: none;
+    border-radius: 3px;
+    &.gift {
+      color: red;
+      text-transform: uppercase;
+    }
   }
 
 }

@@ -1,18 +1,19 @@
+'use strict';
+
 (function() {
-  'use strict';
 
   angular
     .module('webPage')
-    .directive('salesmansMenu', salesmansMenu);
+    .directive('salesmanMenu', salesmansMenu);
 
   function salesmansMenu() {
     return {
 
       restrict: 'E',
-      templateUrl: 'app/components/navbar/salesmansMenu.html',
+      templateUrl: 'app/domain/components/salesmanMenu/salesmanMenu.html',
       scope: {
       },
-      controller: 'SalesmansMenuController',
+      controller: 'SalesmanMenuController',
       controllerAs: 'vm',
       bindToController: true
 

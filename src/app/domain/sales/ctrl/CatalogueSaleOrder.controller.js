@@ -2,15 +2,14 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, IOS, $timeout) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, SaleOrderHelper, $timeout) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
 
-    const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
-
     let vm = saControllerHelper.setup(this, $scope)
-      .use(ClickHelper);
+      .use(ClickHelper)
+      .use(SaleOrderHelper);
 
     let saleOrderId = $state.params.saleOrderId;
 
@@ -61,9 +60,6 @@
 
     // vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderCostChange, 500));
 
-    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
-    $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
-
     $scope.$on('$destroy', () => {
       SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
     });
@@ -89,6 +85,7 @@
         .then(saleOrder => {
           let {desc, label} = _.result(saleOrder, 'workflow');
           toastr.info(desc, `Статус заказа: ${label}`);
+          $scope.$parent.saleOrderExpanded = false;
         })
         .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
 
@@ -144,88 +141,6 @@
           console.error(e);
           toastr.error('Ошибка сохранения заказа');
         });
-
-    }
-
-    function onJSData(event) {
-
-      let id = _.get(event, 'data.id');
-
-      if (!id) return;
-
-      let {data, resource} = event;
-
-      if (resource === 'SaleOrder') {
-
-        DEBUG('onJSData SaleOrder', event);
-
-        if (SaleOrder.hasChanges(id)) {
-          return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder');
-        }
-
-        if (data.deviceCts) {
-
-          DEBUG('onJSData IOS injecting', resource);
-          Schema.model(resource).inject(data);
-
-        } else {
-
-          SaleOrder.find(id, {bypassCache: true})
-            .catch(err => {
-              if (err.error === 404) {
-                SaleOrder.eject(saleOrderId)
-              }
-            });
-
-        }
-
-      } else if (resource === 'SaleOrderPosition') {
-
-        if (data.saleOrderId === saleOrderId) {
-          // IOS
-
-          let position = getPosition(data.articleId);
-
-          if (position && SaleOrderPosition.hasChanges(position)) {
-            return DEBUG('CatalogueSaleOrder:onJSData', 'ignore position');
-          }
-
-          DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
-
-          return SaleOrderPosition.inject(data);
-
-        } else if (!data.saleOrderId) {
-          // not IOS
-          return SaleOrderPosition.find(id, {bypassCache: true, cacheResponse: false})
-            .then(updated => {
-              if (updated.saleOrderId === saleOrderId) {
-                let existing = getPosition(updated.articleId);
-                if (existing && (SaleOrderPosition.hasChanges(existing) || updated.ts <= existing.ts)) {
-                  DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
-                } else {
-                  SaleOrderPosition.inject(updated);
-                }
-              }
-            });
-        }
-
-      }
-
-    }
-
-    function onJSDataDestroy(event) {
-
-      DEBUG('onJSDataDestroy', event);
-      let id = _.get(event, 'data.id');
-      if (!id) return;
-
-      if (SUBSCRIPTIONS.indexOf(event.resource) > -1) {
-        Schema.model(event.resource).eject(id);
-        if (id === saleOrderId) {
-          toastr.error('Заказ удален');
-          $state.go('^');
-        }
-      }
 
     }
 

@@ -3,6 +3,7 @@
 (function () {
 
   const SHORT_TIMEOUT = 0;
+  const LOW_STOCK_THRESHOLD = 24;
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService) {
 
@@ -31,6 +32,7 @@
 
       debounce: IOS.isIos() ? 600 : 200,
       showOnlyOrdered: $state.params.ordered === 'true',
+      lowStockThreshold: LOW_STOCK_THRESHOLD,
 
       currentArticleGroup: null,
       ancestors: [],
@@ -582,7 +584,10 @@
 
       if (vm.search) {
         let reg = new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
-        articles = _.filter(articles, article => reg.test(article.name));
+        articles = _.filter(articles, article => {
+          // TODO: parse number and search by pieceVolume
+          return reg.test(article.name) || reg.test(article.preName) || reg.test(article.lastName);
+        });
       }
 
       let articleIds = _.groupBy(articles, 'id');

@@ -66,7 +66,7 @@
 
   }
 
-  salesmans-menu {
+  salesman-menu {
 
     font-size: 14px;
     padding: 0 15px;
@@ -151,7 +151,7 @@
 
 @media (max-width: $screen-xs - 1) {
 
-  .dropdown-salesman-menu > salesmans-menu > a {
+  .dropdown-salesman-menu > salesman-menu > a {
     font-size: 21px;
     font-weight: 500;
 
@@ -173,7 +173,7 @@
 
 @media (max-width: 767px) {
 
-  .dropdown-salesman-menu > salesmans-menu {
+  .dropdown-salesman-menu > salesman-menu {
     padding: 0 10px;
   }
 

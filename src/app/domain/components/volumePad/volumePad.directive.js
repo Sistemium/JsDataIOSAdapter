@@ -131,7 +131,7 @@
     return {
 
       restrict: 'AC',
-      templateUrl: 'app/domain/volumePad/volumePad.html',
+      templateUrl: 'app/domain/components/volumePad/volumePad.html',
       scope: {
         model: '=',
         boxRel: '=',

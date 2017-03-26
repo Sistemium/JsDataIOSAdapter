@@ -8,7 +8,7 @@
   popover-placement='auto bottom-right'
   ng-disabled='!vm.position'
   )
-    span {{ vm.position ? vm.position.price : vm.prices.price }} ₽
+    span {{ vm.position ? vm.position.price : vm.prices.price | number:2 }} ₽
 
     span.discount(
     ng-if='vm.discountPercent()'

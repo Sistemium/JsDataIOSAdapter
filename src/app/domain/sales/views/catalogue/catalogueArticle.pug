@@ -20,7 +20,7 @@ before-tag-name='li'
     ng-if='vm.showImages'
     )
 
-    .article-wrapper
+    .article-wrapper(ng-class='{lowStock: stock.volume < vm.lowStockThreshold}')
       .article-name-first
         // TODO: filtering options in tooltip (allow user to show only the articles with the same firstName)
         strong.name-first(
@@ -44,17 +44,27 @@ before-tag-name='li'
         )
 
       .article-name-second(
-      uib-tooltip='{{::stock.article.name}}'
+      uib-tooltip='{{::stock.article.name}} {{::stock.article.extraLabel}}'
       )
         small {{::stock.article.preName}}
+        small.tag(
+        ng-repeat='tag in stock.article.tags track by tag.code'
+        ng-class='tag.code'
+        ) {{ tag.label }}
         small {{::stock.article.lastName}}
+        small {{::stock.article.extraLabel}}
 
       .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
-        small.red Запрет "{{ vm.restrictedArticles[stock.articleId].name }}"
+        i.red.glyphicon.glyphicon-ban-circle
+        small.red "{{ vm.restrictedArticles[stock.articleId].name }}"
+        small.gray {{ vm.prices[stock.articleId].price | number:2 }} ₽
 
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
 
-        i.red.glyphicon.glyphicon-warning-sign(ng-if='!stock.volume' uib-tooltip='Нет в наличии')
+        i.red.glyphicon.glyphicon-warning-sign(
+        ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'
+        uib-tooltip='Нет в наличии'
+        )
 
         small.gray.nowrap(ng-if='stock.volume')
           span ~{{stock.displayVolume}}
