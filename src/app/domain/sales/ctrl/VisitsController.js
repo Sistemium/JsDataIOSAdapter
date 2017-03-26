@@ -8,8 +8,7 @@
     const {yLatLng, distanceFn} = mapsHelper;
     const numberFilter = $filter('number');
 
-    let today = moment().toDate();
-    today.setHours(0, 0, 0, 0);
+    let today = moment(moment().format('YYYY-MM-DD')).toDate();
     let events;
 
     let vm = saControllerHelper.setup(this, $scope);

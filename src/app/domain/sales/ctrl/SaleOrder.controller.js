@@ -12,8 +12,7 @@
 
     let eventsGroupedByDate;
 
-    let today = moment().toDate();
-    today.setHours(0, 0, 0, 0);
+    let today = moment(moment().format('YYYY-MM-DD')).toDate();
 
     vm.use({
 
