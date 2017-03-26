@@ -58,7 +58,8 @@
       watchChanges: true,
 
       meta: {
-        positionsCountRu
+        positionsCountRu,
+        nextShipmentDate
       },
 
       methods: {
@@ -126,6 +127,15 @@
 
     function positionsCountRu(count) {
       return wDict[Language.countableState(count || this.positions.length)];
+    }
+
+    function nextShipmentDate() {
+
+      let today = moment(moment().format('YYYY-MM-DD'));
+      let increment = (today.isoWeekday() === 6) ? 2 : 1;
+
+      return today.add(increment, 'day');
+
     }
 
   });
