@@ -7,7 +7,7 @@
     let vm = saControllerHelper.setup(this, $scope);
     let {SaleOrder, Outlet, SaleOrderPosition} = Schema.models();
 
-    let events;
+    let eventsGroupedByDate;
 
     vm.use({
 
@@ -115,11 +115,9 @@
     }
 
     function eventsWithSaleOrderDays(saleOrderDays) {
-
-      events = _.keyBy(saleOrderDays, 'date');
-      events [moment().format('YYYY-MM-DD')] = {status: 'today'};
-
+      eventsGroupedByDate = _.groupBy(saleOrderDays, 'date');
     }
+
 
     function getDayClass(data) {
 
@@ -127,9 +125,9 @@
 
       if (mode === 'day') {
 
-        let event = events [moment(date).format('YYYY-MM-DD')];
-        if (!event) return;
-        return event['count()'] ? 'haveVisit' : event.status;
+        let events = _.keyBy(eventsGroupedByDate[moment(date).format('YYYY-MM-DD')], 'processing');
+        if (!events) return;
+
 
       }
 
