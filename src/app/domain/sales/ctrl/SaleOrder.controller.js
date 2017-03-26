@@ -9,13 +9,16 @@
 
     let eventsGroupedByDate;
 
+    let today = moment().toDate();
+    today.setHours(0, 0, 0, 0);
+
     vm.use({
 
       data: [],
 
       date: $state.params.date,
-      initDate: moment().add(1, 'days').toDate(),
-      // TODO support maxDate in sabDatePicker
+      initDate: today,
+      minDate: today,
       maxDate: moment().add(7, 'days').toDate(),
 
       itemClick,
@@ -115,7 +118,10 @@
     }
 
     function eventsWithSaleOrderDays(saleOrderDays) {
+
       eventsGroupedByDate = _.groupBy(saleOrderDays, 'date');
+      vm.minDate = moment(_.min(_.keys(eventsGroupedByDate))).toDate();
+
     }
 
 
