@@ -52,8 +52,8 @@
       $scope.$watch('vm.date', (nv, ov) => {
 
         // if (ov == nv) return; // suddenly comparing values via '==' stop working
-        if (moment(ov).isSame(nv, 'day')) return;
         if (!nv) vm.date = vm.datepickerOptions.initDate;
+        if (moment(ov).isSame(nv, 'day')) return;
         vm.value = dateWithoutTime(vm.date);
 
       });
