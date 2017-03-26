@@ -18,7 +18,7 @@
 
       data: [],
 
-      date: $state.params.date,
+      date: moment($state.params.date).toDate(),
       initDate: today,
       minDate: today,
       maxDate: moment().add(7, 'days').toDate(),
@@ -61,7 +61,7 @@
         newValue = moment().format();
       }
 
-      $state.go('.', {date: newValue});
+      $state.go('.', {date: moment(newValue).format()});
 
     }
 
