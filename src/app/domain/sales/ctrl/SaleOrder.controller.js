@@ -128,6 +128,17 @@
         let events = _.keyBy(eventsGroupedByDate[moment(date).format('YYYY-MM-DD')], 'processing');
         if (!events) return;
 
+        let draft = events['draft'];
+        if (draft && draft['count()']) {
+          return 'haveDraft';
+        }
+
+        if (moment(date).isSame(moment(), 'day')) {
+          return 'today';
+        }
+
+        let counts = _.sumBy(_.values(events), 'count()');
+        if (counts) return 'haveSaleOrder';
 
       }
 
