@@ -26,9 +26,11 @@
       return q;
     }
 
-    function paramsToOptions(params) {
+    function paramsToOptions(params, options) {
 
-      var parsed = _.assign({},params);
+      options = options || {};
+
+      let parsed = _.assign({},params);
 
       if (params.limit) {
         parsed['x-page-size:'] = params.limit;
@@ -38,7 +40,7 @@
         parsed['x-start-page:'] = Math.ceil(params.offset / (params.limit || 1)) + 1;
       }
 
-      var where = params.where;
+      let where = params.where;
 
       if (where) {
 
@@ -49,6 +51,10 @@
           }
         });
 
+      }
+
+      if (_.isArray(options.groupBy)) {
+        parsed['groupBy:'] = options.groupBy.join(',');
       }
 
       delete parsed.where;
@@ -63,7 +69,7 @@
         method: 'findAll',
         //TODO rename models with pool or set basePath for adapter or leave as it is now
         resource: (this.defaults.pool || options.pool) + '/' + resource.name,
-        params: paramsToOptions(params),
+        params: paramsToOptions(params, options),
         options: angular.extend({
           headers: {
             'x-page-size': options.limit || 3000,
@@ -92,7 +98,7 @@
     };
 
     SocketAdapter.prototype.update = function (resource, id, attrs, options) {
-      var deviceCts = _.get(attrs, 'deviceCts');
+      let deviceCts = _.get(attrs, 'deviceCts');
       if (!deviceCts) {
         attrs = angular.extend(attrs || {}, {deviceCts: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS')});
       }
@@ -105,7 +111,7 @@
     };
 
     SocketAdapter.prototype.destroy = function (resource, id, options) {
-      var q = emit({
+      let q = emit({
         method: 'destroy',
         resource: (this.defaults.pool || options.pool) + '/' + resource.name,
         id: id,
