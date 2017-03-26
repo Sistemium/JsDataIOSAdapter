@@ -26,7 +26,8 @@
       itemClick,
       newItemClick,
       onStateChange,
-      getDayClass
+      getDayClass,
+      clearTextFn
 
     });
 
@@ -151,6 +152,13 @@
         if (counts) return 'haveSaleOrder';
 
       }
+
+    }
+
+    function clearTextFn() {
+
+      vm.date = today();
+      return vm.date;
 
     }
 
