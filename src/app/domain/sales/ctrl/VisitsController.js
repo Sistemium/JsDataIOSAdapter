@@ -8,8 +8,9 @@
     const {yLatLng, distanceFn} = mapsHelper;
     const numberFilter = $filter('number');
 
-    let today = moment(moment().format('YYYY-MM-DD')).toDate();
     let events;
+
+    let today = todayFn();
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -46,14 +47,16 @@
 
     $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
-    $scope.$watch(
-      () => new Date().setHours(0, 0, 0, 0),
-      (todayTime, oldValue) => {
-        if (todayTime != oldValue) {
-          vm.selectedDate = new Date(todayTime);
-        }
+    $scope.$watch(() => new Date().setHours(0, 0, 0, 0), (todayTime, oldValue) => {
+
+      if (todayTime != oldValue) {
+
+        today = todayFn();
+        vm.selectedDate = today;
+
       }
-    );
+
+    });
 
     /*
      Functions
@@ -70,12 +73,9 @@
 
     function setDate(newValue) {
 
-      if (!angular.isObject(newValue)) {
+      if (!moment(newValue).isValid) {
         vm.selectedDate = new Date();
       }
-
-      vm.maxDate = new Date();
-      vm.maxDate.setHours(0, 0, 0, 0);
 
       filterVisitsBySelectedDate();
 
@@ -147,9 +147,13 @@
 
     function clearTextFn() {
 
-      vm.selectedDate = today();
+      vm.selectedDate = today;
       return vm.selectedDate;
 
+    }
+
+    function todayFn() {
+      return moment(moment().format('YYYY-MM-DD')).toDate();
     }
 
     function visitClick(visit) {

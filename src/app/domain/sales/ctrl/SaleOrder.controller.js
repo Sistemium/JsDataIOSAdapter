@@ -12,7 +12,7 @@
 
     let eventsGroupedByDate;
 
-    let today = moment(moment().format('YYYY-MM-DD')).toDate();
+    let today = todayFn();
 
     vm.use({
 
@@ -39,6 +39,14 @@
 
     $scope.$on('rootClick', () => $state.go('sales.saleOrders'));
     $scope.$watch('vm.date', _.debounce(setDate, 300));
+
+    $scope.$watch(() => new Date().setHours(0, 0, 0, 0), (todayTime, oldValue) => {
+
+      if (todayTime != oldValue) {
+        today = todayFn();
+      }
+
+    });
 
     /*
      Handlers
@@ -157,9 +165,13 @@
 
     function clearTextFn() {
 
-      vm.date = today();
+      vm.date = today;
       return vm.date;
 
+    }
+
+    function todayFn() {
+      return moment(moment().format('YYYY-MM-DD')).toDate();
     }
 
   }
