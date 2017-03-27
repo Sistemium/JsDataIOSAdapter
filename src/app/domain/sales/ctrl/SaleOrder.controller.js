@@ -18,8 +18,8 @@
 
       data: [],
 
-      date: moment($state.params.date).toDate(),
-      initDate: today,
+      date: $state.params.date ? moment($state.params.date).toDate() : SaleOrder.meta.nextShipmentDate(),
+      initDate: SaleOrder.meta.nextShipmentDate(),
       minDate: today,
       maxDate: moment().add(7, 'days').toDate(),
 
@@ -67,7 +67,7 @@
     function setDate(newValue) {
 
       if (!newValue) {
-        newValue = moment().format();
+        newValue = vm.initDate;
       }
 
       $state.go('.', {date: moment(newValue).format()});
