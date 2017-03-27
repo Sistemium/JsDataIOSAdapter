@@ -25,7 +25,8 @@
           Workflow.findAll({code: 'SaleOrder.v2'})
             .then(workflow => {
               Schema.workflowSaleOrder = _.get(_.first(workflow), 'workflow');
-            });
+            })
+            .catch(e => console.error('Workflow find error:', e));
 
         });
 
