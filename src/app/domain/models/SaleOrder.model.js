@@ -134,7 +134,7 @@
       let today = moment(moment().format('YYYY-MM-DD'));
       let increment = (today.isoWeekday() === 6) ? 2 : 1;
 
-      return today.add(increment, 'day');
+      return today.add(increment, 'day').toDate();
 
     }
 

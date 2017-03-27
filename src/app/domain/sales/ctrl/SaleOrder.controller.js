@@ -18,8 +18,8 @@
 
       data: [],
 
-      date: $state.params.date ? moment($state.params.date).toDate() : SaleOrder.meta.nextShipmentDate().toDate(),
-      initDate: SaleOrder.meta.nextShipmentDate().toDate(),
+      date: $state.params.date ? moment($state.params.date).toDate() : SaleOrder.meta.nextShipmentDate(),
+      initDate: SaleOrder.meta.nextShipmentDate(),
       minDate: today,
       maxDate: moment().add(7, 'days').toDate(),
 
