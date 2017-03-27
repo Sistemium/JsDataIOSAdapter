@@ -2,7 +2,7 @@
 
 .sale-orders {
 
-  > #scroll-main {
+  .datepicker-with-buttons + * {
     margin-top: 5px;
   }
 
