@@ -4,9 +4,9 @@
 
   angular
     .module('webPage')
-    .directive('salesmanMenu', salesmansMenu);
+    .directive('salesmanMenu', salesmanMenu);
 
-  function salesmansMenu() {
+  function salesmanMenu() {
     return {
 
       restrict: 'E',

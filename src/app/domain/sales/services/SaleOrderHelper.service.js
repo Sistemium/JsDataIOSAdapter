@@ -34,13 +34,13 @@
             SaleOrder.find(id, {bypassCache: true})
               .catch(err => {
                 if (err.error === 404) {
-                  SaleOrder.eject(saleOrderId)
+                  SaleOrder.eject(id)
                 }
               });
 
           }
 
-        } else if (resource === 'SaleOrderPosition') {
+        } else if (resource === 'SaleOrderPosition' && saleOrderId) {
 
           if (data.saleOrderId === saleOrderId) {
             // IOS

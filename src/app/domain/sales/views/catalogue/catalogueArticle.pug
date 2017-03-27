@@ -51,7 +51,7 @@ before-tag-name='li'
         ng-repeat='tag in stock.article.tags track by tag.code'
         ng-class='tag.code'
         ) {{ tag.label }}
-        small {{::stock.article.lastName}}
+        small(ng-if='stock.article.lastName') {{::stock.article.lastName}}
         small {{::stock.article.extraLabel}}
 
       .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')

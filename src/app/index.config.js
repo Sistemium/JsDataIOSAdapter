@@ -1,5 +1,6 @@
+'use strict';
+
 (function () {
-  'use strict';
 
   angular
     .module('webPage')
@@ -25,7 +26,7 @@
 
   function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
 
-    var lastState = localStorageService.get('lastState');
+    let lastState = localStorageService.get('lastState');
 
     PickerAuth.init();
 
@@ -38,19 +39,22 @@
 
       console.log('Auth', res);
 
-      var appConfig =
+      let org = _.get(res, 'account.org');
+      let isTestOrg = /^(dev|dr50)$/.test(org);
+
+      let appConfig =
           // InitService.localDevMode ? {} :
           {
             url: {
-              socket: 'https://socket2.sistemium.com'
+              socket: isTestOrg ? 'https://socket2.sistemium.com' : 'https://socket.sistemium.com'
             }
           }
         ;
 
       if (!IOS.isIos()) {
         angular.extend(appConfig, {
-          jsDataPrefix: res.account.org + '/',
-          org: res.account.org
+          jsDataPrefix: org + '/',
+          org
         });
       }
 
@@ -60,7 +64,7 @@
       InitService.then(() => Sockets.on('connect', sockAuth));
 
       function sockAuth() {
-        var accessToken = Auth.getAccessToken();
+        let accessToken = Auth.getAccessToken();
         if (!accessToken) {
           return;
         }
@@ -72,7 +76,7 @@
 
       //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
-      var lastPicker = window.localStorage.getItem('currentPickerId');
+      let lastPicker = window.localStorage.getItem('currentPickerId');
 
       if (lastPicker) {
         Picker.setCurrentById(lastPicker)

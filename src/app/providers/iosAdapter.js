@@ -120,7 +120,13 @@
 
     function paramsToOptions(params) {
 
-      let parsed = params;
+      let parsed = {};
+
+      _.each(params, (val, key) => {
+        if (!_.isFunction(val)) {
+          parsed[key] = val;
+        }
+      });
 
       if (params.limit) {
         parsed.pageSize = params.limit;
