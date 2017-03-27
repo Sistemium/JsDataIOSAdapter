@@ -1,5 +1,6 @@
+'use strict';
+
 (function () {
-  'use strict';
 
   angular
     .module('webPage')
@@ -25,7 +26,7 @@
 
   function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
 
-    var lastState = localStorageService.get('lastState');
+    let lastState = localStorageService.get('lastState');
 
     PickerAuth.init();
 
@@ -60,7 +61,7 @@
       InitService.then(() => Sockets.on('connect', sockAuth));
 
       function sockAuth() {
-        var accessToken = Auth.getAccessToken();
+        let accessToken = Auth.getAccessToken();
         if (!accessToken) {
           return;
         }
@@ -72,7 +73,7 @@
 
       //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
-      var lastPicker = window.localStorage.getItem('currentPickerId');
+      let lastPicker = window.localStorage.getItem('currentPickerId');
 
       if (lastPicker) {
         Picker.setCurrentById(lastPicker)
