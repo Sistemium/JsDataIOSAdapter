@@ -110,7 +110,7 @@
           Outlet.findAll(_.assign({where: bySalesman}, _.omit(filter, 'date')))
             .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
           SaleOrderPosition.findAll(saleOrderPositionsFilter),
-          SaleOrder.groupBy({filter}, ['date', 'processing'])
+          SaleOrder.groupBy(SalesmanAuth.makeFilter(), ['date', 'processing'])
             .then(res => eventsWithSaleOrderDays(res))
         ],
         'Загрузка данных дня'
