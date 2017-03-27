@@ -39,19 +39,22 @@
 
       console.log('Auth', res);
 
-      var appConfig =
+      let org = _.get(res, 'account.org');
+      let isTestOrg = /^(dev|dr50)$/.test(org);
+
+      let appConfig =
           // InitService.localDevMode ? {} :
           {
             url: {
-              socket: 'https://socket2.sistemium.com'
+              socket: isTestOrg ? 'https://socket2.sistemium.com' : 'https://socket.sistemium.com'
             }
           }
         ;
 
       if (!IOS.isIos()) {
         angular.extend(appConfig, {
-          jsDataPrefix: res.account.org + '/',
-          org: res.account.org
+          jsDataPrefix: org + '/',
+          org
         });
       }
 
