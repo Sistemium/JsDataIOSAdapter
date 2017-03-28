@@ -4,6 +4,7 @@
 
   const SHORT_TIMEOUT = 0;
   const LOW_STOCK_THRESHOLD = 24;
+  const FONT_SIZE_KEY = 'catalogue.fontSize';
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService) {
 
@@ -47,6 +48,7 @@
       stockWithPicIndex: [],
       discountsBy: {},
       discounts: {},
+      fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -58,6 +60,9 @@
 
       bPlusButtonClick,
       kPlusButtonClick,
+
+      largerFontClick,
+      smallerFontClick,
 
       onStateChange,
       articleRowHeight,
@@ -73,6 +78,12 @@
     /*
      Listeners
      */
+
+    vm.watchScope('vm.fontSize', fontSize => {
+      if (fontSize) {
+        localStorageService.set(FONT_SIZE_KEY, fontSize);
+      }
+    });
 
     vm.rebindAll(PriceType, null, 'vm.priceTypes');
     //vm.rebindAll(ArticlePicture, null, 'vm.articlePictures');
@@ -168,6 +179,14 @@
     /*
      Handlers
      */
+
+    function smallerFontClick() {
+      vm.fontSize = _.max([vm.fontSize - 1, 14]);
+    }
+
+    function largerFontClick() {
+      vm.fontSize = _.min([vm.fontSize + 1, 17]);
+    }
 
     function kPlusButtonClick(stock) {
       $scope.$broadcast('kPlusButtonClick', stock.article, vm.prices[stock.articleId]);
