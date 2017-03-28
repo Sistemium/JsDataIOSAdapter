@@ -45,18 +45,16 @@
 
       $scope.$watch('vm.value', (nv, ov) => {
 
-        // if (ov == nv) return; // suddenly comparing values via '==' stop working
-        if (moment(ov).isSame(nv, 'day')) return;
+        if (ov == nv) return;
         vm.date = dateWithoutTime(vm.value);
 
       });
 
       $scope.$watch('vm.date', (nv, ov) => {
 
-        // if (ov == nv) return; // suddenly comparing values via '==' stop working
         if (!nv) vm.date = vm.clearTextFn(); //!nv —> means clear text button pressed
         if (moment(ov).isSame(nv, 'day')) return;
-        vm.value = dateWithoutTime(vm.date);
+        vm.value = vm.date.toString();
 
       });
 
