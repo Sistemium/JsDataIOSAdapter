@@ -446,7 +446,7 @@
         }
       };
 
-      return PriceType.findAll()
+      return PriceType.findAllWithRelations()(['PriceType'])
         .then(() => ArticleGroup.cachedFindAll({}, options))
         .then(() => Article.cachedFindAll({
           volumeNotZero: true,
