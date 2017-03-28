@@ -43,6 +43,13 @@
 }
 
 .quantity-edit {
+
+  a.trigger {
+    min-width: 2.5em;
+    text-align: right;
+    display: inline-block;
+  }
+
   .popover-content {
 
     padding: 0;
