@@ -65,6 +65,14 @@
 
     buttons
 
+      button.btn.btn-sm(
+      ng-click='vm.copySaleOrderClick()'
+      ng-if='vm.saleOrder.totalCost'
+      ng-class='vm.confirmCopySaleOrder ? "btn-warning" : "btn-default"'
+      )
+        span Скопировать
+        span(ng-show='vm.confirmCopySaleOrder') ?
+
       button.btn.btn-primary.btn-sm(
       ng-repeat='(destination, label) in vm.saleOrder.workflow().to'
       ng-click='vm.setProcessingClick(destination)'
