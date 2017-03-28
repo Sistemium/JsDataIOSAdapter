@@ -18,10 +18,10 @@
 
       data: [],
 
-      date: $state.params.date ? moment($state.params.date).toDate() : SaleOrder.meta.nextShipmentDate(),
+      date: $state.params.date ? moment($state.params.date).format() : SaleOrder.meta.nextShipmentDate(),
       initDate: SaleOrder.meta.nextShipmentDate(),
       minDate: today,
-      maxDate: moment().add(7, 'days').toDate(),
+      maxDate: moment().add(7, 'days').toString(),
 
       itemClick,
       newItemClick,
@@ -171,7 +171,7 @@
     }
 
     function todayFn() {
-      return moment(moment().format('YYYY-MM-DD')).toDate();
+      return moment().format();
     }
 
   }
