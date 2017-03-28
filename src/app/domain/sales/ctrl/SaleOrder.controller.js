@@ -14,6 +14,8 @@
 
     let today = todayFn();
 
+    if (!$state.params.date) return setDate(SaleOrder.meta.nextShipmentDate());
+
     vm.use({
 
       data: [],
