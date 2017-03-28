@@ -12,7 +12,7 @@
 
     vm.use({
 
-      toggleEditClick: () => vm.editing = !vm.editing,
+      toggleEditClick: () => $state.go('sales.catalogue.saleOrder', {saleOrderId: vm.saleOrder.id, ordered: true}),
 
       setProcessingClick,
       setSaleOrderClick,
