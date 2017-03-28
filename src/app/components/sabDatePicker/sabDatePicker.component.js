@@ -54,7 +54,7 @@
 
         if (!nv) vm.date = vm.clearTextFn(); //!nv —> means clear text button pressed
         if (moment(ov).isSame(nv, 'day')) return;
-        vm.value = vm.date.toString();
+        vm.value = vm.date.toISOString();
 
       });
 
@@ -75,7 +75,7 @@
     function nextDayClick() {
       vm.date = _.max([
         moment(vm.datepickerOptions.minDate),
-        moment(vm.date).add(1, 'day')
+        moment(vm.date.toISOString()).add(1, 'day')
       ]).toDate();
     }
 
@@ -83,7 +83,7 @@
 
       vm.date = _.min([
         moment(vm.datepickerOptions.maxDate),
-        moment(vm.date).add(-1, 'day')
+        moment(vm.date.toISOString()).add(-1, 'day')
       ]).toDate();
 
     }
