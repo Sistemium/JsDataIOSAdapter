@@ -187,12 +187,12 @@
         // TODO: Refactor if statement
 
         if (index != 0 && (($scope.imagesAll.length - 7) != index) && $scope.firstOpen == false) {
-          thumbWrapper.scrollLeft = 68 * index + 2;
+          thumbWrapper.scrollLeft = 70 * index + 2;
         } else {
           if (($scope.imagesAll.length - 7) == index) {
-            thumbWrapper.scrollLeft = 68 * index + 4;
+            thumbWrapper.scrollLeft = 70 * index + 2;
           } else {
-            thumbWrapper.scrollLeft = 68 * index;
+            thumbWrapper.scrollLeft = 70 * index;
           }
 
         }
