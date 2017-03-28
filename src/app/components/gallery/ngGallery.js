@@ -32,7 +32,7 @@
      Functions
      */
 
-    function thumbnailClick (img) {
+    function thumbnailClick(img) {
 
       if (!img) return;
 
@@ -44,7 +44,7 @@
 
     }
 
-    function fullScreenThumbnailClick (img) {
+    function fullScreenThumbnailClick(img) {
       $scope.index = $scope.imagesAll.indexOf(img);
       showImage(img);
     }
