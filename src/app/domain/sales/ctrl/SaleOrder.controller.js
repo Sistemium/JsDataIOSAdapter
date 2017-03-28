@@ -146,7 +146,7 @@
 
       if (mode === 'day') {
 
-        let events = _.keyBy(eventsGroupedByDate[moment(date).format('YYYY-MM-DD')], 'processing');
+        let events = _.keyBy(eventsGroupedByDate[moment(date).format()], 'processing');
         if (!events) return;
 
         let draft = events['draft'];

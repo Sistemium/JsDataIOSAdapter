@@ -69,7 +69,7 @@
     }
 
     function dateWithoutTime(date) {
-      return moment(moment(date).format('YYYY-MM-DD')).toDate();
+      return moment(moment(date).format()).toDate();
     }
 
     function nextDayClick() {

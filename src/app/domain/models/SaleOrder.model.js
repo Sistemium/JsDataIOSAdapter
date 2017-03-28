@@ -131,7 +131,7 @@
 
     function nextShipmentDate() {
 
-      let today = moment(moment().format('YYYY-MM-DD'));
+      let today = moment(moment().format());
       let increment = (today.isoWeekday() === 6) ? 2 : 1;
 
       return today.add(increment, 'day').toString();
