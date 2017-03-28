@@ -18,7 +18,7 @@
 
       selectedDayVisits: [],
 
-      selectedDate: moment($state.params.date).toDate(),
+      selectedDate: $state.params.date,
       initDate: today,
       maxDate: today,
       minDate: today,
@@ -73,8 +73,8 @@
 
     function setDate(newValue) {
 
-      if (!moment(newValue).isValid) {
-        vm.selectedDate = new Date();
+      if (!newValue) {
+        vm.selectedDate = vm.initDate;
       }
 
       filterVisitsBySelectedDate();
@@ -102,7 +102,7 @@
 
       events = _.keyBy(visitDays, 'date');
       events [dateFormatted(vm.maxDate)] = {status: 'today'};
-      vm.minDate = moment(_.min(_.map(visitDays, 'date'))).toDate();
+      vm.minDate = moment(_.min(_.map(visitDays, 'date'))).format();
 
     }
 
@@ -137,7 +137,7 @@
 
       if (mode === 'day') {
 
-        let event = events [dateFormatted(dateFormatted(date))];
+        let event = events [dateFormatted(date)];
         if (!event) return;
         return event['count()'] ? 'haveVisit' : event.status;
 
@@ -153,7 +153,7 @@
     }
 
     function todayFn() {
-      return moment(moment().format('YYYY-MM-DD')).toDate();
+      return moment().format();
     }
 
     function visitClick(visit) {
