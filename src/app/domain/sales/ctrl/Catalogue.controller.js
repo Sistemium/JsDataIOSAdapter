@@ -103,8 +103,8 @@
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
     });
 
-    $scope.$watchCollection('vm.filters', () => {
-      setCurrentArticleGroup(vm.currentArticleGroup);
+    $scope.$watchCollection('vm.filters', (o, n) => {
+      if (o && n && (o.length || n.length)) setCurrentArticleGroup(vm.currentArticleGroup);
     });
 
     $scope.$on('setSaleOrder', (event, saleOrder) => {
