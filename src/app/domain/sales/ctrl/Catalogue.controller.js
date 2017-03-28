@@ -50,6 +50,7 @@
       discounts: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
+      articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,

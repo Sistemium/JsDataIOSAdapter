@@ -27,7 +27,7 @@ before-tag-name='li'
       .article-name-first
 
         strong.name-first(
-        uib-tooltip='{{::stock.article.name}} {{::stock.article.extraLabel}}'
+        uib-tooltip-template='vm.articleTooltipTpl'
         ) {{::stock.article.firstName}}
         .article-info(
         ng-class='::{gray: stock.article.firstName.length}'
@@ -60,6 +60,7 @@ before-tag-name='li'
 
         small(
         ng-if='stock.article.lastName'
+        uib-tooltip-template='vm.articleTooltipTpl'
         ) {{::stock.article.lastName}}
 
         small {{::stock.article.extraLabel}}
