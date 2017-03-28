@@ -70,6 +70,10 @@
     min-width: 200px;
   }
 
+  a[disabled] .value {
+    color: $black;
+  }
+
 }
 
 .disabled {
