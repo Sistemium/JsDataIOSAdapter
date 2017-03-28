@@ -49,6 +49,7 @@
       discountsBy: {},
       discounts: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
+      filters: [],
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -63,6 +64,10 @@
 
       largerFontClick,
       smallerFontClick,
+
+      pieceVolumeClick,
+      articleTagClick,
+      removeFilterClick,
 
       onStateChange,
       articleRowHeight,
@@ -96,6 +101,10 @@
 
     vm.watchScope('vm.search', (newValue, oldValue) => {
       if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
+    });
+
+    $scope.$watchCollection('vm.filters', () => {
+      setCurrentArticleGroup(vm.currentArticleGroup);
     });
 
     $scope.$on('setSaleOrder', (event, saleOrder) => {
@@ -292,9 +301,31 @@
 
     }
 
+    function removeFilterClick(filter) {
+      addFilter(filter);
+    }
+
+    function articleTagClick(tag) {
+      addFilter({tag: tag.code, label: tag.label});
+    }
+
+    function pieceVolumeClick(pieceVolume) {
+      addFilter({pieceVolume, label: pieceVolume + 'л'});
+    }
+
     /*
      Functions
      */
+
+    function addFilter(filter) {
+
+      if (_.find(vm.filters, filter)) {
+        _.remove(vm.filters, filter);
+      } else {
+        vm.filters.push(filter);
+      }
+
+    }
 
     // TODO: move to a separate helper
 
@@ -468,7 +499,7 @@
       _.each(priceType.prices(), price => {
         let priceOrigin = price.price * discount;
         vm.prices[price.articleId] = {
-          price: _.round(priceOrigin * (1 - (vm.discounts[price.articleId]||0) / 100.0), 2),
+          price: _.round(priceOrigin * (1 - (vm.discounts[price.articleId] || 0) / 100.0), 2),
           priceOrigin
         };
       });
@@ -601,12 +632,38 @@
         articles = _.filter(articles, article => ids.indexOf(article.articleGroupId) > -1);
       }
 
-      if (vm.search) {
-        let reg = new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
+      if (vm.search || vm.filters) {
+
+        let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
+
+        let pieceVolume;
+
+        _.each(vm.filters, filter => {
+          if (filter.pieceVolume) {
+            pieceVolume = parseFloat(filter.pieceVolume);
+          }
+        });
+
+        let tags = _.filter(vm.filters, 'tag');
+
         articles = _.filter(articles, article => {
           // TODO: parse number and search by pieceVolume
-          return reg.test(article.name) || reg.test(article.preName) || reg.test(article.lastName);
+          let res = !reg || reg.test(article.name) || reg.test(article.preName) || reg.test(article.lastName);
+
+          if (res && pieceVolume) {
+            res = Math.abs(article.pieceVolume - pieceVolume) <= 0.051;
+          }
+
+          if (res && tags.length) {
+            _.each(tags, tag => {
+              res = res && _.find(article.tags, {code: tag.tag});
+            });
+          }
+
+          return res;
+
         });
+
       }
 
       let articleIds = _.groupBy(articles, 'id');
