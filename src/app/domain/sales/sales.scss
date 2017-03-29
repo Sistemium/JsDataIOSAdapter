@@ -1,5 +1,13 @@
 @import "../../styles/variables";
 
+.datepicker-with-buttons + * {
+  margin-top: 5px;
+}
+
+.tinyName {
+  white-space: nowrap;
+}
+
 .territory {
 
   h5 > a.lead {

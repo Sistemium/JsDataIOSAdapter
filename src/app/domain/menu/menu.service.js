@@ -35,6 +35,10 @@
             state: 'sales.saleOrders',
             needRoles: SALES_ROLES
           }, {
+            title: 'Отгрузки',
+            state: 'sales.shipmentList',
+            needRoles: SALES_ROLES
+          }, {
             title: 'Каталог',
             state: 'sales.catalogue',
             needRoles: SALES_ROLES
