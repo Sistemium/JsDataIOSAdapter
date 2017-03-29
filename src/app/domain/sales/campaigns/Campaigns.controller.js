@@ -29,7 +29,7 @@
 
     });
 
-    // $scope.$on('rootClick', () => $state.go('sales.visits'));
+    $scope.$on('rootClick', () => $state.go('.', {campaignGroup: null}));
 
     /*
      Functions
