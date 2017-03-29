@@ -4,7 +4,7 @@
 
   function PartnerController(Schema, $state, $scope, ConfirmModal) {
 
-    var vm = this;
+    let vm = this;
 
     _.assign(vm, {
 
@@ -20,9 +20,8 @@
 
     });
 
-    var Partner = Schema.model('Partner');
-    var Outlet = Schema.model('Outlet');
-    var rootState = 'sales.territory.partner';
+    let {Partner, Outlet} = Schema.models();
+    let rootState = 'sales.territory.partner';
 
     $scope.$on('$stateChangeSuccess', function (e, to) {
       vm.disableNavs = !!_.get(to, 'data.disableNavs') || to.name === rootState;
