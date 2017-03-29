@@ -10,8 +10,12 @@
     let initDate = SaleOrder.meta.nextShipmentDate();
 
     vm.use({
+
       date: $state.params.date,
-      initDate
+      initDate,
+
+      onStateChange
+
     });
 
     if (!vm.date) return setDate(initDate);
@@ -24,6 +28,15 @@
      Functions
      */
 
+    function onStateChange(to) {
+      if (!/sales.shipmentList/.test(to.name)) cleanup();
+    }
+
+    function cleanup() {
+      ShipmentPosition.ejectAll();
+      Shipment.ejectAll();
+    }
+
     function getData(salesman) {
 
       let date = vm.date;
@@ -34,8 +47,8 @@
 
       let busy = $q.all([
         Outlet.findAll(filter),
-        Shipment.findAll(filter),
-        ShipmentPosition.findAll(filter)
+        Shipment.findAll(filter, {bypassCache: true}),
+        ShipmentPosition.findAll(filter, {bypassCache: true})
       ])
         .then(() => {
           vm.rebindAll(Shipment, filter, 'vm.data');
