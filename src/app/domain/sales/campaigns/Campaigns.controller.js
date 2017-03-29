@@ -4,7 +4,7 @@
 
   function CampaignsController(Schema, saControllerHelper, $scope, SalesmanAuth) {
 
-    const {Campaign/*, CampaignPicture*/} = Schema.models();
+    const {/*CampaignGroup, */Campaign/*, CampaignPicture*/} = Schema.models();
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
