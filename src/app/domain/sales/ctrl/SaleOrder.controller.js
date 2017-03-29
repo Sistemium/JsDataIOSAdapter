@@ -12,8 +12,6 @@
 
     let eventsGroupedByDate;
 
-    let today = todayFn();
-
     if (!$state.params.date) return setDate(SaleOrder.meta.nextShipmentDate());
 
     vm.use({
@@ -22,14 +20,12 @@
 
       date: $state.params.date ? $state.params.date : SaleOrder.meta.nextShipmentDate(),
       initDate: SaleOrder.meta.nextShipmentDate(),
-      minDate: today,
       maxDate: moment().add(7, 'days').format(),
 
       itemClick,
       newItemClick,
       onStateChange,
-      getDayClass,
-      clearTextFn
+      getDayClass
 
     });
 
@@ -41,14 +37,6 @@
 
     $scope.$on('rootClick', () => $state.go('sales.saleOrders'));
     $scope.$watch('vm.date', _.debounce(setDate, 300));
-
-    $scope.$watch(() => new Date().setHours(0, 0, 0, 0), (todayTime, oldValue) => {
-
-      if (todayTime != oldValue) {
-        today = todayFn();
-      }
-
-    });
 
     /*
      Handlers
@@ -66,21 +54,15 @@
       SaleOrderPosition.ejectAll();
     }
 
-    function setDate(newValue) {
-
-      if (!newValue) {
-        newValue = vm.initDate;
-      }
-
-      $state.go('.', {date: moment(newValue).format()});
-
+    function setDate(date) {
+      $state.go('.', {date: date || vm.initDate});
     }
 
     function getData(salesman) {
 
       vm.currentSalesman = salesman;
 
-      let date = moment(vm.date).format();
+      let date = vm.date;
 
       let filter = SalesmanAuth.makeFilter({date});
 
@@ -163,17 +145,6 @@
 
       }
 
-    }
-
-    function clearTextFn() {
-
-      vm.date = SaleOrder.meta.nextShipmentDate();
-      return vm.date;
-
-    }
-
-    function todayFn() {
-      return moment().format();
     }
 
   }

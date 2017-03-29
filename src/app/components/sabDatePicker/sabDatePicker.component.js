@@ -9,8 +9,7 @@
         maxDate: '<',
         initDate: '<',
         customClass: '<',
-        clearText: '@',
-        clearTextFn: '<'
+        clearText: '@'
       },
 
       templateUrl: 'app/components/sabDatePicker/sabDatePicker.html',
@@ -38,8 +37,7 @@
         minDate: vm.minDate && dateWithoutTime(vm.minDate),
         maxDate: vm.maxDate && dateWithoutTime(vm.maxDate),
         initDate: vm.initDate,
-        customClass: vm.customClass,
-        clearTextFn: vm.clearTextFn
+        customClass: vm.customClass
       }, $scope.datepickerOptions);
 
 
@@ -50,10 +48,9 @@
 
       });
 
-      $scope.$watch('vm.date', (nv, ov) => {
+      $scope.$watch('vm.date', (nv) => {
 
-        if (!nv) vm.date = vm.clearTextFn(); //!nv —> means clear text button pressed
-        if (moment(ov).isSame(nv, 'day')) return;
+        if (!nv) vm.date = dateWithoutTime(vm.initDate);
         vm.value = moment(vm.date.toISOString()).format();
 
       });
