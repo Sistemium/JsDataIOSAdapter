@@ -2,17 +2,19 @@
 
 (function () {
 
-  function CampaignsController(Schema, saControllerHelper, $scope, SalesmanAuth) {
+  function CampaignsController(Schema, saControllerHelper, $scope, SalesmanAuth, $state) {
 
-    const {CampaignGroup/*, Campaign, CampaignPicture*/} = Schema.models();
+    const {CampaignGroup, Campaign/*, CampaignPicture*/} = Schema.models();
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
       campaignGroups: [],
+      selectedCampaignGroup: $state.params.campaignGroup,
       campaigns: [],
 
-      campaignGroupClick
+      campaignGroupClick,
+      campaignClick
 
     });
 
@@ -23,7 +25,7 @@
     SalesmanAuth.watchCurrent($scope, salesman => {
 
       vm.selectedSalesmanId = _.get(salesman, 'id');
-      findCampaigns();
+      loadCampaignsData();
 
     });
 
@@ -33,7 +35,20 @@
      Functions
      */
 
-    function findCampaigns() {
+    function loadCampaignsData() {
+
+      if (!vm.selectedCampaignGroup) {
+
+        loadCampaignGroups();
+        return;
+
+      }
+
+      loadCampaigns();
+
+    }
+
+    function loadCampaignGroups() {
 
       CampaignGroup.findAll({}, {bypassCache: true})
         .then((campaignGroups) => {
@@ -45,8 +60,27 @@
 
     }
 
+    function loadCampaigns() {
+
+      Campaign.findAll({campaignGroupId: vm.selectedCampaignGroup.id}, {bypassCache: true})
+        .then((campaigns) => {
+
+          vm.campaigns = campaigns;
+          console.info('vm.campaigns', vm.campaigns);
+
+        });
+
+    }
+
     function campaignGroupClick(campaignGroup) {
+
       console.info('campaignGroupClick', campaignGroup);
+      $state.go('.', {campaignGroup: campaignGroup.id});
+
+    }
+
+    function campaignClick(campaign) {
+      console.info('campaignClick', campaign);
     }
 
   }
