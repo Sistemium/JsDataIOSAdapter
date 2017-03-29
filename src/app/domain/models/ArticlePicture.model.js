@@ -27,7 +27,6 @@
 
       computed: {
 
-        // arrow functions does not work correctly with 'this'
         srcThumbnail  : function() {
           return PhotoHelper.actingImageSrc(this, 'thumbnail');
         },
