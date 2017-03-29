@@ -21,7 +21,7 @@
             url: '/:id',
             name: 'item',
             templateUrl: 'app/domain/sales/shipment/ShipmentDetails.html',
-            controller: 'ShipmentDetailsController as vm',
+            controller: 'ShipmentDetailsController as vm'
           }]
 
         });
