@@ -3,7 +3,7 @@
   span.input-group-btn
     button.btn.btn-default(
     ng-click='vm.prevDayClick()'
-    ng-disabled='vm.date <= vm.datepickerOptions.minDate'
+    ng-disabled='vm.datepickerOptions.minDate && vm.date <= vm.datepickerOptions.minDate'
     )
       i.glyphicon.glyphicon-chevron-left
 
@@ -25,6 +25,6 @@
   span.input-group-btn
     button.btn.btn-default(
     ng-click='vm.nextDayClick()'
-    ng-disabled='vm.date >= vm.datepickerOptions.maxDate'
+    ng-disabled='vm.datepickerOptions.maxDate && vm.date >= vm.datepickerOptions.maxDate'
     )
       i.glyphicon.glyphicon-chevron-right

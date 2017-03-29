@@ -35,8 +35,8 @@
       vm.date = dateWithoutTime(vm.value);
 
       vm.datepickerOptions = _.defaults({
-        minDate: dateWithoutTime(vm.minDate),
-        maxDate: dateWithoutTime(vm.maxDate),
+        minDate: vm.minDate && dateWithoutTime(vm.minDate),
+        maxDate: vm.maxDate && dateWithoutTime(vm.maxDate),
         initDate: vm.initDate,
         customClass: vm.customClass,
         clearTextFn: vm.clearTextFn
@@ -61,7 +61,7 @@
       $scope.$watch('vm.minDate', () => {
 
         vm.datepickerOptions = _.defaults({
-          minDate: dateWithoutTime(vm.minDate)
+          minDate: vm.minDate && dateWithoutTime(vm.minDate)
         }, vm.datepickerOptions);
 
       });
