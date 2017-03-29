@@ -54,7 +54,7 @@
 
         if (!nv) vm.date = vm.clearTextFn(); //!nv —> means clear text button pressed
         if (moment(ov).isSame(nv, 'day')) return;
-        vm.value = vm.date.toISOString();
+        vm.value = moment(vm.date.toISOString()).format();
 
       });
 
