@@ -189,7 +189,7 @@
       var campaigns = {
 
         name: 'campaigns',
-        url: '/campaigns',
+        url: '/campaigns?campaignGroup',
 
         templateUrl: 'app/domain/sales/campaigns/campaigns.html',
         controller: 'CampaignsController',
