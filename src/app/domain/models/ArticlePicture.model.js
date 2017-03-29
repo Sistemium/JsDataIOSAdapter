@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run((Schema, $window) => {
+  angular.module('Models').run((Schema, PhotoHelper) => {
 
     Schema.register({
 
@@ -27,35 +27,17 @@
 
       computed: {
 
-        // TODO: refactor with a decorator fn of PhotoHelper
-        srcThumbnail  : ['thumbnailSrc', 'thumbnailPath', 'href', (imageSrc, imagePath, href) => {
-          return actingImageSrc(imageSrc, imagePath, href, 'thumbnail');
-        }],
-        srcFullscreen : ['smallSrc', 'resizedImagePath', 'href', (imageSrc, imagePath, href) => {
-          return actingImageSrc(imageSrc, imagePath, href, 'smallImage');
-        }]
+        // arrow functions does not work correctly with 'this'
+        srcThumbnail  : function() {
+          return PhotoHelper.actingImageSrc(this, 'thumbnail');
+        },
+        srcFullscreen : function() {
+            return PhotoHelper.actingImageSrc(this, 'smallImage');
+        }
 
       }
 
     });
-
-    function actingImageSrc(imageSrc, imagePath, href, size) {
-
-      if (imageSrc) {
-        return imageSrc;
-      }
-
-      if ($window.location.protocol === 'file:') {
-        return imagePath ? '../../../../pictures/' + imagePath : null;
-      }
-
-      if (href) {
-        return href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
-      }
-
-      return null;
-
-    }
 
   });
 

@@ -10,19 +10,26 @@
 
     let {SaleOrder, Outlet, SaleOrderPosition} = Schema.models();
 
+    let eventsGroupedByDate;
+
+    let today = todayFn();
+
+    if (!$state.params.date) return setDate(SaleOrder.meta.nextShipmentDate());
+
     vm.use({
 
-      visits: [],
       data: [],
 
-      date: $state.params.date,
-      initDate: moment().add(1, 'days').toDate(),
-      // TODO support maxDate in sabDatePicker
-      maxDate: moment().add(7, 'days').toDate(),
+      date: $state.params.date ? moment($state.params.date).format() : SaleOrder.meta.nextShipmentDate(),
+      initDate: SaleOrder.meta.nextShipmentDate(),
+      minDate: today,
+      maxDate: moment().add(7, 'days').format(),
 
       itemClick,
       newItemClick,
-      onStateChange
+      onStateChange,
+      getDayClass,
+      clearTextFn
 
     });
 
@@ -34,6 +41,14 @@
 
     $scope.$on('rootClick', () => $state.go('sales.saleOrders'));
     $scope.$watch('vm.date', _.debounce(setDate, 300));
+
+    $scope.$watch(() => new Date().setHours(0, 0, 0, 0), (todayTime, oldValue) => {
+
+      if (todayTime != oldValue) {
+        today = todayFn();
+      }
+
+    });
 
     /*
      Handlers
@@ -54,10 +69,10 @@
     function setDate(newValue) {
 
       if (!newValue) {
-        newValue = moment().format();
+        newValue = vm.initDate;
       }
 
-      $state.go('.', {date: newValue});
+      $state.go('.', {date: moment(newValue).format()});
 
     }
 
@@ -96,7 +111,9 @@
         [
           Outlet.findAll(_.assign({where: bySalesman}, _.omit(filter, 'date')))
             .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
-          SaleOrderPosition.findAll(saleOrderPositionsFilter)
+          SaleOrderPosition.findAll(saleOrderPositionsFilter),
+          SaleOrder.groupBy(SalesmanAuth.makeFilter(), ['date', 'processing'])
+            .then(res => eventsWithSaleOrderDays(res))
         ],
         'Загрузка данных дня'
       );
@@ -111,6 +128,52 @@
 
     function newItemClick() {
       $state.go('sales.catalogue.saleOrder');
+    }
+
+    function eventsWithSaleOrderDays(saleOrderDays) {
+
+      // TODO: have to renew this at days and saleOrders change
+
+      eventsGroupedByDate = _.groupBy(saleOrderDays, 'date');
+      vm.minDate = moment(_.min(_.keys(eventsGroupedByDate))).toDate();
+
+    }
+
+
+    function getDayClass(data) {
+
+      let {date, mode} = data;
+
+      if (mode === 'day') {
+
+        let events = _.keyBy(eventsGroupedByDate[moment(date).format()], 'processing');
+        if (!events) return;
+
+        let draft = events['draft'];
+        if (draft && draft['count()']) {
+          return 'haveDraft';
+        }
+
+        if (moment(date).isSame(moment(), 'day')) {
+          return 'today';
+        }
+
+        let counts = _.sumBy(_.values(events), 'count()');
+        if (counts) return 'haveSaleOrder';
+
+      }
+
+    }
+
+    function clearTextFn() {
+
+      vm.date = SaleOrder.meta.nextShipmentDate();
+      return vm.date;
+
+    }
+
+    function todayFn() {
+      return moment().format();
     }
 
   }

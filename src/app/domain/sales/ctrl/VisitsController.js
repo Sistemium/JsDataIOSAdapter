@@ -8,26 +8,22 @@
     const {yLatLng, distanceFn} = mapsHelper;
     const numberFilter = $filter('number');
 
-    let maxDate;
-    let minDate;
     let events;
+
+    let today = todayFn();
 
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
-      visits: [],
       selectedDayVisits: [],
 
-      selectedDate: moment($state.params.date).toDate(),
-      selectPreviousDay,
-      previousDayAvailable,
-      selectNextDay,
-      nextDayAvailable,
-
-      datepickerPopup: {opened: false},
-      datepickerOptions: datepickerOptions(),
-      openDatepicker,
+      selectedDate: $state.params.date,
+      initDate: today,
+      maxDate: today,
+      minDate: today,
+      getDayClass,
+      clearTextFn,
 
       visitClick,
       newVisitClick,
@@ -42,7 +38,7 @@
     SalesmanAuth.watchCurrent($scope, salesman => {
 
       vm.selectedSalesmanId = _.get(salesman, 'id');
-      findVisits()
+      findVisitDays()
         .then(filterVisitsBySelectedDate);
 
     });
@@ -51,14 +47,16 @@
 
     $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
-    $scope.$watch(
-      () => new Date().setHours(0, 0, 0, 0),
-      (todayTime, oldValue) => {
-        if (todayTime != oldValue) {
-          vm.selectedDate = new Date(todayTime);
-        }
+    $scope.$watch(() => new Date().setHours(0, 0, 0, 0), (todayTime, oldValue) => {
+
+      if (todayTime != oldValue) {
+
+        today = todayFn();
+        vm.selectedDate = today;
+
       }
-    );
+
+    });
 
     /*
      Functions
@@ -75,12 +73,9 @@
 
     function setDate(newValue) {
 
-      if (!angular.isObject(newValue)) {
-        vm.selectedDate = new Date();
+      if (!newValue) {
+        vm.selectedDate = vm.initDate;
       }
-
-      maxDate = new Date();
-      maxDate.setHours(0, 0, 0, 0);
 
       filterVisitsBySelectedDate();
 
@@ -88,17 +83,12 @@
 
     }
 
-    function findVisits() {
-
-      let filter = salesmanFilter();
-
-      vm.rebindAll(Visit, filter, 'vm.visits', () => {
-        markDaysWithVisits();
-        vm.datepickerOptions = datepickerOptions();
-      });
+    function findVisitDays() {
 
       return vm.setBusy(
-        Visit.findAll(filter, {bypassCache: true}),
+        // TODO: have to renew this at days and visits change
+        Visit.groupBy(salesmanFilter(),['date'])
+          .then(res => eventsWithVisitDays(res)),
         'Загрузка данных визитов'
       );
 
@@ -108,12 +98,11 @@
       return moment(date).format();
     }
 
-    function markDaysWithVisits() {
+    function eventsWithVisitDays(visitDays) {
 
-      events = _.groupBy(vm.visits, 'date');
-      events [dateFormatted(maxDate)] = {status: 'today'};
-
-      minDate = moment(_.min(_.map(events, (visits, date) => date))).toDate();
+      events = _.keyBy(visitDays, 'date');
+      events [dateFormatted(vm.maxDate)] = {status: 'today'};
+      vm.minDate = moment(_.min(_.map(visitDays, 'date'))).format();
 
     }
 
@@ -142,62 +131,29 @@
       return SalesmanAuth.makeFilter(filter);
     }
 
-    function selectPreviousDay() {
-
-      if (!previousDayAvailable()) return;
-
-      let previousDay = vm.selectedDate;
-      previousDay.setDate(previousDay.getDate() - 1);
-      vm.selectedDate = new Date(previousDay);
-
-    }
-
-    function selectNextDay() {
-
-      if (!nextDayAvailable()) return;
-
-      let nextDay = vm.selectedDate;
-      nextDay.setDate(nextDay.getDate() + 1);
-      vm.selectedDate = new Date(nextDay);
-
-    }
-
-    function previousDayAvailable() {
-      return vm.selectedDate && vm.selectedDate > minDate;
-    }
-
-    function nextDayAvailable() {
-      return vm.selectedDate && vm.selectedDate < maxDate;
-    }
-
-    function datepickerOptions() {
-
-      return {
-        customClass: getDayClass,
-        maxDate,
-        minDate,
-        startingDay: 1,
-        showWeeks: false
-      };
-
-    }
-
     function getDayClass(data) {
 
       let {date, mode} = data;
 
       if (mode === 'day') {
 
-        let event = events [dateFormatted(dateFormatted(date))];
+        let event = events [dateFormatted(date)];
         if (!event) return;
-        return _.isArray(event) ? 'haveVisit' : event.status;
+        return event['count()'] ? 'haveVisit' : event.status;
 
       }
 
     }
 
-    function openDatepicker() {
-      vm.datepickerPopup.opened = true;
+    function clearTextFn() {
+
+      vm.selectedDate = today;
+      return vm.selectedDate;
+
+    }
+
+    function todayFn() {
+      return moment().format();
     }
 
     function visitClick(visit) {

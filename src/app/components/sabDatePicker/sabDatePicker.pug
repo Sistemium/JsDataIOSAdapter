@@ -18,12 +18,13 @@
   ng-required='true'
   current-text='false'
   close-text='Закрыть'
-  clear-text='Ближайшая доставка'
+  clear-text='{{ vm.clearText }}'
   ng-click='datepickerPopupOpened = !datepickerPopupOpened'
   ) {{ vm.date | amDateFormat:'DD/MM/YYYY, dd' }}
 
   span.input-group-btn
     button.btn.btn-default(
     ng-click='vm.nextDayClick()'
+    ng-disabled='vm.date >= vm.datepickerOptions.maxDate'
     )
       i.glyphicon.glyphicon-chevron-right
