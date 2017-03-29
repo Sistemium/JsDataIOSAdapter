@@ -10,7 +10,9 @@
     vm.use({
 
       campaignGroups: [],
-      campaigns: []
+      campaigns: [],
+
+      campaignGroupClick
 
     });
 
@@ -41,6 +43,10 @@
 
         });
 
+    }
+
+    function campaignGroupClick(campaignGroup) {
+      console.info('campaignGroupClick', campaignGroup);
     }
 
   }
