@@ -70,18 +70,24 @@
     }
 
     function nextDayClick() {
-      vm.date = _.max([
-        moment(vm.datepickerOptions.minDate),
-        moment(vm.date.toISOString()).add(1, 'day')
-      ]).toDate();
+      setValidDate(moment(vm.date.toISOString()).add(1, 'day'));
     }
 
     function prevDayClick() {
+      setValidDate(moment(vm.date.toISOString()).add(-1, 'day'));
+    }
 
-      vm.date = _.min([
-        moment(vm.datepickerOptions.maxDate),
-        moment(vm.date.toISOString()).add(-1, 'day')
-      ]).toDate();
+    function setValidDate(date) {
+
+      if (vm.datepickerOptions.maxDate) {
+        date = _.min([moment(vm.datepickerOptions.maxDate), date]);
+      }
+
+      if (vm.datepickerOptions.minDate) {
+        date = _.max([moment(vm.datepickerOptions.minDate), date]);
+      }
+
+      vm.date = date.toDate();
 
     }
 
