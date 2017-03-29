@@ -4,11 +4,12 @@
 
   function CampaignsController(Schema, saControllerHelper, $scope, SalesmanAuth) {
 
-    const {/*CampaignGroup, */Campaign/*, CampaignPicture*/} = Schema.models();
+    const {CampaignGroup, Campaign/*, CampaignPicture*/} = Schema.models();
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
+      campaignGroups: [],
       campaigns: []
 
     });
@@ -32,9 +33,13 @@
 
     function findCampaigns() {
 
-      vm.rebindAll(Campaign, SalesmanAuth.makeFilter(), 'vm.campaigns', () => {
-        console.info('vm.campaigns', vm.campaigns);
-      });
+      CampaignGroup.findAll({}, {bypassCache: true})
+        .then((campaignGroups) => {
+
+          vm.campaignGroups = campaignGroups;
+          console.info('vm.campaignGroups', vm.campaignGroups);
+
+        });
 
     }
 
