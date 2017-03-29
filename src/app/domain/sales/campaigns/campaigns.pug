@@ -3,6 +3,14 @@ section
   table.table.table-striped.clear-both.table-hover
     tbody
       tr.clickable(
+      ng-if='vm.selectedCampaignGroup'
+      ng-repeat='campaign in vm.campaigns | orderBy:"name"'
+      ng-click='vm.campaignClick(campaign)'
+      )
+        td
+          div {{ campaign.name }}
+      tr.clickable(
+      ng-if='!vm.selectedCampaignGroup'
       ng-repeat='campaignGroup in vm.campaignGroups | orderBy:"-name"'
       ng-click='vm.campaignGroupClick(campaignGroup)'
       )
