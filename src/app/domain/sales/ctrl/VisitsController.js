@@ -22,8 +22,8 @@
       initDate: today,
       maxDate: today,
       minDate: today,
+
       getDayClass,
-      clearTextFn,
 
       visitClick,
       newVisitClick,
@@ -53,6 +53,7 @@
 
         today = todayFn();
         vm.selectedDate = today;
+        vm.initDate = today;
 
       }
 
@@ -142,13 +143,6 @@
         return event['count()'] ? 'haveVisit' : event.status;
 
       }
-
-    }
-
-    function clearTextFn() {
-
-      vm.selectedDate = today;
-      return vm.selectedDate;
 
     }
 
