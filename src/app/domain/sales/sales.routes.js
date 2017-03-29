@@ -191,7 +191,7 @@
         name: 'campaigns',
         url: '/campaigns',
 
-        templateUrl: 'app/domain/sales/views/campaigns.html',
+        templateUrl: 'app/domain/sales/campaigns/campaigns.html',
         controller: 'CampaignsController',
         controllerAs: 'vm',
 
