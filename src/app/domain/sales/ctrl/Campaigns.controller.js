@@ -2,12 +2,14 @@
 
 (function () {
 
-  function CampaignsController(saControllerHelper, $scope, SalesmanAuth) {
+  function CampaignsController(Schema, saControllerHelper, $scope, SalesmanAuth) {
 
-    // const {Visit, Outlet} = Schema.models();
+    const {Campaign/*, CampaignPicture*/} = Schema.models();
     let vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
+
+      campaigns: []
 
     });
 
@@ -16,7 +18,10 @@
      */
 
     SalesmanAuth.watchCurrent($scope, salesman => {
+
       vm.selectedSalesmanId = _.get(salesman, 'id');
+      findCampaigns();
+
     });
 
     // $scope.$on('rootClick', () => $state.go('sales.visits'));
@@ -24,6 +29,14 @@
     /*
      Functions
      */
+
+    function findCampaigns() {
+
+      vm.rebindAll(Campaign, SalesmanAuth.makeFilter(), 'vm.campaigns', () => {
+        console.info('vm.campaigns', vm.campaigns);
+      });
+
+    }
 
   }
 
