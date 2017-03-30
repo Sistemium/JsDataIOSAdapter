@@ -72,6 +72,11 @@ before-tag-name='li'
 
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
 
+        i.green.glyphicon.glyphicon-ok-sign(
+        ng-if='vm.articleStats[stock.articleId]'
+        uib-tooltip='Недавно отгружено'
+        )
+
         i.red.glyphicon.glyphicon-warning-sign(
         ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'
         uib-tooltip='Нет в наличии'

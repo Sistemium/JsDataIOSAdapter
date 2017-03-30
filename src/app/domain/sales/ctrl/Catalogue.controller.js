@@ -6,7 +6,7 @@
   const LOW_STOCK_THRESHOLD = 24;
   const FONT_SIZE_KEY = 'catalogue.fontSize';
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService, OutletArticles) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
     const {
@@ -184,7 +184,23 @@
 
       }
     }));
+
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
+
+    vm.watchScope('vm.saleOrder.outletId', (outletId, oldOutletId) => {
+
+      if (!outletId || outletId === oldOutletId) return vm.articleStats = {};
+
+      OutletArticles.groupByArticleId(outletId)
+        .then(data => {
+          vm.articleStats = {};
+          _.each(data, item => vm.articleStats[item.articleId] = item);
+
+          if (vm.showOnlyShipped) setCurrentArticleGroup(vm.currentArticleGroup);
+
+        });
+
+    });
 
     /*
      Handlers
@@ -643,6 +659,14 @@
       if (vm.search || vm.filters) {
 
         let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
+        let showOutletMatrix;
+
+        if (vm.search === '##' && vm.saleOrder) {
+          reg = false;
+          vm.showOnlyShipped = true;
+        } else {
+          vm.showOnlyShipped = false;
+        }
 
         let pieceVolume;
 
@@ -655,8 +679,12 @@
         let tags = _.filter(vm.filters, 'tag');
 
         articles = _.filter(articles, article => {
-          // TODO: parse number and search by pieceVolume
+
           let res = !reg || reg.test(article.name) || reg.test(article.preName) || reg.test(article.lastName);
+
+          if (res && vm.showOnlyShipped) {
+            res = vm.articleStats[article.id];
+          }
 
           if (res && pieceVolume) {
             res = Math.abs(article.pieceVolume - pieceVolume) <= 0.051;
