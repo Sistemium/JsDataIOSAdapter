@@ -1,6 +1,9 @@
 section
 
   table.table.table-striped.clear-both.table-hover
+    thead(ng-if='vm.selectedCampaignGroup')
+      tr
+        th {{ vm.selectedCampaignGroup.name }}
     tbody
       tr.clickable(
       ng-if='vm.selectedCampaignGroup'
