@@ -54,7 +54,7 @@
       let busy = $q.all([
         Driver.findAll(),
         Outlet.findAll(filter),
-        Shipment.findAll(filter, {bypassCache: true}),
+        Shipment.findAllWithRelations(filter, {bypassCache: true})(['Driver','Outlet']),
         ShipmentPosition.findAll(filter, {bypassCache: true})
       ])
         .then(() => {
