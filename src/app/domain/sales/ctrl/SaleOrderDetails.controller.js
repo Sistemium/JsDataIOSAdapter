@@ -57,14 +57,12 @@
           .then(() => vm.confirmCopySaleOrder = false);
       }
 
-      let so = _.omit(vm.saleOrder, ['id']);
-
-      so.processing = 'draft';
+      let so = SaleOrder.copyInstance(vm.saleOrder);
 
       let copying = SaleOrder.create(so)
         .then(saleOrder => {
           return $q.all(_.map(vm.saleOrder.positions, position => {
-            let newPosition = _.omit(position, 'id');
+            let newPosition = SaleOrderPosition.copyInstance(position);
             newPosition.saleOrderId = saleOrder.id;
             return SaleOrderPosition.create(newPosition);
           }))
