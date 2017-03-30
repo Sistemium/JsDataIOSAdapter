@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CampaignsController(Schema, saControllerHelper, $scope, SalesmanAuth, $state) {
+  function CampaignsController(Schema, saControllerHelper, $scope, SalesmanAuth, $state, PhotoHelper) {
 
     const {CampaignGroup, Campaign, CampaignPicture} = Schema.models();
     let vm = saControllerHelper.setup(this, $scope);
@@ -144,6 +144,7 @@
     }
 
     function campaignPictureClick(campaignPicture) {
+      return PhotoHelper.pictureClick(campaignPicture);
     }
 
   }
