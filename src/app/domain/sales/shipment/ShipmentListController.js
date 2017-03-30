@@ -2,7 +2,7 @@
 
   function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state) {
 
-    const {SaleOrder, Shipment, ShipmentPosition, Outlet} = Schema.models();
+    const {SaleOrder, Shipment, ShipmentPosition, Outlet, Driver} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
@@ -52,6 +52,7 @@
       vm.currentSalesman = salesman;
 
       let busy = $q.all([
+        Driver.findAll(),
         Outlet.findAll(filter),
         Shipment.findAll(filter, {bypassCache: true}),
         ShipmentPosition.findAll(filter, {bypassCache: true})

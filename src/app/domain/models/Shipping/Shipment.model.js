@@ -16,6 +16,10 @@
 
       relations: {
         hasOne: {
+          Driver: {
+            localField: 'driver',
+            localKey: 'driverId'
+          },
           Salesman: {
             localField: 'salesman',
             localKey: 'salesmanId'
