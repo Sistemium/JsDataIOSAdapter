@@ -40,7 +40,7 @@
 
     });
 
-    $scope.$on('rootClick', () => $state.go('.', {campaignGroupId: null, campaignId: null, campaignPictureId: null}));
+    $scope.$on('rootClick', () => $state.go('.', {campaignGroupId: null, campaignId: null}));
 
     /*
      Functions
@@ -144,7 +144,6 @@
     }
 
     function campaignPictureClick(campaignPicture) {
-      $state.go('.', {campaignPictureId: campaignPicture.id});
     }
 
   }
