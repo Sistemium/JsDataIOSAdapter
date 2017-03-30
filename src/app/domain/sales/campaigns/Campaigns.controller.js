@@ -11,6 +11,7 @@
 
       campaignGroups: [],
       selectedCampaignGroupId: $state.params.campaignGroupId,
+      selectedCampaignGroup: undefined,
       campaigns: [],
 
       campaignGroupClick,
@@ -62,7 +63,29 @@
 
     function loadCampaigns() {
 
-      Campaign.findAll({campaignGroupId: vm.selectedCampaignGroup.id}, {bypassCache: true})
+      if (!vm.selectedCampaignGroupId) return;
+
+      loadSelectedCampaignGroup()
+        .then(loadSelectedCampaigns());
+
+    }
+
+    function loadSelectedCampaignGroup() {
+
+      if (!vm.selectedCampaignGroupId) return;
+
+      return CampaignGroup.find(vm.selectedCampaignGroupId)
+        .then((selectedCampaignGroup) => {
+          vm.selectedCampaignGroup = selectedCampaignGroup;
+        });
+
+    }
+
+    function loadSelectedCampaigns() {
+
+      if (!vm.selectedCampaignGroupId) return;
+
+      return Campaign.findAll({campaignGroupId: vm.selectedCampaignGroupId}, {bypassCache: true})
         .then((campaigns) => {
 
           vm.campaigns = campaigns;
