@@ -10,7 +10,7 @@
     vm.use({
 
       campaignGroups: [],
-      selectedCampaignGroup: $state.params.campaignGroup,
+      selectedCampaignGroupId: $state.params.campaignGroupId,
       campaigns: [],
 
       campaignGroupClick,
@@ -29,7 +29,7 @@
 
     });
 
-    $scope.$on('rootClick', () => $state.go('.', {campaignGroup: null}));
+    $scope.$on('rootClick', () => $state.go('.', {campaignGroupId: null}));
 
     /*
      Functions
@@ -37,7 +37,7 @@
 
     function loadCampaignsData() {
 
-      if (!vm.selectedCampaignGroup) {
+      if (!vm.selectedCampaignGroupId) {
 
         loadCampaignGroups();
         return;
@@ -75,7 +75,7 @@
     function campaignGroupClick(campaignGroup) {
 
       console.info('campaignGroupClick', campaignGroup);
-      $state.go('.', {campaignGroup: campaignGroup.id});
+      $state.go('.', {campaignGroupId: campaignGroup.id});
 
     }
 
