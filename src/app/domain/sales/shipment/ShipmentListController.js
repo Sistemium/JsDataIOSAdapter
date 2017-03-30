@@ -1,6 +1,6 @@
 (function (module) {
 
-  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state) {
+  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, IOS) {
 
     const {SaleOrder, Shipment, ShipmentPosition, Outlet, Driver} = Schema.models();
     const {saControllerHelper} = Helpers;
@@ -49,13 +49,23 @@
 
       let filter = SalesmanAuth.makeFilter({date});
 
+      let positionsFilter = _.clone(filter);
+
+      if (IOS.isIos()) {
+        positionsFilter = {where: {'ANY shipment': {date: {'==': date}}}};
+
+        if (filter.salesmanId) {
+          positionsFilter.where['ANY shipment'].salesmanId = {'==': filter.salesmanId};
+        }
+      }
+
       vm.currentSalesman = salesman;
 
       let busy = $q.all([
         Driver.findAll(),
         Outlet.findAll(filter),
         Shipment.findAllWithRelations(filter, {bypassCache: true})(['Driver','Outlet']),
-        ShipmentPosition.findAll(filter, {bypassCache: true})
+        ShipmentPosition.findAll(positionsFilter, {bypassCache: true, limit: 5000})
       ])
         .then(() => {
           vm.rebindAll(Shipment, filter, 'vm.data');
