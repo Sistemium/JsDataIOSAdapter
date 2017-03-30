@@ -6,7 +6,18 @@
 
     Schema.register({
 
-      name: 'CampaignGroup'
+      name: 'CampaignGroup',
+
+      relations: {
+
+        hasMany: {
+          Campaign: {
+            localField: 'campaigns',
+            foreignKey: 'campaignGroupId'
+          }
+        }
+
+      }
 
     });
 
