@@ -199,18 +199,17 @@
     margin: -2px 4px -2px 0;
   }
 
-  .article-name-second small.tag {
-    color: $gray;
-    font-weight: bold;
+  .article-name-second .tag, .pieceVolume {
+
+    color: $primary-color;
+
     border: solid 1px $border-gray;
-    padding: 0 3px;
+    padding: 0 5px;
     display: inline-block;
     background: none;
     border-radius: 3px;
-    &.gift {
-      color: red;
-      text-transform: uppercase;
-    }
+    margin-top: -1px;
+
   }
 
 }

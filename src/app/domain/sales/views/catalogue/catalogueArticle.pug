@@ -25,15 +25,17 @@ before-tag-name='li'
     ng-style = '{"font-size": vm.fontSize + "px"}'
     )
       .article-name-first
-        // TODO: filtering options in tooltip (allow user to show only the articles with the same firstName)
+
         strong.name-first(
-        uib-tooltip='{{::stock.article.firstName}}'
+        uib-tooltip-template='vm.articleTooltipTpl'
         ) {{::stock.article.firstName}}
         .article-info(
         ng-class='::{gray: stock.article.firstName.length}'
         )
-          // TODO: allow user to show only the articles with the same pieceVolume rounded to 1/10
-          strong {{::stock.article.pieceVolume}}л
+
+          a.pieceVolume(
+          href ng-click='vm.pieceVolumeClick(stock.article.pieceVolume)'
+          ) {{::stock.article.pieceVolume}}л
           small.gray x {{::stock.article.packageRel}}
           small.gray(ng-if='stock.article.factor > 1') : {{::stock.article.factor}}
 
@@ -47,14 +49,20 @@ before-tag-name='li'
         )
 
       .article-name-second(
-      uib-tooltip='{{::stock.article.name}} {{::stock.article.extraLabel}}'
       )
         small {{::stock.article.preName}}
+
         small.tag(
         ng-repeat='tag in stock.article.tags track by tag.code'
         ng-class='tag.code'
-        ) {{ tag.label }}
-        small(ng-if='stock.article.lastName') {{::stock.article.lastName}}
+        )
+          a(href ng-click='vm.articleTagClick(tag)') {{ tag.label }}
+
+        small(
+        ng-if='stock.article.lastName'
+        uib-tooltip-template='vm.articleTooltipTpl'
+        ) {{::stock.article.lastName}}
+
         small {{::stock.article.extraLabel}}
 
       .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')

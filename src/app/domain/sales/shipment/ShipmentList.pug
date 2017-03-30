@@ -1,0 +1,37 @@
+section.ui-view.shipmentList(cg-busy='vm.cgBusy')
+
+  .row.datepicker-with-buttons
+
+    sab-date-picker.col-sm-4.col-lg-3(
+    value='vm.date'
+    init-date='vm.initDate'
+    clear-text='Ближайшая доставка'
+    )
+
+  #scroll-main(
+  resize
+  resize-offset-top='5'
+  ng-if='vm.data.length'
+  )
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th №
+          th(ng-if='!vm.currentSalesman') ТП
+          th Точка
+          th.number Стоимость
+          th.number Позиций
+      tbody
+        tr.clickable(
+        ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
+        ng-click='vm.itemClick(item)'
+        )
+          td.processing(ng-class='item.workflow().cls') {{ ::item.ndoc }}
+          td.tinyName(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
+          td
+            div {{ ::item.outlet.name }}
+            .gray {{ ::item.outlet.address }}
+          td.number {{ ::item.totalCost() | number:2 }}
+          td.number {{ ::item.positions.length | number:0 }}
+
+  .alert.alert-info.centered(ng-show='!vm.data.length') Нет отгрузок за указанную дату

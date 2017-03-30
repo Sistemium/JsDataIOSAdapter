@@ -33,7 +33,7 @@
     align-content: center;
 
     &:hover {
-      text-decoration:none;
+      text-decoration: none;
     }
 
   }
@@ -104,13 +104,11 @@
         }
       }
 
-
     }
 
     .ng-thumbnails-wrapper {
-
       min-width: 100px;
-      max-width: 520px;
+      max-width: 534px;
       padding: 15px;
       width: 100%;
       text-align: center;
@@ -136,7 +134,8 @@
 
         border-radius: 4px;
         background: white;
-        width: 70px;
+        min-width: 70px;
+        max-width: 70px;
         height: 70px;
         border: 1px solid $border-gray;
         margin-right: 2px;

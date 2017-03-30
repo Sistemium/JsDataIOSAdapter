@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q, toastr, SaleOrderHelper) {
+  function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q, toastr, SaleOrderHelper, $timeout) {
 
     const vm = saControllerHelper
       .setup(this, $scope)
@@ -12,10 +12,11 @@
 
     vm.use({
 
-      toggleEditClick: () => vm.editing = !vm.editing,
+      toggleEditClick: () => $state.go('sales.catalogue.saleOrder', {saleOrderId: vm.saleOrder.id, ordered: true}),
 
       setProcessingClick,
-      setSaleOrderClick
+      setSaleOrderClick,
+      copySaleOrderClick
 
     });
 
@@ -41,11 +42,41 @@
       vm.rebindAll(SaleOrder, {date: newValue}, 'draftSaleOrders');
     });
 
-    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', _.debounce(safeSave,700));
+    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', _.debounce(safeSave, 700));
 
     /*
      Functions
      */
+
+    function copySaleOrderClick() {
+
+      vm.confirmCopySaleOrder = !vm.confirmCopySaleOrder;
+
+      if (vm.confirmCopySaleOrder) {
+        return $timeout(2000)
+          .then(() => vm.confirmCopySaleOrder = false);
+      }
+
+      let so = SaleOrder.copyInstance(vm.saleOrder);
+
+      let copying = SaleOrder.create(so)
+        .then(saleOrder => {
+          return $q.all(_.map(vm.saleOrder.positions, position => {
+            let newPosition = SaleOrderPosition.copyInstance(position);
+            newPosition.saleOrderId = saleOrder.id;
+            return SaleOrderPosition.create(newPosition);
+          }))
+            .then(() => {
+              $state.go('.', {id: saleOrder.id});
+            });
+        })
+        .catch(err => {
+          toastr.error(angular.toJson(err))
+        });
+
+      vm.setBusy(copying);
+
+    }
 
     function setSaleOrderClick(saleOrder) {
       if (!saleOrder.id) return;
@@ -64,7 +95,7 @@
 
     }
 
-    function safeSave () {
+    function safeSave() {
       return vm.saleOrder && vm.saleOrder.safeSave();
     }
 

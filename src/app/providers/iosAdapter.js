@@ -143,8 +143,6 @@
       delete params.limit;
       delete params.offset;
 
-      // should we add params.groupBy to socketAdapter.js?
-
       return parsed;
 
     }

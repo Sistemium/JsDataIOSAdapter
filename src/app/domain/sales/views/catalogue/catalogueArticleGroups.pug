@@ -1,6 +1,8 @@
-.stm-searcher.form-group.has-feedback
+.stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
+
   label(for="search-input")
     i.glyphicon.glyphicon-search
+
   input#search-input.form-control(
   type='search'
   placeholder='Поиск'
@@ -14,6 +16,15 @@
   span.form-control-feedback(ng-hide='!vm.search' )
     a(ng-click='vm.clearSearchClick()' href)
       i.glyphicon.glyphicon-remove
+
+  .filters
+    a.filter(
+    href
+    ng-click='vm.removeFilterClick(filter)'
+    ng-repeat='filter in vm.filters track by $index'
+    )
+      i.glyphicon.glyphicon-remove
+      span {{ filter.label }}
 
 .alert.alert-default.collapser
   a(

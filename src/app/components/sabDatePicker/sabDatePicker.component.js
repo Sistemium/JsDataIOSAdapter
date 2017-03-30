@@ -9,8 +9,7 @@
         maxDate: '<',
         initDate: '<',
         customClass: '<',
-        clearText: '@',
-        clearTextFn: '<'
+        clearText: '@'
       },
 
       templateUrl: 'app/components/sabDatePicker/sabDatePicker.html',
@@ -35,11 +34,10 @@
       vm.date = dateWithoutTime(vm.value);
 
       vm.datepickerOptions = _.defaults({
-        minDate: dateWithoutTime(vm.minDate),
-        maxDate: dateWithoutTime(vm.maxDate),
+        minDate: vm.minDate && dateWithoutTime(vm.minDate),
+        maxDate: vm.maxDate && dateWithoutTime(vm.maxDate),
         initDate: vm.initDate,
-        customClass: vm.customClass,
-        clearTextFn: vm.clearTextFn
+        customClass: vm.customClass
       }, $scope.datepickerOptions);
 
 
@@ -50,18 +48,17 @@
 
       });
 
-      $scope.$watch('vm.date', (nv, ov) => {
+      $scope.$watch('vm.date', (nv) => {
 
-        if (!nv) vm.date = vm.clearTextFn(); //!nv —> means clear text button pressed
-        if (moment(ov).isSame(nv, 'day')) return;
-        vm.value = vm.date.toISOString();
+        if (!nv) vm.date = dateWithoutTime(vm.initDate);
+        vm.value = moment(vm.date.toISOString()).format();
 
       });
 
       $scope.$watch('vm.minDate', () => {
 
         vm.datepickerOptions = _.defaults({
-          minDate: dateWithoutTime(vm.minDate)
+          minDate: vm.minDate && dateWithoutTime(vm.minDate)
         }, vm.datepickerOptions);
 
       });
@@ -73,18 +70,24 @@
     }
 
     function nextDayClick() {
-      vm.date = _.max([
-        moment(vm.datepickerOptions.minDate),
-        moment(vm.date.toISOString()).add(1, 'day')
-      ]).toDate();
+      setValidDate(moment(vm.date.toISOString()).add(1, 'day'));
     }
 
     function prevDayClick() {
+      setValidDate(moment(vm.date.toISOString()).add(-1, 'day'));
+    }
 
-      vm.date = _.min([
-        moment(vm.datepickerOptions.maxDate),
-        moment(vm.date.toISOString()).add(-1, 'day')
-      ]).toDate();
+    function setValidDate(date) {
+
+      if (vm.datepickerOptions.maxDate) {
+        date = _.min([moment(vm.datepickerOptions.maxDate), date]);
+      }
+
+      if (vm.datepickerOptions.minDate) {
+        date = _.max([moment(vm.datepickerOptions.minDate), date]);
+      }
+
+      vm.date = date.toDate();
 
     }
 
