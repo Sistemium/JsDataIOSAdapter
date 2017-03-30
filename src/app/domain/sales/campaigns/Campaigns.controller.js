@@ -32,7 +32,11 @@
     SalesmanAuth.watchCurrent($scope, salesman => {
 
       vm.selectedSalesmanId = _.get(salesman, 'id');
-      loadData();
+
+      vm.setBusy(
+        loadData(),
+        'Загрузка акций'
+      );
 
     });
 
@@ -124,7 +128,7 @@
 
     function loadCampaignGroups() {
 
-      CampaignGroup.findAllWithRelations({}, {bypassCache: true})('Campaign')
+      return CampaignGroup.findAllWithRelations({}, {bypassCache: true})('Campaign')
         .then((campaignGroups) => {
           vm.campaignGroups = campaignGroups;
         });
