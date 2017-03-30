@@ -51,7 +51,7 @@
 
     function loadCampaignGroups() {
 
-      CampaignGroup.findAll({}, {bypassCache: true})
+      CampaignGroup.findAllWithRelations({}, {bypassCache: true})('Campaign')
         .then((campaignGroups) => {
 
           vm.campaignGroups = campaignGroups;
