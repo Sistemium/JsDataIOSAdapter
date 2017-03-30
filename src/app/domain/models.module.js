@@ -145,10 +145,11 @@
 
     }
 
-    return $window.saSchema = saSchema({
+    const schema = saSchema({
 
       getCount,
       groupBy,
+      copyInstance,
 
       loadPaged: function (filter, options) {
         return loadPaged(this, filter, options)
@@ -173,6 +174,27 @@
       parseJson: angular.fromJson
 
     });
+
+    $window.saSchema = schema;
+
+    return schema;
+
+  }
+
+  function copyInstance(instance) {
+
+    let source = _.omit(instance, this.omit);
+
+    delete source.id;
+
+    let res = this.createInstance();
+
+    _.forOwn(source, (val,key) => {
+      if (_.isObject(val) || _.isFunction(val)) return;
+      res[key] = val;
+    });
+
+    return res;
 
   }
 
