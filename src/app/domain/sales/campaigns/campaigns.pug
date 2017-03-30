@@ -10,14 +10,23 @@ section
 
     tbody
       tr.clickable(
-      ng-if='vm.selectedCampaignGroup'
+      ng-if='vm.selectedCampaign'
+      ng-repeat='campaignPicture in vm.campaignPictures | orderBy:"name"'
+      ng-click='vm.campaignPictureClick(campaignPicture)'
+      )
+        td
+          div {{ campaignPicture.name }}
+
+      tr.clickable(
+      ng-if='vm.selectedCampaignGroup && !vm.selectedCampaign'
       ng-repeat='campaign in vm.campaigns | orderBy:"name"'
       ng-click='vm.campaignClick(campaign)'
       )
         td
-          div {{ campaign.name }}
+          div {{ campaign.name }} — {{ campaign.campaignPictures.length | number: 0 }}
+
       tr.clickable(
-      ng-if='!vm.selectedCampaignGroup'
+      ng-if='!vm.selectedCampaignGroup && !vm.selectedCampaign'
       ng-repeat='campaignGroup in vm.campaignGroups | orderBy:"-name"'
       ng-click='vm.campaignGroupClick(campaignGroup)'
       )
