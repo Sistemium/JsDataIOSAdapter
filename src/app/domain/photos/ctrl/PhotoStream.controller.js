@@ -4,12 +4,10 @@
 
   function PhotoStreamController(Schema, $q, $state, $scope, SalesmanAuth) {
 
-    var Outlet = Schema.model('Outlet');
     let vm = this;
     //var Partner = Schema.model('Partner');
     //var SM = Schema.model('Salesman');
-    var Visit = Schema.model('Visit');
-    var VisitPhoto = Schema.model('VisitPhoto');
+    let {Outlet, Visit, VisitPhoto} = Schema.models;
     let stateFilter = {};
 
     let salesman = SalesmanAuth.getCurrentUser();
