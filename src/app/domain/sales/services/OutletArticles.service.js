@@ -1,12 +1,18 @@
 (function (module) {
 
-  function OutletArticles (Schema) {
+  function OutletArticles(Schema, IOS) {
 
     const {ShipmentPosition} = Schema.models();
 
     function groupByArticleId(outletId) {
 
-      return ShipmentPosition.groupBy({outletId}, ['articleId'])
+      let filter = {outletId};
+
+      if (IOS.isIos()) {
+        filter = {where: {'ANY shipment': {'outletId': {'==': outletId}}}};
+      }
+
+      return ShipmentPosition.groupBy(filter, ['articleId'])
 
     }
 

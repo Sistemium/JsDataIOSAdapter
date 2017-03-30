@@ -659,7 +659,6 @@
       if (vm.search || vm.filters) {
 
         let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
-        let showOutletMatrix;
 
         if (vm.search === '##' && vm.saleOrder) {
           reg = false;
