@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, SaleOrderHelper, $timeout) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, SaleOrderHelper, $timeout) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
@@ -17,7 +17,6 @@
 
       searchOutletClick,
       clearSearchOutletClick,
-      saleOrderDoneClick,
       saleOrderSaveDraftClick,
       setProcessingClick
 
@@ -108,19 +107,9 @@
 
     }
 
-    function saleOrderDoneClick() {
-      $scope.$parent.saleOrderExpanded = false;
-      let msg = `Заказ для "${vm.saleOrder.outlet.name}" отправлен в обработку`;
-      $state.go('^')
-        .then(() => {
-          toastr.info(msg);
-        });
-    }
-
     function saleOrderSaveDraftClick() {
       $scope.$parent.saleOrderExpanded = false;
     }
-
 
     function onSaleOrderChange() {
 
