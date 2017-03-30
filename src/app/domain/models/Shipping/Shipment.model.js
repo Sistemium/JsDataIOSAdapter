@@ -36,6 +36,9 @@
       },
 
       methods: {
+        totalCost: function() {
+          return Schema.aggregate('cost').sum(this.positions);
+        }
       }
 
     });

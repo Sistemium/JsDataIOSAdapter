@@ -21,16 +21,19 @@
         }
       },
 
-      defaultValues: {
+      computed: {
+        cost: ['volume', 'price', function (volume, price) {
+          return _.round(volume * price, 2);
+        }]
       },
+
+      defaultValues: {},
 
       watchChanges: false,
 
-      meta: {
-      },
+      meta: {},
 
-      methods: {
-      }
+      methods: {}
 
     });
 
