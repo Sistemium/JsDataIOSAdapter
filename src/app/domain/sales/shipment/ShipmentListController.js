@@ -14,7 +14,8 @@
       date: $state.params.date,
       initDate,
 
-      onStateChange
+      onStateChange,
+      itemClick
 
     });
 
@@ -23,10 +24,15 @@
     SalesmanAuth.watchCurrent($scope, getData);
 
     vm.watchScope('vm.date', _.debounce(setDate, 300));
+    $scope.$on('rootClick', () => $state.go('sales.shipmentList'));
 
     /*
      Functions
      */
+
+    function itemClick(item) {
+      $state.go('.item', {id: item.id});
+    }
 
     function onStateChange(to) {
       if (!/sales.shipmentList/.test(to.name)) cleanup();

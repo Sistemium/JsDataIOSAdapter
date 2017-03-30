@@ -1,0 +1,48 @@
+.shipmentDetails(cg-busy='vm.busy')
+
+  .alert.alert-default
+
+    h4.popovers.spaced
+      span.popover-trigger(
+      )
+        .outlet
+          .name
+            span(ng-if='vm.shipment.outlet.id') {{ vm.shipment.outlet.name }}
+            span.animate-show.spaced
+              small на
+              small.strong {{ vm.shipment.date }}
+          .address
+            small {{vm.shipment.outlet.address}}
+
+    .totals.animate-show(ng-hide='vm.busy')
+
+      .info
+        strong {{ vm.shipment.positions.length | number:0 }}
+        span {{ vm.shipment.positionsCountRu() }}
+        span на сумму
+        strong {{ vm.shipment.totalCost() | number:2 }}
+
+
+  .animate-show#scroll-main(
+  resize resize-offset-top='5' resize-property='height'
+  ng-show='!alertExpanded'
+  )
+    table.table.table-striped.table-hover(
+    ng-if='vm.shipment.positions.length'
+    )
+      thead
+        tr
+          th Товар
+          th.number Количество
+          th.number.hidden-xs Цена
+          th.number.hidden-xs Стоимость
+      tbody
+        tr(
+        ng-repeat='item in vm.shipment.positions | orderBy:"article.name" track by item.id'
+        )
+          td {{ item.article.name }}
+          td.number
+            quantity-edit.disabled(position='item')
+          td.number.hidden-xs
+            span {{ item.price | number:2 }}
+          td.number.hidden-xs {{ item.cost | number:2}}

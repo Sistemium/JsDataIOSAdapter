@@ -1,0 +1,38 @@
+@import "../../../styles/variables";
+
+.shipmentDetails {
+
+  .alert {
+
+    margin-bottom: 11px;
+
+    @extend %rounded-borders;
+    @extend .spaced;
+    @extend .display-flex;
+
+
+    .totals {
+      min-height: 18px;
+      text-align: right;
+      flex: 1;
+    }
+
+    @include responsive-only(lt-sm) {
+
+      display: block;
+
+      > * {
+        display: block;
+      }
+
+      .totals {
+        font-size: 12px;
+        margin-top: $margin-bottom-xs;
+        text-align: left;
+      }
+
+    }
+
+  }
+
+}
