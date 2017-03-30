@@ -4,16 +4,16 @@
 
   function PhotoStreamController(Schema, $q, $state, $scope, SalesmanAuth) {
 
-    var vm = this;
     var Outlet = Schema.model('Outlet');
+    let vm = this;
     //var Partner = Schema.model('Partner');
     //var SM = Schema.model('Salesman');
     var Visit = Schema.model('Visit');
     var VisitPhoto = Schema.model('VisitPhoto');
-    var stateFilter = {};
+    let stateFilter = {};
 
-    var salesman = SalesmanAuth.getCurrentUser();
-    var thumbnails = {};
+    let salesman = SalesmanAuth.getCurrentUser();
+    let thumbnails = {};
 
     if (salesman) {
       stateFilter.salesmanId = salesman.id;
@@ -21,7 +21,7 @@
 
     function pics(pic) {
 
-      var photo = thumbnails[pic.id];
+      let photo = thumbnails[pic.id];
 
       if (photo) {
         return photo;
