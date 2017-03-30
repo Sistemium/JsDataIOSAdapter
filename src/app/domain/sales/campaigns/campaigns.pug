@@ -18,4 +18,4 @@ section
       ng-click='vm.campaignGroupClick(campaignGroup)'
       )
         td
-          div {{ campaignGroup.name }}
+          div {{ campaignGroup.name }} — {{ campaignGroup.campaigns.length | number: 0 }}
