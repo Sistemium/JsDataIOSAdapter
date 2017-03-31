@@ -72,7 +72,7 @@ before-tag-name='li'
 
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
 
-        i.green.glyphicon.glyphicon-ok-sign(
+        i.recently-shipped.glyphicon.glyphicon-star-empty(
         ng-if='vm.articleStats[stock.articleId]'
         uib-tooltip='Недавно отгружено'
         )
