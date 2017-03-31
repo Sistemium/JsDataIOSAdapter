@@ -52,7 +52,8 @@
 
       methods: {
         prices: function () {
-          return Schema.model('Price').meta.data[this.id];
+          let data = Schema.model('Price').meta.data;
+          return data && data[this.id];
         }
       }
 
