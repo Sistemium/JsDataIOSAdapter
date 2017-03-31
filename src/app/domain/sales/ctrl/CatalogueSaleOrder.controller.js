@@ -71,6 +71,10 @@
       toastr.error(processingMessage);
     });
 
+    vm.watchScope('vm.saleOrder.outletId', () => {
+      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume');
+    });
+
     /*
      Handlers
      */
@@ -191,13 +195,12 @@
           priceOrigin: price.priceOrigin,
           articleId: articleId
         });
-        vm.saleOrder.totalCost = 0;
         SaleOrderPosition.inject(position);
       }
 
       position.volume += volume;
 
-      let factor = _.get(position, 'article.factor') || 1;
+      let factor = !vm.noFactor && _.get(position, 'article.factor') || 1;
       let notFactored = position.volume % factor;
 
       if (notFactored) {

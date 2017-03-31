@@ -198,6 +198,12 @@
 
           if (vm.showOnlyShipped) setCurrentArticleGroup(vm.currentArticleGroup);
 
+        })
+        .then(() => {
+          return vm.saleOrder.outlet.DSLoadRelations('Partner')
+            .then(outlet => {
+              vm.noFactor = _.get(outlet, 'partner.allowAnyVolume');
+            });
         });
 
     });
