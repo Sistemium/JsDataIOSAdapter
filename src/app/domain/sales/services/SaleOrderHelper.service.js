@@ -6,9 +6,10 @@
 
     function setupController(vm, $scope) {
 
-      const saleOrderId = $state.params.saleOrderId || $state.params.id;
 
       function onJSData(event) {
+
+        const saleOrderId = _.get(vm, 'saleOrder.id');
 
         let id = _.get(event, 'data.id');
 
@@ -25,13 +26,30 @@
           }
 
           if (data.deviceCts) {
+            // IOS
 
             DEBUG('onJSData IOS injecting', resource);
-            Schema.model(resource).inject(data);
+            SaleOrder.inject(data);
 
           } else {
+            // Not IOS
 
-            SaleOrder.find(id, {bypassCache: true})
+            if (saleOrderId === data.id && data.ts <= _.get(vm, 'saleOrder.ts')) {
+              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts');
+            }
+
+            SaleOrder.find(id, {bypassCache: true, cacheResponse:false})
+              .then(saleOrder => {
+
+                if (SaleOrder.hasChanges(id)) return;
+
+                SaleOrder.inject(saleOrder);
+
+                if (vm.date === saleOrder.date || saleOrderId === saleOrder.id) {
+                  SaleOrderPosition.findAll({saleOrderId: saleOrder.id}, {bypassCache: true});
+                }
+
+              })
               .catch(err => {
                 if (err.error === 404) {
                   SaleOrder.eject(id)
@@ -80,6 +98,8 @@
       const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
 
       function onJSDataDestroy(event) {
+
+        const saleOrderId = _.get(vm, 'saleOrder.id');
 
         DEBUG('onJSDataDestroy', event);
         let id = _.get(event, 'data.id');
