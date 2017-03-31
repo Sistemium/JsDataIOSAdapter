@@ -97,11 +97,6 @@
 
       },
 
-      // fieldTypes: {
-      // packageRel: 'int',
-      // pieceVolume: 'decimal'
-      // },
-
       methods: {
 
         boxVolume: function (volume) {
@@ -134,20 +129,27 @@
       name = rmTags(name);
 
       name = _.replace(name, preName, '');
-      name = _.replace(name, firstName, '');
+      name = _.trim(_.replace(name, firstName, ''));
 
       let re = new RegExp(`(.+)(?=,[ \D])`);
       let m = name.match(re);
 
-      m = (m && m.length > 1) ? m[1] : name;
+      let res = (m && m.length > 1) ? m[1] : name;
 
-      if (!m && firstName) {
-        m = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
+      if (!res && firstName) {
+        res = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
       }
 
-      m = _.trim(m.replace(/^,[^ ]*/, ''));
+      res = _.trim(res.replace(/^,[^ ]*/, ''));
 
-      let res = m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
+      let pieceVolumeRe = /([ ,]+\d[.,]\d+)/g;
+      res = _.trim(_.replace(res, pieceVolumeRe, ''));
+
+      let packageRe = /\(.*[x]+[ ]*[0-9]+[ ]*\)/;
+
+      if (packageRe.test(res)) {
+        res = m.replace(packageRe, '');
+      }
 
       return _.trim(res);
 
