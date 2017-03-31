@@ -61,9 +61,11 @@
 
       vm.currentSalesman = salesman;
 
+      let outletFilter = _.omit(Outlet.meta.salesmanFilter(filter), 'date');
+
       let busy = $q.all([
         Driver.findAll(),
-        Outlet.findAll(filter),
+        Outlet.findAll(outletFilter),
         Shipment.findAllWithRelations(filter, {bypassCache: true})(['Driver','Outlet']),
         ShipmentPosition.findAll(positionsFilter, {bypassCache: true, limit: 5000})
       ])

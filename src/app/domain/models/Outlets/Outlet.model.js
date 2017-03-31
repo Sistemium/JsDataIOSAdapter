@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, IOS) {
 
     Schema.register({
 
@@ -66,15 +66,21 @@
     });
 
     function salesmanFilter(filter) {
-      let bySalesman = filter.salesmanId ? {
-        'ANY outletSalesmanContracts': {
-          'salesmanId': {
-            '==': filter.salesmanId
-          }
-        }
-      } : {};
 
-      return _.assign({where: bySalesman}, filter);
+      if (IOS.isIos() && filter.salesmanId) {
+
+        let bySalesman = {
+          'ANY outletSalesmanContracts': {
+            'salesmanId': {'==': filter.salesmanId}
+          }
+        };
+
+        filter = _.assign({where: bySalesman}, _.omit(filter, 'salesmanId'));
+
+      }
+
+      return filter;
+
     }
 
   });

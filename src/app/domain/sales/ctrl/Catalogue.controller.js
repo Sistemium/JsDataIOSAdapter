@@ -468,6 +468,7 @@
     }
 
     function findAll() {
+
       let options = {limit: 10000};
       let volumeNotZero = {
         volume: {
@@ -516,7 +517,6 @@
 
       DEBUG('filterStock', 'orderBy');
 
-
       if (vm.currentPriceType.parent) {
         priceType = vm.currentPriceType.parent;
         discount += vm.currentPriceType.discountPercent / 100;
@@ -527,7 +527,7 @@
       vm.prices = {};
 
       _.each(priceType.prices(), price => {
-        
+
         let priceOrigin = _.round(price.price * discount,2);
 
         vm.prices[price.articleId] = {
