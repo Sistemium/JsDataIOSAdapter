@@ -37,7 +37,8 @@
         minDate: vm.minDate && dateWithoutTime(vm.minDate),
         maxDate: vm.maxDate && dateWithoutTime(vm.maxDate),
         initDate: vm.initDate,
-        customClass: vm.customClass
+        customClass: vm.customClass,
+        showWeeks: false
       }, $scope.datepickerOptions);
 
 
