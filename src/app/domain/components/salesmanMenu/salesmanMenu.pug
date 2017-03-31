@@ -1,11 +1,12 @@
-a(
-href
-ng-class='{disabled: !vm.isEnabled}'
-uib-popover-template="'app/domain/components/salesmanMenu/salesmanPopover.html'"
-popover-placement='bottom-right'
-popover-trigger='outsideClick'
-popover-is-open='vm.isOpen'
-)
-  span(ng-if='vm.toggleLabel()') {{ vm.toggleLabel() }}
-  span.glyphicon.glyphicon-user(ng-if='!vm.toggleLabel()')
-  span.caret
+.salesman-menu(ng-class='{disabled: !vm.isEnabled, "no-options": !vm.hasOptions}')
+
+  a(
+    href
+    uib-popover-template="'app/domain/components/salesmanMenu/salesmanPopover.html'"
+    popover-placement='bottom-right'
+    popover-trigger='outsideClick'
+    popover-is-open='vm.isOpen'
+    )
+      span(ng-if='vm.toggleLabel()') {{ vm.toggleLabel() }}
+      span.glyphicon.glyphicon-user(ng-if='!vm.toggleLabel()')
+      span.caret

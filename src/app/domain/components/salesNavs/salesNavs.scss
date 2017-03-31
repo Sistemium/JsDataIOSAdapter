@@ -12,16 +12,39 @@
   align-items: center;
   min-height: 33px;
 
-  > * {
+  > *, .salesman-menu {
     @extend %rounded-borders;
   }
 
-  > .dropdown-salesman-menu {
+  .salesman-menu {
+    margin-left: 8px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-self: stretch;
     background-color: #f5f5f5;
+  }
+
+  .salesman-menu {
+    font-size: 14px;
+    padding: 11px 15px;
+    font-weight: normal;
+  }
+
+  @include responsive-only(xxs) {
+
+    .salesman-menu {
+
+      font-size: 21px;
+      font-weight: 500;
+      padding: 7px 10px;
+
+      .caret {
+        display: none;
+      }
+
+    }
+
   }
 
   > .catalogue-settings {
@@ -34,7 +57,6 @@
     color: $active-color;
     cursor: pointer;
     background-color: #f5f5f5;
-    margin-right: 8px;
     min-height: 33px;
     padding: 8px;
 
@@ -62,10 +84,6 @@
 }
 
 salesman-menu {
-
-  font-size: 14px;
-  padding: 0 15px;
-  font-weight: normal;
 
   .popover {
     padding: 5px;

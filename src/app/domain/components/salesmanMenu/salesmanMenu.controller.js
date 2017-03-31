@@ -46,6 +46,7 @@
 
     function onDataChange(e, data) {
       vm.isEnabled = _.get(data, 'length') > 1;
+      vm.hasOptions = _.get(data, 'length') > 1;
     }
 
   }
