@@ -527,11 +527,14 @@
       vm.prices = {};
 
       _.each(priceType.prices(), price => {
-        let priceOrigin = price.price * discount;
+        
+        let priceOrigin = _.round(price.price * discount,2);
+
         vm.prices[price.articleId] = {
           price: _.round(priceOrigin * (1 - (vm.discounts[price.articleId] || 0) / 100.0), 2),
           priceOrigin
         };
+
       });
 
       DEBUG('filterStock', 'vm.prices');
