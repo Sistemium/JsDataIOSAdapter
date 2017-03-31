@@ -159,7 +159,7 @@
   }
 
   .lowStock {
-    .name-first, .article-info, .article-name-second {
+    .name-first, .article-info, .article-name-second > small {
       opacity: 0.5;
     }
   }
