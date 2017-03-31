@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, Sockets, DEBUG, SaleOrderHelper, $timeout) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, SaleOrderHelper, $timeout) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
@@ -17,7 +17,6 @@
 
       searchOutletClick,
       clearSearchOutletClick,
-      saleOrderDoneClick,
       saleOrderSaveDraftClick,
       setProcessingClick
 
@@ -72,6 +71,10 @@
       toastr.error(processingMessage);
     });
 
+    vm.watchScope('vm.saleOrder.outletId', () => {
+      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume');
+    });
+
     /*
      Handlers
      */
@@ -108,19 +111,9 @@
 
     }
 
-    function saleOrderDoneClick() {
-      $scope.$parent.saleOrderExpanded = false;
-      let msg = `Заказ для "${vm.saleOrder.outlet.name}" отправлен в обработку`;
-      $state.go('^')
-        .then(() => {
-          toastr.info(msg);
-        });
-    }
-
     function saleOrderSaveDraftClick() {
       $scope.$parent.saleOrderExpanded = false;
     }
-
 
     function onSaleOrderChange() {
 
@@ -202,13 +195,12 @@
           priceOrigin: price.priceOrigin,
           articleId: articleId
         });
-        vm.saleOrder.totalCost = 0;
         SaleOrderPosition.inject(position);
       }
 
       position.volume += volume;
 
-      let factor = _.get(position, 'article.factor') || 1;
+      let factor = !vm.noFactor && _.get(position, 'article.factor') || 1;
       let notFactored = position.volume % factor;
 
       if (notFactored) {

@@ -17,6 +17,7 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
       thead
         tr
           th №
+          th Водитель
           th(ng-if='!vm.currentSalesman') ТП
           th Точка
           th.number Стоимость
@@ -26,7 +27,8 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
         ng-click='vm.itemClick(item)'
         )
-          td.processing(ng-class='item.workflow().cls') {{ ::item.ndoc }}
+          td(ng-class='item.workflow().cls') {{ ::item.ndoc }}
+          td.tinyName {{ ::item.driver.tinyName }}
           td.tinyName(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
           td
             div {{ ::item.outlet.name }}

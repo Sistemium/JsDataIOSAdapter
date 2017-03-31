@@ -33,9 +33,9 @@
 
   .xs-ancestors {
     margin-bottom: $margin-bottom-xs;
-    @include responsive-only(gt-xs, portrait) {
-      display: none;
-    }
+    //@include responsive-only(gt-xs, portrait) {
+    //  display: none;
+    //}
   }
 
   .list-group-item.with-a-inside {

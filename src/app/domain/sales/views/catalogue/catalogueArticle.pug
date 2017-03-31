@@ -37,7 +37,7 @@ before-tag-name='li'
           href ng-click='vm.pieceVolumeClick(stock.article.pieceVolume)'
           ) {{::stock.article.pieceVolume}}л
           small.gray x {{::stock.article.packageRel}}
-          small.gray(ng-if='stock.article.factor > 1') : {{::stock.article.factor}}
+          small.gray(ng-if='!vm.noFactor && stock.article.factor > 1') : {{::stock.article.factor}}
 
         // TODO: allow removing restricted positions
         quantity-edit(
@@ -71,6 +71,11 @@ before-tag-name='li'
         small.gray {{ vm.prices[stock.articleId].price | number:2 }} ₽
 
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
+
+        i.recently-shipped.glyphicon.glyphicon-star-empty(
+        ng-if='vm.articleStats[stock.articleId]'
+        uib-tooltip='Недавно отгружено'
+        )
 
         i.red.glyphicon.glyphicon-warning-sign(
         ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'

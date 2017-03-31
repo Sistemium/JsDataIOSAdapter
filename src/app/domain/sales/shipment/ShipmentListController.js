@@ -1,8 +1,8 @@
 (function (module) {
 
-  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state) {
+  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, IOS) {
 
-    const {SaleOrder, Shipment, ShipmentPosition, Outlet} = Schema.models();
+    const {SaleOrder, Shipment, ShipmentPosition, Outlet, Driver} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
@@ -14,7 +14,8 @@
       date: $state.params.date,
       initDate,
 
-      onStateChange
+      onStateChange,
+      itemClick
 
     });
 
@@ -23,10 +24,15 @@
     SalesmanAuth.watchCurrent($scope, getData);
 
     vm.watchScope('vm.date', _.debounce(setDate, 300));
+    $scope.$on('rootClick', () => $state.go('sales.shipmentList'));
 
     /*
      Functions
      */
+
+    function itemClick(item) {
+      $state.go('.item', {id: item.id});
+    }
 
     function onStateChange(to) {
       if (!/sales.shipmentList/.test(to.name)) cleanup();
@@ -43,12 +49,23 @@
 
       let filter = SalesmanAuth.makeFilter({date});
 
+      let positionsFilter = _.clone(filter);
+
+      if (IOS.isIos()) {
+        positionsFilter = {where: {'ANY shipment': {date: {'==': date}}}};
+
+        if (filter.salesmanId) {
+          positionsFilter.where['ANY shipment'].salesmanId = {'==': filter.salesmanId};
+        }
+      }
+
       vm.currentSalesman = salesman;
 
       let busy = $q.all([
+        Driver.findAll(),
         Outlet.findAll(filter),
-        Shipment.findAll(filter, {bypassCache: true}),
-        ShipmentPosition.findAll(filter, {bypassCache: true})
+        Shipment.findAllWithRelations(filter, {bypassCache: true})(['Driver','Outlet']),
+        ShipmentPosition.findAll(positionsFilter, {bypassCache: true, limit: 5000})
       ])
         .then(() => {
           vm.rebindAll(Shipment, filter, 'vm.data');

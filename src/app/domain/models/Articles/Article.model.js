@@ -70,52 +70,32 @@
       notify: false,
 
       computed: {
+
         tags: ['name', tagger],
         preName: ['name', preNameFn],
         firstName: ['name', firstNameFn],
+
         category: ['name', function (name) {
           let m = name.match(/^[^ ]*/);
           return (m && m.length) ? m[0].replace(/[^а-яa-z]/ig, ' ') : null;
         }],
+
         factory: ['name', function (name) {
           let m = name.match(/[ ][^ ]+[ ]/);
           return (m && m.length) ? m[0].replace(/[^а-яa-z]/ig, ' ') : null;
         }],
-        lastName: ['name', 'firstName', 'preName', function (name, firstName, preName) {
 
-          name = rmTags(name);
+        lastName: ['name', 'firstName', 'preName', lastNameFn],
 
-          name = _.replace(name, preName, '');
-          name = _.replace(name, firstName, '');
-
-          let re = new RegExp(`(.+)(?=,[ \D])`);
-          let m = name.match(re);
-
-          m = (m && m.length > 1) ? m[1] : name;
-
-          if (!m && firstName) {
-            m = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
-          }
-
-          m = _.trim(m.replace(/^,[^ ]*/, ''));
-
-          let res = m.replace(/\(.*[xх]+[ ]*[0-9]+[ ]*\)/, '');
-
-          return _.trim(res);
-
-        }],
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
         }],
+
         pcsLabel: ['pieceVolume', function (pieceVolume) {
           return pieceVolume ? 'б' : 'шт';
         }]
-      },
 
-      // fieldTypes: {
-      // packageRel: 'int',
-      // pieceVolume: 'decimal'
-      // },
+      },
 
       methods: {
 
@@ -143,6 +123,37 @@
       }
 
     });
+
+    function lastNameFn(name, firstName, preName) {
+
+      name = rmTags(name);
+
+      name = _.replace(name, preName, '');
+      name = _.trim(_.replace(name, firstName, ''));
+
+      let re = new RegExp(`(.+)(?=,[ \D])`);
+      let m = name.match(re);
+
+      let res = (m && m.length > 1) ? m[1] : name;
+
+      if (!res && firstName) {
+        res = _.trim(name.substr(name.lastIndexOf(firstName) + firstName.length))
+      }
+
+      res = _.trim(res.replace(/^,[^ ]*/, ''));
+
+      let pieceVolumeRe = /([ ,]+\d[.,]\d+)/g;
+      res = _.trim(_.replace(res, pieceVolumeRe, ''));
+
+      let packageRe = /\(.*[x]+[ ]*[0-9]+[ ]*\)/;
+
+      if (packageRe.test(res)) {
+        res = m.replace(packageRe, '');
+      }
+
+      return _.trim(res);
+
+    }
 
     function tagger(name) {
 
