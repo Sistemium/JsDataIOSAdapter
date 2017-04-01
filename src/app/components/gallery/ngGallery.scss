@@ -16,6 +16,12 @@
 
   @extend .no-select;
 
+  .commentText i {
+    font-size: 18px;
+    position: relative;
+    top: 5px;
+  }
+
 }
 
 .ng-gallery {

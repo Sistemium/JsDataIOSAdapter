@@ -45,9 +45,16 @@
     }
 
     function thumbClick(picture) {
+
       vm.isPopoverOpen = false;
-      $scope.imagesAll = picture.campaign.campaignPictures;
+
+      let campaign = picture.campaign;
+
+      vm.commentText = campaign.commentText;
+      $scope.imagesAll = campaign.campaignPictures;
+
       vm.thumbnailClick(picture);
+
     }
 
   }
