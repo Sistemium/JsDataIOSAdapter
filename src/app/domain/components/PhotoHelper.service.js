@@ -133,8 +133,12 @@
         return picture.imageSrc;
       }
 
-      if (picture.imagePath && $window.location.protocol === 'file:') {
-        return '../../../../pictures/' + picture.imagePath;
+
+      if ($window.location.protocol === 'file:') {
+        let path = (size === 'thumbnail') ? 'thumbnailPath' : 'resizedImagePath';
+        if (picture[path]) {
+          return '../../../../pictures/' + picture[path];
+        }
       }
 
       if (picture.href) {
