@@ -27,6 +27,10 @@
           Outlet: {
             localField: 'outlet',
             localKey: 'outletId'
+          },
+          SaleOrder: {
+            localField: 'saleOrder',
+            localKey: 'saleOrderId'
           }
         },
         hasMany: {
