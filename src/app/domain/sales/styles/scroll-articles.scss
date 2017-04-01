@@ -11,13 +11,8 @@
 
   /* Styles for ng-gallery thumbnail*/
 
-  .thumbnails {
-    margin-right: 10px;
-
-    a {
-      margin: 1px;
-    }
-
+  a.thumb {
+    margin: 1px 10px 1px 1px;
   }
 
   img {
@@ -54,7 +49,7 @@
     padding: 0 10px;
 
     @include responsive-only(xxs) {
-      ng-gallery {
+      a.thumb {
         position: absolute;
         top: 5px;
         left: 5px;
@@ -65,7 +60,7 @@
 
       }
 
-      ng-gallery + .article-wrapper {
+      a.thumb + .article-wrapper {
         margin-left: 40px
       }
 

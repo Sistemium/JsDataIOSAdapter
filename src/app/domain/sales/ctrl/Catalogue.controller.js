@@ -6,7 +6,8 @@
   const LOW_STOCK_THRESHOLD = 24;
   const FONT_SIZE_KEY = 'catalogue.fontSize';
 
-  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout, DEBUG, IOS, Sockets, localStorageService, OutletArticles) {
+  function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout,
+                               DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
     const {
@@ -28,6 +29,8 @@
 
     let currentArticleGroupId = $state.params.articleGroupId || null;
     let sortedStock;
+
+    GalleryHelper.setupController(vm, $scope);
 
     vm.use({
 
@@ -69,6 +72,7 @@
       pieceVolumeClick,
       articleTagClick,
       removeFilterClick,
+      thumbClick,
 
       onStateChange,
       articleRowHeight,
@@ -211,6 +215,12 @@
     /*
      Handlers
      */
+
+    function thumbClick(stock) {
+
+      vm.thumbnailClick(_.get(stock, 'article.avatar'));
+
+    }
 
     function smallerFontClick() {
       vm.fontSize = _.max([vm.fontSize - 1, 14]);
@@ -444,7 +454,7 @@
 
     function getFilteredArticlesPhotos() {
 
-      vm.categoryPhotos = _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
+      $scope.imagesAll = _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
 
     }
 
@@ -528,7 +538,7 @@
 
       _.each(priceType.prices(), price => {
 
-        let priceOrigin = _.round(price.price * discount,2);
+        let priceOrigin = _.round(price.price * discount, 2);
 
         vm.prices[price.articleId] = {
           price: _.round(priceOrigin * (1 - (vm.discounts[price.articleId] || 0) / 100.0), 2),
