@@ -6,9 +6,29 @@ campaign-popover {
 
   font-size: 14px;
   font-weight: normal;
-  padding: 11px;
+  padding: 8px;
 
   background: $gray-background-color;
+
+  .glyphicon-gift {
+    font-size: 21px;
+    font-weight: 500;
+  }
+
+  @include responsive-only(gt-xxs) {
+    padding: 11px;
+    .glyphicon-gift {
+      display: none;
+    }
+  }
+
+  .campaign-popover {
+    @include responsive-only(xxs) {
+      .name, .caret {
+        display: none;
+      }
+    }
+  }
 
   .campaign {
 
