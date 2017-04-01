@@ -13,11 +13,14 @@
 
   });
 
-  function campaignPopoverController(Schema, $scope) {
+  function campaignPopoverController(Schema, $scope, GalleryHelper) {
 
     const vm = _.assign(this, {
-      $onInit
+      $onInit,
+      thumbClick
     });
+
+    GalleryHelper.setupController(vm, $scope);
 
     const {Campaign, CampaignGroup} = Schema.models();
 
@@ -37,6 +40,12 @@
 
         });
 
+    }
+
+    function thumbClick(picture) {
+      vm.isPopoverOpen = false;
+      $scope.imagesAll = picture.campaign.campaignPictures;
+      vm.thumbnailClick(picture);
     }
 
   }
