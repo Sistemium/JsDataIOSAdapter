@@ -26,7 +26,14 @@ campaign-popover {
 
   .popover {
 
-    min-width: 380px;
+    .popover-inner {
+      max-width: 350px;
+    }
+
+    @include responsive-only(gt-xs) {
+      min-width: 380px;
+    }
+
     top: 47px !important;
 
     .thumb {
