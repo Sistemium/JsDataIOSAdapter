@@ -47,6 +47,10 @@
             state: 'photos.stream',
             needRoles: SALES_ROLES
           }, {
+            title: 'Акции',
+            state: 'sales.campaigns',
+            needRoles: SALES_ROLES
+          }, {
             title: 'Предзаказы',
             state: 'sales.prePreOrders',
             needRoles: 'pre-ordering'

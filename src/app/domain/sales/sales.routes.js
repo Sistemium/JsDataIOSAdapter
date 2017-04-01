@@ -186,6 +186,21 @@
 
       };
 
+      var campaigns = {
+
+        name: 'campaigns',
+        url: '/campaigns?campaignGroupId&&campaignId',
+
+        templateUrl: 'app/domain/sales/campaigns/campaigns.html',
+        controller: 'CampaignsController',
+        controllerAs: 'vm',
+
+        data: {
+          title: 'Акции'
+        }
+
+      };
+
       stateHelperProvider
         .state({
 
@@ -197,7 +212,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [salesTerritory, prePreOrders, visits]
+          children: [salesTerritory, prePreOrders, visits, campaigns]
 
         })
       ;

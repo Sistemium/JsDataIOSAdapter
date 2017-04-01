@@ -1,0 +1,34 @@
+section(cg-busy='vm.cgBusy')
+
+  table.table.table-striped.clear-both.table-hover
+
+    thead
+      tr(ng-if='vm.selectedCampaignGroup')
+        th {{ vm.selectedCampaignGroup.name }}
+      tr(ng-if='vm.selectedCampaign')
+        th {{ vm.selectedCampaign.name }}
+
+    tbody
+      tr.clickable(
+      ng-if='vm.selectedCampaign'
+      ng-repeat='campaignPicture in vm.campaignPictures | orderBy:"name"'
+      ng-click='vm.campaignPictureClick(campaignPicture)'
+      )
+        td
+          div {{ campaignPicture.name }}
+
+      tr.clickable(
+      ng-if='vm.selectedCampaignGroup && !vm.selectedCampaign'
+      ng-repeat='campaign in vm.campaigns | orderBy:"name"'
+      ng-click='vm.campaignClick(campaign)'
+      )
+        td
+          div {{ campaign.name }} — {{ campaign.campaignPictures.length | number: 0 }}
+
+      tr.clickable(
+      ng-if='!vm.selectedCampaignGroup && !vm.selectedCampaign'
+      ng-repeat='campaignGroup in vm.campaignGroups | orderBy:"-name"'
+      ng-click='vm.campaignGroupClick(campaignGroup)'
+      )
+        td
+          div {{ campaignGroup.name }} — {{ campaignGroup.campaigns.length | number: 0 }}
