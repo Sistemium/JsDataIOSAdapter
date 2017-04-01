@@ -2,7 +2,7 @@
 resize resize-offset-top='30'
 )
 
-  // TODO: show only 4 thumbs and use vr-repeat with fixed height
+  // TODO: show only 4 thumbs and use
   .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
     .name {{ campaign.name }}
@@ -10,6 +10,6 @@ resize resize-offset-top='30'
     .pictures
       a.thumb(
       href ng-click='vm.thumbClick(picture)'
-      ng-repeat='picture in campaign.campaignPictures track by picture.id'
+      ng-repeat='picture in ::campaign.campaignPictures track by picture.id'
       )
         img(ng-src='{{picture.srcThumbnail}}')

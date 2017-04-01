@@ -46,15 +46,33 @@ campaign-popover {
 
   .popover {
 
-    .popover-inner {
-      max-width: 350px;
+    top: 47px !important;
+
+    max-width: 270px;
+
+    .campaign .pictures {
+      min-width: 70*3px + 12*3px;
+    }
+
+    @include responsive-only(iphone5) {
+
+      max-width: 240px;
+
+      .campaign .pictures {
+        min-width: 70*2px + 12*2px;
+      }
+
     }
 
     @include responsive-only(gt-xs) {
-      min-width: 380px;
-    }
 
-    top: 47px !important;
+      max-width: 70*5px + 12*5px + 40px;
+
+      .campaign .pictures{
+        min-width: 70*5px + 12*5px;
+      }
+
+    }
 
     .thumb {
 

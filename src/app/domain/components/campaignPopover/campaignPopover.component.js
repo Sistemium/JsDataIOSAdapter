@@ -35,8 +35,8 @@
 
           let filter = {campaignGroupId: vm.campaignGroup.id};
 
-          Campaign.bindAll(filter, $scope, 'vm.campaigns');
-          Campaign.findAllWithRelations(filter)('CampaignPicture');
+          Campaign.findAllWithRelations(filter)('CampaignPicture')
+            .then(campaigns => vm.campaigns = campaigns);
 
           // TODO: remember scroll position on destroy and restore it on init
 

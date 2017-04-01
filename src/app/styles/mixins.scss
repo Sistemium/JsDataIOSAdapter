@@ -43,6 +43,9 @@
     @else if $media == gt-xxs {
       @media (min-width: $screen-xs-min) { @content; }
     }
+    @else if $media == iphone5 {
+      @media (max-width: 320px) { @content; }
+    }
   }
 
 }
