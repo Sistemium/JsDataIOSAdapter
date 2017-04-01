@@ -1,6 +1,8 @@
 .campaign-popover-template.scroll-y(
 resize resize-offset-top='30'
 )
+
+  // TODO: show only 4 thumbs and use vr-repeat with fixed height
   .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
     .name {{ campaign.name }}
