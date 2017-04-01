@@ -2,9 +2,9 @@
 
 (function () {
 
-  angular.module('Models').run(function(Schema) {
+  angular.module('Models').run(function (Schema, PhotoHelper) {
 
-    Schema.register({
+    const config = PhotoHelper.setupModel({
 
       name: 'CampaignPicture',
 
@@ -18,6 +18,8 @@
       }
 
     });
+
+    Schema.register(config);
 
   });
 
