@@ -1,0 +1,12 @@
+.campaign-popover-template.scroll-y(
+resize resize-offset-top='30'
+)
+  .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
+
+    .name {{ campaign.name }}
+
+    .pictures
+      .thumb(
+      ng-repeat='picture in campaign.campaignPictures track by picture.id'
+      )
+        img(ng-src='{{picture.srcThumbnail}}')

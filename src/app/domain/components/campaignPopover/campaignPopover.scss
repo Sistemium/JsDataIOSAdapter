@@ -1,0 +1,55 @@
+@import "../../../styles/variables";
+
+campaign-popover {
+
+  margin-left: 8px;
+
+  font-size: 14px;
+  font-weight: normal;
+  padding: 11px;
+
+  background: $gray-background-color;
+
+  .campaign {
+
+    margin: 5px 0 5px;
+
+    .name {
+      font-size: 16px;
+    }
+
+    .pictures {
+      margin: 5px 0;
+    }
+
+  }
+
+  .popover {
+
+    min-width: 380px;
+    top: 47px !important;
+
+    .thumb {
+
+      margin: 2px;
+
+      display: inline-block;
+      width: 65px;
+      height: 60px;
+      border: solid 1px $state-info-border;
+
+      text-align: center;
+
+      overflow: hidden;
+
+      img {
+        //width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+    }
+
+  }
+
+}
