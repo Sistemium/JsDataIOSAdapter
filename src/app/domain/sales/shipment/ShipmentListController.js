@@ -59,14 +59,6 @@
         }
       }
 
-      // if (IOS.isIos()) {
-      //   positionsFilter = {where: {'ANY shipment': {date: {'==': date}}}};
-      //
-      //   if (filter.salesmanId) {
-      //     positionsFilter.where['ANY shipment'].salesmanId = {'==': filter.salesmanId};
-      //   }
-      // }
-
       vm.currentSalesman = salesman;
 
       let outletFilter = _.omit(Outlet.meta.salesmanFilter(filter), 'date');
