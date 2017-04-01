@@ -39,16 +39,17 @@
             state: 'sales.territory',
             needRoles: SALES_ROLES
           }, {
+            title: 'Акции',
+            state: 'sales.campaigns',
+            // needRoles: SALES_ROLES
+            needRoles: ['admin', 'tester']
+          }, {
             title: 'Визиты',
             state: 'sales.visits',
             needRoles: SALES_ROLES
           }, {
             title: 'Фотопоток',
             state: 'photos.stream',
-            needRoles: SALES_ROLES
-          }, {
-            title: 'Акции',
-            state: 'sales.campaigns',
             needRoles: SALES_ROLES
           }, {
             title: 'Предзаказы',
