@@ -38,6 +38,8 @@
           Campaign.bindAll(filter, $scope, 'vm.campaigns');
           Campaign.findAllWithRelations(filter)('CampaignPicture');
 
+          // TODO: remember scroll position on destroy and restore it on init
+
         });
 
     }
