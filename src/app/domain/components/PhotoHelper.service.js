@@ -145,13 +145,33 @@
 
     }
 
+    function setupModel(model) {
+
+      let computed = model.computed || (model.computed = {});
+
+      _.assign(computed, {
+
+        srcThumbnail  : function() {
+          return actingImageSrc(this, 'thumbnail');
+        },
+        srcFullscreen : function() {
+          return actingImageSrc(this, 'smallImage');
+        }
+
+      });
+
+      return model;
+
+    }
+
     return {
       takePhoto,
       importThumbnail,
       thumbnailClick,
       pictureClick,
       getImageSrc,
-      actingImageSrc
+      actingImageSrc,
+      setupModel
     };
 
   }
