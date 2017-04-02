@@ -35,6 +35,10 @@
             state: 'sales.shipmentList',
             needRoles: SALES_ROLES
           }, {
+            title: 'Долги',
+            state: 'sales.debtByOutlet',
+            needRoles: SALES_ROLES
+          }, {
             title: 'Клиенты',
             state: 'sales.territory',
             needRoles: SALES_ROLES
