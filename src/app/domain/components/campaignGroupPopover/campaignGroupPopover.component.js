@@ -29,6 +29,8 @@
 
       let today = moment().format();
 
+      // TODO: use groupBy to show groups only with campaigns
+
       CampaignGroup.findAll()
         .then(groups => {
 
