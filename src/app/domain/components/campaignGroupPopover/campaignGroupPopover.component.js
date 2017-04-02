@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').component('campaignGroupPopover', {
+  angular.module('Sales').component('campaignGroupPopover', {
 
     bindings: {
       currentItem: '=',
