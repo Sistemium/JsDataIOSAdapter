@@ -13,7 +13,7 @@ section.campaigns(cg-busy='vm.cgBusy')
 
       h4.title
 
-        span.name {{ campaign.name }}
+        span.name {{ campaign.name | cleanName }}
 
         a.commentText(
         href

@@ -1,13 +1,18 @@
 @import "../../../styles/variables";
 
-.campaigns{
+.campaigns {
 
   $thumb-size: 130px;
 
-  .title .commentText {
-    font-size: smaller;
-    position: relative;
-    top: -5px;
+  .title {
+    .name {
+      color: lighten($black, 15%);
+    }
+    .commentText {
+      font-size: smaller;
+      position: relative;
+      top: -5px;
+    }
   }
 
   .pictures {

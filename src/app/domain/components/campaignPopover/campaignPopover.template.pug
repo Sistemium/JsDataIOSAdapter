@@ -5,7 +5,7 @@ resize resize-offset-top='30'
   // TODO: show only 4 thumbs and use
   .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
-    .name {{ campaign.name }}
+    .name {{ campaign.name | cleanName }}
 
     .pictures
       a.thumb(
