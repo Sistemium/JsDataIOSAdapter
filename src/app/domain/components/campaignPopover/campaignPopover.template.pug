@@ -10,6 +10,6 @@ resize resize-offset-top='30'
     .pictures
       a.thumb(
       href ng-click='vm.thumbClick(picture)'
-      ng-repeat='picture in ::campaign.campaignPictures track by picture.id'
+      ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo:5 track by picture.id'
       )
         img(ng-src='{{picture.srcThumbnail}}')

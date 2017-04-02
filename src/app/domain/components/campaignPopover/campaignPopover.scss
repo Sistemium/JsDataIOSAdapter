@@ -53,6 +53,12 @@ campaign-popover {
     .campaign .pictures {
       text-align: right;
       min-width: 70*3px + 12*3px;
+      .thumb {
+        display: none;
+        &:first-child, &:nth-child(2), &:nth-child(3) {
+          display: inline-block;
+        }
+      }
     }
 
     @include responsive-only(iphone5) {
@@ -61,6 +67,10 @@ campaign-popover {
 
       .campaign .pictures {
         min-width: 70*2px + 12*2px;
+        .thumb:nth-child(3) {
+          display: none;
+        }
+
       }
 
     }
@@ -71,6 +81,9 @@ campaign-popover {
 
       .campaign .pictures{
         min-width: 70*5px + 12*5px;
+        .thumb {
+          display: inline-block;
+        }
       }
 
     }
