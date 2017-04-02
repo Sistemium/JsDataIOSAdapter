@@ -2,22 +2,22 @@
 
 (function () {
 
-  function saApp($window, Schema) {
+  function saApp($window, Schema, UUID) {
 
-    var appIdKey = 'saAppId';
     const VERSION = '0.8.0';
+    const appIdKey = 'saAppId';
 
-    var appId = $window.localStorage.getItem(appIdKey);
+    let appId = $window.localStorage.getItem(appIdKey);
 
     if (!appId) {
-      appId = uuid.v4();
+      appId = UUID.v4();
       $window.localStorage.setItem(appIdKey, appId)
     }
 
     function init() {
 
-      var LogMessage = Schema.model('LogMessage');
-      var logMsg = {
+      const LogMessage = Schema.model('LogMessage');
+      const logMsg = {
         event: 'appInit',
         appName: 'j-sistemium',
         appId: appId,

@@ -1,6 +1,6 @@
 'use strict';
 
-/* global moment:false */
+/* global moment:false uuid:false */
 
 (function () {
 
@@ -8,6 +8,7 @@
     .module('webPage')
 
     .constant('moment', moment)
+    .constant('UUID', uuid)
 
     .value('cgBusyDefaults', {
       message: 'Идет загрузка',
