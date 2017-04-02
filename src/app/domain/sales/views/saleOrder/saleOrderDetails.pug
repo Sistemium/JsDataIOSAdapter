@@ -37,7 +37,7 @@
 
     totals.animate-show(ng-hide='vm.busy')
 
-      .has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded')
+      .has-positions(ng-if='!saleOrderExpanded')
 
         .info
           strong {{ vm.saleOrder.positions.length | number:0 }}
@@ -45,14 +45,16 @@
           span на сумму
           strong {{ vm.saleOrder.totalCost | number:2 }}
           span ₽
+
         | &nbsp;
+
         a.toggle-edit(
         href ng-click='vm.toggleEditClick()'
         ng-if='vm.saleOrder && vm.saleOrder.workflow().editable'
         )
           i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
-      .no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
+      .no-positions(ng-if='saleOrderExpanded')
         span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
         a(
         href
