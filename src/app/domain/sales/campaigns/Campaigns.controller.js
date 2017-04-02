@@ -35,9 +35,14 @@
         .then(campaigns => vm.campaigns = campaigns);
     }
 
-    function thumbClick(campaignPicture) {
-      $scope.imagesAll = campaignPicture.campaign.campaignPictures;
-      return vm.thumbnailClick(campaignPicture);
+    function thumbClick(picture) {
+
+      let campaign = picture.campaign;
+
+      vm.commentText = campaign.commentText;
+      $scope.imagesAll = campaign.campaignPictures;
+
+      return vm.thumbnailClick(picture);
     }
 
   }
