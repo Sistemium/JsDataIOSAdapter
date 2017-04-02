@@ -129,10 +129,11 @@
 
     function actingImageSrc(picture, size) {
 
-      if (picture.imageSrc) {
-        return picture.imageSrc;
-      }
+      let srcName = size === 'thumbnail' ? 'thumbnailSrc' : 'imageSrc';
 
+      if (picture[srcName]) {
+        return picture[srcName];
+      }
 
       if ($window.location.protocol === 'file:') {
         let path = (size === 'thumbnail') ? 'thumbnailPath' : 'resizedImagePath';
