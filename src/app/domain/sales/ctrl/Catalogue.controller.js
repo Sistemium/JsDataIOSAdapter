@@ -345,7 +345,8 @@
     function pieceVolumeClick(pieceVolume) {
 
       let existing = _.find(vm.filters, 'pieceVolume');
-      _.remove(vm.filters, existing);
+
+      if (existing) _.remove(vm.filters, existing);
 
       if (_.get(existing, 'pieceVolume') !== pieceVolume) {
         addFilter({pieceVolume, label: pieceVolume + 'л'});
