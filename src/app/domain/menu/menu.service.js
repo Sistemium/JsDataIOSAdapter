@@ -41,8 +41,7 @@
           }, {
             title: 'Акции',
             state: 'sales.campaigns',
-            // needRoles: SALES_ROLES
-            needRoles: ['admin', 'tester']
+            needRoles: SALES_ROLES
           }, {
             title: 'Визиты',
             state: 'sales.visits',
