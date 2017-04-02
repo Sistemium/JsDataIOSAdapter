@@ -1,37 +1,21 @@
-section.scroll-y(
-resize resize-offset-top='5'
-cg-busy='vm.cgBusy'
-)
+section.campaigns(cg-busy='vm.cgBusy')
 
-  table.table.table-striped.clear-both.table-hover
+  .row.datepicker-with-buttons
 
-    thead
-      tr(ng-if='vm.selectedCampaignGroup')
-        th {{ vm.selectedCampaignGroup.name }}
-      tr(ng-if='vm.selectedCampaign')
-        th {{ vm.selectedCampaign.name }}
+    campaign-group-popover.col-sm-4.col-lg-3(
+    current-item='vm.campaignGroup'
+    init-item-id='vm.initGroupId'
+    )
 
-    tbody
-      tr.clickable(
-      ng-if='vm.selectedCampaign'
-      ng-repeat='campaignPicture in vm.campaignPictures | orderBy:"name"'
-      ng-click='vm.campaignPictureClick(campaignPicture)'
-      )
-        td
-          div {{ campaignPicture.name }}
+  .scroll-y(resize resize-offset-top='5')
 
-      tr.clickable(
-      ng-if='vm.selectedCampaignGroup && !vm.selectedCampaign'
-      ng-repeat='campaign in vm.campaigns | orderBy:"name"'
-      ng-click='vm.campaignClick(campaign)'
-      )
-        td
-          div {{ campaign.name }} — {{ campaign.campaignPictures.length | number: 0 }}
+    .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
-      tr.clickable(
-      ng-if='!vm.selectedCampaignGroup && !vm.selectedCampaign'
-      ng-repeat='campaignGroup in vm.campaignGroups | orderBy:"-name"'
-      ng-click='vm.campaignGroupClick(campaignGroup)'
-      )
-        td
-          div {{ campaignGroup.name }} — {{ campaignGroup.campaigns.length | number: 0 }}
+      .name {{ campaign.name }}
+
+      .pictures
+        a.thumb(
+        href ng-click='vm.thumbClick(picture)'
+        ng-repeat='picture in ::campaign.campaignPictures track by picture.id'
+        )
+          img(ng-src='{{picture.srcThumbnail}}')

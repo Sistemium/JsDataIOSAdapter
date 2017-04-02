@@ -9,7 +9,7 @@
         .state({
 
           name: 'sales.campaigns',
-          url: '/campaigns?campaignGroupId&&campaignId',
+          url: '/campaigns?campaignGroupId',
 
           templateUrl: 'app/domain/sales/campaigns/campaigns.html',
           controller: 'CampaignsController',

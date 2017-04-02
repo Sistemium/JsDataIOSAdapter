@@ -1,0 +1,10 @@
+a.campaign-group-popover.animate-show(
+href
+ng-disabled='!vm.items'
+popover-is-open='vm.isPopoverOpen'
+popover-placement='auto bottom-left'
+uib-popover-template='"app/domain/components/campaignGroupPopover/campaignGroupPopover.template.html"'
+)
+  label Период акций:
+  span.name {{ vm.currentItem.name }}
+  span.caret
