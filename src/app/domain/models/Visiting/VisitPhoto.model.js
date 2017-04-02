@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema, PhotoHelper) {
 
-    Schema.register({
+    let config = PhotoHelper.setupModel({
 
       name: 'VisitPhoto',
 
@@ -15,15 +15,11 @@
             localKey: 'visitId'
           }
         }
-      },
-
-      methods: {
-        getImageSrc: function (size) {
-          return PhotoHelper.getImageSrc(this, size);
-        }
       }
 
     });
+
+    Schema.register(config);
 
   });
 
