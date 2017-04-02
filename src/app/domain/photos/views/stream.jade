@@ -1,9 +1,8 @@
-.pull-right.ui-view(style='width: 100%')
-
-section#scroll-main(
-resize resize-offset-top='5'
+.photo-stream.scroll-y(
+cg-busy='vm.cgBusy'
+resize resize-offset-top='5' resize-property='height'
 )
-  .vr-parent(vs-repeat='340' vs-scroll-parent="#scroll-main" ng-if='vm.photos.length')
+  .vr-parent(vs-repeat='340' ng-if='vm.photos.length')
     .stream-photo.text-center(ng-repeat='pic in vm.photos track by pic.id')
       h4.text-left
         .lead
@@ -14,3 +13,9 @@ resize resize-offset-top='5'
             span {{ pic.visit.outlet.address }}
       a.thumbnail.pull-right(ng-click='vm.thumbClick(pic)')
         img(ng-src='{{ pic.srcThumbnail }}')
+
+  .empty(ng-if='!vm.busy && !vm.photos.length')
+    .alert.alert-info.centered
+      span Здесь будут отображены фотографии
+      span &nbsp;
+      a(href ui-sref='sales.visits') визитов
