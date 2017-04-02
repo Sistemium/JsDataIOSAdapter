@@ -129,7 +129,7 @@
 
     function actingImageSrc(picture, size) {
 
-      let srcName = size === 'thumbnail' ? 'thumbnailSrc' : 'imageSrc';
+      let srcName = size === 'thumbnail' ? 'thumbnailSrc' : 'smallSrc';
 
       if (picture[srcName]) {
         return picture[srcName];
