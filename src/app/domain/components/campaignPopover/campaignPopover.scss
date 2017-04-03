@@ -1,0 +1,114 @@
+@import "../../../styles/variables";
+
+campaign-popover {
+
+  margin-left: 8px;
+
+  font-size: 14px;
+  font-weight: normal;
+  padding: 8px;
+
+  background: $gray-background-color;
+
+  .glyphicon-gift {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  @include responsive-only(gt-xxs) {
+    padding: 11px;
+    .glyphicon-gift {
+      display: none;
+    }
+  }
+
+  .campaign-popover {
+    @include responsive-only(xxs) {
+      .name, .caret {
+        display: none;
+      }
+    }
+  }
+
+  .campaign {
+
+    margin: 5px 0 5px;
+
+    .name {
+      font-size: 16px;
+    }
+
+    .pictures {
+      margin: 5px 0;
+    }
+
+  }
+
+  .popover {
+
+    top: 47px !important;
+
+    max-width: 270px;
+
+    .campaign .pictures {
+      text-align: right;
+      min-width: 70*3px + 12*3px;
+      .thumb {
+        display: none;
+        &:first-child, &:nth-child(2), &:nth-child(3) {
+          display: inline-block;
+        }
+      }
+    }
+
+    @include responsive-only(iphone5) {
+
+      max-width: 240px;
+
+      .campaign .pictures {
+        min-width: 70*2px + 12*2px;
+        .thumb:nth-child(3) {
+          display: none;
+        }
+
+      }
+
+    }
+
+    @include responsive-only(gt-xs) {
+
+      max-width: 70*5px + 12*5px + 40px;
+
+      .campaign .pictures{
+        min-width: 70*5px + 12*5px;
+        .thumb {
+          display: inline-block;
+        }
+      }
+
+    }
+
+    .thumb {
+
+      margin: 6px 12px 6px 0;
+
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      border: solid 1px $state-info-border;
+
+      text-align: center;
+
+      overflow: hidden;
+
+      img {
+        //width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+    }
+
+  }
+
+}

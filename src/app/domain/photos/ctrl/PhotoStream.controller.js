@@ -2,86 +2,38 @@
 
 (function () {
 
-  function PhotoStreamController(Schema, $q, $state, $scope, SalesmanAuth) {
+  function PhotoStreamController(Schema, $state, $scope, saControllerHelper, GalleryHelper) {
 
-    var vm = this;
-    var Outlet = Schema.model('Outlet');
-    //var Partner = Schema.model('Partner');
-    //var SM = Schema.model('Salesman');
-    var Visit = Schema.model('Visit');
-    var VisitPhoto = Schema.model('VisitPhoto');
-    var stateFilter = {};
+    const vm = saControllerHelper.setup(this, $scope)
+      .use(GalleryHelper)
+      .use({
 
-    var salesman = SalesmanAuth.getCurrentUser();
-    var thumbnails = {};
+        refresh: refresh,
+        outletClick: outletClick,
+        thumbClick: thumbClick,
+        cachedVisit
 
-    if (salesman) {
-      stateFilter.salesmanId = salesman.id;
-    }
+      });
 
-    function pics(pic) {
+    const {VisitPhoto} = Schema.models();
 
-      var photo = thumbnails[pic.id];
-
-      if (photo) {
-        return photo;
-      }
-
-      thumbnails[pic.id] = VisitPhoto.loadRelations(pic, 'Visit')
-        .then(function () {
-
-          thumbnails[pic.id] = {
-            visit: pic.visit
-          };
-
-          importThumbnail(pic);
-
-          return Visit.loadRelations(pic.visit, 'Outlet');
-
-        })
-        .then(function (visit) {
-          Outlet.loadRelations(visit.outlet, 'Partner');
-          return thumbnails[pic.id];
-        });
-
-
-    }
+    const visits = {};
 
     function refresh() {
-      vm.busy =
-        VisitPhoto.findAll({}, {bypassCache: true});
+      let busy = VisitPhoto.findAll({}, {bypassCache: true});
+      vm.setBusy(busy);
     }
 
     function outletClick(outlet) {
       $state.go('.outlet', {id: outlet.id});
     }
 
-    function importThumbnail(vp) {
-
-      if (thumbnails[vp.id].src) {
-        return vp;
-      }
-
-      return vp.getImageSrc('thumbnail').then(function (src) {
-        thumbnails[vp.id].src = src;
-        return vp;
-      });
-
+    function thumbClick(pic) {
+      $scope.imagesAll = vm.photos;
+      vm.thumbnailClick(pic);
     }
 
-    function thumbnailClick(pic) {
-
-
-      $state.go('.photo', {id: pic.id});
-
-      // ConfirmModal.show(cfg, {
-      //   templateUrl: 'app/components/modal/PictureModal.html',
-      //   size: 'lg'
-      // });
-
-    }
-
-    function rootClick () {
+    function rootClick() {
       if ($state.current.name === 'photos.stream') {
         VisitPhoto.ejectAll();
         refresh();
@@ -90,40 +42,31 @@
       }
     }
 
-    angular.extend(vm, {
+    function cachedVisit(pic) {
 
-      thumbnails: [],
-      refresh: refresh,
-      outletClick: outletClick,
-      thumbnailClick: thumbnailClick,
-      pics: pics
+      let visit = visits[pic.id];
 
-    });
+      if (visit) return visit;
 
-    vm.refresh();
+      visits[pic.id] = VisitPhoto.loadRelations(pic, 'Visit')
+        .then(vp => vp.visit.DSLoadRelations('Outlet'))
+        .then(visit => visit.outlet.DSLoadRelations('Partner'))
+        .then(() => visits[pic.id] = pic.visit);
+
+    }
+
+    refresh();
 
     VisitPhoto.bindAll(
-      {
-        orderBy: [
-          ['deviceCts', 'DESC']
-
-        ]
-      },
+      {orderBy: [['deviceCts', 'DESC']]},
       $scope, 'vm.photos'
     );
 
-    $scope.$on('$stateChangeSuccess', function (e, to) {
-      vm.hideStream = !! _.get(to, 'params.id');
-    });
-
-    $scope.$on('rootClick', function(){
-      rootClick();
-    });
+    $scope.$on('rootClick', rootClick);
 
   }
 
   angular.module('webPage')
-    .controller('PhotoStreamController', PhotoStreamController)
-  ;
+    .controller('PhotoStreamController', PhotoStreamController);
 
 }());

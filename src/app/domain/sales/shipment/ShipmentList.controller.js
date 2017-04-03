@@ -52,10 +52,10 @@
       let positionsFilter = _.clone(filter);
 
       if (IOS.isIos()) {
-        positionsFilter = {where: {'ANY shipment': {date: {'==': date}}}};
+        positionsFilter = {where: {'shipment.date': {'==': date}}};
 
         if (filter.salesmanId) {
-          positionsFilter.where['ANY shipment'].salesmanId = {'==': filter.salesmanId};
+          positionsFilter.where['shipment.salesmanId']= {'==': filter.salesmanId};
         }
       }
 

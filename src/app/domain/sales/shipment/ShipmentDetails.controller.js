@@ -35,14 +35,8 @@
     function getData() {
 
       return Shipment.find($state.params.id)
-        .then(item => item.DSLoadRelations())
-        .then(item => {
-
-          return $q.all(_.map(item.positions, position => {
-            return position.DSLoadRelations()
-          }));
-
-        })
+        .then(Shipment.loadRelations)
+        .then(item => $q.all(_.map(item.positions, position => position.DSLoadRelations())))
         .catch(e => console.error(e));
 
     }

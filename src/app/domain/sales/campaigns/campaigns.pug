@@ -1,0 +1,30 @@
+section.campaigns(cg-busy='vm.cgBusy')
+
+  .row.datepicker-with-buttons
+
+    campaign-group-popover.col-sm-4.col-lg-3(
+    current-item='vm.campaignGroup'
+    init-item-id='vm.initGroupId'
+    )
+
+  .scroll-y(resize resize-offset-top='5')
+
+    .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
+
+      h4.title
+
+        span.name {{ campaign.name | cleanName }}
+
+        a.commentText(
+        href
+        ng-if='campaign.commentText'
+        uib-tooltip='{{campaign.commentText}}'
+        )
+          i.glyphicon.glyphicon-question-sign
+
+      .pictures
+        a.thumb(
+        href ng-click='vm.thumbClick(picture)'
+        ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" track by picture.id'
+        )
+          img(ng-src='{{picture.srcThumbnail}}')

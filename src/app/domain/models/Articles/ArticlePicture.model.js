@@ -4,7 +4,7 @@
 
   angular.module('Models').run((Schema, PhotoHelper) => {
 
-    Schema.register({
+    const config = PhotoHelper.setupModel({
 
       name: 'ArticlePicture',
 
@@ -13,6 +13,7 @@
        */
 
       relations: {
+
         hasMany: {
           ArticlePictureArticle: {
             localField: 'articlePictureArticles',
@@ -23,20 +24,12 @@
             foreignKey: 'avatarPictureId'
           }
         }
-      },
-
-      computed: {
-
-        srcThumbnail  : function() {
-          return PhotoHelper.actingImageSrc(this, 'thumbnail');
-        },
-        srcFullscreen : function() {
-            return PhotoHelper.actingImageSrc(this, 'smallImage');
-        }
 
       }
 
     });
+
+    Schema.register(config);
 
   });
 

@@ -32,7 +32,17 @@
       )
 
     .image-info
-      p.name(ng-if='vm.currentImage.name') {{ vm.currentImage.name }}
+      p.name(ng-if='vm.currentImage.name')
+
+        span {{ vm.currentImage.name }}
+        span &nbsp;
+        a.commentText(
+        href
+        ng-if='vm.commentText'
+        uib-tooltip='{{vm.commentText}}'
+        )
+          i.glyphicon.glyphicon-question-sign
+
       p.index {{index + 1}} / {{imagesAll.length}}
 
     .ng-thumbnails-wrapper
@@ -61,10 +71,12 @@
   )
     i.glyphicon.glyphicon-chevron-right.btn-lg
 
-  a.window-controls(
-  href
-  ng-click='vm.closeGalleryClick()'
-  )
-    i.glyphicon.glyphicon-remove.btn-lg
+  .window-controls
+
+    a(
+    href
+    ng-click='vm.closeGalleryClick()'
+    )
+      i.glyphicon.glyphicon-remove.btn-lg
 
 

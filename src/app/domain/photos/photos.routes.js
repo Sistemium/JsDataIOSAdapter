@@ -5,7 +5,7 @@
   angular.module('webPage')
     .config(function (stateHelperProvider) {
 
-      var stream = {
+      const stream = {
         name: 'stream',
         url: '/stream',
 
@@ -15,23 +15,7 @@
 
         data: {
           title: 'Фотопоток'
-        },
-
-        children: [
-          {
-            name: 'photo',
-            url: '/:id',
-
-            templateUrl: 'app/domain/photos/views/photo.html',
-            controller: 'PhotoController',
-            controllerAs: 'vm',
-
-            data: {
-              // hideNavs: true
-            }
-
-          }
-        ]
+        }
 
       };
 

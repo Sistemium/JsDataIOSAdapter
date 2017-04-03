@@ -4,15 +4,15 @@
 
   angular.module('Models').run(function (Schema, PhotoHelper) {
 
-    let config = PhotoHelper.setupModel({
+    const config = PhotoHelper.setupModel({
 
-      name: 'VisitPhoto',
+      name: 'CampaignPicture',
 
       relations: {
         hasOne: {
-          Visit: {
-            localField: 'visit',
-            localKey: 'visitId'
+          Campaign: {
+            localField: 'campaign',
+            localKey: 'campaignId'
           }
         }
       }

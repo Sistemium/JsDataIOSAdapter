@@ -13,12 +13,16 @@ before-tag-name='li'
   ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflow().editable'
   )
 
-    ng-gallery(
-    images-all='vm.categoryPhotos'
-    thumb-image='stock.article.avatar'
-    thumbs-num='1'
+    a.thumb(
+    ng-disabled='!stock.article.avatar'
     ng-if='vm.showImages'
+    href
+    ng-click='vm.thumbClick(stock)'
     )
+      img(
+      ng-src='{{ stock.article.avatar.srcThumbnail }}'
+      ng-class='stock.article.avatar.srcThumbnail || "placeholder"'
+      )
 
     .article-wrapper(
     ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'

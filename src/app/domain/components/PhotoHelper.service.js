@@ -56,6 +56,7 @@
         },
 
         resolve: function (ctrl) {
+
           ctrl.busy = pic.getImageSrc('resized').then(function (src) {
             ctrl.src = src;
           }, function (err) {
@@ -69,6 +70,44 @@
         templateUrl: 'app/components/modal/PictureModal.html',
         size: 'lg'
       });
+
+    }
+
+    function pictureClick(pic) {
+
+      ConfirmModal.show(
+        pictureClickConfig(pic, pic.href, pic.name, 'resized'),
+        {
+        templateUrl: 'app/components/modal/PictureModal.html',
+        size: 'lg'
+      });
+
+    }
+
+    function pictureClickConfig(pic, src, title, size) {
+
+      return {
+
+        text: false,
+        src: src,
+        title: title,
+
+        resolve: ctrl => {
+
+          ctrl.busy = getImageSrc(pic, size)
+            .then(src => {
+              ctrl.src = src;
+            }, err => {
+
+              console.log(err);
+              ctrl.cancel();
+              toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
+
+            });
+
+        }
+
+      }
 
     }
 
@@ -90,12 +129,17 @@
 
     function actingImageSrc(picture, size) {
 
-      if (picture.imageSrc) {
-        return picture.imageSrc;
+      let srcName = size === 'thumbnail' ? 'thumbnailSrc' : 'smallSrc';
+
+      if (picture[srcName]) {
+        return picture[srcName];
       }
 
-      if (picture.imagePath && $window.location.protocol === 'file:') {
-        return '../../../../pictures/' + picture.imagePath;
+      if ($window.location.protocol === 'file:') {
+        let path = (size === 'thumbnail') ? 'thumbnailPath' : 'resizedImagePath';
+        if (picture[path]) {
+          return '../../../../pictures/' + picture[path];
+        }
       }
 
       if (picture.href) {
@@ -106,12 +150,33 @@
 
     }
 
+    function setupModel(model) {
+
+      let computed = model.computed || (model.computed = {});
+
+      _.assign(computed, {
+
+        srcThumbnail  : function() {
+          return actingImageSrc(this, 'thumbnail');
+        },
+        srcFullscreen : function() {
+          return actingImageSrc(this, 'smallImage');
+        }
+
+      });
+
+      return model;
+
+    }
+
     return {
       takePhoto,
       importThumbnail,
       thumbnailClick,
+      pictureClick,
       getImageSrc,
-      actingImageSrc
+      actingImageSrc,
+      setupModel
     };
 
   }

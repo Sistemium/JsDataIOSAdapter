@@ -1,0 +1,43 @@
+@import "../../../styles/variables";
+
+.campaigns {
+
+  $thumb-size: 130px;
+
+  .title {
+    .name {
+      color: lighten($black, 15%);
+    }
+    .commentText {
+      font-size: smaller;
+      position: relative;
+      top: -5px;
+    }
+  }
+
+  .pictures {
+    text-align: right;
+  }
+
+  .thumb {
+
+    margin: 6px 12px 6px 0;
+
+    display: inline-block;
+    width: $thumb-size;
+    height: $thumb-size;
+    border: solid 1px $state-info-border;
+
+    text-align: center;
+
+    overflow: hidden;
+
+    img {
+      //width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+  }
+
+}

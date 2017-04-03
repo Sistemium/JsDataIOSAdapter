@@ -23,12 +23,8 @@
             state: 'picker',
             needRoles: PICKING_ROLES
           }, {
-            title: 'Клиенты',
-            state: 'sales.territory',
-            needRoles: SALES_ROLES
-          }, {
-            title: 'Визиты',
-            state: 'sales.visits',
+            title: 'Каталог',
+            state: 'sales.catalogue',
             needRoles: SALES_ROLES
           }, {
             title: 'Заказы',
@@ -39,8 +35,20 @@
             state: 'sales.shipmentList',
             needRoles: SALES_ROLES
           }, {
-            title: 'Каталог',
-            state: 'sales.catalogue',
+            title: 'Долги',
+            state: 'sales.debtByOutlet',
+            needRoles: SALES_ROLES
+          }, {
+            title: 'Клиенты',
+            state: 'sales.territory',
+            needRoles: SALES_ROLES
+          }, {
+            title: 'Акции',
+            state: 'sales.campaigns',
+            needRoles: SALES_ROLES
+          }, {
+            title: 'Визиты',
+            state: 'sales.visits',
             needRoles: SALES_ROLES
           }, {
             title: 'Фотопоток',

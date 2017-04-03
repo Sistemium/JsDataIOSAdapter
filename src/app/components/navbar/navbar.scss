@@ -60,19 +60,6 @@
 
 }
 
-@media (max-width: $screen-xs - 1) {
-
-  .dropdown-salesman-menu > salesman-menu > a {
-    font-size: 21px;
-    font-weight: 500;
-
-    .caret {
-      display: none;
-    }
-
-  }
-
-}
 
 @media (min-width: 768px) {
   .navbar.navbar-fixed-bottom {
@@ -83,10 +70,6 @@
 }
 
 @media (max-width: 767px) {
-
-  .dropdown-salesman-menu > salesman-menu {
-    padding: 0 10px;
-  }
 
   .navbar.navbar-fixed-bottom {
     .nav.float-right {
