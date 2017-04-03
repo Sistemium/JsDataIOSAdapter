@@ -1,4 +1,4 @@
-.debt-by-outlet.scroll-y(
+.debt-by-outlet.scroll-y.ui-view(
 resize resize-offset-top='5'
 cg-busy='vm.cgBusy'
 )
@@ -7,4 +7,5 @@ cg-busy='vm.cgBusy'
       .name {{ ::item.outlet.name }}
       .address {{ ::item.outlet.address }}
 
-    .total {{ ::item.total | number:2 }} ₽
+    .total
+      a(href ng-click='vm.itemClick(item)') {{ ::item.total | number:2 }} ₽

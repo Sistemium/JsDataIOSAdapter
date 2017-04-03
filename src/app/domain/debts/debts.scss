@@ -2,21 +2,24 @@
 
 .debt-by-outlet {
 
-  .debt {
+  .outlet {
 
-    .outlet {
+    font-size: larger;
+    font-weight: bold;
+    margin: 5px 0;
+    color: lighten($black, 10%);
 
-      font-size: larger;
-      font-weight: bold;
-      margin: 5px 0;
-      color: lighten($black, 15%);
-
-      .address {
-        color: silver;
-      }
-
+    .address {
+      color: silver;
     }
 
+  }
+
+  > .outlet {
+    margin-bottom: 20px;
+  }
+
+  > .debt {
 
     .total {
       text-align: right;
@@ -26,6 +29,24 @@
     border-bottom: solid 1px $border-gray;
     padding: 5px 0;
 
+  }
+
+  .date {
+    border-bottom: solid 1px $border-gray;
+    padding-bottom: 5px;
+  }
+
+  .debts {
+    text-align: right;
+    .ndoc {
+      display: inline-block;
+      min-width: 100px;
+      text-align: left;
+    }
+    .summ {
+      display: inline-block;
+      min-width: 100px;
+    }
   }
 
 }

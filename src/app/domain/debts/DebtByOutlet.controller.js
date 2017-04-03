@@ -24,6 +24,7 @@
      Listeners
      */
 
+    vm.onScope('rootClick', () => $state.go('sales.debtByOutlet'));
 
     /*
      Functions
@@ -32,7 +33,7 @@
     function itemClick(item) {
       let outletId = item.outletId;
       if (!outletId) return;
-      $state.go('.', {outletId});
+      $state.go('.outletDebt', {outletId});
     }
 
     function getData(filter) {

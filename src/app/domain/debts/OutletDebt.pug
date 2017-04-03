@@ -1,0 +1,15 @@
+h3.outlet
+  .name {{ vm.outlet.name }}
+  .address {{ vm.outlet.address }}
+
+.date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
+
+  h4.title {{ ::group.date }}
+
+  .debts
+
+    .debt(ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id')
+
+      label.ndoc {{ ::debt.ndoc }}
+
+      label.summ {{ ::debt.summ | number:2 }}
