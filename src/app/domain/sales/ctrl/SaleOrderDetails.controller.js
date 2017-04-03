@@ -59,6 +59,15 @@
 
       let so = SaleOrder.copyInstance(vm.saleOrder);
 
+      so.processing = 'draft';
+
+      let defaultDate = SaleOrder.meta.nextShipmentDate();
+
+      if (defaultDate > so.date) {
+        so.date = defaultDate;
+        toastr.info(`Дата доставки изменена на ${defaultDate}`, 'Заказ скопирован');
+      }
+
       let copying = SaleOrder.create(so)
         .then(saleOrder => {
           return $q.all(_.map(vm.saleOrder.positions, position => {
