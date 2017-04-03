@@ -29,13 +29,15 @@
 
       watchChanges: false,
 
+      omit: ['isVisible'],
+
       meta: {
 
         getDefault: function () {
           let id = localStorageService.get('PriceType.default');
           let res = id && model.get(id);
-          if (!res) {
-            res = _.first(model.filter({limit: 1}));
+          if (!_.get(res, 'isVisible')) {
+            res = _.first(model.filter({limit: 1, isVisible: true}));
             if (res) {
               model.meta.setDefault(res);
             }
