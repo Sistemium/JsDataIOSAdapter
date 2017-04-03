@@ -37,7 +37,8 @@
           }, {
             title: 'Долги',
             state: 'sales.debtByOutlet',
-            needRoles: SALES_ROLES
+            needRoles: ['admin', 'tester']
+            // needRoles: SALES_ROLES
           }, {
             title: 'Клиенты',
             state: 'sales.territory',
