@@ -62,10 +62,11 @@
       so.processing = 'draft';
 
       let defaultDate = SaleOrder.meta.nextShipmentDate();
+      let msg = '';
 
       if (defaultDate > so.date) {
         so.date = defaultDate;
-        toastr.info(`Дата доставки изменена на ${defaultDate}`, 'Заказ скопирован');
+        msg = `Дата доставки изменена на ${defaultDate}`;
       }
 
       let copying = SaleOrder.create(so)
@@ -77,6 +78,7 @@
           }))
             .then(() => {
               $state.go('.', {id: saleOrder.id});
+              toastr.info(msg, 'Заказ скопирован');
             });
         })
         .catch(err => {
