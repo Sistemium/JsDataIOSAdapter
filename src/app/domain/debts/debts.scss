@@ -2,7 +2,7 @@
 
 .debt-by-outlet {
 
-  .debt .outlet {
+  .outlet-debt-total .outlet {
 
     font-size: larger;
     font-weight: bold;
@@ -15,11 +15,7 @@
 
   }
 
-  > .outlet {
-    margin-bottom: 20px;
-  }
-
-  > .debt {
+  .outlet-debt-total {
 
     .total {
       text-align: right;

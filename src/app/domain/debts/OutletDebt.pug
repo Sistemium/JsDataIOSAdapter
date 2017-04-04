@@ -19,16 +19,17 @@
       strong {{ vm.totalSumm() | number:2 }}
       span ₽
 
-.date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
+.scroll-y(resize resize-offset-top='5')
+  .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
-  h4.title {{ ::group.date }}
+    h4.title {{ ::group.date }}
 
-  .debts
+    .debts
 
-    .debt(ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id')
+      .debt(ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id')
 
-      label.ndoc {{ ::debt.ndoc }}
+        label.ndoc {{ ::debt.ndoc }}
 
-      label.summ
-        a(href) {{ ::debt.summ | number:2 }}
-        span.currency ₽
+        label.summ
+          a(href) {{ ::debt.summ | number:2 }}
+          span.currency ₽

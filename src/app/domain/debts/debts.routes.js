@@ -20,10 +20,12 @@
 
           children:[
             {
+
               name: 'outletDebt',
               url: '/:outletId',
               templateUrl: 'app/domain/debts/OutletDebt.html',
               controller: 'OutletDebtController as vm'
+
             }
           ]
 

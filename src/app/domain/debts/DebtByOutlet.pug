@@ -1,11 +1,11 @@
-.debt-by-outlet.scroll-y.ui-view(
-resize resize-offset-top='5'
+.debt-by-outlet.ui-view(
 cg-busy='vm.cgBusy'
 )
-  .debt(ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.outletId')
-    .outlet
-      .name {{ ::item.outlet.name }}
-      .address {{ ::item.outlet.address }}
+  .scroll-y(resize resize-offset-top='5')
+    .outlet-debt-total(ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.outletId')
+      .outlet
+        .name {{ ::item.outlet.name }}
+        .address {{ ::item.outlet.address }}
 
-    .total
-      a(href ng-click='vm.itemClick(item)') {{ ::item.total | number:2 }} ₽
+      .total
+        a(href ng-click='vm.itemClick(item)') {{ ::item.total | number:2 }} ₽
