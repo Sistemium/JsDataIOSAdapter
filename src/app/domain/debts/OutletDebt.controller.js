@@ -8,7 +8,7 @@
 
     const vm = saControllerHelper
       .setup(this, $scope)
-      .use({});
+      .use({totalSumm});
 
     const {outletId} = $state.params;
 
@@ -23,7 +23,7 @@
     function getData(outletId) {
 
       return Debt.findAll({outletId})
-        .then(data => _.filter(data, debt => debt.summ > 0))
+        .then(data => vm.debts = _.filter(data, debt => debt.summ > 0))
         .then(data => {
           data = _.groupBy(data, 'date');
           vm.data = _.map(data, (items, date) => {
@@ -32,6 +32,10 @@
         })
         .catch(e => console.error(e));
 
+    }
+
+    function totalSumm() {
+      return _.sumBy(vm.debts, 'summ');
     }
 
   }

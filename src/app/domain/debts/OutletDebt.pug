@@ -1,6 +1,23 @@
-h3.outlet
-  .name {{ vm.outlet.name }}
-  .address {{ vm.outlet.address }}
+.alert.alert-default
+
+  h4.popovers.spaced
+    span.popover-trigger(
+    )
+      .outlet
+        .name
+          span {{ vm.outlet.name }}
+        .address
+          small {{vm.outlet.address}}
+      span.caret
+
+  .totals.animate-show(ng-hide='vm.busy')
+
+    .info
+      //strong {{ vm.debts.length | number:0 }}
+      //span {{ vm.positionsCountRu() }}
+      span Остаток долга:
+      strong {{ vm.totalSumm() | number:2 }}
+      span ₽
 
 .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
@@ -12,4 +29,6 @@ h3.outlet
 
       label.ndoc {{ ::debt.ndoc }}
 
-      label.summ {{ ::debt.summ | number:2 }}
+      label.summ
+        a(href) {{ ::debt.summ | number:2 }}
+        span.currency ₽

@@ -2,7 +2,7 @@
 
 .debt-by-outlet {
 
-  .outlet {
+  .debt .outlet {
 
     font-size: larger;
     font-weight: bold;
@@ -33,20 +33,35 @@
 
   .date {
     border-bottom: solid 1px $border-gray;
-    padding-bottom: 5px;
+    padding: 5px 15px;
   }
 
   .debts {
+
     text-align: right;
+
     .ndoc {
       display: inline-block;
+      font-weight: normal;
       min-width: 100px;
       text-align: left;
     }
+
     .summ {
       display: inline-block;
       min-width: 100px;
     }
+
+    .currency {
+      font-weight: normal;
+      color: $gray;
+      margin-left: 5px;
+    }
+
+  }
+
+  .alert {
+      @extend %header-alert;
   }
 
 }
