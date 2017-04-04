@@ -32,7 +32,7 @@
 
   @include responsive-only(lt-sm) {
 
-    display: block;
+    display: block !important;
 
     > * {
       display: block;
@@ -41,7 +41,7 @@
     .totals {
       font-size: 12px;
       margin-top: $margin-bottom-xs;
-      text-align: left;
+      //text-align: left;
     }
 
   }
