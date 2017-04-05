@@ -31,5 +31,4 @@
         label.ndoc {{ ::debt.ndoc }}
 
         label.summ
-          a(href) {{ ::debt.summ | number:2 }}
-          span.currency ₽
+          debt-cashing-popover(debt='debt') {{ ::debt.summ | number:2 }} ₽

@@ -1,6 +1,13 @@
 @import "../../styles/variables";
+@import "../../styles/alerts";
 
 .debt-by-outlet {
+
+  $margin: 6px;
+
+  .header {
+    min-height: 20px;
+  }
 
   .outlet-debt-total .outlet {
 
@@ -17,19 +24,14 @@
 
   .outlet-debt-total {
 
-    .total {
-      text-align: right;
-      font-weight: bold;
-    }
-
     border-bottom: solid 1px $border-gray;
-    padding: 5px 0;
+    padding: $margin 0;
 
   }
 
   .date {
     border-bottom: solid 1px $border-gray;
-    padding: 5px 15px;
+    padding: 4px 4px 4px 15px;
   }
 
   .debts {
@@ -51,13 +53,44 @@
     .currency {
       font-weight: normal;
       color: $black;
-      margin-left: 5px;
+      margin-left: $margin;
     }
 
   }
 
+  .totals {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .total {
+
+      text-align: right;
+      min-width: 100px;
+
+      label {
+        font-weight: normal;
+        margin: 0 $margin 0;
+      }
+
+      .currency {
+        margin-left: $margin;
+      }
+
+      & + .total {
+        margin-left: 1em;
+      }
+
+    }
+
+  }
+
+
   .alert {
-      @extend %header-alert;
+
+    @extend %header-alert;
+
   }
 
 }
