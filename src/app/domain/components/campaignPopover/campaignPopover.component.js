@@ -48,9 +48,13 @@
           let filter = {campaignGroupId: vm.campaignGroup.id};
 
           Campaign.findAllWithRelations(filter)('CampaignPicture')
-            .then(campaigns => vm.campaigns = campaigns);
+            .then(campaigns => {
 
-          // TODO: remember scroll position on destroy and restore it on init
+              vm.campaigns = _.filter(campaigns, (elem) => {
+                return elem.campaignPictures.length > 0
+              });
+
+            });
 
         });
 
