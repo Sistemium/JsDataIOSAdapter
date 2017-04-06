@@ -13,11 +13,14 @@
   .totals.animate-show(ng-hide='vm.busy')
 
     .info
-      //strong {{ vm.debts.length | number:0 }}
-      //span {{ vm.positionsCountRu() }}
-      span Остаток долга:
-      strong {{ vm.totalSumm() | number:2 }}
-      span ₽
+      .total
+        label Получено прочего:
+        strong {{ vm.cashingTotalByDebt[null] | number:2 }}
+        span.currency ₽
+      .total
+        label Остаток долга:
+        strong {{ vm.totalSumm() | number:2 }}
+        span.currency ₽
 
 .scroll-y(resize resize-offset-top='5')
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
@@ -29,6 +32,9 @@
       .debt(ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id')
 
         label.ndoc {{ ::debt.ndoc }}
+
+        label.cashed(ng-if='vm.cashingTotalByDebt[debt.id]')
+          | {{ ::vm.cashingTotalByDebt[debt.id] | number:2 }} ₽
 
         label.summ
           debt-cashing-popover(debt='debt') {{ ::debt.summ | number:2 }} ₽

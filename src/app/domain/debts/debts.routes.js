@@ -24,7 +24,11 @@
               name: 'outletDebt',
               url: '/:outletId',
               templateUrl: 'app/domain/debts/OutletDebt.html',
-              controller: 'OutletDebtController as vm'
+              controller: 'OutletDebtController as vm',
+
+              data: {
+                disableSalesmanFilter: true
+              }
 
             }
           ]

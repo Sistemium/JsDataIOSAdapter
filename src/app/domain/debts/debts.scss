@@ -6,7 +6,9 @@
   $margin: 6px;
 
   .header {
-    min-height: 20px;
+    padding: 4px 0;
+    min-height: 31px;
+    //font-size: larger;
   }
 
   .outlet-debt-total .outlet {
@@ -17,6 +19,7 @@
     color: $black;
 
     .address {
+      font-size: smaller;
       color: silver;
     }
 

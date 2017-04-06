@@ -27,10 +27,10 @@ cg-busy='vm.cgBusy'
 
       .totals
 
-        span.total(ng-if='item.totalCashingSumm')
-          strong {{ item.totalCashingSumm | number:2 }}
+        span.total(ng-if='item["sum(cashing.summ)"]')
+          strong {{ item["sum(cashing.summ)"] | number:2 }}
           span.currency ₽
 
         a.total(href ng-click='vm.itemClick(item)')
-          strong {{ ::item.total | number:2 }}
+          strong {{ ::item['sum(summ)'] | number:2 }}
           span.currency ₽
