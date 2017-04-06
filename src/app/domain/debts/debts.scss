@@ -4,11 +4,27 @@
 .debt-by-outlet {
 
   $margin: 6px;
+  $field-width: 120px;
+  $headers-border: solid 1px $border-gray;
+
+  .header, .footer {
+    padding: $margin 0;
+    min-height: 35px;
+    //font-size: larger;
+  }
 
   .header {
-    padding: 4px 0;
-    min-height: 31px;
-    //font-size: larger;
+    border-bottom: $headers-border;
+    label {
+      color: $gray;
+    }
+  }
+
+  .footer {
+    border-top: $headers-border;
+    strong {
+      color: $gray;
+    }
   }
 
   .outlet-debt-total .outlet {
@@ -21,6 +37,7 @@
     .address {
       font-size: smaller;
       color: silver;
+      font-weight: normal;
     }
 
   }
@@ -44,13 +61,13 @@
     .ndoc {
       display: inline-block;
       font-weight: normal;
-      min-width: 100px;
+      min-width: $field-width;
       text-align: left;
     }
 
     .summ {
       display: inline-block;
-      min-width: 100px;
+      min-width: $field-width;
     }
 
     .currency {
@@ -70,7 +87,7 @@
     .total {
 
       text-align: right;
-      min-width: 100px;
+      min-width: $field-width;
 
       label {
         font-weight: normal;

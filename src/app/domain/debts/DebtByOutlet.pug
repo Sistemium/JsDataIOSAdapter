@@ -5,20 +5,11 @@ cg-busy='vm.cgBusy'
   //.alert.alert-default
 
   .header
-    .totals.animate-show(ng-hide='vm.busy')
+    .totals
+      label.total На руках
+      label.total Остаток долга
 
-      .total(ng-if='vm.totalCashingSumm()')
-        label Всего на руках:
-        strong {{ vm.totalCashingSumm() | number:2 }}
-        span.currency ₽
-
-      .total
-        label Всего задолженность:
-        strong {{ vm.totalSumm() | number:2 }}
-        span.currency ₽
-
-
-  .scroll-y(resize resize-offset-top='5')
+  .scroll-y(resize resize-offset-top='40')
     .outlet-debt-total(ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.outletId')
 
       .outlet
@@ -34,3 +25,16 @@ cg-busy='vm.cgBusy'
         a.total(href ng-click='vm.itemClick(item)')
           strong {{ ::item['sum(summ)'] | number:2 }}
           span.currency ₽
+
+  .footer
+    .totals.animate-show(ng-hide='vm.busy')
+
+      strong Итого:
+
+      .total(ng-if='vm.totalCashingSumm()')
+        strong {{ vm.totalCashingSumm() | number:2 }}
+        span.currency ₽
+
+      .total
+        strong {{ vm.totalSumm() | number:2 }}
+        span.currency ₽
