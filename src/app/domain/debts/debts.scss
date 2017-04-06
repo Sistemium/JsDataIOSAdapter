@@ -25,25 +25,25 @@
     color: $gray;
   }
 
-  .outlet-debt-total .outlet {
-
-    font-size: larger;
-    font-weight: bold;
-    margin: 5px 0;
-    color: $black;
-
-    .address {
-      font-size: smaller;
-      color: silver;
-      font-weight: normal;
-    }
-
-  }
-
   .outlet-debt-total {
 
     border-bottom: solid 1px $border-gray;
     padding: $margin 0;
+
+    .outlet {
+
+      font-size: larger;
+      font-weight: bold;
+      margin: 5px 0;
+      color: $black;
+
+      .address {
+        font-size: smaller;
+        color: silver;
+        font-weight: normal;
+      }
+
+    }
 
   }
 
@@ -103,7 +103,6 @@
     }
 
   }
-
 
   .alert {
 
