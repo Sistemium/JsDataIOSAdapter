@@ -1,8 +1,8 @@
 .debt-cashing-popover
 
-  a.btn.btn-link(href ng-click='vm.cashWholeClick()') Оплачено целиком
+  a.btn.btn-link(href ng-click='vm.cashWholeClick()') Забрать остаток
 
   .cashings
     .cashing(ng-repeat='cashing in vm.cashings track by cashing.id')
       span.cts {{ cashing.deviceCts | amUtc | amLocal | amCalendar }}
-      span.summ {{ cashing.summ | number:2 }}
+      strong.summ {{ cashing.summ | number:2 }}
