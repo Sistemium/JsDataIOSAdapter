@@ -13,16 +13,28 @@
 
   });
 
-  function campaignPopoverController(Schema, $scope, GalleryHelper) {
+  function campaignPopoverController(Schema, $scope, GalleryHelper, localStorageService) {
 
     const vm = _.assign(this, {
       $onInit,
-      thumbClick
+      thumbClick,
+      onElemLoad,
+      isPopoverOpen: false
     });
 
     GalleryHelper.setupController(vm, $scope);
 
     const {Campaign, CampaignGroup} = Schema.models();
+
+    $scope.$watch('vm.isPopoverOpen', (nv, ov) => {
+
+      if (nv == false && (nv !== ov)) {
+        let elem = document.getElementsByClassName('campaign-popover-template')[0];
+        localStorageService.set('campaignPopoverTopScroll', elem.scrollTop);
+      }
+
+    });
+
 
     function $onInit() {
 
@@ -55,6 +67,19 @@
 
       vm.thumbnailClick(picture);
 
+    }
+
+
+    function onElemLoad() {
+
+      let elem = document.getElementsByClassName('campaign-popover-template')[0];
+      let scrollTo = localStorageService.get('campaignPopoverTopScroll') || 0;
+
+      if (scrollTo > elem.scrollHeight) {
+        scrollTo = 0;
+      }
+
+      elem.scrollTop = scrollTo;
     }
 
   }
