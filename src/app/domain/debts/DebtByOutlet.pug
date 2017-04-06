@@ -6,7 +6,7 @@ cg-busy='vm.cgBusy'
 
   .header
     .totals
-      label.total На руках
+      label.total(ng-if='vm.totalCashingSumm()') На руках
       label.total Остаток долга
 
   .scroll-y(resize resize-offset-top='40')
