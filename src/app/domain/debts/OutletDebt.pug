@@ -10,20 +10,21 @@
           small {{vm.outlet.address}}
       span.caret
 
-  .totals.animate-show(ng-hide='vm.busy')
+  //.totals.animate-show(ng-hide='vm.busy')
 
     .info
       currency-value.total(
-      label='Получено прочего:'
+      label='Прочее на руках:'
       value='vm.cashingTotalByDebt[null]'
       hide-empty='true'
       )
-      currency-value.total(
-      label='Остаток долга:'
-      value='vm.totalSumm()'
-      )
 
-.scroll-y(resize resize-offset-top='5')
+.header
+  .totals
+    label.total(ng-if='vm.cashingTotal') На руках
+    label.total Остаток долга
+
+.scroll-y(resize resize-offset-top='40')
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
     h4.title {{ ::group.date }}
@@ -34,8 +35,18 @@
 
         label.ndoc {{ ::debt.ndoc }}
 
-        label.cashed(ng-if='vm.cashingTotalByDebt[debt.id]')
-          | {{ ::vm.cashingTotalByDebt[debt.id] | number:2 }} ₽
+        currency-value.cashed(
+        value='vm.cashingTotalByDebt[debt.id]'
+        ng-if='vm.cashingTotal'
+        )
 
-        label.summ
-          debt-cashing-popover(debt='debt') {{ ::debt.summ | number:2 }} ₽
+        debt-cashing-popover.summ(debt='debt')
+          currency-value(value='debt.summ')
+
+.footer
+  .totals.animate-show(ng-hide='vm.busy')
+
+    strong Итого:
+
+    currency-value(value='vm.cashingTotal')
+    currency-value(value='vm.totalSumm()')

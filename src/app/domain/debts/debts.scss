@@ -49,29 +49,28 @@
 
   .date {
     border-bottom: solid 1px $border-gray;
-    padding: 4px 4px 4px 15px;
+    padding: 4px 0 4px 15px;
   }
 
   .debts {
 
     text-align: right;
 
-    .ndoc {
-      display: inline-block;
-      font-weight: normal;
+    .debt > * + * {
+      margin-left: $margin;
       min-width: $field-width;
+      display: inline-block;
+    }
+
+    .cashed {
+    }
+
+    .ndoc {
+      font-weight: normal;
       text-align: left;
     }
 
     .summ {
-      display: inline-block;
-      min-width: $field-width;
-    }
-
-    .currency {
-      font-weight: normal;
-      color: $black;
-      margin-left: $margin;
     }
 
   }
@@ -99,7 +98,7 @@
       margin-left: 1em;
       min-width: $field-width;
       text-align: right;
-      
+
     }
 
   }

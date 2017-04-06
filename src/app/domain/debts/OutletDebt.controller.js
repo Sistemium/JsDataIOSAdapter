@@ -38,13 +38,20 @@
           Cashing.findAll(cashingFilter);
 
           vm.rebindAll(Cashing, cashingFilter, 'vm.cashings', () => {
+
             let cashingTotalByDebt = {};
+            let cashingTotal = 0;
+
             _.each(vm.cashings, cashing => {
               let total = cashingTotalByDebt[cashing.debtId] || 0;
               total += cashing.summ;
               cashingTotalByDebt[cashing.debtId] = total;
+              cashingTotal += cashing.summ;
             });
-            vm.cashingTotalByDebt = cashingTotalByDebt;
+
+            vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
+            vm.cashingTotal = cashingTotal;
+
           });
 
         })
