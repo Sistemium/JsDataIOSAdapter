@@ -13,14 +13,15 @@
   .totals.animate-show(ng-hide='vm.busy')
 
     .info
-      .total
-        label Получено прочего:
-        strong {{ vm.cashingTotalByDebt[null] | number:2 }}
-        span.currency ₽
-      .total
-        label Остаток долга:
-        strong {{ vm.totalSumm() | number:2 }}
-        span.currency ₽
+      currency-value.total(
+      label='Получено прочего:'
+      value='vm.cashingTotalByDebt[null]'
+      hide-empty='true'
+      )
+      currency-value.total(
+      label='Остаток долга:'
+      value='vm.totalSumm()'
+      )
 
 .scroll-y(resize resize-offset-top='5')
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')

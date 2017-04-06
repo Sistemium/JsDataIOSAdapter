@@ -18,23 +18,15 @@ cg-busy='vm.cgBusy'
 
       .totals
 
-        span.total(ng-if='item["sum(cashing.summ)"]')
-          strong {{ item["sum(cashing.summ)"] | number:2 }}
-          span.currency ₽
+        currency-value(value='item["sum(cashing.summ)"]')
 
         a.total(href ng-click='vm.itemClick(item)')
-          strong {{ ::item['sum(summ)'] | number:2 }}
-          span.currency ₽
+          currency-value(value='item["sum(summ)"]')
 
   .footer
     .totals.animate-show(ng-hide='vm.busy')
 
       strong Итого:
 
-      .total(ng-if='vm.totalCashingSumm()')
-        strong {{ vm.totalCashingSumm() | number:2 }}
-        span.currency ₽
-
-      .total
-        strong {{ vm.totalSumm() | number:2 }}
-        span.currency ₽
+      currency-value(value='vm.totalCashingSumm()')
+      currency-value(value='vm.totalSumm()')

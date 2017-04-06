@@ -82,10 +82,7 @@
     flex-direction: row;
     justify-content: flex-end;
 
-    .total {
-
-      text-align: right;
-      min-width: $field-width;
+    currency-value {
 
       label {
         font-weight: normal;
@@ -96,10 +93,13 @@
         margin-left: $margin;
       }
 
-      & + .total {
-        margin-left: 1em;
-      }
+    }
 
+    > * + * {
+      margin-left: 1em;
+      min-width: $field-width;
+      text-align: right;
+      
     }
 
   }
