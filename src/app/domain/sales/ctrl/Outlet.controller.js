@@ -17,8 +17,6 @@
     vm.use({
 
       outlet: undefined,
-      isVisitsAccordionOpened: false,
-      isOrdersAccordionOpened: false,
       isUpdateLocationEnabled: true,
       collapsePhotosSection: true,
       collapseVisitsSection: false,
@@ -46,6 +44,7 @@
     SalesmanAuth.watchCurrent($scope, refresh);
 
     Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
+
       Outlet.loadRelations(vm.outlet, ['OutletPhoto', 'Location', 'Partner'])
         .then(function (outlet) {
           _.each(outlet.photos, importThumbnail);
@@ -61,7 +60,7 @@
      Functions
      */
 
-    function onStateChange(to) {
+    function onStateChange (to) {
 
       var isRootState = (to.name === rootState);
       var disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
