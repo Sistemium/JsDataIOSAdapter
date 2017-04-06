@@ -8,141 +8,7 @@
   white-space: nowrap;
 }
 
-// TODO: FIX POPOVER STYLE
-.popover {
-  max-width: none !important;
-
-}
-
 .territory {
-  .outlet-info-wrapper {
-    .functional-header {
-
-      @media (max-width: 360px) {
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row;
-      margin-bottom: 10px;
-
-      h3.outlet {
-
-        @media (max-width: 400px) {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-
-        margin-top: 0;
-
-        a.inherit-colors {
-          display: block;
-          margin-top: 5px;
-          word-wrap: break-word;
-          width: 100%;
-        }
-
-        small {
-          margin: 0;
-          text-align: justify;
-          letter-spacing: 1px;
-        }
-      }
-
-      .button-img-wrapper {
-        display: flex;
-        @media (max-width: 360px) {
-          justify-content: flex-end;
-        }
-
-        .buttons-block {
-          @media (max-width: 360px) {
-            margin-top: 5px;
-          }
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-
-          button {
-            padding: 6px 9px;
-          }
-          button:hover {
-            background: rgba(223, 223, 223, 0.28);
-          }
-
-        }
-
-      }
-
-      .image-wrapper {
-
-        @media (max-width: 360px) {
-          margin: 5px 5px 0 0;
-          flex: 1;
-        }
-
-        margin: 0 10px;
-        border: 1px solid #adadad;
-        border-radius: 5px;
-        width: 120px;
-        height: 120px;
-
-        ng-gallery {
-          img {
-            object-fit: contain;
-            height: 120px;
-            width: 110px;
-          }
-
-        }
-
-        & > img {
-          cursor: pointer;
-          object-fit: contain;
-          height: 100%;
-          width: 100%;
-          outline: none;
-        }
-
-        & > img:hover {
-          background: rgba(223, 223, 223, 0.28);
-          border: 1px solid rgba(223, 223, 223, 0.28);
-          border-radius: 4px;
-        }
-
-      }
-
-    }
-
-    section {
-      .visits {
-
-        .panel-body {
-          padding: 0;
-        }
-
-        .panel-heading {
-          padding: 5px 15px;
-        }
-
-        .heading-block {
-          display: flex;
-          flex-flow: row nowrap;
-          align-items: center;
-
-          .name {
-            flex: 1;
-            margin: 0;
-          }
-
-        }
-
-      }
-    }
-  }
 
   h5 > a.lead {
     color: $dark-blue;
@@ -178,6 +44,7 @@
     }
   }
 
+
   .visitPhotos {
     @media (max-width: $screen-xs) {
       .thumbnail {
@@ -202,6 +69,7 @@
   hr {
     border: none;
   }
+
 
 }
 
@@ -233,6 +101,7 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   border-radius: 64px;
   color: black;
 }
+
 
 .tab-pane .questionGroup {
   overflow-x: hidden;
