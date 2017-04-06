@@ -24,9 +24,24 @@
           }
         }
 
+      },
+
+      computed: {
+
+        teamName: ['name', teamNameFn],
+        title: ['name', 'teamName', titleFn]
+
       }
 
     });
+
+    function titleFn(name, teamName) {
+      return _.trim(_.replace(name, teamName, ''));
+    }
+
+    function teamNameFn(name) {
+      return _.first(name.match(/[^ ]+/));
+    }
 
   });
 

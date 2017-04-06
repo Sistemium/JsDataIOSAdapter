@@ -13,16 +13,28 @@
 
   });
 
-  function campaignPopoverController(Schema, $scope, GalleryHelper) {
+  function campaignPopoverController(Schema, $scope, GalleryHelper, localStorageService) {
 
     const vm = _.assign(this, {
       $onInit,
-      thumbClick
+      thumbClick,
+      onElemLoad,
+      isPopoverOpen: false
     });
 
     GalleryHelper.setupController(vm, $scope);
 
     const {Campaign, CampaignGroup} = Schema.models();
+
+    $scope.$watch('vm.isPopoverOpen', (nv, ov) => {
+
+      if (nv == false && (nv !== ov)) {
+        let elem = document.getElementsByClassName('campaign-popover-template')[0];
+        localStorageService.set('campaignPopoverTopScroll', elem.scrollTop);
+      }
+
+    });
+
 
     function $onInit() {
 
@@ -36,9 +48,13 @@
           let filter = {campaignGroupId: vm.campaignGroup.id};
 
           Campaign.findAllWithRelations(filter)('CampaignPicture')
-            .then(campaigns => vm.campaigns = campaigns);
+            .then(campaigns => {
 
-          // TODO: remember scroll position on destroy and restore it on init
+              vm.campaigns = _.filter(campaigns, (elem) => {
+                return elem.campaignPictures.length > 0
+              });
+
+            });
 
         });
 
@@ -55,6 +71,19 @@
 
       vm.thumbnailClick(picture);
 
+    }
+
+
+    function onElemLoad() {
+
+      let elem = document.getElementsByClassName('campaign-popover-template')[0];
+      let scrollTo = localStorageService.get('campaignPopoverTopScroll') || 0;
+
+      if (scrollTo > elem.scrollHeight) {
+        scrollTo = 0;
+      }
+
+      elem.scrollTop = scrollTo;
     }
 
   }

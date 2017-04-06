@@ -1,15 +1,22 @@
 .campaign-popover-template.scroll-y(
-resize resize-offset-top='30'
+elem-ready='vm.onElemLoad()'
+resize
+resize-offset-top='30'
 )
+  .wrapper
+    #scrollable-div(
+    vs-repeat='110'
+    vs-scroll-parent='.campaign-popover-template'
+    )
+      // TODO: show only 4 thumbs and use
+      .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
-  // TODO: show only 4 thumbs and use
-  .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
+        .name {{ campaign.teamName }} {{ campaign.title }}
 
-    .name {{ campaign.name | cleanName }}
-
-    .pictures
-      a.thumb(
-      href ng-click='vm.thumbClick(picture)'
-      ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo:5 track by picture.id'
-      )
-        img(ng-src='{{picture.srcThumbnail}}')
+        .pictures
+          a.thumb(
+          href
+          ng-click='vm.thumbClick(picture)'
+          ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo:5 track by picture.id'
+          )
+            img(ng-src='{{picture.srcThumbnail}}')
