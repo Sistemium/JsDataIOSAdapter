@@ -13,7 +13,9 @@
       salesmanClick,
       noneClick: SalesmanAuth.logout,
       toggleLabel,
-      isOpen: false
+      isOpen: false,
+      onStateChange,
+      isDisabled
 
     });
 
@@ -21,9 +23,19 @@
       .bindAll($scope, 'vm.salesmen', onDataChange)
       .watchCurrent($scope, salesman => vm.selectedSalesman = salesman);
 
+    let stateDisabled;
+
     /*
      Functions
      */
+
+    function isDisabled() {
+      return !vm.isEnabled || stateDisabled;
+    }
+
+    function onStateChange(toState) {
+      stateDisabled = _.get(toState, 'data.disableSalesmanFilter');
+    }
 
     function toggleLabel() {
       if (vm.selectedSalesman) {
