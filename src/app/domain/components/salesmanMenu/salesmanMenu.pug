@@ -1,4 +1,4 @@
-.salesman-menu(ng-class='{disabled: !vm.isEnabled, "no-options": !vm.hasOptions}')
+.salesman-menu(ng-class='{disabled: vm.isDisabled(), "no-options": !vm.hasOptions}')
 
   a(
     href

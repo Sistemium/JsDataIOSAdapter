@@ -21,7 +21,8 @@
       SalesmanOutletRestriction,
       OutletRestriction,
       Restriction,
-      RestrictionArticle
+      RestrictionArticle,
+      OutletSalesmanContract
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -94,9 +95,6 @@
         localStorageService.set(FONT_SIZE_KEY, fontSize);
       }
     });
-
-    vm.rebindAll(PriceType, null, 'vm.priceTypes');
-    //vm.rebindAll(ArticlePicture, null, 'vm.articlePictures');
 
     vm.onScope(
       'rootClick',
@@ -488,6 +486,23 @@
       };
 
       return PriceType.findAllWithRelations()(['PriceType'])
+        .then(() => {
+
+          // TODO: move to model
+          return OutletSalesmanContract.groupBy({}, ['priceTypeId'])
+            .then(auths => {
+
+              _.each(auths, auth => {
+                let priceTypeId = auth.priceTypeId;
+                if (!priceTypeId) return;
+                _.set(PriceType.get(priceTypeId), 'isVisible', true);
+              });
+
+              vm.priceTypes = PriceType.filter({isVisible: true});
+
+            });
+
+        })
         .then(() => ArticleGroup.cachedFindAll({}, options))
         .then(() => Article.cachedFindAll({
           volumeNotZero: true,

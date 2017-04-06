@@ -46,7 +46,7 @@
                 SaleOrder.inject(saleOrder);
 
                 if (vm.date === saleOrder.date || saleOrderId === saleOrder.id) {
-                  SaleOrderPosition.findAll({saleOrderId: saleOrder.id}, {bypassCache: true});
+                  SaleOrderPosition.findAllWithRelations({saleOrderId: saleOrder.id}, {bypassCache: true})('Article');
                 }
 
               })

@@ -1,30 +1,113 @@
 @import "../../styles/variables";
+@import "../../styles/alerts";
 
 .debt-by-outlet {
 
-  .debt {
+  $margin: 6px;
+  $field-width: 120px;
+  $headers-border: solid 1px $border-gray;
 
-    .outlet {
+  .header, .footer {
+    padding: $margin 0;
+    min-height: 35px;
+    //font-size: larger;
+  }
 
-      font-size: larger;
-      font-weight: bold;
-      margin: 5px 0;
-      color: lighten($black, 15%);
+  .header {
+    border-bottom: $headers-border;
+    label {
+      color: $gray;
+    }
+  }
 
-      .address {
-        color: silver;
+  .footer {
+    border-top: $headers-border;
+    color: $gray;
+  }
+
+  .outlet-debt-total .outlet {
+
+    font-size: larger;
+    font-weight: bold;
+    margin: 5px 0;
+    color: $black;
+
+    .address {
+      font-size: smaller;
+      color: silver;
+      font-weight: normal;
+    }
+
+  }
+
+  .outlet-debt-total {
+
+    border-bottom: solid 1px $border-gray;
+    padding: $margin 0;
+
+  }
+
+  .date {
+    border-bottom: solid 1px $border-gray;
+    padding: 4px 4px 4px 15px;
+  }
+
+  .debts {
+
+    text-align: right;
+
+    .ndoc {
+      display: inline-block;
+      font-weight: normal;
+      min-width: $field-width;
+      text-align: left;
+    }
+
+    .summ {
+      display: inline-block;
+      min-width: $field-width;
+    }
+
+    .currency {
+      font-weight: normal;
+      color: $black;
+      margin-left: $margin;
+    }
+
+  }
+
+  .totals {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .total {
+
+      text-align: right;
+      min-width: $field-width;
+
+      label {
+        font-weight: normal;
+        margin: 0 $margin 0;
+      }
+
+      .currency {
+        margin-left: $margin;
+      }
+
+      & + .total {
+        margin-left: 1em;
       }
 
     }
 
+  }
 
-    .total {
-      text-align: right;
-      font-weight: bold;
-    }
 
-    border-bottom: solid 1px $border-gray;
-    padding: 5px 0;
+  .alert {
+
+    @extend %header-alert;
 
   }
 

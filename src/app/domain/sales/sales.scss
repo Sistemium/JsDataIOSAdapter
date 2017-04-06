@@ -253,3 +253,11 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 i.recently-shipped {
   color: yellowgreen;
 }
+
+%blocked {
+  color: red !important;
+}
+
+.outlet.blocked .name, .address.blocked a {
+  @extend %blocked;
+}

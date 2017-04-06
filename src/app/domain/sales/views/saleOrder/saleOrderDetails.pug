@@ -12,7 +12,7 @@
       popover-is-open='vm.isSaleOrderPopoverOpen'
       ng-disabled='saleOrderExpanded'
       )
-        .outlet
+        .outlet(ng-class='{blocked: vm.saleOrder.outlet.isActive === false}')
           .name
             span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
             span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
