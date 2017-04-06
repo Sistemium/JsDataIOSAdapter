@@ -44,7 +44,6 @@
     }
   }
 
-
   .visitPhotos {
     @media (max-width: $screen-xs) {
       .thumbnail {
@@ -69,7 +68,6 @@
   hr {
     border: none;
   }
-
 
 }
 
@@ -102,7 +100,6 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   color: black;
 }
 
-
 .tab-pane .questionGroup {
   overflow-x: hidden;
 }
@@ -121,4 +118,12 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
 
 i.recently-shipped {
   color: yellowgreen;
+}
+
+%blocked {
+  color: red !important;
+}
+
+.outlet.blocked .name, .address.blocked a {
+  @extend %blocked;
 }
