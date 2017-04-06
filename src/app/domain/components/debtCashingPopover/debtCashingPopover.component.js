@@ -17,17 +17,19 @@
 
   });
 
-  function debtCashingPopoverController(Schema) {
+  function debtCashingPopoverController(Schema, $timeout) {
 
     let vm = this;
 
     _.assign(vm, {
 
       cashings: [],
+      deleteConfirmation:{},
 
       $onInit,
       cashWholeClick,
-      triggerClick
+      triggerClick,
+      deleteCashingClick
 
     });
 
@@ -44,6 +46,16 @@
     /*
      Functions
      */
+
+    function deleteCashingClick(cashing) {
+      let confirmation = !vm.deleteConfirmation[cashing.id];
+      vm.deleteConfirmation[cashing.id] = confirmation;
+      if (confirmation) {
+        return $timeout(2000)
+          .then(() => vm.deleteConfirmation[cashing.id] = false);
+      }
+      cashing.DSEject();
+    }
 
     function triggerClick() {
 

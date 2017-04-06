@@ -4,5 +4,11 @@
 
   .cashings
     .cashing(ng-repeat='cashing in vm.cashings track by cashing.id')
+      a.delete(
+      ng-if='!cashing.isProcessed'
+      href ng-click='vm.deleteCashingClick(cashing)'
+      ng-class='{confirmation: vm.deleteConfirmation[cashing.id]}'
+      )
+        i.glyphicon.glyphicon-trash
       span.cts {{ cashing.deviceCts | amUtc | amLocal | amCalendar }}
       strong.summ {{ cashing.summ | number:2 }}

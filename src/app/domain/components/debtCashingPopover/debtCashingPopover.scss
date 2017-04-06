@@ -1,23 +1,40 @@
+@import "../../../styles/variables";
+
 .debt-cashing-popover {
 
   $margin: 8px;
+  $border: solid 1px $border-gray;
 
-  a.btn {
-    display: block;
+  a {
     text-align: center;
+    display: block;
     padding: $margin;
+  }
+
+  a.delete.confirmation {
+    color: $state-danger-text !important;
   }
 
   .cashings {
 
-    min-width: 200px;
+    min-width: 250px;
 
     .cashing {
-      padding: $margin 0;
+
+      > * {
+        padding: $margin;
+      }
+
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      border-bottom: solid 1px silver;
+      border-bottom: $border;
+      align-items: baseline;
+
+      i.glyphicon {
+        top: 2px;
+      }
+
       .cts {
         text-align: left;
       }
@@ -27,7 +44,7 @@
     }
 
     .cashing:first-child {
-      border-top: solid 1px silver;
+      border-top: $border;
     }
 
   }
