@@ -40,7 +40,7 @@
         ng-if='vm.cashingTotal'
         )
         debt-cashing-popover.summ(debt='debt')
-          currency-value(value='debt.summ')
+          currency-value(value='debt.uncashed()')
 
 .footer
   .totals.animate-show(ng-hide='vm.busy')

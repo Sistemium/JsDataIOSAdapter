@@ -82,6 +82,7 @@
       });
       Cashing.inject(cashing);
       vm.cashings.push(cashing);
+      vm.isPopoverOpen = false;
     }
 
     function $onInit() {

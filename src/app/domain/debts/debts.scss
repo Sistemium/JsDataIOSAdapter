@@ -3,14 +3,24 @@
 
 .debt-by-outlet {
 
+  label {
+    margin-bottom: 0;
+  }
+
   $margin: 6px;
-  $field-width: 120px;
+  $field-width: 110px;
   $headers-border: solid 1px $border-gray;
 
   .header, .footer {
+
     padding: $margin 0;
     min-height: 35px;
-    //font-size: larger;
+
+    @include responsive-only(lt-sm) {
+      padding: $margin/2 0;
+      min-height: 30px;
+    }
+
   }
 
   .header {
@@ -32,9 +42,12 @@
 
     .outlet {
 
-      font-size: larger;
+      @include responsive-only(gt-xs) {
+        font-size: larger;
+        margin: 5px 0;
+      }
+
       font-weight: bold;
-      margin: 5px 0;
       color: $black;
 
       .address {
@@ -49,7 +62,9 @@
 
   .date {
     border-bottom: solid 1px $border-gray;
-    padding: 4px 0 4px 15px;
+    @include responsive-only(gt-xs) {
+      padding: 4px 0 4px 15px;
+    }
   }
 
   .debts {
@@ -61,6 +76,7 @@
       flex-direction: row;
       justify-content: flex-end;
       align-items: baseline;
+      padding: $margin/2 0;
     }
 
     .debt > * + * {
