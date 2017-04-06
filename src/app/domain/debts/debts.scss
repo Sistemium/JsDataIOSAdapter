@@ -56,6 +56,12 @@
 
     text-align: right;
 
+    .debt {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+
     .debt > * + * {
       margin-left: $margin;
       min-width: $field-width;
