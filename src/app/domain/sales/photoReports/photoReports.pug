@@ -2,7 +2,7 @@
   i.glyphicon.glyphicon-camera
 
 // partners & outlets — copypaste from territory.jade
-.territory.ui-view(resize='territory' cg-busy='vm.cgBusy' ng-if='!vm.selectedOutlet')
+.territory.ui-view(resize='territory' cg-busy='vm.cgBusy' ng-if='!vm.selectedOutletId')
   section#scroll-main(
   style='height: {{territory.windowHeight - territory.offsetTop - 5}}px;'
   )
@@ -20,7 +20,9 @@
           a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
 
 // campaigns — copypaste from campaigns.pug
-section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutlet')
+section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId')
+
+  .row Outlet Name
 
   .row.datepicker-with-buttons
 

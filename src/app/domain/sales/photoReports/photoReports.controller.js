@@ -9,11 +9,15 @@
 
     const vm = saControllerHelper.setup(this, $scope)
       .use({
+        selectedOutletId: $state.params.outletId,
         takePhoto,
         outletClick,
         rowHeight
       });
 
+    if (!vm.selectedOutletId) {
+      loadOutlets();
+    }
 
     function loadOutlets() {
 
@@ -40,7 +44,7 @@
     function outletClick(outlet) {
 
       console.info('outletClick', outlet);
-      vm.selectedOutlet = outlet;
+      $state.go('.', {outletId: outlet.id});
 
     }
 
