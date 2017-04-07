@@ -127,6 +127,6 @@ i.recently-shipped {
   color: red !important;
 }
 
-.outlet.blocked .name, .address.blocked a {
+.outlet.blocked .name, .address.blocked a, .outlet.blocked .address {
   @extend %blocked;
 }
