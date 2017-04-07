@@ -19,15 +19,12 @@
     function findOutlets() {
 
       let filter = SalesmanAuth.makeFilter();
-      // let outletFilter = Outlet.meta.salesmanFilter(filter);
 
       return Partner.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])
-        .then(partners => {
+        .then(partners => vm.partners = partners);
 
-          console.info(partners);
-          vm.partners = partners;
+    }
 
-          console.info(_.first(partners).outlets);
 
         });
 
