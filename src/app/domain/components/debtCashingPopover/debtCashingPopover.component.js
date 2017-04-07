@@ -17,7 +17,7 @@
 
   });
 
-  function debtCashingPopoverController(Schema, $timeout) {
+  function debtCashingPopoverController(Schema, $timeout, $scope) {
 
     let vm = this;
 
@@ -48,13 +48,21 @@
      */
 
     function deleteCashingClick(cashing) {
+
       let confirmation = !vm.deleteConfirmation[cashing.id];
+
       vm.deleteConfirmation[cashing.id] = confirmation;
+
       if (confirmation) {
         return $timeout(2000)
           .then(() => vm.deleteConfirmation[cashing.id] = false);
       }
-      cashing.DSEject();
+
+      cashing.DSDestroy()
+        .then(() => {
+          _.remove(vm.cashings, {id: cashing.id});
+          $scope.$emit('DebtOrCashingModified');
+        });
     }
 
     function triggerClick() {
@@ -74,15 +82,22 @@
     }
 
     function cashWholeClick() {
+
       if (vm.debt.summ <= 0) return;
+
       let cashing = Cashing.createInstance({
         debtId: vm.debt.id,
         summ: vm.debt.summ,
         outletId: vm.debt.outletId
       });
-      Cashing.inject(cashing);
-      vm.cashings.push(cashing);
-      vm.isPopoverOpen = false;
+
+      Cashing.create(cashing)
+        .then(saved => {
+          vm.cashings.push(saved);
+          vm.isPopoverOpen = false;
+          $scope.$emit('DebtOrCashingModified');
+        });
+
     }
 
     function $onInit() {

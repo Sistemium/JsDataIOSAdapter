@@ -60,7 +60,7 @@
     }
 
     function totalSumm() {
-      return _.sumBy(vm.debts, 'summ');
+      return _.sumBy(vm.debts, debt => debt.uncashed());
     }
 
   }

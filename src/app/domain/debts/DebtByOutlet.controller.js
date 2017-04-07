@@ -4,35 +4,46 @@
 
   function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth) {
 
-    const vm = saControllerHelper
-      .setup(this, $scope);
-
     const {Debt, Outlet, Cashing} = Schema.models();
 
-    vm.use({
+    const vm = saControllerHelper
+      .setup(this, $scope)
+      .use({
 
-      itemClick,
-      totalCashingSumm,
-      totalSumm
+        itemClick,
+        totalCashed,
+        totalSumm,
+        onStateChange
 
-    });
+      });
 
-    SalesmanAuth.watchCurrent($scope, () => {
-      let filter = SalesmanAuth.makeFilter();
-      vm.setBusy(getData(filter));
-    });
+    const rootState = 'sales.debtByOutlet';
 
     /*
      Listeners
      */
 
-    vm.onScope('rootClick', () => $state.go('sales.debtByOutlet'));
+    SalesmanAuth.watchCurrent($scope, refresh);
+    vm.onScope('rootClick', () => $state.go(rootState));
+    vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);
 
     /*
      Functions
      */
 
-    function totalCashingSumm() {
+    function onStateChange(to) {
+      if (to.name === rootState && vm.wasModified) {
+        refresh();
+      }
+    }
+
+    function refresh() {
+      let filter = SalesmanAuth.makeFilter();
+      vm.setBusy(getData(filter))
+        .then(() => vm.wasModified = false);
+    }
+
+    function totalCashed() {
       return _.sumBy(vm.data, 'sum(cashing.summ)');
     }
 
@@ -49,23 +60,46 @@
     function getData(filter) {
 
       return Debt.groupBy(filter, ['outletId'])
+        .then(data => {
+          return Outlet.findAll(Outlet.meta.salesmanFilter(filter))
+            .then(() => data)
+        })
         .then(data => $q.all(_.map(data, loadDebtRelations)))
-        .then(data => vm.data = _.filter(data, 'outlet'))
-        .then(loadCashings)
+        .then(data => _.filter(data, 'outlet'))
+        .then(loadNotProcessed)
+        .then(loadCashed)
+        .then(data => vm.data = data)
         .catch(e => console.error(e));
 
     }
 
-    function loadCashings(data) {
+    function loadCashed(data) {
 
-      return Cashing.groupBy({uncashingId: null}, ['outletId'])
+      return Cashing.groupBy(SalesmanAuth.makeFilter({uncashingId: null}), ['outletId'])
         .then(cashingGrouped => {
           _.each(cashingGrouped, outletCashings => {
             let {outletId} = outletCashings;
             let item = _.find(data, {outletId});
             if (!item) return;
-            item['sum(cashing.summ)'] = outletCashings['sum(summ)'];
+            item['sum(cashed)'] = outletCashings['sum(summ)'];
           });
+          return data;
+        });
+
+    }
+
+    function loadNotProcessed(data) {
+
+      return Cashing.groupBy(SalesmanAuth.makeFilter({isProcessed: false}), ['outletId'])
+      // FIXME: copy-pasted
+        .then(cashingGrouped => {
+          _.each(cashingGrouped, outletCashings => {
+            let {outletId} = outletCashings;
+            let item = _.find(data, {outletId});
+            if (!item) return;
+            item['sum(summ)'] -= outletCashings['sum(summ)'];
+          });
+          return data;
         });
 
     }

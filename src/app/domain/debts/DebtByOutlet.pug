@@ -18,7 +18,7 @@ cg-busy='vm.cgBusy'
 
       .totals
 
-        currency-value(value='item["sum(cashing.summ)"]')
+        currency-value(value='item["sum(cashed)"]')
 
         a.total(href ng-click='vm.itemClick(item)')
           currency-value(value='item["sum(summ)"]')
@@ -28,5 +28,5 @@ cg-busy='vm.cgBusy'
 
       strong Итого:
 
-      currency-value(value='vm.totalCashingSumm()')
+      currency-value(value='vm.totalCashed()')
       currency-value(value='vm.totalSumm()')
