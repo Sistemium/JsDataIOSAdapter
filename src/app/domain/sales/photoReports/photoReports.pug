@@ -1,1 +1,19 @@
-section PhotoReports
+//button.btn.ml-em.btn-default(ng-click='vm.takePhoto()')
+  i.glyphicon.glyphicon-camera
+
+.territory.ui-view(resize='territory' cg-busy='vm.cgBusy')
+  section#scroll-main(
+  style='height: {{territory.windowHeight - territory.offsetTop - 5}}px;'
+  )
+    .vr-parent(vs-repeat vs-size-fn='vm.rowHeight' vs-scroll-parent="#scroll-main" vs-excess='7')
+      .item.partner(ng-repeat='p in vm.partners| orderBy:"name" track by p.id')
+        h5
+          a.lead {{ ::p.shortName }}
+
+        p.address(
+        ng-repeat='o in p.outlets | orderBy:"address"'
+        ng-class='{blocked: o.isActive === false}'
+        )
+          a.green(ng-if='o.locationId')
+            i.glyphicon.glyphicon-map-marker
+          a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
