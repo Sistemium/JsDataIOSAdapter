@@ -9,7 +9,7 @@
         .state({
 
           name: 'sales.photoReports',
-          url: '/photoReports',
+          url: '/photoReports?outletId',
 
           templateUrl: 'app/domain/sales/photoReports/photoReports.html',
           controller: 'PhotoReportsController',
