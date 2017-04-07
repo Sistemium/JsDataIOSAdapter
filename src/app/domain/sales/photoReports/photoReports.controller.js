@@ -14,9 +14,8 @@
         rowHeight
       });
 
-    findOutlets();
 
-    function findOutlets() {
+    function loadOutlets() {
 
       let filter = SalesmanAuth.makeFilter();
 
