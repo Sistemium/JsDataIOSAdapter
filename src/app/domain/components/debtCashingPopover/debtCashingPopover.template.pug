@@ -1,8 +1,12 @@
 .debt-cashing-popover
 
-  a.btn.btn-link(href ng-click='vm.cashWholeClick()') Забрать остаток
+  a.btn.btn-link(
+  href ng-click='vm.cashWholeClick()'
+  ng-if='vm.debt.uncashed()'
+  ) Забрать остаток
 
-  .cashings
+  .cashings(ng-if='vm.cashings.length')
+    .title Получено
     .cashing(ng-repeat='cashing in vm.cashings track by cashing.id')
       a.delete(
       ng-if='!cashing.isProcessed'
