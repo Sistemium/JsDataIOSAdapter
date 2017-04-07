@@ -1,6 +1,6 @@
 'use strict';
 
-/* global moment:false uuid:false */
+/* global moment:false uuid:false geolib:false */
 
 (function () {
 
@@ -9,6 +9,7 @@
 
     .constant('moment', moment)
     .constant('UUID', uuid)
+    .constant('geolib', geolib)
 
     .value('cgBusyDefaults', {
       message: 'Идет загрузка',
