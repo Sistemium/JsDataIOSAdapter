@@ -58,8 +58,8 @@
           managedOn.call(vm, scope, event, callback);
           return vm;
         },
-        watchScope: (expr, callback) => {
-          scope.$watch(expr, callback);
+        watchScope: (expr, callback, byProperties) => {
+          scope.$watch(expr, callback, byProperties);
           return vm;
         },
 
