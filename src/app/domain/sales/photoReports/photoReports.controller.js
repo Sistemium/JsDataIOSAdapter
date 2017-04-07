@@ -42,7 +42,10 @@
     }
 
     function outletClick(outlet) {
+
       console.info('outletClick', outlet);
+      vm.selectedOutlet = outlet;
+
     }
 
     function rowHeight(partner) {

@@ -1,7 +1,8 @@
 //button.btn.ml-em.btn-default(ng-click='vm.takePhoto()')
   i.glyphicon.glyphicon-camera
 
-.territory.ui-view(resize='territory' cg-busy='vm.cgBusy')
+// partners & outlets — copypaste from territory.jade
+.territory.ui-view(resize='territory' cg-busy='vm.cgBusy' ng-if='!vm.selectedOutlet')
   section#scroll-main(
   style='height: {{territory.windowHeight - territory.offsetTop - 5}}px;'
   )
@@ -17,3 +18,35 @@
           a.green(ng-if='o.locationId')
             i.glyphicon.glyphicon-map-marker
           a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
+
+// campaigns — copypaste from campaigns.pug
+section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutlet')
+
+  .row.datepicker-with-buttons
+
+    campaign-group-popover.col-sm-5.col-lg-3(
+    current-item='vm.campaignGroup'
+    init-item-id='vm.initGroupId'
+    )
+
+  .scroll-y(resize resize-offset-top='5')
+
+    .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
+
+      h4.title
+
+        span.name {{ campaign.name | cleanName }}
+
+        a.commentText(
+        href
+        ng-if='campaign.commentText'
+        uib-tooltip='{{campaign.commentText}}'
+        )
+          i.glyphicon.glyphicon-question-sign
+
+      .pictures
+        a.thumb(
+        href ng-click='vm.thumbClick(picture)'
+        ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" track by picture.id'
+        )
+          img(ng-src='{{picture.srcThumbnail}}')
