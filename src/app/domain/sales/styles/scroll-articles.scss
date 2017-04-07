@@ -86,6 +86,16 @@
       display: block;
       color: #777777;
       width: 100%;
+      position: relative;
+
+      &:first-child {
+        top: -2px;
+      }
+
+      &:last-child {
+        bottom: -2px;
+      }
+
     }
 
     button + button {
