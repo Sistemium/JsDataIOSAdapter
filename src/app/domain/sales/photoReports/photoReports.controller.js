@@ -2,9 +2,9 @@
 
 (function () {
 
-  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth/*, $state*/) {
+  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state) {
 
-    const {Partner/*, PhotoReport, Outlet*/} = Schema.models();
+    const {Partner, Campaign/*, PhotoReport, Outlet*/} = Schema.models();
     const {saMedia, saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -17,6 +17,8 @@
 
     if (!vm.selectedOutletId) {
       loadOutlets();
+    } else {
+      loadCampaigns();
     }
 
     function loadOutlets() {
@@ -28,8 +30,10 @@
 
     }
 
+    function loadCampaigns() {
 
-        });
+      return Campaign.findAllWithRelations()('PhotoReport')
+        .then(campaigns => vm.campaigns = campaigns);
 
     }
 
