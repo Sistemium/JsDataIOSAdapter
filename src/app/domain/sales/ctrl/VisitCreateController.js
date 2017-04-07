@@ -7,7 +7,7 @@
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, geolib, Helpers, mapsHelper) {
 
     const {ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
-    const {yLatLng, distanceFn} = mapsHelper;
+    const {yLatLng} = mapsHelper;
 
     const {Visit, Location} = Schema.models();
     const VQS = Schema.model('VisitQuestionSet');
