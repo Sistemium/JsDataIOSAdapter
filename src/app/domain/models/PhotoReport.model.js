@@ -1,8 +1,8 @@
 'use strict';
 
-(function () {
+(() => {
 
-  angular.module('Models').run(['Schema', function (Schema, PhotoHelper) {
+  angular.module('Models').run((Schema, PhotoHelper) => {
 
     const config = PhotoHelper.setupModel({
 
@@ -35,6 +35,6 @@
     Schema.register(config);
 
 
-  }]);
+  });
 
 })();
