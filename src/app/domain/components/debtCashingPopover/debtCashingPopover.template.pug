@@ -1,12 +1,36 @@
 .debt-cashing-popover
 
-  a.btn.btn-link(
-  href ng-click='vm.cashWholeClick()'
-  ng-if='vm.debt.uncashed()'
-  ) Забрать остаток
+  .to-cash(ng-if='vm.debt.uncashed()')
+
+    a.btn.btn-link(
+    ng-if='!vm.cashPart'
+    href ng-click='vm.cashWholeClick()'
+    ) Забрать весь остаток
+
+    a.btn.btn-link.spaced(
+    ng-class='{disabled: vm.cashPart && !vm.cashed}'
+    href ng-click='vm.cashPartClick()'
+    )
+      span Забрать
+      span(ng-hide='vm.cashed') часть
+      currency-value(ng-show='vm.cashed' value='vm.cashed')
+
+    form.form-group(ng-if='vm.cashPart' name="cashForm")
+      input#sumToCash.form-control(
+      ng-model='vm.cashed'
+      type='number'
+      name='cashed'
+      placeholder='Укажите сумму'
+      step='0.01'
+      max='{{vm.debt.uncashed()}}'
+      required
+      )
+      .error(ng-if='cashForm.$dirty && !cashForm.$valid') Некорректная сумма
+
+    //ng-pattern='/^[0-9]+(\,[0-9]{1,2})?$/'
 
   .cashings(ng-if='vm.cashings.length')
-    .title Получено
+    .title Получено ранее
     .cashing(ng-repeat='cashing in vm.cashings track by cashing.id')
       a.delete(
       ng-if='!cashing.isProcessed'

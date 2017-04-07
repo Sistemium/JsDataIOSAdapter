@@ -29,7 +29,8 @@
       $onInit,
       cashWholeClick,
       triggerClick,
-      deleteCashingClick
+      deleteCashingClick,
+      cashPartClick
 
     });
 
@@ -46,6 +47,17 @@
     /*
      Functions
      */
+
+    function cashPartClick() {
+
+      if (vm.cashPart) {
+        doCashing(vm.cashed);
+      }
+
+      vm.cashPart = !vm.cashPart;
+      vm.cashed = null;
+
+    }
 
     function deleteCashingClick(cashing) {
 
@@ -81,13 +93,13 @@
 
     }
 
-    function cashWholeClick() {
+    function doCashing(summ) {
 
-      if (vm.debt.summ <= 0) return;
+      if (summ <= 0) return;
 
       let cashing = Cashing.createInstance({
         debtId: vm.debt.id,
-        summ: vm.debt.summ,
+        summ: summ,
         outletId: vm.debt.outletId
       });
 
@@ -97,11 +109,17 @@
           vm.isPopoverOpen = false;
           $scope.$emit('DebtOrCashingModified');
         });
+    }
 
+    function cashWholeClick() {
+      doCashing(vm.debt.uncashed());
     }
 
     function $onInit() {
-
+      $scope.$watch('vm.isPopoverOpen', () => {
+        vm.cashPart = false;
+        vm.cashed = null;
+      });
     }
 
   }

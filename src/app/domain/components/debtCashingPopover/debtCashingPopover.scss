@@ -11,8 +11,30 @@
     padding: $margin;
   }
 
-  a.delete.confirmation {
-    color: $state-danger-text !important;
+  a.delete.confirmation, .error {
+    color: $red !important;
+  }
+
+  .to-cash {
+
+    .form-group {
+      margin: 0;
+    }
+
+    input {
+      text-align: right;
+    }
+
+  }
+
+  .to-cash + .cashings {
+    margin-top: $margin;
+  }
+
+  .title, .error {
+    text-align: center;
+    font-size: x-small;
+    margin: $margin/2 auto 0;
   }
 
   .cashings {
@@ -20,8 +42,6 @@
     min-width: 250px;
 
     .title {
-      text-align: center;
-      font-size: x-small;
       margin: $margin auto;
     }
 
@@ -51,10 +71,6 @@
         text-align: right;
       }
     }
-
-    //.cashing:last-child {
-    //  border-bottom: $border;
-    //}
 
   }
 }
