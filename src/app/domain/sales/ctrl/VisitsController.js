@@ -2,10 +2,9 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper, mapsHelper, $filter) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper, $filter, geolib) {
 
     const {Visit, Outlet} = Schema.models();
-    const {yLatLng, distanceFn} = mapsHelper;
     const numberFilter = $filter('number');
 
     let events;
@@ -66,7 +65,7 @@
     function outletDistance(visit) {
       let outletLocation = _.get(visit, 'outlet.location');
       if (outletLocation) {
-        let res = distanceFn(yLatLng(outletLocation), yLatLng(visit.checkInLocation));
+        let res = geolib.getDistance(outletLocation, visit.checkInLocation);
         return `${numberFilter(res, 0)}м.`
       }
     }

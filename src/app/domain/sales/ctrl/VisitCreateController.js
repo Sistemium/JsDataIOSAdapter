@@ -4,10 +4,9 @@
 
   const REQUIRED_ACCURACY = 150;
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, mapsHelper, Helpers) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, geolib, Helpers) {
 
     const {ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
-    const {yLatLng, distanceFn} = mapsHelper;
 
     const {Visit, Location} = Schema.models();
     const VQS = Schema.model('VisitQuestionSet');
@@ -128,7 +127,7 @@
             let outletLocation = _.get(vm.visit, 'outlet.location');
 
             if (outletLocation) {
-              let distance = distanceFn(yLatLng(outletLocation), yLatLng(res));
+              let distance = geolib.getDistance(outletLocation, res);
               toastr.success(
                 `Расстояние до точки ${Math.round(distance)} м.`,
                 'Успешное начало визита',
