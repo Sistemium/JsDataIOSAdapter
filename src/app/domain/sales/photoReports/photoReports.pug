@@ -20,7 +20,7 @@
           a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
 
 // campaigns — copypaste from campaigns.pug
-section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId')
+section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selectedCampaignId')
 
   .row Outlet Name
 

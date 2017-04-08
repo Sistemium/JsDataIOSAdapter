@@ -12,6 +12,7 @@
       .use({
 
         selectedOutletId: $state.params.outletId,
+        selectedCampaignId: $state.params.campaignId,
 
         takePhoto,
         outletClick,
