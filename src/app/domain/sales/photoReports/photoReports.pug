@@ -37,7 +37,10 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
 
       h4.title
 
-        span.name {{ campaign.name | cleanName }}
+        a.name(
+        href
+        ng-click='vm.campaignClick(campaign)'
+        ) {{ campaign.name | cleanName }}
 
         a.commentText(
         href

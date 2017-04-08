@@ -16,6 +16,7 @@
 
         takePhoto,
         outletClick,
+        campaignClick,
         thumbClick,
         rowHeight
 
@@ -55,6 +56,12 @@
 
       console.info('outletClick', outlet);
       $state.go('.', {outletId: outlet.id});
+    }
+
+    function campaignClick(campaign) {
+
+      console.info('campaignClick', campaign);
+      $state.go('.', {outletId: vm.selectedOutletId, campaignId: campaign.id});
 
     }
 
