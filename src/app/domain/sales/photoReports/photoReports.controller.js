@@ -2,17 +2,22 @@
 
 (function () {
 
-  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state) {
+  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state, GalleryHelper) {
 
     const {Partner, Campaign/*, PhotoReport, Outlet*/} = Schema.models();
     const {saMedia, saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
+      .use(GalleryHelper)
       .use({
+
         selectedOutletId: $state.params.outletId,
+
         takePhoto,
         outletClick,
+        thumbClick,
         rowHeight
+
       });
 
     if (!vm.selectedOutletId) {
@@ -49,6 +54,17 @@
 
       console.info('outletClick', outlet);
       $state.go('.', {outletId: outlet.id});
+
+    }
+
+    function thumbClick(picture) {
+
+      let campaign = picture.campaign;
+
+      vm.commentText = campaign.commentText;
+      $scope.imagesAll = campaign.campaignPictures;
+
+      return vm.thumbnailClick(picture);
 
     }
 
