@@ -64,8 +64,6 @@
     }
 
     function outletClick(outlet) {
-
-      console.info('outletClick', outlet);
       $state.go('.', {outletId: outlet.id});
     }
 
