@@ -4,8 +4,8 @@
 
   function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state, GalleryHelper) {
 
-    const {Partner, Campaign/*, PhotoReport, Outlet*/} = Schema.models();
-    const {saMedia, saControllerHelper} = Helpers;
+    const {Partner, Campaign, Outlet/*, PhotoReport*/} = Schema.models();
+    const {saMedia, saControllerHelper, PhotoHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
@@ -70,9 +70,15 @@
 
     function takePhoto() {
 
-      console.info('takePhoto()');
-      // $state.go('sales.territory');
-      // return PhotoHelper.takePhoto('PhotoReport', {visitId: vm.visit.id}, vm.thumbnails);
+      let photoReportData = {
+        outletId    : vm.selectedOutletId,
+        campaignId  : vm.selectedCampaignId,
+        salesmanId  : SalesmanAuth.getCurrentUser().id
+      };
+
+      console.info('photoReportData', photoReportData);
+
+      return PhotoHelper.takePhoto('PhotoReport', photoReportData, vm.thumbnails);
 
     }
 
