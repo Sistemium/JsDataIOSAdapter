@@ -23,8 +23,12 @@
       });
 
     if (!vm.selectedOutletId) {
+
       loadOutlets();
-    } else {
+
+    } else if (!vm.selectedCampaignId) {
+
+      loadOutlet(vm.selectedOutletId);
       loadCampaigns();
     }
 
@@ -34,6 +38,13 @@
 
       return Partner.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])
         .then(partners => vm.partners = partners);
+
+    }
+
+    function loadOutlet(outletId) {
+
+      Outlet.find(outletId)
+        .then(outlet => vm.outlet = outlet);
 
     }
 

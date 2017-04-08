@@ -22,7 +22,7 @@
 // campaigns — copypaste from campaigns.pug
 section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selectedCampaignId')
 
-  .row Outlet Name
+  .row {{ vm.outlet.name }}
 
   .row.datepicker-with-buttons
 
