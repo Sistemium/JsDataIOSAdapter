@@ -1,6 +1,3 @@
-//button.btn.ml-em.btn-default(ng-click='vm.takePhoto()')
-  i.glyphicon.glyphicon-camera
-
 // partners & outlets — copypaste from territory.jade
 .territory.ui-view(resize='territory' cg-busy='vm.cgBusy' ng-if='!vm.selectedOutletId')
   section#scroll-main(
@@ -56,3 +53,11 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
         ng-repeat='picture in ::campaign.photoReports | orderBy: "name" track by picture.id'
         )
           img(ng-src='{{picture.srcThumbnail}}')
+
+// photo button
+section(ng-if='vm.selectedOutletId && vm.selectedCampaignId')
+  .row {{ vm.outlet.name }}
+  .row {{ vm.campaign.name }}
+
+  button.btn.ml-em.btn-default(ng-click='vm.takePhoto()')
+    i.glyphicon.glyphicon-camera
