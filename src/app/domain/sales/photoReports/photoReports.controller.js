@@ -22,6 +22,8 @@
 
       });
 
+    vm.onScope('rootClick', () => $state.go('.', {outletId: null, campaignId: null}));
+
     if (!vm.selectedOutletId) {
 
       loadOutlets();
