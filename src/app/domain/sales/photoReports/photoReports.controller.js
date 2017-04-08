@@ -30,6 +30,12 @@
 
       loadOutlet(vm.selectedOutletId);
       loadCampaigns();
+
+    } else  {
+
+      loadOutlet(vm.selectedOutletId);
+      loadCampaign(vm.selectedCampaignId);
+
     }
 
     function loadOutlets() {
@@ -52,6 +58,13 @@
 
       return Campaign.findAllWithRelations()('PhotoReport')
         .then(campaigns => vm.campaigns = campaigns);
+
+    }
+
+    function loadCampaign(campaignId) {
+
+      Campaign.find(campaignId)
+        .then(campaign => vm.campaign = campaign);
 
     }
 
