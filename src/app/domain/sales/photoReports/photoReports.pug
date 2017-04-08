@@ -51,7 +51,8 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
 
       .pictures
         a.thumb(
-        href ng-click='vm.thumbClick(picture)'
+        href
+        ng-click='vm.thumbClick(picture)'
         ng-repeat='picture in ::campaign.photoReports | orderBy: "name" track by picture.id'
         )
           img(ng-src='{{picture.srcThumbnail}}')
