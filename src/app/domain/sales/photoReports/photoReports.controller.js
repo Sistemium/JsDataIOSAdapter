@@ -119,7 +119,7 @@
     }
 
     function outletClick(outlet) {
-      $state.go('.', {outletId: outlet.id});
+      $state.go('.', {outletId: outlet.id, campaignId: null});
     }
 
     function campaignClick(campaign) {
