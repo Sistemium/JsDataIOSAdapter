@@ -4,7 +4,7 @@
 
   const REQUIRED_ACCURACY = 150;
 
-  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state, GalleryHelper, ConfirmModal, $q) {
+  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state, GalleryHelper, ConfirmModal, $q, Sockets) {
 
     const {Partner, Campaign, Outlet, PhotoReport, Location} = Schema.models();
     const {saMedia, saControllerHelper, PhotoHelper, LocationHelper} = Helpers;
@@ -28,6 +28,8 @@
       });
 
     vm.onScope('rootClick', () => $state.go('.', {outletId: null, campaignId: null}));
+
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['PhotoReport']));
 
     vm.watchScope('vm.campaignGroup.id', campaignGroupId => {
 
