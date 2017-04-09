@@ -72,9 +72,6 @@
 
     function loadCampaigns(campaignGroupId) {
 
-      // return Campaign.findAllWithRelations({campaignGroupId})('PhotoReport')
-      //   .then(campaigns => vm.campaigns = campaigns);
-
       return Campaign.findAll({campaignGroupId})
         .then(campaigns => vm.campaigns = campaigns)
         .then(loadPhotoReports());
