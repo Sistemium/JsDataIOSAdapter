@@ -51,7 +51,10 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
           img(ng-src='{{picture.srcThumbnail}}')
 
 // photo button
-section.campaigns(ng-if='vm.selectedOutletId && vm.selectedCampaignId')
+section.campaigns(
+ng-if='vm.selectedOutletId && vm.selectedCampaignId'
+cg-busy='{promise: vm.busy, message: vm.busyMessage || "Получение геопозиции…"}'
+)
 
   h3 {{ ::vm.outlet.name | uppercase}}
   a.ml-15(

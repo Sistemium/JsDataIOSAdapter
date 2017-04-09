@@ -2,10 +2,12 @@
 
 (function () {
 
-  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state, GalleryHelper) {
+  const REQUIRED_ACCURACY = 150;
 
-    const {Partner, Campaign, Outlet, PhotoReport} = Schema.models();
-    const {saMedia, saControllerHelper, PhotoHelper} = Helpers;
+  function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state, GalleryHelper, ConfirmModal, $q) {
+
+    const {Partner, Campaign, Outlet, PhotoReport, Location} = Schema.models();
+    const {saMedia, saControllerHelper, PhotoHelper, LocationHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
@@ -112,15 +114,22 @@
 
     function takePhoto() {
 
-      let photoReportData = {
-        outletId    : vm.selectedOutletId,
-        campaignId  : vm.selectedCampaignId,
-        salesmanId  : SalesmanAuth.getCurrentUser().id
-      };
+      vm.busy = getLocation()
+        .then(location => {
 
-      console.info('photoReportData', photoReportData);
+          let photoReportData = {
+            outletId  : vm.selectedOutletId,
+            campaignId: vm.selectedCampaignId,
+            salesmanId: SalesmanAuth.getCurrentUser().id,
+            locationId: location.id
+          };
 
-      return PhotoHelper.takePhoto('PhotoReport', photoReportData, vm.thumbnails);
+          return PhotoHelper.takePhoto('PhotoReport', photoReportData, vm.thumbnails);
+
+        })
+        .catch(err => {
+          return ConfirmModal.showMessageAskRepeat(err, takePhoto, $q.reject());
+        });
 
     }
 
@@ -147,6 +156,33 @@
 
       let xsMargin = (saMedia.xsWidth || saMedia.xxsWidth) ? 21 : 0;
       return 39 + partner.outlets.length * 29 + 8 + 17 - xsMargin;
+
+    }
+
+    function getLocation() {
+// TODO: copypaste from VisitCreateController may be move it in separate service
+
+      vm.locating = true;
+      vm.busyMessage = 'Получение геопозиции…';
+
+      return LocationHelper.getLocation(REQUIRED_ACCURACY, undefined, 'PhotoReport')
+        .then(location => {
+
+          vm.locating = false;
+
+          if (location.horizontalAccuracy <= REQUIRED_ACCURACY) {
+
+            return Location.inject(location);
+
+          } else {
+
+            let message = 'Требуемая точность — ' + REQUIRED_ACCURACY + 'м. ';
+            message += 'Достигнутая точность — ' + location.horizontalAccuracy + 'м.';
+            return ConfirmModal.showMessageAskRepeat(message, getLocation, $q.reject());
+
+          }
+
+        });
 
     }
 
