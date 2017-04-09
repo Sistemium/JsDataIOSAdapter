@@ -55,9 +55,17 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
           img(ng-src='{{picture.srcThumbnail}}')
 
 // photo button
-section(ng-if='vm.selectedOutletId && vm.selectedCampaignId')
+section.campaigns(ng-if='vm.selectedOutletId && vm.selectedCampaignId')
   .row {{ vm.outlet.name }} {{ vm.outlet.address }}
   .row {{ vm.campaign.name }}
 
   button.btn.ml-em.btn-default(ng-click='vm.takePhoto()')
     i.glyphicon.glyphicon-camera
+
+  .pictures
+    a.thumb(
+    href
+    ng-click='vm.thumbClick(picture)'
+    ng-repeat='picture in ::vm.campaign.photoReports | orderBy: "name" track by picture.id'
+    )
+      img(ng-src='{{picture.srcThumbnail}}')
