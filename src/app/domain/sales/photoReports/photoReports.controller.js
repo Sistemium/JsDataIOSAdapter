@@ -18,6 +18,7 @@
         initGroupId: $state.params.campaignGroupId,
         photoReports: {},
         thumbnails: {},
+        currentPhotoReports: [],
 
         takePhoto,
         outletClick,
@@ -51,6 +52,14 @@
 
       loadOutlet(vm.selectedOutletId);
       loadCampaign(vm.selectedCampaignId);
+
+      let filter = {
+        outletId  : vm.selectedOutletId,
+        campaignId: vm.selectedCampaignId,
+        salesmanId: SalesmanAuth.getCurrentUser().id
+      };
+
+      vm.rebindAll(PhotoReport, filter, 'vm.currentPhotoReports');
 
     }
 

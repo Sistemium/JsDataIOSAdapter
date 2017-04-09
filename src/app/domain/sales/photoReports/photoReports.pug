@@ -74,6 +74,6 @@ cg-busy='{promise: vm.busy, message: vm.busyMessage || "Получение ге�
       a.thumb(
       href
       ng-click='vm.thumbClick(picture)'
-      ng-repeat='picture in vm.photoReports[vm.campaign.id] | orderBy: "deviceCts" track by picture.id'
+      ng-repeat='picture in vm.currentPhotoReports | orderBy: "deviceCts" track by picture.id'
       )
         img(ng-src='{{picture.srcThumbnail}}')
