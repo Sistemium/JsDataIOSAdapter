@@ -128,7 +128,7 @@
             locationId: location.id
           };
 
-          return PhotoHelper.takePhoto('PhotoReport', photoReportData, vm.thumbnails);
+          return PhotoHelper.makePhoto('PhotoReport', photoReportData);
 
         })
         .catch(err => {

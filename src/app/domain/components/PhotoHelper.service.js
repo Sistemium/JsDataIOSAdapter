@@ -4,6 +4,21 @@
 
   function PhotoHelper(IOS, Schema, $q, ConfirmModal, toastr, $window) {
 
+    function makePhoto(resourceName, data) {
+
+      return IOS.takePhoto(resourceName, data)
+        .then(res => {
+
+          if (!angular.isObject(res)) {
+            return $q.reject(res);
+          }
+
+          return Schema.model(resourceName).inject(res);
+
+        });
+
+    }
+
     function takePhoto(resourceName, data, thumbnailCache) {
 
       let q = IOS.takePhoto(resourceName, data);
@@ -151,6 +166,7 @@
     }
 
     return {
+      makePhoto,
       takePhoto,
       importThumbnail,
       thumbnailClick,
