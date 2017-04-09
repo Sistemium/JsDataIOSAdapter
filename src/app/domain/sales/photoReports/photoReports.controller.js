@@ -82,26 +82,31 @@
     function loadPhotoReports() {
 
       _.forEach(vm.campaigns, campaign => {
-
-        let filter = {
-          outletId  : vm.selectedOutletId,
-          campaignId: campaign.id,
-          salesmanId: SalesmanAuth.getCurrentUser().id
-        };
-
-        PhotoReport.findAll(filter, {bypassCache: true})
-          .then(photoReports => {
-            vm.photoReports[campaign.id] = photoReports;
-          });
-
+        photoReportsForCampaign(campaign.id);
       });
+
+    }
+
+    function photoReportsForCampaign(campaignId) {
+
+      let filter = {
+        outletId  : vm.selectedOutletId,
+        campaignId: campaignId,
+        salesmanId: SalesmanAuth.getCurrentUser().id
+      };
+
+      PhotoReport.findAll(filter, {bypassCache: true})
+        .then(photoReports => {
+          vm.photoReports[campaignId] = photoReports;
+        });
 
     }
 
     function loadCampaign(campaignId) {
 
       Campaign.find(campaignId)
-        .then(campaign => vm.campaign = campaign);
+        .then(campaign => vm.campaign = campaign)
+        .then(photoReportsForCampaign(campaignId));
 
     }
 
