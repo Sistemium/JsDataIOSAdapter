@@ -123,10 +123,7 @@
     }
 
     function campaignClick(campaign) {
-
-      console.info('campaignClick', campaign);
       $state.go('.', {outletId: vm.selectedOutletId, campaignId: campaign.id});
-
     }
 
     function thumbClick(picture) {
