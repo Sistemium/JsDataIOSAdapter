@@ -1,3 +1,4 @@
+hr
 // partners & outlets — copypaste from territory.jade
 .territory.ui-view(resize='territory' cg-busy='vm.cgBusy' ng-if='!vm.selectedOutletId')
   section#scroll-main(
@@ -19,8 +20,10 @@
 // campaigns — copypaste from campaigns.pug
 section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selectedCampaignId')
 
-  .row {{ vm.outlet.name }} {{ vm.outlet.address }}
+  h3 {{ ::vm.outlet.name | uppercase}}
+  .ml-15 {{ ::vm.outlet.address }}
 
+  hr
   .row.datepicker-with-buttons
 
     campaign-group-popover.col-sm-5.col-lg-3(
@@ -37,14 +40,7 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
         a.name(
         href
         ng-click='vm.campaignClick(campaign)'
-        ) {{ campaign.name | cleanName }} {{ vm.photoReports[campaign.id].length }}
-
-        a.commentText(
-        href
-        ng-if='campaign.commentText'
-        uib-tooltip='{{campaign.commentText}}'
-        )
-          i.glyphicon.glyphicon-question-sign
+        ) {{ campaign.name | cleanName }}
 
       .pictures
         a.thumb(
