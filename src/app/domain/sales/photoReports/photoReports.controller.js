@@ -17,7 +17,6 @@
         selectedCampaignId: $state.params.campaignId,
         initGroupId: $state.params.campaignGroupId,
         photoReports: {},
-        thumbnails: {},
         currentPhotoReports: [],
 
         takePhoto,
