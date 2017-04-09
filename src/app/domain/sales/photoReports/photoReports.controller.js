@@ -86,6 +86,14 @@
 
     }
 
+    function loadCampaign(campaignId) {
+
+      Campaign.find(campaignId)
+        .then(campaign => vm.campaign = campaign)
+        .then(photoReportsForCampaign(campaignId));
+
+    }
+
     function photoReportsForCampaign(campaignId) {
 
       let filter = {
@@ -95,17 +103,7 @@
       };
 
       PhotoReport.findAll(filter, {bypassCache: true})
-        .then(photoReports => {
-          vm.photoReports[campaignId] = photoReports;
-        });
-
-    }
-
-    function loadCampaign(campaignId) {
-
-      Campaign.find(campaignId)
-        .then(campaign => vm.campaign = campaign)
-        .then(photoReportsForCampaign(campaignId));
+        .then(photoReports => vm.photoReports[campaignId] = photoReports);
 
     }
 
