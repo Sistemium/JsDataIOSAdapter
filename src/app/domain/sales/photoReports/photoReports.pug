@@ -37,7 +37,7 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
         a.name(
         href
         ng-click='vm.campaignClick(campaign)'
-        ) {{ campaign.name | cleanName }}
+        ) {{ campaign.name | cleanName }} {{ campaign.photoReports.length }}
 
         a.commentText(
         href
