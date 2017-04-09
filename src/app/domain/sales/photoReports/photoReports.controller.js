@@ -4,7 +4,7 @@
 
   function PhotoReportsController(Schema, Helpers, $scope, SalesmanAuth, $state, GalleryHelper) {
 
-    const {Partner, Campaign, Outlet/*, PhotoReport*/} = Schema.models();
+    const {Partner, Campaign, Outlet, PhotoReport} = Schema.models();
     const {saMedia, saControllerHelper, PhotoHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -14,6 +14,7 @@
         selectedOutletId: $state.params.outletId,
         selectedCampaignId: $state.params.campaignId,
         initGroupId: $state.params.campaignGroupId,
+        photoReports: {},
 
         takePhoto,
         outletClick,
@@ -68,8 +69,31 @@
 
     function loadCampaigns(campaignGroupId) {
 
-      return Campaign.findAllWithRelations()('PhotoReport')
-        .then(campaigns => vm.campaigns = campaigns);
+      // return Campaign.findAllWithRelations({campaignGroupId})('PhotoReport')
+      //   .then(campaigns => vm.campaigns = campaigns);
+
+      return Campaign.findAll({campaignGroupId})
+        .then(campaigns => vm.campaigns = campaigns)
+        .then(loadPhotoReports());
+
+    }
+
+    function loadPhotoReports() {
+
+      _.forEach(vm.campaigns, campaign => {
+
+        let filter = {
+          outletId  : vm.selectedOutletId,
+          campaignId: campaign.id,
+          salesmanId: SalesmanAuth.getCurrentUser().id
+        };
+
+        PhotoReport.findAll(filter, {bypassCache: true})
+          .then(photoReports => {
+            vm.photoReports[campaign.id] = photoReports;
+          });
+
+      });
 
     }
 

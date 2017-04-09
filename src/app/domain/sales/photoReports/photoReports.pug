@@ -37,7 +37,7 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
         a.name(
         href
         ng-click='vm.campaignClick(campaign)'
-        ) {{ campaign.name | cleanName }} {{ campaign.photoReports.length }}
+        ) {{ campaign.name | cleanName }} {{ vm.photoReports[campaign.id].length }}
 
         a.commentText(
         href
@@ -50,7 +50,7 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
         a.thumb(
         href
         ng-click='vm.thumbClick(picture)'
-        ng-repeat='picture in ::campaign.photoReports | orderBy: "name" track by picture.id'
+        ng-repeat='picture in ::vm.photoReports[campaign.id] | orderBy: "name" track by picture.id'
         )
           img(ng-src='{{picture.srcThumbnail}}')
 
