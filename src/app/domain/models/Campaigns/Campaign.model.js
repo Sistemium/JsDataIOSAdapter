@@ -21,6 +21,10 @@
           CampaignPicture: {
             localField: 'campaignPictures',
             foreignKey: 'campaignId'
+          },
+          PhotoReport: {
+            localField: 'photoReports',
+            foreignKey: 'campaignId'
           }
         }
 
