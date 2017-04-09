@@ -13,6 +13,7 @@
 
         selectedOutletId: $state.params.outletId,
         selectedCampaignId: $state.params.campaignId,
+        initGroupId: $state.params.campaignGroupId,
 
         takePhoto,
         outletClick,
@@ -23,6 +24,15 @@
       });
 
     vm.onScope('rootClick', () => $state.go('.', {outletId: null, campaignId: null}));
+
+    vm.watchScope('vm.campaignGroup.id', campaignGroupId => {
+
+      if (!campaignGroupId) return;
+
+      $state.go('.', {campaignGroupId}, {notify: false});
+      vm.setBusy(loadCampaigns(campaignGroupId));
+
+    });
 
     if (!vm.selectedOutletId) {
 
@@ -56,7 +66,7 @@
 
     }
 
-    function loadCampaigns() {
+    function loadCampaigns(campaignGroupId) {
 
       return Campaign.findAllWithRelations()('PhotoReport')
         .then(campaigns => vm.campaigns = campaigns);
