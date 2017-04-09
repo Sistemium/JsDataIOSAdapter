@@ -6,9 +6,9 @@
 
     function takePhoto(resourceName, data, thumbnailCache) {
 
-      var q = IOS.takePhoto(resourceName, data);
+      let q = IOS.takePhoto(resourceName, data);
 
-      return q.then(function (res) {
+      return q.then(res => {
 
         if (angular.isObject(res)) {
 
@@ -25,14 +25,14 @@
 
     function importThumbnail(picture, cache) {
 
-      return $q(function (resolve, reject) {
+      return $q((resolve, reject) => {
 
         if (cache[picture.id]) {
           return resolve(picture);
         }
 
         getImageSrc(picture, 'thumbnail')
-          .then(function (src) {
+          .then(src => {
 
             cache[picture.id] = src;
             resolve(picture);
@@ -45,28 +45,9 @@
 
     function thumbnailClick(resourceName, pic, src, title) {
 
-      ConfirmModal.show({
-
-        text: false,
-        src: src,
-        title: title,
-
-        deleteDelegate: function () {
-          return Schema.model(resourceName).destroy(pic);
-        },
-
-        resolve: function (ctrl) {
-
-          ctrl.busy = pic.getImageSrc('resized').then(function (src) {
-            ctrl.src = src;
-          }, function (err) {
-            console.log(err);
-            ctrl.cancel();
-            toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
-          });
-        }
-
-      }, {
+      ConfirmModal.show(_.assign(pictureClickConfig(pic, src, title, 'resized'), {
+        deleteDelegate: () => Schema.model(resourceName).destroy(pic)
+      }), {
         templateUrl: 'app/components/modal/PictureModal.html',
         size: 'lg'
       });
