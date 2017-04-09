@@ -19,7 +19,7 @@
 // campaigns — copypaste from campaigns.pug
 section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selectedCampaignId')
 
-  .row {{ vm.outlet.name }}
+  .row {{ vm.outlet.name }} {{ vm.outlet.address }}
 
   .row.datepicker-with-buttons
 
@@ -56,7 +56,7 @@ section.campaigns(cg-busy='vm.cgBusy' ng-if='vm.selectedOutletId && !vm.selected
 
 // photo button
 section(ng-if='vm.selectedOutletId && vm.selectedCampaignId')
-  .row {{ vm.outlet.name }}
+  .row {{ vm.outlet.name }} {{ vm.outlet.address }}
   .row {{ vm.campaign.name }}
 
   button.btn.ml-em.btn-default(ng-click='vm.takePhoto()')
