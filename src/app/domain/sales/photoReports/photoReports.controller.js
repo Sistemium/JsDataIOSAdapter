@@ -89,8 +89,12 @@
       if (!campaignGroupId) return;
 
       return Campaign.findAll({campaignGroupId})
-        .then(campaigns => vm.campaigns = campaigns)
-        .then(loadPhotoReports());
+        .then(campaigns => {
+
+          vm.campaigns = campaigns;
+          loadPhotoReports();
+
+        });
 
     }
 
