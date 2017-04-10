@@ -86,6 +86,8 @@
 
     function loadCampaigns(campaignGroupId) {
 
+      if (!campaignGroupId) return;
+
       return Campaign.findAll({campaignGroupId})
         .then(campaigns => vm.campaigns = campaigns)
         .then(loadPhotoReports());
