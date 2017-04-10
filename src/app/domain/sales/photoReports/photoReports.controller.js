@@ -16,7 +16,7 @@
         selectedOutletId: $state.params.outletId,
         selectedCampaignId: $state.params.campaignId,
         initGroupId: $state.params.campaignGroupId,
-        photoReports: {},
+        outletPhotoReports: {},
         currentPhotoReports: [],
 
         takePhoto,
@@ -113,7 +113,7 @@
       };
 
       PhotoReport.findAll(filter, {bypassCache: true})
-        .then(photoReports => vm.photoReports[campaignId] = photoReports);
+        .then(photoReports => vm.outletPhotoReports[campaignId] = photoReports);
 
     }
 
