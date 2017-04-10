@@ -51,7 +51,7 @@
     } else if (!vm.selectedCampaignId) {
 
       loadOutlet(vm.selectedOutletId);
-      loadCampaigns();
+      loadCampaigns(vm.initGroupId);
 
     } else  {
 
