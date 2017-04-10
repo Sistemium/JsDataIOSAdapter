@@ -18,7 +18,6 @@
         initGroupId: $state.params.campaignGroupId,
         outletPhotoReports: {},
         currentPhotoReports: [],
-        thumbnails: {},
 
         takePhoto,
         outletClick,
@@ -31,6 +30,7 @@
     vm.onScope('rootClick', () => $state.go('.', {outletId: null, campaignId: null}));
 
     $scope.$on('$destroy', Sockets.jsDataSubscribe(['PhotoReport']));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
     vm.watchScope('vm.campaignGroup.id', campaignGroupId => {
 
@@ -63,6 +63,16 @@
 
       vm.rebindAll(PhotoReport, filter, 'vm.currentPhotoReports');
 
+    }
+
+    function onJSData(event) {
+      if (event.resource === 'PhotoReport') {
+        // FIXME: works only under IOS
+        // TODO: check if the PhotoReport matches current state filter
+        if (_.get(event, 'data.href')) {
+          PhotoReport.inject(event.data);
+        }
+      }
     }
 
     function loadOutlets() {
@@ -121,16 +131,9 @@
 
       PhotoReport.findAll(filter, {bypassCache: true})
         .then(photoReports => {
-
           vm.outletPhotoReports[campaignId] = photoReports;
-          _.each(photoReports, importThumbnail);
-
         });
 
-    }
-
-    function importThumbnail(picture) {
-      return PhotoHelper.importThumbnail(picture, vm.thumbnails);
     }
 
     function takePhoto() {
@@ -146,7 +149,7 @@
             locationId: vm.currentLocation.id
           };
 
-          return PhotoHelper.takePhoto('PhotoReport', photoReportData, vm.thumbnails);
+          return PhotoHelper.makePhoto('PhotoReport', photoReportData);
 
         });
 
