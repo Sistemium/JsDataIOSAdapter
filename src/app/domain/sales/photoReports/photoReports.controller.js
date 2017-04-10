@@ -40,6 +40,10 @@
 
     });
 
+    vm.watchScope('vm.currentPhotoReports', currentPhotoReports => {
+      console.info('currentPhotoReports length', currentPhotoReports.length);
+    });
+
     if (!vm.selectedOutletId) {
 
       loadOutlets();
