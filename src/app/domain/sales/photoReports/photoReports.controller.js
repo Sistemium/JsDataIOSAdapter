@@ -18,6 +18,7 @@
         initGroupId: $state.params.campaignGroupId,
         outletPhotoReports: {},
         currentPhotoReports: [],
+        thumbnails: {},
 
         takePhoto,
         outletClick,
@@ -123,8 +124,17 @@
       };
 
       PhotoReport.findAll(filter, {bypassCache: true})
-        .then(photoReports => vm.outletPhotoReports[campaignId] = photoReports);
+        .then(photoReports => {
 
+          vm.outletPhotoReports[campaignId] = photoReports;
+          _.each(photoReports, importThumbnail);
+
+        });
+
+    }
+
+    function importThumbnail(picture) {
+      return PhotoHelper.importThumbnail(picture, vm.thumbnails);
     }
 
     function takePhoto() {
@@ -139,7 +149,7 @@
             locationId: location.id
           };
 
-          return PhotoHelper.makePhoto('PhotoReport', photoReportData);
+          return PhotoHelper.takePhoto('PhotoReport', photoReportData, vm.thumbnails);
 
         })
         .catch(err => {
