@@ -139,7 +139,7 @@
       }
 
       if (picture.href) {
-        return picture.href.replace(/([^\/]+)(\.[^.]+&)/g, (match, i) => i ? size :  match);
+        return picture.href.replace(/([^\/]+)(\.[^.]+$)/g, (match, name, ext) => size + ext);
       }
 
       return null;
