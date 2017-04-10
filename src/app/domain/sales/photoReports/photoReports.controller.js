@@ -135,21 +135,33 @@
 
     function takePhoto() {
 
-      vm.busy = getLocation()
-        .then(location => {
+      vm.busy = checkin();
+
+      vm.busy.then(() => {
 
           let photoReportData = {
             outletId  : vm.selectedOutletId,
             campaignId: vm.selectedCampaignId,
             salesmanId: SalesmanAuth.getCurrentUser().id,
-            locationId: location.id
+            locationId: vm.currentLocation.id
           };
 
           return PhotoHelper.takePhoto('PhotoReport', photoReportData, vm.thumbnails);
 
+        });
+
+    }
+
+    function checkin() {
+
+      if (vm.currentLocation) return $q.resolve();
+
+      return getLocation()
+        .then(location => {
+          vm.currentLocation = location;
         })
         .catch(err => {
-          return ConfirmModal.showMessageAskRepeat(err, takePhoto, $q.reject());
+          return ConfirmModal.showMessageAskRepeat(err, checkin, $q.reject());
         });
 
     }
