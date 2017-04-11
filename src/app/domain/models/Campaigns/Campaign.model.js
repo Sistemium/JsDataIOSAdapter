@@ -29,18 +29,19 @@
       computed: {
 
         teamName: ['name', teamNameFn],
-        title: ['name', 'teamName', titleFn]
+        title: ['name', titleFn]
 
       }
 
     });
 
-    function titleFn(name, teamName) {
-      return _.trim(_.replace(name, teamName, ''));
+    function teamNameFn(name) {
+      var tName = _.first(name.match(/[^ ]+/));
+      return _.toUpper(_.replace(tName, /\.+/, ''));
     }
 
-    function teamNameFn(name) {
-      return _.first(name.match(/[^ ]+/));
+    function titleFn(name) {
+      return _.upperFirst(_.trim(_.replace(name, (name.split(' ').shift()), '')));
     }
 
   });
