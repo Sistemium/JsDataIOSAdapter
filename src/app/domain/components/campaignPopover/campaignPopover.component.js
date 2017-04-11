@@ -90,14 +90,19 @@
       vm.campaignsDup = teamsFilter();
       localStorageService.set('campaignTeam', team);
     }
-      let elem = document.getElementsByClassName('campaign-popover-template')[0];
-      let scrollTo = localStorageService.get('campaignPopoverTopScroll') || 0;
 
-      if (scrollTo > elem.scrollHeight) {
-        scrollTo = 0;
+    function scrollTo(height) {
+
+      let elem = document.getElementsByClassName('campaign-popover-template')[0];
+
+      if (height > elem.scrollHeight) {
+        height = 0;
       }
 
-      elem.scrollTop = scrollTo;
+      elem.scrollTop = height;
+
+    }
+
     function teamsFilter() {
       return _.filter(vm.campaigns, function (campaign) {
         return campaign.teamName == vm.team
