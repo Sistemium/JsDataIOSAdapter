@@ -56,6 +56,9 @@
                 return elem.campaignPictures.length > 0
               });
 
+              vm.campaignsDup = vm.campaigns;
+              vm.teamNames = Object.keys(_.groupBy(_.map(vm.campaigns, (item) => item.teamName)));
+
             });
 
         });
