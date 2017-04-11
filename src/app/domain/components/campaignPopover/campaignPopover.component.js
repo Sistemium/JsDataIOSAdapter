@@ -80,6 +80,11 @@
 
 
     function onElemLoad() {
+      vm.team = localStorageService.get('campaignTeam') || false;
+      let scrollToPx = localStorageService.get('campaignPopoverTopScroll') || 0;
+      vm.campaignsDup = teamsFilter();
+      scrollTo(scrollToPx);
+    }
 
     function onTeamSelect(team) {
 
