@@ -19,6 +19,7 @@
       $onInit,
       thumbClick,
       onElemLoad,
+      onTeamSelect,
       isPopoverOpen: false
     });
 
@@ -37,6 +38,7 @@
 
 
     function $onInit() {
+
 
       let today = moment().format();
 
@@ -76,6 +78,15 @@
 
     function onElemLoad() {
 
+    function onTeamSelect(team) {
+
+      localStorageService.set('campaignPopoverTopScroll', 0);
+      scrollTo(0);
+
+      vm.team = team;
+      vm.campaignsDup = teamsFilter();
+      localStorageService.set('campaignTeam', team);
+    }
       let elem = document.getElementsByClassName('campaign-popover-template')[0];
       let scrollTo = localStorageService.get('campaignPopoverTopScroll') || 0;
 
