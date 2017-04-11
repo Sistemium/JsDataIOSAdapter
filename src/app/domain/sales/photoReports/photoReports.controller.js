@@ -66,13 +66,25 @@
     }
 
     function onJSData(event) {
-      if (event.resource === 'PhotoReport') {
-        // FIXME: works only under IOS
-        // TODO: check if the PhotoReport matches current state filter
-        if (_.get(event, 'data.href')) {
-          PhotoReport.inject(event.data);
-        }
+
+      // FIXME: works only under IOS
+
+      if (event.resource !== 'PhotoReport') return;
+
+      if (!_.get(event, 'data.href')) return;
+
+      if (!vm.selectedOutletId) return;
+
+      let photoReportOk = (event.data.salesmanId === SalesmanAuth.getCurrentUser().id && event.data.outletId === vm.selectedOutletId);
+
+      if (photoReportOk && vm.selectedCampaignId) {
+        photoReportOk = (event.data.campaignId === vm.selectedCampaignId);
       }
+
+      if (photoReportOk) {
+        PhotoReport.inject(event.data);
+      }
+
     }
 
     function loadOutlets() {
