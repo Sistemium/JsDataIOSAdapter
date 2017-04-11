@@ -98,6 +98,10 @@
       }
 
       elem.scrollTop = scrollTo;
+    function teamsFilter() {
+      return _.filter(vm.campaigns, function (campaign) {
+        return campaign.teamName == vm.team
+      });
     }
 
   }
