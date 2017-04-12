@@ -44,7 +44,7 @@
     }
 
     function totalCashed() {
-      return _.sumBy(vm.data, 'sum(cashing.summ)');
+      return _.sumBy(vm.data, 'sum(cashed)');
     }
 
     function totalSumm() {

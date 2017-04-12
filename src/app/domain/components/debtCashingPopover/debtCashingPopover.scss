@@ -11,13 +11,42 @@
     padding: $margin;
   }
 
-  a.delete.confirmation {
-    color: $state-danger-text !important;
+  a.delete.confirmation, .error {
+    color: $red !important;
+  }
+
+  .to-cash {
+
+    .form-group {
+      margin: $margin 0 0;
+    }
+
+    input {
+      text-align: right;
+    }
+
+  }
+
+  .to-cash + .cashings {
+    margin-top: $margin;
+  }
+
+  .title, .error {
+    text-align: center;
+    font-size: x-small;
+    margin: $margin/2 auto 0;
   }
 
   .cashings {
 
     min-width: 250px;
+
+    .title {
+      margin: $margin auto;
+    }
+
+    border: $border;
+    @extend %rounded-borders;
 
     .cashing {
 
@@ -28,7 +57,7 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      border-bottom: $border;
+      border-top: $border;
       align-items: baseline;
 
       i.glyphicon {
@@ -41,10 +70,6 @@
       .summ {
         text-align: right;
       }
-    }
-
-    .cashing:first-child {
-      border-top: $border;
     }
 
   }

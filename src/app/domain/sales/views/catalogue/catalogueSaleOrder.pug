@@ -50,13 +50,14 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
 
   buttons
     button.btn.btn-success.btn-sm(
-    ng-if='vm.saleOrder.processing == "draft"'
+    ng-if='!vm.saleOrder.totalCost'
     stm-click='saleOrderSaveDraft'
     ng-disabled='!vm.saleOrder.isValid()'
-    ) Сохранить черновик
+    ) Добавить товары
 
     button.btn.btn-primary.btn-sm(
     ng-repeat='(destination, label) in vm.saleOrder.workflow().to'
     ng-click='vm.setProcessingClick(destination)'
-    ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
+    ng-if='vm.saleOrder.totalCost'
+    ng-disabled='!vm.saleOrder.isValid()'
     ) {{ label }}

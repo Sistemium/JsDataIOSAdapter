@@ -34,6 +34,9 @@
       methods: {
         uncashed: function () {
           return this.summ - Schema.aggregate('summ').sum(_.filter(this.cashings, cashing => !cashing.isProcessed));
+        },
+        isOverdue: function() {
+          return this.dateE < moment().format();
         }
       }
 

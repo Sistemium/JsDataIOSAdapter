@@ -31,7 +31,10 @@
 
     .debts
 
-      .debt(ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id')
+      .debt(
+      ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id'
+      ng-class='{overdue: debt.isOverdue()}'
+      )
 
         label.ndoc {{ ::debt.ndoc }}
 

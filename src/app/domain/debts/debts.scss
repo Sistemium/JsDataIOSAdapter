@@ -77,6 +77,13 @@
       justify-content: flex-end;
       align-items: baseline;
       padding: $margin/2 0;
+
+      @include responsive-only(lt-sm) {
+        display: block;
+        .ndoc {
+          display: block;
+        }
+      }
     }
 
     .debt > * + * {
@@ -91,6 +98,10 @@
     .ndoc {
       font-weight: normal;
       text-align: left;
+    }
+
+    .overdue .ndoc {
+      color: $red;
     }
 
     .summ {
