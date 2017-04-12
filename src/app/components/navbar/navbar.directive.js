@@ -20,6 +20,8 @@
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
 
+    UnsyncedInfoService.bind(unsyncedInfo);
+
     vm.use({
 
       auth: Auth,
@@ -31,8 +33,6 @@
 
     $scope.$on('$stateChangeSuccess', onStateChange);
     $scope.$on('$stateChangeStart', onStateChange);
-
-    UnsyncedInfoService.bind(unsyncedInfo);
 
     function onStateChange(event, to) {
 
@@ -49,7 +49,7 @@
     }
 
     function unsyncedInfo(obj) {
-      console.info(obj);
+      vm.haveUnsyncedObjects = (_.first(obj) === 'haveUnsyncedObjects');
     }
 
   }
