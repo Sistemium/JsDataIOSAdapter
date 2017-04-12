@@ -49,7 +49,10 @@
     }
 
     function unsyncedInfo(obj) {
+
       vm.haveUnsyncedObjects = (_.first(obj) === 'haveUnsyncedObjects');
+      $scope.$apply();
+
     }
 
   }
