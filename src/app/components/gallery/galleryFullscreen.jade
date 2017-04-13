@@ -1,6 +1,4 @@
 .ng-gallery.ng-gallery-fullscreen(
-ng-swipe-left='vm.prevImageClick()'
-ng-swipe-right='vm.nextImageClick()'
 )
 
   a.left-right-chevron(
@@ -16,6 +14,9 @@ ng-swipe-right='vm.nextImageClick()'
     a.main-photo-block(
     href
     ng-click='vm.closeGalleryClick()'
+    ng-swipe-right='vm.prevImageClick()'
+    ng-swipe-left='vm.nextImageClick()'
+    ng-swipe-up='vm.closeGalleryClick()'
     )
 
       .loading-circle(ng-if='loading')
