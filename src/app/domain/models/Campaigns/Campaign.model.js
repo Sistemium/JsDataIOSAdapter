@@ -36,7 +36,7 @@
     });
 
     function teamNameFn(name) {
-      var tName = _.first(name.match(/[^ ]+/));
+      let tName = _.first(name.match(/[^ ]+/));
       return _.toUpper(_.replace(tName, /\.+/, ''));
     }
 
