@@ -1,9 +1,11 @@
-@import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/variables.scss";
 @import "mixins";
 
-$primary-color: #337ab7;
+$primary-color: #2768b7;
 $active-color: $primary-color;
 $sab-blue: $primary-color;
+
+@import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/variables.scss";
+@import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/colors.scss";
 
 $black: #333333;
 $blue: $sab-blue;
