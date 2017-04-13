@@ -32,7 +32,8 @@
 
     function refresh(campaignGroupId) {
       return Campaign.findAllWithRelations({campaignGroupId})('CampaignPicture')
-        .then(campaigns => vm.campaigns = campaigns);
+        .then(campaigns => vm.campaigns = campaigns)
+        .catch(e => console.error(e));
     }
 
     function thumbClick(picture) {

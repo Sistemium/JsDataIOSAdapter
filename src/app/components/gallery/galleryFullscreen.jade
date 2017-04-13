@@ -1,4 +1,7 @@
-.ng-gallery.ng-gallery-fullscreen
+.ng-gallery.ng-gallery-fullscreen(
+ng-swipe-left='vm.prevImageClick()'
+ng-swipe-right='vm.nextImageClick()'
+)
 
   a.left-right-chevron(
   href

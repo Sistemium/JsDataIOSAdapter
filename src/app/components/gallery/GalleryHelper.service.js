@@ -17,6 +17,7 @@
 
         thumbnailClick,
         fullScreenThumbnailClick,
+        swipePhotoClick,
 
         nextImageClick: setNextImage,
         prevImageClick: setPrevImage,
@@ -44,6 +45,12 @@
         return _.isFunction(fn) && fn(img);
 
       }
+
+      function swipePhotoClick() {
+        console.log('test');
+        alert('asd');
+      }
+
 
       function fullScreenThumbnailClick(img) {
         $scope.index = $scope.imagesAll.indexOf(img);
