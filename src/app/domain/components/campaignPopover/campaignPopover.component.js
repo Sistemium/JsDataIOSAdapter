@@ -39,7 +39,6 @@
 
     function $onInit() {
 
-
       let today = moment().format();
 
       CampaignGroup.findAll()
@@ -57,7 +56,13 @@
               });
 
               vm.campaignsDup = vm.campaigns;
-              vm.teamNames = Object.keys(_.groupBy(_.map(vm.campaigns, (item) => item.teamName)));
+
+              vm.teams = _.map(_.groupBy(vm.campaigns, 'teamName'), (campaigns, name) => {
+                return {
+                  name,
+                  campaigns
+                };
+              });
 
             });
 
@@ -77,7 +82,6 @@
       vm.thumbnailClick(picture);
 
     }
-
 
     function onElemLoad() {
       vm.team = localStorageService.get('campaignTeam') || false;

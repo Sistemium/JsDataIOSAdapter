@@ -1,29 +1,30 @@
-.team-name-wrapper
-  .team-name(ng-repeat='teamName in vm.teamNames track by $index')
-    span(ng-click='vm.onTeamSelect(teamName)' ng-class='{"active-team-name": vm.team == teamName}') {{teamName}}
+//.team-name-wrapper
+//  .team-name(ng-repeat='team in vm.teams | orderBy:"name" track by team.name')
+//    span(ng-click='vm.onTeamSelect(team.name)' ng-class='{"active-team-name": vm.team == team.name}') {{team.name}} {{ team.campaigns.length }}
 
-  p.no-campaigns(ng-if='!vm.campaignsDup.length') Акций не найдено
+uib-tabset(active='active')
+  uib-tab(index='$index + 1' ng-repeat='team in vm.teams' heading='{{team.name}}')
 
-.campaign-popover-template.scroll-y(
-elem-ready='vm.onElemLoad()'
-resize
-resize-offset-top='30'
-)
-
-  .wrapper
-    #scrollable-div(
-    vs-repeat='110'
-    vs-scroll-parent='.campaign-popover-template'
+    .campaign-popover-template.scroll-y(
+    elem-ready='vm.onElemLoad()'
+    resize
+    resize-offset-top='30'
     )
-      // TODO: show only 4 thumbs and use
-      .campaign(ng-repeat='campaign in vm.campaignsDup | orderBy:"name" track by campaign.id')
 
-        .name {{ campaign.teamName }} {{ campaign.title }}
+      .wrapper
+        #scrollable-div(
+        vs-repeat='110'
+        vs-scroll-parent='.campaign-popover-template'
+        )
+          // TODO: show only 4 thumbs and use
+          .campaign(ng-repeat='campaign in team.campaigns track by campaign.id')
 
-        .pictures
-          a.thumb(
-          href
-          ng-click='vm.thumbClick(picture)'
-          ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo:5 track by picture.id'
-          )
-            img(ng-src='{{picture.srcThumbnail}}')
+            .name {{ campaign.teamName }} {{ campaign.title }}
+
+            .pictures
+              a.thumb(
+              href
+              ng-click='vm.thumbClick(picture)'
+              ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo:5 track by picture.id'
+              )
+                img(ng-src='{{picture.srcThumbnail}}')
