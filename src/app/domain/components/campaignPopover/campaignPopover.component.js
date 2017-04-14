@@ -20,7 +20,8 @@
       thumbClick,
       onElemLoad,
       onTeamSelect,
-      isPopoverOpen: false
+      isPopoverOpen: false,
+      teamIdx: localStorageService.get('campaignTeamIdx') || 0,
     });
 
     GalleryHelper.setupController(vm, $scope);
@@ -29,13 +30,12 @@
 
     $scope.$watch('vm.isPopoverOpen', (nv, ov) => {
 
-      if (nv == false && (nv !== ov)) {
-        let elem = document.getElementsByClassName('campaign-popover-template')[0];
+      if (!nv && nv !== ov) {
+        let elem = getScrollerElement();
         localStorageService.set('campaignPopoverTopScroll', elem.scrollTop);
       }
 
     });
-
 
     function $onInit() {
 
@@ -55,8 +55,6 @@
                 return elem.campaignPictures.length > 0
               });
 
-              vm.campaignsDup = vm.campaigns;
-
               vm.teams = _.map(_.groupBy(vm.campaigns, 'teamName'), (campaigns, name) => {
                 return {
                   name,
@@ -69,6 +67,7 @@
         });
 
     }
+
 
     function thumbClick(picture) {
 
@@ -84,38 +83,32 @@
     }
 
     function onElemLoad() {
-      vm.team = localStorageService.get('campaignTeam') || false;
+      vm.teamIdx = localStorageService.get('campaignTeamIdx') || 1;
       let scrollToPx = localStorageService.get('campaignPopoverTopScroll') || 0;
-      vm.campaignsDup = teamsFilter();
       scrollTo(scrollToPx);
     }
 
-    function onTeamSelect(team) {
-
-      localStorageService.set('campaignPopoverTopScroll', 0);
+    function onTeamSelect(team, idx) {
+      vm.selectedTeam = team;
       scrollTo(0);
+      localStorageService.set('campaignTeamIdx', idx + 1);
+    }
 
-      vm.team = team;
-      vm.campaignsDup = teamsFilter();
-      localStorageService.set('campaignTeam', team);
+    function getScrollerElement() {
+      return document.getElementById('campaign-popover-scroll');
     }
 
     function scrollTo(height) {
 
-      let elem = document.getElementsByClassName('campaign-popover-template')[0];
+      let elem = getScrollerElement();
 
       if (height > elem.scrollHeight) {
         height = 0;
+        localStorageService.set('campaignPopoverTopScroll', 0);
       }
 
       elem.scrollTop = height;
 
-    }
-
-    function teamsFilter() {
-      return _.filter(vm.campaigns, function (campaign) {
-        return campaign.teamName == vm.team
-      });
     }
 
   }
