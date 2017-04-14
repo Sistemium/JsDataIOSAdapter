@@ -19,7 +19,9 @@
       $onInit,
       thumbClick,
       onElemLoad,
-      isPopoverOpen: false
+      onTeamSelect,
+      isPopoverOpen: false,
+      teamIdx: getTeamIdx()
     });
 
     GalleryHelper.setupController(vm, $scope);
@@ -28,13 +30,12 @@
 
     $scope.$watch('vm.isPopoverOpen', (nv, ov) => {
 
-      if (nv == false && (nv !== ov)) {
-        let elem = document.getElementsByClassName('campaign-popover-template')[0];
+      if (!nv && nv !== ov) {
+        let elem = getScrollerElement();
         localStorageService.set('campaignPopoverTopScroll', elem.scrollTop);
       }
 
     });
-
 
     function $onInit() {
 
@@ -54,11 +55,19 @@
                 return elem.campaignPictures.length > 0
               });
 
+              vm.teams = _.map(_.groupBy(vm.campaigns, 'teamName'), (campaigns, name) => {
+                return {
+                  name,
+                  campaigns
+                };
+              });
+
             });
 
         });
 
     }
+
 
     function thumbClick(picture) {
 
@@ -73,17 +82,42 @@
 
     }
 
+    function getTeamIdx() {
+      return localStorageService.get('campaignTeamIdx') || 1;
+    }
+
+    function getTopScrollPosition() {
+      return localStorageService.get('campaignPopoverTopScroll') || 0;
+    }
+
+    function getScrollerElement() {
+      return document.getElementById('campaign-popover-scroll');
+    }
 
     function onElemLoad() {
+      vm.teamIdx = getTeamIdx();
+      let scrollToPx = getTopScrollPosition();
+      scrollTo(scrollToPx);
+    }
 
-      let elem = document.getElementsByClassName('campaign-popover-template')[0];
-      let scrollTo = localStorageService.get('campaignPopoverTopScroll') || 0;
+    function onTeamSelect(team, idx) {
+      vm.selectedTeam = team;
+      scrollTo(0);
+      localStorageService.set('campaignTeamIdx', idx + 1);
+    }
 
-      if (scrollTo > elem.scrollHeight) {
-        scrollTo = 0;
+
+    function scrollTo(height) {
+
+      let elem = getScrollerElement();
+
+      if (height > elem.scrollHeight) {
+        height = 0;
+        localStorageService.set('campaignPopoverTopScroll', height);
       }
 
-      elem.scrollTop = scrollTo;
+      elem.scrollTop = height;
+
     }
 
   }

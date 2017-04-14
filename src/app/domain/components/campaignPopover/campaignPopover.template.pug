@@ -1,22 +1,33 @@
-.campaign-popover-template.scroll-y(
-elem-ready='vm.onElemLoad()'
-resize
-resize-offset-top='30'
-)
-  .wrapper
-    #scrollable-div(
-    vs-repeat='110'
-    vs-scroll-parent='.campaign-popover-template'
+.campaign-popover-template
+
+  uib-tabset.tabset(active='vm.teamIdx')
+    uib-tab(
+    index='$index + 1'
+    ng-repeat='team in vm.teams'
+    heading='{{team.name}}'
+    select='vm.onTeamSelect(team, $index)'
     )
-      // TODO: show only 4 thumbs and use
-      .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
-        .name {{ campaign.teamName }} {{ campaign.title }}
+  #campaign-popover-scroll.scroll-y(
+  resize
+  resize-offset-top='30'
+  )
 
-        .pictures
-          a.thumb(
-          href
-          ng-click='vm.thumbClick(picture)'
-          ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo:5 track by picture.id'
-          )
-            img(ng-src='{{picture.srcThumbnail}}')
+    .wrapper
+      #scrollable-div(
+      vs-repeat='110'
+      vs-scroll-parent='#campaign-popover-scroll'
+      elem-ready='vm.onElemLoad()'
+      )
+
+        .campaign(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
+
+          .name {{ campaign.title }}
+
+          .pictures
+            a.thumb(
+            href
+            ng-click='vm.thumbClick(picture)'
+            ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo: 4 track by picture.id'
+            )
+              img(ng-src='{{picture.srcThumbnail}}')
