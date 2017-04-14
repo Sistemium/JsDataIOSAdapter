@@ -9,7 +9,6 @@
     )
 
   #campaign-popover-scroll.scroll-y(
-  elem-ready='vm.onElemLoad()'
   resize
   resize-offset-top='30'
   )
@@ -18,6 +17,7 @@
       #scrollable-div(
       vs-repeat='110'
       vs-scroll-parent='#campaign-popover-scroll'
+      elem-ready='vm.onElemLoad()'
       )
 
         .campaign(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
