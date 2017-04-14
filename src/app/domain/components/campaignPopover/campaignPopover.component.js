@@ -30,8 +30,9 @@
 
     $scope.$watch('vm.isPopoverOpen', (nv, ov) => {
 
-      if (!nv && nv !== ov) {
+      if (!nv && nv != ov) {
         let elem = getScrollerElement();
+        if (!elem) return;
         localStorageService.set('campaignPopoverTopScroll', elem.scrollTop);
       }
 
@@ -45,6 +46,8 @@
         .then(groups => {
 
           vm.campaignGroup = _.find(groups, group => group.dateB <= today && today <= group.dateE);
+
+          if (!vm.campaignGroup) return;
 
           let filter = {campaignGroupId: vm.campaignGroup.id};
 
@@ -110,6 +113,8 @@
     function scrollTo(height) {
 
       let elem = getScrollerElement();
+
+      if (!elem) return;
 
       if (height > elem.scrollHeight) {
         height = 0;
