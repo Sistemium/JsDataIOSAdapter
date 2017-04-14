@@ -32,6 +32,32 @@ campaign-popover {
 
   .popover {
 
+    .tabset {
+      margin-bottom: 10px;
+
+      & > ul {
+        width: 340px;
+
+        @media (min-width: 350px) and (max-width: 768px) {
+          width: 248px;
+        }
+
+        @media (max-width: 370px) {
+          width: 210px;
+        }
+
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+
+        li.active {
+          pointer-events: none;
+        }
+
+      }
+
+    }
+
     max-width: none;
     top: 47px !important;
 
@@ -55,12 +81,6 @@ campaign-popover {
         font-weight: 500;
       }
       .team-name {
-
-        .active-team-name {
-          background: #337ab7;
-          color: white;
-          pointer-events: none;
-        }
 
         span {
           outline: none;
@@ -87,8 +107,7 @@ campaign-popover {
         font-size: 13px;
       }
     }
-
-    .campaign-popover-template {
+    #campaign-popover-scroll {
 
       width: 340px;
 
@@ -113,7 +132,7 @@ campaign-popover {
               display: inline-block;
             }
 
-            @media (min-width: 350px) and (max-width: 768px) {
+            @media (min-width: 371px) and (max-width: 768px) {
 
               &:nth-child(4) {
                 display: none;
@@ -144,8 +163,7 @@ campaign-popover {
 
     @media (min-width: 371px) and (max-width: 768px) {
 
-      .campaign-popover-template {
-
+      #campaign-popover-scroll {
         width: 248px;
 
         .campaign .pictures {
@@ -162,7 +180,7 @@ campaign-popover {
         padding: 5px;
       }
 
-      .campaign-popover-template {
+      #campaign-popover-scroll {
         width: 210px;
       }
 
