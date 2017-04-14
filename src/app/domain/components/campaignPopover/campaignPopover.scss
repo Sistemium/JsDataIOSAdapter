@@ -33,9 +33,11 @@ campaign-popover {
   .popover {
 
     .tabset {
-      margin-bottom: 10px;
+
+      height: 43px;
 
       & > ul {
+
         width: 340px;
 
         @media (min-width: 350px) and (max-width: 768px) {
