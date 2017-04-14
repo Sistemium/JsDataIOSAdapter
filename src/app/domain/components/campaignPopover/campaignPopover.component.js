@@ -21,7 +21,7 @@
       onElemLoad,
       onTeamSelect,
       isPopoverOpen: false,
-      teamIdx: localStorageService.get('campaignTeamIdx') || 0,
+      teamIdx: getTeamIdx()
     });
 
     GalleryHelper.setupController(vm, $scope);
@@ -82,9 +82,21 @@
 
     }
 
+    function getTeamIdx() {
+      return localStorageService.get('campaignTeamIdx') || 1;
+    }
+
+    function getTopScrollPosition() {
+      return localStorageService.get('campaignPopoverTopScroll') || 0;
+    }
+
+    function getScrollerElement() {
+      return document.getElementById('campaign-popover-scroll');
+    }
+
     function onElemLoad() {
-      vm.teamIdx = localStorageService.get('campaignTeamIdx') || 1;
-      let scrollToPx = localStorageService.get('campaignPopoverTopScroll') || 0;
+      vm.teamIdx = getTeamIdx();
+      let scrollToPx = getTopScrollPosition();
       scrollTo(scrollToPx);
     }
 
@@ -94,9 +106,6 @@
       localStorageService.set('campaignTeamIdx', idx + 1);
     }
 
-    function getScrollerElement() {
-      return document.getElementById('campaign-popover-scroll');
-    }
 
     function scrollTo(height) {
 
@@ -104,7 +113,7 @@
 
       if (height > elem.scrollHeight) {
         height = 0;
-        localStorageService.set('campaignPopoverTopScroll', 0);
+        localStorageService.set('campaignPopoverTopScroll', height);
       }
 
       elem.scrollTop = height;
