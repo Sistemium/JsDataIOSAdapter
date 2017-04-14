@@ -23,7 +23,11 @@
     "angular-moment": "^1.0.1",
     "angular-bootstrap-toggle-switch": "^0.5.6",
     "ya-map": "angular-yandex-map#^1.0.9",
+<<<<<<< HEAD
     "Geolib": "geolib#^2.0.22"
+=======
+    "angular-swipe": "^0.2.1"
+>>>>>>> gallery-swipe
   },
   "devDependencies": {
     "angular-mocks": "~1.6.3"
