@@ -1,10 +1,10 @@
-(function() {
+(function () {
   'use strict';
 
   angular
     .module('webPage', [
       'ngAnimate',
-      // 'ngTouch',
+      'ngTouch',
       'ngSanitize',
       'ngMessages',
       'ngAria',
@@ -24,7 +24,7 @@
       'angularMoment'
     ]);
 
-  angular.module('jsd', ['sistemiumBootstrap','Sales']);
+  angular.module('jsd', ['sistemiumBootstrap', 'Sales']);
 
 
 })();
