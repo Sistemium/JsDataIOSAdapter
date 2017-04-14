@@ -43,6 +43,10 @@
 
                 if (SaleOrder.hasChanges(id)) return;
 
+                if (saleOrder.ts <= _.get(vm, 'saleOrder.ts')) {
+                  return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts after find');
+                }
+
                 SaleOrder.inject(saleOrder);
 
                 if (vm.date === saleOrder.date || saleOrderId === saleOrder.id) {

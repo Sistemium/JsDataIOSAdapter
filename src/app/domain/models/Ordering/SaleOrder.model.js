@@ -71,6 +71,7 @@
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
           this.totalCostDoc = this.totalCost;
+          this.deviceTs = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
         },
 
         positionsCountRu,
@@ -95,22 +96,39 @@
 
           let positions = _.filter(this.positions, SaleOrderPosition.hasChanges);
 
+          let lastModified = this.deviceTs;
+
           return $q.all(_.map(positions, position => position.safeSave()))
             .then(() => {
 
               if (!SaleOrder.hasChanges(this)) return;
 
+              let nowModified = this.deviceTs;
+
+              if (this.deviceTs !== lastModified) {
+                // SaleOrder.revert(this);
+                return console.warn('Ignore SaleOrder update after update position', nowModified, lastModified);
+              }
+
               let changedKeys = _.keys(_.get(SaleOrder.changes(this), 'changed'));
 
               DEBUG('SaleOrder.safeSave changedKeys:', changedKeys);
 
-              // TODO: need investigation why this happens
+              // only deviceTs changed
               if (!changedKeys.length) {
-                return console.warn('SaleOrder has changes but no changedKeys');
+                return console.info('SaleOrder has changes but no changedKeys');
               }
 
-              // TODO: maybe unCachedSave isn't necessary since used JSD omit
-              return SaleOrder.create(this);
+              return SaleOrder.create(this, {
+                afterUpdate: (options, attrs) => {
+                  let nowModified = this.deviceTs;
+                  if (nowModified >= lastModified) {
+                    options.cacheResponse = false;
+                    console.warn('Ignore server response SaleOrder', nowModified, lastModified);
+                  }
+                  return $q.resolve(attrs);
+                }
+              });
 
             })
             .catch(err => {
