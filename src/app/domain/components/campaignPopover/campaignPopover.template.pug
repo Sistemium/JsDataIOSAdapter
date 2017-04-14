@@ -1,30 +1,33 @@
-//.team-name-wrapper
-//  .team-name(ng-repeat='team in vm.teams | orderBy:"name" track by team.name')
-//    span(ng-click='vm.onTeamSelect(team.name)' ng-class='{"active-team-name": vm.team == team.name}') {{team.name}} {{ team.campaigns.length }}
+.campaign-popover-template
 
-uib-tabset(active='active')
-  uib-tab(index='$index + 1' ng-repeat='team in vm.teams' heading='{{team.name}}')
-
-    .campaign-popover-template.scroll-y(
-    elem-ready='vm.onElemLoad()'
-    resize
-    resize-offset-top='30'
+  uib-tabset.tabset(active='vm.teamIdx')
+    uib-tab(
+    index='$index + 1'
+    ng-repeat='team in vm.teams'
+    heading='{{team.name}}'
+    select='vm.onTeamSelect(team, $index)'
     )
 
-      .wrapper
-        #scrollable-div(
-        vs-repeat='110'
-        vs-scroll-parent='.campaign-popover-template'
-        )
-          // TODO: show only 4 thumbs and use
-          .campaign(ng-repeat='campaign in team.campaigns track by campaign.id')
+  #campaign-popover-scroll.scroll-y(
+  elem-ready='vm.onElemLoad()'
+  resize
+  resize-offset-top='30'
+  )
 
-            .name {{ campaign.teamName }} {{ campaign.title }}
+    .wrapper
+      #scrollable-div(
+      vs-repeat='110'
+      vs-scroll-parent='#campaign-popover-scroll'
+      )
 
-            .pictures
-              a.thumb(
-              href
-              ng-click='vm.thumbClick(picture)'
-              ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo:5 track by picture.id'
-              )
-                img(ng-src='{{picture.srcThumbnail}}')
+        .campaign(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
+
+          .name {{ campaign.title }}
+
+          .pictures
+            a.thumb(
+            href
+            ng-click='vm.thumbClick(picture)'
+            ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo: 4 track by picture.id'
+            )
+              img(ng-src='{{picture.srcThumbnail}}')
