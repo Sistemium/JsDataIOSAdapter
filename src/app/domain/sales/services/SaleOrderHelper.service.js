@@ -28,8 +28,20 @@
           if (data.deviceCts) {
             // IOS
 
-            DEBUG('onJSData IOS injecting', resource);
+            if (SaleOrder.hasChanges(id)) {
+              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with changes');
+            }
+
+            if (data.deviceTs < _.get(vm, 'saleOrder.ts')) {
+              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old deviceTs');
+            }
+
+            DEBUG('CatalogueSaleOrder:onJSData injecting', resource);
             SaleOrder.inject(data);
+
+            if (vm.date === data.date) {
+              SaleOrderPosition.findAllWithRelations({saleOrderId: data.id}, {bypassCache: true})('Article');
+            }
 
           } else {
             // Not IOS
@@ -69,8 +81,14 @@
 
             let position = getPosition(data.articleId);
 
-            if (position && SaleOrderPosition.hasChanges(position)) {
-              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore position');
+            if (position) {
+              if (SaleOrderPosition.hasChanges(position)) {
+                return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrderPosition with changes');
+              }
+
+              if (data.deviceTs < position.deviceTs) {
+                return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrderPosition with old deviceTs');
+              }
             }
 
             DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
