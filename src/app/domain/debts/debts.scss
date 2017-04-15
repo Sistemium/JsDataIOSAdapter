@@ -33,6 +33,9 @@
   .footer {
     border-top: $headers-border;
     color: $gray;
+    strong {
+      color: $black;
+    }
   }
 
   .outlet-debt-total {
