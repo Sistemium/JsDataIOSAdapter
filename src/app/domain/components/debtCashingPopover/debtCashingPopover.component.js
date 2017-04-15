@@ -100,7 +100,8 @@
       let cashing = Cashing.createInstance({
         debtId: vm.debt.id,
         summ: summ,
-        outletId: vm.debt.outletId
+        outletId: vm.debt.outletId,
+        date: moment().format()
       });
 
       Cashing.create(cashing)
