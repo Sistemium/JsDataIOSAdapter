@@ -10,7 +10,6 @@
       .setup(this, $scope)
       .use({
         totalSumm,
-        addUndebtedClick,
         trashUndebtedClick,
         confirmation: {}
       });
@@ -30,17 +29,6 @@
         return $timeout(2000).then(() => vm.confirmation[cashing.id] = false);
       }
       Cashing.destroy(cashing);
-    }
-
-    function addUndebtedClick() {
-      let cashing = Cashing.createInstance({
-        outletId,
-        summ: 999,
-        ndoc: 'test',
-        uncashingId: null,
-        debtId: null
-      });
-      Cashing.inject(cashing);
     }
 
     function getData(outletId) {

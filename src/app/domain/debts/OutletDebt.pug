@@ -21,7 +21,7 @@
 
     h4.title
       label Прочая выручка
-      button.btn.btn-default.btn-xs(ng-click='vm.addUndebtedClick()')
+      outlet-cashing-popover.btn.btn-link.btn-xs(outlet='vm.outlet')
         i.glyphicon.glyphicon-plus
 
     .cashings(

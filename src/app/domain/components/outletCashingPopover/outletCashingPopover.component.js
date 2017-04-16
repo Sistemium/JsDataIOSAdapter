@@ -53,7 +53,7 @@
 
       let {summ, ndoc} = vm;
 
-      if (summ <= 0) return;
+      if (summ <= 0 || !ndoc) return;
 
       let cashing = Cashing.createInstance({
         debtId: null,
@@ -65,7 +65,7 @@
       });
 
       Cashing.create(cashing)
-        .then(saved => {
+        .then(() => {
           vm.isPopoverOpen = false;
           $scope.$emit('DebtOrCashingModified');
         });
