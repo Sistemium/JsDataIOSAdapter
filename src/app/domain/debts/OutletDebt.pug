@@ -33,6 +33,13 @@
       value='cashing.summ'
       )
 
+      .buttons
+        a(
+        href ng-click='vm.trashUndebtedClick(cashing)'
+        ng-class='{confirmation: vm.confirmation[cashing.id]}'
+        )
+          i.glyphicon.glyphicon-trash
+
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
     h4.title

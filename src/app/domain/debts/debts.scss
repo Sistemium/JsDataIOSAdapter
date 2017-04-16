@@ -82,7 +82,14 @@
       @extend %table-row;
       text-align: right;
       .cashed {
-        margin-right: $field-width + $margin;
+        //margin-right: $field-width + $margin;
+      }
+      .buttons {
+        text-align: left;
+        font-size: 75%;
+        a.confirmation {
+          color: $red;
+        }
       }
     }
   }

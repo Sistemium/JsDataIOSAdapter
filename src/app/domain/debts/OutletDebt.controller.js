@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout) {
 
     const {Debt, Outlet, Cashing} = Schema.models();
 
@@ -10,7 +10,9 @@
       .setup(this, $scope)
       .use({
         totalSumm,
-        addUndebtedClick
+        addUndebtedClick,
+        trashUndebtedClick,
+        confirmation: {}
       });
 
     const {outletId} = $state.params;
@@ -22,6 +24,13 @@
     /*
      Functions
      */
+
+    function trashUndebtedClick(cashing) {
+      if ((vm.confirmation[cashing.id] = !vm.confirmation[cashing.id])) {
+        return $timeout(2000).then(() => vm.confirmation[cashing.id] = false);
+      }
+      Cashing.destroy(cashing);
+    }
 
     function addUndebtedClick() {
       let cashing = Cashing.createInstance({
