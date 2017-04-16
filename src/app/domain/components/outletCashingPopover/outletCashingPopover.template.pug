@@ -1,0 +1,29 @@
+.outlet-cashing-popover
+
+  form(name="cashForm" ng-submit='vm.onSubmit()')
+
+    .form-group
+
+      input#outlet-cashing-ndoc.form-control(
+      ng-model='vm.ndoc'
+      name='ndoc'
+      placeholder='№ накладной'
+      required
+      )
+
+    .form-group
+      input#outlet-cashing-summ.form-control(
+      ng-model='vm.summ'
+      type='number'
+      name='summ'
+      placeholder='Сумма'
+      step='0.01'
+      required
+      )
+
+    button.btn.btn-primary(
+    type='submit'
+    value='submit'
+    ng-disabled='!cashForm.$valid'
+    ) Добавить выручку
+
