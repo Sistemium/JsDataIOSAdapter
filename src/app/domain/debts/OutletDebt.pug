@@ -10,24 +10,33 @@
           small {{vm.outlet.address}}
       span.caret
 
-  //.totals.animate-show(ng-hide='vm.busy')
-
-    .info
-      currency-value.total(
-      label='Прочее на руках:'
-      value='vm.cashingTotalByDebt[null]'
-      hide-empty='true'
-      )
-
 .header
   .totals
     label.total(ng-if='vm.cashingTotal') На руках
     label.total Остаток долга
 
 .scroll-y(resize resize-offset-top='40')
+
+  .cashing-undebted
+
+    h4.title
+      label Прочая выручка
+      button.btn.btn-default.btn-xs(ng-click='vm.addUndebtedClick()')
+        i.glyphicon.glyphicon-plus
+
+    .cashings(
+    ng-repeat='cashing in vm.undebtedCashings | orderBy:"deviceCts" track by cashing.id'
+    )
+      label.ndoc {{ ::cashing.ndoc }}
+
+      currency-value.cashed(
+      value='cashing.summ'
+      )
+
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
-    h4.title {{ ::group.date }}
+    h4.title
+      label {{ ::group.date }}
 
     .debts
 

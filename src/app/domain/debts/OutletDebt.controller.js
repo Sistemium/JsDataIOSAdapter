@@ -8,7 +8,10 @@
 
     const vm = saControllerHelper
       .setup(this, $scope)
-      .use({totalSumm});
+      .use({
+        totalSumm,
+        addUndebtedClick
+      });
 
     const {outletId} = $state.params;
 
@@ -19,6 +22,17 @@
     /*
      Functions
      */
+
+    function addUndebtedClick() {
+      let cashing = Cashing.createInstance({
+        outletId,
+        summ: 999,
+        ndoc: 'test',
+        uncashingId: null,
+        debtId: null
+      });
+      Cashing.inject(cashing);
+    }
 
     function getData(outletId) {
 
@@ -33,7 +47,7 @@
             return {date, items}
           });
 
-          let cashingFilter = {outletId, uncashingId:null};
+          let cashingFilter = {outletId, uncashingId: null};
 
           Cashing.findAll(cashingFilter);
 
@@ -48,6 +62,8 @@
               cashingTotalByDebt[cashing.debtId] = total;
               cashingTotal += cashing.summ;
             });
+
+            vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
 
             vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
             vm.cashingTotal = cashingTotal;

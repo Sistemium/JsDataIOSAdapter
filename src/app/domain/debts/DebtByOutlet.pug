@@ -10,6 +10,7 @@ cg-busy='vm.cgBusy'
       label.total Остаток долга
 
   .scroll-y(resize resize-offset-top='40' resize-offset-top-xs='32')
+
     .outlet-debt-total(ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.outletId')
 
       .outlet(ng-class='{blocked: item.outlet.isActive === false}')

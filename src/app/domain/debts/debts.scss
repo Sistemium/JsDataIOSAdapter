@@ -3,13 +3,15 @@
 
 .debt-by-outlet {
 
-  label {
-    margin-bottom: 0;
-  }
-
   $margin: 6px;
   $field-width: 110px;
   $headers-border: solid 1px $border-gray;
+
+  label {
+    font-weight: normal;
+    margin-bottom: 0;
+    text-align: left;
+  }
 
   .header, .footer {
 
@@ -63,11 +65,49 @@
 
   }
 
-  .date {
+  .date, .cashing-undebted {
     border-bottom: solid 1px $border-gray;
     @include responsive-only(gt-xs) {
       padding: 4px 0 4px 15px;
     }
+  }
+
+  .cashing-undebted {
+
+    .title .btn {
+      color: $primary-color;
+    }
+
+    .cashings {
+      @extend %table-row;
+      text-align: right;
+      .cashed {
+        margin-right: $field-width + $margin;
+      }
+    }
+  }
+
+  %table-row {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: baseline;
+    padding: $margin/2 0;
+
+    > * + * {
+      margin-left: $margin;
+      min-width: $field-width;
+      display: inline-block;
+    }
+
+    @include responsive-only(lt-sm) {
+      display: block;
+      .ndoc {
+        display: block;
+      }
+    }
+
   }
 
   .debts {
@@ -75,24 +115,7 @@
     text-align: right;
 
     .debt {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      align-items: baseline;
-      padding: $margin/2 0;
-
-      @include responsive-only(lt-sm) {
-        display: block;
-        .ndoc {
-          display: block;
-        }
-      }
-    }
-
-    .debt > * + * {
-      margin-left: $margin;
-      min-width: $field-width;
-      display: inline-block;
+      @extend %table-row;
     }
 
     .cashed {
@@ -121,7 +144,6 @@
     currency-value {
 
       label {
-        font-weight: normal;
         margin: 0 $margin 0;
       }
 
