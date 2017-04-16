@@ -30,7 +30,8 @@
       cashWholeClick,
       triggerClick,
       deleteCashingClick,
-      cashPartClick
+      cashPartClick,
+      onSubmit
 
     });
 
@@ -57,6 +58,10 @@
       vm.cashPart = !vm.cashPart;
       vm.cashed = null;
 
+    }
+
+    function onSubmit() {
+      cashPartClick();
     }
 
     function deleteCashingClick(cashing) {

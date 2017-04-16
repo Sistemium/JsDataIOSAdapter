@@ -17,8 +17,19 @@
 
   .to-cash {
 
-    .form-group {
-      margin: $margin 0 0;
+    form {
+
+      > * {
+        margin: $margin 0 0;
+      }
+
+      *:first-child {
+        margin-top: 0;
+      }
+      button {
+        display: block;
+        width: 100%;
+      }
     }
 
     input {
