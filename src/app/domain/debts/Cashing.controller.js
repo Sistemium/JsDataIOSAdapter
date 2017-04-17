@@ -11,7 +11,8 @@
       .use({
 
         totalCashed,
-        onStateChange
+        onStateChange,
+        doUncashingClick
 
       });
 
@@ -30,16 +31,23 @@
      Functions
      */
 
+    function doUncashingClick() {
+
+    }
+
+
     function onStateChange(to) {
       if (to.name === rootState && vm.wasModified) {
         refresh();
       }
     }
 
+
     function refresh() {
       vm.setBusy(getData())
         .then(() => vm.wasModified = false);
     }
+
 
     function totalCashed() {
       return _.sumBy(vm.uncashed, 'summ');
@@ -58,6 +66,7 @@
 
     }
 
+
     function groupCashingsByOutlet() {
 
       let data = _.groupBy(vm.uncashed, 'outletId');
@@ -74,6 +83,7 @@
       vm.uncashedByOutlet = _.orderBy(data, ['outlet.name', 'outlet.address']);
 
     }
+
 
   }
 

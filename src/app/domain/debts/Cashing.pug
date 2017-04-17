@@ -5,10 +5,14 @@
   resize-offset-top='45'
   cg-busy='vm.cgBusy'
   )
+
+    .buttons
+      button.btn.btn-sm.btn-primary(ng-click='vm.doUncashingClick()') Сдать выручку
+
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.outletId')
 
       .title
-        .name {{ item.outlet.name }}
+        .name {{ item.outlet.name || 'Прочая выручка' }}
         small.address {{ item.outlet.address }}
 
       .cashings
@@ -18,8 +22,12 @@
         .cashing.total(ng-if='item.cashings.length > 1')
           currency-value.summ(value='item.totalSumm')
 
-
   .footer
+
+    .buttons
+      outlet-cashing-popover.btn.btn-link()
+        i.glyphicon.glyphicon-plus
+
     .totals.animate-show(ng-hide='vm.busy')
 
       label Итого на руках:

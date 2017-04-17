@@ -6,6 +6,12 @@
   $margin: $margin-bottom-xs;
   $headers-border: solid 1px $border-gray;
 
+  .scroll-y .buttons {
+
+    text-align: right;
+
+  }
+
   .outlet {
 
     padding: 5px 0;
@@ -58,19 +64,28 @@
 
   .footer {
 
-    padding: $margin 0;
     min-height: 45px;
     border-top: $headers-border;
     color: $gray;
     text-align: right;
 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+
     strong {
       color: $black;
     }
 
-    .totals > * {
-      min-width: $field-width;
-      display: inline-block;
+    .totals {
+
+      padding: $margin 0;
+
+      > * {
+        min-width: $field-width;
+        display: inline-block;
+      }
     }
 
   }
