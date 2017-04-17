@@ -13,6 +13,10 @@
     text-align: left;
   }
 
+  .title {
+    font-size: 18px;
+  }
+
   .header, .footer {
 
     padding: $margin 0;
@@ -48,7 +52,7 @@
     .outlet {
 
       @include responsive-only(gt-xs) {
-        font-size: larger;
+        //font-size: larger;
         margin: 5px 0;
       }
 

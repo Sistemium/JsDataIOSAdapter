@@ -19,7 +19,7 @@
 
   .cashing-undebted
 
-    h4.title
+    .title
       label Прочая выручка
       outlet-cashing-popover.btn.btn-link.btn-xs(outlet='vm.outlet')
         i.glyphicon.glyphicon-plus
@@ -42,7 +42,7 @@
 
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
-    h4.title
+    .title
       label {{ ::group.date }}
 
     .debts
