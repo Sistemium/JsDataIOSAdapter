@@ -36,6 +36,8 @@
 
       .cashing {
 
+        padding: 4px 0;
+
         @extend %flex-row;
         justify-content: flex-end;
 
@@ -55,6 +57,10 @@
 
         .ndoc {
           text-align: left;
+          .detete-btn {
+            margin-left: 5px;
+            color: $red;
+          }
         }
 
         strong {
@@ -87,11 +93,20 @@
     }
 
     .totals {
+
       > * {
         min-width: $field-width;
         display: inline-block;
       }
+
+      @include responsive-only(xxs) {
+        label {
+          display: none;
+        }
+      }
+
     }
+
 
   }
 

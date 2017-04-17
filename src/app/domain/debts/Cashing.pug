@@ -18,7 +18,10 @@
       .cashings
         .cashing(ng-repeat='cashing in item.cashings track by cashing.id')
           .commentText {{ cashing.commentText }}
-          .ndoc {{ cashing.ndoc || cashing.debt.ndoc }}
+          .ndoc
+            span {{ cashing.ndoc || cashing.debt.ndoc }}
+            a.detete-btn(href ng-click='vm.deleteCashingClick(cashing)' ng-if='vm.editing')
+              i.glyphicon.glyphicon-trash
           currency-value.summ(value='cashing.summ')
         .cashing.total(ng-if='item.cashings.length > 1')
           currency-value.summ(value='item.totalSumm')
@@ -26,15 +29,20 @@
   .footer
 
     .buttons
+
       outlet-cashing-popover.btn.btn-link(
       comment-text-placeholder='Точка'
       )
         i.glyphicon.glyphicon-plus
+
       outlet-cashing-popover.btn.btn-link(
       summ-sign='-1'
       ndoc-placeholder='№ заявки'
       )
         i.glyphicon.glyphicon-minus
+
+      a.btn.btn-link(href ng-click='vm.editClick()')
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
     .totals.animate-show(ng-hide='vm.busy')
 

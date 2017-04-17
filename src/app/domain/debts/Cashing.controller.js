@@ -12,7 +12,9 @@
 
         totalCashed,
         onStateChange,
-        doUncashingClick
+        doUncashingClick,
+        editClick,
+        deleteCashingClick
 
       });
 
@@ -35,6 +37,13 @@
 
     }
 
+    function deleteCashingClick(cashing) {
+      Cashing.destroy(cashing.id);
+    }
+
+    function editClick() {
+      vm.editing = !vm.editing;
+    }
 
     function onStateChange(to) {
       if (to.name === rootState && vm.wasModified) {
