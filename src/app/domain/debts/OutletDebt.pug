@@ -17,12 +17,10 @@
 
 .scroll-y(resize resize-offset-top='40')
 
-  .cashing-undebted
+  .cashing-undebted(ng-if='vm.undebtedCashings.length')
 
     .title
       label Прочая выручка
-      outlet-cashing-popover.btn.btn-link.btn-xs(outlet='vm.outlet')
-        i.glyphicon.glyphicon-plus
 
     .cashings(
     ng-repeat='cashing in vm.undebtedCashings | orderBy:"deviceCts" track by cashing.id'
@@ -62,6 +60,12 @@
           currency-value(value='debt.uncashed()')
 
 .footer
+
+  .buttons
+    outlet-cashing-popover.btn.btn-link(outlet='vm.outlet')
+      i.glyphicon.glyphicon-plus
+      span прочее
+
   .totals.animate-show(ng-hide='vm.busy')
 
     label Итого:

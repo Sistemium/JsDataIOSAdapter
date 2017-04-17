@@ -19,11 +19,9 @@
 
   .header, .footer {
 
-    padding: $margin 0;
     min-height: 35px;
 
     @include responsive-only(lt-sm) {
-      padding: $margin/2 0;
       min-height: 30px;
     }
 
@@ -37,11 +35,30 @@
   }
 
   .footer {
+
     border-top: $headers-border;
     color: $gray;
+
+    @extend %flex-row;
+    justify-content: space-between;
+    align-items: center;
+
     strong {
       color: $black;
     }
+
+    .buttons {
+      i + span {
+        margin-left: $margin;
+      }
+    }
+
+    @include responsive-only(xxs) {
+      label {
+        display: none;
+      }
+    }
+
   }
 
   .outlet-debt-total {
