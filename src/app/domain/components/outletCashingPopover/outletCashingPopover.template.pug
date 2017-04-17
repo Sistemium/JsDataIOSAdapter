@@ -34,5 +34,5 @@
     type='submit'
     value='submit'
     ng-disabled='!cashForm.$valid'
-    ) Добавить {{ vm.summSign < 0 ? 'вычет' : 'выручку' }}
+    ) Добавить {{ vm.summSign == -1 ? 'вычет' : 'выручку' }}
 
