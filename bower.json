@@ -1,6 +1,6 @@
 {
   "name": "j-sistemium",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "dependencies": {
     "angular-animate": "~1.6.3",
     "angular-touch": "~1.6.3",
