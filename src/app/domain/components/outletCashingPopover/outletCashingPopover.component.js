@@ -56,12 +56,13 @@
       if (summ <= 0 || !ndoc) return;
 
       let cashing = Cashing.createInstance({
-        debtId: null,
         summ,
         ndoc,
-        outletId: vm.outlet.id,
+        debtId: null,
+        uncashingId: null,
+        outletId: _.get(vm, 'outlet.id') || null,
         date: moment().format(),
-        uncashingId: null
+        commentText: vm.commentText
       });
 
       Cashing.create(cashing)
@@ -75,6 +76,7 @@
       $scope.$watch('vm.isPopoverOpen', () => {
         vm.ndoc = null;
         vm.summ = null;
+        vm.commentText = null;
       });
     }
 

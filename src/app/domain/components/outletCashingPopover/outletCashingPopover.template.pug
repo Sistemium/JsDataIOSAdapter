@@ -2,6 +2,15 @@
 
   form(name="cashForm" ng-submit='vm.onSubmit()')
 
+    .form-group(ng-if='!vm.outlet')
+
+      input#outlet-cashing-comment.form-control(
+      ng-model='vm.commentText'
+      name='commentText'
+      placeholder='Точка'
+      required
+      )
+
     .form-group
 
       input#outlet-cashing-ndoc.form-control(
