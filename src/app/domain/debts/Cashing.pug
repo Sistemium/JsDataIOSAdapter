@@ -15,6 +15,9 @@
         .cashing(ng-repeat='cashing in item.cashings track by cashing.id')
           .ndoc {{ cashing.ndoc || cashing.debt.ndoc }}
           currency-value.summ(value='cashing.summ')
+        .cashing.total(ng-if='item.cashings.length > 1')
+          currency-value.summ(value='item.totalSumm')
+
 
   .footer
     .totals.animate-show(ng-hide='vm.busy')

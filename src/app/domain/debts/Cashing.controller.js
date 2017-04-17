@@ -66,7 +66,8 @@
         return {
           outletId,
           cashings: _.orderBy(cashings, ['ndoc']),
-          outlet: Outlet.get(outletId)
+          outlet: Outlet.get(outletId),
+          totalSumm: _.sumBy(cashings, 'summ')
         }
       });
 

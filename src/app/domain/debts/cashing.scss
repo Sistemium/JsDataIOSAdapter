@@ -45,6 +45,11 @@
         strong {
           font-weight: normal;
         }
+
+        &:last-child strong {
+          font-weight: bold;
+        }
+
       }
 
     }
