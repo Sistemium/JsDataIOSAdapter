@@ -1,0 +1,6 @@
+ul.dropdown-menu(uib-dropdown-menu role='menu')
+  li(
+  role="menuitem"
+  ng-repeat='option in vm.options track by option.id'
+  )
+    a(href ng-click='vm.optionClick(option)') {{ option.name }}

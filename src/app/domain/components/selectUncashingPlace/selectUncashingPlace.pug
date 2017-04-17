@@ -1,0 +1,14 @@
+.btn-group(uib-dropdown)
+
+  a.btn.btn-link(uib-dropdown-toggle)
+    span {{ vm.selected.name || 'Выберите кассу' }}
+    span.caret
+
+  input(type='hidden' ng-model='vm.selected.id' required)
+
+  ul.dropdown-menu(
+  uib-dropdown-menu
+  template-url='app/domain/components/selectUncashingPlace/selectUncashingPlace.template.html'
+  )
+
+
