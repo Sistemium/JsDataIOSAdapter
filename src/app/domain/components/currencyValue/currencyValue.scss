@@ -16,6 +16,11 @@ currency-value {
 
   label {
     font-weight: normal;
+    margin-bottom: 0;
+  }
+
+  label + strong {
+    margin-left: 4px;
   }
 
 }

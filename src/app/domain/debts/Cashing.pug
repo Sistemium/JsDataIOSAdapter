@@ -7,7 +7,8 @@
   )
 
     .buttons
-      button.btn.btn-sm.btn-primary(ng-click='vm.doUncashingClick()') Сдать выручку
+      uncash-popover(uncashed='vm.uncashed' ng-if='vm.uncashed.length')
+        span Сдать выручку
 
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
 
@@ -26,6 +27,12 @@
         .cashing.total(ng-if='item.cashings.length > 1')
           currency-value.summ(value='item.totalSumm')
 
+    .empty(ng-if='!vm.busy && !vm.uncashed.length')
+      .alert.alert-info.centered
+        span Нет информации о собранной выручке. Регистрируйте выручку в разделе
+        span &nbsp;
+        a(href ui-sref='sales.debtByOutlet') Долги
+
   .footer
 
     .buttons
@@ -41,7 +48,7 @@
       )
         i.glyphicon.glyphicon-minus
 
-      a.btn.btn-link(href ng-click='vm.editClick()')
+      a.btn.btn-link(href ng-click='vm.editClick()' ng-if='vm.uncashed.length')
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
     .totals.animate-show(ng-hide='vm.busy')

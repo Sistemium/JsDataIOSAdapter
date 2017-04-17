@@ -51,6 +51,11 @@
       i + span {
         margin-left: $margin;
       }
+      @include responsive-only(lt-sm) {
+        .btn {
+          padding-left: 0;
+        }
+      }
     }
 
     @include responsive-only(xxs) {
