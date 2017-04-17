@@ -1,0 +1,73 @@
+@import "../../styles/variables";
+
+.uncashed {
+
+  $field-width: 110px;
+  $margin: $margin-bottom-xs;
+  $headers-border: solid 1px $border-gray;
+
+  .outlet {
+
+    padding: 5px 0;
+    border-bottom: $headers-border;
+
+    .title {
+
+      text-align: left;
+
+      .name {
+        font-weight: bold;
+      }
+      .address {
+        color: $gray;
+      }
+
+    }
+
+    .cashings {
+
+      text-align: right;
+
+      .cashing {
+        > * + * {
+          margin-left: 1em;
+        }
+
+        > * {
+          width: $field-width;
+          display: inline-block;
+        }
+
+        .ndoc {
+          text-align: left;
+        }
+
+        strong {
+          font-weight: normal;
+        }
+      }
+
+    }
+
+  }
+
+  .footer {
+
+    padding: $margin 0;
+    min-height: 45px;
+    border-top: $headers-border;
+    color: $gray;
+    text-align: right;
+
+    strong {
+      color: $black;
+    }
+
+    .totals > * {
+      min-width: $field-width;
+      display: inline-block;
+    }
+
+  }
+
+}

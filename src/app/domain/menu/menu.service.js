@@ -40,6 +40,11 @@
             // needRoles: ['admin', 'tester']
             needRoles: SALES_ROLES
           }, {
+            title: 'Выручка',
+            state: 'sales.cashing',
+            needRoles: ['admin', 'tester']
+            // needRoles: SALES_ROLES
+          }, {
             title: 'Клиенты',
             state: 'sales.territory',
             needRoles: SALES_ROLES

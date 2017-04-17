@@ -8,6 +8,19 @@
       stateHelperProvider
         .state({
 
+          name: 'sales.cashing',
+          url: '/cashing',
+
+          templateUrl: 'app/domain/debts/Cashing.html',
+          controller: 'CashingController as vm',
+
+          data: {
+            title: 'Выручка'
+          }
+
+        })
+        .state({
+
           name: 'sales.debtByOutlet',
           url: '/debt/byOutlet',
 
