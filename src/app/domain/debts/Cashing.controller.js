@@ -69,18 +69,44 @@
 
     function groupCashingsByOutlet() {
 
-      let data = _.groupBy(vm.uncashed, 'outletId');
+      let data = _.groupBy(vm.uncashed, cashing => {
 
-      data = _.map(data, (cashings, outletId) => {
-        return {
-          outletId,
-          cashings: _.orderBy(cashings, ['ndoc']),
-          outlet: Outlet.get(outletId),
-          totalSumm: _.sumBy(cashings, 'summ')
+        if (!cashing.outletId) {
+          return cashing.summ < 0 ? 'minus' : 'other';
         }
+
+        return cashing.outletId;
+
       });
 
-      vm.uncashedByOutlet = _.orderBy(data, ['outlet.name', 'outlet.address']);
+      data = _.map(data, (cashings, key) => {
+
+        let outletId;
+        let ord = 1;
+        let title;
+
+        if (key === 'minus') {
+          ord = 3;
+          title = 'Вычеты';
+        } else if (key === 'other') {
+          ord = 2;
+          title = 'Прочая выручка';
+        } else {
+          outletId = key;
+        }
+
+        return {
+          ord,
+          key,
+          title,
+          cashings: _.orderBy(cashings, ['commentText', 'ndoc']),
+          outlet: outletId && Outlet.get(outletId),
+          totalSumm: _.sumBy(cashings, 'summ')
+        };
+
+      });
+
+      vm.uncashedByOutlet = _.orderBy(data, ['ord', 'outlet.name', 'outlet.address']);
 
     }
 

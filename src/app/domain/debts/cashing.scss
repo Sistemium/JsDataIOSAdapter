@@ -35,6 +35,15 @@
       text-align: right;
 
       .cashing {
+
+        @extend %flex-row;
+        justify-content: flex-end;
+
+        .commentText {
+          flex: 1;
+          width: auto;
+        }
+
         > * + * {
           margin-left: 1em;
         }
@@ -69,19 +78,15 @@
     color: $gray;
     text-align: right;
 
-    display: flex;
-    flex-direction: row;
+    @extend %flex-row;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
 
     strong {
       color: $black;
     }
 
     .totals {
-
-      padding: $margin 0;
-
       > * {
         min-width: $field-width;
         display: inline-block;

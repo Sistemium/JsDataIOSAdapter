@@ -7,7 +7,7 @@
       input#outlet-cashing-comment.form-control(
       ng-model='vm.commentText'
       name='commentText'
-      placeholder='Точка'
+      placeholder='{{ vm.commentTextPlaceholder }}'
       required
       )
 
@@ -16,7 +16,7 @@
       input#outlet-cashing-ndoc.form-control(
       ng-model='vm.ndoc'
       name='ndoc'
-      placeholder='№ накладной'
+      placeholder='{{ vm.ndocPlaceholder }}'
       required
       )
 
@@ -34,5 +34,5 @@
     type='submit'
     value='submit'
     ng-disabled='!cashForm.$valid'
-    ) Добавить выручку
+    ) Добавить {{ vm.summSign < 0 ? 'вычет' : 'выручку' }}
 

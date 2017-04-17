@@ -9,14 +9,15 @@
     .buttons
       button.btn.btn-sm.btn-primary(ng-click='vm.doUncashingClick()') Сдать выручку
 
-    .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.outletId')
+    .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
 
       .title
-        .name {{ item.outlet.name || 'Прочая выручка' }}
+        .name {{ item.title || item.outlet.name }}
         small.address {{ item.outlet.address }}
 
       .cashings
         .cashing(ng-repeat='cashing in item.cashings track by cashing.id')
+          .commentText {{ cashing.commentText }}
           .ndoc {{ cashing.ndoc || cashing.debt.ndoc }}
           currency-value.summ(value='cashing.summ')
         .cashing.total(ng-if='item.cashings.length > 1')
@@ -25,8 +26,15 @@
   .footer
 
     .buttons
-      outlet-cashing-popover.btn.btn-link()
+      outlet-cashing-popover.btn.btn-link(
+      comment-text-placeholder='Точка'
+      )
         i.glyphicon.glyphicon-plus
+      outlet-cashing-popover.btn.btn-link(
+      summ-sign='-1'
+      ndoc-placeholder='№ заявки'
+      )
+        i.glyphicon.glyphicon-minus
 
     .totals.animate-show(ng-hide='vm.busy')
 

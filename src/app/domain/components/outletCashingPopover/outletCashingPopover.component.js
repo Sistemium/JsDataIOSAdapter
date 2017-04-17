@@ -5,7 +5,10 @@
   module.component('outletCashingPopover', {
 
     bindings: {
-      outlet: '<'
+      outlet: '<',
+      summSign: '<',
+      commentTextPlaceholder: '@',
+      ndocPlaceholder: '@'
     },
 
     transclude: true,
@@ -56,7 +59,7 @@
       if (summ <= 0 || !ndoc) return;
 
       let cashing = Cashing.createInstance({
-        summ,
+        summ: vm.summSign * vm.summ,
         ndoc,
         debtId: null,
         uncashingId: null,
@@ -73,11 +76,17 @@
     }
 
     function $onInit() {
+
+      vm.summSign = vm.summSign || 1;
+      vm.commentTextPlaceholder = vm.commentTextPlaceholder || 'Комментарий';
+      vm.ndocPlaceholder = vm.ndocPlaceholder || '№ накладной';
+
       $scope.$watch('vm.isPopoverOpen', () => {
         vm.ndoc = null;
         vm.summ = null;
         vm.commentText = null;
       });
+
     }
 
   }
