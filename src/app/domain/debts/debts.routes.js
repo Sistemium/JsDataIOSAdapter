@@ -6,6 +6,7 @@
     .config(function (stateHelperProvider) {
 
       stateHelperProvider
+
         .state({
 
           name: 'sales.cashing',
@@ -15,10 +16,12 @@
           controller: 'CashingController as vm',
 
           data: {
-            title: 'Выручка'
+            title: 'Выручка',
+            hideSalesmanFilter: true
           }
 
         })
+
         .state({
 
           name: 'sales.debtByOutlet',

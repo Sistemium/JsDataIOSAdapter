@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CashingController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth) {
+  function CashingController(Schema, $scope, saControllerHelper, $state) {
 
     const {Cashing, Outlet} = Schema.models();
 
@@ -21,9 +21,10 @@
      Listeners
      */
 
-    SalesmanAuth.watchCurrent($scope, refresh);
     vm.onScope('rootClick', () => $state.go(rootState));
     vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);
+
+    refresh();
 
     /*
      Functions
@@ -36,8 +37,7 @@
     }
 
     function refresh() {
-      let filter = SalesmanAuth.makeFilter();
-      vm.setBusy(getData(filter))
+      vm.setBusy(getData())
         .then(() => vm.wasModified = false);
     }
 
