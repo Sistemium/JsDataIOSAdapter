@@ -40,7 +40,7 @@
     color: $gray;
 
     @extend %flex-row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 
     strong {
@@ -48,6 +48,8 @@
     }
 
     .buttons {
+      flex: 1;
+      text-align: left;
       i + span {
         margin-left: $margin;
       }
