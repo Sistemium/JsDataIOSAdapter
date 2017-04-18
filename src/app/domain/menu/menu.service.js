@@ -53,6 +53,10 @@
             state: 'sales.campaigns',
             needRoles: SALES_ROLES
           }, {
+            title: 'Фотоотчёты',
+            state: 'sales.photoReports',
+            needRoles: SALES_ROLES
+          }, {
             title: 'Визиты',
             state: 'sales.visits',
             needRoles: SALES_ROLES

@@ -6,18 +6,18 @@
 
     function browserGetLocation(accuracy, timeout) {
 
-      var geo = $window.navigator.geolocation;
+      let geo = $window.navigator.geolocation;
       timeout = timeout || 30000;
 
       return $q(function (resolve, reject) {
 
-        var geoOptions = {
+        let geoOptions = {
           enableHighAccuracy: true,
           maximumAge: timeout,
           timeout: timeout
         };
 
-        var timeoutId = $timeout(()=>{
+        let timeoutId = $timeout(()=>{
           geo.clearWatch(watchID);
           reject('Время ожидания геометки истекло');
         }, timeout);
@@ -26,8 +26,8 @@
           if (_.get(location, 'coords.accuracy') <= accuracy) {
             $timeout.cancel(timeoutId);
             geo.clearWatch(watchID);
-            var coords = location.coords;
-            var res = {
+            let coords = location.coords;
+            let res = {
               horizontalAccuracy: coords.accuracy,
               latitude: coords.latitude,
               longitude: coords.longitude,
@@ -44,7 +44,7 @@
           reject(err);
         }
 
-        var watchID = geo.watchPosition(successWatch, failWatch, geoOptions);
+        let watchID = geo.watchPosition(successWatch, failWatch, geoOptions);
 
       });
 
@@ -52,7 +52,7 @@
 
     function getLocation(accuracy, ownerXid, target, timeout) {
 
-      var initData = {
+      let initData = {
         ownerXid: ownerXid,
         target: target
       };
@@ -62,7 +62,7 @@
       } else {
         return browserGetLocation(accuracy, timeout)
           .then(function (location) {
-            var Location = Schema.model('Location');
+            let Location = Schema.model('Location');
             return Location.create(_.assign(location, initData));
           })
       }
