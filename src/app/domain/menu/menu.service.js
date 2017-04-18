@@ -55,7 +55,8 @@
           }, {
             title: 'Фотоотчёты',
             state: 'sales.photoReports',
-            needRoles: SALES_ROLES
+            needRoles: ['admin', 'tester']
+            // needRoles: SALES_ROLES
           }, {
             title: 'Визиты',
             state: 'sales.visits',
