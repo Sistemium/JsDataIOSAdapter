@@ -1,0 +1,10 @@
+a.drop-box(
+href
+ngf-select
+ngf-drop
+ngf-change='vm.onSelect($file, $event)'
+ngf-capture='"capture"'
+ng-model='vm.files'
+)
+  span(ng-if='vm.progress') {{ vm.progress.loaded / vm.progress.loaded }}
+  ng-transclude(ng-if='!vm.progress')
