@@ -1,6 +1,6 @@
 .campaign-popover-template
 
-  uib-tabset.tabset(active='vm.teamIdx')
+  uib-tabset.tabset(active='vm.teamIdx' type="pills")
     uib-tab(
     index='$index + 1'
     ng-repeat='team in vm.teams'
