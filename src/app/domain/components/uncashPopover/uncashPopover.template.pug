@@ -10,9 +10,15 @@
 
     select-uncashing-place.form-group(ng-if='vm.type === "cashdesk"' selected='vm.uncashingPlace')
 
-    .form-group(ng-if='vm.type === "bank"')
+    .form-group.uncashingPhoto(ng-if='vm.type === "bank"')
 
-      make-photo(ng-model='vm.uncashingPhoto') Добавить фото
+      make-photo(model='vm.uncashingPicture' file='vm.photoFile' ng-show='!vm.photoFile')
+        span Добавить фото
+
+      .thumb
+        img(ngf-thumbnail='vm.photoFile' ng-if='vm.photoFile' ngf-size='{width: 60, height: 60}')
+        a.remove(href ng-click='vm.photoFile = null' ng-if='vm.photoFile' aria-label='Удалить фото')
+          i.glyphicon.glyphicon-remove
 
     .form-group
 

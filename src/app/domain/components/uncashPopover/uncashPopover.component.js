@@ -29,7 +29,7 @@
 
     });
 
-    const {Uncashing} = Schema.models();
+    const {Uncashing, UncashingPicture} = Schema.models();
 
     /*
      Functions
@@ -59,10 +59,21 @@
         date: moment().format(),
         commentText,
         type,
-        uncashingPlaceId: uncashingPlace.id
+        uncashingPlaceId: type === 'cashdesk' ? uncashingPlace.id : null
       });
 
       Uncashing.create(uncashing)
+        .then(uncashing => {
+
+          if (type === 'bank') {
+            let picture = _.assign(vm.uncashingPicture, {uncashingId: uncashing.id});
+            return UncashingPicture.create(picture)
+              .then(() => uncashing);
+          }
+
+          return uncashing;
+
+        })
         .then(uncashing => {
           return $q.all(_.map(vm.uncashed, cashing => {
             cashing.uncashingId = uncashing.id;
@@ -82,10 +93,13 @@
         if (!isOpen) return;
 
         _.assign(vm, {
+
           type: 'cashdesk',
           commentText: null,
           uncashingPlace: null,
-          summ: _.sumBy(vm.uncashed, 'summ')
+          summ: _.sumBy(vm.uncashed, 'summ'),
+          uncashingPicture: UncashingPicture.createInstance()
+
         });
 
       });

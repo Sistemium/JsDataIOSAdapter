@@ -26,4 +26,31 @@ uncash-popover {
     max-width: 350px;
   }
 
+  .uncashingPhoto {
+    .thumb {
+
+      position: relative;
+
+      img {
+
+        object-fit: contain;
+
+        width: 60px;
+        height: 60px;
+      }
+
+      .remove {
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        border-radius: 10px;
+        padding: 4px;
+        background: red;
+        color: $white;
+        line-height: 1;
+        font-size: 10px;
+      }
+    }
+  }
+
 }
