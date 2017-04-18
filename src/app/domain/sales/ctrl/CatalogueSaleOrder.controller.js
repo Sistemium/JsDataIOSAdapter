@@ -207,8 +207,12 @@
         position.volume = position.volume - notFactored + (volume > 0 ? factor : 0);
       }
 
+      // console.info('addPositionVolume:', position.volume);
+
       position.updateCost();
       vm.saleOrder.updateTotalCost();
+
+      // console.info('addPositionVolume totalCost:', vm.saleOrder.totalCost);
 
       // position.ts = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
       // console.warn(position.ts);

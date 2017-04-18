@@ -6,6 +6,22 @@
     .config(function (stateHelperProvider) {
 
       stateHelperProvider
+
+        .state({
+
+          name: 'sales.cashing',
+          url: '/cashing',
+
+          templateUrl: 'app/domain/debts/Cashing.html',
+          controller: 'CashingController as vm',
+
+          data: {
+            title: 'Выручка',
+            hideSalesmanFilter: true
+          }
+
+        })
+
         .state({
 
           name: 'sales.debtByOutlet',

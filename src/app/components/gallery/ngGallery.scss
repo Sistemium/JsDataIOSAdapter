@@ -32,6 +32,10 @@
 
   .left-right-chevron {
 
+    @media (max-width: 400px) {
+      display: none;
+    }
+
     display: flex;
     flex-flow: row wrap;
     align-items: center;
@@ -81,6 +85,11 @@
       }
 
       img.fullsize {
+
+        @media (max-width: 400px) {
+          max-width: 95%;
+        }
+
         height: auto;
         overflow: auto;
         width: auto;

@@ -16,13 +16,13 @@
 
     const tagRegs = [
       ['sparkling', 'игристое', /игристое/i],
-      ['rose', 'розовое', /розовое/i],
+      ['rose', 'розовое', /розовый|розовое|розов\./i],
       ['red', 'красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
-      ['white', 'белое', /бел\.|белое/i],
+      ['white', 'белое', /бел\.|белое|белый/i],
       ['semiDry', 'п/сух', /полусухое|п\/сух\.?/ig],
-      ['semiSweet', 'п/сл', /полусладкое|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
+      ['semiSweet', 'п/сл', /полуслад[^ ,"]*|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
       ['dry', 'сухое', /сухое|сух[.,]+|[ .,]+сух(?=[ ]|$)/i],
-      ['sweet', 'сладкое', /[ ]+сладк[^ ,]*|сладкое|сл\./i],
+      ['sweet', 'сладкое', /[ ]+сладк[^ ,"]*|сладкое|сл\./i],
       ['brut', 'брют', /брют/i],
       ['gift', 'п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
     ];
@@ -72,7 +72,7 @@
       computed: {
 
         tags: ['name', tagger],
-        preName: ['name', preNameFn],
+        preName: ['name', name => rmTags(preNameFn(name))],
         firstName: ['name', firstNameFn],
 
         category: ['name', function (name) {
@@ -85,7 +85,7 @@
           return (m && m.length) ? m[0].replace(/[^а-яa-z]/ig, ' ') : null;
         }],
 
-        lastName: ['name', 'firstName', 'preName', lastNameFn],
+        lastName: ['name', 'firstName', lastNameFn],
 
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
@@ -124,12 +124,14 @@
 
     });
 
-    function lastNameFn(name, firstName, preName) {
+    function lastNameFn(name, firstName) {
 
-      name = rmTags(name);
+      let preName = preNameFn(name);
 
       name = _.replace(name, preName, '');
       name = _.trim(_.replace(name, firstName, ''));
+
+      name = rmTags(name);
 
       let re = new RegExp(`(.+)(?=,[ \D])`);
       let m = name.match(re);
@@ -188,7 +190,7 @@
       let m = name.match(/[^"]+/);
       let res = /"/.test(name) ? _.first(m) : _.first(name.match(/[^ ]+/));
 
-      return rmTags(res);
+      return res;
 
     }
 

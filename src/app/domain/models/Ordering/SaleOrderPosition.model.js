@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, $q) {
 
     const SaleOrderPosition = Schema.register({
 
@@ -33,17 +33,31 @@
       aggregables: ['cost', 'volume'],
 
       methods: {
+
         updateCost: function () {
           this.priceDoc = this.price;
-          return this.cost = parseFloat((this.price * this.volume).toFixed(2));
+          this.cost = parseFloat((this.price * this.volume).toFixed(2));
+          this.deviceTs = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
         },
 
         safeSave: function () {
 
-          // let options = {keepChanges: ['cost', 'volume']};
+          let lastModified = this.deviceTs;
 
           if (this.volume > 0) {
-            return SaleOrderPosition.create(this);
+            return SaleOrderPosition.create(this, {
+              afterUpdate: (options, attrs) => {
+                // FIXME: copy-pasted from SaleOrder.model
+                let nowModified = this.deviceTs;
+                if (nowModified > lastModified) {
+                  options.cacheResponse = false;
+                  console.warn('Ignore server response SaleOrderPosition', nowModified, lastModified);
+                } else {
+                  console.info('SaleOrderPosition last modified:', lastModified, nowModified);
+                }
+                return $q.resolve(attrs);
+              }
+            });
           } else {
             return SaleOrderPosition.destroy(this);
           }

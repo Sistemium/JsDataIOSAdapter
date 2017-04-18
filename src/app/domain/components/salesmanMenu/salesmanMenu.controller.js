@@ -2,18 +2,19 @@
 
 (function () {
 
-  function salesmanMenuController(saControllerHelper, $scope, SalesmanAuth, saMedia) {
+  function salesmanMenuController(saControllerHelper, $scope, SalesmanAuth, saMedia, $state) {
 
-    let vm = saControllerHelper.setup(this, $scope);
+    const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
       salesmen: null,
       isEnabled: false,
-      salesmanClick,
-      noneClick: SalesmanAuth.logout,
-      toggleLabel,
       isOpen: false,
+      noneClick: SalesmanAuth.logout,
+
+      salesmanClick,
+      toggleLabel,
       onStateChange,
       isDisabled
 
@@ -25,6 +26,8 @@
 
     let stateDisabled;
 
+    onStateChange($state.current);
+
     /*
      Functions
      */
@@ -35,6 +38,7 @@
 
     function onStateChange(toState) {
       stateDisabled = _.get(toState, 'data.disableSalesmanFilter');
+      vm.isHidden = !!_.get(toState, 'data.hideSalesmanFilter');
     }
 
     function toggleLabel() {

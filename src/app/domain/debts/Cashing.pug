@@ -1,0 +1,58 @@
+.uncashed
+
+  .scroll-y(
+  resize resize-property='height'
+  resize-offset-top='45'
+  cg-busy='vm.cgBusy'
+  )
+
+    .buttons
+      uncash-popover(uncashed='vm.uncashed' ng-if='vm.uncashed.length')
+        span Сдать выручку
+
+    .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
+
+      .title
+        .name {{ item.title || item.outlet.name }}
+        small.address {{ item.outlet.address }}
+
+      .cashings
+        .cashing(ng-repeat='cashing in item.cashings track by cashing.id')
+          .commentText {{ cashing.commentText }}
+          .ndoc
+            span {{ cashing.ndoc || cashing.debt.ndoc }}
+            a.detete-btn(href ng-click='vm.deleteCashingClick(cashing)' ng-if='vm.editing')
+              i.glyphicon.glyphicon-trash
+          currency-value.summ(value='cashing.summ')
+        .cashing.total(ng-if='item.cashings.length > 1')
+          currency-value.summ(value='item.totalSumm')
+
+    .empty(ng-if='!vm.busy && !vm.uncashed.length')
+      .alert.alert-info.centered
+        span Нет информации о собранной выручке. Регистрируйте выручку в разделе
+        span &nbsp;
+        a(href ui-sref='sales.debtByOutlet') Долги
+
+  .footer
+
+    .buttons
+
+      outlet-cashing-popover.btn.btn-link(
+      comment-text-placeholder='Точка'
+      )
+        i.glyphicon.glyphicon-plus
+
+      outlet-cashing-popover.btn.btn-link(
+      summ-sign='-1'
+      ndoc-placeholder='№ заявки'
+      )
+        i.glyphicon.glyphicon-minus
+
+      a.btn.btn-link(href ng-click='vm.editClick()' ng-if='vm.uncashed.length')
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+
+    .totals.animate-show(ng-hide='vm.busy')
+
+      label Итого на руках:
+
+      currency-value(value='vm.totalCashed()')

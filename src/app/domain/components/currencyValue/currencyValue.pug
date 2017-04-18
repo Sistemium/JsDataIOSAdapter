@@ -1,0 +1,4 @@
+.currency-value(ng-if='!vm.hideEmpty || vm.value')
+  label(ng-if='vm.label') {{ vm.label }}
+  strong {{ vm.value | number:2 }}
+  span.currency(ng-if='vm.value || vm.value === 0') ₽

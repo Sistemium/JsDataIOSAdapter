@@ -1,17 +1,22 @@
-@import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/variables.scss";
 @import "mixins";
 
-$primary-color: #337ab7;
+$primary-color: #2768b7;
 $active-color: $primary-color;
 $sab-blue: $primary-color;
+
+@import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/variables.scss";
+@import "../../../bower_components/sistemium-angular-bootstrap/dist/sass/colors.scss";
 
 $black: #333333;
 $blue: $sab-blue;
 $dark-blue: darken($blue, 10%);
 $gray: gray;
+$red: red;
+$white: #fff;
 
 $navbar-padding-vertical: 15px;
 $margin-bottom-xs: 10px;
+$margin-bottom-xs-minus: 7px;
 $border-gray: #eee;
 
 $short-duration: 0.5s;

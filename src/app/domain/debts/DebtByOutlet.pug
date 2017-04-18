@@ -6,35 +6,28 @@ cg-busy='vm.cgBusy'
 
   .header
     .totals
-      label.total(ng-if='vm.totalCashingSumm()') На руках
+      label.total(ng-if='vm.totalCashed()') На руках
       label.total Остаток долга
 
-  .scroll-y(resize resize-offset-top='40')
+  .scroll-y(resize resize-offset-top='40' resize-offset-top-xs='32')
+
     .outlet-debt-total(ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.outletId')
 
-      .outlet
+      .outlet(ng-class='{blocked: item.outlet.isActive === false}')
         .name {{ ::item.outlet.name }}
         small.address {{ ::item.outlet.address }}
 
       .totals
 
-        span.total(ng-if='item["sum(cashing.summ)"]')
-          strong {{ item["sum(cashing.summ)"] | number:2 }}
-          span.currency ₽
+        currency-value(value='item["sum(cashed)"]')
 
         a.total(href ng-click='vm.itemClick(item)')
-          strong {{ ::item['sum(summ)'] | number:2 }}
-          span.currency ₽
+          currency-value(value='item["sum(summ)"]')
 
   .footer
     .totals.animate-show(ng-hide='vm.busy')
 
-      strong Итого:
+      label Итого:
 
-      .total(ng-if='vm.totalCashingSumm()')
-        strong {{ vm.totalCashingSumm() | number:2 }}
-        span.currency ₽
-
-      .total
-        strong {{ vm.totalSumm() | number:2 }}
-        span.currency ₽
+      currency-value(value='vm.totalCashed()')
+      currency-value(value='vm.totalSumm()')

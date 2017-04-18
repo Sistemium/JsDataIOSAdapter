@@ -77,7 +77,8 @@
 
     a.chevron {
 
-      @extend .center-vertical;
+      @extend %center-vertical;
+      height: auto;
 
       .glyphicon {
         top: 0;

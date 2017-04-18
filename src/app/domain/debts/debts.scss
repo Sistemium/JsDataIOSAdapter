@@ -4,13 +4,27 @@
 .debt-by-outlet {
 
   $margin: 6px;
-  $field-width: 120px;
+  $field-width: 110px;
   $headers-border: solid 1px $border-gray;
 
+  label {
+    font-weight: normal;
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
   .header, .footer {
-    padding: $margin 0;
+
     min-height: 35px;
-    //font-size: larger;
+
+    @include responsive-only(lt-sm) {
+      min-height: 30px;
+    }
+
   }
 
   .header {
@@ -21,21 +35,35 @@
   }
 
   .footer {
+
     border-top: $headers-border;
     color: $gray;
-  }
 
-  .outlet-debt-total .outlet {
+    @extend %flex-row;
+    justify-content: flex-end;
+    align-items: center;
 
-    font-size: larger;
-    font-weight: bold;
-    margin: 5px 0;
-    color: $black;
+    strong {
+      color: $black;
+    }
 
-    .address {
-      font-size: smaller;
-      color: silver;
-      font-weight: normal;
+    .buttons {
+      flex: 1;
+      text-align: left;
+      i + span {
+        margin-left: $margin;
+      }
+      @include responsive-only(lt-sm) {
+        .btn {
+          padding-left: 0;
+        }
+      }
+    }
+
+    @include responsive-only(xxs) {
+      label {
+        display: none;
+      }
     }
 
   }
@@ -45,33 +73,99 @@
     border-bottom: solid 1px $border-gray;
     padding: $margin 0;
 
+    .outlet {
+
+      @include responsive-only(gt-xs) {
+        //font-size: larger;
+        margin: 5px 0;
+      }
+
+      font-weight: bold;
+      color: $black;
+
+      .address {
+        font-size: smaller;
+        color: silver;
+        font-weight: normal;
+      }
+
+    }
+
   }
 
-  .date {
+  .date, .cashing-undebted {
     border-bottom: solid 1px $border-gray;
-    padding: 4px 4px 4px 15px;
+    @include responsive-only(gt-xs) {
+      padding: 4px 0 4px 15px;
+    }
+  }
+
+  .cashing-undebted {
+
+    .title .btn i {
+      color: $primary-color;
+    }
+
+    .cashings {
+      @extend %table-row;
+      text-align: right;
+      .cashed {
+        //margin-right: $field-width + $margin;
+      }
+      .buttons {
+        text-align: left;
+        font-size: 75%;
+        a.confirmation {
+          color: $red;
+        }
+      }
+    }
+  }
+
+  %table-row {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: baseline;
+    padding: $margin/2 0;
+
+    > * + * {
+      margin-left: $margin;
+      min-width: $field-width;
+      display: inline-block;
+    }
+
+    @include responsive-only(lt-sm) {
+      display: block;
+      .ndoc {
+        display: block;
+      }
+    }
+
   }
 
   .debts {
 
     text-align: right;
 
+    .debt {
+      @extend %table-row;
+    }
+
+    .cashed {
+    }
+
     .ndoc {
-      display: inline-block;
       font-weight: normal;
-      min-width: $field-width;
       text-align: left;
     }
 
-    .summ {
-      display: inline-block;
-      min-width: $field-width;
+    .overdue .ndoc {
+      color: $red;
     }
 
-    .currency {
-      font-weight: normal;
-      color: $black;
-      margin-left: $margin;
+    .summ {
     }
 
   }
@@ -82,13 +176,9 @@
     flex-direction: row;
     justify-content: flex-end;
 
-    .total {
-
-      text-align: right;
-      min-width: $field-width;
+    currency-value {
 
       label {
-        font-weight: normal;
         margin: 0 $margin 0;
       }
 
@@ -96,14 +186,16 @@
         margin-left: $margin;
       }
 
-      & + .total {
-        margin-left: 1em;
-      }
+    }
+
+    > * + * {
+      margin-left: $margin;
+      min-width: $field-width;
+      text-align: right;
 
     }
 
   }
-
 
   .alert {
 

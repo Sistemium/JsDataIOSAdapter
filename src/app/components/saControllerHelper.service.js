@@ -10,7 +10,7 @@
 
     function use(helper, scope) {
 
-      var me = this;
+      let me = this;
 
       if (!helper) return me;
 
@@ -24,7 +24,7 @@
     }
 
     function managedOn(scope, event, callback) {
-      var un = scope.$on(event, callback);
+      let un = scope.$on(event, callback);
       scope.$on('$destroy', un);
       return this;
     }
@@ -45,8 +45,8 @@
 
     function setup(vm, scope) {
 
-      var bindAllStore = {};
-      var busyArray = [];
+      let bindAllStore = {};
+      let busyArray = [];
 
       scope.$on('$destroy', () => _.each(bindAllStore, unbind => unbind()));
       watchStateChange(vm, scope);
@@ -58,20 +58,20 @@
           managedOn.call(vm, scope, event, callback);
           return vm;
         },
-        watchScope: (expr, callback) => {
-          scope.$watch(expr, callback);
+        watchScope: (expr, callback, byProperties) => {
+          scope.$watch(expr, callback, byProperties);
           return vm;
         },
 
         rebindAll: (model, filter, expr, callback) => {
-          var unbind = bindAllStore[expr];
+          let unbind = bindAllStore[expr];
           if (unbind) unbind();
           bindAllStore[expr] = model.bindAll(filter, scope, expr, callback);
           return vm;
         },
 
         rebindOne: (model, id, expr, callback) => {
-          var unbind = bindAllStore[expr];
+          let unbind = bindAllStore[expr];
           if (unbind) unbind();
           if (id) {
             bindAllStore[expr] = model.bindOne(id, scope, expr, callback)
@@ -94,7 +94,7 @@
 
               function popResolver () {
 
-                var next = busyArray.pop();
+                let next = busyArray.pop();
 
                 if (next) {
                   // console.info('setBusy next', next);

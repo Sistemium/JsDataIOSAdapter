@@ -44,7 +44,7 @@ h4.clear-left.pull-left.visit
 section.clear-both.scroll-y(
 cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}'
 ng-class='{mt: !vm.visit.photos.length}'
-resize='tabset'
+resize resize-offset-top='5' resize-property='height'
 ng-style='{"max-height": (tabset.windowHeight - tabset.offsetTop - 5) + "px"}'
 )
 

@@ -1,0 +1,116 @@
+@import "../../styles/variables";
+
+.uncashed {
+
+  $field-width: 110px;
+  $margin: $margin-bottom-xs;
+  $headers-border: solid 1px $border-gray;
+
+  .scroll-y .buttons {
+
+    text-align: right;
+
+  }
+
+  .outlet {
+
+    padding: 5px 0;
+    border-bottom: $headers-border;
+
+    .title {
+
+      text-align: left;
+
+      .name {
+        font-weight: bold;
+      }
+      .address {
+        color: $gray;
+      }
+
+    }
+
+    .cashings {
+
+      text-align: right;
+
+      .cashing {
+
+        padding: 3px 0;
+
+        @extend %flex-row;
+        justify-content: flex-end;
+
+        .commentText {
+          flex: 1;
+          width: auto;
+        }
+
+        > * + * {
+          margin-left: 1em;
+        }
+
+        > * {
+          width: $field-width;
+          display: inline-block;
+        }
+
+        .ndoc {
+          text-align: left;
+          .detete-btn {
+            margin-left: 5px;
+            color: $red;
+          }
+        }
+
+        strong {
+          font-weight: normal;
+        }
+
+        &:last-child strong {
+          font-weight: bold;
+        }
+
+      }
+
+    }
+
+  }
+
+  .footer {
+
+    min-height: 45px;
+    border-top: $headers-border;
+    color: $gray;
+    text-align: right;
+
+    @extend %flex-row;
+    justify-content: space-between;
+    align-items: center;
+
+    strong {
+      color: $black;
+    }
+
+    .totals {
+
+      > * {
+        min-width: $field-width;
+        display: inline-block;
+      }
+
+      @include responsive-only(xxs) {
+        label {
+          display: none;
+        }
+      }
+
+    }
+
+  }
+
+  .empty {
+    @extend %center-vertical;
+  }
+
+}

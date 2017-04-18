@@ -1,0 +1,87 @@
+@import "../../../styles/variables";
+
+.debt-cashing-popover {
+
+  $margin: 8px;
+  $border: solid 1px $border-gray;
+
+  a {
+    text-align: center;
+    display: block;
+    padding: $margin;
+  }
+
+  a.delete.confirmation, .error {
+    color: $red !important;
+  }
+
+  .to-cash {
+
+    form {
+
+      > * {
+        margin: $margin 0 0;
+      }
+
+      *:first-child {
+        margin-top: 0;
+      }
+      button {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    input {
+      text-align: right;
+    }
+
+  }
+
+  .to-cash + .cashings {
+    margin-top: $margin;
+  }
+
+  .title, .error {
+    text-align: center;
+    font-size: x-small;
+    margin: $margin/2 auto 0;
+  }
+
+  .cashings {
+
+    min-width: 250px;
+
+    .title {
+      margin: $margin auto;
+    }
+
+    border: $border;
+    @extend %rounded-borders;
+
+    .cashing {
+
+      > * {
+        padding: $margin;
+      }
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      border-top: $border;
+      align-items: baseline;
+
+      i.glyphicon {
+        top: 2px;
+      }
+
+      .cts {
+        text-align: left;
+      }
+      .summ {
+        text-align: right;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,29 @@
+@import "../../../styles/variables";
+
+uncash-popover {
+
+  .btn-group {
+    @extend %flex-row;
+    justify-content: space-around;
+    > * {
+      flex: 1;
+    }
+  }
+
+  button.btn-success {
+    display: block;
+    width: 100%;
+    strong {
+      font-weight: normal;
+    }
+    .currency {
+      color: $white;
+    }
+  }
+
+  .popover {
+    min-width: 300px;
+    max-width: 350px;
+  }
+
+}

@@ -1,0 +1,31 @@
+.uncash-popover
+
+  form(name="uncashForm" ng-submit='vm.onSubmit()')
+
+    .form-group
+
+      .btn-group
+        label.btn.btn-default(ng-model='vm.type' uib-btn-radio="'bank'" uncheckable) Банк
+        label.btn.btn-default(ng-model='vm.type' uib-btn-radio="'cashdesk'" uncheckable) Касса
+
+    select-uncashing-place.form-group(ng-if='vm.type === "cashdesk"' selected='vm.uncashingPlace')
+
+    .form-group(ng-if='vm.type === "bank"')
+
+      make-photo(ng-model='vm.uncashingPhoto') Добавить фото
+
+    .form-group
+
+      textarea#uncashing-comment.form-control(
+      ng-model='vm.commentText'
+      name='commentText'
+      placeholder='Комментарий'
+      )
+
+    button.btn.btn-success(
+    type='submit'
+    value='submit'
+    ng-disabled='!uncashForm.$valid'
+    )
+      currency-value(value='vm.summ' label='Сдать')
+

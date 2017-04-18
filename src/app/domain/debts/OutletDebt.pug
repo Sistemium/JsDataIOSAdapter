@@ -10,31 +10,65 @@
           small {{vm.outlet.address}}
       span.caret
 
-  .totals.animate-show(ng-hide='vm.busy')
+.header
+  .totals
+    label.total(ng-if='vm.cashingTotal') На руках
+    label.total Остаток долга
 
-    .info
-      .total
-        label Получено прочего:
-        strong {{ vm.cashingTotalByDebt[null] | number:2 }}
-        span.currency ₽
-      .total
-        label Остаток долга:
-        strong {{ vm.totalSumm() | number:2 }}
-        span.currency ₽
+.scroll-y(resize resize-offset-top='40')
 
-.scroll-y(resize resize-offset-top='5')
+  .cashing-undebted(ng-if='vm.undebtedCashings.length')
+
+    .title
+      label Прочая выручка
+
+    .cashings(
+    ng-repeat='cashing in vm.undebtedCashings | orderBy:"deviceCts" track by cashing.id'
+    )
+      label.ndoc {{ ::cashing.ndoc }}
+
+      currency-value.cashed(
+      value='cashing.summ'
+      )
+
+      .buttons
+        a(
+        href ng-click='vm.trashUndebtedClick(cashing)'
+        ng-class='{confirmation: vm.confirmation[cashing.id]}'
+        )
+          i.glyphicon.glyphicon-trash
+
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
-    h4.title {{ ::group.date }}
+    .title
+      label {{ ::group.date }}
 
     .debts
 
-      .debt(ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id')
+      .debt(
+      ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id'
+      ng-class='{overdue: debt.isOverdue()}'
+      )
 
         label.ndoc {{ ::debt.ndoc }}
 
-        label.cashed(ng-if='vm.cashingTotalByDebt[debt.id]')
-          | {{ ::vm.cashingTotalByDebt[debt.id] | number:2 }} ₽
+        currency-value.cashed(
+        value='vm.cashingTotalByDebt[debt.id]'
+        ng-if='vm.cashingTotal'
+        )
+        debt-cashing-popover.summ(debt='debt')
+          currency-value(value='debt.uncashed()')
 
-        label.summ
-          debt-cashing-popover(debt='debt') {{ ::debt.summ | number:2 }} ₽
+.footer
+
+  .buttons
+    outlet-cashing-popover.btn.btn-link(outlet='vm.outlet')
+      i.glyphicon.glyphicon-plus
+      span прочее
+
+  .totals.animate-show(ng-hide='vm.busy')
+
+    label Итого:
+
+    currency-value(value='vm.cashingTotal' ng-if='vm.cashingTotal')
+    currency-value(value='vm.totalSumm()')

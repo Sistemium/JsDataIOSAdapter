@@ -37,8 +37,13 @@
           }, {
             title: 'Долги',
             state: 'sales.debtByOutlet',
-            // needRoles: ['admin', 'tester']
-            needRoles: SALES_ROLES
+            needRoles: ['admin', 'tester']
+            // needRoles: SALES_ROLES
+          }, {
+            title: 'Выручка',
+            state: 'sales.cashing',
+            needRoles: ['admin', 'tester']
+            // needRoles: SALES_ROLES
           }, {
             title: 'Клиенты',
             state: 'sales.territory',
@@ -46,6 +51,10 @@
           }, {
             title: 'Акции',
             state: 'sales.campaigns',
+            needRoles: SALES_ROLES
+          }, {
+            title: 'Фотоотчёты',
+            state: 'sales.photoReports',
             needRoles: SALES_ROLES
           }, {
             title: 'Визиты',
