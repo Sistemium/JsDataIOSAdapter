@@ -3,7 +3,6 @@
 campaign-popover {
 
   margin-left: 8px;
-
   font-size: 14px;
   font-weight: normal;
   padding: 8px;
@@ -32,86 +31,72 @@ campaign-popover {
 
   .popover {
 
-    .tabset {
+    top: 47px !important;
 
-      height: 43px;
+    @include responsive-only(xxs) {
+      max-width: 230px;
+      font-size: 12px;
+      .popover-content {
+        padding: 5px;
+      }
+
+      #campaign-popover-scroll {
+        width: 210px;
+      }
+
+    }
+
+    @include responsive-only(xs) {
+      max-width: 300px;
+      font-size: 13px;
+
+      .popover-content {
+        padding: 5px 5px;
+      }
+
+      #campaign-popover-scroll {
+        width: 234px;
+      }
+    }
+
+    @include responsive-only(gt-xs) {
+      max-width: 400px;
+      font-size: 15px;
+
+      #campaign-popover-scroll {
+        width: 342px;
+      }
+
+    }
+
+    .tabset {
+      height: inherit;
 
       & > ul {
 
-        width: 340px;
+        background: #f5f5f5;
+        border-radius: 4px;
+        padding: 5px;
+        margin-bottom: 5px;
+        text-align: left;
 
-        @include responsive-only(lt-sm) {
-          width: 248px;
+        li {
+          margin: 0 auto;
+          a {
+            white-space: nowrap;
+          }
         }
-
-        @include responsive-only(iphone5) {
-          width: 210px;
-        }
-
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-between;
 
         li.active {
           pointer-events: none;
         }
-
       }
 
     }
 
-    max-width: none;
-    top: 47px !important;
-
-    .team-name-wrapper {
-      margin-bottom: 10px;
-      display: flex;
-      flex-flow: row wrap;
-      justify-content: space-between;
-      width: 340px;
-
-      @media (min-width: 371px) and (max-width: 768px) {
-        width: 248px;
-      }
-
-      @media (max-width: 370px) {
-        width: 210px;
-      }
-
-      .no-campaigns {
-        margin: 10px auto;
-        font-weight: 500;
-      }
-      .team-name {
-
-        span {
-          outline: none;
-          cursor: pointer;
-          background: #f5f5f5;
-          padding: 5px;
-          margin: 2px;
-          border-radius: 4px;
-          line-height: 2;
-          color: #4290d0;
-        }
-
-      }
-    }
-
-    & > * {
-      font-size: 16px;
-
-      @media (min-width: 371px) and (max-width: 768px) {
-        font-size: 14px;
-      }
-
-      @media (max-width: 370px) {
-        font-size: 13px;
-      }
-    }
     #campaign-popover-scroll {
 
-      width: 340px;
+      margin: 0 auto;
 
       .campaign {
 
@@ -128,13 +113,22 @@ campaign-popover {
 
           .thumb {
 
-            display: none;
+            margin: 6px 12px 6px 0;
+            width: 70px;
+            height: 70px;
+            border: solid 1px $state-info-border;
+
+            img {
+              width: inherit;
+              height: 100%;
+              object-fit: cover;
+            }
 
             &:first-child, &:nth-child(2), &:nth-child(3), &:nth-child(4) {
               display: inline-block;
             }
 
-            @media (min-width: 371px) and (max-width: 768px) {
+            @include responsive-only(xs) {
 
               &:nth-child(4) {
                 display: none;
@@ -146,8 +140,7 @@ campaign-popover {
 
             }
 
-            @media (max-width: 370px) {
-
+            @include responsive-only(xxs) {
               &:nth-child(3), &:nth-child(4) {
                 display: none;
               }
@@ -160,54 +153,6 @@ campaign-popover {
           }
         }
       }
-
     }
-
-    @media (min-width: 371px) and (max-width: 768px) {
-
-      #campaign-popover-scroll {
-        width: 248px;
-
-        .campaign .pictures {
-          width: 241px;
-        }
-
-      }
-
-    }
-
-    @media (max-width: 370px) {
-
-      .popover-content {
-        padding: 5px;
-      }
-
-      #campaign-popover-scroll {
-        width: 210px;
-      }
-
-      .campaign .pictures {
-        width: 200px;
-      }
-
-    }
-
-    .thumb {
-
-      margin: 6px 12px 6px 0;
-      display: inline-block;
-      width: 70px;
-      height: 70px;
-      border: solid 1px $state-info-border;
-
-      img {
-        width: inherit;
-        height: 100%;
-        object-fit: cover;
-      }
-
-    }
-
   }
-
 }
