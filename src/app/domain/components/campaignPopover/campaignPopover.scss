@@ -23,7 +23,7 @@ campaign-popover {
   }
 
   .campaign-popover {
-    @media (max-width: 479px) {
+    @include responsive-only(xxs) {
       .name, .caret {
         display: none;
       }
@@ -40,11 +40,11 @@ campaign-popover {
 
         width: 340px;
 
-        @media (min-width: 350px) and (max-width: 768px) {
+        @include responsive-only(lt-sm) {
           width: 248px;
         }
 
-        @media (max-width: 370px) {
+        @include responsive-only(iphone5) {
           width: 210px;
         }
 
