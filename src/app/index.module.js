@@ -22,7 +22,8 @@
       'jsd',
       'toggle-switch',
       'angularMoment',
-      'swipe'
+      'swipe',
+      'ngFileUpload'
     ]);
 
   angular.module('jsd', ['sistemiumBootstrap', 'Sales']);
