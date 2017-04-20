@@ -714,7 +714,11 @@
 
         articles = _.filter(articles, article => {
 
-          let res = !reg || reg.test(article.name) || reg.test(article.preName) || reg.test(article.lastName);
+          let res = !reg ||
+            reg.test(article.name) ||
+            reg.test(article.preName) ||
+            reg.test(article.lastName) ||
+            article.ArticleGroup && reg.test(article.ArticleGroup.name);
 
           if (res && vm.showOnlyShipped) {
             res = vm.articleStats[article.id];
