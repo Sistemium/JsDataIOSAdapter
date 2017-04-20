@@ -57,6 +57,9 @@
 
       let uncashing = Uncashing.createInstance({
         date: moment().format(),
+        summ: _.sumBy(vm.uncashed, 'summ'),
+        summOrigin: _.sumBy(vm.uncashed, 'summ'),
+        processing: 'upload',
         commentText,
         type,
         uncashingPlaceId: type === 'cashdesk' ? uncashingPlace.id : null

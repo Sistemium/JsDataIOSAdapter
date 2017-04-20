@@ -6,5 +6,5 @@ ngf-change='vm.onSelect($file, $event)'
 ngf-capture='"capture"'
 ng-model='vm.files'
 )
-  span(ng-if='vm.progress') {{ vm.progress.loaded / vm.progress.loaded }}
+  span(ng-if='vm.uploading') {{ vm.uploading.loaded / vm.uploading.total * 100.0 | number:0 }}%
   ng-transclude(ng-if='!vm.progress')

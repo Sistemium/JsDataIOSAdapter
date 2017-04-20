@@ -12,12 +12,18 @@
 
     .form-group.uncashingPhoto(ng-if='vm.type === "bank"')
 
-      make-photo(model='vm.uncashingPicture' file='vm.photoFile' ng-show='!vm.photoFile')
+      make-photo(
+      model='vm.uncashingPicture'
+      file='vm.photoFile'
+      ng-show='!vm.photoFile'
+      model-name='UncashingPicture'
+      )
         span Добавить фото
 
-      .thumb
-        img(ngf-thumbnail='vm.photoFile' ng-if='vm.photoFile' ngf-size='{width: 60, height: 60}')
-        a.remove(href ng-click='vm.photoFile = null' ng-if='vm.photoFile' aria-label='Удалить фото')
+      .thumb(ng-if='vm.photoFile')
+        loading-circle(ng-if='!vm.uncashingPicture.srcThumbnail')
+        img(ng-src='{{vm.uncashingPicture.srcThumbnail}}' ng-if='vm.uncashingPicture.srcThumbnail')
+        a.remove(href ng-click='vm.photoFile = null' aria-label='Удалить фото')
           i.glyphicon.glyphicon-remove
 
     .form-group
@@ -29,7 +35,7 @@
       )
 
     button.btn.btn-success(
-    type='submit'
+    ng-click='vm.onSubmit()'
     value='submit'
     ng-disabled='!uncashForm.$valid'
     )

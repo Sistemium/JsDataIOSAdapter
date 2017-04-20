@@ -7,7 +7,8 @@
     bindings: {
       folder: '<',
       model: '=',
-      file: '='
+      file: '=',
+      modelName: '@'
     },
 
     transclude: true,
@@ -54,8 +55,11 @@
 
           let picturesInfo = imsData.pictures;
           let href = _.get(_.find(picturesInfo, {name: 'largeImage'}), 'src');
+          let thumbnailHref = _.get(_.find(picturesInfo, {name: 'thumbnail'}), 'src');
 
-          _.assign(vm.model, {picturesInfo, href});
+          _.assign(vm.model, {picturesInfo, href, thumbnailHref});
+
+          vm.modelName && Schema.model(vm.modelName).inject(vm.model);
 
           console.log(vm.model);
 
