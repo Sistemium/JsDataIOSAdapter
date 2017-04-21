@@ -8,7 +8,7 @@
       uncashed: '<'
     },
 
-    transclude: true,
+    // transclude: true,
 
     templateUrl: 'app/domain/components/uncashPopover/uncashPopover.html',
 
@@ -17,13 +17,15 @@
 
   });
 
-  function uncashPopoverController(Schema, $scope, $q) {
+  function uncashPopoverController(Schema, $scope, $q, localStorageService) {
 
     let vm = this;
 
     _.assign(vm, {
 
       $onInit,
+      $onDestroy,
+
       onSubmit,
       triggerClick
 
@@ -89,23 +91,27 @@
         });
     }
 
+    const DEFAULT_FIELDS = ['uncashingPlaceId', 'type'];
+
+    function $onDestroy() {
+
+      vm.uncashingPlaceId = _.get(vm, 'uncashingPlace.id');
+      localStorageService.set('uncashing.defaults', _.pick(vm, DEFAULT_FIELDS))
+
+    }
+
     function $onInit() {
 
-      $scope.$watch('vm.isPopoverOpen', isOpen => {
+      _.assign(vm, {
 
-        if (!isOpen) return;
-
-        _.assign(vm, {
-
-          type: 'cashdesk',
-          commentText: null,
-          uncashingPlace: null,
-          summ: _.sumBy(vm.uncashed, 'summ'),
-          uncashingPicture: UncashingPicture.createInstance()
-
-        });
+        type: 'cashdesk',
+        commentText: null,
+        summ: _.sumBy(vm.uncashed, 'summ'),
+        uncashingPicture: UncashingPicture.createInstance()
 
       });
+
+      _.assign(vm, localStorageService.get('uncashing.defaults'));
 
     }
 

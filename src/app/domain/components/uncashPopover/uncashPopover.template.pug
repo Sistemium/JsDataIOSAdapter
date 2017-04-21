@@ -4,11 +4,15 @@
 
     .form-group
 
-      .btn-group
+      .btn-group.type
         label.btn.btn-default(ng-model='vm.type' uib-btn-radio="'bank'" uncheckable) Банк
         label.btn.btn-default(ng-model='vm.type' uib-btn-radio="'cashdesk'" uncheckable) Касса
 
-    select-uncashing-place.form-group(ng-if='vm.type === "cashdesk"' selected='vm.uncashingPlace')
+    select-uncashing-place.form-group(
+    ng-if='vm.type === "cashdesk"'
+    selected='vm.uncashingPlace'
+    init-id='vm.uncashingPlaceId'
+    )
 
     .form-group.uncashingPhoto(ng-if='vm.type === "bank"')
 
@@ -18,7 +22,7 @@
       ng-show='!vm.photoFile'
       model-name='UncashingPicture'
       )
-        span Добавить фото
+        span Сфотографируйте ПКО
 
       .thumb(ng-if='vm.photoFile')
         loading-circle(ng-if='!vm.uncashingPicture.srcThumbnail')

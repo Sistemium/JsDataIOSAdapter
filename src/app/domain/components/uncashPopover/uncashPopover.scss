@@ -2,6 +2,12 @@
 
 uncash-popover {
 
+  .uncashPopover {
+    span:nth-child(2) {
+      display: none;
+    }
+  }
+
   .btn-group {
     @extend %flex-row;
     justify-content: space-around;
