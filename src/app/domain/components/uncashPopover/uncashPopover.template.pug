@@ -1,6 +1,6 @@
 .uncash-popover
 
-  form(name="uncashForm" ng-submit='vm.onSubmit()')
+  form(name="uncashForm")
 
     .form-group
 
@@ -19,15 +19,19 @@
       make-photo(
       model='vm.uncashingPicture'
       file='vm.photoFile'
-      ng-show='!vm.photoFile'
+      ng-show='!vm.uncashingPicture.id'
       model-name='UncashingPicture'
       )
         span Сфотографируйте ПКО
 
-      .thumb(ng-if='vm.photoFile')
+      .thumb(ng-if='vm.uncashingPicture.id')
         loading-circle(ng-if='!vm.uncashingPicture.srcThumbnail')
         img(ng-src='{{vm.uncashingPicture.srcThumbnail}}' ng-if='vm.uncashingPicture.srcThumbnail')
-        a.remove(href ng-click='vm.photoFile = null' aria-label='Удалить фото')
+        a.remove(
+        href
+        ng-click='vm.deletePhotoClick()'
+        aria-label='Удалить фото'
+        )
           i.glyphicon.glyphicon-remove
 
     .form-group

@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CashingController(Schema, $scope, saControllerHelper, $state) {
+  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets) {
 
     const {Cashing, Outlet} = Schema.models();
 
@@ -23,6 +23,9 @@
     /*
      Listeners
      */
+
+
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['UncashingPicture']));
 
     vm.onScope('rootClick', () => $state.go(rootState));
     vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);

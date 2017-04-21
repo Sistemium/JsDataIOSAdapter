@@ -17,7 +17,7 @@
 
   });
 
-  function uncashPopoverController(Schema, $scope, $q, localStorageService) {
+  function uncashPopoverController(Schema, $scope, $q, localStorageService, Sockets) {
 
     let vm = this;
 
@@ -27,15 +27,37 @@
       $onDestroy,
 
       onSubmit,
-      triggerClick
+      triggerClick,
+      deletePhotoClick
 
     });
 
     const {Uncashing, UncashingPicture} = Schema.models();
 
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+
     /*
      Functions
      */
+
+    function onJSData(event) {
+
+      if (event.resource !== 'UncashingPicture') return;
+
+      let {data} = event;
+
+      if (!_.get(data, 'href')) return;
+
+      // FIXME: IOS can't upload picture with null uncashingId thus we never reach here
+      
+      UncashingPicture.inject(data);
+
+    }
+
+    function deletePhotoClick() {
+      vm.photoFile = null;
+      vm.uncashingPicture = UncashingPicture.createInstance();
+    }
 
     function triggerClick() {
 
@@ -44,16 +66,6 @@
     }
 
     function onSubmit() {
-
-      // date: {type: 'date'},
-      // summ: {type: 'decimal'},
-      // summOrigin: {type: 'decimal'},
-      // commentText: true,
-      //   processing: true,
-      //   type: true,
-      //   deviceCts: {type: 'timestamp'},
-      //
-      // uncashingPlaceId
 
       let {type, commentText, uncashingPlace} = vm;
 
@@ -71,9 +83,21 @@
         .then(uncashing => {
 
           if (type === 'bank') {
-            let picture = _.assign(vm.uncashingPicture, {uncashingId: uncashing.id});
-            return UncashingPicture.create(picture)
-              .then(() => uncashing);
+
+            let q = $q.resolve(vm.uncashingPicture);
+
+            if (vm.uncashingPicture.id) {
+              // FIXME: ugly because in simulator we don't get href updates and may override it
+              // UncashingPicture can't be uploaded with null uncashingId
+              q = UncashingPicture.find(vm.uncashingPicture.id);
+            }
+
+            return q.then(picture => {
+              picture.uncashingId = uncashing.id;
+              return UncashingPicture.create(picture)
+                .then(() => uncashing);
+            })
+
           }
 
           return uncashing;
