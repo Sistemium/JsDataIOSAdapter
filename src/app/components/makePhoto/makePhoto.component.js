@@ -20,14 +20,16 @@
 
   });
 
-  function makePhotoController(Upload, Schema, Auth) {
+  function makePhotoController(Upload, Schema, Auth, IOS, PhotoHelper) {
 
     let vm = this;
 
     _.assign(vm, {
 
       $onInit,
-      onSelect
+      onSelect,
+
+      makePhotoClick
 
     });
 
@@ -39,11 +41,26 @@
      Functions
      */
 
+    function makePhotoClick() {
+      return PhotoHelper.makePhoto(vm.modelName, {})
+        .then(res => {
+          vm.model = res;
+        });
+    }
+
     function $onInit() {
+
+      vm.isIos = IOS.isIos();
+
+
+
+      if (vm.isIos) return;
+
       Setting.findAll({name: 'IMS.url'})
         .then(settings => {
           imsUrl = _.get(_.first(settings), 'value');
         });
+
     }
 
     function onSelect(file) {

@@ -1,4 +1,5 @@
 a.drop-box(
+ng-if='!vm.isIos'
 href
 ngf-select
 ngf-drop
@@ -6,5 +7,18 @@ ngf-change='vm.onSelect($file, $event)'
 ngf-capture='"capture"'
 ng-model='vm.files'
 )
-  span(ng-if='vm.uploading') {{ vm.uploading.loaded / vm.uploading.total * 100.0 | number:0 }}%
+  uib-progressbar(
+  ng-if='vm.uploading'
+  value='vm.uploading.loaded / vm.uploading.total * 100.0'
+  type='info'
+  )
+    b {{ vm.uploading.loaded / vm.uploading.total * 100.0 | number:0 }}%
   ng-transclude(ng-if='!vm.progress')
+
+
+a(
+ng-if='vm.isIos'
+href
+ng-click='vm.makePhotoClick()'
+)
+  ng-transclude
