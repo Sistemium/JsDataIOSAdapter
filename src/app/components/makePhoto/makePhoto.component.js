@@ -7,7 +7,6 @@
     bindings: {
       folder: '<',
       model: '=',
-      file: '=',
       modelName: '@'
     },
 
@@ -52,8 +51,6 @@
 
       vm.isIos = IOS.isIos();
 
-
-
       if (vm.isIos) return;
 
       Setting.findAll({name: 'IMS.url'})
@@ -76,9 +73,10 @@
 
           _.assign(vm.model, {picturesInfo, href, thumbnailHref});
 
-          vm.modelName && Schema.model(vm.modelName).inject(vm.model);
-
-          console.log(vm.model);
+          if (vm.modelName) {
+            Schema.model(vm.modelName).create(vm.model)
+              .then(savedModel => vm.model = savedModel);
+          }
 
         });
 

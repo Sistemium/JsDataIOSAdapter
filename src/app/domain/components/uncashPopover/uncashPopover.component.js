@@ -8,27 +8,38 @@
       uncashed: '<'
     },
 
-    // transclude: true,
-
     templateUrl: 'app/domain/components/uncashPopover/uncashPopover.html',
 
-    controller: uncashPopoverController,
     controllerAs: 'vm'
 
   });
 
-  function uncashPopoverController(Schema, $scope, $q, localStorageService, Sockets) {
+  module.component('uncashingForm', {
+
+    bindings: {
+      uncashed: '<',
+      isPopoverOpen: '='
+    },
+
+    templateUrl: 'app/domain/components/uncashPopover/uncashingForm.html',
+
+    controller: uncashingFormController,
+    controllerAs: 'vm'
+
+  });
+
+  function uncashingFormController(Schema, $scope, $q, localStorageService, Sockets, Auth) {
 
     let vm = this;
 
     _.assign(vm, {
 
       $onInit,
-      $onDestroy,
+      $onDestroy: saveDefaults,
 
       onSubmit,
-      triggerClick,
-      deletePhotoClick
+      deletePhotoClick,
+      totalSumm
 
     });
 
@@ -48,64 +59,36 @@
 
       if (!_.get(data, 'href')) return;
 
-      // FIXME: IOS can't upload picture with null uncashingId thus we never reach here
-      
       UncashingPicture.inject(data);
 
     }
 
     function deletePhotoClick() {
-      vm.photoFile = null;
-      vm.uncashingPicture = UncashingPicture.createInstance();
+      if (vm.uncashingPicture.id) {
+        UncashingPicture.destroy(vm.uncashingPicture)
+          .then(() => {
+            vm.uncashingPicture = UncashingPicture.createInstance({uncashingId: vm.uncashing.id});
+          });
+      }
     }
 
-    function triggerClick() {
-
-      vm.isPopoverOpen = !vm.isPopoverOpen;
-
-    }
 
     function onSubmit() {
 
-      let {type, commentText, uncashingPlace} = vm;
+      let {uncashing} = vm;
 
-      let uncashing = Uncashing.createInstance({
+      _.assign(uncashing, {
         date: moment().format(),
-        summ: _.sumBy(vm.uncashed, 'summ'),
+        summ: totalSumm(),
         summOrigin: _.sumBy(vm.uncashed, 'summ'),
-        processing: 'upload',
-        commentText,
-        type,
-        uncashingPlaceId: type === 'cashdesk' ? uncashingPlace.id : null
+        processing: 'upload'
       });
 
       Uncashing.create(uncashing)
         .then(uncashing => {
-
-          if (type === 'bank') {
-
-            let q = $q.resolve(vm.uncashingPicture);
-
-            if (vm.uncashingPicture.id) {
-              // FIXME: ugly because in simulator we don't get href updates and may override it
-              // UncashingPicture can't be uploaded with null uncashingId
-              q = UncashingPicture.find(vm.uncashingPicture.id);
-            }
-
-            return q.then(picture => {
-              picture.uncashingId = uncashing.id;
-              return UncashingPicture.create(picture)
-                .then(() => uncashing);
-            })
-
-          }
-
-          return uncashing;
-
-        })
-        .then(uncashing => {
           return $q.all(_.map(vm.uncashed, cashing => {
             cashing.uncashingId = uncashing.id;
+            // TODO: here could be useful PATCH method
             return cashing.DSSave();
           }))
         })
@@ -117,26 +100,54 @@
 
     const DEFAULT_FIELDS = ['uncashingPlaceId', 'type'];
 
-    function $onDestroy() {
+    function saveDefaults() {
 
-      vm.uncashingPlaceId = _.get(vm, 'uncashingPlace.id');
-      localStorageService.set('uncashing.defaults', _.pick(vm, DEFAULT_FIELDS))
+      localStorageService.set('uncashing.defaults', _.pick(vm.uncashing, DEFAULT_FIELDS))
 
+    }
+
+    function totalSumm() {
+      return _.sumBy(vm.uncashed, 'summ');
     }
 
     function $onInit() {
 
-      _.assign(vm, {
+      let {authId} = Auth.getAccount();
+      let processing = 'draft';
 
-        type: 'cashdesk',
-        commentText: null,
-        summ: _.sumBy(vm.uncashed, 'summ'),
-        uncashingPicture: UncashingPicture.createInstance()
+      Uncashing.findAll({authId, processing}, {limit: 1, bypassCache: true})
+        .then(uncashings => {
 
-      });
+          let draft = _.first(uncashings);
 
-      _.assign(vm, localStorageService.get('uncashing.defaults'));
+          if (draft) return draft;
 
+          draft = Uncashing.createInstance({
+            authId,
+            processing: 'draft',
+            type: 'cashdesk',
+            date: moment().format(),
+            commentText: null,
+            summOrigin: totalSumm()
+          });
+
+          _.assign(draft, localStorageService.get('uncashing.defaults'));
+
+          return Uncashing.create(draft);
+
+        })
+        .then(uncashing => Uncashing.loadRelations(uncashing))
+        .then(uncashing => {
+
+          let uncashingPicture = uncashing.picture || UncashingPicture.createInstance({uncashingId: uncashing.id});
+
+          _.assign(vm, {uncashingPicture, uncashing});
+
+          $scope.$watch('vm.uncashing.type', () => {
+            Uncashing.save(vm.uncashing);
+          });
+
+        });
     }
 
   }

@@ -1,5 +1,5 @@
 button.uncashPopover.btn(
-ng-click='vm.triggerClick()'
+ng-click='vm.isPopoverOpen = !vm.isPopoverOpen'
 ng-class='vm.isPopoverOpen ? "btn-warning" : "btn-primary"'
 ng-disabled='!vm.uncashed.length'
 popover-trigger='"none"'

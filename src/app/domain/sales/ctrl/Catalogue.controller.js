@@ -519,7 +519,9 @@
         .then(() => {
 
           DEBUG('findAll', 'finish');
-          vm.currentPriceType = PriceType.meta.getDefault();
+          if (!vm.currentPriceType) {
+            vm.currentPriceType = PriceType.meta.getDefault();
+          }
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
           DEBUG('findAll', 'setCurrentArticleGroup');

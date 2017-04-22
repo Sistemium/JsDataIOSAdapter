@@ -13,6 +13,10 @@
           UncashingPlace: {
             localField: 'uncashingPlace',
             localKey: 'uncashingPlaceId'
+          },
+          UncashingPicture: {
+            localField: 'picture',
+            foreignKey: 'uncashingId'
           }
         },
         hasMany: {
