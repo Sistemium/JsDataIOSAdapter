@@ -125,10 +125,7 @@
           draft = Uncashing.createInstance({
             authId,
             processing: 'draft',
-            type: 'cashdesk',
-            date: moment().format(),
-            commentText: null,
-            summOrigin: totalSumm()
+            type: 'cashdesk'
           });
 
           _.assign(draft, localStorageService.get('uncashing.defaults'));
