@@ -37,13 +37,11 @@
           }, {
             title: 'Долги',
             state: 'sales.debtByOutlet',
-            needRoles: ['admin', 'tester']
-            // needRoles: SALES_ROLES
+            needRoles: SALES_ROLES
           }, {
             title: 'Выручка',
             state: 'sales.cashing',
-            needRoles: ['admin', 'tester']
-            // needRoles: SALES_ROLES
+            needRoles: SALES_ROLES
           }, {
             title: 'Клиенты',
             state: 'sales.territory',
