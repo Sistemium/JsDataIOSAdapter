@@ -41,7 +41,7 @@
      */
 
     function makePhotoClick() {
-      return PhotoHelper.makePhoto(vm.modelName, {})
+      return PhotoHelper.makePhoto(vm.modelName, vm.model || {})
         .then(res => {
           vm.model = res;
         });
