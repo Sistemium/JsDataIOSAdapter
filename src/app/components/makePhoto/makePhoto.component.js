@@ -86,11 +86,13 @@
 
       vm.uploading = {};
 
+      let folder = vm.folder || `${vm.modelName}/${moment().format('YYYY/MM/DD')}`;
+
       return Upload.upload({
         url: imsUrl,
         data: {
-          file: file,
-          folder: vm.folder || 'test'
+          file,
+          folder
         },
         headers: {'Authorization': Auth.getAccessToken()}
       })
