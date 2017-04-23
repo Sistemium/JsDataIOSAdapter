@@ -44,11 +44,9 @@
             return {date, items}
           });
 
-          let cashingFilter = {outletId, uncashingId: null};
+          Cashing.findAll({outletId, isProcessed: false});
 
-          Cashing.findAll(cashingFilter);
-
-          vm.rebindAll(Cashing, cashingFilter, 'vm.cashings', () => {
+          vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', () => {
 
             let cashingTotalByDebt = {};
             let cashingTotal = 0;

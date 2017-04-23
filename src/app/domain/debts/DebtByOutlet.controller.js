@@ -59,10 +59,16 @@
 
     function getData(filter) {
 
-      return Debt.groupBy(filter, ['outletId'])
-        .then(data => {
-          return Outlet.findAll(Outlet.meta.salesmanFilter(filter))
-            .then(() => data)
+      return Outlet.findAll(Outlet.meta.salesmanFilter(filter))
+        .then(outlets => {
+
+          let outletById = _.groupBy(outlets, 'id');
+
+          return Debt.groupBy({}, ['outletId'])
+            .then(debtsByOutlet => {
+              return _.filter(debtsByOutlet, debt => outletById[debt.outletId]);
+            });
+
         })
         .then(data => $q.all(_.map(data, loadDebtRelations)))
         .then(data => _.filter(data, 'outlet'))
