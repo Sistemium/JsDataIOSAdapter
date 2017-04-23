@@ -40,31 +40,40 @@
         .then(data => {
 
           data = _.groupBy(data, 'date');
-          vm.data = _.map(data, (items, date) => {
+          data = _.map(data, (items, date) => {
             return {date, items}
           });
 
-          Cashing.findAll({outletId, isProcessed: false});
+          return Cashing.findAll({outletId, isProcessed: false})
+            .then(() => {
+              vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', () => {
 
-          vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', () => {
+                let cashingTotalByDebt = {};
+                let cashingTotal = 0;
 
-            let cashingTotalByDebt = {};
-            let cashingTotal = 0;
+                _.each(vm.cashings, cashing => {
+                  let total = cashingTotalByDebt[cashing.debtId] || 0;
+                  total += cashing.summ;
+                  cashingTotalByDebt[cashing.debtId] = total;
+                  cashingTotal += cashing.summ;
+                });
 
-            _.each(vm.cashings, cashing => {
-              let total = cashingTotalByDebt[cashing.debtId] || 0;
-              total += cashing.summ;
-              cashingTotalByDebt[cashing.debtId] = total;
-              cashingTotal += cashing.summ;
-            });
+                vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
 
-            vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
+                vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
+                vm.cashingTotal = cashingTotal;
 
-            vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
-            vm.cashingTotal = cashingTotal;
+              });
+            })
+            .then(() => data);
 
+        })
+        .then(data => {
+          vm.data = _.filter(data, date => {
+            return _.find(date.items, debt => {
+              return Math.abs(debt.uncashed()) > 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
+            })
           });
-
         })
         .catch(e => console.error(e));
 

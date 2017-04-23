@@ -38,7 +38,10 @@
         )
           i.glyphicon.glyphicon-trash
 
-  .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
+  .date(
+  ng-if='!vm.busy'
+  ng-repeat='group in vm.data | orderBy:"date" track by group.date'
+  )
 
     .title
       label {{ ::group.date | amDateFormat:'DD/MM/YYYY' }}
