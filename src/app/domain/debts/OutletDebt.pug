@@ -41,7 +41,7 @@
   .date(ng-repeat='group in vm.data | orderBy:"date" track by group.date')
 
     .title
-      label {{ ::group.date }}
+      label {{ ::group.date | amDateFormat:'DD/MM/YYYY' }}
 
     .debts
 
@@ -50,7 +50,12 @@
       ng-class='{overdue: debt.isOverdue()}'
       )
 
-        label.ndoc {{ ::debt.ndoc }}
+        label.ndoc
+          small.tip(ng-if='debt.isOverdue()')
+            span Просрочено
+            = ' '
+            span {{ debt.dateE | amDifference:null | amDurationFormat }}
+          span {{ ::debt.ndoc }}
 
         currency-value.cashed(
         value='vm.cashingTotalByDebt[debt.id]'

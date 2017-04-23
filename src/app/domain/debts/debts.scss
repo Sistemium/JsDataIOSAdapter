@@ -168,6 +168,23 @@
 
       font-weight: normal;
       text-align: left;
+
+      .tip {
+        position: relative;
+        top: -1px;
+        margin-right: 5px;
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 6px;
+        border: solid 1px $state-warning-border;
+        background: $state-warning-bg;
+        color: $state-warning-text;
+      }
+
+      @include responsive-only(lt-sm) {
+        //padding-left: 4px;
+      }
+
     }
 
     .overdue .ndoc {
