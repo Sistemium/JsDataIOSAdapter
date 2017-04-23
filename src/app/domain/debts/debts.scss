@@ -14,7 +14,15 @@
   }
 
   .title {
-    font-size: 18px;
+    font-size: 16px;
+    @include responsive-only(lt-sm) {
+
+      font-size: inherit;
+      padding: 4px 8px;
+      background: $border-gray;
+      color: $black;
+      margin-bottom: 4px;
+    }
   }
 
   .header, .footer {
@@ -30,7 +38,7 @@
   .header {
     border-bottom: $headers-border;
     label {
-      color: $gray;
+      color: $black;
     }
   }
 
@@ -157,6 +165,7 @@
     }
 
     .ndoc {
+
       font-weight: normal;
       text-align: left;
     }
@@ -192,7 +201,6 @@
       margin-left: $margin;
       min-width: $field-width;
       text-align: right;
-
     }
 
   }
