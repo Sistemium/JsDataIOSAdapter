@@ -11,16 +11,13 @@ section.campaigns(cg-busy='vm.cgBusy')
 
     .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
-      h4.title
-
         span.name {{ campaign.name | cleanName }}
-
-        a.commentText(
-        href
-        ng-if='campaign.commentText'
-        uib-tooltip='{{campaign.commentText}}'
-        )
-          i.glyphicon.glyphicon-question-sign
+          sup.commentText(
+          href
+          ng-if='campaign.commentText'
+          uib-tooltip='{{campaign.commentText}}'
+          )
+            i.glyphicon.glyphicon-question-sign
 
       .pictures
         a.thumb(
