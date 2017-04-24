@@ -25,3 +25,5 @@ section.campaigns(cg-busy='vm.cgBusy')
         ng-repeat='picture in ::campaign.campaignPictures track by picture.id'
         )
           img(ng-src='{{picture.srcThumbnail}}')
+
+    p(ng-if='!vm.campaigns.length && vm.cgBusy') Акций не найдено
