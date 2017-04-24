@@ -63,8 +63,7 @@
 
           vm.teams = _.map(_.groupBy(campaignsFilteredByPhoto, 'teamName'), (campaigns, name) => {
             return {
-              name,
-              campaigns
+              name
             };
           });
 
