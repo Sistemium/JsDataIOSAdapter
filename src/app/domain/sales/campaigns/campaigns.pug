@@ -11,7 +11,7 @@ section.campaigns(cg-busy='vm.cgBusy')
 
     .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
 
-        span.name {{ campaign.name | cleanName }}
+        span.name {{campaign.teamName}} {{campaign.title}}
           sup.commentText(
           href
           ng-if='campaign.commentText'
