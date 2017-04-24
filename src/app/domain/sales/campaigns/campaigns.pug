@@ -7,9 +7,9 @@ section.campaigns(cg-busy='vm.cgBusy')
     init-item-id='vm.initGroupId'
     )
 
-  .scroll-y(resize resize-offset-top='5')
+    .campaign(ng-repeat='campaign in vm.campaigns | filter:{teamName: vm.currentTeam } | orderBy:"name" track by campaign.id')
 
-    .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
+      .title
 
         span.name {{campaign.teamName}} {{campaign.title}}
           sup.commentText(
