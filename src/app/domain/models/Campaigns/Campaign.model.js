@@ -40,8 +40,7 @@
     });
 
     function teamNameFn(name) {
-      let teamName = getTeamName(name);
-      return _.toUpper(_.replace(teamName, /\.+/, ''));
+      return _.toUpper(getTeamName(name));
     }
 
     function titleFn(name) {
@@ -62,7 +61,7 @@
     }
 
     function getTeamName(name) {
-      return _.first(name.match(/[^.| |!]+/));
+      return _.first(name.match(/[^.| |! |:]+/));
     }
 
 
