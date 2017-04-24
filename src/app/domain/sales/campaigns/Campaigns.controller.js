@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CampaignsController(Schema, saControllerHelper, $scope, $state, GalleryHelper) {
+  function CampaignsController(Schema, saControllerHelper, $scope, $state, GalleryHelper, localStorageService) {
 
     const {Campaign} = Schema.models();
 
@@ -10,12 +10,15 @@
       .use(GalleryHelper)
       .use({
         thumbClick,
+        currentItem: localStorageService.get('lastState').params.campaignGroupId || '',
+        currentTeam: '',
         initGroupId: $state.params.campaignGroupId
       });
 
     /*
      Listeners
      */
+
 
     vm.watchScope('vm.campaignGroup.id', campaignGroupId => {
 
