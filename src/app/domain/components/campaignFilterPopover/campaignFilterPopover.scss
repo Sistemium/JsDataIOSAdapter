@@ -1,0 +1,61 @@
+@import "../../../styles/variables";
+
+campaign-filter-popover {
+
+  .campaign-filters {
+    background-color: #f5f5f5;
+    padding: 5px 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    @include responsive-only(xxs) {
+      justify-content: center;
+    }
+
+    a.campaign-group-popover, a.campaign-team-name-popover {
+      font-size: 15px;
+
+      label {
+        margin-bottom: 0;
+      }
+
+    }
+
+    a.campaign-group-popover {
+      margin-right: 15px;
+      @include responsive-only(xxs) {
+        margin-right: 0;
+      }
+    }
+
+    .popover {
+
+      @include responsive-only(gt-xxs) {
+        top: 30px !important;
+      }
+
+      .popover-content {
+        padding: 0 10px;
+
+        a.name {
+          white-space: nowrap;
+          font-size: 15px;
+          display: block;
+          padding: 5px;
+          border-bottom: solid 1px $border-gray;
+        }
+
+        div:last-of-type > a.name {
+          border-bottom: none;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
