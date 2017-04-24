@@ -1,0 +1,8 @@
+.campaign-team-name-popover-template.scroll-y(
+resize resize-offset-top='30'
+)
+
+  .campaign-group(ng-repeat='team in vm.teams track by $index')
+    a.name(
+    href ng-click='vm.teamClick(team)'
+    ) {{ team.name }}
