@@ -71,7 +71,7 @@
       toastr.error(processingMessage);
     });
 
-    vm.watchScope('vm.saleOrder.outletId', () => {
+    vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
       vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume');
     });
 
