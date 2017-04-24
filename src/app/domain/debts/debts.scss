@@ -29,6 +29,10 @@
 
     min-height: 35px;
 
+    @extend %flex-row;
+    justify-content: flex-end;
+    align-items: center;
+
     @include responsive-only(lt-sm) {
       min-height: 30px;
     }
@@ -46,10 +50,6 @@
 
     border-top: $headers-border;
     color: $gray;
-
-    @extend %flex-row;
-    justify-content: flex-end;
-    align-items: center;
 
     strong {
       color: $black;
@@ -71,6 +71,12 @@
     @include responsive-only(xxs) {
       label {
         display: none;
+      }
+
+      outlet-cashing-popover {
+        i + span {
+          display: none;
+        }
       }
     }
 
