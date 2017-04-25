@@ -93,8 +93,8 @@
         tr
           th Товар
           th.number Количество
-          th.number.hidden-xs Цена
-          th.number.hidden-xs Стоимость
+          th.number.price Цена
+          th.number.cost Стоимость
       tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflow().editable}')
         tr.clickable(
         ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
@@ -102,7 +102,10 @@
           td {{ item.article.name }}
           td.number
             quantity-edit(position='item')
-          td.number.hidden-xs
-            span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ ::item.discountPercent() }}%)
-            span {{ item.price | number:2 }}
-          td.number.hidden-xs {{ item.cost | number:2}}
+          td.number.price
+            .flags
+              span.flag(ng-if='item.isCompDiscount') КС
+              span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ ::item.discountPercent() }}%)
+              currency-value(value='item.price')
+          td.number.cost
+            currency-value(value='item.cost')

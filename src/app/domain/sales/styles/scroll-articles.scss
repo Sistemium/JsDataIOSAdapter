@@ -1,4 +1,5 @@
 @import "../../../styles/variables";
+@import "../../../styles/flags";
 
 #scroll-articles {
 
@@ -196,12 +197,7 @@
   }
 
   .flag {
-    background: $state-info-bg;
-    color: $state-info-text;
-    display: inline-block;
-    padding: 2px 4px;
-    border-radius: 3px;
-    margin: -2px 4px -2px 0;
+    @extend %flag;
   }
 
   .article-name-second .tag {
