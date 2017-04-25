@@ -1,3 +1,12 @@
+@import "../../styles/variables";
+
+
 .stm-menu {
   overflow-x: hidden;
+
+  .badge {
+    background: $primary-color;
+    color: $white;
+  }
+
 }
