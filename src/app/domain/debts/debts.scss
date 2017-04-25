@@ -49,7 +49,7 @@
   .footer {
 
     border-top: $headers-border;
-    color: $gray;
+    //color: $gray;
 
     .buttons {
       flex: 1;
@@ -175,25 +175,17 @@
         position: relative;
         top: -1px;
         margin-right: 8px;
-        display: inline-block;
-        padding: 3px 8px;
-        border-radius: 6px;
-        border: solid 1px $state-warning-border;
-        background: $state-warning-bg;
-        color: $state-warning-text;
-      }
-
-      @include responsive-only(lt-sm) {
-        //padding-left: 4px;
+        color: $state-info-text;
+        @include responsive-only(lt-sm) {
+          display: inline-block;
+          min-width: 120px;
+        }
       }
 
     }
 
-    .overdue .ndoc {
-      //color: $red;
-    }
-
-    .summ {
+    .overdue .tip {
+      color: $state-warning-text;
     }
 
   }

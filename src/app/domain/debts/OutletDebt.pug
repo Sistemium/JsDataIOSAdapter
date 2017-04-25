@@ -58,6 +58,10 @@
             span Просрочено
             = ' '
             span {{ debt.dateE | amDifference:null | amDurationFormat }}
+          small.tip(ng-if='!debt.isOverdue()')
+            span На оплату
+            = ' '
+            span {{ debt.dateE | amDifference:null | amDurationFormat }}
           span {{ ::debt.ndoc }}
 
         currency-value.cashed(
