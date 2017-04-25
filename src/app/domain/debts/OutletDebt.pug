@@ -78,5 +78,6 @@
 
     label Итого:
 
-    currency-value(value='vm.cashingTotal' ng-if='vm.cashingTotal')
+    a(href ng-click='$parent.vm.totalCashedClick()')
+      currency-value(value='vm.cashingTotal' ng-if='vm.cashingTotal')
     currency-value(value='vm.totalSumm()')

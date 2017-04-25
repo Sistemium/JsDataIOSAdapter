@@ -13,7 +13,8 @@
         itemClick,
         totalCashed,
         totalSumm,
-        onStateChange
+        onStateChange,
+        totalCashedClick
 
       });
 
@@ -30,6 +31,10 @@
     /*
      Functions
      */
+
+    function totalCashedClick() {
+      $state.go('sales.cashing');
+    }
 
     function onStateChange(to) {
       if (to.name === rootState && vm.wasModified) {
