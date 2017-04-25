@@ -13,7 +13,8 @@
 
       .title
         .name {{ item.title || item.outlet.name }}
-        small.address {{ item.outlet.address }}
+        small.address
+          a(href ng-click='vm.outletClick(item.outlet)') {{ item.outlet.address }}
 
       .cashings
         .cashing(ng-repeat='cashing in item.cashings track by cashing.id')

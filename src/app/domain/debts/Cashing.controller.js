@@ -14,7 +14,8 @@
         onStateChange,
         doUncashingClick,
         editClick,
-        deleteCashingClick
+        deleteCashingClick,
+        outletClick
 
       });
 
@@ -35,6 +36,12 @@
     /*
      Functions
      */
+
+    function outletClick(outlet) {
+      if (outlet) {
+        $state.go('sales.debtByOutlet.outletDebt', {outletId: outlet.id})
+      }
+    }
 
     function doUncashingClick() {
 
