@@ -13,7 +13,7 @@
     text-align: left;
   }
 
-  .title {
+  .date > .title {
     font-size: 16px;
     @include responsive-only(lt-sm) {
 
