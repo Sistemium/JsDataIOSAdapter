@@ -15,7 +15,9 @@
       initDate,
 
       onStateChange,
-      itemClick
+      itemClick,
+      totalCost,
+      totalPositions
 
     });
 
@@ -29,6 +31,15 @@
     /*
      Functions
      */
+
+    function totalCost() {
+      return _.sumBy(vm.data, shipment => shipment.totalCost());
+    }
+
+    function totalPositions() {
+      return _.sumBy(vm.data, 'positions.length');
+    }
+
 
     function itemClick(item) {
       $state.go('.item', {id: item.id});
