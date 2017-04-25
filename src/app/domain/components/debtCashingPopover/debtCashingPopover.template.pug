@@ -40,7 +40,7 @@
     .title Получено ранее
     .cashing(ng-repeat='cashing in vm.cashings track by cashing.id')
       a.delete(
-      ng-if='!cashing.isProcessed'
+      ng-if='!cashing.uncashingId'
       href ng-click='vm.deleteCashingClick(cashing)'
       ng-class='{confirmation: vm.deleteConfirmation[cashing.id]}'
       )
