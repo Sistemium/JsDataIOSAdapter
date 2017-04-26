@@ -76,20 +76,21 @@
     function onSubmit() {
 
       let {uncashing} = vm;
+      let uncashed = _.clone(vm.uncashed);
 
       _.assign(uncashing, {
         date: moment().format(),
         summ: totalSumm(),
-        summOrigin: _.sumBy(vm.uncashed, 'summ'),
+        summOrigin: _.sumBy(uncashed, 'summ'),
         processing: 'upload'
       });
 
       Uncashing.create(uncashing)
         .then(uncashing => {
-          return $q.all(_.map(vm.uncashed, cashing => {
+          return $q.all(_.map(uncashed, cashing => {
             cashing.uncashingId = uncashing.id;
             // TODO: here could be useful PATCH method
-            return cashing.DSSave();
+            return cashing.DSCreate();
           }))
         })
         .then(() => {
