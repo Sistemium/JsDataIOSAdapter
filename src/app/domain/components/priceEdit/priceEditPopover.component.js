@@ -63,7 +63,7 @@
 
     function ksButtonClick() {
       vm.position.isCompDiscount = !vm.position.isCompDiscount;
-      vm.position.DSSave()
+      vm.position.DSCreate()
         .then(() => vm.popoverOpen = false);
     }
 
