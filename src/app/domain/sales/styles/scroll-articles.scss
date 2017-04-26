@@ -196,8 +196,15 @@
     font-size: 85%;
   }
 
-  .flag {
-    @extend %flag;
+  .compDiscount {
+
+    &.flag {
+      background: $state-info-bg;
+      color: $state-info-text;
+    }
+
+    @extend %flaggable;
+
   }
 
   .article-name-second .tag {

@@ -64,6 +64,7 @@
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
 
+      compDiscountClick,
       bPlusButtonClick,
       kPlusButtonClick,
 
@@ -226,6 +227,17 @@
 
     function largerFontClick() {
       vm.fontSize = _.min([vm.fontSize + 1, 17]);
+    }
+
+    function compDiscountClick(stock) {
+
+      let position = vm.saleOrderPositionByArticle[stock.articleId];
+
+      if (!position) return;
+
+      position.isCompDiscount = !position.isCompDiscount;
+      position.DSCreate();
+
     }
 
     function kPlusButtonClick(stock) {
