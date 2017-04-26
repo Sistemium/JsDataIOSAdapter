@@ -1,10 +1,26 @@
 @import "variables";
 
 %flag {
+
+  @extend %flaggable;
+  @extend %flagged;
+
+}
+
+%flagged {
+
   background: $state-info-bg;
+
+}
+
+%flaggable {
+
   color: $state-info-text;
+  //background: $white;
+  border: solid 1px $state-info-bg;
   display: inline-block;
   padding: 2px 4px;
   border-radius: 3px;
   margin: -2px 4px -2px 0;
+
 }
