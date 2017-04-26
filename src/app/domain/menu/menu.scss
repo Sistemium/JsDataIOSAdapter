@@ -2,10 +2,11 @@
 
 
 .stm-menu {
+
   overflow-x: hidden;
 
-  .badge {
-    background: $primary-color;
+  button.btn .caption .badge {
+    background-color: $primary-color;
     color: $white;
   }
 
