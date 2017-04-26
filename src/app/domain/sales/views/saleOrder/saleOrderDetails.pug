@@ -37,7 +37,7 @@
 
     totals.animate-show(ng-hide='vm.busy')
 
-      .has-positions(ng-if='!saleOrderExpanded')
+      .has-positions
 
         .info
           strong {{ vm.saleOrder.positions.length | number:0 }}
@@ -62,8 +62,8 @@
         popover-is-open='vm.isOutletPopoverOpen'
         uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
         )
-          span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
-          span.caret
+          //span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
+          //span.caret
 
     buttons
 
