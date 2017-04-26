@@ -101,14 +101,17 @@
 
     function loadNotProcessed(data) {
 
-      return Cashing.groupBy(SalesmanAuth.makeFilter({isProcessed: false}), ['outletId'])
+      return Cashing.findAll(SalesmanAuth.makeFilter({isProcessed: false}))
+        .then(cashings => {
+          cashings = _.filter(cashings, 'debtId');
+          return _.groupBy(cashings, 'outletId');
+        })
       // FIXME: copy-pasted
         .then(cashingGrouped => {
-          _.each(cashingGrouped, outletCashings => {
-            let {outletId} = outletCashings;
+          _.each(cashingGrouped, (outletCashings, outletId) => {
             let item = _.find(data, {outletId});
             if (!item) return;
-            item['sum(summ)'] -= outletCashings['sum(summ)'];
+            item['sum(summ)'] -= _.sumBy(outletCashings, 'summ');
           });
           return data;
         });
