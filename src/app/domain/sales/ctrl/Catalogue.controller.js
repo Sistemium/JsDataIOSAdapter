@@ -67,9 +67,6 @@
       bPlusButtonClick,
       kPlusButtonClick,
 
-      largerFontClick,
-      smallerFontClick,
-
       pieceVolumeClick,
       articleTagClick,
       removeFilterClick,
@@ -218,14 +215,6 @@
 
       vm.thumbnailClick(_.get(stock, 'article.avatar'));
 
-    }
-
-    function smallerFontClick() {
-      vm.fontSize = _.max([vm.fontSize - 1, 14]);
-    }
-
-    function largerFontClick() {
-      vm.fontSize = _.min([vm.fontSize + 1, 17]);
     }
 
     function kPlusButtonClick(stock) {
