@@ -1,0 +1,21 @@
+settings-popover {
+
+  font-size: 21px;
+  padding: 6px 8px;
+  background: $gray-background-color;
+
+  button.btn.btn-default {
+    background: $gray-background-color;
+    color: #4290d0;
+  }
+
+  i.glyphicon {
+    top: 2px;
+  }
+
+  .popover {
+    top: 47px !important;
+  }
+
+}
+
