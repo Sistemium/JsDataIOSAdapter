@@ -68,9 +68,6 @@
       bPlusButtonClick,
       kPlusButtonClick,
 
-      largerFontClick,
-      smallerFontClick,
-
       pieceVolumeClick,
       articleTagClick,
       removeFilterClick,
@@ -221,6 +218,7 @@
 
     }
 
+<<<<<<< HEAD
     function smallerFontClick() {
       vm.fontSize = _.max([vm.fontSize - 1, 14]);
     }
@@ -240,6 +238,8 @@
 
     }
 
+=======
+>>>>>>> SaleOrdersCamapaignPopover
     function kPlusButtonClick(stock) {
       $scope.$broadcast('kPlusButtonClick', stock.article, vm.prices[stock.articleId]);
     }

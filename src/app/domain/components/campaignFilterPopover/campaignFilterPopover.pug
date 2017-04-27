@@ -1,0 +1,24 @@
+.campaign-filters
+
+  a.campaign-group-popover.animate-show(
+  href
+  ng-disabled='!vm.campaignGroups'
+  popover-is-open='vm.isGroupPopoverOpen'
+  popover-placement='auto bottom-left'
+  uib-popover-template='"app/domain/components/campaignFilterPopover/campaignGroupPopover.template.html"'
+  )
+    label Период акций:
+    span.name {{ vm.currentItem.name }}
+    span.caret
+
+  a.campaign-team-name-popover.animate-show(
+  href
+  ng-disabled='!vm.teams.length'
+  popover-is-open='vm.isTeamNamePopoverOpen'
+  popover-placement='bottom-right'
+  uib-popover-template='"app/domain/components/campaignFilterPopover/campaignTeamName.template.html"'
+  )
+
+    label Фильтр по группам:
+    span.name {{ vm.currentTeam || 'Не выбран' }}
+    span.caret

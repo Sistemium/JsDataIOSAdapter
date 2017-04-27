@@ -1,30 +1,30 @@
 section.campaigns(cg-busy='vm.cgBusy')
 
-  .row.datepicker-with-buttons
+  campaign-filter-popover(
+  current-item='vm.campaignGroup'
+  init-item-id='vm.initGroupId'
+  current-team='vm.currentTeam'
+  )
 
-    campaign-group-popover.col-sm-5.col-lg-3(
-    current-item='vm.campaignGroup'
-    init-item-id='vm.initGroupId'
-    )
+  .scroll-y.selectivity-increasing-class(resize resize-offset-top='5')
 
-  .scroll-y(resize resize-offset-top='5')
+    .campaign(ng-repeat='campaign in vm.campaigns | filter:{teamName: vm.currentTeam } | orderBy:"name" track by campaign.id')
 
-    .campaign(ng-repeat='campaign in vm.campaigns | orderBy:"name" track by campaign.id')
+      .title
 
-      h4.title
-
-        span.name {{ campaign.name | cleanName }}
-
-        a.commentText(
-        href
-        ng-if='campaign.commentText'
-        uib-tooltip='{{campaign.commentText}}'
-        )
-          i.glyphicon.glyphicon-question-sign
+        span.name {{campaign.teamName}} {{campaign.title}}
+          sup.commentText(
+          href
+          ng-if='campaign.commentText'
+          uib-tooltip='{{campaign.commentText}}'
+          )
+            i.glyphicon.glyphicon-question-sign
 
       .pictures
         a.thumb(
         href ng-click='vm.thumbClick(picture)'
-        ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" track by picture.id'
+        ng-repeat='picture in ::campaign.campaignPictures track by picture.id'
         )
           img(ng-src='{{picture.srcThumbnail}}')
+
+    p(ng-if='!vm.campaigns.length && vm.cgBusy') Акций не найдено

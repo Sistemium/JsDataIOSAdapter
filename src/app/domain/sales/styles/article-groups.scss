@@ -45,6 +45,13 @@
     align-items: stretch;
     padding: 0;
 
+    a.campaign-name {
+      display: flex;
+      justify-content: space-between;
+      @extend .ellipsis;
+
+    }
+
     a {
 
       cursor: pointer;
@@ -53,6 +60,18 @@
 
       @include responsive-only(lt-sm) {
         padding: 7px 10px;
+      }
+
+      span.badge {
+        margin-left: 10px;
+        order: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      span.campaign-elem-name {
+        @extend .ellipsis;
       }
 
     }
@@ -91,17 +110,13 @@
       &:not(:first-child) {
         padding-left: 0;
       }
-      @include responsive-only(gt-xs) {
-        &:not(:last-child) {
-          margin-right: -44px;
-        }
-      }
+
     }
 
     .chevron + a:not(.chevron) {
       @include responsive-only(gt-xs) {
-        margin-left: -44px;
-        padding-left: 44px;
+        margin-left: -48px;
+        padding-left: 48px;
       }
     }
 

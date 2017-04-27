@@ -40,13 +40,30 @@
     });
 
     function teamNameFn(name) {
-      let tName = _.first(name.match(/[^ ]+/));
-      return _.toUpper(_.replace(tName, /\.+/, ''));
+      return _.toUpper(getTeamName(name));
     }
 
     function titleFn(name) {
-      return _.upperFirst(_.trim(_.replace(name, (name.split(' ').shift()), '')));
+
+      let nameArr = name.split(' ');
+
+      let regExp = new RegExp(getTeamName(name, 'i'));
+
+      _.each(nameArr, function (item, idx) {
+        if ((item.match(regExp))) {
+          nameArr = (nameArr.slice(idx + 1));
+          return false;
+        }
+      });
+
+      return _.upperFirst(nameArr.join(' '));
+
     }
+
+    function getTeamName(name) {
+      return _.first(name.match(/[^.| |! |:]+/));
+    }
+
 
   });
 

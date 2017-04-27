@@ -1,0 +1,8 @@
+.campaign-group-popover-template.scroll-y(
+resize resize-offset-top='30'
+)
+
+  .campaign-group(ng-repeat='group in vm.campaignGroups track by group.id')
+    a.name(
+    href ng-click='vm.itemClick(group)'
+    ) {{ group.name }}

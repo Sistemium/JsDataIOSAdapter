@@ -34,55 +34,56 @@
     span {{ vm.currentArticleGroup.displayName || vm.showOnlyOrdered && 'Товары заказа' || '  Все товары' }}
     span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
 
-.block-to-collapse.scroll-y(
-uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
-collapsed='vm.isArticleGroupsCollapsingDone=true'
-resize resize-offset-top='5'
-)
-  ul.list-group.xs-ancestors(
-  ng-if='vm.currentArticleGroup || vm.showOnlyOrdered'
+font-size-edit(append-to='articleGroups')
+
+  .block-to-collapse.scroll-y(
+  uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
+  collapsed='vm.isArticleGroupsCollapsingDone=true'
+  resize resize-offset-top='5'
   )
-
-    .list-group-item.with-a-inside(
-    ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id'
+    ul.list-group.xs-ancestors(
+    ng-if='vm.currentArticleGroup || vm.showOnlyOrdered'
     )
 
-      a.chevron(
-      stm-click='articleGroup' click-payload='ancestor'
+      .list-group-item.with-a-inside(
+      ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id'
       )
-        i.glyphicon.glyphicon-menu-left
 
-      a(
+        a.chevron(
+        stm-click='articleGroup' click-payload='ancestor'
+        )
+          i.glyphicon.glyphicon-menu-left
+
+        a.campaign-name(
+        href
+        stm-click='articleGroupAndCollapse' click-payload='ancestor'
+        ) {{::ancestor.displayName}}
+
+    ul.list-group
+
+      a.list-group-item.active(
       href
-      stm-click='articleGroupAndCollapse' click-payload='ancestor'
-      ) {{::ancestor.displayName}}
-
-  ul.list-group(
-  )
-
-    a.list-group-item.active(
-    href
-    ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName || !vm.currentArticleGroup && vm.showOnlyOrdered'
-    ng-click='vm.isArticleGroupsExpanded=false'
-    )
-      span {{ vm.currentArticleGroup.displayName || 'Товары заказа' }}
-
-    .list-group-item.with-a-inside(
-    ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
-    ng-class='{active: vm.currentArticleGroup.id === elem.id}'
-    )
-      a(
-      href
-      stm-click='articleGroupAndCollapse' click-payload='elem'
+      ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName || !vm.currentArticleGroup && vm.showOnlyOrdered'
+      ng-click='vm.isArticleGroupsExpanded=false'
       )
-        span.badge.pull-right(ng-if='::vm.articleGroupIds[elem.id]')
-          span {{::vm.articleGroupIds[elem.id].length}}
-          span(ng-if='::elem.children.length') +
-        span {{::elem.displayName }}
+        span {{ vm.currentArticleGroup.displayName || 'Товары заказа' }}
 
-      a.chevron(
-      href
-      stm-click='articleGroup' click-payload='elem'
-      ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
+      .list-group-item.with-a-inside(
+      ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
+      ng-class='{active: vm.currentArticleGroup.id === elem.id}'
       )
-        i.glyphicon.glyphicon-menu-right
+        a.campaign-name(
+        href
+        stm-click='articleGroupAndCollapse' click-payload='elem'
+        )
+          span.badge(ng-if='::vm.articleGroupIds[elem.id]')
+            span {{::vm.articleGroupIds[elem.id].length}}
+            span(ng-if='::elem.children.length') +
+          span.campaign-elem-name {{::elem.displayName }}
+
+        a.chevron(
+        href
+        stm-click='articleGroup' click-payload='elem'
+        ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
+        )
+          i.glyphicon.glyphicon-menu-right
