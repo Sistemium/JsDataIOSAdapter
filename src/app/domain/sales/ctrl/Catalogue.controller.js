@@ -218,15 +218,6 @@
 
     }
 
-<<<<<<< HEAD
-    function smallerFontClick() {
-      vm.fontSize = _.max([vm.fontSize - 1, 14]);
-    }
-
-    function largerFontClick() {
-      vm.fontSize = _.min([vm.fontSize + 1, 17]);
-    }
-
     function compDiscountClick(stock) {
 
       let position = vm.saleOrderPositionByArticle[stock.articleId];
@@ -238,8 +229,6 @@
 
     }
 
-=======
->>>>>>> SaleOrdersCamapaignPopover
     function kPlusButtonClick(stock) {
       $scope.$broadcast('kPlusButtonClick', stock.article, vm.prices[stock.articleId]);
     }

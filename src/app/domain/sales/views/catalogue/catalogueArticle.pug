@@ -25,28 +25,6 @@ font-size-edit(append-to='catalogueArticle')
         ng-class='stock.article.avatar.srcThumbnail || "placeholder"'
         )
 
-<<<<<<< HEAD
-        small.gray.nowrap(ng-if='stock.volume')
-          span ~{{stock.displayVolume}}
-
-        small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
-          a.compDiscount(
-          href
-          ng-click='vm.compDiscountClick(stock)'
-          ng-class='{flag: vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount}'
-          ) КС
-          span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
-          span.gray
-            | =
-          span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
-          span.gray
-            | x
-
-        price-edit(
-        prices='vm.prices[stock.articleId]'
-        position='vm.saleOrderPositionByArticle[stock.articleId]'
-        discount='vm.discounts[stock.articleId]'
-=======
       .article-wrapper(
       ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
       )
@@ -75,7 +53,6 @@ font-size-edit(append-to='catalogueArticle')
           )
 
         .article-name-second(
->>>>>>> SaleOrdersCamapaignPopover
         )
           small {{::stock.article.preName}}
 
@@ -113,7 +90,11 @@ font-size-edit(append-to='catalogueArticle')
             span ~{{stock.displayVolume}}
 
           small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
-            span.flag(ng-if='vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount') КС
+            a.compDiscount(
+            href
+            ng-click='vm.compDiscountClick(stock)'
+            ng-class='{flag: vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount}'
+            ) КС
             span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
             span.gray
               | =
