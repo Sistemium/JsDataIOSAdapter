@@ -15,10 +15,12 @@
     };
   }
 
-  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, localStorageService) {
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, localStorageService, UnsyncedInfoService) {
 
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
+
+    UnsyncedInfoService.bind(unsyncedInfo);
 
     vm.use({
 
@@ -43,6 +45,13 @@
         isSalesState: _.startsWith(to.name, 'sales.'),
         isCatalogueState: _.startsWith(to.name, 'sales.catalogue')
       });
+
+    }
+
+    function unsyncedInfo(obj) {
+
+      vm.haveUnsyncedObjects = (_.first(obj) === 'haveUnsyncedObjects');
+      $scope.$apply();
 
     }
 
