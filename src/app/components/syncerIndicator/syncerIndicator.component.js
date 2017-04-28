@@ -25,7 +25,14 @@
     }
 
     function syncerInfoClick() {
-      toastr.error('Проверьте подключение к интернет или обратитесь в техподдержку', 'Требуется передать данные')
+      const text = 'Проверьте подключение к интернет или обратитесь в техподдержку';
+      const title = 'Требуется передать данные';
+      const options = {
+        onTap: () => {
+          console.info('Пробуем передать данные');
+        }
+      };
+      toastr.error(text, title, options);
     }
 
   }
