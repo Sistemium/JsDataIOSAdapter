@@ -6,9 +6,9 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
   a(href ng-click='vm.rootClick()' ng-class='{disabled: vm.isRootState}')
     | {{ vm.title }}
 
-  span(ng-if='vm.haveUnsyncedObjects') HUO!
-
   .separator
+
+  syncer-indicator
 
   fullscreen-menu(ng-show='vm.isRootState')
 

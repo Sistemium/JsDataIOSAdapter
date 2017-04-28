@@ -15,12 +15,10 @@
     };
   }
 
-  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, UnsyncedInfoService) {
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper) {
 
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
-
-    UnsyncedInfoService.bind(unsyncedInfo);
 
     vm.use({
 
@@ -44,13 +42,6 @@
         isSalesState: _.startsWith(to.name, 'sales.'),
         isCatalogueState: _.startsWith(to.name, 'sales.catalogue')
       });
-
-    }
-
-    function unsyncedInfo(obj) {
-
-      vm.haveUnsyncedObjects = (_.first(obj) === 'haveUnsyncedObjects');
-      $scope.$apply();
 
     }
 
