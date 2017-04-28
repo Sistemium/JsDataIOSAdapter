@@ -13,7 +13,7 @@
 
   });
 
-  function syncerIndicatorController($scope, SyncerInfo, toastr) {
+  function syncerIndicatorController($scope, SyncerInfo, toastr, $window) {
 
     const vm = _.assign(this, {
       $onInit,
@@ -29,7 +29,17 @@
       const title = 'Требуется передать данные';
       const options = {
         onTap: () => {
+
           console.info('Пробуем передать данные');
+
+          if ($window.webkit) {
+            $window.webkit.messageHandlers.remoteControl.postMessage({
+              remoteCommands: {
+                "STMSyncer":"upload"
+              }
+            });
+          }
+
         }
       };
       toastr.error(text, title, options);
