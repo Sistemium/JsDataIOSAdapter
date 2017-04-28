@@ -40,33 +40,40 @@
         .then(data => {
 
           data = _.groupBy(data, 'date');
-          vm.data = _.map(data, (items, date) => {
+          data = _.map(data, (items, date) => {
             return {date, items}
           });
 
-          let cashingFilter = {outletId, uncashingId: null};
+          return Cashing.findAll({outletId, isProcessed: false})
+            .then(() => {
+              vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', () => {
 
-          Cashing.findAll(cashingFilter);
+                let cashingTotalByDebt = {};
+                let cashingTotal = 0;
 
-          vm.rebindAll(Cashing, cashingFilter, 'vm.cashings', () => {
+                _.each(vm.cashings, cashing => {
+                  let total = cashingTotalByDebt[cashing.debtId] || 0;
+                  total += cashing.summ;
+                  cashingTotalByDebt[cashing.debtId] = total;
+                  cashingTotal += cashing.summ;
+                });
 
-            let cashingTotalByDebt = {};
-            let cashingTotal = 0;
+                vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
 
-            _.each(vm.cashings, cashing => {
-              let total = cashingTotalByDebt[cashing.debtId] || 0;
-              total += cashing.summ;
-              cashingTotalByDebt[cashing.debtId] = total;
-              cashingTotal += cashing.summ;
-            });
+                vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
+                vm.cashingTotal = cashingTotal;
 
-            vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
+              });
+            })
+            .then(() => data);
 
-            vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
-            vm.cashingTotal = cashingTotal;
-
+        })
+        .then(data => {
+          vm.data = _.filter(data, date => {
+            return _.find(date.items, debt => {
+              return Math.abs(debt.uncashed()) > 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
+            })
           });
-
         })
         .catch(e => console.error(e));
 

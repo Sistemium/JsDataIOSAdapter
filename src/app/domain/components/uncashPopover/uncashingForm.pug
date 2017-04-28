@@ -1,0 +1,50 @@
+form.uncashingForm(name="uncashForm")
+
+  .form-group
+
+    .btn-group.type
+      label.btn.btn-default(ng-model='vm.uncashing.type' uib-btn-radio="'bank'" uncheckable) Банк
+      label.btn.btn-default(ng-model='vm.uncashing.type' uib-btn-radio="'cashdesk'" uncheckable) Касса
+
+  select-uncashing-place.form-group(
+  ng-if='vm.uncashing.type === "cashdesk"'
+  selected='vm.uncashing.uncashingPlace'
+  init-id='vm.uncashing.uncashingPlaceId'
+  )
+
+  .form-group.uncashingPhoto(ng-if='vm.uncashing.type === "bank"')
+
+    make-photo(
+    model='vm.uncashingPicture'
+    ng-show='!vm.uncashingPicture.id'
+    model-name='UncashingPicture'
+    )
+      span Сфотографируйте квитанцию
+
+    .thumb(ng-if='vm.uncashingPicture.id')
+      loading-circle(ng-if='!vm.uncashingPicture.srcThumbnail')
+      img(ng-src='{{vm.uncashingPicture.srcThumbnail}}' ng-if='vm.uncashingPicture.srcThumbnail')
+      a.remove(
+      href
+      ng-click='vm.deletePhotoClick()'
+      aria-label='Удалить фото'
+      )
+        i.glyphicon.glyphicon-remove
+
+    input(type='hidden' ng-model='vm.uncashingPicture.id' required)
+
+  .form-group
+
+    textarea#uncashing-comment.form-control(
+    ng-model='vm.uncashing.commentText'
+    name='commentText'
+    placeholder='Комментарий'
+    )
+
+  button.btn.btn-success(
+  ng-click='vm.onSubmit()'
+  value='submit'
+  ng-disabled='!uncashForm.$valid'
+  )
+    currency-value(value='vm.totalSumm()' label='Сдать')
+

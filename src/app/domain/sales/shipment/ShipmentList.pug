@@ -36,4 +36,10 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
           td.number {{ ::item.totalCost() | number:2 }}
           td.number {{ ::item.positions.length | number:0 }}
 
+      tfoot
+        tr
+          th(colspan='{{ vm.currentSalesman ? 3 : 4 }}') Итого:
+          th.number {{ ::vm.totalCost() | number:2 }}
+          th.number {{ ::vm.totalPositions() | number:0 }}
+
   .alert.alert-info.centered(ng-show='!vm.data.length') Нет отгрузок за указанную дату

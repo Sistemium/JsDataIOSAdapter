@@ -29,5 +29,6 @@ cg-busy='vm.cgBusy'
 
       label Итого:
 
-      currency-value(value='vm.totalCashed()')
+      a(href ng-click='vm.totalCashedClick()')
+        currency-value(value='vm.totalCashed()')
       currency-value(value='vm.totalSumm()')

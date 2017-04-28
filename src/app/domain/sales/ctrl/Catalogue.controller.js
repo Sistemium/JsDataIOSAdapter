@@ -64,6 +64,7 @@
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
 
+      compDiscountClick,
       bPlusButtonClick,
       kPlusButtonClick,
 
@@ -214,6 +215,17 @@
     function thumbClick(stock) {
 
       vm.thumbnailClick(_.get(stock, 'article.avatar'));
+
+    }
+
+    function compDiscountClick(stock) {
+
+      let position = vm.saleOrderPositionByArticle[stock.articleId];
+
+      if (!position) return;
+
+      position.isCompDiscount = !position.isCompDiscount;
+      position.DSCreate();
 
     }
 
@@ -508,7 +520,9 @@
         .then(() => {
 
           DEBUG('findAll', 'finish');
-          vm.currentPriceType = PriceType.meta.getDefault();
+          if (!vm.currentPriceType) {
+            vm.currentPriceType = PriceType.meta.getDefault();
+          }
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
           DEBUG('findAll', 'setCurrentArticleGroup');
@@ -703,7 +717,11 @@
 
         articles = _.filter(articles, article => {
 
-          let res = !reg || reg.test(article.name) || reg.test(article.preName) || reg.test(article.lastName);
+          let res = !reg ||
+            reg.test(article.name) ||
+            reg.test(article.preName) ||
+            reg.test(article.lastName) ||
+            article.ArticleGroup && reg.test(article.ArticleGroup.name);
 
           if (res && vm.showOnlyShipped) {
             res = vm.articleStats[article.id];

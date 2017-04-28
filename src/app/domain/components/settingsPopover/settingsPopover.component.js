@@ -11,11 +11,19 @@
 
   });
 
-  function settingsPopoverController($scope, $rootScope) {
+  function settingsPopoverController($scope, $rootScope, localStorageService) {
+
+    const vm = _.assign(this, {
+      $onInit
+    });
 
     $scope.$watch('vm.isPopoverOpen', isPopoverOpen => {
       $rootScope.$broadcast('settingsPopoverOpen', isPopoverOpen);
     });
+
+    function $onInit() {
+      vm.showImages = localStorageService.get('showImages') || false;
+    }
 
   }
 

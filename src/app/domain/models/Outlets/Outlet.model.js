@@ -43,6 +43,10 @@
           SaleOrder: {
             localField: 'saleOrders',
             foreignKey: 'outletId'
+          },
+          Cashing: {
+            localField: 'cashings',
+            foreignKey: 'outletId'
           }
           // PickingRequest: {
           //   localField: 'pickingOrders',

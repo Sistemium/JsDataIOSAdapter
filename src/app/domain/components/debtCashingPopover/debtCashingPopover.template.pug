@@ -5,13 +5,13 @@
     a.btn.btn-link(
     ng-if='!vm.cashPart'
     href ng-click='vm.cashWholeClick()'
-    ) Забрать весь остаток
+    ) Оплачено целиком
 
     a.btn.btn-link.spaced(
     ng-show='!vm.cashPart'
     href ng-click='vm.cashPartClick()'
     )
-      span Забрать часть
+      span Оплачено частично
 
     form(ng-if='vm.cashPart' name="cashForm" ng-submit='vm.onSubmit()')
 
@@ -40,7 +40,7 @@
     .title Получено ранее
     .cashing(ng-repeat='cashing in vm.cashings track by cashing.id')
       a.delete(
-      ng-if='!cashing.isProcessed'
+      ng-if='!cashing.uncashingId'
       href ng-click='vm.deleteCashingClick(cashing)'
       ng-class='{confirmation: vm.deleteConfirmation[cashing.id]}'
       )

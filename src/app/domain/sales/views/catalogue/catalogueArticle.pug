@@ -90,7 +90,11 @@ font-size-edit(append-to='catalogueArticle')
             span ~{{stock.displayVolume}}
 
           small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
-            span.flag(ng-if='vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount') КС
+            a.compDiscount(
+            href
+            ng-click='vm.compDiscountClick(stock)'
+            ng-class='{flag: vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount}'
+            ) КС
             span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
             span.gray
               | =

@@ -1,11 +1,17 @@
 @import "../../../styles/variables";
 
-.outlet-cashing-popover {
+outlet-cashing-popover {
 
   $margin: 13px;
 
-  form > * + * {
-    margin-top: $margin;
+  .popover-inner {
+    width: 270px;
+  }
+
+  form {
+    > * + * {
+      margin-top: $margin;
+    }
   }
 
   .form-group {

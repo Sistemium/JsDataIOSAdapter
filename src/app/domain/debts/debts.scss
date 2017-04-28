@@ -13,13 +13,25 @@
     text-align: left;
   }
 
-  .title {
-    font-size: 18px;
+  .date > .title {
+    font-size: 16px;
+    @include responsive-only(lt-sm) {
+
+      font-size: inherit;
+      padding: 4px 8px;
+      background: $border-gray;
+      color: $black;
+      margin-bottom: 4px;
+    }
   }
 
   .header, .footer {
 
     min-height: 35px;
+
+    @extend %flex-row;
+    justify-content: flex-end;
+    align-items: center;
 
     @include responsive-only(lt-sm) {
       min-height: 30px;
@@ -30,22 +42,14 @@
   .header {
     border-bottom: $headers-border;
     label {
-      color: $gray;
+      color: $black;
     }
   }
 
   .footer {
 
     border-top: $headers-border;
-    color: $gray;
-
-    @extend %flex-row;
-    justify-content: flex-end;
-    align-items: center;
-
-    strong {
-      color: $black;
-    }
+    //color: $gray;
 
     .buttons {
       flex: 1;
@@ -63,6 +67,12 @@
     @include responsive-only(xxs) {
       label {
         display: none;
+      }
+
+      outlet-cashing-popover {
+        i + span {
+          display: none;
+        }
       }
     }
 
@@ -157,15 +167,25 @@
     }
 
     .ndoc {
+
       font-weight: normal;
       text-align: left;
+
+      .tip {
+        position: relative;
+        top: -1px;
+        margin-right: 8px;
+        color: $state-info-text;
+        @include responsive-only(lt-sm) {
+          display: inline-block;
+          min-width: 120px;
+        }
+      }
+
     }
 
-    .overdue .ndoc {
-      color: $red;
-    }
-
-    .summ {
+    .overdue .tip {
+      color: $state-warning-text;
     }
 
   }
@@ -192,7 +212,6 @@
       margin-left: $margin;
       min-width: $field-width;
       text-align: right;
-
     }
 
   }

@@ -1,12 +1,11 @@
 (function() {
-  'use strict';
 
   angular
     .module('webPage')
-    .directive('stmMenu', acmeNavbar);
+    .directive('stmMenu', menuDirective);
 
   /** @ngInject */
-  function acmeNavbar() {
+  function menuDirective($rootScope) {
     return {
 
       restrict: 'AC',
@@ -14,6 +13,10 @@
       scope: {
         header: '=',
         items: '='
+      },
+
+      controller: function menuDirectiveController() {
+        $rootScope.$broadcast('menu-show');
       }
 
     };

@@ -5,7 +5,8 @@
   module.component('selectUncashingPlace', {
 
     bindings: {
-      selected: '='
+      selected: '=',
+      initId: '<'
     },
 
     templateUrl: 'app/domain/components/selectUncashingPlace/selectUncashingPlace.html',
@@ -22,7 +23,7 @@
     _.assign(vm, {
 
       $onInit,
-      optionClick
+      optionClick: setSelected
 
     });
 
@@ -32,14 +33,15 @@
      Functions
      */
 
-    function optionClick(option) {
-      vm.selected = option;
+    function setSelected(item) {
+      vm.selected = item;
     }
 
     function $onInit() {
 
       UncashingPlace.bindAll({}, $scope, 'vm.options');
-      UncashingPlace.findAll();
+      UncashingPlace.findAll()
+        .then(data => setSelected(_.find(data, {id: vm.initId})));
 
     }
 

@@ -1,0 +1,11 @@
+@import "../../styles/variables";
+
+make-photo {
+
+  .drop-box {
+    > * + * {
+      display: none;
+    }
+  }
+
+}
