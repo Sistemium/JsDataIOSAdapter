@@ -33,7 +33,7 @@ campaign-filter-popover {
     .popover {
 
       @include responsive-only(gt-xxs) {
-        top: 30px !important;
+        top: 40px !important;
       }
 
       .popover-content {
