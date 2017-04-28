@@ -8,23 +8,32 @@ font-size-edit {
     > ul {
       pointer-events: none;
       opacity: 0.5;
+      // For vScroll Block
+      //margin: 0;
+      //height: 100%;
+      //overflow: hidden;
     }
   }
 
   .articleGroups, .catalogueArticle {
-    position: absolute;
     z-index: 100;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
   }
 
+  .articleGroups {
+    position: absolute;
+  }
+
   .catalogueArticle {
-    right: 15px;
+    right: 27px;
+    position: fixed;
   }
 
   .articleGroups, .catalogueArticle {
     button {
+      height: 36px;
       border: 1px solid silver;
       border-radius: 9px;
       margin: 2px;
