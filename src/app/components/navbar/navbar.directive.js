@@ -15,7 +15,7 @@
     };
   }
 
-  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, localStorageService, UnsyncedInfoService) {
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, UnsyncedInfoService) {
 
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
@@ -26,8 +26,7 @@
 
       auth: Auth,
       menu: Menu.root(),
-      rootClick: () => $rootScope.$broadcast('rootClick'),
-      showImages: localStorageService.get('showImages') || false
+      rootClick: () => $rootScope.$broadcast('rootClick')
 
     });
 
