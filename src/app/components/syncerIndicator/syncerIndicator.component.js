@@ -30,12 +30,10 @@
       const options = {
         onTap: () => {
 
-          console.info('Пробуем передать данные');
-
           if ($window.webkit) {
             $window.webkit.messageHandlers.remoteControl.postMessage({
               remoteCommands: {
-                "STMSyncer":"upload"
+                STMSyncer: 'upload'
               }
             });
           }
