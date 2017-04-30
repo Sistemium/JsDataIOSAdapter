@@ -102,12 +102,12 @@
 
           vm.progress = progress;
 
-          saAsync.series(_.map(res,function(po){
+          saAsync.series(_.map(res, po => {
             return done => {
               const res = onFindPO(po);
 
               if (res) {
-                res.then(function(){
+                res.then(() => {
                   progress.value ++;
                   done();
                 });
