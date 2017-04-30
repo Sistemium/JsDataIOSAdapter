@@ -5,28 +5,28 @@
   angular.module('webPage')
     .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync) {
 
-      var PO = Schema.model('PickingOrder');
-      var POP = Schema.model('PickingOrderPosition');
-      var vm = this;
+      const PO = Schema.model('PickingOrder');
+      const POP = Schema.model('PickingOrderPosition');
+      let vm = this;
 
       function ejectOthers () {
         Schema.model ('PickingOrderPositionPicked').ejectAll();
         Schema.model ('StockBatch').ejectAll();
       }
 
-      var selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
+      let selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
 
       function loadRelationsPOP (pop) {
         return POP.loadRelations(pop,['PickingOrderPositionPicked']);
       }
 
-      var allPositions = [];
+      let allPositions = [];
 
       _.each(selected,function(po){
         Array.prototype.push.apply(allPositions,po.positions);
       });
 
-      var progress = {
+      let progress = {
         max: allPositions.length,
         value: 0
       };
