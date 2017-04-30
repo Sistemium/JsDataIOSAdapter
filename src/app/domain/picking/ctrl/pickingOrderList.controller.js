@@ -16,7 +16,7 @@
 
     let date;
     let stateFilterYes = {
-      picker: picker.id
+      pickerId: picker.id
     };
 
     let stateFilterNo = {
@@ -38,7 +38,7 @@
       const i = (data && data.length) ? data[0] : data;
       if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
         PO.inject(i);
-        return POP.findAllWithRelations({ pickingOrder: i.id })('Article')
+        return POP.findAllWithRelations({ pickingOrderId: i.id })('Article')
       } else {
         PO.eject(i.id);
         return false;
@@ -62,7 +62,7 @@
       } else if (event.resource === 'PickingOrderPosition') {
         POP.find(id, {cacheResponse: false})
           .then(pos => {
-            if (PO.get(pos.pickingOrder)) {
+            if (PO.get(pos.pickingOrderId)) {
               POP.inject(pos);
               POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
             }
@@ -72,7 +72,7 @@
 
     function setSelected () {
       vm.selectedItems = PO.filter({
-        picker: picker.id,
+        pickerId: picker.id,
         date: date,
         selected: true
       });
@@ -87,10 +87,12 @@
 
     function refresh() {
 
+      date = "2017-05-01";
+
       const lastModified = PO.lastModified();
 
       vm.busy = PO.findAll({
-          picker: picker.id,
+          pickerId: picker.id,
           date: date
         }, {bypassCache: true, cacheResponse: false})
         .then(res => {
@@ -139,11 +141,11 @@
     }
 
     $scope.$on('$destroy',PO.bindAll({
-      picker: picker.id
+      pickerId: picker.id
     }, $scope, 'vm.pickingOrders'));
 
     $scope.$on('$destroy',PO.bindAll({
-      picker: picker.id,
+      pickerId: picker.id,
       selected: true
     }, $scope, 'vm.selectedItems'));
 
