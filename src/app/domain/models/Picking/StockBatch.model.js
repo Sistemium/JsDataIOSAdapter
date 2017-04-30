@@ -40,12 +40,12 @@
 
       someBy: {
 
-        barCode: function (code) {
+        barCode: code => {
 
           const SBBC = Schema.model('StockBatchBarCode');
           const SB = Schema.model('StockBatch');
 
-          return $q(function (resolve, reject) {
+          return $q((resolve, reject) => {
 
             if (!code) {
               return reject('Укажите штрих-код');
@@ -53,19 +53,19 @@
 
             SBBC.findAll({
               code: code
-            }).then(function (res) {
+            }).then(res => {
 
               if (!res.length) {
                 return resolve([]);
               }
 
-              const qs = _.map(res, function (i) {
+              const qs = _.map(res, i => {
                 return SBBC.loadRelations(i);
               });
 
-              $q.all(qs).then(function (sbbcs) {
+              $q.all(qs).then(sbbcs => {
 
-                $q.all(_.map(sbbcs, function (sbbc) {
+                $q.all(_.map(sbbcs, sbbc => {
                   return SB.loadRelations(sbbc.stockBatch, 'Article');
                 })).then(resolve, reject);
 

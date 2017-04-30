@@ -13,14 +13,14 @@
       }
 
       function hasPicked (positions) {
-        return !!_.filter(positions,function(pos){
+        return !!_.filter(positions, pos => {
           return !!pos.pickedPositions.length;
         }).length;
       }
 
       function maxTs (positions) {
-        return _.reduce (positions,function (res,pos){
-          const lastPos = _.maxBy (pos.pickedPositions, function (pp) {
+        return _.reduce (positions, (res, pos) => {
+          const lastPos = _.maxBy (pos.pickedPositions, pp => {
             return POPP.lastModified (pp.id);
           });
           return Math.max (lastPos && POPP.lastModified (lastPos) || 0, res);
@@ -98,7 +98,7 @@
           pivotPositionsByArticle:  function (articleIndex) {
             return _.orderBy(_.map(articleIndex, function (positions, key) {
 
-              const totalVolume = _.reduce(positions, function (sum, pos) {
+              const totalVolume = _.reduce(positions, (sum, pos) => {
                 return sum + pos.volume;
               }, 0);
 
@@ -120,12 +120,12 @@
                 totalUnPickedVolume: totalUnPicked,
                 ts: maxTs(positions),
 
-                orderVolume: function (order) {
+                orderVolume: order => {
                   const p = _.find(positions, ['pickingOrder', order.id]);
                   return article.boxPcs(p && p.volume || 0);
                 },
 
-                position: function (order) {
+                position: order => {
                   return _.find(positions, ['pickingOrder', order.id]);
                 },
 

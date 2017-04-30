@@ -19,22 +19,22 @@
 
         someBy: {
 
-          article: function (id) {
+          article: id => {
 
             const SB = Schema.model('StockBatch');
 
-            return $q(function (resolve, reject) {
+            return $q((resolve, reject) => {
 
               if (!id) {
                 return reject('Укажите товар');
               }
 
-              SB.findAll({article: id, limit: 1}).then(function (sbs) {
+              SB.findAll({article: id, limit: 1}).then(sbs => {
                 if (!sbs.length) {
                   return reject ();
                 }
                 SB.loadRelations(sbs[0], 'StockBatchBarCode')
-                  .then(function (sb) {
+                  .then(sb => {
                     resolve(sb.StockBatchBarCodes);
                   }, reject);
               }, reject);
