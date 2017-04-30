@@ -87,8 +87,6 @@
 
     function refresh() {
 
-      date = "2017-05-01";
-
       const lastModified = PO.lastModified();
 
       vm.busy = PO.findAll({
