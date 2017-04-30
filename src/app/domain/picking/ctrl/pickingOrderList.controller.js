@@ -45,7 +45,7 @@
       }
     }
 
-    const onJSData = function (event) {
+    const onJSData = event => {
       const id = _.get(event, 'data.id');
       if (!id) {
         return;
@@ -53,7 +53,7 @@
       if (event.resource === 'PickingOrder') {
         PO.find(id, {bypassCache: true, cacheResponse: false})
           .then(onFindPO)
-          .catch (function (err) {
+          .catch (err => {
             if (err.error === 404) {
               DEBUG ('PickingOrderListController:eject',id);
               PO.eject (id);
@@ -61,7 +61,7 @@
           });
       } else if (event.resource === 'PickingOrderPosition') {
         POP.find(id, {cacheResponse: false})
-          .then(function(pos){
+          .then(pos => {
             if (PO.get(pos.pickingOrder)) {
               POP.inject(pos);
               POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
@@ -93,7 +93,7 @@
           picker: picker.id,
           date: date
         }, {bypassCache: true, cacheResponse: false})
-        .then(function (res) {
+        .then(res => {
 
           let progress = {
             max: res.length,
@@ -103,7 +103,7 @@
           vm.progress = progress;
 
           saAsync.series(_.map(res,function(po){
-            return function(done) {
+            return done => {
               const res = onFindPO(po);
 
               if (res) {
@@ -117,12 +117,12 @@
               }
 
             };
-          }),function () {
+          }), () => {
             vm.progress = false;
             if (!lastModified) {
               return;
             }
-            _.each (res, function (po) {
+            _.each (res, po => {
               if (po.DSLastModified() <= lastModified) {
                 PO.eject(po);
               }
@@ -149,12 +149,12 @@
 
     angular.extend(vm, {
 
-      toggleSelect: function (item) {
+      toggleSelect: item => {
         item.selected = !item.selected;
         setSelected();
       },
 
-      rowClass: function (order) {
+      rowClass: order => {
         return (order.selected ? 'active ' : '') + order.cls;
       },
 
@@ -169,7 +169,7 @@
     Schema.model('Setting').findAll({
       group: 'domain',
       name: 'picking.date'
-    }).then (function(res){
+    }).then (res => {
       if (res.length) {
         date = res[0].value;
       } else {
@@ -192,14 +192,14 @@
         //toastr.info (object.id,'scanFn object.id');
         q = SB.find(object.id);
       } else if (vm.barCodeInput) {
-        q = SB.someBy.barCode(code).then(function (sbs) {
+        q = SB.someBy.barCode(code).then(sbs => {
           return _.head(sbs);
         });
       } else {
         return SoundSynth.say(notFound);
       }
 
-      q.then(function(sb){
+      q.then(sb => {
         if (!sb) {
           return SoundSynth.say(notFound);
         }
@@ -207,7 +207,7 @@
           stockBatch: sb,
           code: code
         });
-      },function (){
+      }, () => {
         SoundSynth.say(notFound);
       });
 
@@ -215,19 +215,19 @@
 
     BarCodeScanner.bind(scanFn, SoundSynth.repeat);
 
-    $scope.$on('$stateChangeSuccess', function (e, to) {
+    $scope.$on('$stateChangeSuccess', (e, to) => {
       vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
       vm.mode = to.name.match(/[^\.]*$/)[0];
     });
 
-    $scope.$on('$stateChangeSuccess', function (e, to) {
+    $scope.$on('$stateChangeSuccess', (e, to) => {
       vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
       if (to.name === 'picking.orderList') {
         setSelected();
       }
     });
 
-    $scope.$watch('vm.hasSelected',function (n){
+    $scope.$watch('vm.hasSelected', n => {
       vm.currentTotals = n ? vm.selectedTotals : vm.totals;
     });
 
