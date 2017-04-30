@@ -22,7 +22,7 @@
 
       let allPositions = [];
 
-      _.each(selected,function(po){
+      _.each(selected, po => {
         Array.prototype.push.apply(allPositions,po.positions);
       });
 
@@ -38,8 +38,8 @@
         selectedItems: selected,
         totals: PO.agg (vm, 'selectedItems'),
 
-        startPicking: function () {
-          vm.selectedItems = _.map(vm.selectedItems,function(po){
+        startPicking: () => {
+          vm.selectedItems = _.map(vm.selectedItems, po => {
             po.processing = 'picking';
             PO.save(po);
             return po;
@@ -48,8 +48,8 @@
           $state.go('^.articleList');
         },
 
-        finishPicking: function () {
-          _.each(vm.selectedItems,function(po){
+        finishPicking: () => {
+          _.each(vm.selectedItems, po => {
             po.processing = 'picked';
             po.selected = undefined;
             PO.save(po);
@@ -59,8 +59,8 @@
           $state.go('^');
         },
 
-        pausePicking: function () {
-          _.each(vm.selectedItems,function(po){
+        pausePicking: () => {
+          _.each(vm.selectedItems, po => {
             po.processing = 'ready';
             po.selected = undefined;
             PO.save(po);
@@ -72,11 +72,11 @@
 
       });
 
-      vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, function(chunk){
+      vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, chunk => {
         progress.value += chunk.length;
       }, _.noop);
 
-      vm.busy.then(function(){
+      vm.busy.then(() => {
         vm.progress = false;
       });
 
