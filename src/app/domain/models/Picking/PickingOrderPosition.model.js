@@ -4,9 +4,9 @@
 
     angular.module('Models').run(function (Schema) {
 
-      var POPP = Schema.models().PickingOrderPositionPicked;
-      var totalVolume = Schema.aggregate('volume').sum;
-      var totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
+      const POPP = Schema.models().PickingOrderPositionPicked;
+      let totalVolume = Schema.aggregate('volume').sum;
+      let totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
 
       function isPicked (positions) {
         return !totalUnPickedVolume (positions);
@@ -20,7 +20,7 @@
 
       function maxTs (positions) {
         return _.reduce (positions,function (res,pos){
-          var lastPos = _.maxBy (pos.pickedPositions, function (pp) {
+          const lastPos = _.maxBy (pos.pickedPositions, function (pp) {
             return POPP.lastModified (pp.id);
           });
           return Math.max (lastPos && POPP.lastModified (lastPos) || 0, res);
@@ -98,14 +98,14 @@
           pivotPositionsByArticle:  function (articleIndex) {
             return _.orderBy(_.map(articleIndex, function (positions, key) {
 
-              var totalVolume = _.reduce(positions, function (sum, pos) {
+              const totalVolume = _.reduce(positions, function (sum, pos) {
                 return sum + pos.volume;
               }, 0);
 
-              var article = positions[0].Article;
-              var boxPcs = article && article.boxPcs(totalVolume);
-              var picked = isPicked(positions);
-              var totalUnPicked = totalUnPickedVolume (positions);
+              const article = positions[0].Article;
+              const boxPcs = article && article.boxPcs(totalVolume);
+              const picked = isPicked(positions);
+              const totalUnPicked = totalUnPickedVolume (positions);
 
               return {
 
@@ -121,7 +121,7 @@
                 ts: maxTs(positions),
 
                 orderVolume: function (order) {
-                  var p = _.find(positions, ['pickingOrder', order.id]);
+                  const p = _.find(positions, ['pickingOrder', order.id]);
                   return article.boxPcs(p && p.volume || 0);
                 },
 

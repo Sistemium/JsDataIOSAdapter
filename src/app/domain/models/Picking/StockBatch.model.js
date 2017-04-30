@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema, $q) {
 
-    var totalVolume = Schema.aggregate('volume').sum;
+    const totalVolume = Schema.aggregate('volume').sum;
 
     Schema.register({
 
@@ -32,7 +32,7 @@
       methods: {
 
         spareVolume: function () {
-          var volume = (this.volume || 0) - (totalVolume(this.pickedPickingOrderPositions) || 0);
+          const volume = (this.volume || 0) - (totalVolume(this.pickedPickingOrderPositions) || 0);
           return volume > 0 ? volume : 0;
         }
 
@@ -42,8 +42,8 @@
 
         barCode: function (code) {
 
-          var SBBC = Schema.model('StockBatchBarCode');
-          var SB = Schema.model('StockBatch');
+          const SBBC = Schema.model('StockBatchBarCode');
+          const SB = Schema.model('StockBatch');
 
           return $q(function (resolve, reject) {
 
@@ -59,7 +59,7 @@
                 return resolve([]);
               }
 
-              var qs = _.map(res, function (i) {
+              const qs = _.map(res, function (i) {
                 return SBBC.loadRelations(i);
               });
 

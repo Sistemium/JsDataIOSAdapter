@@ -4,9 +4,9 @@
 
     angular.module('Models').service('Picker', function (Schema, SoundSynth, toastr) {
 
-      var currentPicker;
+      let currentPicker;
 
-      var Picker = Schema.register ({
+      const Picker = Schema.register ({
 
         name: 'Picker',
 
@@ -21,7 +21,7 @@
 
         computed: {
           shortName: ['name', function (name) {
-            var names = name.match (/(^[^ ]*) (.*$)/);
+            const names = name.match (/(^[^ ]*) (.*$)/);
             return names[1] + ' ' + names[2][0] + '.';
           }]
         },

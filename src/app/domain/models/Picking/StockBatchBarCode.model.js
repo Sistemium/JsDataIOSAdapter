@@ -21,7 +21,7 @@
 
           article: function (id) {
 
-            var SB = Schema.model('StockBatch');
+            const SB = Schema.model('StockBatch');
 
             return $q(function (resolve, reject) {
 
