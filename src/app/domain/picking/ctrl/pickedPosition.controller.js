@@ -5,19 +5,19 @@
   angular.module('webPage')
     .controller('PickedPositionController', function ($scope, $state, models) {
 
-      var vm = this;
-      var POPP = models.PickingOrderPositionPicked;
-      var POP = models.PickingOrderPosition;
+      let vm = this;
+      const POPP = models.PickingOrderPositionPicked;
+      const POP = models.PickingOrderPosition;
 
-      var mode = $state.params.positionId ? 'pick' : 'picked';
+      const mode = $state.params.positionId ? 'pick' : 'picked';
 
-      var pickedPosition = mode === 'picked' && POPP.get ($state.params.pickedPositionId);
+      let pickedPosition = mode === 'picked' && POPP.get ($state.params.pickedPositionId);
 
-      var position = pickedPosition && pickedPosition.parent || POP.get ($state.params.positionId);
+      const position = pickedPosition && pickedPosition.parent || POP.get ($state.params.positionId);
 
-      var initVolume, initExport;
+      let initVolume, initExport;
 
-      var unPickedVolume;
+      let unPickedVolume;
 
       if (pickedPosition) {
         initVolume = pickedPosition.boxPcs().full;
@@ -29,7 +29,7 @@
         unPickedVolume = position.unPickedVolume();
       }
 
-      var states = [
+      let states = [
         {
           input: 'volume',
           label: 'Собрано',
@@ -41,7 +41,7 @@
         }
       ];
 
-      var barCode = pickedPosition && pickedPosition.code;
+      const barCode = pickedPosition && pickedPosition.code;
 
       if (barCode) {
 
