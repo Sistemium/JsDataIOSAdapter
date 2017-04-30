@@ -8,18 +8,18 @@
 
   function ctrl ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, saAsync, DEBUG) {
 
-    var picker = Schema.model ('Picker').getCurrent();
+    const picker = Schema.model ('Picker').getCurrent();
 
     if (!picker) {
       return $state.go ('login');
     }
 
-    var date;
-    var stateFilterYes = {
+    let date;
+    let stateFilterYes = {
       picker: picker.id
     };
 
-    var stateFilterNo = {
+    let stateFilterNo = {
       processing: false
     };
 
@@ -29,13 +29,13 @@
       stateFilterNo.processing = 'picked';
     }
 
-    var vm = this;
-    var PO = Schema.model ('PickingOrder');
-    var POP = Schema.model ('PickingOrderPosition');
-    var SB = Schema.model ('StockBatch');
+    let vm = this;
+    const PO = Schema.model ('PickingOrder');
+    const POP = Schema.model ('PickingOrderPosition');
+    const SB = Schema.model ('StockBatch');
 
     function onFindPO (data) {
-      var i = (data && data.length) ? data[0] : data;
+      const i = (data && data.length) ? data[0] : data;
       if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
         PO.inject(i);
         return POP.findAllWithRelations({ pickingOrder: i.id })('Article')
@@ -45,8 +45,8 @@
       }
     }
 
-    var onJSData = function (event) {
-      var id = _.get(event, 'data.id');
+    const onJSData = function (event) {
+      const id = _.get(event, 'data.id');
       if (!id) {
         return;
       }
@@ -87,7 +87,7 @@
 
     function refresh() {
 
-      var lastModified = PO.lastModified();
+      const lastModified = PO.lastModified();
 
       vm.busy = PO.findAll({
           picker: picker.id,
@@ -95,7 +95,7 @@
         }, {bypassCache: true, cacheResponse: false})
         .then(function (res) {
 
-          var progress = {
+          let progress = {
             max: res.length,
             value: 0
           };
@@ -104,7 +104,7 @@
 
           saAsync.series(_.map(res,function(po){
             return function(done) {
-              var res = onFindPO(po);
+              const res = onFindPO(po);
 
               if (res) {
                 res.then(function(){
@@ -180,12 +180,12 @@
 
     function scanFn(code, type, object) {
 
-      var notFound = 'Неизвестный штрих-код';
+      const notFound = 'Неизвестный штрих-код';
 
       Errors.clear();
       code = code || vm.barCodeInput;
 
-      var q;
+      let q;
 
       if (object) {
         SB.inject(object);
