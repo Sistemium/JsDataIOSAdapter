@@ -14,17 +14,17 @@
         hasOne: {
           Article: {
             localField: 'Article',
-            localKey: 'article'
+            localKey: 'articleId'
           }
         },
         hasMany: {
           StockBatchBarCode: {
             localField: 'StockBatchBarCodes',
-            foreignKey: 'stockBatch'
+            foreignKey: 'stockBatchId'
           },
           PickingOrderPositionPicked: {
             localField: 'pickedPickingOrderPositions',
-            foreignKey: 'stockBatch'
+            foreignKey: 'stockBatchId'
           }
         }
       },

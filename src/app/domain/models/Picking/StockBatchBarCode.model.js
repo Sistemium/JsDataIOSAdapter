@@ -12,7 +12,7 @@
           belongsTo: {
             StockBatch: {
               localField: 'StockBatch',
-              localKey: 'stockBatch'
+              localKey: 'stockBatchId'
             }
           }
         },

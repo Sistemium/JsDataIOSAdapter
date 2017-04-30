@@ -12,13 +12,13 @@
         hasMany: {
           PickingOrderPosition: {
             localField: 'positions',
-            foreignKey: 'pickingOrder'
+            foreignKey: 'pickingOrderId'
           }
         },
         hasOne: {
           Picker: {
-            localField: 'pickedBy',
-            localKey: 'picker'
+            localField: 'picker',
+            localKey: 'pickerId'
           }
         }
       },

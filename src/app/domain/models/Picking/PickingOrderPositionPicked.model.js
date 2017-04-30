@@ -12,13 +12,13 @@
           belongsTo: {
             PickingOrderPosition: {
               localField: 'parent',
-              localKey: 'pickingOrderPosition'
+              localKey: 'pickingOrderPositionId'
             }
           },
           hasOne: {
             StockBatch: {
-              localField: 'sb',
-              localKey: 'stockBatch'
+              localField: 'StockBatch',
+              localKey: 'stockBatchId'
             }
           }
         },

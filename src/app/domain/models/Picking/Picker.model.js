@@ -14,7 +14,7 @@
           hasMany: {
             PickingOrder: {
               localField: 'pickingOrders',
-              foreignKey: 'picker'
+              foreignKey: 'pickerId'
             }
           }
         },

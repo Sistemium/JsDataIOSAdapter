@@ -35,19 +35,19 @@
           belongsTo: {
             PickingOrder: {
               localField: 'PickingOrder',
-              localKey: 'pickingOrder'
+              localKey: 'pickingOrderId'
             }
           },
           hasOne: {
             Article: {
               localField: 'Article',
-              localKey: 'article'
+              localKey: 'articleId'
             }
           },
           hasMany: {
             PickingOrderPositionPicked: {
               localField: 'pickedPositions',
-              foreignKey: 'pickingOrderPosition'
+              foreignKey: 'pickingOrderPositionId'
             }
           }
         },
