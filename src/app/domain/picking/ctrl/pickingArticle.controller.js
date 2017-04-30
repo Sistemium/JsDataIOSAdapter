@@ -13,7 +13,7 @@
 
         picking: picking,
         article: _.get(picking,'article'),
-        orders: _.map($scope.$parent.vm.orders,function (order) {
+        orders: _.map($scope.$parent.vm.orders, order => {
 
           return {
             id: order.id,
@@ -25,7 +25,7 @@
 
         }),
 
-        done: function () {
+        done: () => {
 
           picking.updatePicked ();
 
