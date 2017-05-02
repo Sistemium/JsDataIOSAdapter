@@ -13,7 +13,7 @@
 
   });
 
-  function syncerIndicatorController($scope, SyncerInfo, toastr) {
+  function syncerIndicatorController($scope, SyncerInfo, toastr, $window) {
 
     const vm = _.assign(this, {
       $onInit,
@@ -25,7 +25,22 @@
     }
 
     function syncerInfoClick() {
-      toastr.error('Проверьте подключение к интернет или обратитесь в техподдержку', 'Требуется передать данные')
+      const text = 'Проверьте подключение к интернет или обратитесь в техподдержку';
+      const title = 'Требуется передать данные';
+      const options = {
+        onTap: () => {
+
+          if ($window.webkit) {
+            $window.webkit.messageHandlers.remoteControl.postMessage({
+              remoteCommands: {
+                STMSyncer: 'upload'
+              }
+            });
+          }
+
+        }
+      };
+      toastr.error(text, title, options);
     }
 
   }
