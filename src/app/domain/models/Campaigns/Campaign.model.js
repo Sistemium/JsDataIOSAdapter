@@ -50,8 +50,8 @@
       let regExp = new RegExp(getTeamName(name, 'i'));
 
       _.each(nameArr, function (item, idx) {
-        if ((item.match(regExp))) {
-          nameArr = (nameArr.slice(idx + 1));
+        if (item.match(regExp)) {
+          nameArr = nameArr.slice(idx + 1);
           return false;
         }
       });
@@ -61,7 +61,7 @@
     }
 
     function getTeamName(name) {
-      return _.first(name.match(/[^.| |! |:]+/));
+      return _.first(name.match(/[^.| ! :]+/));
     }
 
 
