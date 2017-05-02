@@ -55,6 +55,16 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
   align-items: baseline;
 }
 
+
+%no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 @mixin responsive-only($media, $orientation: false) {
 
   @if $orientation  {

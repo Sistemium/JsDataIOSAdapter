@@ -14,7 +14,7 @@
     outline: none;
   }
 
-  @extend .no-select;
+  @extend %no-select;
 
   .commentText i {
     font-size: 18px;
