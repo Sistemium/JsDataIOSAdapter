@@ -5,32 +5,32 @@ font-size-edit {
   ng-transclude.isShownSettings {
     pointer-events: none;
     opacity: 0.5;
-    > ul {
+    > #scroll-articles-parent {
       pointer-events: none;
       opacity: 0.5;
-      // For vScroll Block
-      //margin: 0;
-      //height: 100%;
-      //overflow: hidden;
+    }
+  }
+
+  .catalogueArticle {
+    right: 15px;
+  }
+
+  .articleGroups {
+    button {
+      @include responsive-only(lt-sm) {
+        display: none;
+      }
     }
   }
 
   .articleGroups, .catalogueArticle {
+
     z-index: 100;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
-  }
-
-  .articleGroups {
     position: absolute;
-  }
 
-  .catalogueArticle {
-    position: fixed;
-  }
-
-  .articleGroups, .catalogueArticle {
     button {
       height: 36px;
       border: 1px solid silver;
@@ -38,9 +38,6 @@ font-size-edit {
       margin: 2px;
       background: #f5f5f5;
       color: #4290d0;
-      @include responsive-only(lt-sm) {
-        display: none;
-      }
     }
   }
 
