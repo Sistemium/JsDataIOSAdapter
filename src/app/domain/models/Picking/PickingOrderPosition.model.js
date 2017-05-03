@@ -121,12 +121,12 @@
                 ts: maxTs(positions),
 
                 orderVolume: order => {
-                  const p = _.find(positions, ['pickingOrder', order.id]);
+                  const p = _.find(positions, {pickingOrderId : order.id});
                   return article.boxPcs(p && p.volume || 0);
                 },
 
                 position: order => {
-                  return _.find(positions, ['pickingOrder', order.id]);
+                  return _.find(positions, {pickingOrderId : order.id});
                 },
 
                 updatePicked: function () {
