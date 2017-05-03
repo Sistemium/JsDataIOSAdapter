@@ -162,7 +162,7 @@
 
     angular.extend(vm, {
 
-      articleIndex: _.groupBy(positions, 'article'),
+      articleIndex: _.groupBy(positions, 'articleId'),
       orders: orders,
       pickedIndex: {},
       barCodeInput: '',
