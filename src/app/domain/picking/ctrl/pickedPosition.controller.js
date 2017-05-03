@@ -112,10 +112,10 @@
 
           if (!pickedPosition) {
             POPP.create ({
-              pickingOrderPosition: position.id,                                            // pickingOrderPositionId ???
+              pickingOrderPositionId: position.id,
               volume: states[0].exportValue,
               productionInfo: states.length > 1 ? states[1].value : null,
-              article: position.article                                                     // articleId: position.articleId ???
+              articleId: position.articleId
             }).then (() => {
               $state.go('^');
             });

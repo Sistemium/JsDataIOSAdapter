@@ -73,7 +73,7 @@
               stockBatchId: sb.id,
               pickingOrderPositionId: this.id,
               volume: volume || this.volume,
-              article: sb.article,                      // articleId ???
+              articleId: sb.articleId,
               code: code
             });
 

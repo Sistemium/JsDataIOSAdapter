@@ -152,7 +152,7 @@
 
     const positions = POP.filter({
       where: {
-        pickingOrder: {                                               // pickingOrderId ???
+        pickingOrderId: {
           'in': _.map(orders, o => {
             return o.id;
           })
