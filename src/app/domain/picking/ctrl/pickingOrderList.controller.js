@@ -215,6 +215,8 @@
 
     BarCodeScanner.bind(scanFn, SoundSynth.repeat);
 
+    // double $scope.$on('$stateChangeSuccess') ???
+
     $scope.$on('$stateChangeSuccess', (e, to) => {
       vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
       vm.mode = to.name.match(/[^\.]*$/)[0];
