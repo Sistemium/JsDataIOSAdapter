@@ -111,10 +111,10 @@
 
                 id: key,
                 sameId: article.sameId,
-                article: article,                                             // articleId ???
-                positions: positions,
+                article,
+                positions,
                 volume: boxPcs,
-                totalVolume: totalVolume,
+                totalVolume,
                 isPicked: picked,
                 hasPicked: hasPicked(positions),
                 totalUnPickedVolume: totalUnPicked,
