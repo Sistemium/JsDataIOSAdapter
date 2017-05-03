@@ -70,8 +70,8 @@
           linkStockBatch: function (sb, code, volume) {
 
             return POPP.create({
-              stockBatch: sb.id,                        // stockBatchId ???
-              pickingOrderPosition: this.id,            // pickingOrderPositionId ??
+              stockBatchId: sb.id,
+              pickingOrderPositionId: this.id,
               volume: volume || this.volume,
               article: sb.article,                      // articleId ???
               code: code
