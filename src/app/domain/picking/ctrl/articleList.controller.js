@@ -69,7 +69,7 @@
           pickablePositions.push ({
             pop: pop,
             unp: unp,
-            num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,        // pop.PickingOrderId ???
+            num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,
             // TODO: check packageRels
             volume: Language.speakableBoxPcs(a.boxPcs(unp))
           });
@@ -86,7 +86,7 @@
       let qs = [];
 
       const pickedVolume = _.reduce(pickablePositions, (res, pp) => {
-        qs.push (pp.pop.linkStockBatch(sb, code, pp.unp));              // sb.id ???
+        qs.push (pp.pop.linkStockBatch(sb, code, pp.unp));
         return res + pp.unp;
       }, 0);
 
