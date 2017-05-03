@@ -59,6 +59,7 @@
                 return resolve([]);
               }
 
+              // qs — is it needed here?
               const qs = _.map(res, i => {
                 return SBBC.loadRelations(i);
               });
