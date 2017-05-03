@@ -69,7 +69,7 @@
           pickablePositions.push ({
             pop: pop,
             unp: unp,
-            num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,
+            num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,        // pop.PickingOrderId ???
             // TODO: check packageRels
             volume: Language.speakableBoxPcs(a.boxPcs(unp))
           });
@@ -86,7 +86,7 @@
       let qs = [];
 
       const pickedVolume = _.reduce(pickablePositions, (res, pp) => {
-        qs.push (pp.pop.linkStockBatch(sb, code, pp.unp));
+        qs.push (pp.pop.linkStockBatch(sb, code, pp.unp));              // sb.id ???
         return res + pp.unp;
       }, 0);
 
@@ -125,7 +125,7 @@
       const fn = () => {
 
         const found = options.stockBatch.Article &&
-          processArticle(options.stockBatch.Article, options.stockBatch, options.code);
+          processArticle(options.stockBatch.Article, options.stockBatch, options.code);     // stockBatch.ArticleId ???
 
         if (found && found.id) {
           toastr.success(found.name, found.volume);
@@ -140,7 +140,7 @@
 
       };
 
-      Article.find(options.stockBatch.article)
+      Article.find(options.stockBatch.article)                      // stockBatch.articleId ???
         .then(() => {
           $timeout(fn,10);
         })
@@ -152,7 +152,7 @@
 
     const positions = POP.filter({
       where: {
-        pickingOrder: {
+        pickingOrder: {                                               // pickingOrderId ???
           'in': _.map(orders, o => {
             return o.id;
           })

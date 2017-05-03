@@ -47,7 +47,7 @@
 
         vm.barCode = barCode;
 
-      } else if (position && position.Article.productionInfoType) {
+      } else if (position && position.Article.productionInfoType) {         // position.ArticleId ??? but productionInfoType ???
         states.push ({
           input: 'productionInfo',
           label: 'Дата розлива',
@@ -112,10 +112,10 @@
 
           if (!pickedPosition) {
             POPP.create ({
-              pickingOrderPosition: position.id,
+              pickingOrderPosition: position.id,                                            // pickingOrderPositionId ???
               volume: states[0].exportValue,
               productionInfo: states.length > 1 ? states[1].value : null,
-              article: position.article
+              article: position.article                                                     // articleId: position.articleId ???
             }).then (() => {
               $state.go('^');
             });

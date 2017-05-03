@@ -29,7 +29,7 @@
                 return reject('Укажите товар');
               }
 
-              SB.findAll({article: id, limit: 1}).then(sbs => {
+              SB.findAll({article: id, limit: 1}).then(sbs => {             // articleId ???
                 if (!sbs.length) {
                   return reject ();
                 }

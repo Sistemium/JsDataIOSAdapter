@@ -60,27 +60,27 @@
         methods: {
 
           boxVolume: function () {
-            return this.Article && this.Article.boxVolume (this.volume) || 0;
+            return this.Article && this.Article.boxVolume (this.volume) || 0;             // this.ArticleId ???
           },
 
           boxPcs: function (volume) {
-            return this.Article && this.Article.boxPcs (angular.isUndefined(volume) ? this.volume : volume) || {};
+            return this.Article && this.Article.boxPcs (angular.isUndefined(volume) ? this.volume : volume) || {};      // this.ArticleId ???
           },
 
           linkStockBatch: function (sb, code, volume) {
 
             return POPP.create({
-              stockBatch: sb.id,
-              pickingOrderPosition: this.id,
+              stockBatch: sb.id,                        // stockBatchId ???
+              pickingOrderPosition: this.id,            // pickingOrderPositionId ??
               volume: volume || this.volume,
-              article: sb.article,
+              article: sb.article,                      // articleId ???
               code: code
             });
 
           },
 
           unPickedBoxVolume: function () {
-            return this.Article && this.Article.boxVolume (this.unPickedVolume()) || 0;
+            return this.Article && this.Article.boxVolume (this.unPickedVolume()) || 0;           // this.ArticleId ???
           },
 
           unPickedVolume: function () {
@@ -111,7 +111,7 @@
 
                 id: key,
                 sameId: article.sameId,
-                article: article,
+                article: article,                                             // articleId ???
                 positions: positions,
                 volume: boxPcs,
                 totalVolume: totalVolume,
