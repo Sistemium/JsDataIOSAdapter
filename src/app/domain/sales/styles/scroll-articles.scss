@@ -199,8 +199,12 @@
   .compDiscount {
 
     &.flag {
-      background: $state-info-bg;
+      background-color: $state-info-bg;
       color: $state-info-text;
+
+      &:hover {
+        background-color: $state-info-bg;
+      }
     }
 
     @extend %flaggable;
