@@ -66,7 +66,7 @@
               $q.all(qs).then(sbbcs => {
 
                 $q.all(_.map(sbbcs, sbbc => {
-                  return SB.loadRelations(sbbc.stockBatch, 'Article');            // sbbc.stockBatchId ???
+                  return SB.loadRelations(sbbc.stockBatchId, 'Article');
                 })).then(resolve, reject);
 
               }, reject);
