@@ -60,11 +60,11 @@
         methods: {
 
           boxVolume: function () {
-            return this.Article && this.Article.boxVolume (this.volume) || 0;             // this.ArticleId ???
+            return this.Article && this.Article.boxVolume (this.volume) || 0;
           },
 
           boxPcs: function (volume) {
-            return this.Article && this.Article.boxPcs (angular.isUndefined(volume) ? this.volume : volume) || {};      // this.ArticleId ???
+            return this.Article && this.Article.boxPcs (angular.isUndefined(volume) ? this.volume : volume) || {};
           },
 
           linkStockBatch: function (sb, code, volume) {
@@ -80,7 +80,7 @@
           },
 
           unPickedBoxVolume: function () {
-            return this.Article && this.Article.boxVolume (this.unPickedVolume()) || 0;           // this.ArticleId ???
+            return this.Article && this.Article.boxVolume (this.unPickedVolume()) || 0;
           },
 
           unPickedVolume: function () {
