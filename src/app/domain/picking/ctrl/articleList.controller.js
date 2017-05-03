@@ -125,7 +125,7 @@
       const fn = () => {
 
         const found = options.stockBatch.Article &&
-          processArticle(options.stockBatch.Article, options.stockBatch, options.code);     // stockBatch.ArticleId ???
+          processArticle(options.stockBatch.Article, options.stockBatch, options.code);
 
         if (found && found.id) {
           toastr.success(found.name, found.volume);
