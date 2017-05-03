@@ -59,7 +59,6 @@
                 return resolve([]);
               }
 
-              // qs — is it needed here?
               const qs = _.map(res, i => {
                 return SBBC.loadRelations(i);
               });
@@ -68,7 +67,8 @@
 
                 $q.all(_.map(sbbcs, sbbc => {
                   return SB.loadRelations(sbbc.stockBatchId, 'Article');
-                })).then(resolve, reject);
+                }))
+                  .then(resolve, reject);
 
               }, reject);
 
