@@ -140,7 +140,7 @@
 
       };
 
-      Article.find(options.stockBatch.article)                      // stockBatch.articleId ???
+      Article.find(options.stockBatch.articleId)
         .then(() => {
           $timeout(fn,10);
         })
