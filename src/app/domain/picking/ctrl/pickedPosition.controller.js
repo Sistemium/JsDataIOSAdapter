@@ -47,7 +47,7 @@
 
         vm.barCode = barCode;
 
-      } else if (position && position.Article.productionInfoType) {         // position.ArticleId ??? but productionInfoType ???
+      } else if (position && position.Article.productionInfoType) {
         states.push ({
           input: 'productionInfo',
           label: 'Дата розлива',
