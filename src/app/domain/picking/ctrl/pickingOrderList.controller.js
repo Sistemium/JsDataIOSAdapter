@@ -215,14 +215,9 @@
 
     BarCodeScanner.bind(scanFn, SoundSynth.repeat);
 
-    // double $scope.$on('$stateChangeSuccess') ???
-
     $scope.$on('$stateChangeSuccess', (e, to) => {
       vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
       vm.mode = to.name.match(/[^\.]*$/)[0];
-    });
-
-    $scope.$on('$stateChangeSuccess', (e, to) => {
       vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
       if (to.name === 'picking.orderList') {
         setSelected();
