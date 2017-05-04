@@ -25,10 +25,12 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
       tbody
         tr.clickable(
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
-        ng-click='vm.itemClick(item)'
+        ng-click='vm.itemClick(item, $event)'
         )
           td(ng-class='item.workflow().cls') {{ ::item.ndoc }}
-          td.tinyName {{ ::item.driver.tinyName }}
+          td.tinyName
+            driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]')
+              span {{ ::item.driver.tinyName }}
           td.tinyName(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
           td
             div {{ ::item.outlet.name }}
