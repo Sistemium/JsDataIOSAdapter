@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SalesmanAuth($rootScope, $state, Schema, localStorageService) {
+  function SalesmanAuth($rootScope, $state, Schema, localStorageService, InitService, Sockets, IOS, DEBUG, Menu) {
 
     const LOGIN_EVENT = 'salesman-login';
     const LOGOUT_EVENT = 'salesman-logout';
@@ -32,6 +32,7 @@
 
     };
 
+    salesModuleRun();
 
     $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
@@ -136,6 +137,61 @@
         res.salesmanId = currentSalesman.id;
       }
       return res;
+    }
+
+    function salesModuleRun() {
+
+      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition'];
+
+      InitService.then(service.init)
+        .then(salesmanAuth => {
+
+          if (IOS.isIos()) {
+            SUBSCRIPTIONS.push('RecordStatus');
+            Sockets.onJsData('jsData:update', onRecordStatus);
+          }
+
+          if (salesmanAuth.getCurrentUser() || salesmanAuth.hasOptions) {
+            DEBUG('Sales module will jsDataSubscribe:', SUBSCRIPTIONS);
+            Sockets.jsDataSubscribe(SUBSCRIPTIONS);
+          }
+
+          const {Workflow, SaleOrder} = Schema.models();
+
+          Workflow.findAll({code: 'SaleOrder.v2'})
+            .then(workflow => {
+              Schema.workflowSaleOrder = _.get(_.first(workflow), 'workflow');
+            })
+            .catch(e => console.error('Workflow find error:', e));
+
+          function setBadges() {
+            let filter = salesmanAuth.makeFilter({processing: 'draft'});
+            SaleOrder.groupBy(filter)
+              .then(data => {
+                Menu.setItemData('sales.saleOrders', {badge: data.length});
+              });
+          }
+
+          $rootScope.$on('menu-show', setBadges);
+
+          setBadges();
+
+        });
+
+      function onRecordStatus(event) {
+
+        if (event.resource !== 'RecordStatus') return;
+
+        try {
+          Schema
+            .model(event.data.name)
+            .eject(event.data.objectXid);
+        } catch (e) {
+          console.warn('onRecordStatus error:', e);
+        }
+
+      }
+
     }
 
     return service;
