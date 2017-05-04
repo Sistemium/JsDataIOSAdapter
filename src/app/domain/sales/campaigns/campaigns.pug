@@ -28,4 +28,4 @@ section.campaigns(cg-busy='vm.cgBusy')
         )
           img(ng-src='{{picture.srcThumbnail}}')
 
-    p(ng-if='!vm.campaigns.length && vm.cgBusy') Акций не найдено
+    .no-data(ng-if='!vm.campaigns.length && vm.cgBusy') Акций не найдено
