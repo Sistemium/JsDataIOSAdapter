@@ -27,12 +27,12 @@
       roles = newRoles || {};
       currentUser = roles.account || {};
 
-      currentUser.shortName = (function (name) {
+      currentUser.shortName = (name => {
         const names = name.match (/(^[^ ]*) (.*$)/);
         return names ? names[1] + ' ' + names[2][0] + '.' : name;
       })(currentUser.name);
 
-      rolesArray = _.map(roles.roles, function(val,key) {
+      rolesArray = _.map(roles.roles, (val,key) => {
         return key;
       });
 
@@ -62,7 +62,7 @@
       if (!roles && (token || ios)) {
 
         rolesPromise = authProtocol.getRoles(token)
-          .then(function(res){
+          .then(res => {
             console.log ('Auth.init',res);
             return setRoles(res);
           });
@@ -71,7 +71,7 @@
 
       } else if (roles) {
 
-        rolesPromise = $q(function(resolve){
+        rolesPromise = $q(resolve => {
           resolve(roles);
         });
 
@@ -79,7 +79,7 @@
 
       } else {
 
-        return $q(function(resolve){
+        return $q(resolve => {
           resolveRoles = resolve;
         });
 
@@ -87,14 +87,14 @@
 
     }
 
-    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, from) {
+    $rootScope.$on('$stateChangeStart', (event, next, nextParams, from) => {
 
       if (!roles) {
         if (next.name !== 'auth') {
 
           event.preventDefault();
           if (rolesPromise) {
-            rolesPromise.then(function () {
+            rolesPromise.then(() => {
               $state.go(next, nextParams);
             });
             return;
@@ -118,7 +118,7 @@
 
     });
 
-    $rootScope.$on('authenticated', function (event, res) {
+    $rootScope.$on('authenticated', (event, res) => {
       console.log ('authenticated', res);
       setRoles(res);
       if (resolveRoles) {
@@ -129,19 +129,19 @@
 
     return angular.extend(me, {
 
-      getCurrentUser: function () {
+      getCurrentUser: () => {
         return me.profileState === 'picker' && PickerAuth.getCurrentUser() || currentUser;
       },
 
-      getAccount: function () {
+      getAccount: () => {
         return currentUser;
       },
 
-      isLoggedIn: function () {
+      isLoggedIn: () => {
         return !!currentUser;
       },
 
-      isAdmin: function () {
+      isAdmin: () => {
         return true;
       },
 
@@ -149,11 +149,11 @@
 
       getAccessToken,
 
-      roles: function() {
+      roles: () => {
         return roles && roles.roles;
       },
 
-      isAuthorized: function (anyRoles) {
+      isAuthorized: anyRoles => {
         if (anyRoles && !angular.isArray(anyRoles)) {
           anyRoles = [anyRoles];
         }
