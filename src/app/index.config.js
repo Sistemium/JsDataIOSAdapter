@@ -35,11 +35,11 @@
       .then(saApp.init)
       .catch(error => localStorageService.set('error', angular.toJson(error)));
 
-    Auth.init(IOS.isIos() ? IOS.init() : phaService).then(function (res) {
+    Auth.init(IOS.isIos() ? IOS.init() : phaService).then(function (autorization) {
 
-      console.log('Auth', res);
+      console.log('Auth', autorization);
 
-      let org = _.get(res, 'account.org');
+      let org = _.get(autorization, 'account.org');
       let isTestOrg = /^(dev|dr50)$/.test(org);
 
       let appConfig =
