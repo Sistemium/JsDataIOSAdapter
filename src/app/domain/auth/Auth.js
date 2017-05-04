@@ -4,15 +4,15 @@
 
   angular.module('core.services').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS, PickerAuth) {
 
-    var me = this;
+    let me = this;
 
-    var roles;
-    var rolesArray;
-    var rolesPromise;
-    var resolveRoles;
-    var currentUser;
+    let roles;
+    let rolesArray;
+    let rolesPromise;
+    let resolveRoles;
+    let currentUser;
 
-    var ios = IOS.isIos();
+    const ios = IOS.isIos();
 
     function getAccessToken() {
       return ios || $window.localStorage.getItem('authorization');
@@ -28,7 +28,7 @@
       currentUser = roles.account || {};
 
       currentUser.shortName = (function (name) {
-        var names = name.match (/(^[^ ]*) (.*$)/);
+        const names = name.match (/(^[^ ]*) (.*$)/);
         return names ? names[1] + ' ' + names[2][0] + '.' : name;
       })(currentUser.name);
 
@@ -57,7 +57,7 @@
         return rolesPromise;
       }
 
-      var token = getAccessToken();
+      const token = getAccessToken();
 
       if (!roles && (token || ios)) {
 
