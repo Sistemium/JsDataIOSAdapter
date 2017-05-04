@@ -16,8 +16,7 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
 
     #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
 
-    #scroll-articles.col-sm-8.scroll-y.animate-show(
-    resize resize-offset-top='5' resize-property='height'
+    #scroll-articles.col-sm-8.animate-show(
     ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
     ng-show='(vm.isWideScreen || !vm.isArticleGroupsExpanded)'
     )

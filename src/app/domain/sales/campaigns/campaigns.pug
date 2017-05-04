@@ -13,12 +13,13 @@ section.campaigns(cg-busy='vm.cgBusy')
       .title
 
         span.name {{campaign.teamName}} {{campaign.title}}
-          sup.commentText(
-          href
-          ng-if='campaign.commentText'
-          uib-tooltip='{{campaign.commentText}}'
-          )
-            i.glyphicon.glyphicon-question-sign
+
+        sup.commentText(
+        ng-if='campaign.commentText'
+        uib-tooltip='{{::campaign.commentText}}'
+        tooltip-trigger='focus'
+        )
+          i.glyphicon.glyphicon-question-sign
 
       .pictures
         a.thumb(

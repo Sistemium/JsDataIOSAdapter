@@ -6,9 +6,11 @@ settings-popover {
   padding: 6px 8px;
   background: $gray-background-color;
 
-  button.btn.btn-default {
-    background: $gray-background-color;
-    color: #4290d0;
+  .popover {
+    button {
+      background: $gray-background-color;
+      color: #4290d0;
+    }
   }
 
   i.glyphicon {

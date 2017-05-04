@@ -35,10 +35,18 @@
   }
 
   a.home {
-    font-size: 27px;
+    background: $cg-background-color;
+    padding: 4px 5px;
+    border-radius: 9px;
+    font-size: 25px;
     @media (max-width: $screen-xs-max) {
       font-size: 20px;
     }
+
+    &.disabled {
+      background: none !important;
+    }
+
   }
 
   syncer-indicator {
@@ -63,7 +71,6 @@
   }
 
 }
-
 
 @media (min-width: 768px) {
   .navbar.navbar-fixed-bottom {
