@@ -2,10 +2,10 @@
 
 (function () {
 
-  let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition'];
+  // let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition'];
 
   angular.module('Sales', ['sistemium', 'yaMap', 'Models'])
-    .run(function (SalesmanAuth, InitService, Sockets, IOS, DEBUG, Schema, $rootScope, Menu) {
+    .run(/*function (SalesmanAuth, InitService, Sockets, IOS, DEBUG, Schema, $rootScope, Menu) {
 
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
@@ -56,6 +56,6 @@
 
       }
 
-    });
+    }*/);
 
 })();

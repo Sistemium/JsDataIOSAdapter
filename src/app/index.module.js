@@ -26,7 +26,7 @@
       'ngFileUpload'
     ]);
 
-  angular.module('jsd', ['sistemiumBootstrap', 'Sales']);
+  angular.module('jsd', ['sistemiumBootstrap'/*, 'Sales'*/]);
 
 
 })();
