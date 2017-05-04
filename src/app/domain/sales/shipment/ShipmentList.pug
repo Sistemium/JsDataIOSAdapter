@@ -29,7 +29,7 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
         )
           td(ng-class='item.workflow().cls') {{ ::item.ndoc }}
           td.tinyName
-            driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]')
+            driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]' ng-if='item.driver')
               span {{ ::item.driver.tinyName }}
           td.tinyName(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
           td
