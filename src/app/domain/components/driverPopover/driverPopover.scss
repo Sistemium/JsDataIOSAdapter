@@ -1,5 +1,12 @@
 driver-popover {
+
+  position: relative;
+
+
   .popover-inner {
+
+    min-width: 220px;
+
     .phone {
       margin-top: 5px;
     }
@@ -7,4 +14,5 @@ driver-popover {
       margin: 0;
     }
   }
+
 }
