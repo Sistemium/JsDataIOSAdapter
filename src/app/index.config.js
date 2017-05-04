@@ -24,7 +24,7 @@
     return saDebug.log('stg:log');
   }
 
-  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService) {
+  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService, $injector) {
 
     let lastState = localStorageService.get('lastState');
 
@@ -93,6 +93,10 @@
           params: params
         })
       ));
+
+      if (_.get(autorization, 'roles.salesman')) {
+        console.info($injector.get('SalesmanAuth'));
+      }
 
     });
 
