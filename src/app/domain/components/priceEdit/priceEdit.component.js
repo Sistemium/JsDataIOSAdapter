@@ -51,4 +51,4 @@
 
   module.component('priceEdit', priceEdit);
 
-})(angular.module('webPage'));
+})(angular.module('Sales'));

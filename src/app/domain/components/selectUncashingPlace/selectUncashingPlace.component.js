@@ -47,4 +47,4 @@
 
   }
 
-})(angular.module('webPage'));
+})(angular.module('Sales'));

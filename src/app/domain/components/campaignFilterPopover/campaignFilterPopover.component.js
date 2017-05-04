@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').component('campaignFilterPopover', {
+  angular.module('Sales').component('campaignFilterPopover', {
 
 
     bindings: {

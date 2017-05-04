@@ -24,4 +24,4 @@
 
   module.service('OutletArticles', OutletArticles);
 
-})(angular.module('webPage'));
+})(angular.module('Sales'));

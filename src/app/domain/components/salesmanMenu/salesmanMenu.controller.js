@@ -67,7 +67,7 @@
 
   }
 
-  angular.module('webPage')
+  angular.module('Sales')
     .controller('SalesmanMenuController', salesmanMenuController);
 
 })();

@@ -72,4 +72,4 @@
 
   module.component('priceEditPopover', priceEditPopover);
 
-})(angular.module('webPage'));
+})(angular.module('Sales'));
