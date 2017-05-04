@@ -221,7 +221,7 @@
 
   }
 
-  angular.module('Sales')
+  angular.module('webPage')
     .controller('CatalogueSaleOrderController', CatalogueSaleOrderController);
 
 })();

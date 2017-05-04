@@ -96,4 +96,4 @@
 
   module.controller('ShipmentListController', ShipmentListController);
 
-})(angular.module('Sales'));
+})(angular.module('webPage'));

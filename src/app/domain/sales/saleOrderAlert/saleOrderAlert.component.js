@@ -60,4 +60,4 @@
 
   }
 
-})(angular.module('Sales'));
+})(angular.module('webPage'));
