@@ -64,11 +64,15 @@
       title: 'Тесты',
       state: 'playground',
       needRoles: ['admin', 'tester']
+    }, {
+      title: 'Новости',
+      state: 'newsFeed',
+      needRoles: ['admin', 'tester']
     }];
 
 
     function setItemData(state, data) {
-      _.assign (_.find(items, {state}), data);
+      _.assign(_.find(items, {state}), data);
     }
 
     function root() {
