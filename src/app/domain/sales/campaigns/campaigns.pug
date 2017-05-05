@@ -22,10 +22,17 @@ section.campaigns(cg-busy='vm.cgBusy')
           i.glyphicon.glyphicon-question-sign
 
       .pictures
+
         a.thumb(
+        ng-class='{"is-not-visible": $index > vm.limit-1, "is-visible": vm.showCampaignPhotosId == campaign.id }'
         href ng-click='vm.thumbClick(picture)'
         ng-repeat='picture in ::campaign.campaignPictures track by picture.id'
         )
+
           img(ng-src='{{picture.srcThumbnail}}')
+
+        .more(ng-if='campaign.campaignPictures.length > vm.limit' ng-click='vm.showHiddenPic(campaign)')
+          span {{vm.showCampaignPhotosId == campaign.id ? '-' : '+' }}
+          span {{campaign.photoCount - vm.limit}}
 
     p(ng-if='!vm.campaigns.length && vm.cgBusy') Акций не найдено
