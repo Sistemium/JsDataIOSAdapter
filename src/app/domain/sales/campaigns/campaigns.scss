@@ -5,58 +5,63 @@
   $display-img-cnt: 5 !important;
 
   $thumb-size: 130px;
-
-  campaign-filter-popover {
-    > .campaign-filters {
-      margin-bottom: 10px;
-    }
-  }
+  $margin: 20px;
 
   .scroll-y.selectivity-increasing-class {
+
     position: relative;
+    padding-top: 12px;
+    margin-top: 10px;
 
     .campaign {
 
-      margin-bottom: 10px;
-
-      padding: 10px 15px;
-      border-radius: 9px;
-      background: #f5f5f5;
+      padding: $margin;
+      border-radius: $border-radius;
+      background: $gray-background-color;
 
       .campaign-name {
         display: flex;
         flex-flow: row nowrap;
       }
+
+      & + .campaign {
+        margin-top: $margin;
+      }
+
     }
 
-    p {
+    .no-data {
       text-align: center;
       font-weight: 400;
       padding: 40px;
       margin-top: 10px;
       border-radius: 10px;
-      background: #f5f5f5;
+      background: $gray-background-color;
     }
 
   }
 
   .title {
-    font-size: 1.2em;
-    font-weight: 500;
+
+    font-size: 120%;
+    font-weight: bold;
 
     .name {
       color: lighten($black, 15%);
     }
 
     .commentText {
+
       cursor: pointer;
       color: #4290d0;
       font-size: smaller;
       margin: 5px 0 0 5px;
+
       i {
         display: inline;
       }
     }
+
   }
 
   .is-not-visible {
@@ -68,6 +73,8 @@
   }
 
   .pictures {
+
+    margin-top: $margin/2;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
@@ -109,6 +116,7 @@
     }
 
     .thumb {
+
       margin: 6px 12px 6px 0;
       display: inline-block;
       width: $thumb-size;

@@ -134,10 +134,13 @@
 
     });
 
-    vm.watchScope('vm.saleOrder.contractId', contractId => {
+    vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
+      vm.discounts = {};
+      vm.discountsBy = {};
+      filterStock();
       setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
       setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
-    });
+    }));
 
     SalesmanAuth.watchCurrent($scope, salesman => {
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
@@ -371,9 +374,15 @@
 
     function setDiscounts(contractId, partnerId) {
 
-      if (!contractId || !partnerId || !vm.prices) return;
+      if (!contractId || !partnerId || !vm.prices) {
+        vm.discounts = {};
+        vm.discountsBy = {};
+        return $q.resolve();
+      }
 
-      if (vm.discountsBy.partnerId === partnerId && vm.discountsBy.contractId === contractId) return;
+      if (vm.discountsBy.partnerId === partnerId && vm.discountsBy.contractId === contractId) {
+        return $q.resolve();
+      }
 
       vm.discountsBy.contractId = contractId;
       vm.discountsBy.partnerId = partnerId;
@@ -416,6 +425,8 @@
           if (_.get(vm.saleOrder, 'positions.length')) {
             vm.saleOrder.updateTotalCost();
           }
+
+          return vm.discounts;
 
         })
         .catch(e => console.error(e));

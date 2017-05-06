@@ -13,6 +13,7 @@
 
       date: $state.params.date,
       initDate,
+      driverPopoverOpen: {},
 
       onStateChange,
       itemClick,
@@ -41,7 +42,10 @@
     }
 
 
-    function itemClick(item) {
+    function itemClick(item, $event) {
+      let driverPopoverOpen = _.find(vm.driverPopoverOpen, val => val);
+      if ($event.defaultPrevented || driverPopoverOpen) return;
+      console.info($event);
       $state.go('.item', {id: item.id});
     }
 
