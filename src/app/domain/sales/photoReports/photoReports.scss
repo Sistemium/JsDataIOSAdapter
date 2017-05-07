@@ -4,6 +4,7 @@
 
   $thumb-side: 90px;
   $padding: 5px;
+  $small: 85%;
 
   .filters {
     margin-bottom: $padding*2;
@@ -11,9 +12,11 @@
 
   .photoReport {
 
-    padding: $padding 0;
-
     @extend %flex-row;
+
+    padding: $padding 0;
+    align-items: center;
+    position: relative;
 
     .thumb img {
 
@@ -24,9 +27,28 @@
 
     }
 
-    .outlet {
+    > * + * {
       margin-left: $padding*2;
       flex: 1;
+    }
+
+    .campaign {
+      text-align: right;
+      margin-top: -30px;
+      font-size: $small;
+      line-height: $padding*2.5;
+      //position: relative;
+      //top: -20px;
+      //max-width: 150px;
+      //font-size: 75%;
+    }
+
+    .deviceCts {
+      font-size: $small;
+      color: $gray;
+      position: absolute;
+      top: 5px;
+      right: 0;
     }
   }
 

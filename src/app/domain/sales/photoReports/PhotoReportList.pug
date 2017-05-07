@@ -24,4 +24,10 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
       .photoReport(ng-repeat='item in vm.data track by item.id')
         .thumb
           img(ng-src='{{ item.srcThumbnail }}')
-        .outlet {{ item.outletId }}
+        .outlet
+          .name {{ item.outlet.name }}
+          .address
+            small.gray {{ item.outlet.address }}
+        .campaign {{ item.campaign.name }}
+        .deviceCts {{ item.deviceCts | amUtc | amLocal | amCalendar }}
+

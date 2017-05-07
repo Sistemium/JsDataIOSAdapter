@@ -4,7 +4,7 @@
 
   function PhotoReportListController(Schema, Helpers, $scope, SalesmanAuth, GalleryHelper) {
 
-    const {PhotoReport} = Schema.models();
+    const {PhotoReport, Outlet, Campaign} = Schema.models();
     const {saControllerHelper, toastr} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -31,7 +31,13 @@
 
       let filter = SalesmanAuth.makeFilter(sort);
 
-      let q = PhotoReport.findAll(filter, {bypassCache: true});
+      let q = [
+        Campaign.findAll(),
+        Outlet.findAll(Outlet.meta.salesmanFilter(filter))
+          .then(() => {
+            return PhotoReport.findAllWithRelations(filter, {bypassCache: true})(['Outlet']);
+          })
+      ];
 
       vm.setBusy(q);
       vm.rebindAll(PhotoReport, {}, 'vm.data');
