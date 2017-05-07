@@ -10,7 +10,7 @@ font-size-edit(append-to='catalogueArticle')
     before-tag-name='li'
     )
 
-      .list-group-item.display-flex.flex-align-center.spaced(
+      .list-group-item.catalogue-article(
       ng-repeat='stock in vm.stock track by stock.id'
       ng-class='{"item-padding": vm.showImages}'
       ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflow().editable'

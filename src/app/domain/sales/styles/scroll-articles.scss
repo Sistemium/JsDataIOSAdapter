@@ -14,6 +14,7 @@
 
   a.thumb {
     margin: 1px 10px 1px 1px;
+    display: block;
   }
 
   img {
@@ -43,11 +44,17 @@
   .list-group-item {
 
     min-height: 80px;
+    padding: 0 10px;
+
+    @extend %flex-row;
+    @extend .spaced;
+
+    align-items: center;
+
     @media (max-width: $screen-xs-max) {
       min-height: 74px;
     }
 
-    padding: 0 10px;
 
     @include responsive-only(xxs) {
       a.thumb {
@@ -107,7 +114,7 @@
 
   .article-name-third {
 
-    display: flex;
+    @extend %flex-row;
     justify-content: flex-end;
 
     & > div {

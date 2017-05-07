@@ -42,18 +42,13 @@
 
     overflow: hidden;
     display: flex;
-    align-items: stretch;
+    justify-content: space-between;
     padding: 0;
-
-    a.campaign-name {
-      display: flex;
-      justify-content: space-between;
-      @extend .ellipsis;
-
-    }
 
     a {
 
+      display: flex;
+      justify-content: flex-start;
       cursor: pointer;
       padding: 10px 15px;
       color: $article-nav-menu-text-color;
@@ -62,16 +57,14 @@
         padding: 7px 10px;
       }
 
-      span.badge {
+      .badge {
         margin-left: 10px;
-        order: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
 
-      span.campaign-elem-name {
+      .name {
         @extend .ellipsis;
+        min-width: 0;
+        flex: 1;
       }
 
     }
@@ -97,6 +90,7 @@
     a.chevron {
 
       @extend %center-vertical;
+      //padding: 4px;
       height: auto;
 
       .glyphicon {

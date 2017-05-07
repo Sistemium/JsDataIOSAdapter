@@ -54,7 +54,7 @@ font-size-edit(append-to='articleGroups')
         )
           i.glyphicon.glyphicon-menu-left
 
-        a.campaign-name(
+        a.articleGroup(
         href
         stm-click='articleGroupAndCollapse' click-payload='ancestor'
         ) {{::ancestor.displayName}}
@@ -72,14 +72,14 @@ font-size-edit(append-to='articleGroups')
       ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
       ng-class='{active: vm.currentArticleGroup.id === elem.id}'
       )
-        a.campaign-name(
+        a.articleGroup(
         href
         stm-click='articleGroupAndCollapse' click-payload='elem'
         )
-          span.badge(ng-if='::vm.articleGroupIds[elem.id]')
+          .name {{::elem.displayName }}
+          .badge(ng-if='::vm.articleGroupIds[elem.id]')
             span {{::vm.articleGroupIds[elem.id].length}}
             span(ng-if='::elem.children.length') +
-          span.campaign-elem-name {{::elem.displayName }}
 
         a.chevron(
         href
