@@ -206,11 +206,12 @@
   .compDiscount {
 
     &.flag {
-      background-color: $state-info-bg;
-      color: $state-info-text;
+      border-color: $primary-color;
+      background-color: $primary-color;
+      color: $white;
 
       &:hover {
-        background-color: $state-info-bg;
+        background-color: $primary-color;
       }
     }
 
