@@ -11,9 +11,8 @@
           name: 'sales.photoReports',
           url: '/photoReports?outletId&campaignId',
 
-          templateUrl: 'app/domain/sales/photoReports/photoReports.html',
-          controller: 'PhotoReportsController',
-          controllerAs: 'vm',
+          templateUrl: 'app/domain/sales/photoReports/PhotoReportList.html',
+          controller: 'PhotoReportListController as vm',
 
           data: {
             title: 'Фотоотчёты'
