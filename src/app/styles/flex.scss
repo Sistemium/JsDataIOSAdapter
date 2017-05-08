@@ -1,6 +1,5 @@
 .display-flex {
   display: flex;
-  //display: -webkit-flex;
   align-items: center;
 
   > button {
@@ -32,7 +31,6 @@ li.display-flex:last-child > button:last-child {
 
 .flex-1 {
   flex: 1;
-  //-webkit-flex: 1;
 }
 
 .flex-right {
@@ -69,7 +67,6 @@ li.display-flex:last-child > button:last-child {
 
 .flex {
   display: flex;
-  //display: -webkit-flex;
   align-items: center;
 
   > button {
@@ -84,7 +81,6 @@ li.display-flex:last-child > button:last-child {
 
   .flex-1 {
     flex: 1;
-    //-webkit-flex: 1;
   }
 }
 
