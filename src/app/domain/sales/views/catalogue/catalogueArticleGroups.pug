@@ -36,7 +36,7 @@
 
 font-size-edit(append-to='articleGroups')
 
-  .block-to-collapse.scroll-y(
+  .block-to-collapse.scroll-y.article-groups(
   uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
   collapsed='vm.isArticleGroupsCollapsingDone=true'
   resize resize-offset-top='5'
@@ -45,7 +45,7 @@ font-size-edit(append-to='articleGroups')
     ng-if='vm.currentArticleGroup || vm.showOnlyOrdered'
     )
 
-      .list-group-item.with-a-inside(
+      .list-group-item(
       ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id'
       )
 
@@ -68,7 +68,7 @@ font-size-edit(append-to='articleGroups')
       )
         span {{ vm.currentArticleGroup.displayName || 'Товары заказа' }}
 
-      .list-group-item.with-a-inside(
+      .list-group-item(
       ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
       ng-class='{active: vm.currentArticleGroup.id === elem.id}'
       )
