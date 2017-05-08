@@ -5,7 +5,8 @@
   module.component('uncashPopover', {
 
     bindings: {
-      uncashed: '<'
+      uncashed: '<',
+      isPopoverOpen: '='
     },
 
     templateUrl: 'app/domain/components/uncashPopover/uncashPopover.html',

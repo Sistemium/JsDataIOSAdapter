@@ -7,7 +7,7 @@
   )
 
     .buttons
-      uncash-popover(uncashed='vm.uncashed' ng-if='vm.uncashed.length')
+      uncash-popover(uncashed='vm.uncashed' ng-if='vm.uncashed.length' is-popover-open='vm.uncashing')
 
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
 
