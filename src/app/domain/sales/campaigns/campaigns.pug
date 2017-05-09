@@ -31,8 +31,9 @@ section.campaigns(cg-busy='vm.cgBusy')
 
           img(ng-src='{{picture.srcThumbnail}}')
 
-        .more(ng-if='campaign.campaignPictures.length > vm.limit' ng-click='vm.showHiddenPic(campaign)')
+        span.more(ng-if='campaign.campaignPictures.length > vm.limit' ng-click='vm.showHiddenPic(campaign)')
           span {{vm.showCampaignPhotosId == campaign.id ? '-' : '+' }}
           span {{campaign.photoCount - vm.limit}}
 
-    p(ng-if='!vm.campaigns.length && vm.cgBusy') Акций не найдено
+    .no-data(ng-if='!vm.campaigns.length && vm.cgBusy.promise.$cgBusyFulfilled') Акций не найдено
+
