@@ -5,6 +5,8 @@
   function CampaignsController(Schema, saControllerHelper, $scope, $state, GalleryHelper, localStorageService, $window) {
 
     const {Campaign} = Schema.models();
+    const sectionElem = document.getElementsByClassName('campaigns');
+    const appWindow = angular.element($window);
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
@@ -14,25 +16,16 @@
         currentTeam: '',
         initGroupId: $state.params.campaignGroupId,
         showPhotos: '',
-        showHiddenPic
+        showHiddenPic,
+        limit: getSectionWidth()
       });
 
     /*
      Listeners
      */
 
-    //TODO: Refactor
-
-    var sectionElem = document.getElementsByClassName("campaigns");
-    var wrappedSectionElem = angular.element(sectionElem)[0].clientWidth;
-
-    vm.limit = Math.floor((wrappedSectionElem - 10 - 124) / 142);
-
-    var appWindow = angular.element($window);
-
     appWindow.bind('resize', function () {
-      var currWidth = angular.element(sectionElem)[0].clientWidth;
-      vm.limit = Math.floor((currWidth - 10 - 124) / 142);
+      vm.limit = getSectionWidth()
     });
 
 
@@ -45,10 +38,22 @@
 
     });
 
+    $scope.$on('$stateChangeStart', onStateChange);
+
 
     /*
      Functions
      */
+
+    function getSectionWidth() {
+      let currWidth = angular.element(sectionElem)[0].clientWidth;
+      let show = Math.floor((currWidth - 40 - 90) / 142);
+      return show > 0 ? show : 1
+    }
+
+    function onStateChange() {
+      appWindow.unbind();
+    }
 
     function showHiddenPic(campaign) {
 
