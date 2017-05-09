@@ -38,7 +38,7 @@
     //}
   }
 
-  .list-group-item.with-a-inside {
+  div.list-group-item {
 
     overflow: hidden;
     display: flex;
@@ -47,6 +47,7 @@
 
     a {
 
+      max-width: 100%;
       display: flex;
       justify-content: flex-start;
       cursor: pointer;

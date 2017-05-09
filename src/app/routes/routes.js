@@ -41,6 +41,19 @@
           controller: 'PhaAuthController',
           controllerAs: 'vm'
         })
+
+        .state({
+          name: 'newsFeed',
+          url: '/newsFeed',
+          templateUrl: 'app/domain/newsFeed/newsFeed.html',
+          controller: 'NewsFeedController',
+          controllerAs: 'vm',
+          data: {
+            title: 'Новости'
+          }
+        })
+
+
       ;
 
     })
