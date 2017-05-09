@@ -36,9 +36,17 @@
 
   a.home {
     background: $cg-background-color;
-    padding: 4px 5px;
+    padding: 0 8px;
+    line-height: 37px;
     border-radius: 9px;
-    font-size: 25px;
+    font-size: 21px;
+    display: block;
+
+    b {
+      top: 3px;
+      right: 1px;
+    }
+
     @media (max-width: $screen-xs-max) {
       font-size: 20px;
     }

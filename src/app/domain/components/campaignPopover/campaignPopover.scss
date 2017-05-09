@@ -2,27 +2,38 @@
 
 campaign-popover {
 
+  $dimension: 37px;
+
   margin-left: 8px;
   font-size: 14px;
+  height: $dimension;
   font-weight: normal;
-  padding: 8px;
+  text-align: center;
+  display: block;
 
   background: $gray-background-color;
 
   .glyphicon-gift {
     font-size: 20px;
     font-weight: 500;
+    width: $dimension;
+    line-height: $dimension;
   }
 
   @include responsive-only(gt-xxs) {
-    padding: 11px;
+
     .glyphicon-gift {
       display: none;
     }
+
   }
 
-  .campaign-popover {
+  .campaign {
+    padding: 0 10px;
+    line-height: $dimension;
+
     @include responsive-only(xxs) {
+      padding: 0;
       .name, .caret {
         display: none;
       }
