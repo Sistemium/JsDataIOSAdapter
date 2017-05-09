@@ -3,7 +3,9 @@
 settings-popover {
 
   font-size: 21px;
-  padding: 6px 8px;
+  line-height: 37px;
+  padding: 0 8px;
+  display: block;
   background: $gray-background-color;
 
   .popover {
@@ -14,7 +16,7 @@ settings-popover {
   }
 
   i.glyphicon {
-    top: 2px;
+    top: 3px;
   }
 
   .popover {
