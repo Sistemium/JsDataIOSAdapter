@@ -18,7 +18,14 @@
           data: {
             title: 'Выручка',
             hideSalesmanFilter: true
-          }
+          },
+
+          children: [
+            {
+              name: 'uncashing',
+              url: '/uncashing'
+            }
+          ]
 
         })
 
