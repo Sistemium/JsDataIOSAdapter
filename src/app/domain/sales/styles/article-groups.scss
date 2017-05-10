@@ -2,14 +2,13 @@
 
 #article-groups {
 
+  flex: 1;
+
   margin-bottom: 0;
 
   @include responsive-only(gt-xs) {
-    padding-right: 0; // 5px
-    .block-to-collapse {
-      //margin-right: 5px;
-      padding-right: 5px !important;
-    }
+    padding-right: 0;
+    margin-right: 11px;
   }
 
   .block-to-collapse {
@@ -17,16 +16,8 @@
     position: absolute;
     z-index: 2; //2
 
-    background: white;
-    clear: both;
-
-    left: 15px;
-    right: 15px;
-
-    @include responsive-only(gt-xs) {
-      right: -5px;
-      padding-right: 0; //5px
-
+    @include responsive-only(lt-sm) {
+      width: 100%;
     }
 
   }
@@ -47,7 +38,6 @@
 
     a {
 
-      max-width: 100%;
       display: flex;
       justify-content: flex-start;
       cursor: pointer;
@@ -119,15 +109,3 @@
 
 }
 
-.iOS {
-  #article-groups {
-    .block-to-collapse {
-      left: 10px;
-      right: 10px;
-      @include responsive-only(gt-xs) {
-        right: -5px;
-        padding-right: 5px;
-      }
-    }
-  }
-}

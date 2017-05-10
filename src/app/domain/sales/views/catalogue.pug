@@ -10,13 +10,13 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
   ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'"
   )
 
-  section.row.animate-show(
+  section.animate-show(
   ng-show='!saleOrderExpanded'
   )
 
-    #article-groups.col-sm-4(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
+    #article-groups(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
 
-    #scroll-articles.col-sm-8.animate-show(
+    #scroll-articles.animate-show(
     ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
     ng-show='(vm.isWideScreen || !vm.isArticleGroupsExpanded)'
     )
