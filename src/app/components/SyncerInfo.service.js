@@ -1,20 +1,24 @@
 (function (module) {
 
-  module.service('SyncerInfo', $window => {
+  module.service('SyncerInfo', SyncerInfo);
+
+  function SyncerInfo($window) {
+
+    const CALLBACK = 'unsyncedInfoCallback';
 
     function bind(callback) {
 
-      function unsyncedInfoCallback(obj) {
-        callback(obj);
-      }
-
-      $window.unsyncedInfoCallback = unsyncedInfoCallback;
+      $window[CALLBACK] = function (obj) {
+        if (_.isFunction(callback)) {
+          callback(obj);
+        }
+      };
 
       let webkit = $window.webkit;
 
       if (webkit) {
         webkit.messageHandlers.unsyncedInfoService.postMessage({
-          unsyncedInfoCallback: 'unsyncedInfoCallback'
+          unsyncedInfoCallback: CALLBACK
         });
         return true;
       }
@@ -25,7 +29,7 @@
 
     function stateInfoCallback(state) {
       _.assign(syncerState, {
-        hasUnsynced:_.first(state) === 'haveUnsyncedObjects'
+        hasUnsynced: _.first(state) === 'haveUnsyncedObjects'
       });
     }
 
@@ -40,6 +44,6 @@
       watch
     };
 
-  });
+  }
 
 })(angular.module('core.services'));
