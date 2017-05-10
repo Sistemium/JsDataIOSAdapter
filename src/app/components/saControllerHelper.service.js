@@ -66,7 +66,7 @@
         rebindAll: (model, filter, expr, callback) => {
           let unbind = bindAllStore[expr];
           if (unbind) unbind();
-          bindAllStore[expr] = model.bindAll(filter, scope, expr, callback);
+          scope.$on('$destroy', bindAllStore[expr] = model.bindAll(filter, scope, expr, callback));
           return vm;
         },
 
@@ -74,7 +74,7 @@
           let unbind = bindAllStore[expr];
           if (unbind) unbind();
           if (id) {
-            bindAllStore[expr] = model.bindOne(id, scope, expr, callback)
+            scope.$on('$destroy', bindAllStore[expr] = model.bindOne(id, scope, expr, callback));
           } else {
             _.set(scope, expr, null);
           }
