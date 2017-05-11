@@ -90,15 +90,17 @@
 
     margin-left: 1em;
     text-align: right;
+    margin-right: 2px;
 
     button {
       padding: 3px 5px;
+      width: 29px;
+      height: 27px;
       font-size: 13px;
       line-height: 1.5;
       border-radius: 3px;
       display: block;
       color: #777777;
-      width: 100%;
       position: relative;
 
       &:first-child {
