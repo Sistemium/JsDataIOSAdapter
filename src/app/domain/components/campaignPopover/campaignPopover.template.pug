@@ -1,26 +1,25 @@
-.campaign-popover-template
+.campaign-popover-template(elem-ready='vm.onElemLoad()')
 
-  uib-tabset.tabset(active='vm.teamIdx' type="pills")
+  uib-tabset.tabset(active='vm.teamIdx' type='pills')
     uib-tab(
     index='$index + 1'
     ng-repeat='team in vm.teams'
-    heading='{{team.name}}'
+    heading='{{team.name|| "нет имеени"}}'
     select='vm.onTeamSelect(team, $index)'
     )
 
   #campaign-popover-scroll.scroll-y(
   resize
-  resize-offset-top='30'
+  resize-offset-top='40'
   )
 
     .wrapper
       #scrollable-div(
       vs-repeat='110'
       vs-scroll-parent='#campaign-popover-scroll'
-      elem-ready='vm.onElemLoad()'
       )
 
-        .campaign(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
+        .campaign-item(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
 
           .name {{ campaign.title }}
 

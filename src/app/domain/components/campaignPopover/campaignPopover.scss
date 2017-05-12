@@ -29,7 +29,7 @@ campaign-popover {
   }
 
   .campaign {
-    padding: 0 10px;
+    padding: 10px;
     line-height: $dimension;
 
     @include responsive-only(xxs) {
@@ -80,7 +80,6 @@ campaign-popover {
 
       #campaign-popover-scroll {
         width: 359px;
-        padding: 0 10px;
       }
 
     }
@@ -95,14 +94,16 @@ campaign-popover {
         margin-bottom: 5px;
         text-align: left;
         border-radius: 5px 5px 0 0;
+        font-size: 13px;
 
-        @extend %flex-row;
-        flex-wrap: wrap;
+        display: flex;
+        flex-flow: row wrap;
         align-items: center;
+        overflow: scroll;
 
         li {
+          border-radius: 9px;
           text-align: center;
-          float: none;
           margin: 0 auto;
           a {
             white-space: nowrap;
@@ -120,9 +121,7 @@ campaign-popover {
 
       margin: 0 auto;
 
-      .campaign {
-
-        height: 110px;
+      .campaign-item {
 
         .name {
           @extend .ellipsis;

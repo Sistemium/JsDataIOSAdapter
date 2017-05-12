@@ -53,7 +53,7 @@
 
   &.saleOrder .breadcrumb {
     //@media (orientation: landscape) {
-      display: none;
+    display: none;
     //}
   }
 
@@ -73,12 +73,25 @@
 
 }
 
+section.animate-show {
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+
+  @include responsive-only(lt-sm) {
+    flex-flow: column;
+  }
+}
+
 .catalogue, .sale-order-details {
 
   > .animate-show {
+
     &.ng-hide:not(.ng-hide-animate) {
       display: block !important;
     }
+
     &.ng-hide {
       @extend a.disabled;
       opacity: 0.2;
