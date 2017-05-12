@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync) {
+    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync, WeighingService) {
 
       const PO = Schema.model('PickingOrder');
       const POP = Schema.model('PickingOrderPosition');
@@ -39,16 +39,25 @@
         totals: PO.agg (vm, 'selectedItems'),
 
         startPicking: () => {
-          vm.selectedItems = _.map(vm.selectedItems, po => {
-            po.processing = 'picking';
-            PO.save(po);
-            return po;
-          });
-          $scope.$parent.vm.pickingItems = vm.selectedItems;
-          $state.go('^.articleList');
+
+          WeighingService.weighing();
+
+          // here we have to ask for weight and start pickingSession
+
+          // vm.selectedItems = _.map(vm.selectedItems, po => {
+          //   po.processing = 'picking';
+          //   PO.save(po);
+          //   return po;
+          // });
+          // $scope.$parent.vm.pickingItems = vm.selectedItems;
+          // $state.go('^.articleList');
+
         },
 
         finishPicking: () => {
+
+          // here we have to ask for weight and finish pickingSession
+
           _.each(vm.selectedItems, po => {
             po.processing = 'picked';
             po.selected = undefined;
@@ -60,6 +69,9 @@
         },
 
         pausePicking: () => {
+
+          // here we have to ask for weight and finish pickingSession
+
           _.each(vm.selectedItems, po => {
             po.processing = 'ready';
             po.selected = undefined;
