@@ -120,36 +120,44 @@
             })
             .catch((err) => {
               console.info('startPicking weighing problem', err);
-            });
+            })
+          ;
 
         },
 
         finishPicking: () => {
 
           // here we have to ask for weight and finish pickingSession
+          weighing()
+            .then((weight) => {
 
-          _.each(vm.selectedItems, po => {
-            po.processing = 'picked';
-            po.selected = undefined;
-            PO.save(po);
-          });
-          $scope.$parent.vm.pickingItems = false;
-          ejectOthers();
-          $state.go('^');
+              console.info('finishPicking weighing success', weight);
+              selectedItemProcessing('picked');
+
+            })
+            .catch((err) => {
+              console.info('finishPicking weighing problem', err);
+            })
+          ;
+
         },
 
         pausePicking: () => {
 
           // here we have to ask for weight and finish pickingSession
 
-          _.each(vm.selectedItems, po => {
-            po.processing = 'ready';
-            po.selected = undefined;
-            PO.save(po);
-          });
-          $scope.$parent.vm.pickingItems = false;
-          ejectOthers();
-          $state.go('^');
+          weighing()
+            .then((weight) => {
+
+              console.info('pausePicking weighing success', weight);
+              selectedItemProcessing('ready');
+
+            })
+            .catch((err) => {
+              console.info('pausePicking weighing problem', err);
+            })
+          ;
+
         }
 
       });
