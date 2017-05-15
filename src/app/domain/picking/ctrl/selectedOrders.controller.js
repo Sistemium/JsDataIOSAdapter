@@ -33,12 +33,12 @@
 
       function weighing() {
 
-        weighingModalWithText('Взвесить тележку?')
+        return weighingModalWithText('Взвесить тележку?')
           .then((data) => {
-            console.info('111 then', data);
+            return data;
           })
-          .catch((data) => {
-            console.info('111 catch', data);
+          .catch((err) => {
+            return $q.reject(err);
           })
         ;
 
@@ -91,15 +91,23 @@
 
           // here we have to ask for weight and start pickingSession
 
-          weighing();
+          weighing()
+            .then((weight) => {
 
-          //   vm.selectedItems = _.map(vm.selectedItems, po => {
-          //     po.processing = 'picking';
-          //     PO.save(po);
-          //     return po;
-          //   });
-          //   $scope.$parent.vm.pickingItems = vm.selectedItems;
-          //   $state.go('^.articleList');
+              console.info('startPicking weighing success', weight);
+
+              vm.selectedItems = _.map(vm.selectedItems, po => {
+                po.processing = 'picking';
+                PO.save(po);
+                return po;
+              });
+              $scope.$parent.vm.pickingItems = vm.selectedItems;
+              $state.go('^.articleList');
+
+            })
+            .catch((err) => {
+              console.info('startPicking weighing problem', err);
+            });
 
         },
 
