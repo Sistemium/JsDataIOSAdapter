@@ -31,37 +31,48 @@
         value: 0
       };
 
-      function weighingModal() {
+      function weighing() {
 
-        return ConfirmModal.show({
-          text: `Взвесить тележку?`
-        })
-          .then(() => {
-            return WeighingService.weighing();
+        weighingModalWithText('Взвесить тележку?')
+          .then((data) => {
+            console.info('111 then', data);
           })
-          .catch(err => {
-
-            console.info('weighingModal catch');
-            return err;
-
-          });
+          .catch((data) => {
+            console.info('111 catch', data);
+          })
+        ;
 
       }
 
-      function weighingErrorModal() {
+      function weighingModalWithText(text) {
 
         return ConfirmModal.show({
-          text: `Ошибка взвешивания. Повторить?`
+          text: text
         })
           .then(() => {
-            return weighingModal();
+
+          // have to show spinner while weighing
+
+            return WeighingService.weighing()
+              .then((response) => {
+
+                if (response.status !== 200) {
+                  return weighingModalWithText('Ошибка взвешивания. Повторить?');
+                }
+
+                return response.data.weight;
+
+              })
+            ;
+
           })
           .catch(err => {
 
-            console.info('weighingErrorModal catch');
-            return err;
+            if (!err || !err.status) return err;
+            return weighingModalWithText('Ошибка взвешивания. Повторить?');
 
-          });
+          })
+        ;
 
       }
 
@@ -76,37 +87,15 @@
 
           // here we have to ask for weight and start pickingSession
 
-          return weighingModal()
-            .then(response => {
+          weighing();
 
-            console.info(response);
-
-            if (!response.status) return;
-
-            if (response.status !== 200) {
-              return weighingErrorModal();
-            }
-
-            let weight = response.data.weight;
-
-            console.info('weight', weight);
-
-            vm.selectedItems = _.map(vm.selectedItems, po => {
-              po.processing = 'picking';
-              PO.save(po);
-              return po;
-            });
-            $scope.$parent.vm.pickingItems = vm.selectedItems;
-            $state.go('^.articleList');
-
-          })
-            .catch(response => {
-
-              console.log('error', response);
-              return weighingErrorModal();
-
-            })
-          ;
+          //   vm.selectedItems = _.map(vm.selectedItems, po => {
+          //     po.processing = 'picking';
+          //     PO.save(po);
+          //     return po;
+          //   });
+          //   $scope.$parent.vm.pickingItems = vm.selectedItems;
+          //   $state.go('^.articleList');
 
         },
 
