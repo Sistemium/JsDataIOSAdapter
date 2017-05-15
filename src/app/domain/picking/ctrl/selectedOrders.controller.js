@@ -57,7 +57,7 @@
               .then((response) => {
 
                 if (response.status !== 200) {
-                  return weighingModalWithText('Ошибка взвешивания. Повторить?');
+                  return weighingError();
                 }
 
                 return response.data.weight;
@@ -69,11 +69,15 @@
           .catch(err => {
 
             if (!err || !err.status) return err;
-            return weighingModalWithText('Ошибка взвешивания. Повторить?');
+            return weighingError();
 
           })
         ;
 
+      }
+
+      function weighingError() {
+        return weighingModalWithText('Ошибка взвешивания. Повторить?');
       }
 
       angular.extend(vm,{
