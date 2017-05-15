@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync, WeighingService) {
+    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync, WeighingService, ConfirmModal) {
 
       const PO = Schema.model('PickingOrder');
       const POP = Schema.model('PickingOrderPosition');
@@ -31,6 +31,40 @@
         value: 0
       };
 
+      function weighingModal() {
+
+        return ConfirmModal.show({
+          text: `Взвесить тележку?`
+        })
+          .then(() => {
+            return WeighingService.weighing();
+          })
+          .catch(err => {
+
+            console.info('weighingModal catch');
+            return err;
+
+          });
+
+      }
+
+      function weighingErrorModal() {
+
+        return ConfirmModal.show({
+          text: `Ошибка взвешивания. Повторить?`
+        })
+          .then(() => {
+            return weighingModal();
+          })
+          .catch(err => {
+
+            console.info('weighingErrorModal catch');
+            return err;
+
+          });
+
+      }
+
       angular.extend(vm,{
 
         progress: progress,
@@ -40,17 +74,39 @@
 
         startPicking: () => {
 
-          WeighingService.weighing();
-
           // here we have to ask for weight and start pickingSession
 
-          // vm.selectedItems = _.map(vm.selectedItems, po => {
-          //   po.processing = 'picking';
-          //   PO.save(po);
-          //   return po;
-          // });
-          // $scope.$parent.vm.pickingItems = vm.selectedItems;
-          // $state.go('^.articleList');
+          return weighingModal()
+            .then(response => {
+
+            console.info(response);
+
+            if (!response.status) return;
+
+            if (response.status !== 200) {
+              return weighingErrorModal();
+            }
+
+            let weight = response.data.weight;
+
+            console.info('weight', weight);
+
+            vm.selectedItems = _.map(vm.selectedItems, po => {
+              po.processing = 'picking';
+              PO.save(po);
+              return po;
+            });
+            $scope.$parent.vm.pickingItems = vm.selectedItems;
+            $state.go('^.articleList');
+
+          })
+            .catch(response => {
+
+              console.log('error', response);
+              return weighingErrorModal();
+
+            })
+          ;
 
         },
 
