@@ -3,7 +3,7 @@
 (function () {
 
   angular.module('webPage')
-    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync, WeighingService, ConfirmModal) {
+    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync, WeighingService, ConfirmModal, $q) {
 
       const PO = Schema.model('PickingOrder');
       const POP = Schema.model('PickingOrderPosition');
@@ -68,7 +68,7 @@
           })
           .catch(err => {
 
-            if (!err || !err.status) return err;
+            if (!err || !err.status) return $q.reject(err);
             return weighingError();
 
           })
