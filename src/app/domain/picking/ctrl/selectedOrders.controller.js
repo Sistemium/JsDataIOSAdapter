@@ -80,6 +80,19 @@
         return weighingModalWithText('Ошибка взвешивания. Повторить?');
       }
 
+      function selectedItemProcessing(processing) {
+
+        _.each(vm.selectedItems, po => {
+          po.processing = processing;
+          po.selected = undefined;
+          PO.save(po);
+        });
+        $scope.$parent.vm.pickingItems = false;
+        ejectOthers();
+        $state.go('^');
+
+      }
+
       angular.extend(vm,{
 
         progress: progress,
