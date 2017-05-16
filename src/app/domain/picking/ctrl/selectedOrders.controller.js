@@ -133,8 +133,11 @@
                 return po;
               });
 
-              vm.pickingSession = PS.inject({processing: 'startPicking'});
-              console.info('vm.pickingSession', vm.pickingSession);
+              console.info('vm.pickingSession',
+                vm.pickingSession = PS.inject({
+                  processing: 'startPicking'
+                })
+              );
               console.info('pickingSessionWeighing',
                 PSW.inject({
                   pickingSessionId: vm.pickingSession.id,
