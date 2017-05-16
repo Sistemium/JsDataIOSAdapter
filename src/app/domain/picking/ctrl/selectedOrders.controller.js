@@ -37,7 +37,6 @@
 
       selectedItems: selected,
       totals: PO.agg (vm, 'selectedItems'),
-      pickingSession: currentSession(),
 
       startPicking,
       finishPicking,
@@ -116,10 +115,12 @@
 
     }
 
-    function currentSession() {
-      PS.findAll({processing: 'startPicking'}).then(ps => {
-        return ps;
-      });
+    function getCurrentPickingSession() {
+      PS.findAll({processing: 'picking'})
+        .then(pss => {
+          vm.pickingSession = _.first(pss);
+        })
+      ;
     }
 
     function startPicking() {
@@ -216,7 +217,7 @@
 
     }
 
-    vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, chunk => {
+    vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, getCurrentPickingSession, chunk => {
       progress.value += chunk.length;
     }, _.noop);
 
