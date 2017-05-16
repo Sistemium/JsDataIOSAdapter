@@ -97,13 +97,19 @@
 
       }
 
+      function currentSession() {
+        PS.findAll({processing: 'startPicking'}).then(ps => {
+          return ps;
+        });
+      }
+
       angular.extend(vm,{
 
         progress: progress,
 
         selectedItems: selected,
         totals: PO.agg (vm, 'selectedItems'),
-        pickingSession: undefined,
+        pickingSession: currentSession(),
 
         startPicking: () => {
 
