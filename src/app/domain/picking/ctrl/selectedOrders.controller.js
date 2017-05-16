@@ -139,7 +139,10 @@
               });
 
               $scope.$parent.vm.pickingItems = vm.selectedItems;
-              $state.go('^.articleList');
+
+              PS.save(vm.pickingSession).then(() => {
+                $state.go('^.articleList');
+              });
 
             })
             .catch((err) => {
