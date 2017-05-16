@@ -115,6 +115,13 @@
 
           // here we have to ask for weight and start pickingSession
 
+          if (vm.pickingSession) {
+
+            $state.go('^.articleList');
+            return;
+
+          }
+
           weighing()
             .then((weight) => {
 
