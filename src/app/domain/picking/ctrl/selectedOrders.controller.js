@@ -2,218 +2,223 @@
 
 (function () {
 
-  angular.module('webPage')
-    .controller('SelectedOrdersController', function (Schema, $scope, $state, saAsync, WeighingService, ConfirmModal, $q) {
+  function SelectedOrdersController(Schema, $scope, $state, saAsync, WeighingService, ConfirmModal, $q) {
 
-      const PO = Schema.model('PickingOrder');
-      const POP = Schema.model('PickingOrderPosition');
-      const POS = Schema.model('PickingOrderSession');
-      const PS = Schema.model('PickingSession');
-      const PSW = Schema.model('PickingSessionWeighing');
+    const PO = Schema.model('PickingOrder');
+    const POP = Schema.model('PickingOrderPosition');
+    const POS = Schema.model('PickingOrderSession');
+    const PS = Schema.model('PickingSession');
+    const PSW = Schema.model('PickingSessionWeighing');
 
-      let vm = this;
+    let vm = this;
 
-      function ejectOthers () {
-        Schema.model ('PickingOrderPositionPicked').ejectAll();
-        Schema.model ('StockBatch').ejectAll();
-      }
+    let selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
 
-      let selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
+    let allPositions = [];
 
-      function loadRelationsPOP (pop) {
-        return POP.loadRelations(pop,['PickingOrderPositionPicked']);
-      }
+    _.each(selected, po => {
+      Array.prototype.push.apply(allPositions,po.positions);
+    });
 
-      let allPositions = [];
+    let progress = {
+      max: allPositions.length,
+      value: 0
+    };
 
-      _.each(selected, po => {
-        Array.prototype.push.apply(allPositions,po.positions);
-      });
+    angular.extend(vm,{
 
-      let progress = {
-        max: allPositions.length,
-        value: 0
-      };
+      progress: progress,
 
-      function weighing() {
+      selectedItems: selected,
+      totals: PO.agg (vm, 'selectedItems'),
+      pickingSession: currentSession(),
 
-        return weighingModalWithText('Взвесить тележку?')
-          .then((data) => {
-            return data;
-          })
-          .catch((err) => {
-            return $q.reject(err);
-          })
+      startPicking,
+      finishPicking,
+      pausePicking
+
+    });
+
+    function ejectOthers () {
+      Schema.model ('PickingOrderPositionPicked').ejectAll();
+      Schema.model ('StockBatch').ejectAll();
+    }
+
+    function loadRelationsPOP (pop) {
+      return POP.loadRelations(pop,['PickingOrderPositionPicked']);
+    }
+
+    function weighing() {
+
+      return weighingModalWithText('Взвесить тележку?')
+        .then((data) => {
+          return data;
+        })
+        .catch((err) => {
+          return $q.reject(err);
+        })
         ;
 
-      }
+    }
 
-      function weighingModalWithText(text) {
+    function weighingModalWithText(text) {
 
-        return ConfirmModal.show({
-          text: text
-        })
-          .then(() => {
+      return ConfirmModal.show({
+        text: text
+      })
+        .then(() => {
 
           //TODO: have to show spinner while weighing
 
-            return WeighingService.weighing()
-              .then((response) => {
+          return WeighingService.weighing()
+            .then((response) => {
 
-                if (response.status !== 200) {
-                  return weighingError();
-                }
+              if (response.status !== 200) {
+                return weighingError();
+              }
 
-                return response.data.weight;
+              return response.data.weight;
 
-              })
+            })
             ;
 
-          })
-          .catch(err => {
+        })
+        .catch(err => {
 
-            if (!err || !err.status) return $q.reject(err);
-            return weighingError();
+          if (!err || !err.status) return $q.reject(err);
+          return weighingError();
 
-          })
+        })
         ;
 
+    }
+
+    function weighingError() {
+      return weighingModalWithText('Ошибка взвешивания. Повторить?');
+    }
+
+    function selectedItemProcessing(processing) {
+
+      _.each(vm.selectedItems, po => {
+        po.processing = processing;
+        po.selected = undefined;
+        PO.save(po);
+      });
+      $scope.$parent.vm.pickingItems = false;
+      ejectOthers();
+      $state.go('^');
+
+    }
+
+    function currentSession() {
+      PS.findAll({processing: 'startPicking'}).then(ps => {
+        return ps;
+      });
+    }
+
+    function startPicking() {
+
+      if (vm.pickingSession) {
+
+        $state.go('^.articleList');
+        return;
+
       }
 
-      function weighingError() {
-        return weighingModalWithText('Ошибка взвешивания. Повторить?');
-      }
+      // here we have to ask for weight and start pickingSession
 
-      function selectedItemProcessing(processing) {
+      weighing()
+        .then((weight) => {
 
-        _.each(vm.selectedItems, po => {
-          po.processing = processing;
-          po.selected = undefined;
-          PO.save(po);
-        });
-        $scope.$parent.vm.pickingItems = false;
-        ejectOthers();
-        $state.go('^');
+          console.info('startPicking weighing success', weight);
 
-      }
+          vm.selectedItems = _.map(vm.selectedItems, po => {
+            po.processing = 'picking';
+            PO.save(po);
+            return po;
+          });
 
-      function currentSession() {
-        PS.findAll({processing: 'startPicking'}).then(ps => {
-          return ps;
-        });
-      }
+          console.info('vm.pickingSession',
+            vm.pickingSession = PS.inject({
+              processing: 'startPicking'
+            })
+          );
+          console.info('pickingSessionWeighing',
+            PSW.inject({
+              pickingSessionId: vm.pickingSession.id,
+              weight: weight
+            })
+          );
 
-      angular.extend(vm,{
+          _.forEach(vm.selectedItems, po => {
+            console.info(
+              POS.inject({
+                pickingSessionId: vm.pickingSession.id,
+                pickingOrderId: po.id
+              })
+            );
+          });
 
-        progress: progress,
+          $scope.$parent.vm.pickingItems = vm.selectedItems;
 
-        selectedItems: selected,
-        totals: PO.agg (vm, 'selectedItems'),
-        pickingSession: currentSession(),
-
-        startPicking: () => {
-
-          // here we have to ask for weight and start pickingSession
-
-          if (vm.pickingSession) {
-
+          PS.save(vm.pickingSession).then(() => {
             $state.go('^.articleList');
-            return;
+          });
 
-          }
+        })
+        .catch((err) => {
+          console.info('startPicking weighing problem', err);
+        })
+      ;
 
-          weighing()
-            .then((weight) => {
+    }
 
-              console.info('startPicking weighing success', weight);
+    function finishPicking() {
 
-              vm.selectedItems = _.map(vm.selectedItems, po => {
-                po.processing = 'picking';
-                PO.save(po);
-                return po;
-              });
+      // here we have to ask for weight and finish pickingSession
+      weighing()
+        .then((weight) => {
 
-              console.info('vm.pickingSession',
-                vm.pickingSession = PS.inject({
-                  processing: 'startPicking'
-                })
-              );
-              console.info('pickingSessionWeighing',
-                PSW.inject({
-                  pickingSessionId: vm.pickingSession.id,
-                  weight: weight
-                })
-              );
+          console.info('finishPicking weighing success', weight);
+          selectedItemProcessing('picked');
 
-              _.forEach(vm.selectedItems, po => {
-                console.info(
-                  POS.inject({
-                    pickingSessionId: vm.pickingSession.id,
-                    pickingOrderId: po.id
-                  })
-                );
-              });
+        })
+        .catch((err) => {
+          console.info('finishPicking weighing problem', err);
+        })
+      ;
 
-              $scope.$parent.vm.pickingItems = vm.selectedItems;
+    }
 
-              PS.save(vm.pickingSession).then(() => {
-                $state.go('^.articleList');
-              });
+    function pausePicking() {
 
-            })
-            .catch((err) => {
-              console.info('startPicking weighing problem', err);
-            })
-          ;
+      // here we have to ask for weight and finish pickingSession
 
-        },
+      weighing()
+        .then((weight) => {
 
-        finishPicking: () => {
+          console.info('pausePicking weighing success', weight);
+          selectedItemProcessing('ready');
 
-          // here we have to ask for weight and finish pickingSession
-          weighing()
-            .then((weight) => {
+        })
+        .catch((err) => {
+          console.info('pausePicking weighing problem', err);
+        })
+      ;
 
-              console.info('finishPicking weighing success', weight);
-              selectedItemProcessing('picked');
+    }
 
-            })
-            .catch((err) => {
-              console.info('finishPicking weighing problem', err);
-            })
-          ;
+    vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, chunk => {
+      progress.value += chunk.length;
+    }, _.noop);
 
-        },
+    vm.busy.then(() => {
+      vm.progress = false;
+    });
 
-        pausePicking: () => {
+  }
 
-          // here we have to ask for weight and finish pickingSession
-
-          weighing()
-            .then((weight) => {
-
-              console.info('pausePicking weighing success', weight);
-              selectedItemProcessing('ready');
-
-            })
-            .catch((err) => {
-              console.info('pausePicking weighing problem', err);
-            })
-          ;
-
-        }
-
-      });
-
-      vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, chunk => {
-        progress.value += chunk.length;
-      }, _.noop);
-
-      vm.busy.then(() => {
-        vm.progress = false;
-      });
-
-    })
-  ;
+  angular.module('webPage')
+    .controller('SelectedOrdersController', SelectedOrdersController);
 
 }());
