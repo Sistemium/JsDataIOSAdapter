@@ -7,6 +7,10 @@
 
       const PO = Schema.model('PickingOrder');
       const POP = Schema.model('PickingOrderPosition');
+      const POS = Schema.model('PickingOrderSession');
+      const PS = Schema.model('PickingSession');
+      const PSW = Schema.model('PickingSessionWeighing');
+
       let vm = this;
 
       function ejectOthers () {
@@ -51,7 +55,7 @@
         })
           .then(() => {
 
-          // have to show spinner while weighing
+          //TODO: have to show spinner while weighing
 
             return WeighingService.weighing()
               .then((response) => {
@@ -99,6 +103,7 @@
 
         selectedItems: selected,
         totals: PO.agg (vm, 'selectedItems'),
+        pickingSession: undefined,
 
         startPicking: () => {
 
@@ -114,6 +119,25 @@
                 PO.save(po);
                 return po;
               });
+
+              vm.pickingSession = PS.inject({processing: 'startPicking'});
+              console.info('vm.pickingSession', vm.pickingSession);
+              console.info('pickingSessionWeighing',
+                PSW.inject({
+                  pickingSessionId: vm.pickingSession.id,
+                  weight: weight
+                })
+              );
+
+              _.forEach(vm.selectedItems, po => {
+                console.info(
+                  POS.inject({
+                    pickingSessionId: vm.pickingSession.id,
+                    pickingOrderId: po.id
+                  })
+                );
+              });
+
               $scope.$parent.vm.pickingItems = vm.selectedItems;
               $state.go('^.articleList');
 
