@@ -4,6 +4,12 @@
 
   function SelectedOrdersController(Schema, $scope, $state, saAsync, WeighingService, ConfirmModal, $q) {
 
+    const picker = Schema.model('Picker').getCurrent();
+
+    if (!picker) {
+      return $state.go ('login');
+    }
+
     const PO = Schema.model('PickingOrder');
     const POP = Schema.model('PickingOrderPosition');
     const POS = Schema.model('PickingOrderSession');
@@ -140,7 +146,9 @@
 
           console.info('vm.pickingSession',
             vm.pickingSession = PS.inject({
-              processing: 'startPicking'
+              processing: 'picking',
+              pickerId: picker.id,
+              siteId: picker.siteId
             })
           );
           console.info('pickingSessionWeighing',
