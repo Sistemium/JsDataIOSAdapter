@@ -15,7 +15,7 @@
     };
   }
 
-  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper) {
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, $window, localStorageService) {
 
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
@@ -44,6 +44,18 @@
       });
 
     }
+
+    function measure() {
+      let a = $window.performance.now();
+      $rootScope.$apply();
+      vm.lastDigest = Math.round($window.performance.now() - a);
+      setTimeout(measure, 2000);
+    }
+
+    if (localStorageService.get('debug.performance')) {
+      setTimeout(measure, 1000);
+    }
+
 
   }
 
