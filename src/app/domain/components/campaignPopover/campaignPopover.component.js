@@ -36,13 +36,21 @@
         localStorageService.set('campaignPopoverTopScroll', elem.scrollTop);
       }
 
+      if (nv && !vm.busy) {
+        vm.busy = loadData();
+      }
+
     });
 
     function $onInit() {
 
+    }
+
+    function loadData() {
+
       let today = moment().format();
 
-      CampaignGroup.findAll()
+      return CampaignGroup.findAll()
         .then(groups => {
 
           vm.campaignGroup = _.find(groups, group => group.dateB <= today && today <= group.dateE);
@@ -51,7 +59,7 @@
 
           let filter = {campaignGroupId: vm.campaignGroup.id};
 
-          Campaign.findAllWithRelations(filter)('CampaignPicture')
+          return Campaign.findAllWithRelations(filter)('CampaignPicture')
             .then(campaigns => {
 
               vm.campaigns = _.filter(campaigns, (elem) => {
@@ -68,7 +76,6 @@
             });
 
         });
-
     }
 
 
