@@ -4,7 +4,7 @@
     uib-tab(
     index='$index + 1'
     ng-repeat='team in vm.teams'
-    heading='{{team.name|| "нет имеени"}}'
+    heading='{{team.name}}'
     select='vm.onTeamSelect(team, $index)'
     )
 
