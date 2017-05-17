@@ -799,7 +799,7 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.findAll()
+        RestrictionArticle.findAll({}, {limit: 10000})
       ])
         .then(res => {
 
