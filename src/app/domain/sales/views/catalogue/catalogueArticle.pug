@@ -5,7 +5,7 @@ font-size-edit(append-to='catalogueArticle')
 
   #scroll-articles-parent.scroll-y(resize resize-offset-top='5' resize-property='height')
     ul.list-group.round-corners-by-type.vr-parent(
-    vs-repeat='{{vm.articleRowHeight()}}'
+    vs-repeat='{{ vm.articleRowHeight }}'
     vs-scroll-parent="#scroll-articles-parent"
     before-tag-name='li'
     )

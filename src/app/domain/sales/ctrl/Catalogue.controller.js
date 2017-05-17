@@ -74,7 +74,7 @@
       thumbClick,
 
       onStateChange,
-      articleRowHeight,
+      // articleRowHeight,
       alertCheck,
       alertTriggers: _.groupBy(CatalogueAlert.getAll(), 'articleGroupId')
 
@@ -151,12 +151,13 @@
 
     vm.watchScope(
       isWideScreen,
-      (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
-    );
-
-    vm.watchScope(
-      isWideScreen,
-      newValue => vm.isWideScreen = newValue
+      (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+          $scope.$broadcast('vsRepeatTrigger');
+        }
+        vm.isWideScreen = newValue;
+        vm.articleRowHeight = articleRowHeight();
+      }
     );
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
