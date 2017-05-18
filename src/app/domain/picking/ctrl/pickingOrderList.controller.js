@@ -38,6 +38,7 @@
     PS.findAll({processing: 'picking'}, { bypassCache: true })
       .then(pss => {
         if (_.first(pss)) {
+          // TODO: have to set vm.selectedItems via getting distinct POs from all POSes with finded PS
           $state.go('.selectedOrders');
         }
       })
