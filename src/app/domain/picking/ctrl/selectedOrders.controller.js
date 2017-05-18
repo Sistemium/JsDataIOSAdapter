@@ -162,28 +162,42 @@
               siteId: picker.siteId
             })
           );
-          console.info('pickingSessionWeighing',
-            PSW.inject({
-              pickingSessionId: vm.pickingSession.id,
-              weight: weight
+
+          PS.save(vm.pickingSession)
+            .then(() => {
+
+              console.info('pickingSessionWeighing',
+                PSW.save(
+                  PSW.inject({
+                    pickingSessionId: vm.pickingSession.id,
+                    weight: weight
+                  })
+                ).then((psw) => {
+                  return psw;
+                })
+              );
+
+              _.forEach(vm.selectedItems, po => {
+                console.info(
+                  POS.save(
+                    POS.inject({
+                      pickingSessionId: vm.pickingSession.id,
+                      pickingOrderId: po.id
+                    })
+                  ).then((pos) => {
+                    return pos;
+                  })
+                );
+              });
+
             })
-          );
+            .then(() => {
 
-          _.forEach(vm.selectedItems, po => {
-            console.info(
-              POS.inject({
-                pickingSessionId: vm.pickingSession.id,
-                pickingOrderId: po.id
-              })
-            );
-          });
+              $scope.$parent.vm.pickingItems = vm.selectedItems;
+              $state.go('^.articleList');
 
-          PS.save(vm.pickingSession).then(() => {
-
-            $scope.$parent.vm.pickingItems = vm.selectedItems;
-            $state.go('^.articleList');
-
-          });
+            })
+          ;
 
         })
         .catch((err) => {
