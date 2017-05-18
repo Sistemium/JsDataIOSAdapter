@@ -236,9 +236,13 @@
           console.info('weighing success', weight);
 
           console.info('pickingSessionWeighing',
-            PSW.inject({
-              pickingSessionId: vm.pickingSession.id,
-              weight: weight
+            PSW.save(
+              PSW.inject({
+                pickingSessionId: vm.pickingSession.id,
+                weight: weight
+              })
+            ).then((psw) => {
+              return psw;
             })
           );
 
