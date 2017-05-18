@@ -132,6 +132,54 @@
       ;
     }
 
+    function createPickingSession(weight) {
+
+      console.info('vm.pickingSession',
+        vm.pickingSession = PS.inject({
+          processing: 'picking',
+          pickerId: picker.id,
+          siteId: picker.siteId
+        })
+      );
+
+      PS.save(vm.pickingSession)
+        .then(() => {
+
+          console.info('pickingSessionWeighing',
+            PSW.save(
+              PSW.inject({
+                pickingSessionId: vm.pickingSession.id,
+                weight: weight
+              })
+            ).then((psw) => {
+              return psw;
+            })
+          );
+
+          _.forEach(vm.selectedItems, po => {
+            console.info(
+              POS.save(
+                POS.inject({
+                  pickingSessionId: vm.pickingSession.id,
+                  pickingOrderId: po.id
+                })
+              ).then((pos) => {
+                return pos;
+              })
+            );
+          });
+
+        })
+        .then(() => {
+
+          $scope.$parent.vm.pickingItems = vm.selectedItems;
+          $state.go('^.articleList');
+
+        })
+      ;
+
+    }
+
     function startPicking() {
 
       if (vm.pickingSession) {
@@ -147,57 +195,15 @@
       weighing()
         .then((weight) => {
 
-          console.info('startPicking weighing success', weight);
-
           vm.selectedItems = _.map(vm.selectedItems, po => {
             po.processing = 'picking';
             PO.save(po);
             return po;
           });
 
-          console.info('vm.pickingSession',
-            vm.pickingSession = PS.inject({
-              processing: 'picking',
-              pickerId: picker.id,
-              siteId: picker.siteId
-            })
-          );
+          console.info('startPicking weighing success', weight);
 
-          PS.save(vm.pickingSession)
-            .then(() => {
-
-              console.info('pickingSessionWeighing',
-                PSW.save(
-                  PSW.inject({
-                    pickingSessionId: vm.pickingSession.id,
-                    weight: weight
-                  })
-                ).then((psw) => {
-                  return psw;
-                })
-              );
-
-              _.forEach(vm.selectedItems, po => {
-                console.info(
-                  POS.save(
-                    POS.inject({
-                      pickingSessionId: vm.pickingSession.id,
-                      pickingOrderId: po.id
-                    })
-                  ).then((pos) => {
-                    return pos;
-                  })
-                );
-              });
-
-            })
-            .then(() => {
-
-              $scope.$parent.vm.pickingItems = vm.selectedItems;
-              $state.go('^.articleList');
-
-            })
-          ;
+          createPickingSession(weight);
 
         })
         .catch((err) => {
