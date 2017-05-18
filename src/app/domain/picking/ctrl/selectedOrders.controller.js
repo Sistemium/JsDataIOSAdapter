@@ -134,37 +134,27 @@
 
     function createPickingSession(weight) {
 
-      console.info('vm.pickingSession',
-        vm.pickingSession = PS.inject({
-          processing: 'picking',
-          pickerId: picker.id,
-          siteId: picker.siteId
-        })
-      );
+      vm.pickingSession = PS.inject({
+        processing: 'picking',
+        pickerId: picker.id,
+        siteId: picker.siteId
+      });
 
       PS.save(vm.pickingSession)
         .then(() => {
 
-          console.info('pickingSessionWeighing',
-            PSW.save(
-              PSW.inject({
-                pickingSessionId: vm.pickingSession.id,
-                weight: weight
-              })
-            ).then((psw) => {
-              return psw;
+          PSW.save(
+            PSW.inject({
+              pickingSessionId: vm.pickingSession.id,
+              weight: weight
             })
           );
 
           _.forEach(vm.selectedItems, po => {
-            console.info(
-              POS.save(
-                POS.inject({
-                  pickingSessionId: vm.pickingSession.id,
-                  pickingOrderId: po.id
-                })
-              ).then((pos) => {
-                return pos;
+            POS.save(
+              POS.inject({
+                pickingSessionId: vm.pickingSession.id,
+                pickingOrderId: po.id
               })
             );
           });
@@ -201,13 +191,12 @@
             return po;
           });
 
-          console.info('startPicking weighing success', weight);
-
+          console.info('weighing success', weight);
           createPickingSession(weight);
 
         })
         .catch((err) => {
-          console.info('startPicking weighing problem', err);
+          console.info('weighing problem', err);
         })
       ;
 
@@ -241,14 +230,10 @@
 
           console.info('weighing success', weight);
 
-          console.info('pickingSessionWeighing',
-            PSW.save(
-              PSW.inject({
-                pickingSessionId: vm.pickingSession.id,
-                weight: weight
-              })
-            ).then((psw) => {
-              return psw;
+          PSW.save(
+            PSW.inject({
+              pickingSessionId: vm.pickingSession.id,
+              weight: weight
             })
           );
 
