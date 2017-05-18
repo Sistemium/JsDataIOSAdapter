@@ -125,7 +125,7 @@
     }
 
     function getCurrentPickingSession() {
-      PS.findAll({processing: 'picking'})
+      PS.findAll({processing: 'picking'}, { bypassCache: true })
         .then(pss => {
           vm.pickingSession = _.first(pss);
         })
