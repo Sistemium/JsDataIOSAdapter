@@ -127,6 +127,7 @@
 
       if (vm.pickingSession) {
 
+        $scope.$parent.vm.pickingItems = vm.selectedItems;
         $state.go('^.articleList');
         return;
 
@@ -168,10 +169,11 @@
             );
           });
 
-          $scope.$parent.vm.pickingItems = vm.selectedItems;
-
           PS.save(vm.pickingSession).then(() => {
+
+            $scope.$parent.vm.pickingItems = vm.selectedItems;
             $state.go('^.articleList');
+
           });
 
         })
