@@ -33,6 +33,15 @@
     const PO = Schema.model ('PickingOrder');
     const POP = Schema.model ('PickingOrderPosition');
     const SB = Schema.model ('StockBatch');
+    const PS = Schema.model('PickingSession');
+
+    PS.findAll({processing: 'picking'}, { bypassCache: true })
+      .then(pss => {
+        if (_.first(pss)) {
+          $state.go('.selectedOrders');
+        }
+      })
+    ;
 
     function onFindPO (data) {
       const i = (data && data.length) ? data[0] : data;
