@@ -33,14 +33,49 @@
     const PO = Schema.model ('PickingOrder');
     const POP = Schema.model ('PickingOrderPosition');
     const SB = Schema.model ('StockBatch');
+
     const PS = Schema.model('PickingSession');
+    const POS = Schema.model('PickingOrderSession');
 
     PS.findAll({processing: 'picking'}, { bypassCache: true })
       .then(pss => {
-        if (_.first(pss)) {
-          // TODO: have to set vm.selectedItems via getting distinct POs from all POSes with finded PS
-          $state.go('.selectedOrders');
+
+        let ps = _.first(pss);
+
+        if (ps) {
+
+          POS.findAll({pickingSessionId: ps.id})
+            .then((poses) => {
+
+              let poIds = _.uniq(_.map(poses, 'pickingOrderId'));
+
+              PO.findAll({pickerId: picker.id, date: date}, {bypassCache: true, cacheResponse: false})
+                .then(() => {
+
+                  vm.selectedItems = PO.filter({
+                    where: {
+                      id: {
+                        'in': poIds
+                      }
+                    }
+                  });
+
+                  vm.hasSelected = !!vm.selectedItems.length;
+
+                  _.each(vm.selectedItems, (po) => {
+                    po.selected = true;
+                  });
+
+                  $state.go('.selectedOrders');
+
+                })
+              ;
+
+            })
+          ;
+
         }
+
       })
     ;
 
