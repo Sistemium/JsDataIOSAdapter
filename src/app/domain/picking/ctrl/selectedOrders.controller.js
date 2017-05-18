@@ -110,6 +110,15 @@
         PO.save(po);
       });
       $scope.$parent.vm.pickingItems = false;
+
+      if (vm.pickingSession) {
+
+        vm.pickingSession.processing = 'finished';
+        PS.save(vm.pickingSession);
+        vm.pickingSession = undefined;
+
+      }
+
       ejectOthers();
       $state.go('^');
 
