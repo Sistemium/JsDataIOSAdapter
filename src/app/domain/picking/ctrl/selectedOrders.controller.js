@@ -187,36 +187,45 @@
     function finishPicking() {
 
       // here we have to ask for weight and finish pickingSession
-      weighing()
-        .then((weight) => {
-
-          console.info('finishPicking weighing success', weight);
-          selectedItemProcessing('picked');
-
-        })
-        .catch((err) => {
-          console.info('finishPicking weighing problem', err);
-        })
-      ;
+      endPicking('picked');
 
     }
 
     function pausePicking() {
 
       // here we have to ask for weight and finish pickingSession
+      endPicking('ready');
+
+    }
+
+    function endPicking(processing) {
+
+      if (!vm.pickingSession) {
+
+        selectedItemProcessing(processing);
+        return;
+
+      }
 
       weighing()
         .then((weight) => {
 
-          console.info('pausePicking weighing success', weight);
-          selectedItemProcessing('ready');
+          console.info('weighing success', weight);
+
+          console.info('pickingSessionWeighing',
+            PSW.inject({
+              pickingSessionId: vm.pickingSession.id,
+              weight: weight
+            })
+          );
+
+          selectedItemProcessing(processing);
 
         })
         .catch((err) => {
-          console.info('pausePicking weighing problem', err);
+          console.info('weighing problem', err);
         })
       ;
-
     }
 
     vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, getCurrentPickingSession, chunk => {
