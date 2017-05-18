@@ -246,9 +246,10 @@
       ;
     }
 
-    vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, getCurrentPickingSession, chunk => {
+    vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, chunk => {
       progress.value += chunk.length;
-    }, _.noop);
+    }, _.noop)
+      .then(getCurrentPickingSession());
 
     vm.busy.then(() => {
       vm.progress = false;
