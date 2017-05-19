@@ -80,7 +80,7 @@
                     } else  {
                       $state.go('^');
                     }
-                  } else  {
+                  } else {
                     $state.go('picking.orderList',{state: 'notdone'});
                   }
 
