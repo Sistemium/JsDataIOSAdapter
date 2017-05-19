@@ -29,8 +29,23 @@
 
     }
 
+    function weighingRequired() {
+      return true;
+    }
+
+    function weighingPossible() {
+      return true;
+    }
+
+    function shouldWeighing() {
+      return weighingPossible() && weighingRequired();
+    }
+
     return {
-      weighing
+      weighing,
+      weighingRequired,
+      weighingPossible,
+      shouldWeighing
     }
 
   }
