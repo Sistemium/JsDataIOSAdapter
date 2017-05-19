@@ -1,0 +1,36 @@
+//.test(style='height: 300px; overflow: scroll')
+//  pre {{vm | json}}
+
+p {{vm.currentState}}
+
+.ui-view(cg-busy='{promise: vm.busy, message: "Загрузка новостей"}')
+  .news-feed(ng-if='!vm.busy')
+    .news
+      .no-news
+        p(ng-if='!vm.news') Новостей не найдено. Предлагаем
+        p(ng-if='vm.news') Количество новостей {{vm.news.length}}. Предлагаем
+
+          a(
+          ng-click='vm.goToCreateNews()'
+          ) cоздать новость.
+
+      .news-repeater.scroll-y(resize resize-offset-top='15' vs-repeat='135')
+        .news-item(ng-repeat='news in vm.news track by news.id' ng-click='vm.showAdditionalInfo(news)')
+          .line-1
+            label.subject {{news.subject}}
+            valid-lifetime(date-b='news.dateB' date-e='news.dateE')
+          .line-2
+            .news-body(
+            )
+              p {{news.body}}
+          .line-3
+            label Оценка:
+            span(
+            uib-rating
+            ng-model="vm.rating" /* vm.news.rating */,
+            max="5"
+            on-hover="hoveringOver(value)"
+            on-leave="overStar = null"
+            titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+            aria-labelledby="default-rating"
+            )
