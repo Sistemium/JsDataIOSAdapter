@@ -2,7 +2,7 @@
 
 (function () {
 
-  let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition'];
+  let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'NewsMessage'];
 
   angular.module('Sales', ['sistemium', 'yaMap', 'Models'])
     .run(function (SalesmanAuth, InitService, Sockets, IOS, DEBUG, Schema, $rootScope, Menu) {
@@ -20,7 +20,7 @@
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
-          const {Workflow, SaleOrder} = Schema.models();
+          const {Workflow, SaleOrder, NewsMessage} = Schema.models();
 
           Workflow.findAll({code: 'SaleOrder.v2'})
             .then(workflow => {
@@ -29,11 +29,17 @@
             .catch(e => console.error('Workflow find error:', e));
 
           function setBadges() {
+
             let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
             SaleOrder.groupBy(filter)
               .then(data => {
                 Menu.setItemData('sales.saleOrders', {badge: data.length});
               });
+
+            NewsMessage.findAll().then(data => {
+              Menu.setItemData('newsFeed', {badge: data.length});
+            });
           }
 
           $rootScope.$on('menu-show', setBadges);
