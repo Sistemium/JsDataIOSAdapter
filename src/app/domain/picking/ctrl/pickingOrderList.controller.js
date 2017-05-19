@@ -37,31 +37,34 @@
     const PS = Schema.model('PickingSession');
     const POS = Schema.model('PickingOrderSession');
 
-    PS.findAll({
-      pickerId: picker.id,
-      siteId: picker.siteId,
-      processing: 'picking'
-    }, { bypassCache: true })
-      .then(pss => {
+    findUnfinishedPickingSession();
 
-        let ps = _.first(pss);
+    function findUnfinishedPickingSession() {
 
-        if (ps) {
+      PS.findAll({
+        pickerId: picker.id,
+        siteId: picker.siteId,
+        processing: 'picking'
+      }, { bypassCache: true })
+        .then(pss => {
+
+          let ps = _.first(pss);
+
+          if (!ps) return;
 
           POS.findAll({pickingSessionId: ps.id})
             .then((poses) => {
 
               let poIds = _.uniq(_.map(poses, 'pickingOrderId'));
 
-              PO.findAll({pickerId: picker.id, date: date}, {bypassCache: true, cacheResponse: false})
+              PO.findAll({
+                pickerId: picker.id,
+                date: date
+              }, {bypassCache: true, cacheResponse: false})
                 .then(() => {
 
                   vm.selectedItems = PO.filter({
-                    where: {
-                      id: {
-                        'in': poIds
-                      }
-                    }
+                    where: {id: {'in': poIds}}
                   });
 
                   vm.hasSelected = !!vm.selectedItems.length;
@@ -78,10 +81,10 @@
             })
           ;
 
-        }
+        })
+      ;
 
-      })
-    ;
+    }
 
     function onFindPO (data) {
       const i = (data && data.length) ? data[0] : data;
@@ -179,7 +182,7 @@
           });
 
           if (!vm.selectedItems.length && vm.mode !== 'orderList') {
-            $state.go('picking.orderList',{state: 'notdone'});
+            findUnfinishedPickingSession();
           }
 
           setSelected();
