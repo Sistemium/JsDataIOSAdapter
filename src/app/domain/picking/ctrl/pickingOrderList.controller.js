@@ -37,7 +37,11 @@
     const PS = Schema.model('PickingSession');
     const POS = Schema.model('PickingOrderSession');
 
-    PS.findAll({processing: 'picking'}, { bypassCache: true })
+    PS.findAll({
+      pickerId: picker.id,
+      siteId: picker.siteId,
+      processing: 'picking'
+    }, { bypassCache: true })
       .then(pss => {
 
         let ps = _.first(pss);

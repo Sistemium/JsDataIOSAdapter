@@ -62,7 +62,7 @@
         .catch((err) => {
           return $q.reject(err);
         })
-        ;
+      ;
 
     }
 
@@ -125,7 +125,11 @@
     }
 
     function getCurrentPickingSession() {
-      PS.findAll({processing: 'picking'}, { bypassCache: true })
+      PS.findAll({
+        pickerId: picker.id,
+        siteId: picker.siteId,
+        processing: 'picking'
+      }, { bypassCache: true })
         .then(pss => {
           vm.pickingSession = _.first(pss);
         })
