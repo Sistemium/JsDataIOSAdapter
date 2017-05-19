@@ -1,0 +1,86 @@
+.create-and-edit-news
+
+  .duration(ng-class='{"warning": vm.news.beginDate > vm.news.endDate }')
+    label.control-label Период действия
+    .date-pickers
+      .begin
+        span.pretext.control-label С
+        sab-date-picker.help-style(
+        value='vm.news.dateB'
+        clear-text='Сегодня'
+        )
+      .end
+        span.pretext.control-label По
+        sab-date-picker(
+        value='vm.news.dateE'
+        min-date='vm.news.dateB'
+        clear-text='Сегодня'
+        )
+
+    span#helpBlock3.help-block(ng-if='vm.news.beginDate > vm.news.endDate') Дата введена некорректно
+
+  p {{vm.test}}
+
+  form(name='vm.newsFeedForm')
+    .subject(ng-class='{"has-error": !vm.newsFeedForm.subject.$pristine && !vm.news.subject.length}')
+      label.control-label(for='newsSubject') Тема
+      input.form-control(
+      type='text'
+      ng-model='vm.news.subject'
+      id='newsSubject'
+      aria-describedby='helpBlock'
+      name='subject'
+      )
+      span#helpBlock.help-block(
+      ng-if=' !vm.newsFeedForm.subject.$pristine && !vm.news.subject.length'
+      ) Поле обязательно для ввода
+
+    .text(
+    ng-class='{"has-error": !vm.newsFeedForm.body.$pristine && !vm.news.body.length}'
+    )
+      label.control-label(for='newsText') Текст
+      textarea.form-control(
+      type='text'
+      rows='5'
+      ng-model='vm.news.body'
+      id='newsText'
+      aria-describedby='helpBlock2'
+      name='body'
+      )
+      span#helpBlock2.help-block(
+      ng-if='!vm.newsFeedForm.body.$pristine && !vm.news.body.length'
+      ) Поле обязательно для ввода
+
+    .version(ng-class='{"has-error": vm.newsFeedForm.version.$error.pattern || !vm.newsFeedForm.version.$viewValue}')
+      label.control-label(for='version') Версия программы
+
+      input.form-control(
+      name='version'
+      id='version'
+      ng-model='vm.currVersion'
+      ng-pattern='vm.regExForCurrVersion'
+      aria-describedby='helpBlock4, helpBlock5'
+      )
+
+      span#helpBlock4.help-block(ng-if='vm.newsFeedForm.version.$error.pattern') Версия введена некорректно
+      span#helpBlock5.help-block(ng-if='!vm.newsFeedForm.version.$pristine && !vm.newsFeedForm.version.$viewValue') Поле обязательно для ввода
+
+  button.btn.btn-primary(
+  ng-if='vm.currentState ==="create"'
+  ng-click='vm.submitNews()'
+  ng-disabled='!(vm.news.body.length && vm.news.subject.length && vm.currVersion) || vm.news.beginDate > vm.news.endDate'
+  ) Сохранить новость
+
+  //ref
+
+  button.btn.btn-primary(
+  ng-if='vm.currentState ==="detailed" && vm.testHasChanges()'
+  ng-click='vm.updateNews()'
+  ng-disabled='!(vm.news.body.length && vm.news.subject.length && vm.currVersion) || vm.news.beginDate > vm.news.endDate'
+  ) Обновить новость
+
+  button.btn.btn-primary(
+  ng-if='vm.testHasChanges()'
+  ng-click='vm.revertChanges()'
+  ) Возвратить
+
