@@ -55,6 +55,8 @@
 
     function weighing() {
 
+      if (!WeighingService.shouldWeighing()) return $q.resolve(-1);
+
       return weighingModalWithText('Взвесить тележку?')
         .then((data) => {
           return data;
@@ -147,12 +149,16 @@
       PS.save(vm.pickingSession)
         .then(() => {
 
-          PSW.save(
-            PSW.inject({
-              pickingSessionId: vm.pickingSession.id,
-              weight: weight
-            })
-          );
+          if (WeighingService.shouldWeighing()) {
+
+            PSW.save(
+              PSW.inject({
+                pickingSessionId: vm.pickingSession.id,
+                weight: weight
+              })
+            );
+
+          }
 
           _.forEach(vm.selectedItems, po => {
             POS.save(
@@ -234,12 +240,16 @@
 
           console.info('weighing success', weight);
 
-          PSW.save(
-            PSW.inject({
-              pickingSessionId: vm.pickingSession.id,
-              weight: weight
-            })
-          );
+          if (WeighingService.shouldWeighing()) {
+
+            PSW.save(
+              PSW.inject({
+                pickingSessionId: vm.pickingSession.id,
+                weight: weight
+              })
+            );
+
+          }
 
           selectedItemProcessing(processing);
 
