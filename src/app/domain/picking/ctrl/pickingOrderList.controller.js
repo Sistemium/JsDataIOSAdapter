@@ -50,7 +50,12 @@
 
           let ps = _.first(pss);
 
-          if (!ps) return;
+          if (!ps) {
+
+            $state.go('picking.orderList',{state: 'notdone'});
+            return;
+
+          }
 
           POS.findAll({pickingSessionId: ps.id})
             .then((poses) => {
