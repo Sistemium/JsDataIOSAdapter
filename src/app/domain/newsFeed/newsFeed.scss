@@ -1,12 +1,12 @@
-.news-feed {
+.create-and-edit-news {
 
-  .duration, .subject, .text {
+  .duration, .subject, .text, .version {
     background: #f5f5f5;
     padding: 10px;
     margin: 10px 0;
     border-radius: 9px;
 
-    span#helpBlock3 {
+    span#helpBlock3, #helpBlock4, #helpBlock5 {
       margin-bottom: 0;
       text-align: right;
       color: #a94442;
@@ -14,20 +14,10 @@
       opacity: 1;
     }
 
-    span#helpBlock3:hover {
-      margin-bottom: 0;
-      text-align: right;
-      color: #a94442;
-      visibility: hidden;
-      opacity: 0;
-
-      transition: visibility 5s, opacity 4.5s linear
-    }
-
   }
 
   .warning {
-    > * {
+    textarea, label {
       color: #a94442;
     }
 
@@ -37,6 +27,7 @@
     }
 
   }
+
 
   .date-pickers {
 
@@ -87,6 +78,125 @@
   }
 
   button.btn.btn-primary {
-    float: right;
+    display: flex;
+    margin-left: auto;
+  }
+}
+
+.news-feed {
+
+  .no-news {
+
+    background: #f5f5f5;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 9px;
+
+    p {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0;
+      text-align: center;
+      a {
+        margin: 0 0 0 5px;
+        cursor: pointer;
+      }
+    }
+
+  }
+
+  .news-repeater {
+
+    .news-item ~ .news-item {
+      margin: 10px 0;
+    }
+
+    .news-item {
+      outline: none;
+      background: #f5f5f5;
+      padding: 10px;
+      height: 135px;
+
+      border-radius: 9px;
+
+      .line-1 {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        align-items: baseline;
+
+        .subject {
+          font-size: 130%;
+
+          @media (max-width: $screen-xs) {
+            font-size: 105%;
+          }
+
+        }
+
+      }
+
+      .line-2 {
+
+        height: 56px;
+
+        .news-body {
+          p {
+            margin: 5px 10px;
+            overflow: hidden;
+            position: relative;
+            line-height: 1.3em;
+            max-height: 4em;
+            text-align: justify;
+            padding-right: 1em;
+          }
+
+          p:before {
+            content: '...';
+            position: absolute;
+            right: 0;
+            bottom: 2px;
+          }
+
+          p:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 1em;
+            height: 1em;
+            margin-top: 0.2em;
+            background: #f5f5f5;
+
+          }
+
+        }
+      }
+
+      .line-3 {
+        height: 30px;
+        justify-content: flex-end;
+        display: flex;
+        align-items: center;
+        span {
+          color: #2768b7;
+          margin-left: 2px;
+          i {
+            top: 0;
+          }
+        }
+      }
+
+    }
+
+    .news-item:hover {
+      background-color: darken(#f5f5f5, 5%);
+      .news-body {
+        p:after {
+          background-color: darken(#f5f5f5, 5%);
+        }
+      }
+
+    }
+
   }
 }
