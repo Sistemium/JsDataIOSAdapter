@@ -73,7 +73,16 @@
                     po.selected = true;
                   });
 
-                  $state.go('.selectedOrders');
+                  if (vm.hasSelected) {
+                    console.info('vm.hasSelected');
+                    if (!_.endsWith($state.current.name, 'selectedOrders')) {
+                      $state.go('.selectedOrders');
+                    } else  {
+                      $state.go('^');
+                    }
+                  } else  {
+                    $state.go('picking.orderList',{state: 'notdone'});
+                  }
 
                 })
               ;
