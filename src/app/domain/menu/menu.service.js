@@ -65,9 +65,8 @@
       state: 'playground',
       needRoles: ['admin', 'tester']
     }, {
-      title: 'Новости',
-      state: 'newsFeed',
-      needRoles: ['admin', 'tester']
+      title: 'Лента новостей',
+      state: 'newsFeed'
     }];
 
 
@@ -89,7 +88,6 @@
       };
 
     }
-
 
     return {
       root,
