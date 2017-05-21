@@ -4,7 +4,7 @@
 
   function PhotoReportListController(Schema, Helpers, $scope, SalesmanAuth, GalleryHelper) {
 
-    const {PhotoReport, Outlet, Campaign} = Schema.models();
+    const {PhotoReport, Outlet, Campaign, CampaignGroup} = Schema.models();
     const {saControllerHelper, toastr} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -32,6 +32,7 @@
       let filter = SalesmanAuth.makeFilter(sort);
 
       let q = [
+        CampaignGroup.findAll(),
         Campaign.findAll(),
         Outlet.findAll(Outlet.meta.salesmanFilter(filter))
           .then(() => {
@@ -40,7 +41,7 @@
       ];
 
       vm.setBusy(q);
-      vm.rebindAll(PhotoReport, {}, 'vm.data');
+      vm.rebindAll(PhotoReport, {orderBy: [['deviceCts', 'DESC']]}, 'vm.data');
 
     }
 
