@@ -1,0 +1,74 @@
+@import "../../../styles/variables";
+
+make-photo-report {
+
+  .popover {
+    min-width: 300px;
+    max-width: 350px;
+    right: 0;
+    overflow-y: hidden;
+  }
+
+  photo-report-form {
+
+    display: block;
+
+    .photo-report-form {
+
+      display: flex;
+      flex-direction: column;
+
+      label {
+        margin: 0;
+        color: $gray;
+        font-size: 75%;
+      }
+
+      > a {
+        display: block;
+        text-align: left;
+        margin-bottom: 10px;
+      }
+
+      > * {
+        margin-bottom: 15px;
+      }
+
+      choice-list {
+        margin-top: -5px;
+        .title {
+          margin-bottom: 15px;
+        }
+        flex: 1;
+      }
+
+      .photo {
+        margin-top: 5px;
+        text-align: right;
+      }
+
+      make-photo ng-transclude {
+
+        background-color: $primary-color;
+        color: $white;
+        padding: 8px 10px;
+        border: solid 1px;
+        border-radius: 6px;
+
+        i {
+          margin-right: 10px;
+          font-size: 120%;
+          top: 3px;
+        }
+
+      }
+
+      button.btn-success {
+        display: block;
+        width: 100%;
+      }
+
+    }
+  }
+
+}

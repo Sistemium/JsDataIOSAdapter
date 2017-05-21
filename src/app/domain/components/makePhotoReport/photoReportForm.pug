@@ -1,0 +1,64 @@
+form.photo-report-form(
+name='photoReportForm'
+resize resize-offset-top='50' resize-property='height'
+)
+
+  a.campaign(
+  href
+  ng-show='!vm.showOutletList && !vm.showCampaignList'
+  ng-click='vm.chooseCampaignClick()'
+  )
+    .no-campaign(ng-if='!vm.photoReport.campaign') Выберите акцию
+    label(ng-if='vm.photoReport.campaign') Акция:
+    .name {{ vm.photoReport.campaign.name }}
+    .address
+      small.gray {{ vm.photoReport.campaign.campaignGroup.name }}
+
+
+  a.outlet(
+  href
+  ng-show='!vm.showOutletList && !vm.showCampaignList'
+  ng-click='vm.chooseOutletClick()'
+  )
+    .no-outlet(ng-if='!vm.photoReport.outlet') Выберите точку
+    label(ng-if='vm.photoReport.campaign') Точка:
+    .name {{ vm.photoReport.outlet.name }}
+    .address
+      small.gray {{ vm.photoReport.outlet.address }}
+
+
+  choice-list(
+  ng-if='vm.showCampaignList'
+  data-title='Выберите Акцию'
+  options='vm.campaigns' on-click='vm.chooseCampaignClick' choice-id='vm.photoReport.campaignId'
+  )
+
+  choice-list(
+  ng-if='vm.showOutletList'
+  data-title='Выберите Точку'
+  options='vm.outlets' on-click='vm.chooseOutletClick' choice-id='vm.photoReport.outletId'
+  )
+
+  .photo(ng-if='!vm.showOutletList && !vm.showCampaignList && vm.photoReport.outlet && vm.photoReport.campaign')
+
+    make-photo(
+    model='vm.photoReport'
+    ng-show='!vm.photoReport.id'
+    model-name='PhotoReport'
+    )
+      i.glyphicon.glyphicon-camera
+      span Добавить фото
+
+    .thumb(ng-if='vm.photoReport.id')
+      loading-circle(ng-if='!vm.photoReport.srcThumbnail')
+      img(ng-src='{{vm.photoReport.srcThumbnail}}' ng-if='vm.photoReport.srcThumbnail')
+      a.remove(
+      href ng-click='vm.deletePhotoClick()'
+      aria-label='Удалить фото'
+      )
+        i.glyphicon.glyphicon-remove
+
+    input(type='hidden' ng-model='vm.photoReport.id' required)
+
+  .buttons(ng-if='vm.photoReport.id')
+    button.btn.btn-success(ng-click='vm.onSubmit()') Готово
