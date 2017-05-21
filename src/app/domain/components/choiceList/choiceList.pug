@@ -1,0 +1,33 @@
+.choice-list
+
+  .title(ng-if='vm.title') {{ vm.title }}
+
+  .stm-searcher.form-group.has-feedback
+
+    label(for='search-choice-list')
+      i.glyphicon.glyphicon-search
+
+    input#search-choice-list.form-control(
+    type='search'
+    placeholder='Поиск'
+    ng-model='vm.search'
+    select-on-focus
+    auto-focus='select'
+    )
+
+    span.form-control-feedback(ng-hide='!vm.search' )
+      a(href ng-click='vm.search=""')
+        i.glyphicon.glyphicon-remove
+
+  .scroll-y#choice-list-root
+    .options(
+    vs-repeat vs-scroll-parent='#choice-list-root'
+    )
+      .option(
+      ng-repeat='option in vm.options | filter:vm.search track by option.id'
+      ng-class='{active: vm.choiceId === option.id, blocked: option.isActive === false}'
+      )
+        a(href ng-click='vm.optionClick(option)')
+          .name {{ ::option.name }}
+          .gray.address
+            small {{ ::option.address }}
