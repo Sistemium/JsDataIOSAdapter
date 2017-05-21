@@ -10,6 +10,19 @@
     margin-bottom: $padding*2;
   }
 
+  .buttons {
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    > * {
+      display: inline-block;
+    }
+
+  }
+
   .photo-report {
 
     @extend %flex-row;
@@ -18,12 +31,16 @@
     align-items: center;
     position: relative;
 
-    .thumb img {
+    .thumb {
 
-      max-height: $thumb-side;
-      max-width: $thumb-side;
-      min-height: $thumb-side;
-      min-width: $thumb-side;
+      img {
+
+        max-height: $thumb-side;
+        max-width: $thumb-side;
+        min-height: $thumb-side;
+        min-width: $thumb-side;
+
+      }
 
     }
 
@@ -49,6 +66,12 @@
       position: absolute;
       top: 5px;
       right: 0;
+
+      .remove {
+        margin-right: 10px;
+        color: $red;
+      }
+
     }
   }
 

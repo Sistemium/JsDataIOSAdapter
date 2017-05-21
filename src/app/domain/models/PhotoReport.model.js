@@ -32,7 +32,7 @@
 
       methods: {
         title: function() {
-          return `${this.outlet.name} - ${this.outlet.address}`;
+          return `${this.outlet.name} (${this.outlet.address})`;
         }
       }
 

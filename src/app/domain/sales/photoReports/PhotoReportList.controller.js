@@ -11,7 +11,8 @@
       .use(GalleryHelper)
       .use({
         addItemClick,
-        thumbClick
+        thumbClick,
+        deleteClick
       });
 
     SalesmanAuth.watchCurrent($scope, refresh);
@@ -19,6 +20,10 @@
     /*
      Functions
      */
+
+    function deleteClick(picture) {
+      PhotoReport.destroy(picture);
+    }
 
     function thumbClick(picture) {
 
