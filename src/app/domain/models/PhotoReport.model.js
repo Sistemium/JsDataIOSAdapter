@@ -28,6 +28,12 @@
             localKey: 'salesmanId'
           }
         }
+      },
+
+      methods: {
+        title: function() {
+          return `${this.outlet.name} - ${this.outlet.address}`;
+        }
       }
 
     });

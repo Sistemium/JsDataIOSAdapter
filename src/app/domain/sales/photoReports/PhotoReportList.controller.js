@@ -10,7 +10,8 @@
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
       .use({
-        addItemClick
+        addItemClick,
+        thumbClick
       });
 
     SalesmanAuth.watchCurrent($scope, refresh);
@@ -18,6 +19,15 @@
     /*
      Functions
      */
+
+    function thumbClick(picture) {
+
+      vm.commentText = picture.campaign.name;
+      $scope.imagesAll = vm.data;
+
+      return vm.thumbnailClick(picture);
+
+    }
 
     function addItemClick() {
       toastr.info('Добавить Фото-отчет');

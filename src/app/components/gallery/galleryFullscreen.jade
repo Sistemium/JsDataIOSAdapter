@@ -30,9 +30,9 @@
       )
 
     .image-info
-      p.name(ng-if='vm.currentImage.name')
+      p.name(ng-if='vm.currentImage.name || vm.currentImage.title')
 
-        span {{ vm.currentImage.name }}
+        span {{ vm.currentImage.name || vm.currentImage.title() }}
         span &nbsp;
         a.commentText(
         href
