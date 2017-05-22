@@ -1,6 +1,5 @@
-form.photo-report-form(
+.form.photo-report-form(
 name='photoReportForm'
-resize resize-offset-top='50' resize-property='height'
 )
 
   a.campaignGroup(
@@ -32,24 +31,6 @@ resize resize-offset-top='50' resize-property='height'
     .address
       small.gray {{ vm.photoReport.outlet.address }}
 
-  choice-list(
-  ng-if='vm.showCampaignGroupList'
-  data-title='Выберите Акцию' order-by='-name'
-  options='vm.campaignGroups' on-click='vm.chooseCampaignGroupClick' choice-id='vm.campaignGroupId'
-  )
-
-  choice-list(
-  ng-if='vm.showCampaignList'
-  data-title='Выберите Акцию' first-name='title'
-  options='vm.campaigns' on-click='vm.chooseCampaignClick' choice-id='vm.photoReport.campaignId'
-  )
-
-  choice-list(
-  ng-if='vm.showOutletList'
-  data-title='Выберите Точку'
-  options='vm.outlets' on-click='vm.chooseOutletClick' choice-id='vm.photoReport.outletId'
-  )
-
   .photo(ng-if='!vm.listShown && vm.photoReport.outlet && vm.photoReport.campaign')
 
     make-photo(
@@ -73,3 +54,21 @@ resize resize-offset-top='50' resize-property='height'
 
   .buttons(ng-if='vm.photoReport.id')
     button.btn.btn-success(ng-click='vm.onSubmit()') Готово
+
+  choice-list(
+  ng-if='vm.showCampaignGroupList'
+  data-title='Выберите период акций' order-by='-name'
+  options='vm.campaignGroups' on-click='vm.chooseCampaignGroupClick' choice-id='vm.campaignGroupId'
+  )
+
+  choice-list(
+  ng-if='vm.showCampaignList'
+  data-title='Выберите Акцию' first-name='title'
+  options='vm.campaigns' on-click='vm.chooseCampaignClick' choice-id='vm.photoReport.campaignId'
+  )
+
+  choice-list(
+  ng-if='vm.showOutletList'
+  data-title='Выберите Точку'
+  options='vm.outlets' on-click='vm.chooseOutletClick' choice-id='vm.photoReport.outletId'
+  )

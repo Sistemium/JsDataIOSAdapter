@@ -4,10 +4,16 @@
 make-photo-report {
 
   .popover {
-    min-width: 300px;
+
+    min-width: 290px;
     max-width: 350px;
-    right: 0;
     overflow-y: hidden;
+
+    @include responsive-only(xxs) {
+      max-width: 280px;
+      min-width: 280px;
+    }
+
   }
 
   photo-report-form {
@@ -16,8 +22,12 @@ make-photo-report {
 
     .photo-report-form {
 
-      display: flex;
-      flex-direction: column;
+      //display: flex;
+      //flex-direction: column;
+      //justify-content: flex-start;
+      position: relative;
+      height: 100%;
+      width: 100%;
 
       label {
         margin: 0;
@@ -40,11 +50,19 @@ make-photo-report {
       }
 
       choice-list {
-        margin-top: -5px;
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin-bottom: 0;
+        flex: 1;
+
         .title {
           margin-bottom: 15px;
         }
-        flex: 1;
+
       }
 
       .photo {
