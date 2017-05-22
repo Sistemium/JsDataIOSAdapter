@@ -34,13 +34,13 @@ resize resize-offset-top='50' resize-property='height'
 
   choice-list(
   ng-if='vm.showCampaignGroupList'
-  data-title='Выберите Акцию'
+  data-title='Выберите Акцию' order-by='-name'
   options='vm.campaignGroups' on-click='vm.chooseCampaignGroupClick' choice-id='vm.campaignGroupId'
   )
 
   choice-list(
   ng-if='vm.showCampaignList'
-  data-title='Выберите Акцию'
+  data-title='Выберите Акцию' first-name='title'
   options='vm.campaigns' on-click='vm.chooseCampaignClick' choice-id='vm.photoReport.campaignId'
   )
 

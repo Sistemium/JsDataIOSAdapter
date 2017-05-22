@@ -11,8 +11,13 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
       //)
 
     .buttons.col-sm-4.col-md-3
-      a.btn.btn-link.edit-toggler(href ng-click='vm.editing = !vm.editing' ng-if='vm.data.length')
+
+      a.btn.btn-link.edit-toggler(
+      href ng-click='vm.editing = !vm.editing'
+      ng-class='{disabled: !vm.data.length}'
+      )
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+
       make-photo-report
 
   #scroll-main.scroll-y(
@@ -33,7 +38,7 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
           .address
             small.gray {{ item.outlet.address }}
 
-        .campaign {{ item.campaign.title }} {{ item.campaignGroup.name }}
+        .campaign {{ item.campaign.title }} ({{ item.campaign.campaignGroup.shortName }})
         .deviceCts
 
           a.remove(
