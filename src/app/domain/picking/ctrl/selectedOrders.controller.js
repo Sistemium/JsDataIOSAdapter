@@ -40,7 +40,10 @@
 
       startPicking,
       finishPicking,
-      pausePicking
+      pausePicking,
+      getWeighing,
+
+      shouldWeighing: WeighingService.shouldWeighing
 
     });
 
@@ -86,6 +89,23 @@
 
     }
 
+    function getWeighing() {
+
+      return getWeight()
+        .then((weight) => {
+
+          PSW.save(
+            PSW.inject({
+              pickingSessionId: vm.pickingSession.id,
+              weight: weight
+            })
+          );
+
+        })
+      ;
+
+    }
+
     function getWeight() {
 
       //TODO: have to show spinner while weighing
@@ -98,8 +118,6 @@
           }
 
           return confirmWeighingModal(response.data.weight);
-
-          // return response.data.weight;
 
         })
       ;
@@ -115,7 +133,7 @@
           return weight;
         })
       ;
-      
+
     }
 
     function weighingError() {
