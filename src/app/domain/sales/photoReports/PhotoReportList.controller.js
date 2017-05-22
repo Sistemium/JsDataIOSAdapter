@@ -1,6 +1,6 @@
 (function (module) {
 
-  module('Sales').controller('PhotoReportListController', PhotoReportListController);
+  module.controller('PhotoReportListController', PhotoReportListController);
 
   function PhotoReportListController(Schema, Helpers, $scope, SalesmanAuth, GalleryHelper, Sockets) {
 
@@ -77,4 +77,4 @@
 
   }
 
-})(angular.module);
+})(angular.module('Sales'));
