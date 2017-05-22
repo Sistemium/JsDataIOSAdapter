@@ -45,23 +45,15 @@
 
     function titleFn(name) {
 
-      let nameArr = name.split(' ');
+      let title = _.last(name.match(/[^ ]+ (.*)/)) || name;
 
-      let regExp = new RegExp(getTeamName(name, 'i'));
-
-      _.each(nameArr, function (item, idx) {
-        if (item.match(regExp)) {
-          nameArr = nameArr.slice(idx + 1);
-          return false;
-        }
-      });
-
-      return _.upperFirst(nameArr.join(' '));
+      return _.upperFirst(title);
 
     }
 
     function getTeamName(name) {
-      return _.first(name.match(/[^.| ! :]+/));
+      let res = _.first(name.match(/^[^ ]+/)) || 'Прочее';
+      return _.replace(res, /[^A-я]/g, '') || 'Прочее';
     }
 
 
