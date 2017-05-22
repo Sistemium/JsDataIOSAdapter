@@ -93,14 +93,7 @@
 
       return getWeight()
         .then((weight) => {
-
-          PSW.save(
-            PSW.inject({
-              pickingSessionId: vm.pickingSession.id,
-              weight: weight
-            })
-          );
-
+          createPickingSessionWeighing(weight);
         })
       ;
 
@@ -185,16 +178,7 @@
       PS.save(vm.pickingSession)
         .then(() => {
 
-          if (vm.shouldWeighing()) {
-
-            PSW.save(
-              PSW.inject({
-                pickingSessionId: vm.pickingSession.id,
-                weight: weight
-              })
-            );
-
-          }
+          createPickingSessionWeighing(weight);
 
           _.forEach(vm.selectedItems, po => {
             POS.save(
@@ -213,6 +197,21 @@
 
         })
       ;
+
+    }
+
+    function createPickingSessionWeighing(weight) {
+
+      if (vm.shouldWeighing()) {
+
+        PSW.save(
+          PSW.inject({
+            pickingSessionId: vm.pickingSession.id,
+            weight: weight
+          })
+        );
+
+      }
 
     }
 
@@ -276,17 +275,7 @@
 
           console.info('weighing success', weight);
 
-          if (vm.shouldWeighing()) {
-
-            PSW.save(
-              PSW.inject({
-                pickingSessionId: vm.pickingSession.id,
-                weight: weight
-              })
-            );
-
-          }
-
+          createPickingSessionWeighing(weight);
           selectedItemProcessing(processing);
 
         })
