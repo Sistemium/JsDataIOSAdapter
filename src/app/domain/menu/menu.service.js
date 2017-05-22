@@ -54,7 +54,8 @@
     }, {
       title: 'Фотопоток',
       state: 'photos.stream',
-      needRoles: SALES_ROLES
+      // needRoles: SALES_ROLES
+      // needRoles: ['admin', 'tester']
     }, {
       title: 'Предзаказы',
       state: 'sales.prePreOrders',
