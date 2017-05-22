@@ -59,18 +59,14 @@
 
     function refresh() {
 
-      let sort = {
-        orderBy: ['ts']
-      };
-
-      let filter = SalesmanAuth.makeFilter(sort);
+      let filter = SalesmanAuth.makeFilter();
 
       let q = [
         CampaignGroup.findAll(),
         Campaign.findAll(),
         Outlet.findAll(Outlet.meta.salesmanFilter(filter))
           .then(() => {
-            return PhotoReport.findAllWithRelations(filter, {bypassCache: true})(['Outlet']);
+            return PhotoReport.findAllWithRelations({}, {bypassCache: true})(['Outlet']);
           })
       ];
 
