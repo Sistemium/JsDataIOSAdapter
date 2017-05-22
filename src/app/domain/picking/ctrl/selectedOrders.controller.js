@@ -74,21 +74,7 @@
         text: text
       })
         .then(() => {
-
-          //TODO: have to show spinner while weighing
-
-          return WeighingService.weighing()
-            .then((response) => {
-
-              if (response.status !== 200) {
-                return weighingError();
-              }
-
-              return response.data.weight;
-
-            })
-            ;
-
+          return getWeight();
         })
         .catch(err => {
 
@@ -96,8 +82,40 @@
           return weighingError();
 
         })
-        ;
+      ;
 
+    }
+
+    function getWeight() {
+
+      //TODO: have to show spinner while weighing
+
+      return WeighingService.weighing()
+        .then((response) => {
+
+          if (response.status !== 200) {
+            return weighingError();
+          }
+
+          return confirmWeighingModal(response.data.weight);
+
+          // return response.data.weight;
+
+        })
+      ;
+
+    }
+
+    function confirmWeighingModal(weight) {
+
+      return ConfirmModal.show({
+        text: `Вес: ${weight} кг. Записать?`
+      })
+        .then(() => {
+          return weight;
+        })
+      ;
+      
     }
 
     function weighingError() {
