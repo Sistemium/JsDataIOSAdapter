@@ -58,7 +58,7 @@
 
     function weighing() {
 
-      if (!WeighingService.shouldWeighing()) return $q.resolve(-1);
+      if (!vm.shouldWeighing()) return $q.resolve(-1);
 
       return weighingModalWithText('Взвесить тележку?')
         .then((data) => {
@@ -185,7 +185,7 @@
       PS.save(vm.pickingSession)
         .then(() => {
 
-          if (WeighingService.shouldWeighing()) {
+          if (vm.shouldWeighing()) {
 
             PSW.save(
               PSW.inject({
@@ -276,7 +276,7 @@
 
           console.info('weighing success', weight);
 
-          if (WeighingService.shouldWeighing()) {
+          if (vm.shouldWeighing()) {
 
             PSW.save(
               PSW.inject({
