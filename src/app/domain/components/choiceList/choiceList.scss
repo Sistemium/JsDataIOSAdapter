@@ -34,6 +34,12 @@ choice-list {
         }
       }
 
+      .option {
+        .name, .address {
+          @extend .ellipsis;
+        }
+      }
+
     }
 
   }

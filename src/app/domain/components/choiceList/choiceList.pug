@@ -24,10 +24,10 @@
     vs-repeat vs-scroll-parent='#choice-list-root'
     )
       .option(
-      ng-repeat='option in vm.options | filter:vm.search track by option.id'
-      ng-class='{chosen: vm.choiceId === option.id, blocked: option.isActive === false}'
+      ng-repeat='option in vm.options | orderBy:vm.orderBy | filter:vm.search track by option.id'
+      ng-class='{chosen: vm.choiceId === option.id}'
       )
         a(href ng-click='vm.optionClick(option)')
-          .name {{ ::option.name }}
+          .name {{ ::option[vm.firstName] }}
           .gray.address
-            small {{ ::option.address }}
+            small {{ ::option[vm.smallName] }}

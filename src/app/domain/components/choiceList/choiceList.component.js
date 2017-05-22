@@ -8,7 +8,10 @@
       title: '@',
       choiceId: '=',
       options: '<',
-      onClick: '='
+      onClick: '=',
+      firstName: '@',
+      smallName: '@',
+      orderBy: '@'
     },
 
     controller: choiceListController,
@@ -34,6 +37,9 @@
 
     function $onInit() {
       console.log(vm);
+      vm.firstName = vm.firstName || 'name';
+      vm.smallName = vm.smallName || 'address';
+      vm.orderBy = vm.orderBy || vm.firstName;
     }
 
   }
