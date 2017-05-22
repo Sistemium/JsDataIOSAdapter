@@ -2,7 +2,7 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
 
   .filters.row
 
-    .col-md-9.col-sm-8
+    .col-sm-7.col-md-8.col-lg-9
 
       //sab-date-picker.col-sm-4.col-lg-3(
       //value='vm.date'
@@ -10,15 +10,16 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
       //clear-text='Сегодня'
       //)
 
-    .buttons.col-sm-4.col-md-3
+    .col-sm-5.col-md-4.col-lg-3
+      .buttons
 
-      a.btn.btn-link.edit-toggler(
-      href ng-click='vm.editing = !vm.editing'
-      ng-class='{disabled: !vm.data.length}'
-      )
-        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+        a.btn.btn-link.edit-toggler(
+        href ng-click='vm.editing = !vm.editing'
+        ng-class='{disabled: !vm.data.length}'
+        )
+          i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
-      make-photo-report(is-popover-open='vm.isPopoverOpen')
+        make-photo-report(is-popover-open='vm.isPopoverOpen')
 
   #scroll-main.scroll-y(
   resize

@@ -1,6 +1,9 @@
 .choice-list
 
-  .title(ng-if='vm.title') {{ vm.title }}
+  .title(ng-if='vm.title')
+    a.btn.btn-link(href ng-click='vm.optionClick()')
+      i.glyphicon.glyphicon-arrow-left
+    span {{ vm.title }}
 
   .stm-searcher.form-group.has-feedback
 

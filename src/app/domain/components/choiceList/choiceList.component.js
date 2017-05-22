@@ -24,22 +24,30 @@
   function choiceListController() {
 
     const vm = _.assign(this, {
+
       optionClick,
       $onInit
+
     });
 
     function optionClick(option) {
-      vm.choiceId = option.id;
+
+      if (option) {
+        vm.choiceId = option.id;
+      }
+
       if (_.isFunction(vm.onClick)) {
         vm.onClick(option);
       }
+
     }
 
     function $onInit() {
-      console.log(vm);
+
       vm.firstName = vm.firstName || 'name';
       vm.smallName = vm.smallName || 'address';
       vm.orderBy = vm.orderBy || vm.firstName;
+
     }
 
   }
