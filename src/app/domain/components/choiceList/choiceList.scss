@@ -28,9 +28,10 @@ choice-list {
       min-height: 0;
       flex: 1 1 auto;
 
-      .option.active a {
-        @extend a.disabled;
-        color: $primary-color;
+      .option.chosen {
+        a {
+          font-weight: bold;
+        }
       }
 
     }

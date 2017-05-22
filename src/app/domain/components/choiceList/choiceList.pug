@@ -25,7 +25,7 @@
     )
       .option(
       ng-repeat='option in vm.options | filter:vm.search track by option.id'
-      ng-class='{active: vm.choiceId === option.id, blocked: option.isActive === false}'
+      ng-class='{chosen: vm.choiceId === option.id, blocked: option.isActive === false}'
       )
         a(href ng-click='vm.optionClick(option)')
           .name {{ ::option.name }}

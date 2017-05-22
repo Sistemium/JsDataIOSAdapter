@@ -32,7 +32,8 @@
       onSubmit,
       deletePhotoClick,
       chooseOutletClick,
-      chooseCampaignClick
+      chooseCampaignClick,
+      chooseCampaignGroupClick
 
 
     });
@@ -45,18 +46,26 @@
      Functions
      */
 
+    function chooseCampaignGroupClick(campaignGroup) {
+      if (campaignGroup && campaignGroup.id !== vm.campaignGroupId) {
+        vm.photoReport.campaignId = null;
+        vm.campaignGroupId = campaignGroup.id;
+      }
+      vm.listShown = vm.showCampaignGroupList = !vm.showCampaignGroupList;
+    }
+
     function chooseCampaignClick(campaign) {
       if (campaign) {
         vm.photoReport.campaign = campaign;
       }
-      vm.showCampaignList = !vm.showCampaignList;
+      vm.listShown = vm.showCampaignList = !vm.showCampaignList;
     }
 
     function chooseOutletClick(outlet) {
       if (outlet) {
         vm.photoReport.outlet = outlet;
       }
-      vm.showOutletList = !vm.showOutletList;
+      vm.listShown = vm.showOutletList = !vm.showOutletList;
     }
 
     function onJSData(event) {
@@ -114,6 +123,7 @@
       CampaignGroup.findAll()
         .then(groups => {
 
+          vm.campaignGroups = groups;
           vm.campaignGroupId = localStorageService.get(`${LOCAL_STORAGE_KEY}.campaignGroupId`);
 
           if (!vm.campaignGroupId) {
@@ -124,6 +134,7 @@
           $scope.$watch('vm.campaignGroupId', campaignGroupId => {
             Campaign.findAll({campaignGroupId})
               .then(campaigns => vm.campaigns = campaigns);
+            vm.campaignGroup = CampaignGroup.get(campaignGroupId);
           });
 
         });

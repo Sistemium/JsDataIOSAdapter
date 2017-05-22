@@ -16,9 +16,24 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+    text-align: right;
 
     > * {
-      display: inline-block;
+      display: block;
+    }
+
+    .edit-toggler {
+      i {
+        top: 3px;
+      }
+    }
+
+    make-photo-report {
+      flex: 1;
+      .make-photo-report {
+        display: block;
+        width: 100%;
+      }
     }
 
   }
@@ -70,6 +85,8 @@
       .remove {
         margin-right: 10px;
         color: $red;
+        position: relative;
+        top: 1px;
       }
 
     }

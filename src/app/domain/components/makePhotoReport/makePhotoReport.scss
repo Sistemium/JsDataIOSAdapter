@@ -34,6 +34,15 @@ make-photo-report {
         margin-bottom: 15px;
       }
 
+      .not-chosen {
+        background-color: $primary-color;
+        border: solid 1px #258fbf;
+        color: $white;
+        text-align: center;
+        padding: 6px;
+        border-radius: 6px;
+      }
+
       choice-list {
         margin-top: -5px;
         .title {
