@@ -123,7 +123,10 @@
       CampaignGroup.findAll()
         .then(groups => {
 
-          vm.campaignGroups = groups;
+          vm.campaignGroups = _.filter(groups, campaignGroup => {
+            return moment().isAfter(campaignGroup.dateB) && moment().add(-90, 'days').isBefore(campaignGroup.dateE);
+          });
+
           vm.campaignGroupId = localStorageService.get(`${LOCAL_STORAGE_KEY}.campaignGroupId`);
 
           if (!vm.campaignGroupId) {
