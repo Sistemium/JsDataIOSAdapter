@@ -5,7 +5,7 @@
   module.component('makePhotoReport', {
 
     bindings: {
-      // isPopoverOpen: '='
+      isPopoverOpen: '='
     },
 
     templateUrl: 'app/domain/components/makePhotoReport/makePhotoReport.html',

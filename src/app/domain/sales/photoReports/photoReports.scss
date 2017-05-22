@@ -2,6 +2,11 @@
 
 .photo-report-list {
 
+
+  [disabled] {
+    @extend %disabled;
+  }
+
   $thumb-side: 90px;
   $padding: 5px;
   $small: 85%;
@@ -26,6 +31,7 @@
       i {
         top: 3px;
       }
+      margin-right: 10px;
     }
 
     make-photo-report {
