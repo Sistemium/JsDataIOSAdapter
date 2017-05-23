@@ -41,10 +41,19 @@
 
       vm.busy = OutletSalesmanContract.findAllWithRelations(filter)()
         .then(res => {
+
           vm.currentOption = _.find(res, {contractId: vm.saleOrder.contractId});
-          if (res.length && !vm.currentOption) {
-            optionClick(res[0]);
+
+          if (vm.currentOption) return;
+
+          if (res.length === 1) {
+            return optionClick(res[0]);
           }
+
+          vm.saleOrder.contractId = null;
+          vm.saleOrder.priceTypeId = null;
+          vm.isOpen = true;
+
         })
         .finally(() => vm.busy = false);
 
@@ -53,6 +62,7 @@
     }
 
     function optionClick(osc) {
+      vm.isOpen = false;
       vm.currentOption = osc;
       vm.saleOrder.contractId = osc.contractId;
       vm.saleOrder.priceTypeId = osc.priceTypeId;

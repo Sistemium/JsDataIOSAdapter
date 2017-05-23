@@ -448,12 +448,8 @@
           return;
         }
 
-        let contractDiscount = _.first(byArticleId[articleId]) ||
-          _.first(byPriceGroup[_.get(article, 'priceGroupId')]);
-
-        if (!contractDiscount) return;
-
-        let {discount} = contractDiscount;
+        let discount = _.get(_.first(byArticleId[articleId]), 'discount') ||
+          _.get(_.first(byPriceGroup[_.get(article, 'priceGroupId')]), 'discount');
 
         if (!discount) return;
 
