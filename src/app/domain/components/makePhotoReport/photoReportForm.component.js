@@ -93,17 +93,18 @@
     function onSubmit() {
 
       let {photoReport} = vm;
+      vm.onSubmitFn(photoReport);
 
-      _.assign(photoReport, {
-        processing: 'upload'
-      });
-
-      PhotoReport.save(photoReport)
-        .then(saved => {
-          if (_.isFunction(vm.onSubmitFn)) {
-            vm.onSubmitFn(saved)
-          }
-        });
+      // _.assign(photoReport, {
+      //   processing: 'upload'
+      // });
+      //
+      // PhotoReport.save(photoReport)
+      //   .then(saved => {
+      //     if (_.isFunction(vm.onSubmitFn)) {
+      //       vm.onSubmitFn(saved)
+      //     }
+      //   });
     }
 
     const DEFAULT_FIELDS = ['campaignId', 'outletId'];
