@@ -1,0 +1,24 @@
+.detailed-view
+  .news-item
+    .line-1
+      label.subject {{vm.news.subject}}
+      valid-lifetime(date-b='vm.news.dateB' date-e='vm.news.dateE' ng-if='vm.news.dateE || vm.news.dateB')
+    .line-2
+      .news-body.scroll-y(resize resize-offset-top='60')
+        p {{vm.news.body}}
+    .line-3
+
+      // TODO: Show if user has admin/editor? rights
+      button.btn-warning.btn.glyphicon.glyphicon-pencil(ng-click='vm.editNews()')
+
+      .rating
+        label Оценка:
+        span(
+        uib-rating
+        ng-model='vm.rating' /* vm.news.rating */,
+        max='5'
+        on-hover='hoveringOver(value)'
+        on-leave='overStar = null'
+        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+        aria-labelledby="default-rating"
+        )

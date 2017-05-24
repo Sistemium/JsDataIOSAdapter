@@ -66,7 +66,7 @@
           }, {
             name: 'detailed',
             url: '/:id',
-            templateUrl: 'app/domain/newsFeed/createAndEditNews.html',
+            templateUrl: 'app/domain/newsFeed/detailedView.html',
             controller: 'NewsFeedController',
             controllerAs: 'vm',
 
@@ -74,7 +74,20 @@
               title: 'Новость'
             }
 
-          }]
+          }, {
+            name: 'edit',
+            url: '/:id/edit',
+            templateUrl: 'app/domain/newsFeed/createAndEditNews.html',
+            controller: 'NewsFeedController',
+            controllerAs: 'vm',
+
+            data: {
+              title: 'Редактирование новости'
+            }
+
+          }
+
+          ]
 
 
         });
