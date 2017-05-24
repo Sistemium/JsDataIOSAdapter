@@ -17,8 +17,9 @@
       clearForm,
       regExForCurrVersion: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
       rating: 5,
-      //ref
-      testHasChanges,
+      editNews,
+      updateNews,
+      newsHasChanges,
       revertChanges
     });
 
@@ -36,19 +37,17 @@
 
       vm.currentState = to.name.split('.')[1] || to.name;
 
-      if (params && to.name === 'newsFeed.detailed') {
+      if (params && (vm.currentState === 'edit' || vm.currentState === 'detailed')) {
+
         NewsMessage.find(params.id).then((news) => {
           vm.news = news;
-          vm.currVersion = vm.news.appVersion;
         }).catch((e) => {
           if (e.error === 404) {
-            toastr.error('Ошибка. Новость не найдена', {timeOut: 30000});
+            toastr.error('Ошибка. Новость не найдена', {timeOut: 5000});
           } else {
-            toastr.error('Ошибка сервера', {timeOut: 30000});
+            toastr.error('Ошибка сервера', {timeOut: 5000});
           }
         });
-
-        autoresizeTextarea();
 
       } else if (to.name === 'newsFeed') {
         vm.setBusy(
@@ -60,8 +59,8 @@
         }).catch(e => console.error(e));
 
       } else if (to.name === 'newsFeed.create') {
-        vm.currVersion = saApp.version();
-        delete vm.news;
+        vm.news = {};
+        vm.news.appVersion = saApp.version();
       }
 
     }
@@ -79,26 +78,33 @@
       delete vm.news;
     }
 
-    function autoresizeTextarea() {
-
-      //TODO: refactor
-
-      angular.element(document).ready(function () {
-
-        vm.formHeight = document.documentElement.clientHeight - document.getElementsByClassName('create-and-edit-news ng-scope')[0].clientHeight;
-
-        document.getElementsByTagName('textarea')[0].style.height = vm.formHeight + 'px';
-
-      });
-    }
-
-    function testHasChanges() {
-      console.log('fired');
+    function newsHasChanges() {
       return NewsMessage.hasChanges($state.params.id);
     }
 
     function revertChanges() {
       NewsMessage.revert($state.params.id);
+    }
+
+    function editNews() {
+      $state.go('^.edit', {id: $state.params.id});
+    }
+
+    function updateNews() {
+
+      vm.news.id = $state.params.id;
+
+      NewsMessage.create(vm.news).then(() => {
+
+        toastr.success('Новость обновлена', {timeOut: 3000});
+
+      }).catch((e) => {
+        console.error(e);
+        if (e) {
+          toastr.error('Новость не обновлена', {timeOut: 5000});
+        }
+      })
+
     }
 
     function submitNews() {
@@ -108,7 +114,7 @@
         'subject': vm.news.subject,
         'dateB': vm.news.dateB,
         'dateE': vm.news.dateE,
-        'appVersion': vm.currVersion
+        'appVersion': vm.news.appVersion
       };
 
       NewsMessage.create(vm.newNews).then(() => {
@@ -120,7 +126,7 @@
       }).catch((e) => {
         console.error(e);
         if (e) {
-          toastr.error('Новость не сохранена', {timeOut: 50000});
+          toastr.error('Новость не сохранена', {timeOut: 5000});
         }
       })
 
