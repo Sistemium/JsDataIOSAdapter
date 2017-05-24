@@ -6,6 +6,10 @@
     margin: 10px 0;
     border-radius: 9px;
 
+    @media (max-width: $screen-xs) {
+      margin: 5px 0;
+    }
+
     span#helpBlock3, #helpBlock4, #helpBlock5 {
       margin-bottom: 0;
       text-align: right;
@@ -16,8 +20,16 @@
 
   }
 
+  //.duration {
+  //  height: 141px;
+  //}
+  //
+  //.version {
+  //  height: 102px;
+  //}
+
   .warning {
-    textarea, label {
+    textarea, label, span {
       color: #a94442;
     }
 
@@ -27,7 +39,6 @@
     }
 
   }
-
 
   .date-pickers {
 
@@ -60,27 +71,59 @@
 
   }
 
-  .subject {
-    span#helpBlock {
-      margin-bottom: 0;
-      text-align: right;
-    }
-  }
+  form {
 
-  .text {
-    textarea {
-      resize: none;
-    }
-    span#helpBlock2 {
-      margin-bottom: 0;
-      text-align: right;
-    }
-  }
-
-  button.btn.btn-primary {
     display: flex;
-    margin-left: auto;
+    flex-flow: column nowrap;
+
+    .subject {
+      //height: 102px;
+      span#helpBlock {
+        margin-bottom: 0;
+        text-align: right;
+      }
+    }
+
+    .text {
+      //min-height: 177px;
+      textarea {
+        resize: vertical;
+        min-height: 138px;
+      }
+
+      textarea::-webkit-scrollbar {
+        display: inherit;
+      }
+
+      span#helpBlock2 {
+        margin-bottom: 0;
+        text-align: right;
+      }
+    }
+    .button-block {
+
+      display: flex;
+      margin: 5px 0;
+      flex-flow: row nowrap;
+      justify-content: flex-end;
+      button.btn.btn-primary {
+        margin: 0 5px;
+        @media (max-width: $screen-xs) {
+          flex: 1;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+      }
+
+      button.btn.btn-primary:last-of-type {
+        margin-right: 0;
+      }
+    }
+
   }
+
 }
 
 .news-feed {
@@ -127,6 +170,9 @@
 
         .subject {
           font-size: 130%;
+          @extend .ellipsis;
+          flex: 1;
+          margin-right: 10px;
 
           @media (max-width: $screen-xs) {
             font-size: 105%;
@@ -193,6 +239,81 @@
       .news-body {
         p:after {
           background-color: darken(#f5f5f5, 5%);
+        }
+      }
+
+    }
+
+  }
+}
+
+.detailed-view {
+
+  .news-item {
+    outline: none;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 9px;
+
+    .line-1 {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+      align-items: center;
+
+      valid-lifetime {
+        margin-left: auto;
+      }
+
+      .subject {
+        margin-bottom: 0;
+        font-size: 130%;
+
+        @media (max-width: $screen-xs) {
+          font-size: 120%;
+          margin-right: 10px;
+        }
+
+      }
+
+    }
+
+    .line-2 {
+
+      margin: 10px 0;
+
+      .news-body {
+        p {
+          margin: 5px 10px;
+          line-height: 1.5em;
+          text-align: justify;
+          white-space: pre-line;
+        }
+      }
+    }
+
+    .line-3 {
+      height: 30px;
+      justify-content: space-between;
+      display: flex;
+      align-items: baseline;
+
+      button {
+        padding: 3px 5px;
+      }
+
+      .rating {
+        label {
+          margin-bottom: 0;
+        }
+        span {
+          cursor: pointer;
+          padding-top: 7px;
+          color: #2768b7;
+          margin-left: 2px;
+          i {
+            top: 0;
+          }
         }
       }
 
