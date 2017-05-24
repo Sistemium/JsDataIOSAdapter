@@ -1,8 +1,3 @@
-//.test(style='height: 300px; overflow: scroll')
-//  pre {{vm | json}}
-
-p {{vm.currentState}}
-
 .ui-view(cg-busy='{promise: vm.busy, message: "Загрузка новостей"}')
   .news-feed(ng-if='!vm.busy')
     .news
@@ -14,7 +9,7 @@ p {{vm.currentState}}
           ng-click='vm.goToCreateNews()'
           ) cоздать новость.
 
-      .news-repeater.scroll-y(resize resize-offset-top='15' vs-repeat='135')
+      .news-repeater.scroll-y(resize resize-offset-top='15' vs-repeat='155')
         .news-item(ng-repeat='news in vm.news track by news.id' ng-click='vm.showAdditionalInfo(news)')
           .line-1
             label.subject {{news.subject}}
