@@ -29,8 +29,8 @@
       $onInit,
       $onDestroy: saveDefaults,
 
-      // onSubmit,
       // deletePhotoClick,
+      onSubmit,
       chooseShipmentPointClick
 
     });
@@ -71,23 +71,13 @@
     //   }
     // }
     //
-    //
-    // function onSubmit() {
-    //
-    //   let {photoReport} = vm;
-    //   vm.onSubmitFn(photoReport);
-    //
-    //   // _.assign(photoReport, {
-    //   //   processing: 'upload'
-    //   // });
-    //   //
-    //   // PhotoReport.save(photoReport)
-    //   //   .then(saved => {
-    //   //     if (_.isFunction(vm.onSubmitFn)) {
-    //   //       vm.onSubmitFn(saved)
-    //   //     }
-    //   //   });
-    // }
+
+    function onSubmit() {
+
+      let {shipmentRoutePointPhoto} = vm;
+      vm.onSubmitFn(shipmentRoutePointPhoto);
+
+    }
 
     const DEFAULT_FIELDS = ['shipmentRoutePointId'];
     const LOCAL_STORAGE_KEY = 'shipmentPointPhotoForm.defaults';
