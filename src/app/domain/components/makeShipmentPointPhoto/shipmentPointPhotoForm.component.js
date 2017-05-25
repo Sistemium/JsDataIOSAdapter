@@ -29,8 +29,8 @@
       $onInit,
       $onDestroy: saveDefaults,
 
-      // deletePhotoClick,
       onSubmit,
+      deletePhotoClick,
       chooseShipmentPointClick
 
     });
@@ -62,15 +62,14 @@
 
     }
 
-    // function deletePhotoClick() {
-    //   if (vm.photoReport.id) {
-    //     PhotoReport.destroy(vm.photoReport)
-    //       .then(() => {
-    //         initEmpty();
-    //       });
-    //   }
-    // }
-    //
+    function deletePhotoClick() {
+      if (vm.shipmentRoutePointPhoto.id) {
+        ShipmentRoutePointPhoto.destroy(vm.shipmentRoutePointPhoto)
+          .then(() => {
+            initEmpty();
+          });
+      }
+    }
 
     function onSubmit() {
 
