@@ -35,12 +35,12 @@ section.ui-view.shipping-photo-list(cg-busy='vm.cgBusy')
           img(ng-src='{{ item.srcThumbnail }}')
 
 
-        //.outlet
-        //  .name {{ item.outlet.name }}
-        //  .address
-        //    small.gray {{ item.outlet.address }}
-        //
-        //.campaign {{ item.campaign.title }} ({{ item.campaign.campaignGroup.shortName }})
+        .shipment-route-point
+          .name {{ item.shipmentRoutePoint.name }}
+          .address
+            small.gray {{ item.shipmentRoutePoint.address }}
+
+        .shipment-route {{ item.shipmentRoutePoint.shipmentRoute.date }}
         .deviceCts
 
           a.remove(
