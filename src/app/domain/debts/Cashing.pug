@@ -7,6 +7,23 @@
   )
 
     .buttons
+
+      outlet-cashing-popover(
+      comment-text-placeholder='Точка'
+      is-popover-open='vm.plusPopoverOpen'
+      )
+        i.glyphicon.glyphicon-plus
+
+      outlet-cashing-popover(
+      summ-sign='-1'
+      ndoc-placeholder='№ заявки'
+      is-popover-open='vm.minusPopoverOpen'
+      )
+        i.glyphicon.glyphicon-minus
+
+      a.btn.btn-link(href ng-click='vm.editClick()' ng-if='vm.uncashed.length')
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+
       uncash-popover(uncashed='vm.uncashed' ng-if='vm.uncashed.length' is-popover-open='vm.uncashing')
 
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
@@ -36,20 +53,6 @@
   .footer
 
     .buttons
-
-      outlet-cashing-popover.btn.btn-link(
-      comment-text-placeholder='Точка'
-      )
-        i.glyphicon.glyphicon-plus
-
-      outlet-cashing-popover.btn.btn-link(
-      summ-sign='-1'
-      ndoc-placeholder='№ заявки'
-      )
-        i.glyphicon.glyphicon-minus
-
-      a.btn.btn-link(href ng-click='vm.editClick()' ng-if='vm.uncashed.length')
-        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
     .totals.animate-show(ng-hide='vm.busy')
 

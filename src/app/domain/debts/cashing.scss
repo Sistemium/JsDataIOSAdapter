@@ -77,6 +77,12 @@
 
   }
 
+  .buttons {
+    > * + * {
+      margin-left: 6px;
+    }
+  }
+
   .footer {
 
     min-height: 45px;
