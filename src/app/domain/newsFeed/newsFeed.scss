@@ -293,28 +293,43 @@
     }
 
     .line-3 {
-      height: 30px;
+      height: 33px;
       justify-content: space-between;
       display: flex;
-      align-items: baseline;
 
       button {
-        padding: 3px 5px;
+        padding: 5px 10px;
       }
 
       .rating {
-        label {
-          margin-bottom: 0;
+
+        > * {
+          user-select: none;
         }
+
+        display: flex;
+        align-self: center;
+
+        label {
+          margin-bottom: 3px;
+          margin-right: 3px;
+        }
+
         span {
+
+          > * {
+            outline: none;
+          }
+
           cursor: pointer;
-          padding-top: 7px;
           color: #2768b7;
           margin-left: 2px;
+          margin-top: 2px;
           i {
             top: 0;
           }
         }
+
       }
 
     }

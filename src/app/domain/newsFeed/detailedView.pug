@@ -9,7 +9,9 @@
     .line-3
 
       // TODO: Show if user has admin/editor? rights
-      button.btn-warning.btn.glyphicon.glyphicon-pencil(ng-click='vm.editNews()')
+      .buttons
+        button.btn-warning.btn.glyphicon.glyphicon-pencil(ng-click='vm.editNews()')
+        button.btn-warning.btn.glyphicon.glyphicon-camera(ng-click='vm.addPhoto()')
 
       .rating
         label Оценка:
