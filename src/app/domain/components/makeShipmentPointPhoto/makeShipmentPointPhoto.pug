@@ -1,0 +1,10 @@
+button.make-shipment-point-photo.btn.btn-primary(
+ng-click='vm.triggerClick()'
+ng-class='vm.isPopoverOpen ? "btn-warning" : "btn-primary"'
+popover-trigger='"none"'
+popover-is-open='vm.isPopoverOpen'
+popover-placement='auto bottom'
+uib-popover-template='"app/domain/components/makeShipmentPointPhoto/makeShipmentPointPhoto.template.html"'
+)
+  i.glyphicon.glyphicon-plus(ng-if='!vm.isPopoverOpen')
+  span {{ vm.isPopoverOpen ? 'Отмена' : 'Сделать фото-отчет' }}

@@ -1,0 +1,74 @@
+.form.shipment-point-photo-form(
+name='shipmentPointPhotoForm'
+)
+
+  a.campaignGroup(
+  href
+  ng-show='!vm.listShown'
+  ng-click='vm.chooseCampaignGroupClick()'
+  )
+    .not-chosen(ng-if='!vm.campaignGroup') Выберите период акций
+    label(ng-if='vm.campaignGroup') Период акций:
+    .name {{ vm.campaignGroup.name }}
+
+  a.campaign(
+  href
+  ng-show='!vm.listShown'
+  ng-click='vm.chooseCampaignClick()'
+  )
+    .not-chosen(ng-if='!vm.photoReport.campaign') Выберите акцию
+    label(ng-if='vm.photoReport.campaign') Акция:
+    .name {{ vm.photoReport.campaign.title }}
+
+  a.outlet(
+  href
+  ng-show='!vm.listShown'
+  ng-click='vm.chooseOutletClick()'
+  )
+    .not-chosen(ng-if='!vm.photoReport.outlet') Выберите точку
+    label(ng-if='vm.photoReport.outlet') Точка:
+    .name {{ vm.photoReport.outlet.name }}
+    .address
+      small.gray {{ vm.photoReport.outlet.address }}
+
+  .photo(ng-if='!vm.listShown && vm.photoReport.outlet && vm.photoReport.campaign')
+
+    make-photo(
+    model='vm.photoReport'
+    ng-show='!vm.photoReport.id'
+    model-name='PhotoReport'
+    )
+      i.glyphicon.glyphicon-camera
+      span Добавить фото
+
+    .thumb(ng-if='vm.photoReport.id')
+      loading-circle(ng-if='!vm.photoReport.srcThumbnail')
+      img(ng-src='{{vm.photoReport.srcThumbnail}}' ng-if='vm.photoReport.srcThumbnail')
+      a.remove(
+      href ng-click='vm.deletePhotoClick()'
+      aria-label='Удалить фото'
+      )
+        i.glyphicon.glyphicon-remove
+
+    input(type='hidden' ng-model='vm.photoReport.id' required)
+
+  .buttons(ng-if='vm.photoReport.id')
+    button.btn.btn-success(ng-click='vm.onSubmit()') Готово
+
+  choice-list(
+  ng-if='vm.showCampaignGroupList'
+  data-title='Выберите период акций' order-by='-name'
+  options='vm.campaignGroups' on-click='vm.chooseCampaignGroupClick' choice-id='vm.campaignGroupId'
+  )
+
+  choice-list(
+  ng-if='vm.showCampaignList'
+  data-title='Выберите Акцию' first-name='title'
+  options='vm.campaigns' on-click='vm.chooseCampaignClick' choice-id='vm.photoReport.campaignId'
+  )
+
+  choice-list(
+  ng-if='vm.showOutletList'
+  data-title='Выберите Точку'
+  options='vm.outlets' on-click='vm.chooseOutletClick' choice-id='vm.photoReport.outletId'
+  )
