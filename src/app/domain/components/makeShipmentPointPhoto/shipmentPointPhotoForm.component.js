@@ -15,9 +15,9 @@
 
   });
 
-  function shipmentPointPhotoFormController(Schema, $scope, localStorageService, Sockets, SalesmanAuth, Helpers) {
+  function shipmentPointPhotoFormController(Schema, $scope, localStorageService, Sockets, Helpers) {
 
-    const {saControllerHelper, ClickHelper, moment} = Helpers;
+    const {saControllerHelper, ClickHelper} = Helpers;
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
