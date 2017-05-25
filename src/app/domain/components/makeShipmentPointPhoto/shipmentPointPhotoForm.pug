@@ -13,27 +13,26 @@ name='shipmentPointPhotoForm'
     .address
       small.gray {{ vm.shipmentRoutePointPhoto.shipmentRoutePoint.address }}
 
+  .photo(ng-if='!vm.listShown && vm.shipmentRoutePointPhoto.shipmentRoutePoint')
 
-  //.photo(ng-if='!vm.listShown && vm.photoReport.outlet && vm.photoReport.campaign')
-  //
-  //  make-photo(
-  //  model='vm.photoReport'
-  //  ng-show='!vm.photoReport.id'
-  //  model-name='PhotoReport'
-  //  )
-  //    i.glyphicon.glyphicon-camera
-  //    span Добавить фото
-  //
-  //  .thumb(ng-if='vm.photoReport.id')
-  //    loading-circle(ng-if='!vm.photoReport.srcThumbnail')
-  //    img(ng-src='{{vm.photoReport.srcThumbnail}}' ng-if='vm.photoReport.srcThumbnail')
-  //    a.remove(
-  //    href ng-click='vm.deletePhotoClick()'
-  //    aria-label='Удалить фото'
-  //    )
-  //      i.glyphicon.glyphicon-remove
-  //
-  //  input(type='hidden' ng-model='vm.photoReport.id' required)
+    make-photo(
+      model='vm.shipmentRoutePointPhoto'
+      ng-show='!vm.shipmentRoutePointPhoto.id'
+      model-name='ShipmentRoutePointPhoto'
+    )
+      i.glyphicon.glyphicon-camera
+      span Добавить фото
+
+    .thumb(ng-if='vm.shipmentRoutePointPhoto.id')
+      loading-circle(ng-if='!vm.shipmentRoutePointPhoto.srcThumbnail')
+      img(ng-src='{{vm.shipmentRoutePointPhoto.srcThumbnail}}' ng-if='vm.shipmentRoutePointPhoto.srcThumbnail')
+      a.remove(
+        href ng-click='vm.deletePhotoClick()'
+        aria-label='Удалить фото'
+      )
+        i.glyphicon.glyphicon-remove
+
+    input(type='hidden' ng-model='vm.shipmentRoutePointPhoto.id' required)
 
   .buttons(ng-if='vm.shipmentRoutePointPhoto.id')
     button.btn.btn-success(ng-click='vm.onSubmit()') Готово
