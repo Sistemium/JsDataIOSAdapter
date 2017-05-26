@@ -49,6 +49,7 @@
 
               vm.volume = _.get(vm.article.boxPcs(position.volume), 'full');
               vm.date = _.get(position, 'shipment.date');
+              vm.price = _.get(position, 'price');
 
             });
 
