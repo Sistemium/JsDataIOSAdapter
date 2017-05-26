@@ -26,8 +26,8 @@
 
     function refresh() {
 
-      if (vm.selectedRoutePoint) return findPhotos();
-      if (vm.selectedRoute) return findPoints();
+      if (vm.routePointId) return findPhotos(vm.routePointId);
+      if (vm.routeId) return findPoints(vm.routeId);
       findRoute();
 
     }
