@@ -5,7 +5,6 @@ section.ui-view(cg-busy='vm.cgBusy')
     resize-offset-top='10'
     resize-property='max-height'
     ng-if='vm.data.length'
-    ng-disabled='vm.isPopoverOpen'
   )
     .routes
       .route(ng-repeat='route in vm.data track by route.id')
