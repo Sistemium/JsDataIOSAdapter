@@ -47,7 +47,14 @@
       $state.go('.', {routeId: route.id, routePointId: undefined});
     }
 
-    function findPoints(route) {
+    // $state.go('.', {outletId: outlet.id, campaignId: null});
+
+    function findPoints(routeId) {
+
+      let q = [
+        ShipmentRoutePoint.findAll({shipmentRouteId: routeId}).then(points => vm.data = points)
+      ];
+      vm.setBusy(q);
 
     }
 
