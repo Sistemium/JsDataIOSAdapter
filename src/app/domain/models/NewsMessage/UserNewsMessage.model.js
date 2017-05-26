@@ -6,8 +6,7 @@
 
     Schema.register({
 
-      name: 'NewsMessage',
-      watchChanges: false
+      name: 'UserNewsMessage'
 
     });
 
