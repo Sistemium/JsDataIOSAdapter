@@ -14,7 +14,8 @@
         routeId: $state.params.routeId,
         routePointId: $state.params.routePointId,
 
-        selectRoute
+        selectRoute,
+        selectPoint
 
       });
 
@@ -58,7 +59,9 @@
 
     }
 
-    function findPhotos(routePoint) {
+    function selectPoint(point) {
+      $state.go('.', {routeId: vm.routeId, routePointId: point.id});
+    }
 
     }
 
