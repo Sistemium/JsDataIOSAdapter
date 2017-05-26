@@ -14,6 +14,12 @@
             localField: 'driver',
             localKey: 'driverId'
           }
+        },
+        hasMany: {
+          ShipmentRoutePoint: {
+            localField: 'routePoints',
+            foreignKey: 'shipmentRouteId'
+          }
         }
       }
 
