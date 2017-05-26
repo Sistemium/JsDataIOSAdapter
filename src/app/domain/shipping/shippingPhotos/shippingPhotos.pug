@@ -15,4 +15,14 @@ section.ui-view(cg-busy='vm.cgBusy')
             href
             ng-click='vm.selectRoute(item)'
           ) {{ item.date | amUtc | amLocal | amCalendar }} ({{item.routePoints.length}} точек)
+          a(
+            ng-if='vm.routeId && !vm.routePointId'
+            href
+            ng-click='vm.selectPoint(item)'
+          ) {{ item.name }} / {{ item.address }} ({{item.photos.length}} фото)
+          a(
+            ng-if='vm.routeId && vm.routePointId'
+            href
+            ng-click=''
+          ) {{ item.id }}
         hr
