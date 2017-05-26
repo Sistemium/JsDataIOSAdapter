@@ -80,7 +80,7 @@ font-size-edit(append-to='catalogueArticle')
 
             i.recently-shipped.glyphicon.glyphicon-star-empty(
             ng-if='vm.articleStats[stock.articleId]'
-            uib-tooltip='Недавно отгружено'
+            uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"
             )
 
             i.red.glyphicon.glyphicon-warning-sign(
