@@ -63,6 +63,13 @@
       $state.go('.', {routeId: vm.routeId, routePointId: point.id});
     }
 
+    function findPhotos(routePointId) {
+
+      let q = [
+        ShipmentRoutePointPhoto.findAll({shipmentRoutePointId: routePointId}).then(photos => vm.data = photos)
+      ];
+      vm.setBusy(q);
+
     }
 
   }
