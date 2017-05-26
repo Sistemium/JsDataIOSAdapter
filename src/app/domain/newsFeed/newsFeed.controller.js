@@ -5,6 +5,7 @@
   function NewsFeedController($state, Schema, saControllerHelper, $scope, saApp, toastr) {
 
     let NewsMessage = Schema.model('NewsMessage');
+    let UserNewsMessage = Schema.model('UserNewsMessage');
 
     const vm = saControllerHelper
       .setup(this, $scope);
@@ -15,12 +16,16 @@
       onStateChange,
       submitNews,
       clearForm,
-      regExForCurrVersion: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
-      rating: 5,
+      saveRating,
+
       editNews,
       updateNews,
       newsHasChanges,
-      revertChanges
+      revertChanges,
+
+      regExForCurrVersion: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
+      rating: 5
+
     });
 
     $scope.$on('$stateChangeStart', onStateChange);
@@ -56,12 +61,69 @@
           })
         ).then(news => {
           vm.news = news;
+          UserNewsMessage.findAll();
         }).catch(e => console.error(e));
 
       } else if (to.name === 'newsFeed.create') {
         vm.news = {};
         vm.news.appVersion = saApp.version();
       }
+
+    }
+
+    function saveRating(ev, val, id) {
+
+      let numericRating = val || undefined;
+
+      if (!val) {
+
+        let writtenRating = ev.srcElement.title;
+
+        switch (writtenRating) {
+          case 'Один':
+            numericRating = 1;
+            break;
+          case 'Два':
+            numericRating = 2;
+            break;
+          case 'Три':
+            numericRating = 3;
+            break;
+          case 'Четыре':
+            numericRating = 4;
+            break;
+          case 'Пять':
+            numericRating = 5;
+            break;
+          default:
+            numericRating = null;
+
+        }
+
+      }
+
+      UserNewsMessage.findAll({newsMessageId: id}, {bypassCache: true}).then((rating) => {
+
+        let ratingId = rating.length ? _.first(rating).id : undefined;
+        let recordRating = rating.length ? _.first(rating).rating : 0;
+
+        if (numericRating && (recordRating !== numericRating)) {
+
+          let objToWrite = ratingId ? {id: ratingId, rating: numericRating, newsMessageId: id} : {
+            rating: numericRating,
+            newsMessageId: id
+          };
+
+          UserNewsMessage.create(objToWrite).then(() => {
+            toastr.success('Ваша оценка принята', {timeOut: 1000});
+          });
+
+        }
+
+      });
+
+
+      ev.stopPropagation();
 
     }
 
