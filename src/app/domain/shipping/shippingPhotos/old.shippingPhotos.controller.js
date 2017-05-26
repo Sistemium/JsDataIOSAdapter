@@ -2,7 +2,7 @@
 
 (function () {
 
-  function ShippingPhotos(Schema, Helpers, $scope, GalleryHelper, Sockets) {
+  function oldShippingPhotos(Schema, Helpers, $scope, GalleryHelper, Sockets) {
 
     const {ShipmentRoute, ShipmentRoutePoint, ShipmentRoutePointPhoto} = Schema.models();
     const {saControllerHelper, toastr} = Helpers;
@@ -76,6 +76,6 @@
   }
 
   angular.module('webPage')
-    .controller('ShippingPhotos', ShippingPhotos);
+    .controller('oldShippingPhotos', oldShippingPhotos);
 
 }());
