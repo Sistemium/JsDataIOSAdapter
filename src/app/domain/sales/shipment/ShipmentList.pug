@@ -27,7 +27,11 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
         ng-click='vm.itemClick(item, $event)'
         )
-          td(ng-class='item.workflow().cls') {{ ::item.ndoc }}
+          td.ndoc(ng-class='item.workflow().cls')
+            span.ndoc {{ ::item.ndoc }}
+            span.egais
+              i.glyphicon(ng-class='item.egais.egaisActCls')
+              i.glyphicon(ng-class='item.egais.egaisTtnCls')
           td.tinyName
             driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]' ng-if='item.driver')
               span {{ ::item.driver.tinyName }}

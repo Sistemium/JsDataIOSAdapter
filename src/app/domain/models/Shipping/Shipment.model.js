@@ -31,6 +31,10 @@
           SaleOrder: {
             localField: 'saleOrder',
             localKey: 'saleOrderId'
+          },
+          ShipmentEgais: {
+            localField: 'egais',
+            foreignKey: 'shipmentId'
           }
         },
         hasMany: {
