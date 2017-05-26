@@ -2,10 +2,10 @@
 
 (function () {
 
-  function ShippingPhotos(Schema, Helpers, $scope, GalleryHelper/*, Sockets*/) {
+  function ShippingPhotos(Schema, Helpers, $scope, GalleryHelper, $state) {
 
     const {ShipmentRoute, ShipmentRoutePoint, ShipmentRoutePointPhoto} = Schema.models();
-    const {saControllerHelper/*, toastr*/} = Helpers;
+    const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
@@ -42,7 +42,7 @@
     }
 
     function selectRoute(route) {
-      vm.selectedRoute = route;
+      $state.go('.', {routeId: route.id, routePointId: undefined});
     }
 
     function findPoints(route) {
