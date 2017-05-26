@@ -21,10 +21,10 @@
       )
         i.glyphicon.glyphicon-minus
 
-      a.btn.btn-link(href ng-click='vm.editClick()' ng-if='vm.uncashed.length')
+      a.btn.btn-link(href ng-click='vm.editClick()' ng-disabled='!vm.uncashed.length')
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
-      uncash-popover(uncashed='vm.uncashed' ng-if='vm.uncashed.length' is-popover-open='vm.uncashing')
+      uncash-popover(uncashed='vm.uncashed' ng-disabled='!vm.uncashed.length' is-popover-open='vm.uncashing')
 
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
 
