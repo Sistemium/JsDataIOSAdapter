@@ -34,6 +34,8 @@
 
     function findRoute() {
 
+      // TODO: nave to filter ShipmentRoutes by current driverId
+
       let q = [
         ShipmentRoute.findAllWithRelations({limit: 10})('ShipmentRoutePoint').then(routes => vm.data = routes)
       ];
