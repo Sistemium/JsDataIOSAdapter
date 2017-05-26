@@ -11,8 +11,8 @@
       .use(GalleryHelper)
       .use({
 
-        selectedRoute: undefined,
-        selectedRoutePoint: undefined,
+        routeId: $state.params.routeId,
+        routePointId: $state.params.routePointId,
 
         selectRoute
 
