@@ -1,0 +1,54 @@
+section.ui-view.shipping-photo-list(cg-busy='vm.cgBusy')
+
+  .filters.row
+
+    .col-sm-7.col-md-8.col-lg-9
+
+      //sab-date-picker.col-sm-4.col-lg-3(
+      //value='vm.date'
+      //init-date='vm.initDate'
+      //clear-text='Сегодня'
+      //)
+
+    .col-sm-5.col-md-4.col-lg-3
+      .buttons
+
+        a.btn.btn-link.edit-toggler(
+        href ng-click='vm.editing = !vm.editing'
+        ng-class='{disabled: !vm.data.length}'
+        )
+          i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+
+        make-shipment-point-photo(is-popover-open='vm.isPopoverOpen')
+
+  #scroll-main.scroll-y(
+  resize
+  resize-offset-top='10'
+  resize-property='max-height'
+  ng-if='vm.data.length'
+  ng-disabled='vm.isPopoverOpen'
+  )
+    .photo-reports(vs-repeat='100' vs-scroll-parent='#scroll-main')
+      .photo-report(ng-repeat='item in vm.data track by item.id')
+
+        a.thumb(ng-click='vm.thumbClick(item)')
+          img(ng-src='{{ item.srcThumbnail }}')
+
+
+        .shipment-route-point
+          .name {{ item.shipmentRoutePoint.name }}
+          .address
+            small.gray {{ item.shipmentRoutePoint.address }}
+
+        .shipment-route {{ item.shipmentRoutePoint.shipmentRoute.date }}
+        .deviceCts
+
+          a.remove(
+          href ng-click='vm.deleteClick(item)'
+          ng-if='vm.editing'
+          aria-label='Удалить фото'
+          )
+            i.glyphicon.glyphicon-trash
+
+          span {{ item.deviceCts | amUtc | amLocal | amCalendar }}
+
