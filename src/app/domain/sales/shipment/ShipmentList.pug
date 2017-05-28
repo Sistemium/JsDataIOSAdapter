@@ -29,7 +29,7 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
         )
           td.ndoc(ng-class='item.workflow().cls')
             span.ndoc {{ ::item.ndoc }}
-            egais-popover(shipment='item')
+            egais-popover(shipment='item' ng-if='item.egais')
               i.glyphicon(ng-class='item.egais.egaisTtnCls')
               i.glyphicon(ng-class='item.egais.egaisActCls')
           td.tinyName
