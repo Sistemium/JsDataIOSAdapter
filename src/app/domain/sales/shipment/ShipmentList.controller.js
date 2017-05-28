@@ -45,7 +45,6 @@
     function itemClick(item, $event) {
       let driverPopoverOpen = _.find(vm.driverPopoverOpen, val => val);
       if ($event.defaultPrevented || driverPopoverOpen) return;
-      console.info($event);
       $state.go('.item', {id: item.id});
     }
 
@@ -56,6 +55,7 @@
     function cleanup() {
       ShipmentPosition.ejectAll();
       Shipment.ejectAll();
+      ShipmentEgais.ejectAll();
     }
 
     function getData(salesman) {

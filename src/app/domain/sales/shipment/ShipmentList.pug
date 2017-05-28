@@ -29,9 +29,9 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
         )
           td.ndoc(ng-class='item.workflow().cls')
             span.ndoc {{ ::item.ndoc }}
-            span.egais
-              i.glyphicon(ng-class='item.egais.egaisActCls')
+            egais-popover(shipment='item')
               i.glyphicon(ng-class='item.egais.egaisTtnCls')
+              i.glyphicon(ng-class='item.egais.egaisActCls')
           td.tinyName
             driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]' ng-if='item.driver')
               span {{ ::item.driver.tinyName }}
