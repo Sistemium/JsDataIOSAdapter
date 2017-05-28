@@ -4,9 +4,16 @@ egais-popover {
 
   @extend %flaggable;
   background-color: $state-info-bg;
+  padding-top: 4px;
 
   position: relative;
   display: inline;
+
+  ng-transclude {
+    > * + * {
+      margin-left: 2px;
+    }
+  }
 
   .popover-inner {
 
