@@ -29,9 +29,11 @@ section.ui-view(cg-busy='vm.cgBusy')
             href
             ng-click='vm.selectPoint(item)'
           ) {{ item.name }} / {{ item.address }} ({{item.photos.length}} фото)
-          a(
+          a.thumb(
             ng-if='vm.routeId && vm.routePointId'
             href
-            ng-click=''
-          ) {{ item.id }}
+            ng-click='vm.thumbClick(item)'
+          ) {{ item.deviceCts | amUtc | amLocal | amCalendar }}
+            img(ng-src='{{ item.srcThumbnail }}')
+
         hr
