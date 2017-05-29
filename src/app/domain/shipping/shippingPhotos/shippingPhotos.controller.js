@@ -75,6 +75,8 @@
       ];
       vm.setBusy(q);
 
+      vm.rebindAll(ShipmentRoutePointPhoto, {orderBy: [['deviceCts', 'DESC']]}, 'vm.data');
+
     }
 
     function initEmptyPhoto() {
