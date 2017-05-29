@@ -15,7 +15,8 @@
         routePointId: $state.params.routePointId,
 
         selectRoute,
-        selectPoint
+        selectPoint,
+        thumbClick
 
       });
 
@@ -81,6 +82,15 @@
         shipmentRoutePointId: vm.routePointId
       });
       vm.shipmentRoutePointPhoto = draft;
+
+    }
+
+    function thumbClick(picture) {
+
+      vm.commentText = picture.shipmentRoutePoint.name;
+      $scope.imagesAll = vm.data;
+
+      return vm.thumbnailClick(picture);
 
     }
 
