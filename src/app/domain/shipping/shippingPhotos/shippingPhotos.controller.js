@@ -54,7 +54,7 @@
     function findPoints(routeId) {
 
       let q = [
-        ShipmentRoutePoint.findAll({shipmentRouteId: routeId}).then(points => vm.data = points)
+        ShipmentRoutePoint.findAllWithRelations({shipmentRouteId: routeId})('ShipmentRoutePointPhoto').then(points => vm.data = points)
       ];
       vm.setBusy(q);
 
