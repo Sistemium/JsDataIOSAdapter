@@ -51,8 +51,6 @@
       $state.go('.', {routeId: route.id, routePointId: undefined});
     }
 
-    // $state.go('.', {outletId: outlet.id, campaignId: null});
-
     function findPoints(routeId) {
 
       let q = [
