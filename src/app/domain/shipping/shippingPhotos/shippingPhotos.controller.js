@@ -77,6 +77,8 @@
 
       vm.rebindAll(ShipmentRoutePointPhoto, {orderBy: [['deviceCts', 'DESC']]}, 'vm.data');
 
+      $scope.$on('$destroy', $scope.$watch('vm.data', initEmptyPhoto));
+
     }
 
     function initEmptyPhoto() {
