@@ -69,9 +69,10 @@
     function findPhotos(routePointId) {
 
       let q = [
-        ShipmentRoutePointPhoto.findAllWithRelations({shipmentRoutePointId: routePointId}, {bypassCache: true})(['ShipmentRoutePoint'])
-          .then(photos => vm.data = photos)
-          .then(initEmptyPhoto)
+        ShipmentRoutePointPhoto.findAllWithRelations(
+          {shipmentRoutePointId: routePointId},
+          {bypassCache: true}
+        )(['ShipmentRoutePoint'])
       ];
       vm.setBusy(q);
 
