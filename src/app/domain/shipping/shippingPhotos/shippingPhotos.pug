@@ -1,11 +1,20 @@
 section.ui-view(cg-busy='vm.cgBusy')
 
+  make-photo(
+  model='vm.shipmentRoutePointPhoto'
+  ng-if='vm.routeId && vm.routePointId'
+  model-name='ShipmentRoutePointPhoto'
+  )
+    i.glyphicon.glyphicon-camera
+    span Добавить фото
+
   #scroll-main.scroll-y(
     resize
     resize-offset-top='10'
     resize-property='max-height'
     ng-if='vm.data.length'
   )
+
     .routes
       .route(ng-repeat='item in vm.data track by item.id')
 
