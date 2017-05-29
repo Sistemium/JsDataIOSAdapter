@@ -219,11 +219,17 @@
       }
 
       .line-3 {
+
+
         height: 30px;
         justify-content: flex-end;
         display: flex;
         align-items: center;
         span {
+          & > * {
+            user-select: none;
+            outline: none;
+          }
           color: #2768b7;
           margin-left: 2px;
           i {
@@ -324,7 +330,7 @@
           cursor: pointer;
           color: #2768b7;
           margin-left: 2px;
-          margin-top: 2px;
+          margin-top: 3px;
           i {
             top: 0;
           }
