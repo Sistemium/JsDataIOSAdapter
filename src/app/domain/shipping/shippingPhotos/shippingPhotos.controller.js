@@ -11,6 +11,8 @@
       .use(GalleryHelper)
       .use({
 
+        shipmentRoutePointPhoto: undefined,
+
         routeId: $state.params.routeId,
         routePointId: $state.params.routePointId,
 
