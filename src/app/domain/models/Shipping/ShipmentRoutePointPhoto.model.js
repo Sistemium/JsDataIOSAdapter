@@ -2,9 +2,9 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, PhotoHelper) {
 
-    Schema.register({
+    Schema.register(PhotoHelper.setupModel({
 
       name: 'ShipmentRoutePointPhoto',
 
@@ -17,7 +17,7 @@
         }
       }
 
-    });
+    }));
 
   });
 
