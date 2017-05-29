@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('core.services').service('Auth', function ($rootScope, $q, $state, Sockets, $window, IOS, PickerAuth) {
+  function Auth($rootScope, $q, $state, $window, IOS, PickerAuth) {
 
     var me = this;
 
@@ -28,11 +28,11 @@
       currentUser = roles.account || {};
 
       currentUser.shortName = (function (name) {
-        var names = name.match (/(^[^ ]*) (.*$)/);
+        var names = name.match(/(^[^ ]*) (.*$)/);
         return names ? names[1] + ' ' + names[2][0] + '.' : name;
       })(currentUser.name);
 
-      rolesArray = _.map(roles.roles, function(val,key) {
+      rolesArray = _.map(roles.roles, function (val, key) {
         return key;
       });
 
@@ -62,8 +62,8 @@
       if (!roles && (token || ios)) {
 
         rolesPromise = authProtocol.getRoles(token)
-          .then(function(res){
-            console.log ('Auth.init',res);
+          .then(function (res) {
+            console.log('Auth.init', res);
             return setRoles(res);
           });
 
@@ -71,7 +71,7 @@
 
       } else if (roles) {
 
-        rolesPromise = $q(function(resolve){
+        rolesPromise = $q(function (resolve) {
           resolve(roles);
         });
 
@@ -79,7 +79,7 @@
 
       } else {
 
-        return $q(function(resolve){
+        return $q(function (resolve) {
           resolveRoles = resolve;
         });
 
@@ -105,7 +105,7 @@
         }
       } else {
         me.profileState = 'profile';
-        if (_.get(next,'data.auth') === 'pickerAuth') {
+        if (_.get(next, 'data.auth') === 'pickerAuth') {
           me.profileState = 'picker';
         }
       }
@@ -119,10 +119,10 @@
     });
 
     $rootScope.$on('authenticated', function (event, res) {
-      console.log ('authenticated', res);
+      console.log('authenticated', res);
       setRoles(res);
       if (resolveRoles) {
-        resolveRoles (roles);
+        resolveRoles(roles);
       }
       $window.localStorage.setItem('authorization', res.accessToken);
     });
@@ -149,7 +149,7 @@
 
       getAccessToken,
 
-      roles: function() {
+      roles: function () {
         return roles && roles.roles;
       },
 
@@ -158,12 +158,14 @@
           anyRoles = [anyRoles];
         }
         return roles && !anyRoles ||
-          !!_.intersection (anyRoles,rolesArray).length
-        ;
+          !!_.intersection(anyRoles, rolesArray).length
+          ;
       }
 
     });
 
-  });
+  }
+
+  angular.module('core.services').service('Auth', Auth);
 
 })();
