@@ -74,6 +74,16 @@
 
     }
 
+    function initEmptyPhoto() {
+
+      let draft = ShipmentRoutePointPhoto.createInstance({
+        processing: 'draft',
+        shipmentRoutePointId: vm.routePointId
+      });
+      vm.shipmentRoutePointPhoto = draft;
+
+    }
+
   }
 
   angular.module('webPage')
