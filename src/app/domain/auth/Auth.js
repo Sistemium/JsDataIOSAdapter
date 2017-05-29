@@ -163,6 +163,8 @@
       },
 
       isAuthorized,
+      authId: function() {
+        return currentUser.authId;
       }
 
     });

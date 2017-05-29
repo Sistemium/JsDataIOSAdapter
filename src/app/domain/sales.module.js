@@ -5,7 +5,9 @@
   let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition'];
 
   angular.module('Sales', ['sistemium', 'yaMap', 'Models'])
-    .run(function (SalesmanAuth, InitService, Sockets, IOS, DEBUG, Schema, $rootScope, Menu) {
+    .run(function (SalesmanAuth, InitService, Sockets, IOS, DEBUG, Schema, $rootScope, Menu, Auth) {
+
+      const {Workflow, SaleOrder} = Schema.models();
 
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
@@ -20,13 +22,11 @@
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
-          const {Workflow, SaleOrder} = Schema.models();
+          getWorkflow('SaleOrder.v2', 'workflowSaleOrder');
 
-          Workflow.findAll({code: 'SaleOrder.v2'})
-            .then(workflow => {
-              Schema.workflowSaleOrder = _.get(_.first(workflow), 'workflow');
-            })
-            .catch(e => console.error('Workflow find error:', e));
+          if (Auth.isAuthorized('supervisor')) {
+            getWorkflow('SaleOrder.v2.sv', 'workflowSaleOrderSupervisor');
+          }
 
           function setBadges() {
             let filter = SalesmanAuth.makeFilter({processing: 'draft'});
@@ -41,6 +41,16 @@
           setBadges();
 
         });
+
+      function getWorkflow(code, codeAs) {
+
+        Workflow.findAll({code})
+          .then(workflow => {
+            SaleOrder.meta[codeAs] = _.get(_.first(workflow), 'workflow');
+          })
+          .catch(e => console.error('Workflow find error:', e));
+
+      }
 
       function onRecordStatus(event) {
 
