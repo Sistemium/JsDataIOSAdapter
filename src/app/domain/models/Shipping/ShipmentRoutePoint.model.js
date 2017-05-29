@@ -14,6 +14,12 @@
             localField: 'shipmentRoute',
             localKey: 'shipmentRouteId'
           }
+        },
+        hasMany: {
+          ShipmentRoutePointPhoto: {
+            localField: 'photos',
+            foreignKey: 'shipmentRoutePointId'
+          }
         }
       }
 
