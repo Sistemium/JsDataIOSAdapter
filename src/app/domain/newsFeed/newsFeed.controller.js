@@ -46,6 +46,7 @@
 
         NewsMessage.find(params.id).then((news) => {
           vm.news = news;
+          UserNewsMessage.findAll();
         }).catch((e) => {
           if (e.error === 404) {
             toastr.error('Ошибка. Новость не найдена', {timeOut: 5000});
