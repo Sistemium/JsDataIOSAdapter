@@ -4,15 +4,15 @@
 
   function Auth($rootScope, $q, $state, $window, IOS, PickerAuth) {
 
-    var me = this;
+    const me = this;
 
-    var roles;
-    var rolesArray;
-    var rolesPromise;
-    var resolveRoles;
-    var currentUser;
+    let roles;
+    let rolesArray;
+    let rolesPromise;
+    let resolveRoles;
+    let currentUser;
 
-    var ios = IOS.isIos();
+    const ios = IOS.isIos();
 
     function getAccessToken() {
       return ios || $window.localStorage.getItem('authorization');
@@ -87,7 +87,16 @@
 
     }
 
-    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, from) {
+    function isAuthorized(anyRoles) {
+      if (anyRoles && !angular.isArray(anyRoles)) {
+        anyRoles = [anyRoles];
+      }
+      return roles && !anyRoles ||
+        !!_.intersection(anyRoles, rolesArray).length
+        ;
+    }
+
+    $rootScope.$on('$stateChangeStart', (event, next, nextParams, from) => {
 
       if (!roles) {
         if (next.name !== 'auth') {
@@ -118,7 +127,7 @@
 
     });
 
-    $rootScope.$on('authenticated', function (event, res) {
+    $rootScope.$on('authenticated', (event, res) => {
       console.log('authenticated', res);
       setRoles(res);
       if (resolveRoles) {
@@ -142,7 +151,7 @@
       },
 
       isAdmin: function () {
-        return true;
+        return isAuthorized(['admin', 'tester']);
       },
 
       init,
@@ -153,13 +162,7 @@
         return roles && roles.roles;
       },
 
-      isAuthorized: function (anyRoles) {
-        if (anyRoles && !angular.isArray(anyRoles)) {
-          anyRoles = [anyRoles];
-        }
-        return roles && !anyRoles ||
-          !!_.intersection(anyRoles, rolesArray).length
-          ;
+      isAuthorized,
       }
 
     });
