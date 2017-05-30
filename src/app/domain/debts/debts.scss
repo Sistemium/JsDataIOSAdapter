@@ -107,6 +107,10 @@
 
     @extend %flex-row;
 
+    @include responsive-only(lt-sm) {
+      display: block;
+    }
+
     .outlet {
 
       flex: 1;
@@ -236,6 +240,9 @@
       margin-left: $margin;
       min-width: $field-width;
       text-align: right;
+      @include responsive-only(xxs) {
+        min-width: $field-width - 15;
+      }
     }
 
   }
