@@ -16,7 +16,7 @@ cg-busy='vm.cgBusy'
   elem-ready='vm.restoreScrollPosition()'
   )
 
-    .partner-debt-total(ng-repeat='group in vm.data track by group.partner.id')
+    .partner-debt-total(ng-repeat='group in vm.data | orderBy:"partner.shortName" track by group.partner.id')
 
       h4.name {{ ::group.partner.shortName }}
 
