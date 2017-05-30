@@ -13,6 +13,10 @@
     text-align: left;
   }
 
+  currency-value.red {
+    color: $state-warning-text;
+  }
+
   .date > .title {
     font-size: 16px;
     @include responsive-only(lt-sm) {
