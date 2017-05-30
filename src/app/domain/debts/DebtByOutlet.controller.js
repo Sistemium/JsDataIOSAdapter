@@ -135,14 +135,17 @@
 
     function getOverdue(debtsByOutlet) {
 
-      // FIXME: STAPI need overdue predicate support
-      if (!IOS.isIos()) return debtsByOutlet;
-
       let where = {
         dateE: {'<=': moment().format()}
       };
 
-      return Debt.groupBy({where}, ['outletId'])
+      let filter = {where};
+
+      if (!IOS.isIos()) {
+        filter = {isOverdue: true};
+      }
+
+      return Debt.groupBy(filter, ['outletId'])
         .then(overdueDebtsByOutlet => {
           _.each(overdueDebtsByOutlet, item => {
             let outletDebt = _.find(debtsByOutlet, {outletId: item.outletId});
