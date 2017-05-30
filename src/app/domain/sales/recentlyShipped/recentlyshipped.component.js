@@ -38,7 +38,7 @@
         delete filter.articleId;
         filter.where = {
           'ANY shipment': {'outletId': {'==': vm.outlet.id}},
-          articleId: {'==': vm.article.id},
+          articleId: {'==': vm.article.id}
         };
         options.limit = 100;
       }
