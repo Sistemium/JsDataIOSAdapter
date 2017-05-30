@@ -6,6 +6,7 @@ cg-busy='vm.cgBusy'
 
   .header
     .totals
+      label.total(ng-if='vm.totalOverdue()') Просрочено
       label.total(ng-if='vm.totalCashed()') На руках
       label.total Остаток долга
 
@@ -19,22 +20,25 @@ cg-busy='vm.cgBusy'
 
       h4.name {{ ::group.partner.shortName }}
 
-      .outlet-debt-total(ng-repeat='item in group.items track by item.outlet.id')
+      .outlet-debt-total(ng-repeat='item in group.items | orderBy:"outlet.address" track by item.outlet.id')
 
         .outlet(ng-class='{blocked: item.outlet.isActive === false}')
           small.address {{ ::item.outlet.address }}
 
-        .totals
+        a.totals(href ng-click='vm.itemClick(item)')
 
-          currency-value(value='item["sum(cashed)"]')
+          currency-value.red(value='item.overdue')
 
-          a.total(href ng-click='vm.itemClick(item)')
+          currency-value(value='item["sum(cashed)"]' ng-if='vm.totalCashed()')
+
+          .total
             currency-value(value='item["sum(summ)"]')
 
 
       .totals(ng-if='group.items.length > 1')
 
-        currency-value(value='group["sum(cashed)"]')
+        currency-value.red(value='group.overdue')
+        currency-value(value='group["sum(cashed)"]' ng-if='vm.totalCashed()')
 
         .total
           currency-value(value='group["sum(summ)"]')
@@ -44,6 +48,7 @@ cg-busy='vm.cgBusy'
 
       label Итого:
 
-      a(href ng-click='vm.totalCashedClick()')
+      currency-value.red(value='vm.totalOverdue()')
+      a(href ng-click='vm.totalCashedClick()' ng-if='vm.totalCashed()')
         currency-value(value='vm.totalCashed()')
       currency-value(value='vm.totalSumm()')

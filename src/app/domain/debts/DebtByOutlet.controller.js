@@ -2,7 +2,7 @@
 
 (function () {
 
-  function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth, localStorageService, saEtc) {
+  function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth, localStorageService, saEtc, IOS) {
 
     const {Debt, Outlet, Cashing, Partner} = Schema.models();
 
@@ -13,6 +13,7 @@
         itemClick,
         totalCashed,
         totalSumm,
+        totalOverdue,
         onStateChange,
         totalCashedClick,
         restoreScrollPosition
@@ -91,6 +92,10 @@
         });
     }
 
+    function totalOverdue(data) {
+      return _.sumBy(data || vm.data, 'overdue');
+    }
+
     function totalCashed(data) {
       return _.sumBy(data || vm.data, 'sum(cashed)');
     }
@@ -118,12 +123,35 @@
             });
 
         })
+        .then(getOverdue)
         .then(data => $q.all(_.map(data, loadDebtRelations)))
         .then(data => _.filter(data, 'outlet'))
         .then(loadNotProcessed)
         .then(loadCashed)
         .then(groupByPartner)
         .catch(e => console.error(e));
+
+    }
+
+    function getOverdue(debtsByOutlet) {
+
+      // FIXME: STAPI need overdue predicate support
+      if (!IOS.isIos()) return debtsByOutlet;
+
+      let where = {
+        dateE: {'<=': moment().format()}
+      };
+
+      return Debt.groupBy({where}, ['outletId'])
+        .then(overdueDebtsByOutlet => {
+          _.each(overdueDebtsByOutlet, item => {
+            let outletDebt = _.find(debtsByOutlet, {outletId: item.outletId});
+            if (outletDebt) {
+              outletDebt.overdue = item['sum(summ)'];
+            }
+          });
+          return debtsByOutlet;
+        });
 
     }
 
@@ -136,7 +164,8 @@
           partner: Partner.get(partnerId),
           items,
           'sum(cashed)': totalCashed(items),
-          'sum(summ)': totalSumm(items)
+          'sum(summ)': totalSumm(items),
+          overdue: totalOverdue(items)
         }
       });
 
