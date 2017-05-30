@@ -78,15 +78,35 @@
 
   }
 
-  .outlet-debt-total {
+  .partner-debt-total {
 
     border-bottom: solid 1px $border-gray;
     padding: $margin 0;
 
+    > .name {
+      margin-bottom: 0;
+      margin-top: $margin/2;
+      @include responsive-only(lt-sm) {
+        margin-bottom: $margin/2;
+      }
+    }
+
+    .totals {
+      @include responsive-only(gt-xs) {
+        margin: 5px 0;
+      }
+    }
+
+  }
+
+  .outlet-debt-total {
+
+    @extend %flex-row;
+
     .outlet {
 
+      flex: 1;
       @include responsive-only(gt-xs) {
-        //font-size: larger;
         margin: 5px 0;
       }
 

@@ -4,7 +4,7 @@
 
   function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth) {
 
-    const {Debt, Outlet, Cashing} = Schema.models();
+    const {Debt, Outlet, Cashing, Partner} = Schema.models();
 
     const vm = saControllerHelper
       .setup(this, $scope)
@@ -48,12 +48,12 @@
         .then(() => vm.wasModified = false);
     }
 
-    function totalCashed() {
-      return _.sumBy(vm.data, 'sum(cashed)');
+    function totalCashed(data) {
+      return _.sumBy(data || vm.data, 'sum(cashed)');
     }
 
-    function totalSumm() {
-      return _.sumBy(vm.data, 'sum(summ)');
+    function totalSumm(data) {
+      return _.sumBy(data || vm.data, 'sum(summ)');
     }
 
     function itemClick(item) {
@@ -79,8 +79,25 @@
         .then(data => _.filter(data, 'outlet'))
         .then(loadNotProcessed)
         .then(loadCashed)
-        .then(data => vm.data = data)
+        .then(groupByPartner)
         .catch(e => console.error(e));
+
+    }
+
+    function groupByPartner(data) {
+
+      let byPartnerId = _.groupBy(data, 'outlet.partnerId');
+
+      vm.data = _.map(byPartnerId, (items, partnerId) => {
+        return {
+          partner: Partner.get(partnerId),
+          items,
+          'sum(cashed)': totalCashed(items),
+          'sum(summ)': totalSumm(items)
+        }
+      });
+
+      vm.data = _.orderBy(vm.data, 'partner.name');
 
     }
 
@@ -125,8 +142,9 @@
       return Outlet.find(item.outletId)
         .then(outlet => {
           item.outlet = outlet;
-          return item;
-        });
+          return outlet.DSLoadRelations('Partner');
+        })
+        .then(() => item);
 
     }
 

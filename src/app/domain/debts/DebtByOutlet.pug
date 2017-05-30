@@ -11,18 +11,29 @@ cg-busy='vm.cgBusy'
 
   .scroll-y(resize resize-offset-top='40' resize-offset-top-xs='32')
 
-    .outlet-debt-total(ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.outletId')
+    .partner-debt-total(ng-repeat='group in vm.data track by group.partner.id')
 
-      .outlet(ng-class='{blocked: item.outlet.isActive === false}')
-        .name {{ ::item.outlet.name }}
-        small.address {{ ::item.outlet.address }}
+      h4.name {{ ::group.partner.shortName }}
 
-      .totals
+      .outlet-debt-total(ng-repeat='item in group.items track by item.outlet.id')
 
-        currency-value(value='item["sum(cashed)"]')
+        .outlet(ng-class='{blocked: item.outlet.isActive === false}')
+          small.address {{ ::item.outlet.address }}
 
-        a.total(href ng-click='vm.itemClick(item)')
-          currency-value(value='item["sum(summ)"]')
+        .totals
+
+          currency-value(value='item["sum(cashed)"]')
+
+          a.total(href ng-click='vm.itemClick(item)')
+            currency-value(value='item["sum(summ)"]')
+
+
+      .totals(ng-if='group.items.length > 1')
+
+        currency-value(value='group["sum(cashed)"]')
+
+        .total
+          currency-value(value='group["sum(summ)"]')
 
   .footer
     .totals.animate-show(ng-hide='vm.busy')
