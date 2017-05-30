@@ -35,7 +35,11 @@
 
       if (IOS.isIos()) {
         delete filter.outletId;
-        filter.where = {'ANY shipment': {'outletId': {'==': vm.outlet.id}}};
+        delete filter.articleId;
+        filter.where = {
+          'ANY shipment': {'outletId': {'==': vm.outlet.id}},
+          articleId: {'==': vm.article.id},
+        };
         options.limit = 100;
       }
 
