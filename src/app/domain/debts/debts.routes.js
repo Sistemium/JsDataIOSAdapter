@@ -38,7 +38,8 @@
           controller: 'DebtByOutletController as vm',
 
           data: {
-            title: 'Долги по точкам'
+            title: 'Долги по точкам',
+            rootState: 'sales.debtByOutlet'
           },
 
           children:[
