@@ -6,8 +6,8 @@ cg-busy='vm.cgBusy'
 
   .header
     .totals
-      label.total(ng-if='vm.totalOverdue()') Просрочено
-      label.total(ng-if='vm.totalCashed()') На руках
+      label.total.overdue(ng-if='vm.totalOverdue()') Просрочено
+      label.total.cashed(ng-if='vm.totalCashed()') На руках
       label.total Остаток долга
 
   .scroll-y#scroll-main(
@@ -35,7 +35,7 @@ cg-busy='vm.cgBusy'
             currency-value(value='item["sum(summ)"]')
 
 
-      .totals(ng-if='group.items.length > 1')
+      .totals.sub(ng-if='group.items.length > 1')
 
         currency-value.red(value='group.overdue' hide-empty='true')
         currency-value(value='group["sum(cashed)"]' ng-if='vm.totalCashed()')

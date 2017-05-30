@@ -17,6 +17,12 @@
     color: $state-warning-text;
   }
 
+  @include responsive-only(xxs) {
+    currency-value.red, .total.overdue {
+      display: none;
+    }
+  }
+
   .date > .title {
     font-size: 16px;
     @include responsive-only(lt-sm) {
@@ -39,6 +45,15 @@
 
     @include responsive-only(lt-sm) {
       min-height: 30px;
+
+    }
+
+    @include responsive-only(xxs) {
+
+      .totals {
+        padding: 5px;
+      }
+
     }
 
   }
@@ -96,9 +111,20 @@
     }
 
     .totals {
-      @include responsive-only(gt-xs) {
-        margin: 5px 0;
+
+      margin: 5px 0;
+
+      @include responsive-only(xxs) {
+
+        padding: 5px;
+        background-color: $gray-background-color;
+
+        &.sub {
+          background-color: transparent;
+        }
       }
+
+
     }
 
   }
@@ -114,9 +140,7 @@
     .outlet {
 
       flex: 1;
-      @include responsive-only(gt-xs) {
-        margin: 5px 0;
-      }
+      margin: 5px 0;
 
       font-weight: bold;
       color: $black;
@@ -241,7 +265,7 @@
       min-width: $field-width;
       text-align: right;
       @include responsive-only(xxs) {
-        min-width: $field-width - 15;
+        min-width: $field-width;
       }
     }
 
