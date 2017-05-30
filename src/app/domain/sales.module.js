@@ -2,20 +2,21 @@
 
 (function () {
 
-  let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition'];
+  let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet'];
 
   angular.module('Sales', ['sistemium', 'yaMap', 'Models'])
     .run(function (SalesmanAuth, InitService, Sockets, IOS, DEBUG, Schema, $rootScope, Menu, Auth) {
 
-      const {Workflow, SaleOrder} = Schema.models();
+      const {Workflow, SaleOrder, Outlet} = Schema.models();
 
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
 
           if (IOS.isIos()) {
             SUBSCRIPTIONS.push('RecordStatus');
-            Sockets.onJsData('jsData:update', onRecordStatus);
           }
+
+          Sockets.onJsData('jsData:update', onRecordStatus);
 
           if (salesmanAuth.getCurrentUser() || salesmanAuth.hasOptions) {
             DEBUG('Sales module will jsDataSubscribe:', SUBSCRIPTIONS);
@@ -53,6 +54,14 @@
       }
 
       function onRecordStatus(event) {
+
+        if (event.resource === 'Outlet') {
+          if (event.data.name) {
+            Outlet.inject(event.data);
+          } else {
+            Outlet.find(event.data.id, {bypassCache: true});
+          }
+        }
 
         if (event.resource !== 'RecordStatus') return;
 
