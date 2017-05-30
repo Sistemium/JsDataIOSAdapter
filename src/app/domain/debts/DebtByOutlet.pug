@@ -9,7 +9,11 @@ cg-busy='vm.cgBusy'
       label.total(ng-if='vm.totalCashed()') На руках
       label.total Остаток долга
 
-  .scroll-y(resize resize-offset-top='40' resize-offset-top-xs='32')
+  .scroll-y#scroll-main(
+  resize resize-offset-top='40' resize-offset-top-xs='32'
+  ng-if='vm.data.length'
+  elem-ready='vm.restoreScrollPosition()'
+  )
 
     .partner-debt-total(ng-repeat='group in vm.data track by group.partner.id')
 
