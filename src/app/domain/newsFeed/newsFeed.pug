@@ -1,6 +1,6 @@
 .ui-view(cg-busy='{promise: vm.busy, message: "Загрузка новостей"}')
   .news-feed(ng-if='!vm.busy')
-    .news
+    .news(ng-if='vm.isAdmin')
       .no-news
         p(ng-if='!vm.news') Новостей не найдено. Предлагаем
         p(ng-if='vm.news') Количество новостей {{vm.news.length}}. Предлагаем
