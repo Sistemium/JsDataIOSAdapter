@@ -2,7 +2,7 @@
 
 (function () {
 
-  function NewsFeedController($state, Schema, saControllerHelper, $scope, saApp, toastr) {
+  function NewsFeedController($state, Schema, saControllerHelper, $scope, saApp, toastr, Sockets, Auth) {
 
     let NewsMessage = Schema.model('NewsMessage');
     let UserNewsMessage = Schema.model('UserNewsMessage');
@@ -17,14 +17,13 @@
       submitNews,
       clearForm,
       saveRating,
+      isAdmin: Auth.isAdmin(),
+      regExForCurrVersion: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
 
       editNews,
       updateNews,
       newsHasChanges,
       revertChanges,
-
-      regExForCurrVersion: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
-      rating: 5
 
     });
 
@@ -34,9 +33,24 @@
       $state.go('newsFeed');
     });
 
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+
     /*
      Functions
      */
+
+    function onJSData(event) {
+
+      if (event.resource !== 'NewsMessage') {
+        return;
+      }
+
+      let id = event.data.id;
+
+      NewsMessage.find(id, {bypassCache: true})
+        .then(msg => console.info('updated newsMessage', msg));
+
+    }
 
     function onStateChange(to, params) {
 
