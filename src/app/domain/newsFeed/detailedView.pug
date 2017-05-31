@@ -10,17 +10,23 @@
 
       // TODO: Show if user has admin/editor? rights
       .buttons
-        button.btn-warning.btn.glyphicon.glyphicon-pencil(ng-click='vm.editNews()')
-        button.btn-warning.btn.glyphicon.glyphicon-camera(ng-click='vm.addPhoto()')
+        button.btn-warning.btn.glyphicon.glyphicon-pencil(ng-click='vm.editNews()' ng-if='vm.isAdmin')
+        button.btn-warning.btn.glyphicon.glyphicon-camera(ng-click='vm.addPhoto()' ng-if='vm.isAdmin')
+      .rating-block
 
-      .rating
-        label Оценка:
-        span(
-        uib-rating
-        ng-model='vm.news.userNewsMessage.rating'
-        max='5'
-        ng-click='vm.saveRating($event, vm.news.userNewsMessage.rating, vm.news.id)'
-        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
-        enable-reset='false'
-        aria-labelledby='default-rating'
-        )
+        .rating-mean(style='display: flex')
+          label(ng-if='vm.news.rating') Среднее:
+          span.flex-1
+          span {{vm.news.rating}}
+
+        .rating
+          label Оценка:
+          span(
+          uib-rating
+          ng-model='vm.news.userNewsMessage.rating'
+          max='5'
+          ng-click='vm.saveRating($event, vm.news.userNewsMessage.rating, vm.news.id)'
+          titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+          enable-reset='false'
+          aria-labelledby='default-rating'
+          )
