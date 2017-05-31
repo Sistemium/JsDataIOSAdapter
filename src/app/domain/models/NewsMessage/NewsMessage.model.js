@@ -4,13 +4,15 @@
 
   angular.module('Models').run(function (Schema) {
 
-    //TODO: Rating's mean
+    function getRating() {
 
-    function processingLabel(news) {
+      var rating = this.ratingsTotal / this.ratingsCount;
 
-      console.log(this);
+      if (rating) {
+        return rating % 1 != 0 ? rating.toFixed(1) : rating
+      }
 
-      return 'aasa';
+
     }
 
     Schema.register({
@@ -26,17 +28,10 @@
       },
 
       computed: {
-        rating: ['news', processingLabel]
+        rating: ['news', getRating]
       },
 
-      methods: {
-
-        // orderSubTotal: function () {
-        //   return _.sumBy(this.positions, item =>
-        //     item.count > 0 ? Math.round(100.0 * item.priceOrigin * item.count) / 100.0 : 0
-        //   );
-        // },
-      }
+      methods: {}
 
     });
 
