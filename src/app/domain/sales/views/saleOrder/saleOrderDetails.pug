@@ -99,9 +99,20 @@
         tr.clickable(
         ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
         )
-          td {{ item.article.name }}
+          td
+            .name {{ item.article.name }}
+            //.spaced
+              span.flag(ng-if='item.isCompDiscount') КС
+              span {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
+              span.gray
+                | x
+              span {{ item.price | number:2 }} ₽
+              span.gray
+                | =
+              span {{ item.cost | number:2 }} ₽
           td.number
-            quantity-edit(position='item')
+            //quantity-edit(position='item')
+            | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
           td.number.price
             .flags
               span.flag(ng-if='item.isCompDiscount') КС

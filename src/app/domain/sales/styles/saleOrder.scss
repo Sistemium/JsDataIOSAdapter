@@ -7,6 +7,11 @@
 
 .sale-order-details {
 
+  td .spaced {
+    display: block;
+    text-align: right;
+  }
+
   sale-order-alert .totals {
 
     .toggle-edit {
