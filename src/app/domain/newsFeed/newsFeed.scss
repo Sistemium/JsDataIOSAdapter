@@ -324,6 +324,7 @@
         flex-flow: column nowrap;
 
         .rating-mean {
+          display: flex;
           span:last-of-type {
             margin-right: 2px;
           }

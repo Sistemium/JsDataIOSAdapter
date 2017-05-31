@@ -14,7 +14,7 @@
         button.btn-warning.btn.glyphicon.glyphicon-camera(ng-click='vm.addPhoto()' ng-if='vm.isAdmin')
       .rating-block
 
-        .rating-mean(style='display: flex')
+        .rating-mean
           label(ng-if='vm.news.rating') Среднее:
           span.flex-1
           span {{vm.news.rating}}
