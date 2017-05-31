@@ -220,11 +220,11 @@
 
       .line-3 {
 
-
         height: 30px;
         justify-content: flex-end;
         display: flex;
         align-items: center;
+
         span {
           & > * {
             user-select: none;
@@ -299,15 +299,21 @@
     }
 
     .line-3 {
-      height: 33px;
+      height: 35px;
       justify-content: space-between;
       display: flex;
+      align-items: center;
 
-      button {
-        padding: 5px 10px;
+      .buttons {
+        height: 33px;
+        button {
+          padding: 5px 10px;
+        }
       }
 
-      .rating {
+      .rating-block {
+
+        line-height: 1;
 
         > * {
           user-select: none;
@@ -315,25 +321,34 @@
 
         display: flex;
         align-self: center;
+        flex-flow: column nowrap;
+
+        .rating-mean {
+          span:last-of-type {
+            margin-right: 2px;
+          }
+
+        }
+
+        .rating {
+          span {
+
+            > * {
+              outline: none;
+            }
+
+            cursor: pointer;
+            color: #2768b7;
+            margin-left: 2px;
+            i {
+              top: 0;
+            }
+          }
+        }
 
         label {
           margin-bottom: 3px;
           margin-right: 3px;
-        }
-
-        span {
-
-          > * {
-            outline: none;
-          }
-
-          cursor: pointer;
-          color: #2768b7;
-          margin-left: 2px;
-          margin-top: 3px;
-          i {
-            top: 0;
-          }
         }
 
       }
