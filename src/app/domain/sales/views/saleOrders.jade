@@ -37,11 +37,11 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
         ng-click='vm.itemClick(item)'
         )
-          td.processing(ng-class='item.workflow().cls')
-            span {{ item.workflow().label }}
+          td.processing(ng-class='item.workflowStep.cls')
+            span {{ item.workflowStep.label }}
             span(
             ng-if='item.processingMessage'
-            ng-class='item.workflow().messageCls'
+            ng-class='item.workflowStep.messageCls'
             )
               i.glyphicon.glyphicon-warning-sign
           td.tinyName(ng-if='!vm.currentSalesman') {{ item.salesman.tinyName }}

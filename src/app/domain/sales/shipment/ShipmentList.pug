@@ -27,7 +27,7 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
         ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
         ng-click='vm.itemClick(item, $event)'
         )
-          td.ndoc(ng-class='item.workflow().cls')
+          td.ndoc(ng-class='item.workflowStep.cls')
             span.ndoc {{ ::item.ndoc }}
             egais-popover(shipment='item' ng-if='item.egais')
               i.glyphicon(ng-class='item.egais.egaisTtnCls')

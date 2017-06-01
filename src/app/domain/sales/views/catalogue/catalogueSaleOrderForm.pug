@@ -3,7 +3,7 @@ uib-alert
 ng-if='vm.saleOrder.processingMessage'
 close='vm.saleOrder.processingMessage = null'
 )
-  strong(ng-class='vm.saleOrder.workflow().messageCls')
+  strong(ng-class='vm.saleOrder.workflowStep.messageCls')
     i.glyphicon.glyphicon-warning-sign
   span {{ vm.saleOrder.processingMessage }}
 
