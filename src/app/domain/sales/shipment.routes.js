@@ -15,6 +15,7 @@
 
           data: {
             title: 'Отгрузки',
+            auth: 'SalesmanAuth',
             rootState: 'sales.shipmentList'
           },
 
