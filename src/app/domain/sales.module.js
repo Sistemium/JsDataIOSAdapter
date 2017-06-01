@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+<<<<<<< HEAD
 
   let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet'];
 
@@ -76,5 +77,9 @@
       }
 
     });
+=======
+  
+  // angular.module('Sales', ['sistemium', 'yaMap']);
+>>>>>>> warehouse
 
 })();

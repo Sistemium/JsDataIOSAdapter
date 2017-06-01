@@ -26,7 +26,9 @@
       'ngFileUpload'
     ]);
 
-  angular.module('jsd', ['sistemiumBootstrap', 'Sales']);
+  angular.module('Sales', ['sistemium', 'yaMap']);
+
+  angular.module('jsd', ['sistemiumBootstrap', 'Models', 'Sales']);
 
 
 })();
