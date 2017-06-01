@@ -14,7 +14,8 @@
           controllerAs: 'vm',
 
           data: {
-            title: 'Заказы'
+            title: 'Заказы',
+            rootState: 'sales.saleOrders'
           },
 
           children: [{
