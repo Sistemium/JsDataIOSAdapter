@@ -59,7 +59,12 @@
 
         totalCost: function() {
           return Schema.aggregate('cost').sum(this.positions);
+        },
+
+        totalCostDoc: function() {
+          return _.sumBy(this.positions, pos => pos.volume * pos.priceDoc);
         }
+
       }
 
     });
