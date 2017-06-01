@@ -4,11 +4,7 @@
 
   function Auth($rootScope, $q, $state, $window, IOS, PickerAuth) {
 
-<<<<<<< HEAD
     const me = this;
-=======
-    let me = this;
->>>>>>> warehouse
 
     let roles;
     let rolesArray;
@@ -31,21 +27,12 @@
       roles = newRoles || {};
       currentUser = roles.account || {};
 
-<<<<<<< HEAD
-      currentUser.shortName = (function (name) {
-        var names = name.match(/(^[^ ]*) (.*$)/);
-        return names ? names[1] + ' ' + names[2][0] + '.' : name;
-      })(currentUser.name);
-
-      rolesArray = _.map(roles.roles, function (val, key) {
-=======
       currentUser.shortName = (name => {
         const names = name.match (/(^[^ ]*) (.*$)/);
         return names ? names[1] + ' ' + names[2][0] + '.' : name;
       })(currentUser.name);
 
       rolesArray = _.map(roles.roles, (val,key) => {
->>>>>>> warehouse
         return key;
       });
 
@@ -75,13 +62,8 @@
       if (!roles && (token || ios)) {
 
         rolesPromise = authProtocol.getRoles(token)
-<<<<<<< HEAD
-          .then(function (res) {
-            console.log('Auth.init', res);
-=======
           .then(res => {
             console.log ('Auth.init',res);
->>>>>>> warehouse
             return setRoles(res);
           });
 
@@ -89,11 +71,7 @@
 
       } else if (roles) {
 
-<<<<<<< HEAD
-        rolesPromise = $q(function (resolve) {
-=======
         rolesPromise = $q(resolve => {
->>>>>>> warehouse
           resolve(roles);
         });
 
@@ -101,11 +79,7 @@
 
       } else {
 
-<<<<<<< HEAD
-        return $q(function (resolve) {
-=======
         return $q(resolve => {
->>>>>>> warehouse
           resolveRoles = resolve;
         });
 
@@ -113,7 +87,6 @@
 
     }
 
-<<<<<<< HEAD
     function isAuthorized(anyRoles) {
       if (anyRoles && !angular.isArray(anyRoles)) {
         anyRoles = [anyRoles];
@@ -123,8 +96,6 @@
         ;
     }
 
-=======
->>>>>>> warehouse
     $rootScope.$on('$stateChangeStart', (event, next, nextParams, from) => {
 
       if (!roles) {
@@ -157,11 +128,7 @@
     });
 
     $rootScope.$on('authenticated', (event, res) => {
-<<<<<<< HEAD
-      console.log('authenticated', res);
-=======
       console.log ('authenticated', res);
->>>>>>> warehouse
       setRoles(res);
       if (resolveRoles) {
         resolveRoles(roles);
@@ -183,40 +150,23 @@
         return !!currentUser;
       },
 
-<<<<<<< HEAD
       isAdmin: function () {
         return isAuthorized(['admin', 'tester']);
-=======
-      isAdmin: () => {
-        return true;
->>>>>>> warehouse
       },
 
       init,
 
       getAccessToken,
 
-<<<<<<< HEAD
-      roles: function () {
-        return roles && roles.roles;
-      },
 
       isAuthorized,
+
       authId: function() {
         return currentUser.authId;
-=======
-      roles: () => {
-        return roles && roles.roles;
       },
 
-      isAuthorized: anyRoles => {
-        if (anyRoles && !angular.isArray(anyRoles)) {
-          anyRoles = [anyRoles];
-        }
-        return roles && !anyRoles ||
-          !!_.intersection (anyRoles,rolesArray).length
-        ;
->>>>>>> warehouse
+      roles: () => {
+        return roles && roles.roles;
       }
 
     });

@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SalesmanAuth($rootScope, $state, Schema, localStorageService, InitService, Sockets, IOS, DEBUG, Menu) {
+  function SalesmanAuth($rootScope, $state, Schema, localStorageService, InitService, Sockets, IOS, DEBUG, Menu, Auth) {
 
     const LOGIN_EVENT = 'salesman-login';
     const LOGOUT_EVENT = 'salesman-logout';
@@ -31,6 +31,8 @@
       isLoggedIn: () => !!currentSalesman
 
     };
+
+    const SalesmanAuth = service;
 
     salesModuleRun();
 
@@ -117,7 +119,7 @@
       let un1 = scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
       let un2 = scope.$on(LOGOUT_EVENT, () => callback(null));
       callback(currentSalesman);
-      scope.$on('$destroy', ()=>{
+      scope.$on('$destroy', () => {
         un1();
         un2();
       });
@@ -141,31 +143,32 @@
 
     function salesModuleRun() {
 
-      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition'];
+      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet'];
 
-      InitService.then(service.init)
+      const {Workflow, SaleOrder, Outlet} = Schema.models();
+
+      InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
 
           if (IOS.isIos()) {
             SUBSCRIPTIONS.push('RecordStatus');
-            Sockets.onJsData('jsData:update', onRecordStatus);
           }
+
+          Sockets.onJsData('jsData:update', onRecordStatus);
 
           if (salesmanAuth.getCurrentUser() || salesmanAuth.hasOptions) {
             DEBUG('Sales module will jsDataSubscribe:', SUBSCRIPTIONS);
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
-          const {Workflow, SaleOrder} = Schema.models();
+          getWorkflow('SaleOrder.v2', 'workflowSaleOrder');
 
-          Workflow.findAll({code: 'SaleOrder.v2'})
-            .then(workflow => {
-              Schema.workflowSaleOrder = _.get(_.first(workflow), 'workflow');
-            })
-            .catch(e => console.error('Workflow find error:', e));
+          if (Auth.isAuthorized('supervisor')) {
+            getWorkflow('SaleOrder.v2.sv', 'workflowSaleOrderSupervisor');
+          }
 
           function setBadges() {
-            let filter = salesmanAuth.makeFilter({processing: 'draft'});
+            let filter = SalesmanAuth.makeFilter({processing: 'draft'});
             SaleOrder.groupBy(filter)
               .then(data => {
                 Menu.setItemData('sales.saleOrders', {badge: data.length});
@@ -178,7 +181,25 @@
 
         });
 
+      function getWorkflow(code, codeAs) {
+
+        Workflow.findAll({code})
+          .then(workflow => {
+            SaleOrder.meta[codeAs] = _.get(_.first(workflow), 'workflow');
+          })
+          .catch(e => console.error('Workflow find error:', e));
+
+      }
+
       function onRecordStatus(event) {
+
+        if (event.resource === 'Outlet') {
+          if (event.data.name) {
+            Outlet.inject(event.data);
+          } else {
+            Outlet.find(event.data.id, {bypassCache: true});
+          }
+        }
 
         if (event.resource !== 'RecordStatus') return;
 
@@ -191,6 +212,7 @@
         }
 
       }
+
 
     }
 
