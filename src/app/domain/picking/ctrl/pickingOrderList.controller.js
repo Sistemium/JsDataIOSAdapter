@@ -2,19 +2,23 @@
 
 (function () {
 
-  angular.module('webPage')
-    .controller('PickingOrderListController', ctrl)
-  ;
+  function PickingOrderListController($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, saAsync, DEBUG) {
 
-  function ctrl ($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, saAsync, DEBUG) {
+    const picker = Schema.model('Picker').getCurrent();
 
-    const picker = Schema.model ('Picker').getCurrent();
+    const PO = Schema.model('PickingOrder');
+    const POP = Schema.model('PickingOrderPosition');
+    const SB = Schema.model('StockBatch');
+
+    const PS = Schema.model('PickingSession');
+    const POS = Schema.model('PickingOrderSession');
 
     if (!picker) {
-      return $state.go ('login');
+      return $state.go('login');
     }
 
     let date;
+
     let stateFilterYes = {
       pickerId: picker.id
     };
@@ -29,15 +33,72 @@
       stateFilterNo.processing = 'picked';
     }
 
-    let vm = this;
-    const PO = Schema.model ('PickingOrder');
-    const POP = Schema.model ('PickingOrderPosition');
-    const SB = Schema.model ('StockBatch');
+    let vm = _.assign(this, {
 
-    const PS = Schema.model('PickingSession');
-    const POS = Schema.model('PickingOrderSession');
+      toggleSelect: item => {
+        item.selected = !item.selected;
+        setSelected();
+      },
+
+      rowClass: order => {
+        return (order.selected ? 'active ' : '') + order.cls;
+      },
+
+      totals: PO.agg(vm, 'pickingOrders'),
+      selectedTotals: PO.agg(vm, 'selectedItems'),
+      hasSelected: false,
+
+      refresh: refresh
+
+    });
+
+    Schema.model('Setting').findAll({
+      group: 'domain',
+      name: 'picking.date'
+    }).then(res => {
+      if (res.length) {
+        date = res[0].value;
+      } else {
+        date = null;
+      }
+      refresh();
+    });
+
+    BarCodeScanner.bind(scanFn, SoundSynth.repeat);
+
+    $scope.$on('$destroy', PO.bindAll({
+      pickerId: picker.id
+    }, $scope, 'vm.pickingOrders'));
+
+    $scope.$on('$destroy', PO.bindAll({
+      pickerId: picker.id,
+      selected: true
+    }, $scope, 'vm.selectedItems'));
+
+    $scope.$on('$stateChangeSuccess', (e, to) => {
+      vm.hideBottomBar = !!_.get(to, 'data.hideBottomBar');
+      vm.mode = to.name.match(/[^\.]*$/)[0];
+      vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
+      if (to.name === 'picking.orderList') {
+        setSelected();
+      }
+    });
+
+    $scope.$watch('vm.hasSelected', n => {
+      vm.currentTotals = n ? vm.selectedTotals : vm.totals;
+    });
+
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['PickingOrder', 'PickingOrderPosition']));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+
+    PO.ejectAll();
+    POP.ejectAll();
 
     findUnfinishedPickingSession();
+
+    /*
+     Functions
+     */
 
     function findUnfinishedPickingSession() {
 
@@ -45,22 +106,22 @@
         pickerId: picker.id,
         siteId: picker.siteId,
         processing: 'picking'
-      }, { bypassCache: true })
+      }, {bypassCache: true})
         .then(pss => {
 
           let ps = _.first(pss);
 
           if (!ps) {
 
-            $state.go('picking.orderList',{state: 'notdone'});
+            $state.go('picking.orderList', {state: 'notdone'});
             return;
 
           }
 
           POS.findAll({pickingSessionId: ps.id})
-            .then((poses) => {
+            .then(pickingOrderSessions => {
 
-              let poIds = _.uniq(_.map(poses, 'pickingOrderId'));
+              let poIds = _.uniq(_.map(pickingOrderSessions, 'pickingOrderId'));
 
               PO.findAll({
                 pickerId: picker.id,
@@ -82,50 +143,56 @@
                     console.info('vm.hasSelected');
                     if (!_.endsWith($state.current.name, 'selectedOrders')) {
                       $state.go('.selectedOrders');
-                    } else  {
+                    } else {
                       $state.go('^');
                     }
                   } else {
-                    $state.go('picking.orderList',{state: 'notdone'});
+                    $state.go('picking.orderList', {state: 'notdone'});
                   }
 
-                })
-              ;
+                });
 
-            })
-          ;
+            });
 
-        })
-      ;
+        });
 
     }
 
-    function onFindPO (data) {
+    function onFindPO(data) {
+
       const i = (data && data.length) ? data[0] : data;
+
       if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
         PO.inject(i);
-        return POP.findAllWithRelations({ pickingOrderId: i.id })('Article')
+        return POP.findAllWithRelations({pickingOrderId: i.id})('Article')
       } else {
         PO.eject(i.id);
         return false;
       }
+
     }
 
-    const onJSData = event => {
+    function onJSData(event) {
+
       const id = _.get(event, 'data.id');
+
       if (!id) {
         return;
       }
+
       if (event.resource === 'PickingOrder') {
+
         PO.find(id, {bypassCache: true, cacheResponse: false})
           .then(onFindPO)
-          .catch (err => {
+          .catch(err => {
             if (err.error === 404) {
-              DEBUG ('PickingOrderListController:eject',id);
-              PO.eject (id);
+              DEBUG('PickingOrderListController:eject', id);
+              PO.eject(id);
             }
           });
+
       } else if (event.resource === 'PickingOrderPosition') {
+
         POP.find(id, {cacheResponse: false})
           .then(pos => {
             if (PO.get(pos.pickingOrderId)) {
@@ -133,10 +200,11 @@
               POP.loadRelations(pos, ['Article', 'PickingOrderPositionPicked']);
             }
           });
-      }
-    };
 
-    function setSelected () {
+      }
+    }
+
+    function setSelected() {
       vm.selectedItems = PO.filter({
         pickerId: picker.id,
         date: date,
@@ -145,20 +213,14 @@
       vm.hasSelected = !!vm.selectedItems.length;
     }
 
-    $scope.$on('$destroy',Sockets.jsDataSubscribe(['PickingOrder','PickingOrderPosition']));
-    $scope.$on('$destroy',Sockets.onJsData('jsData:update', onJSData));
-
-    PO.ejectAll();
-    POP.ejectAll();
-
     function refresh() {
 
       const lastModified = PO.lastModified();
 
       vm.busy = PO.findAll({
-          pickerId: picker.id,
-          date: date
-        }, {bypassCache: true, cacheResponse: false})
+        pickerId: picker.id,
+        date: date
+      }, {bypassCache: true, cacheResponse: false})
         .then(res => {
 
           let progress = {
@@ -174,25 +236,29 @@
 
               if (res) {
                 res.then(() => {
-                  progress.value ++;
+                  progress.value++;
                   done();
                 });
               } else {
-                progress.value ++;
+                progress.value++;
                 done();
               }
 
             };
           }), () => {
+
             vm.progress = false;
+
             if (!lastModified) {
               return;
             }
-            _.each (res, po => {
+
+            _.each(res, po => {
               if (po.DSLastModified() <= lastModified) {
                 PO.eject(po);
               }
             });
+
           });
 
           if (!vm.selectedItems.length && vm.mode !== 'orderList') {
@@ -203,46 +269,6 @@
 
         });
     }
-
-    $scope.$on('$destroy',PO.bindAll({
-      pickerId: picker.id
-    }, $scope, 'vm.pickingOrders'));
-
-    $scope.$on('$destroy',PO.bindAll({
-      pickerId: picker.id,
-      selected: true
-    }, $scope, 'vm.selectedItems'));
-
-    angular.extend(vm, {
-
-      toggleSelect: item => {
-        item.selected = !item.selected;
-        setSelected();
-      },
-
-      rowClass: order => {
-        return (order.selected ? 'active ' : '') + order.cls;
-      },
-
-      totals: PO.agg (vm, 'pickingOrders'),
-      selectedTotals: PO.agg (vm, 'selectedItems'),
-      hasSelected: false,
-
-      refresh: refresh
-
-    });
-
-    Schema.model('Setting').findAll({
-      group: 'domain',
-      name: 'picking.date'
-    }).then (res => {
-      if (res.length) {
-        date = res[0].value;
-      } else {
-        date = null;
-      }
-      refresh();
-    });
 
     function scanFn(code, type, object) {
 
@@ -266,34 +292,25 @@
       }
 
       q.then(sb => {
+
         if (!sb) {
           return SoundSynth.say(notFound);
         }
-        $scope.$broadcast ('stockBatchBarCodeScan',{
+
+        $scope.$broadcast('stockBatchBarCodeScan', {
           stockBatch: sb,
           code: code
         });
-      }, () => {
-        SoundSynth.say(notFound);
-      });
+
+      })
+        .catch(() => SoundSynth.say(notFound));
 
     }
 
-    BarCodeScanner.bind(scanFn, SoundSynth.repeat);
-
-    $scope.$on('$stateChangeSuccess', (e, to) => {
-      vm.hideBottomBar = !! _.get(to, 'data.hideBottomBar');
-      vm.mode = to.name.match(/[^\.]*$/)[0];
-      vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
-      if (to.name === 'picking.orderList') {
-        setSelected();
-      }
-    });
-
-    $scope.$watch('vm.hasSelected', n => {
-      vm.currentTotals = n ? vm.selectedTotals : vm.totals;
-    });
-
   }
 
-}());
+  angular.module('webPage')
+    .controller('PickingOrderListController', PickingOrderListController);
+
+
+})();
