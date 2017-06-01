@@ -24,7 +24,7 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
           th.number Позиций
       tbody
         tr.clickable(
-        ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.id'
+        ng-repeat='item in vm.data track by item.id'
         ng-click='vm.itemClick(item, $event)'
         )
           td.ndoc(ng-class='item.workflowStep.cls')
