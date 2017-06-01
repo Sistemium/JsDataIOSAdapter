@@ -17,13 +17,11 @@
       return $state.go('login');
     }
 
-    let date;
-
-    let stateFilterYes = {
+    const stateFilterYes = {
       pickerId: picker.id
     };
 
-    let stateFilterNo = {
+    const stateFilterNo = {
       processing: false
     };
 
@@ -33,7 +31,11 @@
       stateFilterNo.processing = 'picked';
     }
 
-    let vm = _.assign(this, {
+    let date;
+
+    const vm = this;
+
+    _.assign(vm, {
 
       toggleSelect: item => {
         item.selected = !item.selected;
@@ -50,18 +52,6 @@
 
       refresh: refresh
 
-    });
-
-    Schema.model('Setting').findAll({
-      group: 'domain',
-      name: 'picking.date'
-    }).then(res => {
-      if (res.length) {
-        date = res[0].value;
-      } else {
-        date = null;
-      }
-      refresh();
     });
 
     BarCodeScanner.bind(scanFn, SoundSynth.repeat);
@@ -94,7 +84,19 @@
     PO.ejectAll();
     POP.ejectAll();
 
-    findUnfinishedPickingSession();
+
+    Schema.model('Setting').findAll({
+      group: 'domain',
+      name: 'picking.date'
+    }).then(res => {
+      if (res.length) {
+        date = res[0].value;
+      } else {
+        date = null;
+      }
+      refresh();
+    });
+
 
     /*
      Functions
@@ -142,7 +144,7 @@
                   if (vm.hasSelected) {
                     console.info('vm.hasSelected');
                     if (!_.endsWith($state.current.name, 'selectedOrders')) {
-                      $state.go('.selectedOrders');
+                      $state.go('picking.orderList.selectedOrders');
                     } else {
                       $state.go('^');
                     }
