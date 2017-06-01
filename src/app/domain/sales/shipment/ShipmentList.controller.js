@@ -87,6 +87,7 @@
         ShipmentEgais.findAll(positionsFilter, {bypassCache: true, limit: 5000})
       ])
         .then(() => {
+          _.assign(filter, {orderBy:['outlet.name', 'outlet.address']});
           vm.rebindAll(Shipment, filter, 'vm.data');
         });
 
