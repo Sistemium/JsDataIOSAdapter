@@ -69,4 +69,4 @@
   angular.module('webPage')
     .controller('PhotoStreamController', PhotoStreamController);
 
-}());
+})();

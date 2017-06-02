@@ -138,4 +138,4 @@
   angular.module('webPage')
     .controller('SaleOrderDetailsController', SaleOrderDetailsController);
 
-}());
+})();

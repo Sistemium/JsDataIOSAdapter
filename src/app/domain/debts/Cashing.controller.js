@@ -147,4 +147,4 @@
   angular.module('webPage')
     .controller('CashingController', CashingController);
 
-}());
+})();

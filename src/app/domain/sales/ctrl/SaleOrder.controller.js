@@ -152,4 +152,4 @@
   angular.module('webPage')
     .controller('SaleOrderController', SaleOrderController);
 
-}());
+})();

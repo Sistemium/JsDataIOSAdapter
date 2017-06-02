@@ -228,4 +228,4 @@
   angular.module('webPage')
     .controller('DebtByOutletController', DebtByOutletController);
 
-}());
+})();

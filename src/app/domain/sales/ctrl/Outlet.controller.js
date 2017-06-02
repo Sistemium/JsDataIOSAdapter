@@ -235,4 +235,4 @@
   angular.module('webPage')
     .controller('OutletController', OutletController);
 
-}());
+})();
