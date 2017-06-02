@@ -1,8 +1,9 @@
 @import "../../styles/variables";
+@import "../../styles/flex";
 
 .root-navbar {
 
-  @extend .display-flex;
+  @extend %flex-center;
 
   margin-bottom: -7px;
   margin-top: $margin-bottom-xs;
