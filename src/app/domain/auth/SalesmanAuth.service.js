@@ -171,6 +171,7 @@
             let filter = SalesmanAuth.makeFilter({processing: 'draft'});
             SaleOrder.groupBy(filter)
               .then(data => {
+                data = _.filter(data, 'totalCost');
                 Menu.setItemData('sales.saleOrders', {badge: data.length});
               });
           }
