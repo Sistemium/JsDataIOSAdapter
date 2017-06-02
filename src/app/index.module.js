@@ -24,7 +24,8 @@
       'toggle-switch',
       'angularMoment',
       'swipe',
-      'ngFileUpload'
+      'ngFileUpload',
+      'ngPinchZoom'
     ]);
 
   angular.module('Sales', ['sistemium', 'yaMap']);
