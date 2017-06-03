@@ -48,7 +48,7 @@
       state: 'sales.photoReports',
       needRoles: SALES_ROLES
     }, {
-      title: 'ShipmentRoutePointPhotos',
+      title: 'Доставка',
       state: 'shipping.photos',
       needRoles: SALES_ROLES // mb need new role DRIVER?
     }, {
