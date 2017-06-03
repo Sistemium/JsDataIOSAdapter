@@ -13,10 +13,7 @@ li(uib-dropdown is-open='priceTypesOpen' ng-disabled='vm.saleOrder || vm.priceTy
     span {{vm.currentPriceType.name || 'Выберите тип цен'}}
     span.caret
 
-  ul.dropdown-menu(
-  uib-dropdown-menu
-  sa-click-outside outside-if='priceTypesOpen'
-  )
+  ul.dropdown-menu(uib-dropdown-menu)
     li(
     ng-repeat='priceType in vm.priceTypes track by priceType.id'
     ng-class='{active: vm.currentPriceType.name == priceType.name}'

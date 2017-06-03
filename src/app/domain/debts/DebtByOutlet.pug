@@ -6,29 +6,49 @@ cg-busy='vm.cgBusy'
 
   .header
     .totals
-      label.total(ng-if='vm.totalCashed()') На руках
+      label.total.overdue(ng-if='vm.totalOverdue()') Просрочено
+      label.total.cashed(ng-if='vm.totalCashed()') На руках
       label.total Остаток долга
 
-  .scroll-y(resize resize-offset-top='40' resize-offset-top-xs='32')
+  .scroll-y#scroll-main(
+  resize resize-offset-top='40' resize-offset-top-xs='32'
+  ng-if='vm.data.length'
+  elem-ready='vm.restoreScrollPosition()'
+  )
 
-    .outlet-debt-total(ng-repeat='item in vm.data | orderBy:"outlet.name" track by item.outletId')
+    .partner-debt-total(ng-repeat='group in vm.data | orderBy:"partner.shortName" track by group.partner.id')
 
-      .outlet(ng-class='{blocked: item.outlet.isActive === false}')
-        .name {{ ::item.outlet.name }}
-        small.address {{ ::item.outlet.address }}
+      h4.name {{ ::group.partner.shortName }}
 
-      .totals
+      .outlet-debt-total(ng-repeat='item in group.items | orderBy:"outlet.address" track by item.outlet.id')
 
-        currency-value(value='item["sum(cashed)"]')
+        .outlet(ng-class='{blocked: item.outlet.isActive === false}')
+          small.address {{ ::item.outlet.address }}
 
-        a.total(href ng-click='vm.itemClick(item)')
-          currency-value(value='item["sum(summ)"]')
+        a.totals(href ng-click='vm.itemClick(item)')
+
+          currency-value.red(value='item.overdue' hide-empty='true')
+
+          currency-value(value='item["sum(cashed)"]' ng-if='vm.totalCashed()')
+
+          .total
+            currency-value(value='item["sum(summ)"]')
+
+
+      .totals.sub(ng-if='group.items.length > 1')
+
+        currency-value.red(value='group.overdue' hide-empty='true')
+        currency-value(value='group["sum(cashed)"]' ng-if='vm.totalCashed()')
+
+        .total
+          currency-value(value='group["sum(summ)"]')
 
   .footer
     .totals.animate-show(ng-hide='vm.busy')
 
       label Итого:
 
-      a(href ng-click='vm.totalCashedClick()')
+      currency-value.red(value='vm.totalOverdue()' hide-empty='true')
+      a(href ng-click='vm.totalCashedClick()' ng-if='vm.totalCashed()')
         currency-value(value='vm.totalCashed()')
       currency-value(value='vm.totalSumm()')

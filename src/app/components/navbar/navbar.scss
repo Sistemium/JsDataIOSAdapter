@@ -1,8 +1,9 @@
 @import "../../styles/variables";
+@import "../../styles/flex";
 
 .root-navbar {
 
-  @extend .display-flex;
+  @extend %flex-center;
 
   margin-bottom: -7px;
   margin-top: $margin-bottom-xs;
@@ -24,7 +25,7 @@
   }
 
   > a + a {
-    margin-left: 35px;
+    margin-left: 20px;
     @media (max-width: $screen-xs-max) {
       margin-left: 15px;
     }
@@ -59,6 +60,12 @@
 
   syncer-indicator {
     margin-right: 8px;
+  }
+
+  a.sub-root-nav {
+    @include responsive-only(xxs) {
+      display: none;
+    }
   }
 
 }

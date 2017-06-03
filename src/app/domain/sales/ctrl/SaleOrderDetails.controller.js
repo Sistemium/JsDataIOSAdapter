@@ -2,11 +2,14 @@
 
 (function () {
 
-  function SaleOrderDetailsController(Schema, $scope, saControllerHelper, $state, $q, toastr, SaleOrderHelper, $timeout) {
+  function SaleOrderDetailsController(Schema, $scope, $state, $q, SaleOrderHelper, $timeout, Helpers) {
+
+    const {saControllerHelper, ClickHelper, toastr} = Helpers;
 
     const vm = saControllerHelper
       .setup(this, $scope)
-      .use(SaleOrderHelper);
+      .use(SaleOrderHelper)
+      .use(ClickHelper);
 
     const {SaleOrderPosition, SaleOrder, Contract, PriceType} = Schema.models();
 
@@ -90,7 +93,9 @@
     }
 
     function setSaleOrderClick(saleOrder) {
-      if (!saleOrder.id) return;
+      if (!saleOrder) {
+        return $state.go('sales.catalogue.saleOrder', {saleOrderId: null});
+      }
       $state.go($state.current.name, {id: saleOrder.id}, {inherit: true});
     }
 
@@ -99,7 +104,7 @@
       vm.saleOrder.processing = processing;
       vm.saleOrder.DSCreate()
         .then(saleOrder => {
-          let {desc, label} = _.result(saleOrder, 'workflow');
+          let {desc, label} = _.get(saleOrder, 'workflowStep');
           toastr.info(desc, `Статус заказа: ${label}`);
         })
         .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
@@ -133,4 +138,4 @@
   angular.module('webPage')
     .controller('SaleOrderDetailsController', SaleOrderDetailsController);
 
-}());
+})();

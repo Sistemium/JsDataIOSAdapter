@@ -191,4 +191,4 @@
     return IosAdapter;
   });
 
-}());
+})();

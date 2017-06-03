@@ -12,13 +12,14 @@
 
     form.form.form-horizontal(
     resize resize-offset-top='60' resize-offset-top-xs='100'
-    ng-disabled='!vm.saleOrder.workflow().editable'
+    ng-disabled='!vm.saleOrder.workflowStep.editable'
     ng-include="'app/domain/sales/views/catalogue/catalogueSaleOrderForm.html'"
     )
 
     .buttons
 
       button.btn.delete-sale-order-btn(
+      ng-if='vm.saleOrder.workflowStep.editable'
       ng-click='vm.deleteSaleOrderClick()'
       ng-class='vm.confirmDelete ? "btn-danger" : "btn-warning"'
       ng-blur='vm.confirmDelete = false'

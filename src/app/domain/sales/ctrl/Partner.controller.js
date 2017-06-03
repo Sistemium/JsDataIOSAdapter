@@ -87,4 +87,4 @@
     .controller('PartnerController', PartnerController)
   ;
 
-}());
+})();

@@ -86,7 +86,7 @@
       vm.saleOrder.processing = processing;
       vm.saleOrder.DSCreate()
         .then(saleOrder => {
-          let {desc, label} = _.result(saleOrder, 'workflow');
+          let {desc, label} = _.get(saleOrder, 'workflowStep');
           toastr.info(desc, `Статус заказа: ${label}`);
           $scope.$parent.saleOrderExpanded = false;
         })

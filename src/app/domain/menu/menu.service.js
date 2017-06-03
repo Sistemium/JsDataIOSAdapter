@@ -44,7 +44,7 @@
       state: 'sales.campaigns',
       needRoles: SALES_ROLES
     }, {
-      title: 'Фотоотчёты',
+      title: 'Фото-отчёты',
       state: 'sales.photoReports',
       needRoles: SALES_ROLES
     }, {

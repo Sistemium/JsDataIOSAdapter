@@ -239,4 +239,4 @@
   angular.module('webPage')
     .controller('PhotoReportsController', PhotoReportsController);
 
-}());
+})();

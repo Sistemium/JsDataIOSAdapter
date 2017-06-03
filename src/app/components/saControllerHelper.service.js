@@ -30,14 +30,14 @@
     }
 
     function watchStateChange(vm, $scope) {
-      managedOn($scope, '$stateChangeSuccess', (event, toState, toParams) => {
+      managedOn($scope, '$stateChangeSuccess', (event, toState, toParams, fromState, fromParams) => {
 
         _.assign(vm, {
           currentState: _.first(toState.name.match(/[^.]+$/))
         });
 
         if (_.isFunction(vm.onStateChange)) {
-          vm.onStateChange(toState, toParams);
+          vm.onStateChange(toState, toParams, fromState, fromParams);
         }
 
       })

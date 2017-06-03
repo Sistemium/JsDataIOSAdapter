@@ -44,4 +44,4 @@
   angular.module('webPage')
     .controller('NewsFeedController', NewsFeedController);
 
-}());
+})();

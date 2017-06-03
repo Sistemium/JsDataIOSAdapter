@@ -13,7 +13,7 @@ font-size-edit(append-to='catalogueArticle')
       .list-group-item.catalogue-article(
       ng-repeat='stock in vm.stock track by stock.id'
       ng-class='{"item-padding": vm.showImages}'
-      ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflow().editable'
+      ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
       )
 
         a.thumb(
@@ -80,7 +80,7 @@ font-size-edit(append-to='catalogueArticle')
 
             i.recently-shipped.glyphicon.glyphicon-star-empty(
             ng-if='vm.articleStats[stock.articleId]'
-            uib-tooltip='Недавно отгружено'
+            uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"
             )
 
             i.red.glyphicon.glyphicon-warning-sign(
@@ -111,7 +111,7 @@ font-size-edit(append-to='catalogueArticle')
             )
 
         .right(
-        ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflow().editable'
+        ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
         )
 
           button.btn.btn-default(

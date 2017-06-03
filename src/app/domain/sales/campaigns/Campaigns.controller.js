@@ -95,4 +95,4 @@
   angular.module('webPage')
     .controller('CampaignsController', CampaignsController);
 
-}());
+})();

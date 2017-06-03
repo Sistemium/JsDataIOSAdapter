@@ -3,6 +3,11 @@
 outlet-cashing-popover {
 
   $margin: 13px;
+  display: inline-block;
+
+  > a {
+    padding: 8px;
+  }
 
   .popover-inner {
     width: 270px;

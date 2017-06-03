@@ -18,10 +18,10 @@
 
   @extend %rounded-borders;
   @extend .spaced;
-  @extend .display-flex;
+  @extend %flex-center;
 
   .popover-trigger {
-    @extend .display-flex;
+    @extend %flex-center;
   }
 
   .totals {

@@ -8,7 +8,8 @@
       outlet: '<',
       summSign: '<',
       commentTextPlaceholder: '@',
-      ndocPlaceholder: '@'
+      ndocPlaceholder: '@',
+      isPopoverOpen: '='
     },
 
     transclude: true,

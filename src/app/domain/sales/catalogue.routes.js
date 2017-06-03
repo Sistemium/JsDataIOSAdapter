@@ -15,7 +15,8 @@
 
           data: {
             title: 'Каталог',
-            auth: 'SalesmanAuth'
+            auth: 'SalesmanAuth',
+            rootState: 'sales.catalogue'
           },
 
           children: [

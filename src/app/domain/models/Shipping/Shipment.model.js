@@ -31,6 +31,10 @@
           SaleOrder: {
             localField: 'saleOrder',
             localKey: 'saleOrderId'
+          },
+          ShipmentEgais: {
+            localField: 'egais',
+            foreignKey: 'shipmentId'
           }
         },
         hasMany: {
@@ -55,7 +59,12 @@
 
         totalCost: function() {
           return Schema.aggregate('cost').sum(this.positions);
+        },
+
+        totalCostDoc: function() {
+          return _.sumBy(this.positions, pos => pos.volume * pos.priceDoc);
         }
+
       }
 
     });

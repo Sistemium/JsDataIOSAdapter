@@ -822,4 +822,4 @@
   angular.module('Sales')
     .controller('CatalogueController', CatalogueController);
 
-}());
+})();

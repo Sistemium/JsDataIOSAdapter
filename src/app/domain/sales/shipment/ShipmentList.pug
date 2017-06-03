@@ -24,10 +24,14 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
           th.number Позиций
       tbody
         tr.clickable(
-        ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
+        ng-repeat='item in vm.data track by item.id'
         ng-click='vm.itemClick(item, $event)'
         )
-          td(ng-class='item.workflow().cls') {{ ::item.ndoc }}
+          td.ndoc(ng-class='item.workflowStep.cls')
+            span.ndoc {{ ::item.ndoc }}
+            egais-popover(shipment='item' ng-if='item.egais')
+              i.glyphicon(ng-class='item.egais.egaisTtnCls')
+              i.glyphicon(ng-class='item.egais.egaisActCls')
           td.tinyName
             driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]' ng-if='item.driver')
               span {{ ::item.driver.tinyName }}
@@ -35,7 +39,10 @@ section.ui-view.shipmentList(cg-busy='vm.cgBusy')
           td
             div {{ ::item.outlet.name }}
             .gray {{ ::item.outlet.address }}
-          td.number {{ ::item.totalCost() | number:2 }}
+          td.number
+            span.addCostDoc.gray(ng-if='item.totalCostDoc() - item.totalCost() > 0.01')
+              | (+{{ ::item.totalCostDoc() - item.totalCost() | number:2 }})&nbsp;
+            span.cost {{ ::item.totalCost() | number:2 }}
           td.number {{ ::item.positions.length | number:0 }}
 
       tfoot

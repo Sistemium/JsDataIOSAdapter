@@ -1,7 +1,17 @@
+@import "../../../styles/variables";
+
 .sale-order-popover {
 
   .option {
-    //min-width: 260px;
+
+    .name {
+      @extend %flex-center;
+    }
+
+    .address {
+      @extend .ellipsis;
+    }
+
   }
 
   .new-item {
@@ -22,10 +32,6 @@
       }
     }
 
-  }
-
-  .address {
-    @extend .ellipsis;
   }
 
 }
