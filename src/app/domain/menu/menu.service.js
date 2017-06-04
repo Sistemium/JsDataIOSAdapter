@@ -49,7 +49,7 @@
       needRoles: SALES_ROLES
     }, {
       title: 'Доставка',
-      state: 'shipping.photos',
+      state: 'shipping.routes',
       needRoles: SALES_ROLES // mb need new role DRIVER?
     }, {
     //   title: 'Визиты',

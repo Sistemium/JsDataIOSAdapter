@@ -18,6 +18,17 @@
       stateHelperProvider
         .state({
 
+          url: '/shipmentRoutes',
+          name: 'shipping.routes',
+          templateUrl: 'app/domain/shipping/shipmentRoutes.html',
+          controller: 'ShipmentRoutes as vm'
+
+        })
+      ;
+
+      stateHelperProvider
+        .state({
+
           url: '/shippingphotos?routeId&routePointId',
           name: 'shipping.photos',
           templateUrl: 'app/domain/shipping/shippingPhotos/shippingPhotos.html',
