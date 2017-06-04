@@ -79,10 +79,13 @@
         .then(() => {
           _.remove(vm.cashings, {id: cashing.id});
           $scope.$emit('DebtOrCashingModified');
+          vm.isPopoverOpen = false;
         });
     }
 
-    function triggerClick() {
+    function triggerClick(event) {
+
+      event.preventDefault();
 
       vm.isPopoverOpen = !vm.isPopoverOpen;
 

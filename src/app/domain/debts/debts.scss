@@ -13,13 +13,19 @@
     text-align: left;
   }
 
-  currency-value.red {
+  *.overdue {
     color: $state-warning-text;
   }
 
   @include responsive-only(xxs) {
     currency-value.red, .total.overdue {
       display: none;
+    }
+  }
+
+  .in-progress {
+    .date .ndoc > span {
+      color: $primary-color;
     }
   }
 
@@ -59,29 +65,37 @@
   }
 
   .header {
+
     border-bottom: $headers-border;
+
     label {
       color: $black;
+    }
+
+    .buttons {
+
+      flex: 1;
+      display: flex;
+      text-align: left;
+      justify-content: space-between;
+      align-items: center;
+
+      i + span {
+        margin-left: $margin;
+      }
+
+      @include responsive-only(lt-sm) {
+        .btn {
+          padding-left: 0;
+        }
+      }
+
     }
   }
 
   .footer {
 
     border-top: $headers-border;
-    //color: $gray;
-
-    .buttons {
-      flex: 1;
-      text-align: left;
-      i + span {
-        margin-left: $margin;
-      }
-      @include responsive-only(lt-sm) {
-        .btn {
-          padding-left: 0;
-        }
-      }
-    }
 
     @include responsive-only(xxs) {
       label {
@@ -171,9 +185,6 @@
     .cashings {
       @extend %table-row;
       text-align: right;
-      .cashed {
-        //margin-right: $field-width + $margin;
-      }
       .buttons {
         text-align: left;
         font-size: 75%;
@@ -182,6 +193,10 @@
         }
       }
     }
+  }
+
+  .cashed.unsaved {
+    color: $gray;
   }
 
   %table-row {
@@ -213,6 +228,10 @@
 
     .debt {
       @extend %table-row;
+      &:focus {
+        outline: none;
+        background-color: $gray-background-color;
+      }
     }
 
     .cashed {
@@ -236,7 +255,7 @@
 
     }
 
-    .overdue .tip {
+    .tip.overdue  {
       color: $state-warning-text;
     }
 

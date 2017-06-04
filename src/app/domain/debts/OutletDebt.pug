@@ -10,12 +10,30 @@
           small {{vm.outlet.address}}
       span.caret
 
+  .totals
+    to-summ-cashing(
+    popover-open='vm.toSummCashingPopoverOpen'
+    cashings='vm.unsavedCashings'
+    summ='vm.summToCash'
+    in-progress='vm.toSummCashingInProgress'
+    )
+
 .header
+
+  .buttons
+
+    outlet-cashing-popover.btn.btn-link(outlet='vm.outlet' is-popover-open='vm.addOtherPopoverOpen')
+      i.glyphicon.glyphicon-plus
+      span прочее
+
   .totals
     label.total(ng-if='vm.cashingTotal') На руках
     label.total Остаток долга
 
-.scroll-y(resize resize-offset-top='40')
+.scroll-y(
+resize resize-offset-top='40'
+ng-class='vm.toSummCashingInProgress && "in-progress"'
+)
 
   .cashing-undebted(ng-if='vm.undebtedCashings.length')
 
@@ -50,11 +68,11 @@
 
       .debt(
       ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id'
-      ng-class='{overdue: debt.isOverdue()}'
+      ng-click='vm.debtClick(debt, $event)'
       )
 
         label.ndoc
-          small.tip(ng-if='debt.isOverdue()')
+          small.tip.overdue(ng-if='debt.isOverdue()')
             span Просрочено
             = ' '
             span {{ debt.dateE | amDifference:null | amDurationFormat }}
@@ -72,11 +90,6 @@
           currency-value(value='debt.uncashed()')
 
 .footer
-
-  .buttons
-    outlet-cashing-popover.btn.btn-link(outlet='vm.outlet')
-      i.glyphicon.glyphicon-plus
-      span прочее
 
   .totals.animate-show(ng-hide='vm.busy')
 

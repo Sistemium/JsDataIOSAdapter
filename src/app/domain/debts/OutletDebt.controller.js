@@ -11,7 +11,9 @@
       .use({
         totalSumm,
         trashUndebtedClick,
-        confirmation: {}
+        confirmation: {},
+        debtClick,
+        unsavedCashings: []
       });
 
     const {outletId} = $state.params;
@@ -23,6 +25,42 @@
     /*
      Functions
      */
+
+    function debtClick(debt, event) {
+
+      if (event.defaultPrevented || !vm.summToCash) return;
+
+      event.preventDefault();
+      // event.stopImmediatePropagation();
+
+      let uncashed = debt.uncashed();
+      let summ = _.min([vm.summToCash && (vm.summToCash - (_.sumBy(vm.unsavedCashings, 'summ')||0)), uncashed]);
+
+      if (uncashed > 0 && summ > 0) {
+
+        let cashing = Cashing.inject({
+          summ,
+          debtId: debt.id,
+          outletId: debt.outletId,
+          date: moment().format()
+        });
+
+        vm.unsavedCashings.push(cashing);
+
+      } else {
+
+        let cashings = Cashing.filter({debtId: debt.id});
+
+        _.each(cashings, cashing => {
+          if (!cashing.DSLastSaved()) {
+            _.remove(vm.unsavedCashings, cashing);
+            Cashing.eject(cashing);
+          }
+        });
+
+      }
+
+    }
 
     function trashUndebtedClick(cashing) {
       if ((vm.confirmation[cashing.id] = !vm.confirmation[cashing.id])) {
