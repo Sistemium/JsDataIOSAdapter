@@ -4,7 +4,7 @@
 
   function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state) {
 
-    const {Shipment, ShipmentRoutePointPhoto} = Schema.models();
+    const {Shipment, ShipmentRoutePointPhoto, ShipmentRoutePoint} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -17,20 +17,23 @@
 
       });
 
-    if (!$state.params.routePointId) {
+    if (!vm.routePointId) {
       $state.go('shipping.routes');
     }
 
-    let filter = {shipmentRoutePointId: $state.params.routePointId};
+    // let filter = {shipmentRoutePointId: vm.routePointId};
 
     let q = [
-      ShipmentRoutePointPhoto.findAllWithRelations(filter, {bypassCache: true})(['ShipmentRoutePoint'])
+      ShipmentRoutePoint.loadRelations(vm.routePointId, ['Shipment', 'ShipmentRoutePointPhoto'])
+      // ,
+      // ShipmentRoutePointPhoto.findAllWithRelations(filter, {bypassCache: true})(['ShipmentRoutePoint'])
     ];
     vm.setBusy(q);
 
-    vm.rebindAll(ShipmentRoutePointPhoto, {orderBy: [['deviceCts', 'DESC']]}, 'vm.data');
+    vm.rebindAll(Shipment, {orderBy: [['deviceCts', 'DESC']]}, 'vm.shipments');
+    vm.rebindAll(ShipmentRoutePointPhoto, {orderBy: [['deviceCts', 'DESC']]}, 'vm.photos');
 
-    $scope.$on('$destroy', $scope.$watch('vm.data', initEmptyPhoto));
+    $scope.$on('$destroy', $scope.$watch('vm.photos', initEmptyPhoto));
 
     function initEmptyPhoto() {
 
@@ -44,7 +47,7 @@
     function thumbClick(picture) {
 
       vm.commentText = picture.shipmentRoutePoint.name;
-      $scope.imagesAll = vm.data;
+      $scope.imagesAll = vm.photos;
 
       return vm.thumbnailClick(picture);
 

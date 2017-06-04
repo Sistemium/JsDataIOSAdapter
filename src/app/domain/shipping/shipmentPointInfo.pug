@@ -11,11 +11,13 @@ section.ui-view(cg-busy='vm.cgBusy')
   resize
   resize-offset-top='10'
   resize-property='max-height'
-  ng-if='vm.data.length'
   )
 
+    p photos {{ vm.photos.length }}
+    p shipments {{ vm.shipments.length }}
+
     .shipmentRoutePointPhotos
-      .shipmentRoutePointPhoto(ng-repeat='item in vm.data track by item.id')
+      .shipmentRoutePointPhoto(ng-repeat='item in vm.photos track by item.id')
 
         a.thumb(
         href
