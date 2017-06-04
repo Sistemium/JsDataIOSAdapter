@@ -15,4 +15,4 @@ uib-popover-template='"app/domain/components/toSummCashing/toSummCashing.templat
 )
   span(ng-if='!vm.inProgress') Подбор под сумму
   span(ng-if='vm.inProgress && !vm.isReady()') Осталось подобрать {{ vm.summRemains() | number:2 }}
-  span(ng-if='vm.isReady()') Готово, сохрвнить
+  span(ng-if='vm.isReady()') Готово, сохранить выбор
