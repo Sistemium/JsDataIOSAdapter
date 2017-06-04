@@ -40,10 +40,10 @@
       stateHelperProvider
         .state({
 
-          url: '/shippingphotos?routeId&routePointId',
-          name: 'shipping.photos',
-          templateUrl: 'app/domain/shipping/shippingPhotos/shippingPhotos.html',
-          controller: 'ShippingPhotos as vm'
+          url: '/shippingphotos?routePointId',
+          name: 'shipping.pointInfo',
+          templateUrl: 'app/domain/shipping/shipmentPointInfo.html',
+          controller: 'ShipmentPointInfo as vm'
 
         })
       ;
