@@ -18,7 +18,7 @@
   }
 
   @include responsive-only(xxs) {
-    currency-value.red, .total.overdue {
+    .overdue {
       display: none;
     }
   }
@@ -39,6 +39,39 @@
       color: $black;
       margin-bottom: 4px;
     }
+  }
+
+  .alert {
+
+    .totals {
+
+      to-summ-cashing {
+
+        @include responsive-only(xxs) {
+          width: 100%;
+
+          button {
+
+            width: 100%;
+            display: block;
+
+            & + button {
+              margin-top: $margin;
+            }
+
+          }
+
+        }
+
+        @include responsive-only(gt-xxs) {
+          button + button {
+            margin-left: $margin;
+          }
+        }
+
+      }
+    }
+
   }
 
   .header, .footer {
@@ -137,7 +170,6 @@
           background-color: transparent;
         }
       }
-
 
     }
 
@@ -255,7 +287,7 @@
 
     }
 
-    .tip.overdue  {
+    .tip.overdue {
       color: $state-warning-text;
     }
 
