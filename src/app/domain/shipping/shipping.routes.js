@@ -29,6 +29,17 @@
       stateHelperProvider
         .state({
 
+          url: '/shipmentPoints?routeId',
+          name: 'shipping.points',
+          templateUrl: 'app/domain/shipping/shipmentPoints.html',
+          controller: 'ShipmentPoints as vm'
+
+        })
+      ;
+
+      stateHelperProvider
+        .state({
+
           url: '/shippingphotos?routeId&routePointId',
           name: 'shipping.photos',
           templateUrl: 'app/domain/shipping/shippingPhotos/shippingPhotos.html',
