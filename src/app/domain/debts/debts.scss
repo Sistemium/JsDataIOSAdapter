@@ -27,6 +27,9 @@
     .date .ndoc > span {
       color: $primary-color;
     }
+    div.debt *:hover {
+      cursor: pointer;
+    }
   }
 
   .date > .title {
@@ -231,6 +234,10 @@
     color: $gray;
   }
 
+  .cash-this {
+    min-width: 40px !important;
+  }
+
   %table-row {
 
     display: flex;
@@ -260,9 +267,8 @@
 
     .debt {
       @extend %table-row;
-      &:focus {
+      & *:focus {
         outline: none;
-        background-color: $gray-background-color;
       }
     }
 
