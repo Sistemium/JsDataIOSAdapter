@@ -20,7 +20,7 @@
     vm.setBusy(q);
 
     function selectRoute(route) {
-      $state.go('.', {routeId: route.id});
+      $state.go('shipping.points', {routeId: route.id});
     }
 
   }
