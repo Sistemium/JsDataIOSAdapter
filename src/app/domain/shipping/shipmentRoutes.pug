@@ -1,0 +1,19 @@
+section.ui-view(cg-busy='vm.cgBusy')
+
+  #scroll-main.scroll-y(
+  resize
+  resize-offset-top='10'
+  resize-property='max-height'
+  ng-if='vm.data.length'
+  )
+
+    .routes
+      .route(ng-repeat='item in vm.data track by item.id')
+
+        .date
+          a(
+          href
+          ng-click='vm.selectRoute(item)'
+          ) {{ item.date | amUtc | amLocal | amCalendar }} ({{item.routePoints.length}} точек)
+
+        hr
