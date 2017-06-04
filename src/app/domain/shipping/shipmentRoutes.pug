@@ -7,13 +7,12 @@ section.ui-view(cg-busy='vm.cgBusy')
   ng-if='vm.data.length'
   )
 
-    .routes
-      .route(ng-repeat='item in vm.data track by item.id')
+    .shipmentRoutes
+      .shipmentRoute(ng-repeat='item in vm.data track by item.id')
 
-        .date
-          a(
-          href
-          ng-click='vm.selectRoute(item)'
-          ) {{ item.date | amUtc | amLocal | amCalendar }} ({{item.routePoints.length}} точек)
+        a(
+        href
+        ng-click='vm.selectRoute(item)'
+        ) {{ item.date | amUtc | amLocal | amCalendar }} ({{item.routePoints.length}} точек)
 
         hr
