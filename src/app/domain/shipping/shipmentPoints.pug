@@ -1,0 +1,18 @@
+section.ui-view(cg-busy='vm.cgBusy')
+
+  #scroll-main.scroll-y(
+  resize
+  resize-offset-top='10'
+  resize-property='max-height'
+  ng-if='vm.data.length'
+  )
+
+    .shipmentPoints
+      .shipmentPoint(ng-repeat='item in vm.data track by item.id')
+
+        a(
+        href
+        ng-click='vm.selectPoint(item)'
+        ) {{ item.name }} / {{ item.address }} ({{item.photos.length}} фото)
+
+        hr
