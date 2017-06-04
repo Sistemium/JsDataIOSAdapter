@@ -13,6 +13,6 @@ section.ui-view(cg-busy='vm.cgBusy')
         a(
         href
         ng-click='vm.selectPoint(item)'
-        ) {{ item.name }} / {{ item.address }} ({{item.photos.length}} фото)
+        ) {{ item.name }} / {{ item.address }} ({{item.photos.length}} фото) ({{item.shipment.ndocs.length}} накладных, {{item.shipment.positionCnt}} позиций)
 
         hr
