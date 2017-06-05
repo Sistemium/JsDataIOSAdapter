@@ -2,7 +2,7 @@
 
 (function () {
 
-  function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state) {
+  function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state, $q) {
 
     const {ShipmentRoutePointPhoto, ShipmentRoutePoint, ShipmentRoutePointShipment, Shipment} = Schema.models();
     const {saControllerHelper} = Helpers;
@@ -46,6 +46,12 @@
         };
 
         vm.shipments = Shipment.filter(shipmentFilter);
+
+        return $q.all(_.map(vm.shipments, shipment => {
+          return Shipment.loadRelations(shipment.id, ['ShipmentPosition']).then(shipmentWithRelations => {
+            console.info(shipmentWithRelations);
+          });
+        }));
 
       })
     ];
