@@ -7,21 +7,26 @@ section.ui-view(cg-busy='vm.cgBusy')
 
   hr
 
-  make-photo(
-  model='vm.shipmentRoutePointPhoto'
-  model-name='ShipmentRoutePointPhoto'
-  )
-    i.glyphicon.glyphicon-camera
-    span Добавить фото
-
   #scroll-main.scroll-y(
   resize
   resize-offset-top='10'
   resize-property='max-height'
   )
 
-    p photos {{ vm.photos.length }}
-    p shipments {{ vm.shipments.length }}
+    p Накладные
+
+    .shipments
+      .shipment(ng-repeat='item in vm.shipments track by item.id')
+        p {{ item.ndoc }} {{ item.date | amUtc | amLocal | amCalendar }}
+
+    hr
+
+    make-photo(
+    model='vm.shipmentRoutePointPhoto'
+    model-name='ShipmentRoutePointPhoto'
+    )
+      i.glyphicon.glyphicon-camera
+      span Добавить фото
 
     .shipmentRoutePointPhotos
       .shipmentRoutePointPhoto(ng-repeat='item in vm.photos track by item.id')
@@ -29,7 +34,8 @@ section.ui-view(cg-busy='vm.cgBusy')
         a.thumb(
         href
         ng-click='vm.thumbClick(item)'
-        ) {{ item.deviceCts | amUtc | amLocal | amCalendar }}
+        )
           img(ng-src='{{ item.srcThumbnail }}')
+          span {{ item.deviceCts | amUtc | amLocal | amCalendar }}
 
         hr
