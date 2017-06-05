@@ -7,6 +7,20 @@ section.ui-view(cg-busy='vm.cgBusy')
 
   hr
 
+  a(
+  href
+  ng-if='!vm.routePoint.reachedAtLocationId'
+  ng-click='vm.confirmArrival()'
+  ) Прибыл в точку
+
+  a(
+  href
+  ng-if='vm.routePoint.reachedAtLocationId'
+  ng-click='vm.doneShipping()'
+  ) Завершить отгрузку
+
+  hr
+
   #scroll-main.scroll-y(
   resize
   resize-offset-top='10'

@@ -14,7 +14,9 @@
         routePointId: $state.params.routePointId,
 
         thumbClick,
-        goBack
+        goBack,
+        confirmArrival,
+        doneShipping
 
       });
 
