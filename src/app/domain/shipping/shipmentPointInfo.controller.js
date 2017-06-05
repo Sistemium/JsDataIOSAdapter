@@ -42,9 +42,6 @@
 
         vm.shipments = Shipment.filter(shipmentFilter);
 
-        // return Shipment.findAll({}).then(() => {
-        // });
-
       })
     ];
     vm.setBusy(q);
