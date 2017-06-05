@@ -97,6 +97,13 @@
 
     }
 
+    function doneShipping() {
+
+      // have to set all shipments shipment.isShipped = YES
+      console.info('doneShipping');
+
+    }
+
   }
 
   angular.module('webPage')
