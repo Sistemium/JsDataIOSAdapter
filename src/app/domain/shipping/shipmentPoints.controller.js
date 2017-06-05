@@ -9,11 +9,12 @@
 
     const vm = saControllerHelper.setup(this, $scope)
       .use({
-        selectPoint
+        selectPoint,
+        goBack
       });
 
     if (!$state.params.routeId) {
-      $state.go('shipping.routes');
+      goBack();
     }
 
     let filter = {shipmentRouteId: $state.params.routeId};
@@ -25,6 +26,10 @@
 
     function selectPoint(point) {
       $state.go('shipping.pointInfo', {routePointId: point.id});
+    }
+
+    function goBack() {
+      $state.go('shipping.routes');
     }
 
   }
