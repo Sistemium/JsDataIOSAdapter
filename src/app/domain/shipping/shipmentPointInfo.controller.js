@@ -22,39 +22,44 @@
       $state.go('shipping.routes');
     }
 
+    let findPointPromise = ShipmentRoutePoint.find(vm.routePointId).then(point => {
+
+      vm.routePoint = point;
+      return ShipmentRoutePoint.loadRelations(point.id, ['ShipmentRoutePointPhoto']);
+
+    });
+
+    let loadPositionsPromise = $q.all(_.map(vm.shipments, shipment => {
+      return Shipment.loadRelations(shipment.id, ['ShipmentPosition']).then(shipmentWithRelations => {
+        // console.info(shipmentWithRelations);
+        // have no position — need to check it later
+      });
+    }));
+
     let shipmentFilter = {shipmentRoutePointId: vm.routePointId};
+    let findPointShipmentPromise = ShipmentRoutePointShipment.findAllWithRelations(shipmentFilter)('Shipment').then(shipments => {
+
+      let shipmentIds = _.map(shipments, shipment => {
+        return shipment.shipmentId;
+      });
+
+      let shipmentFilter = {
+        where: {
+          id: {
+            'in': shipmentIds
+          }
+        }
+      };
+
+      vm.shipments = Shipment.filter(shipmentFilter);
+
+      return loadPositionsPromise;
+
+    });
 
     let q = [
-      ShipmentRoutePoint.find(vm.routePointId).then(point => {
-
-        vm.routePoint = point;
-        return ShipmentRoutePoint.loadRelations(point.id, ['ShipmentRoutePointPhoto']);
-
-      }),
-      ShipmentRoutePointShipment.findAllWithRelations(shipmentFilter)('Shipment').then(shipments => {
-
-        let shipmentIds = _.map(shipments, shipment => {
-          return shipment.shipmentId;
-        });
-
-        let shipmentFilter = {
-          where: {
-            id: {
-              'in': shipmentIds
-            }
-          }
-        };
-
-        vm.shipments = Shipment.filter(shipmentFilter);
-
-        return $q.all(_.map(vm.shipments, shipment => {
-          return Shipment.loadRelations(shipment.id, ['ShipmentPosition']).then(shipmentWithRelations => {
-            // console.info(shipmentWithRelations);
-            // have no position — need to check it later
-          });
-        }));
-
-      })
+      findPointPromise,
+      findPointShipmentPromise
     ];
     vm.setBusy(q);
 
