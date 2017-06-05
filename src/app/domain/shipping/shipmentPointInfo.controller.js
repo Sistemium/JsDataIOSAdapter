@@ -49,7 +49,8 @@
 
         return $q.all(_.map(vm.shipments, shipment => {
           return Shipment.loadRelations(shipment.id, ['ShipmentPosition']).then(shipmentWithRelations => {
-            console.info(shipmentWithRelations);
+            // console.info(shipmentWithRelations);
+            // have no position — need to check it later
           });
         }));
 
