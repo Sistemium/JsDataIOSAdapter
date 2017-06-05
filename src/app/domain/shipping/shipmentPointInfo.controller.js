@@ -2,9 +2,9 @@
 
 (function () {
 
-  function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state, $q) {
+  function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state, $q, LocationHelper, toastr) {
 
-    const {ShipmentRoutePointPhoto, ShipmentRoutePoint, ShipmentRoutePointShipment, Shipment} = Schema.models();
+    const {ShipmentRoutePointPhoto, ShipmentRoutePoint, ShipmentRoutePointShipment, Shipment, Location} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -96,6 +96,35 @@
 
       // have to get Location and set ShipmentRoutePoint.reachedAtLocationId
       console.info('confirmArrival');
+
+      let q = getLocation(vm.routePointId)
+        .then((data) => {
+
+          let reachedAtLocation = Location.inject(data);
+          vm.routePoint.reachedAtLocationId = reachedAtLocation.id;
+
+          return $q.all([
+            Location.save(reachedAtLocation.id),
+            ShipmentRoutePoint.save(vm.routePointId)
+          ]);
+
+        });
+
+      vm.setBusy(q, 'Поиск геопозиции…');
+
+    }
+
+    function getLocation(ownerId) {
+
+      return LocationHelper.getLocation(100, ownerId, 'ShipmentRoutePoint')
+        .catch((err) => gotError(err, 'Невозможно получить геопозицию.'));
+
+    }
+
+    function gotError(err, errText) {
+
+      toastr.error(angular.toJson(err), errText);
+      throw errText;
 
     }
 
