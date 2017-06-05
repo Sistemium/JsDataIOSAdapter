@@ -25,7 +25,12 @@
     let shipmentFilter = {shipmentRoutePointId: vm.routePointId};
 
     let q = [
-      ShipmentRoutePoint.find(vm.routePointId).then(point => vm.routePoint = point),
+      ShipmentRoutePoint.find(vm.routePointId).then(point => {
+
+        vm.routePoint = point;
+        return ShipmentRoutePoint.loadRelations(point.id, ['ShipmentRoutePointPhoto']);
+
+      }),
       ShipmentRoutePointShipment.findAllWithRelations(shipmentFilter)('Shipment').then(shipments => {
 
         let shipmentIds = _.map(shipments, shipment => {
