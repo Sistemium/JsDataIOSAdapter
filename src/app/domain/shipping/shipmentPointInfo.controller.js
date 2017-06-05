@@ -90,6 +90,13 @@
       $state.go('shipping.points', {routeId: vm.routePoint.shipmentRouteId});
     }
 
+    function confirmArrival() {
+
+      // have to get Location and set ShipmentRoutePoint.reachedAtLocationId
+      console.info('confirmArrival');
+
+    }
+
   }
 
   angular.module('webPage')
