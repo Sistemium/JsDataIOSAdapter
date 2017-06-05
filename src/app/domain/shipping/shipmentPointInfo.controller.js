@@ -4,7 +4,7 @@
 
   function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state) {
 
-    const {ShipmentRoutePointPhoto, ShipmentRoutePoint, ShipmentRoutePointShipment} = Schema.models();
+    const {ShipmentRoutePointPhoto, ShipmentRoutePoint, ShipmentRoutePointShipment, Shipment} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -22,21 +22,35 @@
       $state.go('shipping.routes');
     }
 
-    // let filter = {shipmentRoutePointId: vm.routePointId};
-    // ffb32924-3a4f-11e7-8000-a94bf6924c85 0 shipments
-    // ffab8804-3a4f-11e7-8000-a94bf6924c85
-
-    // ShipmentRoutePointShipment.findAll({shipmentRoutePointId: 'ffab8804-3a4f-11e7-8000-a94bf6924c85'}).then(res => {
-    //   console.info(res);
-    // });
+    let shipmentFilter = {shipmentRoutePointId: vm.routePointId};
 
     let q = [
-      ShipmentRoutePoint.find(vm.routePointId).then(point => vm.routePoint = point)
+      ShipmentRoutePoint.find(vm.routePointId).then(point => vm.routePoint = point),
+      ShipmentRoutePointShipment.findAllWithRelations(shipmentFilter)('Shipment').then(shipments => {
+
+        let shipmentIds = _.map(shipments, shipment => {
+          return shipment.shipmentId;
+        });
+
+        let shipmentFilter = {
+          where: {
+            id: {
+              'in': shipmentIds
+            }
+          }
+        };
+
+        vm.shipments = Shipment.filter(shipmentFilter);
+
+        // return Shipment.findAll({}).then(() => {
+        // });
+
+      })
     ];
     vm.setBusy(q);
 
-    // vm.rebindAll(Shipment, {orderBy: [['deviceCts', 'DESC']]}, 'vm.shipments');
-    // vm.rebindAll(ShipmentRoutePointPhoto, {orderBy: [['deviceCts', 'DESC']]}, 'vm.photos');
+    let photoFilter = {shipmentRoutePointId: vm.routePointId, orderBy: [['deviceCts', 'DESC']]};
+    vm.rebindAll(ShipmentRoutePointPhoto, photoFilter, 'vm.photos');
 
     $scope.$on('$destroy', $scope.$watch('vm.photos', initEmptyPhoto));
 
