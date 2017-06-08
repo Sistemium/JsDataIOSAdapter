@@ -130,8 +130,15 @@
 
     function doneShipping() {
 
-      // have to set all shipments shipment.isShipped = YES
-      console.info('doneShipping');
+      let doneShippingPromise = $q.all(_.map(vm.shipments, shipment => {
+
+        shipment.isShipped = true;
+        return Shipment.save(shipment.id);
+
+      }));
+
+      let q = [doneShippingPromise.then(goBack())];
+      vm.setBusy(q);
 
     }
 
