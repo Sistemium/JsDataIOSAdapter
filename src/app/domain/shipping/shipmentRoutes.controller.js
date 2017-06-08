@@ -12,10 +12,12 @@
         selectRoute
       });
 
-    let filter = SalesmanAuth.makeFilter({limit: 10, orderBy: [['date', 'DESC']]});
+    let filter = SalesmanAuth.makeFilter();
+
+    let options = {limit: 10, orderBy: [['date', 'DESC']]};
 
     let q = [
-      ShipmentRoute.findAllWithRelations(filter)('ShipmentRoutePoint').then(routes => vm.data = routes)
+      ShipmentRoute.findAllWithRelations(filter, options)('ShipmentRoutePoint').then(routes => vm.data = routes)
     ];
     vm.setBusy(q);
 
