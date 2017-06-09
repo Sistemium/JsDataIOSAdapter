@@ -8,7 +8,7 @@ section.ui-view(cg-busy='vm.cgBusy')
   )
 
     .shipmentRoutes
-      .shipmentRoute(ng-repeat='item in vm.data track by item.id')
+      .shipmentRoute(ng-repeat='item in vm.data | orderBy:"-date" track by item.id')
 
         a(
         href
