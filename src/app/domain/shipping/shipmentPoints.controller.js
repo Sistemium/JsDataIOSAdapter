@@ -13,11 +13,13 @@
         goBack
       });
 
-    if (!$state.params.routeId) {
+    const routeId = $state.params.routeId;
+
+    if (!routeId) {
       goBack();
     }
 
-    let filter = {shipmentRouteId: $state.params.routeId};
+    let filter = {shipmentRouteId: routeId};
 
     let q = [
       ShipmentRoutePoint.findAllWithRelations(filter)(['ShipmentRoutePointPhoto']).then(points => vm.data = points)
