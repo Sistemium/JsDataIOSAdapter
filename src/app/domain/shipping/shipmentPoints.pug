@@ -15,7 +15,7 @@ section.ui-view(cg-busy='vm.cgBusy')
   )
 
     .shipmentPoints
-      .shipmentPoint(ng-repeat='item in vm.data track by item.id')
+      .shipmentPoint(ng-repeat='item in vm.data | orderBy:"ord" track by item.id')
 
         a(
         href
