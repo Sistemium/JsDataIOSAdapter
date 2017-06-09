@@ -2,7 +2,7 @@
 
 (function () {
 
-  function ShipmentRoutes(Schema, Helpers, $scope, $state, SalesmanAuth) {
+  function ShipmentRoutes(Schema, Helpers, $scope, $state) {
 
     const {ShipmentRoute} = Schema.models();
     const {saControllerHelper} = Helpers;
@@ -12,12 +12,10 @@
         selectRoute
       });
 
-    let filter = SalesmanAuth.makeFilter();
-
     let options = {limit: 10, orderBy: [['date', 'DESC']]};
 
     let q = [
-      ShipmentRoute.findAllWithRelations(filter, options)('ShipmentRoutePoint').then(routes => vm.data = routes)
+      ShipmentRoute.findAllWithRelations({}, options)('ShipmentRoutePoint').then(routes => vm.data = routes)
     ];
     vm.setBusy(q);
 
