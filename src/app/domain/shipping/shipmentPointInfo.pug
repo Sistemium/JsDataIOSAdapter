@@ -31,7 +31,7 @@ section.ui-view(cg-busy='vm.cgBusy')
 
     .shipments
       .shipment(ng-repeat='item in vm.shipments track by item.id')
-        p {{ item.ndoc }} / {{ item.date | amUtc | amLocal | amCalendar }} / {{ item.positions.count }} {{ item.positionsCountRu(item.positions.count) }}
+        p {{ item.ndoc }} / {{ item.date | amUtc | amLocal | amCalendar }} / {{ item.positions.length }} {{ item.positionsCountRu(item.positions.length) }}
 
     hr
 
