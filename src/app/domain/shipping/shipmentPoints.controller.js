@@ -4,7 +4,7 @@
 
   function ShipmentPoints(Schema, Helpers, $scope, $state) {
 
-    const {ShipmentRoutePoint} = Schema.models();
+    const {ShipmentRoute, ShipmentRoutePoint} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -22,6 +22,7 @@
     let filter = {shipmentRouteId: routeId};
 
     let q = [
+      ShipmentRoute.find(routeId).then(route => vm.routeDate = route.date),
       ShipmentRoutePoint.findAllWithRelations(filter)(['ShipmentRoutePointPhoto']).then(points => vm.data = points)
     ];
     vm.setBusy(q);
