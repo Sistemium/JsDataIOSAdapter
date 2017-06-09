@@ -7,6 +7,10 @@ section.ui-view(cg-busy='vm.cgBusy')
 
   hr
 
+  span {{ vm.routePoint.name }} / {{ vm.routePoint.address }}
+
+  hr
+
   a(
   href
   ng-if='!vm.routePoint.reachedAtLocationId'
