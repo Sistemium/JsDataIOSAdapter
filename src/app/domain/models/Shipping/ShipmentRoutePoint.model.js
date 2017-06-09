@@ -23,10 +23,10 @@
           ShipmentRoutePointPhoto: {
             localField: 'photos',
             foreignKey: 'shipmentRoutePointId'
-          },
-          Shipment: {
-            localField: 'shipments',
-            foreignKey: 'shipmentId'
+          // },
+          // ShipmentRoutePointShipment: {
+          //   localField: 'shipments',
+          //   foreignKey: 'shipmentRoutePointId'
           }
         }
       }

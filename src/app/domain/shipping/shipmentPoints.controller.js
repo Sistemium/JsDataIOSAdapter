@@ -20,7 +20,7 @@
     let filter = {shipmentRouteId: $state.params.routeId};
 
     let q = [
-      ShipmentRoutePoint.findAllWithRelations(filter)(['ShipmentRoutePointPhoto', 'Shipment']).then(points => vm.data = points)
+      ShipmentRoutePoint.findAllWithRelations(filter)(['ShipmentRoutePointPhoto']).then(points => vm.data = points)
     ];
     vm.setBusy(q);
 
