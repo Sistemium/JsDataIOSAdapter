@@ -7,6 +7,10 @@ section.ui-view(cg-busy='vm.cgBusy')
 
   hr
 
+  span {{ vm.routeDate | amUtc | amLocal | amCalendar }}
+
+  hr
+
   #scroll-main.scroll-y(
   resize
   resize-offset-top='10'
