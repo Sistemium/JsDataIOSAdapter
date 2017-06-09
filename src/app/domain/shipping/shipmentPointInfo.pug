@@ -30,7 +30,7 @@ section.ui-view(cg-busy='vm.cgBusy')
     p Накладные
 
     .shipments
-      .shipment(ng-repeat='item in vm.shipments track by item.id')
+      .shipment(ng-repeat='item in vm.shipments | orderBy:"ndoc" track by item.id')
         p {{ item.ndoc }} / {{ item.date | amUtc | amLocal | amCalendar }} / {{ item.positions.length }} {{ item.positionsCountRu(item.positions.length) }}
 
     hr
