@@ -218,6 +218,8 @@
 
     function thumbClick(stock) {
 
+      $scope.imagesAll = $scope.imagesAll || _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
+
       vm.thumbnailClick(_.get(stock, 'article.avatar'));
 
     }
@@ -245,6 +247,10 @@
 
       // TODO: define SalesSettings service
       localStorageService.set('showImages', vm.showImages = !vm.showImages);
+
+      if (!vm.showImages) return;
+
+      ArticlePicture.findAll({}, {limit: 10000});
 
     }
 
@@ -460,13 +466,6 @@
 
     }
 
-    function getFilteredArticlesPhotos() {
-
-      $scope.imagesAll = _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
-
-    }
-
-
     function cacheSaleOrderPositions() {
 
       vm.saleOrderPositionByArticle = {};
@@ -519,7 +518,11 @@
             'ANY stocks': volumeNotZero
           }
         }, options))
-        .then(() => ArticlePicture.findAll({}, options))
+        .then(() => {
+          if (vm.showImages) {
+            ArticlePicture.findAll({}, options);
+          }
+        })
         .then(() => Stock.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
@@ -619,8 +622,7 @@
 
       vm.stock = ownStock;
 
-
-      getFilteredArticlesPhotos();
+      $scope.imagesAll = false;
 
       if (children.length) {
 
