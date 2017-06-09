@@ -2,7 +2,7 @@
 
 (function () {
 
-  function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state, $q, LocationHelper, toastr) {
+  function ShipmentPointInfo(Schema, Helpers, $scope, GalleryHelper, $state, $q, LocationHelper, toastr, Sockets) {
 
     const {ShipmentRoutePointPhoto, ShipmentRoutePoint, ShipmentRoutePointShipment, Shipment, Location} = Schema.models();
     const {saControllerHelper} = Helpers;
@@ -64,6 +64,25 @@
     vm.rebindAll(ShipmentRoutePointPhoto, photoFilter, 'vm.photos');
 
     $scope.$on('$destroy', $scope.$watch('vm.photos', initEmptyPhoto));
+
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['ShipmentRoutePointPhoto']));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+
+    /*
+     Functions
+     */
+
+    function onJSData(event) {
+
+      if (event.resource !== 'ShipmentRoutePointPhoto') return;
+
+      let {data} = event;
+
+      if (!_.get(data, 'href')) return;
+
+      ShipmentRoutePointPhoto.inject(data);
+
+    }
 
     function initEmptyPhoto() {
 
