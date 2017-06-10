@@ -49,6 +49,7 @@
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
       showImages: localStorageService.get('showImages') || false,
+      showFirstLevel: localStorageService.get('showFirstLevel') || false,
       stockWithPicIndex: [],
       discountsBy: {},
       discounts: {},
@@ -63,6 +64,7 @@
       clearSearchClick,
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
+      toggleShowFirstLevelClick,
 
       compDiscountClick,
       bPlusButtonClick,
@@ -249,10 +251,14 @@
       $scope.$broadcast('bPlusButtonClick', stock.article, vm.prices[stock.articleId]);
     }
 
+    function toggleShowFirstLevelClick() {
+      vm.showFirstLevel = !vm.showFirstLevel;
+      setCurrentArticleGroup(vm.currentArticleGroup);
+    }
+
     function toggleShowImagesClick() {
 
-      // TODO: define SalesSettings service
-      localStorageService.set('showImages', vm.showImages = !vm.showImages);
+      vm.showImages = !vm.showImages;
 
       if (!vm.showImages) return;
 
@@ -671,7 +677,7 @@
 
     function setFirstLevelGroups(currentArticleGroup) {
 
-      if (!currentArticleGroup) {
+      if (!currentArticleGroup || !vm.showFirstLevel) {
         vm.precedingGroups = [];
         vm.followingGroups = [];
         return;
@@ -686,11 +692,10 @@
 
       }
 
-      let currentFirstLevelGroup = _.find(currentArticleGroup.firstLevelAncestor());
+      let currentFirstLevelGroup = currentArticleGroup.firstLevelAncestor();
 
       if (!currentFirstLevelGroup) {
         currentFirstLevelGroup = currentArticleGroup;
-        console.warn('No currentFirstLevelGroup', currentArticleGroup);
       }
 
       vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.name < currentFirstLevelGroup.name);
@@ -708,9 +713,11 @@
 
     function setAncestors(articleGroup) {
 
-      vm.ancestors = [
-        // {displayName: 'Все товары', showAll: true}
-      ];
+      vm.ancestors = [];
+
+      if (!vm.showFirstLevel) {
+        vm.ancestors.push({displayName: 'Все товары', showAll: true});
+      }
 
       if (vm.showOnlyOrdered) {
         vm.ancestors.push({displayName: 'Товары заказа', id: false});

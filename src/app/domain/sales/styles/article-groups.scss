@@ -18,7 +18,7 @@
   .block-to-collapse {
 
     position: absolute;
-    z-index: 2; //2
+    z-index: 2;
 
     @include responsive-only(lt-sm) {
       width: 100%;
@@ -26,11 +26,8 @@
 
   }
 
-  .xs-ancestors {
+  .list-group {
     margin-bottom: $margin-bottom-xs;
-    //@include responsive-only(gt-xs, portrait) {
-    //  display: none;
-    //}
   }
 
   div.list-group-item {

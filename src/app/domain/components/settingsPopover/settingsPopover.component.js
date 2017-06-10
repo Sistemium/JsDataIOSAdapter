@@ -13,6 +13,8 @@
 
   function settingsPopoverController($scope, $rootScope, localStorageService) {
 
+    const items = ['showFirstLevel', 'showImages'];
+
     const vm = _.assign(this, {
       $onInit
     });
@@ -22,7 +24,15 @@
     });
 
     function $onInit() {
-      vm.showImages = localStorageService.get('showImages') || false;
+      _.each(items, item => {
+        $rootScope[name] = vm[item] = localStorageService.get(item) || false;
+        vm[`${item}Click`] = () => toggleItemClick(item);
+      });
+    }
+
+    function toggleItemClick(name) {
+      localStorageService.set(name, vm[name] = !vm[name]);
+      $rootScope[name] = vm[name];
     }
 
   }

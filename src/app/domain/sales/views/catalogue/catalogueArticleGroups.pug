@@ -42,7 +42,7 @@ font-size-edit(append-to='articleGroups')
   resize resize-offset-top='5'
   )
 
-    ul.preceding-groups
+    ul.preceding-groups(ng-if='vm.showFirstLevel')
 
       .list-group-item(
       ng-repeat='elem in vm.precedingGroups | orderBy:"name" track by elem.id'
@@ -53,10 +53,11 @@ font-size-edit(append-to='articleGroups')
         )
           .name {{::elem.displayName }}
 
-          a.chevron(
-          href
-          )
-            i.glyphicon.glyphicon-menu-right
+        a.chevron(
+        href
+        stm-click='articleGroup' click-payload='elem'
+        )
+          i.glyphicon.glyphicon-menu-right
 
     ul.list-group.xs-ancestors(
     ng-if='vm.currentArticleGroup || vm.showOnlyOrdered'
@@ -105,7 +106,7 @@ font-size-edit(append-to='articleGroups')
         )
           i.glyphicon.glyphicon-menu-right
 
-    ul.following-groups
+    ul.following-groups(ng-if='vm.showFirstLevel')
 
       .list-group-item(
       ng-repeat='elem in vm.followingGroups | orderBy:"name" track by elem.id'
@@ -115,8 +116,9 @@ font-size-edit(append-to='articleGroups')
         stm-click='articleGroupAndCollapse' click-payload='elem'
         )
           .name {{::elem.displayName }}
-            
-          a.chevron(
-          href
-          )
-            i.glyphicon.glyphicon-menu-right
+
+        a.chevron(
+        href
+        stm-click='articleGroup' click-payload='elem'
+        )
+          i.glyphicon.glyphicon-menu-right

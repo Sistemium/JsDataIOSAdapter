@@ -63,7 +63,7 @@
 
     function firstLevelAncestor() {
       let id = _.find(this.ancestors(), {articleGroupId: null});
-      return id ? ArticleGroup(id) : null;
+      return id || null;
     }
 
     function descendants() {
