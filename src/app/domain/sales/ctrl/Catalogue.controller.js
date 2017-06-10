@@ -101,11 +101,17 @@
     );
 
     vm.watchScope('vm.search', (newValue, oldValue) => {
-      if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
+      if (newValue != oldValue) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
     });
 
     $scope.$watchCollection('vm.filters', (o, n) => {
-      if (o && n && (o.length || n.length)) setCurrentArticleGroup(vm.currentArticleGroup);
+      if (o && n && (o.length || n.length)) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
     });
 
     $scope.$on('setSaleOrder', (event, saleOrder) => {
@@ -647,10 +653,10 @@
 
       vm.articleGroupIds = groupIds;
       vm.articleGroupIdsLength = Object.keys(vm.articleGroupIds).length;
+      vm.noMoreChildren = !children.length;
 
       setAncestors(articleGroup);
-
-      vm.noMoreChildren = !children.length;
+      setFirstLevelGroups(articleGroup);
 
       scrollArticlesTop();
 
@@ -659,6 +665,36 @@
         q: vm.search,
         ordered: vm.showOnlyOrdered || null
       }, {notify: false});
+
+    }
+
+
+    function setFirstLevelGroups(currentArticleGroup) {
+
+      if (!currentArticleGroup) {
+        vm.precedingGroups = [];
+        vm.followingGroups = [];
+        return;
+      }
+
+      if (!vm.firstLevelGroups) {
+
+        let ownStock = getStockByArticlesOfGroup(null);
+        let groupIds = articleGroupIds(ownStock);
+        let childGroups = _.filter(ArticleGroup.getAll(), {articleGroupId: null});
+        vm.firstLevelGroups = _.filter(childGroups, hasArticlesOrGroupsInStock(groupIds));
+
+      }
+
+      let currentFirstLevelGroup = _.find(currentArticleGroup.firstLevelAncestor());
+
+      if (!currentFirstLevelGroup) {
+        currentFirstLevelGroup = currentArticleGroup;
+        console.warn('No currentFirstLevelGroup', currentArticleGroup);
+      }
+
+      vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.name < currentFirstLevelGroup.name);
+      vm.followingGroups = _.filter(vm.firstLevelGroups, group => group.name > currentFirstLevelGroup.name);
 
     }
 
@@ -672,7 +708,9 @@
 
     function setAncestors(articleGroup) {
 
-      vm.ancestors = [{displayName: 'Все товары', showAll: true}];
+      vm.ancestors = [
+        // {displayName: 'Все товары', showAll: true}
+      ];
 
       if (vm.showOnlyOrdered) {
         vm.ancestors.push({displayName: 'Товары заказа', id: false});

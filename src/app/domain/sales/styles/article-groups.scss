@@ -6,6 +6,10 @@
 
   margin-bottom: 0;
 
+  .preceding-groups, .following-groups {
+    padding-left: 0;
+  }
+
   @include responsive-only(gt-xs) {
     padding-right: 0;
     margin-right: 11px;
