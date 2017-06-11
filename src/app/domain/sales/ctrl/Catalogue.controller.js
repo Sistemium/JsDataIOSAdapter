@@ -170,31 +170,32 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
+
+      if (e.resource !== 'Stock') return;
+
       DEBUG('jsData:updateCollection', e);
-      if (e.resource === 'Stock') {
 
-        let options = {
-          limit: 10000,
-          bypassCache: true,
-          offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-        };
+      let options = {
+        limit: 10000,
+        bypassCache: true,
+        offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+      };
 
-        Stock.cachedFindAll({}, options)
-          .then(res => {
+      Stock.cachedFindAll({}, options)
+        .then(res => {
 
-            let index = {};
+          let index = {};
 
-            _.each(res, item => index[item.id] = item);
+          _.each(res, item => index[item.id] = item);
 
-            onJSDataFinished({
-              model: Stock,
-              index: index,
-              data: res
-            });
-
+          onJSDataFinished({
+            model: Stock,
+            index: index,
+            data: res
           });
 
-      }
+        });
+
     }));
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
