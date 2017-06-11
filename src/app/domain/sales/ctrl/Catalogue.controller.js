@@ -317,6 +317,7 @@
     function saleOrderTotalsClick(showOnlyOrdered) {
 
       vm.showOnlyOrdered = showOnlyOrdered || !vm.showOnlyOrdered;
+      vm.firstLevelGroups = null;
 
       vm.setBusy($q.all(
         _.map(
@@ -715,7 +716,7 @@
 
       vm.ancestors = [];
 
-      if (!vm.showFirstLevel) {
+      if (!vm.showFirstLevel && articleGroup || vm.showOnlyOrdered) {
         vm.ancestors.push({displayName: 'Все товары', showAll: true});
       }
 

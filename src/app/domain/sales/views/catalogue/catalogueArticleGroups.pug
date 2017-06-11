@@ -42,7 +42,7 @@ font-size-edit(append-to='articleGroups')
   resize resize-offset-top='5'
   )
 
-    ul.preceding-groups(ng-if='vm.showFirstLevel')
+    ul.preceding-groups(ng-if='vm.showFirstLevel && vm.precedingGroups.length')
 
       .list-group-item(
       ng-repeat='elem in vm.precedingGroups | orderBy:"name" track by elem.id'
@@ -60,7 +60,7 @@ font-size-edit(append-to='articleGroups')
           i.glyphicon.glyphicon-menu-right
 
     ul.list-group.xs-ancestors(
-    ng-if='vm.currentArticleGroup || vm.showOnlyOrdered'
+    ng-if='vm.ancestors.length'
     )
 
       .list-group-item(
@@ -106,7 +106,7 @@ font-size-edit(append-to='articleGroups')
         )
           i.glyphicon.glyphicon-menu-right
 
-    ul.following-groups(ng-if='vm.showFirstLevel')
+    ul.following-groups(ng-if='vm.showFirstLevel && vm.followingGroups.length')
 
       .list-group-item(
       ng-repeat='elem in vm.followingGroups | orderBy:"name" track by elem.id'
