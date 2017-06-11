@@ -663,6 +663,10 @@
       vm.articleGroupIdsLength = Object.keys(vm.articleGroupIds).length;
       vm.noMoreChildren = !children.length;
 
+      if (!articleGroup) {
+        vm.firstLevelGroups = vm.articleGroups;
+      }
+
       setAncestors(articleGroup);
       setFirstLevelGroups(articleGroup);
 
