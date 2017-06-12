@@ -721,7 +721,7 @@
 
       vm.ancestors = [];
 
-      if (!vm.showFirstLevel && articleGroup || vm.showOnlyOrdered) {
+      if (articleGroup || vm.showOnlyOrdered) {
         vm.ancestors.push({displayName: 'Все товары', showAll: true});
       }
 

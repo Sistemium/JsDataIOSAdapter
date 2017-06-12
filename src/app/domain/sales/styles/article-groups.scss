@@ -8,6 +8,21 @@
 
   .preceding-groups, .following-groups {
     padding-left: 0;
+    .list-group-item a {
+
+      background-color: $gray-background-color;
+
+      &:hover {
+        background-color: white !important;
+      }
+
+    }
+  }
+
+  .xs-ancestors {
+    .list-group-item a {
+      //font-weight: bold;
+    }
   }
 
   @include responsive-only(gt-xs) {
@@ -28,6 +43,12 @@
 
   .list-group {
     margin-bottom: $margin-bottom-xs;
+  }
+
+  .expanded {
+    .list-group-item:not(.active) {
+
+    }
   }
 
   div.list-group-item {
