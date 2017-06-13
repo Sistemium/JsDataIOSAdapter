@@ -7,29 +7,29 @@
 
   function ArticleListController ($scope, $filter, $state, toastr, models, $timeout, SoundSynth, Language, $q) {
 
-    var vm = this;
-    var POP = models.PickingOrderPosition;
+    let vm = this;
+    const POP = models.PickingOrderPosition;
     //var SB = models.StockBatch;
     //var SBBC = models.StockBatchBarCode;
-    var orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
-    var Article = models.Article;
+    const orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
+    const Article = models.Article;
 
     function processArticle(a, sb, code) {
 
-      var pas = _.filter(vm.articles, {sameId: a.sameId});
+      const pas = _.filter(vm.articles, {sameId: a.sameId});
 
       if (!pas.length) {
         return;
       }
 
-      var totalUnpicked = 0;
-      var pa = _.find(pas,function(p){
+      let totalUnpicked = 0;
+      let pa = _.find(pas, p => {
         totalUnpicked += p.totalUnPickedVolume;
         return totalUnpicked > 0;
       });
 
-      var pickablePositions = [];
-      var maxVolume = _.result(sb,'spareVolume') || 0;
+      let pickablePositions = [];
+      let maxVolume = _.result(sb,'spareVolume') || 0;
 
       function respondToSay(say,pickedVolume) {
         if (!say && !totalUnpicked) {
@@ -58,9 +58,9 @@
 
       vm.pickedIndex [pa.id] = true;
 
-      _.each (pa.positions,function (pop){
+      _.each (pa.positions, pop => {
 
-        var unp = _.min([pop.unPickedVolume(), maxVolume]);
+        const unp = _.min([pop.unPickedVolume(), maxVolume]);
 
         maxVolume -= unp;
         totalUnpicked -= unp;
@@ -83,21 +83,21 @@
         pickablePositions = _.take(pickablePositions);
       }
 
-      var qs = [];
+      let qs = [];
 
-      var pickedVolume = _.reduce(pickablePositions, function (res, pp) {
+      const pickedVolume = _.reduce(pickablePositions, (res, pp) => {
         qs.push (pp.pop.linkStockBatch(sb, code, pp.unp));
         return res + pp.unp;
       }, 0);
 
       if (pickedVolume) {
-        $q.all (qs).then(function () {
+        $q.all (qs).then(() => {
           pa.updatePicked();
           setGroups(vm.articles);
         })
       }
 
-      var say = _.reduce(pickablePositions, function (res, pp, idx) {
+      const say = _.reduce(pickablePositions, (res, pp, idx) => {
         return res
           + (idx ? ', плюс ' : '')
           + pp.volume
@@ -112,9 +112,9 @@
 
     }
 
-    var lockScanProcessor;
+    let lockScanProcessor;
 
-    $scope.$on('stockBatchBarCodeScan', function (e, options) {
+    $scope.$on('stockBatchBarCodeScan', (e, options) => {
 
       if (lockScanProcessor) {
         return;
@@ -122,9 +122,9 @@
 
       lockScanProcessor = true;
 
-      var fn = function(){
+      const fn = () => {
 
-        var found = options.stockBatch.Article &&
+        const found = options.stockBatch.Article &&
           processArticle(options.stockBatch.Article, options.stockBatch, options.code);
 
         if (found && found.id) {
@@ -140,20 +140,20 @@
 
       };
 
-      Article.find(options.stockBatch.article)
-        .then(function(){
+      Article.find(options.stockBatch.articleId)
+        .then(() => {
           $timeout(fn,10);
         })
-        .catch(function(){
+        .catch(() => {
           lockScanProcessor = false;
         })
 
     });
 
-    var positions = POP.filter({
+    const positions = POP.filter({
       where: {
-        pickingOrder: {
-          'in': _.map(orders, function (o) {
+        pickingOrderId: {
+          'in': _.map(orders, o => {
             return o.id;
           })
         }
@@ -162,7 +162,7 @@
 
     angular.extend(vm, {
 
-      articleIndex: _.groupBy(positions, 'article'),
+      articleIndex: _.groupBy(positions, 'articleId'),
       orders: orders,
       pickedIndex: {},
       barCodeInput: '',
@@ -170,7 +170,7 @@
 
     });
 
-    $scope.$on('$stateChangeSuccess', function (e, to) {
+    $scope.$on('$stateChangeSuccess', (e, to) => {
 
       vm.mode = to.name.match(/[^\.]*$/)[0];
 
@@ -185,7 +185,7 @@
 
     function setGroups(articlesArray) {
 
-      var filtered = $filter('filter')(articlesArray, vm.currentFilter);
+      const filtered = $filter('filter')(articlesArray, vm.currentFilter);
 
       if (vm.mode === 'picked'){
 
@@ -198,7 +198,7 @@
 
         vm.groups = _.map(
           _.groupBy(filtered, 'article.category'),
-          function (val, key) {
+          (val, key) => {
             return {name: key, articles: val};
           }
         );

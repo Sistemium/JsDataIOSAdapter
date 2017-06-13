@@ -1,0 +1,29 @@
+@import "../../../styles/variables";
+
+.to-summ-cashing-popover {
+
+  $margin: 15px;
+  $border: solid 1px $border-gray;
+
+  .title, .error {
+    text-align: center;
+    font-size: x-small;
+    margin: $margin auto 0;
+  }
+
+  .error {
+    color: $red;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+  }
+
+  form {
+    min-width: 200px;
+    input {
+      text-align: right;
+    }
+  }
+}

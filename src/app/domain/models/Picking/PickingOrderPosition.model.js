@@ -4,23 +4,23 @@
 
     angular.module('Models').run(function (Schema) {
 
-      var POPP = Schema.models().PickingOrderPositionPicked;
-      var totalVolume = Schema.aggregate('volume').sum;
-      var totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
+      const POPP = Schema.models().PickingOrderPositionPicked;
+      let totalVolume = Schema.aggregate('volume').sum;
+      let totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
 
       function isPicked (positions) {
         return !totalUnPickedVolume (positions);
       }
 
       function hasPicked (positions) {
-        return !!_.filter(positions,function(pos){
+        return !!_.filter(positions, pos => {
           return !!pos.pickedPositions.length;
         }).length;
       }
 
       function maxTs (positions) {
-        return _.reduce (positions,function (res,pos){
-          var lastPos = _.maxBy (pos.pickedPositions, function (pp) {
+        return _.reduce (positions, (res, pos) => {
+          const lastPos = _.maxBy (pos.pickedPositions, pp => {
             return POPP.lastModified (pp.id);
           });
           return Math.max (lastPos && POPP.lastModified (lastPos) || 0, res);
@@ -35,19 +35,19 @@
           belongsTo: {
             PickingOrder: {
               localField: 'PickingOrder',
-              localKey: 'pickingOrder'
+              localKey: 'pickingOrderId'
             }
           },
           hasOne: {
             Article: {
               localField: 'Article',
-              localKey: 'article'
+              localKey: 'articleId'
             }
           },
           hasMany: {
             PickingOrderPositionPicked: {
               localField: 'pickedPositions',
-              foreignKey: 'pickingOrderPosition'
+              foreignKey: 'pickingOrderPositionId'
             }
           }
         },
@@ -70,10 +70,10 @@
           linkStockBatch: function (sb, code, volume) {
 
             return POPP.create({
-              stockBatch: sb.id,
-              pickingOrderPosition: this.id,
+              stockBatchId: sb.id,
+              pickingOrderPositionId: this.id,
               volume: volume || this.volume,
-              article: sb.article,
+              articleId: sb.articleId,
               code: code
             });
 
@@ -98,35 +98,35 @@
           pivotPositionsByArticle:  function (articleIndex) {
             return _.orderBy(_.map(articleIndex, function (positions, key) {
 
-              var totalVolume = _.reduce(positions, function (sum, pos) {
+              const totalVolume = _.reduce(positions, (sum, pos) => {
                 return sum + pos.volume;
               }, 0);
 
-              var article = positions[0].Article;
-              var boxPcs = article && article.boxPcs(totalVolume);
-              var picked = isPicked(positions);
-              var totalUnPicked = totalUnPickedVolume (positions);
+              const article = positions[0].Article;
+              const boxPcs = article && article.boxPcs(totalVolume);
+              const picked = isPicked(positions);
+              const totalUnPicked = totalUnPickedVolume (positions);
 
               return {
 
                 id: key,
                 sameId: article.sameId,
-                article: article,
-                positions: positions,
+                article,
+                positions,
                 volume: boxPcs,
-                totalVolume: totalVolume,
+                totalVolume,
                 isPicked: picked,
                 hasPicked: hasPicked(positions),
                 totalUnPickedVolume: totalUnPicked,
                 ts: maxTs(positions),
 
-                orderVolume: function (order) {
-                  var p = _.find(positions, ['pickingOrder', order.id]);
+                orderVolume: order => {
+                  const p = _.find(positions, {pickingOrderId : order.id});
                   return article.boxPcs(p && p.volume || 0);
                 },
 
-                position: function (order) {
-                  return _.find(positions, ['pickingOrder', order.id]);
+                position: order => {
+                  return _.find(positions, {pickingOrderId : order.id});
                 },
 
                 updatePicked: function () {

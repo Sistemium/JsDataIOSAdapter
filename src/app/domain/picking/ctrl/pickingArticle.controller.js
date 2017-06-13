@@ -5,15 +5,15 @@
   angular.module('webPage')
     .controller('PickingArticleController', function ($scope, $state) {
 
-      var vm = this;
-      var articles = $scope.vm.articles;
-      var picking = _.find(articles, {id: $state.params.id});
+      let vm = this;
+      const articles = $scope.vm.articles;
+      let picking = _.find(articles, {id: $state.params.id});
 
       angular.extend(vm, {
 
         picking: picking,
         article: _.get(picking,'article'),
-        orders: _.map($scope.$parent.vm.orders,function (order) {
+        orders: _.map($scope.$parent.vm.orders, order => {
 
           return {
             id: order.id,
@@ -25,7 +25,7 @@
 
         }),
 
-        done: function () {
+        done: () => {
 
           picking.updatePicked ();
 

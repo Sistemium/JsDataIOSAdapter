@@ -5,19 +5,19 @@
   angular.module('webPage')
     .controller('PickedPositionController', function ($scope, $state, models) {
 
-      var vm = this;
-      var POPP = models.PickingOrderPositionPicked;
-      var POP = models.PickingOrderPosition;
+      let vm = this;
+      const POPP = models.PickingOrderPositionPicked;
+      const POP = models.PickingOrderPosition;
 
-      var mode = $state.params.positionId ? 'pick' : 'picked';
+      const mode = $state.params.positionId ? 'pick' : 'picked';
 
-      var pickedPosition = mode === 'picked' && POPP.get ($state.params.pickedPositionId);
+      let pickedPosition = mode === 'picked' && POPP.get ($state.params.pickedPositionId);
 
-      var position = pickedPosition && pickedPosition.parent || POP.get ($state.params.positionId);
+      const position = pickedPosition && pickedPosition.parent || POP.get ($state.params.positionId);
 
-      var initVolume, initExport;
+      let initVolume, initExport;
 
-      var unPickedVolume;
+      let unPickedVolume;
 
       if (pickedPosition) {
         initVolume = pickedPosition.boxPcs().full;
@@ -29,11 +29,11 @@
         unPickedVolume = position.unPickedVolume();
       }
 
-      var states = [
+      let states = [
         {
           input: 'volume',
           label: 'Собрано',
-          validate: function (val) {
+          validate: val => {
             return !!parseInt(val) && (parseInt(val) <= unPickedVolume);
           },
           value: initVolume,
@@ -41,7 +41,7 @@
         }
       ];
 
-      var barCode = pickedPosition && pickedPosition.code;
+      const barCode = pickedPosition && pickedPosition.code;
 
       if (barCode) {
 
@@ -52,7 +52,7 @@
           input: 'productionInfo',
           label: 'Дата розлива',
           datatype: 'date',
-          validate: function (val) {
+          validate: val => {
             return !! /\d{2}\/\d{2}\/\d{2,4}/.test (val);
           },
           value: pickedPosition && pickedPosition.productionInfo || ''
@@ -62,7 +62,7 @@
           input: 'productionInfo',
           label: 'Марка',
           datatype: 'exciseStamp',
-          validate: function (val) {
+          validate: val => {
             return !! /^\d{3}-\d{8,9}/.test (val);
           },
           value: pickedPosition && pickedPosition.productionInfo || ''
@@ -76,7 +76,7 @@
         states: states,
         step: pickedPosition ? undefined : 0,
 
-        notDone: function () {
+        notDone: () => {
 
           if (vm.step>=0) {
             return ! states [vm.step].validate(states [vm.step].value);
@@ -84,7 +84,7 @@
 
         },
 
-        done: function () {
+        done: () => {
 
           if (angular.isUndefined (vm.step)) {
             return vm.save();
@@ -102,35 +102,35 @@
 
         },
 
-        edit: function (step) {
+        edit: step => {
 
           vm.step = step;
 
         },
 
-        save: function () {
+        save: () => {
 
           if (!pickedPosition) {
             POPP.create ({
-              pickingOrderPosition: position.id,
+              pickingOrderPositionId: position.id,
               volume: states[0].exportValue,
               productionInfo: states.length > 1 ? states[1].value : null,
-              article: position.article
-            }).then (function (){
+              articleId: position.articleId
+            }).then (() => {
               $state.go('^');
             });
           } else {
             pickedPosition.volume = states[0].exportValue;
             pickedPosition.productionInfo = states.length > 1 ? states[1].value : null;
-            POPP.save(pickedPosition.id).then (function (){
+            POPP.save(pickedPosition.id).then (() => {
               $state.go('^');
             });
           }
 
         },
 
-        remove: function () {
-          POPP.destroy (pickedPosition).then(function() {
+        remove: () => {
+          POPP.destroy (pickedPosition).then(() => {
             $state.go('^');
           });
         }

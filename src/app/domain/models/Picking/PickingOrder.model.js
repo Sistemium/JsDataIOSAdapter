@@ -12,13 +12,13 @@
         hasMany: {
           PickingOrderPosition: {
             localField: 'positions',
-            foreignKey: 'pickingOrder'
+            foreignKey: 'pickingOrderId'
           }
         },
         hasOne: {
           Picker: {
-            localField: 'pickedBy',
-            localKey: 'picker'
+            localField: 'picker',
+            localKey: 'pickerId'
           }
         }
       },
@@ -28,8 +28,8 @@
       },
 
       computed: {
-        processingClass: ['processing',function(processing){
-          return 'glyphicon glyphicon-' + (function() {
+        processingClass: ['processing', processing => {
+          return 'glyphicon glyphicon-' + (() => {
             switch (processing) {
               case 'picking': {
                 return 'import';
@@ -44,7 +44,7 @@
             return 'save';
           })();
         }],
-        cls: ['processing',function(processing){
+        cls: ['processing', processing => {
           switch (processing) {
             case 'picking': {
               return 'red';
@@ -79,7 +79,7 @@
         },
 
         totalUnPickedPositionsCount: function () {
-          return Schema.aggregate('unPickedVolume').custom(this.positions,function(sum,unPickedVolume){
+          return Schema.aggregate('unPickedVolume').custom(this.positions, (sum,unPickedVolume) => {
             return sum + (unPickedVolume ? 1 : 0);
           },0);
         },

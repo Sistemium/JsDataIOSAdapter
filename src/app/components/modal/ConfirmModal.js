@@ -32,7 +32,7 @@
 
     function show(config, modalConfig) {
 
-      var modalInstance = $uibModal.open(angular.extend({
+      const modalInstance = $uibModal.open(angular.extend({
 
         templateUrl: 'app/components/modal/ConfirmModal.html',
         controllerAs: 'vm',
@@ -40,7 +40,7 @@
 
         controller: ['$uibModalInstance', function ConfirmModalController($uibModalInstance) {
 
-          var me = this;
+          let me = this;
 
           angular.extend(me, angular.extend({
 
