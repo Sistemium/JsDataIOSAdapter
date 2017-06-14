@@ -2,7 +2,7 @@
 
 (function () {
 
-  function ShipmentDetailsController(Schema, $scope, saControllerHelper, $state, $q) {
+  function ShipmentDetailsController(Schema, $scope, saControllerHelper, $state, $q, $window) {
 
     const vm = saControllerHelper
       .setup(this, $scope);
@@ -21,6 +21,10 @@
      Listeners
      */
 
+    const appWindow = angular.element($window);
+
+    console.log(appWindow);
+
     Shipment.bindOne($state.params.id, $scope, 'vm.shipment');
 
     /*
@@ -38,7 +42,6 @@
         .then(item => item.DSLoadRelations('ShipmentPosition'))
         .then(item => $q.all(_.map(item.positions, position => position.DSLoadRelations())))
         .catch(e => console.error(e));
-
     }
 
   }

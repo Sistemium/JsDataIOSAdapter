@@ -41,21 +41,24 @@
         }
       },
 
-      defaultValues: {
-      },
+      defaultValues: {},
 
       watchChanges: false,
 
-      meta: {
-      },
+      meta: {},
 
       methods: {
 
         positionsCountRu,
 
-        totalCost: function() {
+        totalCost: function () {
           return Schema.aggregate('cost').sum(this.positions);
+        },
+
+        totalPositions: function () {
+          return this.positions.length;
         }
+
       }
 
     });

@@ -8,7 +8,7 @@
       stateHelperProvider
         .state({
 
-          url: '/shipment?date',
+          url: '/shipment',
           name: 'sales.shipmentList',
           templateUrl: 'app/domain/sales/shipment/ShipmentList.html',
           controller: 'ShipmentListController as vm',

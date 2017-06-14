@@ -1,47 +1,42 @@
-section.ui-view.shipmentList(cg-busy='vm.cgBusy')
+pre {{vm.data.length}}
 
-  .row.datepicker-with-buttons
+.ui-view(cg-busy='{promise: vm.busy, message: "Подождите, идет загрузка"}')
+  .shipment-list-view
+    .shipment-table-headers
+      .order-number №
+      .driver Водитель
+      .salesman ТП
+      .outlet Точка
+      .price Стоимость
+      .quantity Позиции
 
-    sab-date-picker.col-sm-4.col-lg-3(
-    value='vm.date'
-    init-date='vm.initDate'
-    clear-text='Ближайшая доставка'
+    .shipment-list.scroll-y(
+    resize
+    resize-offset-top='5'
+    vs-repeat='{{vm.isWideScreen()? 40: 126}}'
+    svs-options='{latch: true}' /*commented */,
+    vs-scrolled-to-end='vm.onScrollEnd()'
+    scrolled-to-end='{{vm.testFunc}}'
     )
+      .shipment-table-items(ng-repeat='shipment in vm.data | orderBy: "-date"' ng-click='vm.itemClick(shipment, $event)')
 
-  #scroll-main(
-  resize
-  resize-offset-top='5'
-  ng-if='vm.data.length'
-  )
-    table.table.table-striped.table-hover
-      thead
-        tr
-          th №
-          th Водитель
-          th(ng-if='!vm.currentSalesman') ТП
-          th Точка
-          th.number Стоимость
-          th.number Позиций
-      tbody
-        tr.clickable(
-        ng-repeat='item in vm.data | orderBy:"-ts" track by item.id'
-        ng-click='vm.itemClick(item, $event)'
-        )
-          td(ng-class='item.workflow().cls') {{ ::item.ndoc }}
-          td.tinyName
-            driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]' ng-if='item.driver')
-              span {{ ::item.driver.tinyName }}
-          td.tinyName(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
-          td
-            div {{ ::item.outlet.name }}
-            .gray {{ ::item.outlet.address }}
-          td.number {{ ::item.totalCost() | number:2 }}
-          td.number {{ ::item.positions.length | number:0 }}
+        .order-number
+          span.attr-name(ng-if='!vm.isWideScreen()') №:
+          span {{shipment.ndoc}}
 
-      tfoot
-        tr
-          th(colspan='{{ vm.currentSalesman ? 3 : 4 }}') Итого:
-          th.number {{ ::vm.totalCost() | number:2 }}
-          th.number {{ ::vm.totalPositions() | number:0 }}
+        .driver
+          span.attr-name(ng-if='!vm.isWideScreen()') Водитель:
+          span {{shipment.driver.tinyName}}
 
-  .alert.alert-info.centered(ng-show='!vm.data.length') Нет отгрузок за указанную дату
+        .salesman
+          span.attr-name(ng-if='!vm.isWideScreen()') ТП:
+          span {{shipment.salesman.tinyName}}
+        .outlet
+          span.attr-name(ng-if='!vm.isWideScreen()') Точка:
+          span {{shipment.outlet.name}}
+        .price
+          span.attr-name(ng-if='!vm.isWideScreen()') Цена:
+          span {{shipment.totalCost() | number: 2}}
+        .quantity
+          span.attr-name(ng-if='!vm.isWideScreen()') Количество:
+          span {{shipment.positions.length}}
