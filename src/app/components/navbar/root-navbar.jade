@@ -1,16 +1,21 @@
 h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
-  a.home(href ui-sref='home' ng-class='{disabled: vm.isRootState}')
+  a.home(href ui-sref='home' ng-class='{disabled: vm.isHomeState}')
     b.glyphicon.glyphicon-home
 
-  a(href ng-click='vm.rootClick()' ng-class='{disabled: vm.isRootState}')
-    | {{ vm.title }}
+  a.home.sub-root-nav(href ng-click='vm.rootClick()' ng-if='vm.isSubRootState')
+    b.glyphicon.glyphicon-chevron-left
+
+  a(href ng-click='vm.rootClick()' ng-class='{disabled: vm.isHomeState}')
+    span {{ vm.title }}
 
   .separator
 
+  small(ng-if='vm.lastDigest >= 0') D:{{ vm.lastDigest }}
+
   syncer-indicator
 
-  fullscreen-menu(ng-show='vm.isRootState')
+  fullscreen-menu(ng-show='vm.isHomeState')
 
   // TODO: add component config option to unhardcode domain content
   .sales-navs(ng-if='vm.isSalesState')

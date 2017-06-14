@@ -2,12 +2,46 @@
 
 .photo-report-list {
 
+
+  [disabled] {
+    @extend %disabled;
+  }
+
   $thumb-side: 90px;
   $padding: 5px;
   $small: 85%;
 
   .filters {
     margin-bottom: $padding*2;
+  }
+
+  .buttons {
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: right;
+
+    > * {
+      display: block;
+    }
+
+    .edit-toggler {
+      i {
+        top: 3px;
+      }
+      margin-right: 10px;
+    }
+
+    make-photo-report {
+      flex: 1;
+      .make-photo-report {
+        display: block;
+        width: 100%;
+      }
+    }
+
   }
 
   .photo-report {
@@ -18,12 +52,16 @@
     align-items: center;
     position: relative;
 
-    .thumb img {
+    .thumb {
 
-      max-height: $thumb-side;
-      max-width: $thumb-side;
-      min-height: $thumb-side;
-      min-width: $thumb-side;
+      img {
+
+        max-height: $thumb-side;
+        max-width: $thumb-side;
+        min-height: $thumb-side;
+        min-width: $thumb-side;
+
+      }
 
     }
 
@@ -33,14 +71,14 @@
     }
 
     .campaign {
+
+      position: relative;
       text-align: right;
-      margin-top: -30px;
+      margin-top: 15px;
+      top: -10px;
       font-size: $small;
-      line-height: $padding*2.5;
-      //position: relative;
-      //top: -20px;
-      //max-width: 150px;
-      //font-size: 75%;
+      line-height: $padding*2.75;
+
     }
 
     .deviceCts {
@@ -49,6 +87,14 @@
       position: absolute;
       top: 5px;
       right: 0;
+
+      .remove {
+        margin-right: 10px;
+        color: $red;
+        position: relative;
+        top: 1px;
+      }
+
     }
   }
 

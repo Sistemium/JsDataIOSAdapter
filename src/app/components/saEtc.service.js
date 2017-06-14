@@ -27,11 +27,19 @@
       element.scrollTop = 0;
     }
 
+    function scrollBottomElementById(id) {
+      let element = getElementById(id);
+      if (!element) return;
+      element.scrollTop = element.scrollHeight;
+    }
+
+
     return {
       scrolTopElementById,
       getElementById,
       blurActive,
-      focusElementById
+      focusElementById,
+      scrollBottomElementById
     };
 
   }

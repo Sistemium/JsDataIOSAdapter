@@ -41,3 +41,46 @@ a.thumb {
   border: none;
   margin: 0;
 }
+
+.popover-inner {
+
+  .thumb {
+
+    position: relative;
+
+    width: 60px;
+    height: 60px;
+
+    @extend %center-vertical;
+
+    border: solid 1px $border-gray;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    img {
+
+      object-fit: contain;
+
+      width: 60px;
+      height: 60px;
+      min-width: 60px;
+      min-height: 60px;
+    }
+
+    .remove {
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      border-radius: 10px;
+      padding: 4px;
+      background: red;
+      color: $white;
+      line-height: 1;
+      font-size: 10px;
+    }
+  }
+
+}

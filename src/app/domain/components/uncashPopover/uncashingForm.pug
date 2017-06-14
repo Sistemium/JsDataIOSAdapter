@@ -3,8 +3,8 @@ form.uncashingForm(name="uncashForm")
   .form-group
 
     .btn-group.type
-      label.btn.btn-default(ng-model='vm.uncashing.type' uib-btn-radio="'bank'" uncheckable) Банк
-      label.btn.btn-default(ng-model='vm.uncashing.type' uib-btn-radio="'cashdesk'" uncheckable) Касса
+      label.btn.btn-default(ng-model='vm.uncashing.type' uib-btn-radio="'bank'") Банк
+      label.btn.btn-default(ng-model='vm.uncashing.type' uib-btn-radio="'cashdesk'") Касса
 
   select-uncashing-place.form-group(
   ng-if='vm.uncashing.type === "cashdesk"'

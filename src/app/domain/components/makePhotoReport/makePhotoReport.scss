@@ -1,0 +1,95 @@
+@import "../../../styles/variables";
+@import "../../../styles/buttons";
+
+make-photo-report {
+
+  .popover {
+
+    min-width: 290px;
+    max-width: 350px;
+    overflow-y: hidden;
+
+    @include responsive-only(xxs) {
+      max-width: 280px;
+      min-width: 280px;
+    }
+
+  }
+
+  photo-report-form {
+
+    display: block;
+
+    .photo-report-form {
+
+      //display: flex;
+      //flex-direction: column;
+      //justify-content: flex-start;
+      position: relative;
+      height: 100%;
+      width: 100%;
+
+      label {
+        margin: 0;
+        color: $gray;
+        font-size: 75%;
+      }
+
+      > a {
+        display: block;
+        text-align: left;
+        margin-bottom: 10px;
+      }
+
+      > * {
+        margin-bottom: 15px;
+      }
+
+      .not-chosen {
+        @extend %primary-button;
+      }
+
+      choice-list {
+
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin-bottom: 0;
+        flex: 1;
+
+        .title {
+          margin-bottom: 15px;
+        }
+
+      }
+
+      .photo {
+        margin-top: 5px;
+        text-align: right;
+      }
+
+      make-photo ng-transclude {
+
+        @extend %primary-button;
+        width: 100%;
+        display: block;
+
+        i {
+          margin-right: 10px;
+          font-size: 120%;
+          top: 3px;
+        }
+
+      }
+
+      button.btn-success {
+        display: block;
+        width: 100%;
+      }
+
+    }
+  }
+
+}

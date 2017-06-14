@@ -2,9 +2,9 @@
 
 (function () {
 
-  function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth) {
+  function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth, localStorageService, saEtc, IOS) {
 
-    const {Debt, Outlet, Cashing} = Schema.models();
+    const {Debt, Outlet, Cashing, Partner} = Schema.models();
 
     const vm = saControllerHelper
       .setup(this, $scope)
@@ -13,8 +13,10 @@
         itemClick,
         totalCashed,
         totalSumm,
+        totalOverdue,
         onStateChange,
-        totalCashedClick
+        totalCashedClick,
+        restoreScrollPosition
 
       });
 
@@ -28,9 +30,49 @@
     vm.onScope('rootClick', () => $state.go(rootState));
     vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);
 
+    // TODO: move scroll restore to a separate directive
+    vm.onScope('$stateChangeStart', (event, next, nextParams, from) => {
+      if (from.name === rootState) {
+        saveScrollPosition();
+      }
+    });
+
     /*
      Functions
      */
+
+    function saveScrollPosition() {
+      return localStorageService.set('debtByOutlet.scroll', _.get(getScrollerElement(), 'scrollTop'));
+    }
+
+    function getSavedScrollPosition() {
+      return localStorageService.get('debtByOutlet.scroll') || 0;
+    }
+
+    function getScrollerElement() {
+      return saEtc.getElementById('scroll-main');
+    }
+
+    function restoreScrollPosition() {
+      scrollTo(getSavedScrollPosition());
+    }
+
+    function scrollTo(height) {
+
+      let elem = getScrollerElement();
+
+      if (!elem) {
+        console.warn('no scroller element');
+        return;
+      }
+
+      if (height > elem.scrollHeight) {
+        height = elem.scrollHeight;
+      }
+
+      elem.scrollTop = height;
+
+    }
 
     function totalCashedClick() {
       $state.go('sales.cashing');
@@ -45,15 +87,21 @@
     function refresh() {
       let filter = SalesmanAuth.makeFilter();
       vm.setBusy(getData(filter))
-        .then(() => vm.wasModified = false);
+        .then(() => {
+          vm.wasModified = false;
+        });
     }
 
-    function totalCashed() {
-      return _.sumBy(vm.data, 'sum(cashed)');
+    function totalOverdue(data) {
+      return _.sumBy(data || vm.data, 'overdue');
     }
 
-    function totalSumm() {
-      return _.sumBy(vm.data, 'sum(summ)');
+    function totalCashed(data) {
+      return _.sumBy(data || vm.data, 'sum(cashed)');
+    }
+
+    function totalSumm(data) {
+      return _.sumBy(data || vm.data, 'sum(summ)');
     }
 
     function itemClick(item) {
@@ -75,12 +123,56 @@
             });
 
         })
+        .then(getOverdue)
         .then(data => $q.all(_.map(data, loadDebtRelations)))
         .then(data => _.filter(data, 'outlet'))
         .then(loadNotProcessed)
         .then(loadCashed)
-        .then(data => vm.data = data)
+        .then(groupByPartner)
         .catch(e => console.error(e));
+
+    }
+
+    function getOverdue(debtsByOutlet) {
+
+      let where = {
+        dateE: {'<=': moment().format()}
+      };
+
+      let filter = {where};
+
+      if (!IOS.isIos()) {
+        filter = {isOverdue: true};
+      }
+
+      return Debt.groupBy(filter, ['outletId'])
+        .then(overdueDebtsByOutlet => {
+          _.each(overdueDebtsByOutlet, item => {
+            let outletDebt = _.find(debtsByOutlet, {outletId: item.outletId});
+            if (outletDebt) {
+              outletDebt.overdue = item['sum(summ)'];
+            }
+          });
+          return debtsByOutlet;
+        });
+
+    }
+
+    function groupByPartner(data) {
+
+      let byPartnerId = _.groupBy(data, 'outlet.partnerId');
+
+      vm.data = _.map(byPartnerId, (items, partnerId) => {
+        return {
+          partner: Partner.get(partnerId),
+          items,
+          'sum(cashed)': totalCashed(items),
+          'sum(summ)': totalSumm(items),
+          overdue: totalOverdue(items)
+        }
+      });
+
+      vm.data = _.orderBy(vm.data, 'partner.name');
 
     }
 
@@ -125,8 +217,9 @@
       return Outlet.find(item.outletId)
         .then(outlet => {
           item.outlet = outlet;
-          return item;
-        });
+          return outlet.DSLoadRelations('Partner');
+        })
+        .then(() => item);
 
     }
 

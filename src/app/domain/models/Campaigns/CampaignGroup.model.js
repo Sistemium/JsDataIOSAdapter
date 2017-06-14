@@ -17,9 +17,17 @@
           }
         }
 
+      },
+
+      computed: {
+        shortName: ['name', shortName]
       }
 
     });
+
+    function shortName(name) {
+      return _.last(name.match(/\((.*)\)/));
+    }
 
   });
 

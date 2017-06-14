@@ -46,21 +46,21 @@
     }, {
       title: 'Фотоотчёты',
       state: 'sales.photoReports',
-      needRoles: ['admin', 'tester']
+      needRoles: SALES_ROLES
+    }, {
+    //   title: 'Визиты',
+    //   state: 'sales.visits',
+    //   needRoles: SALES_ROLES
+    // }, {
+      // title: 'Фотопоток',
+      // state: 'photos.stream',
       // needRoles: SALES_ROLES
-    }, {
-      title: 'Визиты',
-      state: 'sales.visits',
-      needRoles: SALES_ROLES
-    }, {
-      title: 'Фотопоток',
-      state: 'photos.stream',
-      needRoles: SALES_ROLES
-    }, {
-      title: 'Предзаказы',
-      state: 'sales.prePreOrders',
-      needRoles: 'pre-ordering'
-    }, {
+      // needRoles: ['admin', 'tester']
+    // }, {
+    //   title: 'Предзаказы',
+    //   state: 'sales.prePreOrders',
+    //   needRoles: 'pre-ordering'
+    // }, {
       title: 'Тесты',
       state: 'playground',
       needRoles: ['admin', 'tester']

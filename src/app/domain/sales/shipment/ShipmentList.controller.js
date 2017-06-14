@@ -2,7 +2,7 @@
 
   function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, IOS) {
 
-    const {SaleOrder, Shipment, ShipmentPosition, Outlet, Driver} = Schema.models();
+    const {SaleOrder, Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
@@ -45,7 +45,6 @@
     function itemClick(item, $event) {
       let driverPopoverOpen = _.find(vm.driverPopoverOpen, val => val);
       if ($event.defaultPrevented || driverPopoverOpen) return;
-      console.info($event);
       $state.go('.item', {id: item.id});
     }
 
@@ -56,6 +55,7 @@
     function cleanup() {
       ShipmentPosition.ejectAll();
       Shipment.ejectAll();
+      ShipmentEgais.ejectAll();
     }
 
     function getData(salesman) {
@@ -70,19 +70,21 @@
         positionsFilter = {where: {'shipment.date': {'==': date}}};
 
         if (filter.salesmanId) {
-          positionsFilter.where['shipment.salesmanId']= {'==': filter.salesmanId};
+          positionsFilter.where['shipment.salesmanId'] = {'==': filter.salesmanId};
         }
       }
 
       vm.currentSalesman = salesman;
 
       let outletFilter = _.omit(Outlet.meta.salesmanFilter(filter), 'date');
+      let shipmentRelations = ['Driver', 'Outlet'];
 
       let busy = $q.all([
         Driver.findAll(),
         Outlet.findAll(outletFilter),
-        Shipment.findAllWithRelations(filter, {bypassCache: true})(['Driver','Outlet']),
-        ShipmentPosition.findAll(positionsFilter, {bypassCache: true, limit: 5000})
+        Shipment.findAllWithRelations(filter, {bypassCache: true})(shipmentRelations),
+        ShipmentPosition.findAll(positionsFilter, {bypassCache: true, limit: 5000}),
+        ShipmentEgais.findAll(positionsFilter, {bypassCache: true, limit: 5000})
       ])
         .then(() => {
           vm.rebindAll(Shipment, filter, 'vm.data');

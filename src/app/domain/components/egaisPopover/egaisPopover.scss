@@ -1,0 +1,48 @@
+@import "../../../styles/variables";
+
+egais-popover {
+
+  @extend %flaggable;
+  background-color: $state-info-bg;
+  padding-top: 4px;
+
+  position: relative;
+  display: inline;
+
+  ng-transclude {
+    > * + * {
+      margin-left: 2px;
+    }
+  }
+
+  .popover-inner {
+
+    color: $black;
+
+    min-width: 250px;
+
+    span {
+      font-size: 75%;
+    }
+
+    .status {
+
+      @extend %flex-row;
+      align-items: center;
+
+      > * + * {
+        margin-left: 5px;
+      }
+
+      & + .status {
+        margin-top: 10px;
+      }
+
+      > * {
+        display: block;
+      }
+
+    }
+  }
+
+}

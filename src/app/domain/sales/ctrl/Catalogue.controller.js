@@ -74,7 +74,7 @@
       thumbClick,
 
       onStateChange,
-      articleRowHeight,
+      // articleRowHeight,
       alertCheck,
       alertTriggers: _.groupBy(CatalogueAlert.getAll(), 'articleGroupId')
 
@@ -151,12 +151,13 @@
 
     vm.watchScope(
       isWideScreen,
-      (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
-    );
-
-    vm.watchScope(
-      isWideScreen,
-      newValue => vm.isWideScreen = newValue
+      (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+          $scope.$broadcast('vsRepeatTrigger');
+        }
+        vm.isWideScreen = newValue;
+        vm.articleRowHeight = articleRowHeight();
+      }
     );
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
@@ -447,12 +448,8 @@
           return;
         }
 
-        let contractDiscount = _.first(byArticleId[articleId]) ||
-          _.first(byPriceGroup[_.get(article, 'priceGroupId')]);
-
-        if (!contractDiscount) return;
-
-        let {discount} = contractDiscount;
+        let discount = _.get(_.first(byArticleId[articleId]), 'discount') ||
+          _.get(_.first(byPriceGroup[_.get(article, 'priceGroupId')]), 'discount');
 
         if (!discount) return;
 
@@ -798,7 +795,7 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.findAll()
+        RestrictionArticle.findAll({}, {limit: 10000})
       ])
         .then(res => {
 
