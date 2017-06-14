@@ -13,13 +13,22 @@
     text-align: left;
   }
 
-  currency-value.red {
+  *.overdue {
     color: $state-warning-text;
   }
 
   @include responsive-only(xxs) {
-    currency-value.red, .total.overdue {
+    .overdue {
       display: none;
+    }
+  }
+
+  .in-progress {
+    .date .ndoc > span {
+      color: $primary-color;
+    }
+    div.debt *:hover {
+      cursor: pointer;
     }
   }
 
@@ -33,6 +42,39 @@
       color: $black;
       margin-bottom: 4px;
     }
+  }
+
+  .alert {
+
+    .totals {
+
+      to-summ-cashing {
+
+        @include responsive-only(xxs) {
+          width: 100%;
+
+          button {
+
+            width: 100%;
+            display: block;
+
+            & + button {
+              margin-top: $margin;
+            }
+
+          }
+
+        }
+
+        @include responsive-only(gt-xxs) {
+          button + button {
+            margin-left: $margin;
+          }
+        }
+
+      }
+    }
+
   }
 
   .header, .footer {
@@ -59,29 +101,37 @@
   }
 
   .header {
+
     border-bottom: $headers-border;
+
     label {
       color: $black;
+    }
+
+    .buttons {
+
+      flex: 1;
+      display: flex;
+      text-align: left;
+      justify-content: space-between;
+      align-items: center;
+
+      i + span {
+        margin-left: $margin;
+      }
+
+      @include responsive-only(lt-sm) {
+        .btn {
+          padding-left: 0;
+        }
+      }
+
     }
   }
 
   .footer {
 
     border-top: $headers-border;
-    //color: $gray;
-
-    .buttons {
-      flex: 1;
-      text-align: left;
-      i + span {
-        margin-left: $margin;
-      }
-      @include responsive-only(lt-sm) {
-        .btn {
-          padding-left: 0;
-        }
-      }
-    }
 
     @include responsive-only(xxs) {
       label {
@@ -123,7 +173,6 @@
           background-color: transparent;
         }
       }
-
 
     }
 
@@ -171,9 +220,6 @@
     .cashings {
       @extend %table-row;
       text-align: right;
-      .cashed {
-        //margin-right: $field-width + $margin;
-      }
       .buttons {
         text-align: left;
         font-size: 75%;
@@ -182,6 +228,14 @@
         }
       }
     }
+  }
+
+  .cashed.unsaved {
+    color: $gray;
+  }
+
+  .cash-this {
+    min-width: 40px !important;
   }
 
   %table-row {
@@ -213,6 +267,9 @@
 
     .debt {
       @extend %table-row;
+      & *:focus {
+        outline: none;
+      }
     }
 
     .cashed {
@@ -236,7 +293,7 @@
 
     }
 
-    .overdue .tip {
+    .tip.overdue {
       color: $state-warning-text;
     }
 

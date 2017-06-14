@@ -46,6 +46,7 @@
 
       methods: {
 
+        firstLevelAncestor,
         ancestors,
         descendants,
 
@@ -59,6 +60,11 @@
 
     let cacheA = {};
     let cacheD = {};
+
+    function firstLevelAncestor() {
+      let id = _.find(this.ancestors(), {articleGroupId: null});
+      return id || null;
+    }
 
     function descendants() {
       return ArticleGroup.getAll(this.descendantsCache);

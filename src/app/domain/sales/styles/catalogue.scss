@@ -18,7 +18,7 @@
 
     a {
 
-      @extend .display-flex;
+      @extend %flex-center;
       padding: 8px 10px;
 
       &:hover {

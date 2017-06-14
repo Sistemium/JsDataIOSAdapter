@@ -27,7 +27,7 @@ cg-busy='vm.cgBusy'
 
         a.totals(href ng-click='vm.itemClick(item)')
 
-          currency-value.red(value='item.overdue' hide-empty='true')
+          currency-value.overdue(value='item.overdue' hide-empty='true')
 
           currency-value(value='item["sum(cashed)"]' ng-if='vm.totalCashed()')
 
@@ -37,7 +37,7 @@ cg-busy='vm.cgBusy'
 
       .totals.sub(ng-if='group.items.length > 1')
 
-        currency-value.red(value='group.overdue' hide-empty='true')
+        currency-value.overdue(value='group.overdue' hide-empty='true')
         currency-value(value='group["sum(cashed)"]' ng-if='vm.totalCashed()')
 
         .total
@@ -48,7 +48,7 @@ cg-busy='vm.cgBusy'
 
       label Итого:
 
-      currency-value.red(value='vm.totalOverdue()' hide-empty='true')
+      currency-value.overdue(value='vm.totalOverdue()' hide-empty='true')
       a(href ng-click='vm.totalCashedClick()' ng-if='vm.totalCashed()')
         currency-value(value='vm.totalCashed()')
       currency-value(value='vm.totalSumm()')

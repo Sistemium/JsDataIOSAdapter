@@ -23,7 +23,7 @@
       editNews,
       updateNews,
       newsHasChanges,
-      revertChanges,
+      revertChanges
 
     });
 
@@ -213,4 +213,4 @@
   angular.module('webPage')
     .controller('NewsFeedController', NewsFeedController);
 
-}());
+})();

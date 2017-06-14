@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema, $q) {
 
-    var totalVolume = Schema.aggregate('volume').sum;
+    const totalVolume = Schema.aggregate('volume').sum;
 
     Schema.register({
 
@@ -14,17 +14,17 @@
         hasOne: {
           Article: {
             localField: 'Article',
-            localKey: 'article'
+            localKey: 'articleId'
           }
         },
         hasMany: {
           StockBatchBarCode: {
             localField: 'StockBatchBarCodes',
-            foreignKey: 'stockBatch'
+            foreignKey: 'stockBatchId'
           },
           PickingOrderPositionPicked: {
             localField: 'pickedPickingOrderPositions',
-            foreignKey: 'stockBatch'
+            foreignKey: 'stockBatchId'
           }
         }
       },
@@ -32,7 +32,7 @@
       methods: {
 
         spareVolume: function () {
-          var volume = (this.volume || 0) - (totalVolume(this.pickedPickingOrderPositions) || 0);
+          const volume = (this.volume || 0) - (totalVolume(this.pickedPickingOrderPositions) || 0);
           return volume > 0 ? volume : 0;
         }
 
@@ -40,12 +40,12 @@
 
       someBy: {
 
-        barCode: function (code) {
+        barCode: code => {
 
-          var SBBC = Schema.model('StockBatchBarCode');
-          var SB = Schema.model('StockBatch');
+          const SBBC = Schema.model('StockBatchBarCode');
+          const SB = Schema.model('StockBatch');
 
-          return $q(function (resolve, reject) {
+          return $q((resolve, reject) => {
 
             if (!code) {
               return reject('Укажите штрих-код');
@@ -53,21 +53,22 @@
 
             SBBC.findAll({
               code: code
-            }).then(function (res) {
+            }).then(res => {
 
               if (!res.length) {
                 return resolve([]);
               }
 
-              var qs = _.map(res, function (i) {
+              const qs = _.map(res, i => {
                 return SBBC.loadRelations(i);
               });
 
-              $q.all(qs).then(function (sbbcs) {
+              $q.all(qs).then(sbbcs => {
 
-                $q.all(_.map(sbbcs, function (sbbc) {
-                  return SB.loadRelations(sbbc.stockBatch, 'Article');
-                })).then(resolve, reject);
+                $q.all(_.map(sbbcs, sbbc => {
+                  return SB.loadRelations(sbbc.stockBatchId, 'Article');
+                }))
+                  .then(resolve, reject);
 
               }, reject);
 

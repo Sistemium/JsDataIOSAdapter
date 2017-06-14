@@ -64,15 +64,17 @@
         workflowSaleOrderSupervisor: false
       },
 
-      methods: {
-
-        workflow: function () {
+      computed: {
+        workflowStep: ['authId', 'processing', function (authId, processing) {
           let wf = SaleOrder.meta.workflowSaleOrder;
-          if (this.authId && this.authId !== Auth.authId()) {
+          if (authId && authId !== Auth.authId()) {
             wf = SaleOrder.meta.workflowSaleOrderSupervisor;
           }
-          return _.get(wf, this.processing);
-        },
+          return _.get(wf, processing);
+        }]
+      },
+
+      methods: {
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));

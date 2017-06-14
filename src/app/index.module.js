@@ -17,16 +17,20 @@
       'ui.mask',
       'sistemiumBootstrap',
       'Models',
+      'Sales',
       'cgBusy',
       'vs-repeat',
       'jsd',
       'toggle-switch',
       'angularMoment',
       'swipe',
-      'ngFileUpload'
+      'ngFileUpload',
+      'ngPinchZoom'
     ]);
 
-  angular.module('jsd', ['sistemiumBootstrap', 'Sales']);
+  angular.module('Sales', ['sistemium', 'yaMap']);
+
+  angular.module('jsd', ['sistemiumBootstrap', 'Models']);
 
 
 })();

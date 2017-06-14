@@ -9,7 +9,7 @@ sale-order-alert {
 
   .header {
 
-    @extend .display-flex;
+    @extend %flex-center;
 
     @media (max-width: $screen-xs) {
       min-height: 60px;
@@ -135,7 +135,7 @@ sale-order-alert {
 
   // FIXME: this is too generic, could space options in popovers
   @extend .spaced;
-  @extend .display-flex;
+  @extend %flex-center;
 
   flex: 1;
   min-width: 0;
@@ -154,13 +154,13 @@ sale-order-alert {
 
   .popovers {
 
-    @extend .display-flex;
+    @extend %flex-center;
     min-width: 0;
     margin-right: 15px;
 
     .popover-trigger {
 
-      @extend .display-flex;
+      @extend %flex-center;
       flex: 1;
       min-width: 0;
 

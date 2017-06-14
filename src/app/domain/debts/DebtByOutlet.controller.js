@@ -79,7 +79,7 @@
     }
 
     function onStateChange(to) {
-      if (to.name === rootState && vm.wasModified) {
+      if (to.name === rootState && vm.wasModified && !vm.busy) {
         refresh();
       }
     }
@@ -228,4 +228,4 @@
   angular.module('webPage')
     .controller('DebtByOutletController', DebtByOutletController);
 
-}());
+})();

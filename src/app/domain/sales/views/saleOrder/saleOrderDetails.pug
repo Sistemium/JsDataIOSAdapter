@@ -21,12 +21,12 @@
               small.strong {{ vm.saleOrder.date }}
 
               small(
-              ng-class='["processing", vm.saleOrder.workflow().cls, vm.saleOrder.processing]'
+              ng-class='["processing", vm.saleOrder.workflowStep.cls, vm.saleOrder.processing]'
               )
-                span {{ vm.saleOrder.workflow().label }}
+                span {{ vm.saleOrder.workflowStep.label }}
                 span(
                 ng-if='vm.saleOrder.processingMessage'
-                ng-class='vm.saleOrder.workflow().messageCls'
+                ng-class='vm.saleOrder.workflowStep.messageCls'
                 )
                   i.glyphicon.glyphicon-warning-sign
 
@@ -50,7 +50,7 @@
 
         a.toggle-edit(
         href ng-click='vm.toggleEditClick()'
-        ng-if='vm.saleOrder && vm.saleOrder.workflow().editable'
+        ng-if='vm.saleOrder && vm.saleOrder.workflowStep.editable'
         )
           i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
@@ -76,7 +76,7 @@
         span(ng-show='vm.confirmCopySaleOrder') ?
 
       button.btn.btn-primary.btn-sm(
-      ng-repeat='(destination, label) in vm.saleOrder.workflow().to'
+      ng-repeat='(destination, label) in vm.saleOrder.workflowStep.to'
       ng-click='vm.setProcessingClick(destination)'
       ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
       ) {{ label }}
@@ -95,13 +95,24 @@
           th.number Количество
           th.number.price Цена
           th.number.cost Стоимость
-      tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflow().editable}')
+      tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflowStep.editable}')
         tr.clickable(
         ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
         )
-          td {{ item.article.name }}
+          td
+            .name {{ item.article.name }}
+            //.spaced
+              span.flag(ng-if='item.isCompDiscount') КС
+              span {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
+              span.gray
+                | x
+              span {{ item.price | number:2 }} ₽
+              span.gray
+                | =
+              span {{ item.cost | number:2 }} ₽
           td.number
-            quantity-edit(position='item')
+            //quantity-edit(position='item')
+            | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
           td.number.price
             .flags
               span.flag(ng-if='item.isCompDiscount') КС

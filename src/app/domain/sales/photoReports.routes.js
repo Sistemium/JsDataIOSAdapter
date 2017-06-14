@@ -15,7 +15,7 @@
           controller: 'PhotoReportListController as vm',
 
           data: {
-            title: 'Фотоотчёты'
+            title: 'Фото-отчёты'
           }
 
         });

@@ -15,12 +15,12 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
             small на
             small.strong {{ vm.saleOrder.date }}
             small(
-            ng-class='["processing", vm.saleOrder.workflow().cls, vm.saleOrder.processing]'
+            ng-class='["processing", vm.saleOrder.workflowStep.cls, vm.saleOrder.processing]'
             )
-              span {{ vm.saleOrder.workflow().label }}
+              span {{ vm.saleOrder.workflowStep.label }}
               span(
               ng-if='vm.saleOrder.processingMessage'
-              ng-class='vm.saleOrder.workflow().messageCls'
+              ng-class='vm.saleOrder.workflowStep.messageCls'
               )
                 i.glyphicon.glyphicon-warning-sign
             // TODO: show date with amCalendar but without time
@@ -41,7 +41,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
       span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
       a(
       href
-      ng-if='!vm.saleOrder.outletId || saleOrderExpanded && vm.saleOrder.workflow().editable'
+      ng-if='!vm.saleOrder.outletId || saleOrderExpanded && vm.saleOrder.workflowStep.editable'
       popover-is-open='vm.isOutletPopoverOpen'
       uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
       )
@@ -56,7 +56,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
     ) Добавить товары
 
     button.btn.btn-primary.btn-sm(
-    ng-repeat='(destination, label) in vm.saleOrder.workflow().to'
+    ng-repeat='(destination, label) in vm.saleOrder.workflowStep.to'
     ng-click='vm.setProcessingClick(destination)'
     ng-if='vm.saleOrder.totalCost'
     ng-disabled='!vm.saleOrder.isValid()'

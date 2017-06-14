@@ -13,6 +13,8 @@
               small.strong {{ vm.shipment.date }}
           .address
             small {{vm.shipment.outlet.address}}
+          .comment
+            small {{ vm.shipment.commentText }}
 
     .totals.animate-show(ng-hide='vm.busy')
 
