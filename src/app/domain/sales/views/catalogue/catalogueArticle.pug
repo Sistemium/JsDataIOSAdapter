@@ -16,8 +16,8 @@ before-tag-name='li'
     ng-click='vm.thumbClick(stock)'
     )
       img(
-      ng-src='{{ stock.article.avatar.srcThumbnail }}'
-      ng-class='stock.article.avatar.srcThumbnail || "placeholder"'
+      ng-src='{{ ::stock.article.avatar.srcThumbnail }}'
+      ng-class='::stock.article.avatar.srcThumbnail || "placeholder"'
       )
 
     .article-wrapper(
@@ -52,13 +52,13 @@ before-tag-name='li'
         small {{::stock.article.preName}}
 
         small.tag(
-        ng-repeat='tag in stock.article.tags track by tag.code'
-        ng-class='tag.code'
+        ng-repeat='tag in ::stock.article.tags track by tag.code'
+        ng-class='::tag.code'
         )
           a(href ng-click='vm.articleTagClick(tag)') {{ tag.label }}
 
         small(
-        ng-if='stock.article.lastName'
+        ng-if='::stock.article.lastName'
         uib-tooltip-template='vm.articleTooltipTpl'
         ) {{::stock.article.lastName}}
 
