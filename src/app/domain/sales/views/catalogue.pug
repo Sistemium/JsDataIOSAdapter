@@ -7,14 +7,15 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
 
   ol.breadcrumb(
   ng-hide='!vm.isWideScreen && vm.saleOrder'
-  ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'"
   )
+    include catalogue/catalogueBreadcrumb
 
   section.animate-show#catalogue-main(
   ng-show='!saleOrderExpanded'
   )
 
-    #article-groups(ng-include="'app/domain/sales/views/catalogue/catalogueArticleGroups.html'")
+    #article-groups
+      include catalogue/catalogueArticleGroups
 
     font-size-edit#scroll-articles.animate-show(
     ng-show='vm.isWideScreen || !vm.isArticleGroupsExpanded'
@@ -25,5 +26,5 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
 
       #scroll-articles-parent.scroll-y(
       resize resize-offset-top='5' resize-property='height'
-      ng-include="'app/domain/sales/views/catalogue/catalogueArticle.html'"
       )
+        include catalogue/catalogueArticle
