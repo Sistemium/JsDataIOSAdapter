@@ -126,7 +126,7 @@
       let afterChangeOrder = true;
 
       if (vm.saleOrder && vm.saleOrder.priceTypeId !== _.get(vm, 'currentPriceType.id')) {
-        priceTypeClick(vm.saleOrder.priceType);
+        setPriceType(vm.saleOrder.priceType);
       }
 
       vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
@@ -336,8 +336,12 @@
     }
 
     function priceTypeClick(priceType) {
-      vm.currentPriceType = priceType;
       PriceType.meta.setDefault(priceType);
+      setPriceType(priceType);
+    }
+
+    function setPriceType(priceType) {
+      vm.currentPriceType = priceType;
       filterStock();
       setCurrentArticleGroup(vm.currentArticleGroup);
     }
@@ -522,6 +526,10 @@
 
               vm.priceTypes = PriceType.filter({isVisible: true});
 
+              if (!vm.currentPriceType) {
+                vm.currentPriceType = PriceType.meta.getDefault();
+              }
+
             });
 
         })
@@ -541,15 +549,14 @@
           volumeNotZero: true,
           where: volumeNotZero
         }, options))
-        .then(() => Price.cachedFindAll(options))
+        .then(() => Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options)))
         .then(() => {
 
           DEBUG('findAll', 'finish');
-          if (!vm.currentPriceType) {
-            vm.currentPriceType = PriceType.meta.getDefault();
-          }
+
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
+
           DEBUG('findAll', 'setCurrentArticleGroup');
 
         });
@@ -574,6 +581,12 @@
       if (vm.currentPriceType.parent) {
         priceType = vm.currentPriceType.parent;
         discount += vm.currentPriceType.discountPercent / 100;
+      }
+
+      if (!priceType.prices()) {
+        DEBUG('filterStock', 'cachedFindAll Price');
+        return Price.cachedFindAll({priceTypeId: priceType.id})
+          .then(filterStock);
       }
 
       DEBUG('filterStock', 'prices');
@@ -671,6 +684,8 @@
       setFirstLevelGroups(articleGroup);
 
       scrollArticlesTop();
+
+      DEBUG('setCurrentArticleGroup', 'end');
 
       $state.go('.', {
         articleGroupId: filter.articleGroupId,
