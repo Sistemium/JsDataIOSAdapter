@@ -17,7 +17,7 @@
 
         zoom: 1,
 
-        setZoom: _.debounce(zoom => $scope.$apply(() => vm.zoom = zoom), 200),
+        setZoom: _.throttle(zoom => $scope.$apply(() => vm.zoom = zoom), 200),
 
         thumbnailClick,
         fullScreenThumbnailClick,
