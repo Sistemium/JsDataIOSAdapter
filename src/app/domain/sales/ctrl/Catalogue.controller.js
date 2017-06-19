@@ -551,6 +551,11 @@
         }, options))
         .then(() => Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options)))
         .then(() => {
+          if (vm.currentPriceType.parentId) {
+            return Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.parentId}, options));
+          }
+        })
+        .then(() => {
 
           DEBUG('findAll', 'finish');
 
@@ -585,7 +590,7 @@
 
       if (!priceType.prices()) {
         DEBUG('filterStock', 'cachedFindAll Price');
-        return Price.cachedFindAll({priceTypeId: priceType.id})
+        return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000})
           .then(filterStock);
       }
 
