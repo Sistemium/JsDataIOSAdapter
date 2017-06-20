@@ -320,12 +320,14 @@
       vm.showOnlyOrdered = showOnlyOrdered || !vm.showOnlyOrdered;
       vm.firstLevelGroups = null;
 
-      vm.setBusy($q.all(
-        _.map(
-          _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.filter({articleId: pos.articleId}).length),
-          pos => Article.find(pos.articleId)
-            .then(article => Article.loadRelations(article, 'Stock'))
-        )
+      if (vm.showOnlyOrdered && vm.currentArticleGroup) {
+        vm.currentArticleGroup = null;
+      }
+
+      vm.setBusy(_.map(
+        _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.filter({articleId: pos.articleId}).length),
+        pos => Article.find(pos.articleId)
+          .then(article => Article.loadRelations(article, 'Stock'))
       ))
         .then(reloadVisible)
         .catch(error => console.error(error));
