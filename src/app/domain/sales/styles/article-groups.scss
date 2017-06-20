@@ -8,14 +8,19 @@
 
   .preceding-groups, .following-groups {
     padding-left: 0;
-    .list-group-item a {
-
-      background-color: $gray-background-color;
-
-      &:hover {
-        background-color: white !important;
+    .list-group-item {
+      & + .list-group-item {
+        border-top-color: $gray-background-color;
       }
+      > a {
 
+        background-color: darken($gray-background-color, 10%);
+        //color: $white;
+
+        &:hover {
+          background-color: white !important;
+        }
+      }
     }
   }
 
