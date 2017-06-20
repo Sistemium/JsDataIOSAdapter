@@ -1,0 +1,57 @@
+@import "../../../styles/variables";
+
+choice-list {
+
+  display: block;
+  overflow: hidden;
+
+  .choice-list {
+
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .title {
+
+      font-weight: bold;
+      margin: 5px 0 10px;
+      color: $gray;
+      text-align: center;
+      position: relative;
+
+      a {
+        position: absolute;
+        left: -5px;
+        top: -5px;
+      }
+
+    }
+
+    .stm-searcher {
+    }
+
+    .scroll-y {
+
+      min-height: 0;
+      flex: 1;
+      flex-shrink: 1;
+
+      .option.chosen {
+        a {
+          font-weight: bold;
+        }
+      }
+
+      .option {
+        .name, .address {
+          @extend .ellipsis;
+        }
+      }
+
+    }
+
+  }
+
+}

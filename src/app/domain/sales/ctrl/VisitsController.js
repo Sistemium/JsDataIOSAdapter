@@ -162,4 +162,4 @@
   angular.module('webPage')
     .controller('VisitsController', VisitsController);
 
-}());
+})();

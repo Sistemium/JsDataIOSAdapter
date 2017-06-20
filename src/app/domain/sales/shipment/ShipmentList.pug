@@ -1,9 +1,8 @@
-pre {{vm.data.length}}
-
 .ui-view(cg-busy='{promise: vm.busy, message: "Подождите, идет загрузка"}')
-  .shipment-list-view
+  .shipment-list-view(ng-if='vm.ready')
     .shipment-table-headers
       .order-number №
+      .egais Егаис
       .driver Водитель
       .salesman ТП
       .outlet Точка
@@ -13,30 +12,38 @@ pre {{vm.data.length}}
     .shipment-list.scroll-y(
     resize
     resize-offset-top='5'
-    vs-repeat='{{vm.isWideScreen()? 40: 126}}'
-    svs-options='{latch: true}' /*commented */,
-    vs-scrolled-to-end='vm.onScrollEnd()'
-    scrolled-to-end='{{vm.testFunc}}'
+    vs-repeat='{{vm.isWideScreen() ? 40 : 145}}'
+    vs-scrolled-to-end='vm.getData()'
+    vs-excess='10'
     )
-      .shipment-table-items(ng-repeat='shipment in vm.data | orderBy: "-date"' ng-click='vm.itemClick(shipment, $event)')
+      .shipment-table-items(ng-repeat='shipment in vm.data' ng-click='vm.itemClick(shipment, $event)')
 
         .order-number
-          span.attr-name(ng-if='!vm.isWideScreen()') №:
+          label №:
           span {{shipment.ndoc}}
 
+        .egais
+          label ЕГАИС:
+          egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
+            i.glyphicon(ng-class='shipment.egaisCached().egaisTtnCls')
+            i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
+
         .driver
-          span.attr-name(ng-if='!vm.isWideScreen()') Водитель:
+          label Водитель:
           span {{shipment.driver.tinyName}}
 
         .salesman
-          span.attr-name(ng-if='!vm.isWideScreen()') ТП:
+          label ТП:
           span {{shipment.salesman.tinyName}}
+
         .outlet
-          span.attr-name(ng-if='!vm.isWideScreen()') Точка:
+          label Точка:
           span {{shipment.outlet.name}}
+
         .price
-          span.attr-name(ng-if='!vm.isWideScreen()') Цена:
-          span {{shipment.totalCost() | number: 2}}
+          label Цена:
+          span {{ shipment.totalCost() | number: 2 }}
+
         .quantity
-          span.attr-name(ng-if='!vm.isWideScreen()') Количество:
-          span {{shipment.positions.length}}
+          label Количество:
+          span {{ shipment.totalPositions() }}

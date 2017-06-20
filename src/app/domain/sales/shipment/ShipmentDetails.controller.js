@@ -49,4 +49,4 @@
   angular.module('webPage')
     .controller('ShipmentDetailsController', ShipmentDetailsController);
 
-}());
+})();

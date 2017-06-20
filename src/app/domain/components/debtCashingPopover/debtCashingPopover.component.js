@@ -5,7 +5,8 @@
   module.component('debtCashingPopover', {
 
     bindings: {
-      debt: '<'
+      debt: '<',
+      doNotSave: '<'
     },
 
     transclude: true,
@@ -17,14 +18,14 @@
 
   });
 
-  function debtCashingPopoverController(Schema, $timeout, $scope) {
+  function debtCashingPopoverController(Schema, $timeout, $scope, $q) {
 
     let vm = this;
 
     _.assign(vm, {
 
       cashings: [],
-      deleteConfirmation:{},
+      deleteConfirmation: {},
 
       $onInit,
       cashWholeClick,
@@ -75,14 +76,19 @@
           .then(() => vm.deleteConfirmation[cashing.id] = false);
       }
 
-      cashing.DSDestroy()
-        .then(() => {
-          _.remove(vm.cashings, {id: cashing.id});
-          $scope.$emit('DebtOrCashingModified');
-        });
+      let q = cashing.DSLastSaved() ? Cashing.destroy(cashing) : $q.resolve(Cashing.eject(cashing));
+
+      q.then(() => {
+        _.remove(vm.cashings, {id: cashing.id});
+        $scope.$emit('DebtOrCashingModified');
+        vm.isPopoverOpen = false;
+      });
+
     }
 
-    function triggerClick() {
+    function triggerClick(event) {
+
+      event.preventDefault();
 
       vm.isPopoverOpen = !vm.isPopoverOpen;
 
@@ -93,7 +99,7 @@
       if (!debtId) return;
 
       Cashing.findAll({debtId})
-        .then(cashings => vm.cashings = cashings)
+        .then(() => vm.cashings = Cashing.filter({debtId}))
         .catch(e => console.error(e));
 
     }
@@ -109,12 +115,14 @@
         date: moment().format()
       });
 
-      Cashing.create(cashing)
-        .then(saved => {
-          vm.cashings.push(saved);
-          vm.isPopoverOpen = false;
-          $scope.$emit('DebtOrCashingModified');
-        });
+      let q = vm.doNotSave ? $q.resolve(Cashing.inject(cashing)) : Cashing.create(cashing);
+
+      q.then(saved => {
+        vm.cashings.push(saved);
+        vm.isPopoverOpen = false;
+        $scope.$emit('DebtOrCashingModified');
+      });
+
     }
 
     function cashWholeClick() {

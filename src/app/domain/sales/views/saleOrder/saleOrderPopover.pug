@@ -5,7 +5,7 @@ resize resize-offset-top='25'
     button.btn.btn-primary(
     ng-disabled='vm.saleOrder && !vm.saleOrder.id'
     stm-click='setSaleOrder'
-    ng-click='isPopoverOpen=false'
+    ng-click='vm.isSaleOrderPopoverOpen=false'
     )
       i.glyphicon.glyphicon-plus
       span Добавить новый Заказ
@@ -18,10 +18,10 @@ resize resize-offset-top='25'
   )
     a(
     href
-    ng-click='vm.isSaleOrderPopoverOpen=false; vm.setSaleOrderClick(draft)'
+    ng-click='vm.isSaleOrderPopoverOpen=false'
     stm-click='setSaleOrder' click-payload='draft'
     )
-      .name.display-flex
+      .name
         .flex-1 {{ ::draft.outlet.name }}
         .right {{ draft.totalCost || 0 | number:2 }} ₽
       .address.gray

@@ -4,9 +4,9 @@
 
     angular.module('Models').service('Picker', function (Schema, SoundSynth, toastr) {
 
-      var currentPicker;
+      let currentPicker;
 
-      var Picker = Schema.register ({
+      const Picker = Schema.register ({
 
         name: 'Picker',
 
@@ -14,45 +14,45 @@
           hasMany: {
             PickingOrder: {
               localField: 'pickingOrders',
-              foreignKey: 'picker'
+              foreignKey: 'pickerId'
             }
           }
         },
 
         computed: {
-          shortName: ['name', function (name) {
-            var names = name.match (/(^[^ ]*) (.*$)/);
+          shortName: ['name', name => {
+            const names = name.match (/(^[^ ]*) (.*$)/);
             return names[1] + ' ' + names[2][0] + '.';
           }]
         },
 
-        getCurrent: function () {
+        getCurrent: () => {
           return currentPicker;
         },
 
-        setCurrentById: function (id) {
-          return Picker.find(id).then(function(p){
+        setCurrentById: id => {
+          return Picker.find(id).then(p => {
             //SoundSynth.say(p.name);
             return (currentPicker = p);
-          },function (res) {
+          }, res => {
             toastr.error(angular.toJson(res),'Ошибка регистрации сборщика');
           });
         },
 
-        logout: function () {
+        logout: () => {
           currentPicker = undefined;
           Schema.model ('PickingOrder').ejectAll();
           Picker.ejectAll();
         },
 
-        login: function (code, password) {
+        login: (code, password) => {
 
           return Picker.findAll({
             code: code,
             password: password
           },{
             bypassCache:true
-          }).then (function (pickers){
+          }).then(pickers => {
             if (pickers.length) {
               return (currentPicker = pickers[0]);
             } else {

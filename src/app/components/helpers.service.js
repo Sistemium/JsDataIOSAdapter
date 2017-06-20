@@ -11,7 +11,8 @@
       PhotoHelper,
       LocationHelper,
       ClickHelper,
-      saMedia
+      saMedia,
+      moment
     ) {
 
       return {
@@ -23,7 +24,8 @@
         PhotoHelper,
         LocationHelper,
         ClickHelper,
-        saMedia
+        saMedia,
+        moment
 
       };
 

@@ -9,18 +9,20 @@ settings-popover {
   background: $gray-background-color;
 
   .popover {
+
+    min-width: 250px;
+
+    top: 47px !important;
+
     button {
       background: $gray-background-color;
       color: #4290d0;
     }
+
   }
 
   i.glyphicon {
     top: 3px;
-  }
-
-  .popover {
-    top: 47px !important;
   }
 
 }

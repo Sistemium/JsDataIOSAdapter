@@ -15,7 +15,13 @@
             localKey: 'campaignId'
           }
         }
-      }
+      },
+
+      watchChanges: false,
+      resetHistoryOnInject: false,
+
+      instanceEvents: false,
+      notify: false
 
     });
 

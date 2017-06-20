@@ -34,6 +34,12 @@
       min-width: 100px;
       flex: 0.2;
     }
+
+    .egais {
+      min-width: 50px;
+      flex: 0.05;
+    }
+
     .salesman {
       min-width: 100px;
       flex: 0.2;
@@ -72,7 +78,7 @@
       padding-left: 5px;
 
       @include responsive-only(lt-sm) {
-        line-height: 18px;
+        line-height: 14px;
         flex-flow: column nowrap;
         height: auto;
         border: 1px solid #DDD;
@@ -86,6 +92,12 @@
         min-width: 100px;
         flex: 0.1;
       }
+
+      .egais {
+        min-width: 50px;
+        flex: 0.05;
+      }
+
       .driver {
         min-width: 100px;
         flex: 0.2;
@@ -108,56 +120,32 @@
         flex: 0.1;
       }
 
-      .order-number, .driver, .salesman, .outlet, .price, .quantity {
+      .order-number, .driver, .salesman, .outlet, .price, .quantity, .egais {
 
-        .attr-name {
+
+        label {
           font-weight: 600;
+          margin: 0;
+
+          @include responsive-only(gt-xs) {
+            display: none;
+          }
+
         }
 
         @include responsive-only(lt-sm) {
           display: flex;
           justify-content: space-between;
           flex-flow: row nowrap;
+          align-items: center;
           min-width: 50px;
           font-size: 14px;
+          line-height: 19px;
+
         }
       }
 
     }
-  }
-
-  .shipment-item {
-
-    //.headings {
-    //  color: #000;
-    //  font-weight: 600;
-    //  font-size: 15px;
-    //  display: flex;
-    //  flex-flow: row nowrap;
-    //  justify-content: space-between;
-    //}
-    //
-    //.shipment-data {
-    //  display: flex;
-    //  flex-flow: row nowrap;
-    //  justify-content: space-between;
-    //}
-  }
-
-  .sticky-title {
-    position: -webkit-sticky;
-    position: -moz-sticky;
-    position: -o-sticky;
-    position: -ms-sticky;
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: block;
-    z-index: 1;
-    background: #999;
-    color: #fff;
-    padding: 10px 20px;
   }
 
 }

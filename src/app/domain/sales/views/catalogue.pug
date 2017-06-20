@@ -10,7 +10,7 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
   ng-include="'app/domain/sales/views/catalogue/catalogueBreadcrumb.html'"
   )
 
-  section.animate-show(
+  section.animate-show#catalogue-main(
   ng-show='!saleOrderExpanded'
   )
 

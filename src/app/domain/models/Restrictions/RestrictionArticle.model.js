@@ -19,7 +19,10 @@
           //   localKey: 'articleId'
           // }
         }
-      }
+      },
+
+      instanceEvents: false,
+      notify: false
 
     });
 

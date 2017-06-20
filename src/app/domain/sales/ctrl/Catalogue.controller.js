@@ -49,6 +49,7 @@
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
       showImages: localStorageService.get('showImages') || false,
+      showFirstLevel: localStorageService.get('showFirstLevel') || false,
       stockWithPicIndex: [],
       discountsBy: {},
       discounts: {},
@@ -63,6 +64,7 @@
       clearSearchClick,
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
+      toggleShowFirstLevelClick,
 
       compDiscountClick,
       bPlusButtonClick,
@@ -74,7 +76,7 @@
       thumbClick,
 
       onStateChange,
-      articleRowHeight,
+      // articleRowHeight,
       alertCheck,
       alertTriggers: _.groupBy(CatalogueAlert.getAll(), 'articleGroupId')
 
@@ -101,11 +103,17 @@
     );
 
     vm.watchScope('vm.search', (newValue, oldValue) => {
-      if (newValue != oldValue) setCurrentArticleGroup(vm.currentArticleGroup)
+      if (newValue != oldValue) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
     });
 
     $scope.$watchCollection('vm.filters', (o, n) => {
-      if (o && n && (o.length || n.length)) setCurrentArticleGroup(vm.currentArticleGroup);
+      if (o && n && (o.length || n.length)) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
     });
 
     $scope.$on('setSaleOrder', (event, saleOrder) => {
@@ -151,41 +159,43 @@
 
     vm.watchScope(
       isWideScreen,
-      (newValue, oldValue) => newValue != oldValue && $scope.$broadcast('vsRepeatTrigger')
-    );
-
-    vm.watchScope(
-      isWideScreen,
-      newValue => vm.isWideScreen = newValue
+      (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+          $scope.$broadcast('vsRepeatTrigger');
+        }
+        vm.isWideScreen = newValue;
+        vm.articleRowHeight = articleRowHeight();
+      }
     );
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
+
+      if (e.resource !== 'Stock') return;
+
       DEBUG('jsData:updateCollection', e);
-      if (e.resource === 'Stock') {
 
-        let options = {
-          limit: 10000,
-          bypassCache: true,
-          offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-        };
+      let options = {
+        limit: 10000,
+        bypassCache: true,
+        offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+      };
 
-        Stock.cachedFindAll({}, options)
-          .then(res => {
+      Stock.cachedFindAll({}, options)
+        .then(res => {
 
-            let index = {};
+          let index = {};
 
-            _.each(res, item => index[item.id] = item);
+          _.each(res, item => index[item.id] = item);
 
-            onJSDataFinished({
-              model: Stock,
-              index: index,
-              data: res
-            });
-
+          onJSDataFinished({
+            model: Stock,
+            index: index,
+            data: res
           });
 
-      }
+        });
+
     }));
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
@@ -217,6 +227,8 @@
 
     function thumbClick(stock) {
 
+      $scope.imagesAll = $scope.imagesAll || _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
+
       vm.thumbnailClick(_.get(stock, 'article.avatar'));
 
     }
@@ -240,10 +252,18 @@
       $scope.$broadcast('bPlusButtonClick', stock.article, vm.prices[stock.articleId]);
     }
 
+    function toggleShowFirstLevelClick() {
+      vm.showFirstLevel = !vm.showFirstLevel;
+      setCurrentArticleGroup(vm.currentArticleGroup);
+    }
+
     function toggleShowImagesClick() {
 
-      // TODO: define SalesSettings service
-      localStorageService.set('showImages', vm.showImages = !vm.showImages);
+      vm.showImages = !vm.showImages;
+
+      if (!vm.showImages) return;
+
+      ArticlePicture.findAll({}, {limit: 10000});
 
     }
 
@@ -298,6 +318,7 @@
     function saleOrderTotalsClick(showOnlyOrdered) {
 
       vm.showOnlyOrdered = showOnlyOrdered || !vm.showOnlyOrdered;
+      vm.firstLevelGroups = null;
 
       vm.setBusy($q.all(
         _.map(
@@ -447,12 +468,8 @@
           return;
         }
 
-        let contractDiscount = _.first(byArticleId[articleId]) ||
-          _.first(byPriceGroup[_.get(article, 'priceGroupId')]);
-
-        if (!contractDiscount) return;
-
-        let {discount} = contractDiscount;
+        let discount = _.get(_.first(byArticleId[articleId]), 'discount') ||
+          _.get(_.first(byPriceGroup[_.get(article, 'priceGroupId')]), 'discount');
 
         if (!discount) return;
 
@@ -462,13 +479,6 @@
       });
 
     }
-
-    function getFilteredArticlesPhotos() {
-
-      $scope.imagesAll = _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
-
-    }
-
 
     function cacheSaleOrderPositions() {
 
@@ -522,7 +532,11 @@
             'ANY stocks': volumeNotZero
           }
         }, options))
-        .then(() => ArticlePicture.findAll({}, options))
+        .then(() => {
+          if (vm.showImages) {
+            ArticlePicture.findAll({}, options);
+          }
+        })
         .then(() => Stock.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
@@ -622,8 +636,7 @@
 
       vm.stock = ownStock;
 
-
-      getFilteredArticlesPhotos();
+      $scope.imagesAll = false;
 
       if (children.length) {
 
@@ -648,10 +661,14 @@
 
       vm.articleGroupIds = groupIds;
       vm.articleGroupIdsLength = Object.keys(vm.articleGroupIds).length;
+      vm.noMoreChildren = !children.length;
+
+      if (!articleGroup) {
+        vm.firstLevelGroups = vm.articleGroups;
+      }
 
       setAncestors(articleGroup);
-
-      vm.noMoreChildren = !children.length;
+      setFirstLevelGroups(articleGroup);
 
       scrollArticlesTop();
 
@@ -660,6 +677,35 @@
         q: vm.search,
         ordered: vm.showOnlyOrdered || null
       }, {notify: false});
+
+    }
+
+
+    function setFirstLevelGroups(currentArticleGroup) {
+
+      if (!currentArticleGroup || !vm.showFirstLevel) {
+        vm.precedingGroups = [];
+        vm.followingGroups = [];
+        return;
+      }
+
+      if (!vm.firstLevelGroups) {
+
+        let ownStock = getStockByArticlesOfGroup(null);
+        let groupIds = articleGroupIds(ownStock);
+        let childGroups = _.filter(ArticleGroup.getAll(), {articleGroupId: null});
+        vm.firstLevelGroups = _.filter(childGroups, hasArticlesOrGroupsInStock(groupIds));
+
+      }
+
+      let currentFirstLevelGroup = currentArticleGroup.firstLevelAncestor();
+
+      if (!currentFirstLevelGroup) {
+        currentFirstLevelGroup = currentArticleGroup;
+      }
+
+      vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.name < currentFirstLevelGroup.name);
+      vm.followingGroups = _.filter(vm.firstLevelGroups, group => group.name > currentFirstLevelGroup.name);
 
     }
 
@@ -673,7 +719,11 @@
 
     function setAncestors(articleGroup) {
 
-      vm.ancestors = [{displayName: 'Все товары', showAll: true}];
+      vm.ancestors = [];
+
+      if (articleGroup || vm.showOnlyOrdered) {
+        vm.ancestors.push({displayName: 'Все товары', showAll: true});
+      }
 
       if (vm.showOnlyOrdered) {
         vm.ancestors.push({displayName: 'Товары заказа', id: false});
@@ -798,7 +848,7 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.findAll()
+        RestrictionArticle.findAll({}, {limit: 10000})
       ])
         .then(res => {
 
@@ -825,4 +875,4 @@
   angular.module('Sales')
     .controller('CatalogueController', CatalogueController);
 
-}());
+})();

@@ -1,0 +1,23 @@
+.to-summ-cashing-popover
+
+  form(name="cashForm" ng-submit='vm.onSubmit()')
+
+    .form-group
+      input#sumToCash.form-control(
+      ng-model='vm.summ'
+      type='number'
+      name='summ'
+      auto-focus='true'
+      placeholder='Укажите сумму'
+      step='0.01'
+      required
+      )
+
+      .error(ng-if='cashForm.$dirty && !cashForm.$valid') Некорректная сумма
+
+    button.btn.btn-success(
+    type='submit'
+    value='submit'
+    ng-click='vm.onSubmit()'
+    ng-disabled='!cashForm.$valid'
+    ) Выбрать долги

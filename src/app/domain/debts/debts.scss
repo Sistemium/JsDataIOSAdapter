@@ -13,6 +13,25 @@
     text-align: left;
   }
 
+  *.overdue {
+    color: $state-warning-text;
+  }
+
+  @include responsive-only(xxs) {
+    .overdue {
+      display: none;
+    }
+  }
+
+  .in-progress {
+    .date .ndoc > span {
+      color: $primary-color;
+    }
+    div.debt *:hover {
+      cursor: pointer;
+    }
+  }
+
   .date > .title {
     font-size: 16px;
     @include responsive-only(lt-sm) {
@@ -25,6 +44,39 @@
     }
   }
 
+  .alert {
+
+    .totals {
+
+      to-summ-cashing {
+
+        @include responsive-only(xxs) {
+          width: 100%;
+
+          button {
+
+            width: 100%;
+            display: block;
+
+            & + button {
+              margin-top: $margin;
+            }
+
+          }
+
+        }
+
+        @include responsive-only(gt-xxs) {
+          button + button {
+            margin-left: $margin;
+          }
+        }
+
+      }
+    }
+
+  }
+
   .header, .footer {
 
     min-height: 35px;
@@ -35,34 +87,51 @@
 
     @include responsive-only(lt-sm) {
       min-height: 30px;
+
+    }
+
+    @include responsive-only(xxs) {
+
+      .totals {
+        padding: 5px;
+      }
+
     }
 
   }
 
   .header {
+
     border-bottom: $headers-border;
+
     label {
       color: $black;
+    }
+
+    .buttons {
+
+      flex: 1;
+      display: flex;
+      text-align: left;
+      justify-content: space-between;
+      align-items: center;
+
+      i + span {
+        margin-left: $margin;
+      }
+
+      @include responsive-only(lt-sm) {
+        .btn {
+          padding-left: 0;
+        }
+      }
+
     }
   }
 
   .footer {
 
     border-top: $headers-border;
-    //color: $gray;
-
-    .buttons {
-      flex: 1;
-      text-align: left;
-      i + span {
-        margin-left: $margin;
-      }
-      @include responsive-only(lt-sm) {
-        .btn {
-          padding-left: 0;
-        }
-      }
-    }
 
     @include responsive-only(xxs) {
       label {
@@ -78,17 +147,49 @@
 
   }
 
-  .outlet-debt-total {
+  .partner-debt-total {
 
     border-bottom: solid 1px $border-gray;
     padding: $margin 0;
 
+    > .name {
+      margin-bottom: 0;
+      margin-top: $margin/2;
+      @include responsive-only(lt-sm) {
+        margin-bottom: $margin/2;
+      }
+    }
+
+    .totals {
+
+      margin: 5px 0;
+
+      @include responsive-only(xxs) {
+
+        padding: 5px;
+        background-color: $gray-background-color;
+
+        &.sub {
+          background-color: transparent;
+        }
+      }
+
+    }
+
+  }
+
+  .outlet-debt-total {
+
+    @extend %flex-row;
+
+    @include responsive-only(lt-sm) {
+      display: block;
+    }
+
     .outlet {
 
-      @include responsive-only(gt-xs) {
-        //font-size: larger;
-        margin: 5px 0;
-      }
+      flex: 1;
+      margin: 5px 0;
 
       font-weight: bold;
       color: $black;
@@ -119,9 +220,6 @@
     .cashings {
       @extend %table-row;
       text-align: right;
-      .cashed {
-        //margin-right: $field-width + $margin;
-      }
       .buttons {
         text-align: left;
         font-size: 75%;
@@ -130,6 +228,14 @@
         }
       }
     }
+  }
+
+  .cashed.unsaved {
+    color: $gray;
+  }
+
+  .cash-this {
+    min-width: 40px !important;
   }
 
   %table-row {
@@ -161,6 +267,9 @@
 
     .debt {
       @extend %table-row;
+      & *:focus {
+        outline: none;
+      }
     }
 
     .cashed {
@@ -184,7 +293,7 @@
 
     }
 
-    .overdue .tip {
+    .tip.overdue {
       color: $state-warning-text;
     }
 
@@ -212,6 +321,9 @@
       margin-left: $margin;
       min-width: $field-width;
       text-align: right;
+      @include responsive-only(xxs) {
+        min-width: $field-width;
+      }
     }
 
   }

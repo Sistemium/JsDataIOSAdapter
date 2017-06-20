@@ -9,7 +9,7 @@
   }
 
   .inputs {
-    @extend .display-flex;
+    @extend %flex-center;
   }
 
   .boxes, .bottles {

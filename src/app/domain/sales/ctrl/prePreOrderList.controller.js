@@ -136,5 +136,5 @@
   angular.module('webPage')
     .controller('PrePreOrderListController', PrePreOrderListController)
   ;
-  
-}());
+
+})();

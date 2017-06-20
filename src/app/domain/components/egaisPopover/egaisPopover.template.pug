@@ -1,0 +1,11 @@
+.status
+  i.glyphicon(ng-class='vm.egais.egaisTtnCls')
+  span {{ vm.egais.egaisTtnStatusTs | amUtc | amLocal | amCalendar:null:vm.format }}
+.status
+  span {{ vm.egais.egaisTtnStatus }}
+  span {{ vm.egais.egaisTtnNdoc }}
+.status
+  i.glyphicon(ng-class='vm.egais.egaisActCls')
+  span {{ vm.egais.egaisActTs | amUtc | amLocal | amCalendar:null:vm.format }}
+.status
+  span {{ vm.egais.egaisActStatus }}

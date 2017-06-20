@@ -2,16 +2,19 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr) {
 
     const {Debt, Outlet, Cashing} = Schema.models();
 
     const vm = saControllerHelper
       .setup(this, $scope)
       .use({
+        toSummCashingInProgress: false,
         totalSumm,
         trashUndebtedClick,
-        confirmation: {}
+        confirmation: {},
+        debtClick,
+        unsavedCashings: []
       });
 
     const {outletId} = $state.params;
@@ -20,9 +23,60 @@
 
     Outlet.bindOne(outletId, $scope, 'vm.outlet');
 
+    vm.watchScope('vm.toSummCashingInProgress', clearChecks);
+
     /*
      Functions
      */
+
+    function clearChecks() {
+      _.each(vm.data, group => {
+        _.each(group.items, item => {
+          item.checked = false;
+        });
+      });
+    }
+
+    function debtClick(debt, event) {
+
+      if (event.defaultPrevented || !vm.summToCash) return;
+
+      event.preventDefault();
+
+      let uncashed = debt.uncashed();
+      let toCashRemains= vm.summToCash - (_.sumBy(vm.unsavedCashings, 'summ') || 0);
+      let summ = _.min([vm.summToCash && toCashRemains, uncashed]);
+
+      if (!toCashRemains && !debt.checked) {
+        return toastr.error('Нажмите "Готово", чтобы завершить подбор', 'Сумма уже подобрана');
+      }
+
+      if (uncashed > 0 && summ > 0) {
+
+        debt.checked = true;
+
+        Cashing.inject({
+          summ,
+          debtId: debt.id,
+          outletId: debt.outletId,
+          date: moment().format()
+        });
+
+      } else {
+
+        debt.checked = false;
+
+        let cashings = Cashing.filter({debtId: debt.id});
+
+        _.each(cashings, cashing => {
+          if (!cashing.DSLastSaved()) {
+            Cashing.eject(cashing);
+          }
+        });
+
+      }
+
+    }
 
     function trashUndebtedClick(cashing) {
       if ((vm.confirmation[cashing.id] = !vm.confirmation[cashing.id])) {
@@ -88,4 +142,4 @@
   angular.module('webPage')
     .controller('OutletDebtController', OutletDebtController);
 
-}());
+})();

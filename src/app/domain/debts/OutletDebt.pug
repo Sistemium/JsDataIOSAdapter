@@ -10,12 +10,32 @@
           small {{vm.outlet.address}}
       span.caret
 
+  .totals
+    to-summ-cashing(
+    outlet='vm.outlet'
+    popover-open='vm.toSummCashingPopoverOpen'
+    cashings='vm.unsavedCashings'
+    summ='vm.summToCash'
+    in-progress='vm.toSummCashingInProgress'
+    )
+
 .header
+
+  .buttons
+
+    outlet-cashing-popover.btn.btn-link(outlet='vm.outlet' is-popover-open='vm.addOtherPopoverOpen')
+      i.glyphicon.glyphicon-plus
+      span прочее
+
   .totals
     label.total(ng-if='vm.cashingTotal') На руках
     label.total Остаток долга
+    label.cash-this(ng-if='vm.toSummCashingInProgress')
 
-.scroll-y(resize resize-offset-top='40')
+.scroll-y(
+resize resize-offset-top='40'
+ng-class='vm.toSummCashingInProgress && "in-progress"'
+)
 
   .cashing-undebted(ng-if='vm.undebtedCashings.length')
 
@@ -50,33 +70,35 @@
 
       .debt(
       ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id'
-      ng-class='{overdue: debt.isOverdue()}'
       )
 
-        label.ndoc
-          small.tip(ng-if='debt.isOverdue()')
+        label.ndoc(ng-click='vm.debtClick(debt, $event)')
+
+          small.tip.overdue(ng-if='debt.isOverdue()')
             span Просрочено
             = ' '
             span {{ debt.dateE | amDifference:null | amDurationFormat }}
+
           small.tip(ng-if='!debt.isOverdue()')
             span На оплату
             = ' '
             span {{ debt.dateE | amDifference:null | amDurationFormat }}
+
           span {{ ::debt.ndoc }}
 
         currency-value.cashed(
+        ng-click='vm.debtClick(debt, $event)'
         value='vm.cashingTotalByDebt[debt.id]'
         ng-if='vm.cashingTotal'
         )
-        debt-cashing-popover.summ(debt='debt')
+
+        debt-cashing-popover.summ(debt='debt' do-not-save='vm.toSummCashingInProgress')
           currency-value(value='debt.uncashed()')
 
-.footer
+        a.cash-this(href ng-click='vm.debtClick(debt, $event)' ng-if='vm.toSummCashingInProgress')
+          i.glyphicon(ng-class='debt.checked ? "glyphicon-check" : "glyphicon-unchecked"')
 
-  .buttons
-    outlet-cashing-popover.btn.btn-link(outlet='vm.outlet')
-      i.glyphicon.glyphicon-plus
-      span прочее
+.footer
 
   .totals.animate-show(ng-hide='vm.busy')
 
@@ -84,4 +106,7 @@
 
     a(href ng-click='$parent.vm.totalCashedClick()')
       currency-value(value='vm.cashingTotal' ng-if='vm.cashingTotal')
+
     currency-value(value='vm.totalSumm()')
+
+    label.cash-this(ng-if='vm.toSummCashingInProgress')

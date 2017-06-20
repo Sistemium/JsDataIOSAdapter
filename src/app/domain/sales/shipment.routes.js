@@ -14,7 +14,9 @@
           controller: 'ShipmentListController as vm',
 
           data: {
-            title: 'Отгрузки'
+            title: 'Отгрузки',
+            auth: 'SalesmanAuth',
+            rootState: 'sales.shipmentList'
           },
 
           children: [{

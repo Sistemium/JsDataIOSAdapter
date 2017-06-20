@@ -1,15 +1,18 @@
 (function (module) {
 
-  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia) {
+  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia, IOS, localStorageService) {
 
-    const {Shipment, ShipmentPosition, Outlet, Driver} = Schema.models();
+    const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
     const {saControllerHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    const pageSize = 100;
+    const pageSize = 50;
     let startPage = 1;
-    let filter = SalesmanAuth.makeFilter();
+    let noData = false;
+    let currSalesman;
+
+    vm.data = [];
 
     vm.use({
 
@@ -17,13 +20,12 @@
 
       onStateChange,
       itemClick,
-      onScrollEnd,
-      onElemLoad,
-      isWideScreen,
-      totalCost
+      getData,
+      isWideScreen
+
     });
 
-    SalesmanAuth.watchCurrent($scope, getData);
+    SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
     $scope.$on('rootClick', () => $state.go('sales.shipmentList'));
 
@@ -31,54 +33,44 @@
      Functions
      */
 
+
+    function onSalesmanChange() {
+
+      vm.ready = false;
+
+      currSalesman = '';
+      startPage = 1;
+      noData = false;
+      let filter;
+
+      $q.when(SalesmanAuth.getCurrentUser())
+        .then((salesman) => {
+
+
+          if (vm.data.length) {
+            vm.data = [];
+            cleanup();
+          }
+
+          if (salesman) {
+            filter = {'salesmanId': salesman.id};
+          }
+
+          return $q.all([
+            // Driver.findAll(filter),
+            // Outlet.findAll(filter)
+          ]).then(() => {
+            return getData(filter);
+          });
+
+
+        }).catch((err) => {
+        throw err;
+      })
+    }
+
     function isWideScreen() {
       return !saMedia.xsWidth && !saMedia.xxsWidth;
-    }
-
-    function getDataOnScrollEnd() {
-
-      vm.setBusy(
-        Shipment.findAll({'x-order-by:': '-date'}, {
-          pageSize: pageSize,
-          startPage: startPage + 1,
-          bypassCache: true
-        }).then((res) => {
-          return res
-        })
-      ).then(res => {
-
-        vm.data.push(...res);
-
-        let busy = $q.all([
-
-          startPage++,
-
-          vm.data = _.uniq(vm.data, 'id'),
-
-          _.each(res, (item) => {
-            ShipmentPosition.findAll({shipmentId: item.id})
-          })
-
-        ]);
-
-        vm.setBusy(busy);
-
-      }).catch(
-        e => console.error(e)
-      );
-
-    }
-
-    function totalCost() {
-      return _.sumBy(vm.data, shipment => shipment.totalCost());
-    }
-
-    function onElemLoad() {
-      debounceTest();
-    }
-
-    function onScrollEnd() {
-      getDataOnScrollEnd();
     }
 
     function itemClick(item, $event) {
@@ -96,31 +88,82 @@
     function cleanup() {
       ShipmentPosition.ejectAll();
       Shipment.ejectAll();
+      ShipmentEgais.ejectAll();
     }
 
-    function getData(salesman) {
+    function getData(salesmanFilter) {
 
-      Shipment.findAll({'x-order-by:': '-date'}, {
+      vm.ready = true;
+      
+      if (busy || noData) {
+        return;
+      }
+
+      if (salesmanFilter) {
+        currSalesman = salesmanFilter;
+      } else {
+        let lsSalesman = localStorageService.get('currentSalesmanId');
+        if (lsSalesman) {
+          currSalesman = {'salesmanId': lsSalesman}
+        }
+      }
+
+      let filter = {'x-order-by:': '-date'};
+
+      if (!_.get(filter, 'salesmanId')) {
+        _.assign(filter, currSalesman);
+      }
+
+      let options = {
         pageSize: pageSize,
-        startPage: startPage,
+        startPage: startPage + 1,
         bypassCache: true
-      }).then((res) => {
-        vm.data = res;
+      };
 
-        let busy = $q.all([
-          Driver.findAll(),
-          Outlet.findAll(),
-          Shipment.findAllWithRelations(filter, {bypassCache: true})(['Driver', 'Outlet']),
-          _.each(vm.data, (item) => {
-            ShipmentPosition.findAll({shipmentId: item.id})
+      let positionsFilter = _.clone(filter);
+
+      if (IOS.isIos()) {
+        positionsFilter = {where: {}};
+
+        if (filter.salesmanId) {
+          positionsFilter.where['shipment.salesmanId'] = {'==': filter.salesmanId};
+        }
+      }
+
+      let busy = Shipment.findAll(filter, options).then((res) => {
+
+        if (!res.length) {
+          noData = true;
+        }
+
+        vm.data.push(...res);
+
+        vm.data = _.orderBy(_.uniq(vm.data, 'id'), ['date', 'ndoc'], ['desc', 'asc']);
+
+        _.each(res, shipment => shipment.DSLoadRelations(['Outlet', 'Driver']));
+
+        let posQ = _.map(vm.data, (item) => {
+
+          if (startPage === 1) {
+            ShipmentEgais.findAll(positionsFilter, {bypassCache: true, limit: 5000});
+          }
+
+          return ShipmentPosition.findAll({shipmentId: item.id});
+
+        });
+
+        return $q.all([
+          ...posQ,
+
+          $q.when().then(() => {
+            startPage++
           })
-        ]);
 
-        vm.setBusy(busy);
+        ]);
 
       });
 
-      vm.currentSalesman = salesman;
+      vm.setBusy(busy);
 
     }
 

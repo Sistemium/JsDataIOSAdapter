@@ -3,8 +3,10 @@ href
 ng-if='vm.data'
 ng-class='{disabled: vm.data.length < 2}'
 ng-hide='vm.busy'
+ng-click='vm.isOpen = !vm.isOpen'
 popover-is-open='vm.isOpen'
 popover-placement='auto bottom-left'
+popover-trigger='"none"'
 uib-popover-template='"app/domain/sales/outletSalesmanContract/outletSalesmanContractPopover.template.html"'
 )
   span {{ vm.currentOption.contract.name }} ({{ vm.currentOption.priceType.name }})

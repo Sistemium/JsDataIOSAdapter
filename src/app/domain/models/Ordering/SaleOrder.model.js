@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, Language, $q, DEBUG) {
+  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth) {
 
     const wDict = {
       w1: 'позиция',
@@ -59,14 +59,22 @@
 
       meta: {
         positionsCountRu,
-        nextShipmentDate
+        nextShipmentDate,
+        workflowSaleOrder: false,
+        workflowSaleOrderSupervisor: false
+      },
+
+      computed: {
+        workflowStep: ['authId', 'processing', function (authId, processing) {
+          let wf = SaleOrder.meta.workflowSaleOrder;
+          if (authId && authId !== Auth.authId()) {
+            wf = SaleOrder.meta.workflowSaleOrderSupervisor;
+          }
+          return _.get(wf, processing);
+        }]
       },
 
       methods: {
-
-        workflow: function () {
-          return Schema.workflowSaleOrder && Schema.workflowSaleOrder[this.processing];
-        },
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));

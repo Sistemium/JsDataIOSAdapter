@@ -15,7 +15,7 @@
     };
   }
 
-  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper) {
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, $window, localStorageService) {
 
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
@@ -33,17 +33,32 @@
 
     function onStateChange(event, to) {
 
+      let rootState = _.get(to, 'data.rootState');
+
       vm.use({
         hide: !!_.get(to, 'data.hideTopBar'),
         hideNavs: !!_.get(to, 'data.hideNavs'),
         title: _.get(to, 'data.title') || DEFAULT_TITLE,
-        isRootState: to.name === 'home',
+        isHomeState: to.name === 'home',
         currentItem: _.find(vm.menu.items, item => to.name && _.startsWith(to.name, item.state)),
         isSalesState: _.startsWith(to.name, 'sales.'),
-        isCatalogueState: _.startsWith(to.name, 'sales.catalogue')
+        isCatalogueState: _.startsWith(to.name, 'sales.catalogue'),
+        isSubRootState: _.startsWith(to.name, rootState) && to.name !== rootState
       });
 
     }
+
+    function measure() {
+      let a = $window.performance.now();
+      $rootScope.$apply();
+      vm.lastDigest = Math.round($window.performance.now() - a);
+      setTimeout(measure, 2000);
+    }
+
+    if (localStorageService.get('debug.performance')) {
+      setTimeout(measure, 1000);
+    }
+
 
   }
 
