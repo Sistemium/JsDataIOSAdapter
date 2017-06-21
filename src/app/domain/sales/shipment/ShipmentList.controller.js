@@ -9,7 +9,7 @@
 
     const pageSize = 50;
     let startPage = 1;
-    let noData = false;
+    let gotAllData = false;
     let currSalesman;
 
     vm.data = [];
@@ -38,35 +38,24 @@
 
       vm.ready = false;
 
-      currSalesman = '';
+      currSalesman = null;
       startPage = 1;
-      noData = false;
-      let filter;
+      gotAllData = false;
 
-      $q.when(SalesmanAuth.getCurrentUser())
-        .then((salesman) => {
+      let filter = SalesmanAuth.makeFilter();
 
+      if (vm.data.length) {
+        vm.data = [];
+        cleanup();
+      }
 
-          if (vm.data.length) {
-            vm.data = [];
-            cleanup();
-          }
+      vm.setBusy([
+        Driver.findAll(filter),
+        Outlet.findAll(filter)
+      ]).then(() => {
+        return getData(filter);
+      });
 
-          if (salesman) {
-            filter = {'salesmanId': salesman.id};
-          }
-
-          return $q.all([
-            // Driver.findAll(filter),
-            // Outlet.findAll(filter)
-          ]).then(() => {
-            return getData(filter);
-          });
-
-
-        }).catch((err) => {
-        throw err;
-      })
     }
 
     function isWideScreen() {
@@ -91,11 +80,13 @@
       ShipmentEgais.ejectAll();
     }
 
+    let busyGettingData;
+
     function getData(salesmanFilter) {
 
       vm.ready = true;
-      
-      if (busy || noData) {
+
+      if (busyGettingData || gotAllData) {
         return;
       }
 
@@ -130,10 +121,10 @@
         }
       }
 
-      let busy = Shipment.findAll(filter, options).then((res) => {
+      busyGettingData = Shipment.findAll(filter, options).then((res) => {
 
         if (!res.length) {
-          noData = true;
+          gotAllData = true;
         }
 
         vm.data.push(...res);
@@ -163,7 +154,8 @@
 
       });
 
-      vm.setBusy(busy);
+      vm.setBusy(busyGettingData)
+        .finally(() => busyGettingData = false);
 
     }
 
