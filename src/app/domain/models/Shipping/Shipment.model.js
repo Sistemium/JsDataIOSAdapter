@@ -63,7 +63,7 @@
 
         positionsCountRu,
 
-        egaisCached: function() {
+        egaisCached: function () {
 
           if (!this.cachedEgais) {
             this.cachedEgais = this.egais || null;
@@ -73,32 +73,30 @@
 
         },
 
-        totalCost: function () {
-          if (!caches[this.id]) {
-            setCaches(this);
-          }
-          return caches[this.id].totalCost;
-        },
-
-        totalCostDoc: function() {
-          return _.sumBy(this.positions, pos => pos.volume * pos.priceDoc);
-        },
-
-        totalPositions: function () {
-          if (!caches[this.id]) {
-            setCaches(this);
-          }
-          return caches[this.id].positions;
-        }
+        totalCost: cachedValue('totalCost'),
+        totalCostDoc: cachedValue('totalCostDoc'),
+        totalPositions: cachedValue('positions')
 
       }
 
     });
 
+    // TODO: move to separate ModelCaching service
+
     $rootScope.$watch(ifPositionsChanged, clearCaches);
+
+    function cachedValue(name) {
+      return function () {
+        if (!caches[this.id]) {
+          setCaches(this);
+        }
+        return caches[this.id][name];
+      }
+    }
 
     function setCaches(shipment) {
       caches[shipment.id] = {
+        totalCostDoc: _.sumBy(shipment.positions, pos => pos.volume * pos.priceDoc) || null,
         totalCost: Schema.aggregate('cost').sum(shipment.positions) || null,
         positions: shipment.positions.length || null
       };
