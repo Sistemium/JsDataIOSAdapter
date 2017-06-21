@@ -1,123 +1,116 @@
-font-size-edit(append-to='catalogueArticle')
+ul.list-group.round-corners-by-type.vr-parent(
+vs-repeat='{{ vm.articleRowHeight }}'
+vs-scroll-parent="#scroll-articles-parent"
+before-tag-name='li'
+)
 
-  .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
-    | Нет подходящих товаров
+  .list-group-item.catalogue-article(
+  ng-repeat='stock in vm.stock track by stock.id'
+  ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
+  )
 
-  #scroll-articles-parent.scroll-y(resize resize-offset-top='5' resize-property='height')
-    ul.list-group.round-corners-by-type.vr-parent(
-    vs-repeat='{{ vm.articleRowHeight }}'
-    vs-scroll-parent="#scroll-articles-parent"
-    before-tag-name='li'
+    a.thumb(
+    ng-disabled='!stock.article.avatar'
+    ng-if='vm.showImages'
+    href
+    ng-click='vm.thumbClick(stock)'
     )
-
-      .list-group-item.catalogue-article(
-      ng-repeat='stock in vm.stock track by stock.id'
-      ng-class='{"item-padding": vm.showImages}'
-      ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
+      img(
+      ng-src='{{ ::stock.article.avatar.srcThumbnail }}'
+      ng-class='::stock.article.avatar.srcThumbnail || "placeholder"'
       )
 
-        a.thumb(
-        ng-disabled='!stock.article.avatar'
-        ng-if='vm.showImages'
-        href
-        ng-click='vm.thumbClick(stock)'
-        )
-          img(
-          ng-src='{{ stock.article.avatar.srcThumbnail }}'
-          ng-class='stock.article.avatar.srcThumbnail || "placeholder"'
-          )
+    .article-wrapper(
+    ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
+    )
+      .article-name-first
 
-        .article-wrapper(
-        ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
-        )
-          .article-name-first
-
-            strong.name-first(
-            uib-tooltip-template='vm.articleTooltipTpl'
-            ) {{::stock.article.firstName}}
-            .article-info(
-            ng-class='::{gray: stock.article.firstName.length}'
-            )
-
-              a.pieceVolume(
-              href ng-click='vm.pieceVolumeClick(stock.article.pieceVolume)'
-              ) {{::stock.article.pieceVolume}}л
-              small.gray x {{::stock.article.packageRel}}
-              small.gray(ng-if='!vm.noFactor && stock.article.factor > 1') : {{::stock.article.factor}}
-
-            // TODO: allow removing restricted positions
-            quantity-edit(
-            ng-if='vm.saleOrder'
-            article='stock.article'
-            sale-order='vm.saleOrder'
-            price='vm.prices[stock.articleId]'
-            position='vm.saleOrderPositionByArticle[stock.articleId]'
-            )
-
-          .article-name-second(
-          )
-            small {{::stock.article.preName}}
-
-            small.tag(
-            ng-repeat='tag in stock.article.tags track by tag.code'
-            ng-class='tag.code'
-            )
-              a(href ng-click='vm.articleTagClick(tag)') {{ tag.label }}
-
-            small(
-            ng-if='stock.article.lastName'
-            uib-tooltip-template='vm.articleTooltipTpl'
-            ) {{::stock.article.lastName}}
-
-            small {{::stock.article.extraLabel}}
-
-          .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
-            i.red.glyphicon.glyphicon-ban-circle
-            small.red "{{ vm.restrictedArticles[stock.articleId].name }}"
-            small.gray {{ vm.prices[stock.articleId].price | number:2 }} ₽
-
-          .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
-
-            i.recently-shipped.glyphicon.glyphicon-star-empty(
-            ng-if='vm.articleStats[stock.articleId]'
-            uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"
-            )
-
-            i.red.glyphicon.glyphicon-warning-sign(
-            ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'
-            uib-tooltip='Нет в наличии'
-            )
-
-            small.gray.nowrap(ng-if='stock.volume')
-              span ~{{stock.displayVolume}}
-
-            small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
-              a.compDiscount(
-              href
-              ng-click='vm.compDiscountClick(stock)'
-              ng-class='{flag: vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount}'
-              ) КС
-              span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
-              span.gray
-                | =
-              span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
-              span.gray
-                | x
-
-            price-edit(
-            prices='vm.prices[stock.articleId]'
-            position='vm.saleOrderPositionByArticle[stock.articleId]'
-            discount='vm.discounts[stock.articleId]'
-            )
-
-        .right(
-        ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
+        strong.name-first(
+        uib-tooltip-template='vm.articleTooltipTpl'
+        ) {{::stock.article.firstName}}
+        .article-info(
+        ng-class='::{gray: stock.article.firstName.length}'
         )
 
-          button.btn.btn-default(
-          ng-click='vm.kPlusButtonClick(stock)'
-          ) +К
+          a.pieceVolume(
+          href ng-click='vm.pieceVolumeClick(stock.article.pieceVolume)'
+          ) {{::stock.article.pieceVolume}}л
+          small.gray x {{::stock.article.packageRel}}
+          small.gray(ng-if='!vm.noFactor && stock.article.factor > 1') : {{::stock.article.factor}}
 
-          button.btn.btn-default(
-          ng-click='vm.bPlusButtonClick(stock)'
-          ) +Б
+        // TODO: allow removing restricted positions
+        quantity-edit(
+        ng-if='vm.saleOrder'
+        article='stock.article'
+        sale-order='vm.saleOrder'
+        price='vm.prices[stock.articleId]'
+        position='vm.saleOrderPositionByArticle[stock.articleId]'
+        )
+
+      .article-name-second(
+      )
+        small {{::stock.article.preName}}
+
+        small.tag(
+        ng-repeat='tag in ::stock.article.tags track by tag.code'
+        ng-class='::tag.code'
+        )
+          a(href ng-click='vm.articleTagClick(tag)') {{ tag.label }}
+
+        small(
+        ng-if='::stock.article.lastName'
+        uib-tooltip-template='vm.articleTooltipTpl'
+        ) {{::stock.article.lastName}}
+
+        small {{::stock.article.extraLabel}}
+
+      .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
+        i.red.glyphicon.glyphicon-ban-circle
+        small.red "{{ vm.restrictedArticles[stock.articleId].name }}"
+        small.gray {{ vm.prices[stock.articleId].price | number:2 }} ₽
+
+      .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
+
+        i.recently-shipped.glyphicon.glyphicon-star-empty(
+        ng-if='vm.articleStats[stock.articleId]'
+        uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"
+        )
+
+        i.red.glyphicon.glyphicon-warning-sign(
+        ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'
+        uib-tooltip='Нет в наличии'
+        )
+
+        small.gray.nowrap(ng-if='stock.volume')
+          span ~{{stock.displayVolume}}
+
+        small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
+          a.compDiscount(
+          href
+          ng-click='vm.compDiscountClick(stock)'
+          ng-class='{flag: vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount}'
+          ) КС
+          span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
+          span.gray
+            | =
+          span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
+          span.gray
+            | x
+
+        price-edit(
+        prices='vm.prices[stock.articleId]'
+        position='vm.saleOrderPositionByArticle[stock.articleId]'
+        discount='vm.discounts[stock.articleId]'
+        )
+
+    .right(
+    ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
+    )
+
+      button.btn.btn-default(
+      ng-click='vm.kPlusButtonClick(stock)'
+      ) +К
+
+      button.btn.btn-default(
+      ng-click='vm.bPlusButtonClick(stock)'
+      ) +Б

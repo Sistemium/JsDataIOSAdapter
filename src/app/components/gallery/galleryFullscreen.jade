@@ -27,7 +27,7 @@
       ng-src='{{ currentImageSrc }}'
       ng-if='!loading'
       alt='Ошибка загрузки изображения'
-      ng-pinch-zoom max-scale='4'
+      ng-pinch-zoom max-scale='8' zoom-fn='vm.setZoom'
       )
 
     .image-info
@@ -42,7 +42,7 @@
         )
           i.glyphicon.glyphicon-question-sign
 
-      p.index {{index + 1}} / {{imagesAll.length}}
+      p.index {{index + 1}} / {{imagesAll.length}} [{{ vm.zoom }}]
 
     .ng-thumbnails-wrapper
       #ng-thumbnails-scroll(

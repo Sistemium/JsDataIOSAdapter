@@ -81,7 +81,7 @@
 
     function thumbClick(picture) {
 
-      vm.isPopoverOpen = false;
+      // vm.isPopoverOpen = false;
 
       let campaign = picture.campaign;
 
