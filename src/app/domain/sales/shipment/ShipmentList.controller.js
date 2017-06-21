@@ -1,6 +1,6 @@
 (function (module) {
 
-  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia, IOS, localStorageService) {
+  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia, IOS) {
 
     const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
     const {saControllerHelper} = Helpers;
@@ -10,13 +10,11 @@
     const pageSize = 50;
     let startPage = 1;
     let gotAllData = false;
-    let currSalesman;
-
-    vm.data = [];
 
     vm.use({
 
       driverPopoverOpen: {},
+      data: [],
 
       onStateChange,
       itemClick,
@@ -38,7 +36,6 @@
 
       vm.ready = false;
 
-      currSalesman = null;
       startPage = 1;
       gotAllData = false;
 
@@ -82,7 +79,7 @@
 
     let busyGettingData;
 
-    function getData(salesmanFilter) {
+    function getData() {
 
       vm.ready = true;
 
@@ -90,20 +87,7 @@
         return;
       }
 
-      if (salesmanFilter) {
-        currSalesman = salesmanFilter;
-      } else {
-        let lsSalesman = localStorageService.get('currentSalesmanId');
-        if (lsSalesman) {
-          currSalesman = {'salesmanId': lsSalesman}
-        }
-      }
-
-      let filter = {'x-order-by:': '-date'};
-
-      if (!_.get(filter, 'salesmanId')) {
-        _.assign(filter, currSalesman);
-      }
+      let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date,ndoc'});
 
       let options = {
         pageSize: pageSize,
@@ -133,11 +117,11 @@
 
         _.each(res, shipment => shipment.DSLoadRelations(['Outlet', 'Driver']));
 
-        let posQ = _.map(vm.data, (item) => {
+        if (startPage === 1) {
+          ShipmentEgais.findAll(positionsFilter, {bypassCache: true, limit: 5000});
+        }
 
-          if (startPage === 1) {
-            ShipmentEgais.findAll(positionsFilter, {bypassCache: true, limit: 5000});
-          }
+        let posQ = _.map(vm.data, (item) => {
 
           return ShipmentPosition.findAll({shipmentId: item.id});
 
