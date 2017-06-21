@@ -40,10 +40,10 @@
           label Точка:
           span {{shipment.outlet.name}}
 
-        .price
-          label Цена:
-          span {{ shipment.totalCost() | number: 2 }}
+        currency-value.cost(value='shipment.totalCost()' label='Стоимость')
 
         .quantity
           label Количество:
           span {{ shipment.totalPositions() }}
+
+        // TODO: show diff from shipment.totalCostDoc() if > 0.01

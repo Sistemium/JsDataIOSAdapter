@@ -48,7 +48,7 @@
       min-width: 100px;
       flex: 0.3;
     }
-    .price {
+    .cost {
       min-width: 100px;
       flex: 0.1;
     }
@@ -111,7 +111,7 @@
         min-width: 100px;
         flex: 0.3;
       }
-      .price {
+      .cost {
         min-width: 100px;
         flex: 0.1;
       }
@@ -120,7 +120,7 @@
         flex: 0.1;
       }
 
-      .order-number, .driver, .salesman, .outlet, .price, .quantity, .egais {
+      .order-number, .driver, .salesman, .outlet, .cost, .quantity, .egais {
 
 
         label {
