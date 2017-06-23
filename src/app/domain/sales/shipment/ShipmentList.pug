@@ -2,7 +2,7 @@
   .shipment-list-view(ng-if='vm.ready')
     .shipment-table-headers
       .order-number №
-      .egais Егаис
+      .egais ЕГАИС
       .driver Водитель
       .salesman ТП
       .outlet Точка
@@ -12,18 +12,17 @@
     .shipment-list.scroll-y(
     resize
     resize-offset-top='5'
-    vs-repeat='{{vm.isWideScreen() ? 40 : 145}}'
+    vs-repeat='{{vm.isWideScreen() ? 40 : 131}}'
     vs-scrolled-to-end='vm.getData()'
     vs-excess='10'
     )
       .shipment-table-items(ng-repeat='shipment in vm.data' ng-click='vm.itemClick(shipment, $event)')
 
         .order-number
-          label №:
+          label №
           span {{shipment.ndoc}}
 
         .egais
-          label ЕГАИС:
           egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
             i.glyphicon(ng-class='shipment.egaisCached().egaisTtnCls')
             i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
@@ -37,10 +36,17 @@
           span {{shipment.salesman.tinyName}}
 
         .outlet
-          label Точка:
-          span {{shipment.outlet.name}}
+          .outlet-address
+            span {{shipment.outlet.name}}
+            span.address {{shipment.outlet.address}}
 
-        currency-value.cost(value='shipment.totalCost()' label='Стоимость')
+        .cost
+          label Стоимость:
+          .cost-diff-price
+            currency-value(value='shipment.totalCost()')
+            .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
+              span +
+              currency-value(value='shipment.totalCostDoc() - shipment.totalCost()' weight='400')
 
         .quantity
           label Количество:
