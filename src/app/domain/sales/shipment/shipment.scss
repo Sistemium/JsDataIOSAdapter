@@ -1,10 +1,141 @@
-
 .shipment-list-view {
+
+  $table-padding-left: 5;
 
   padding: 0 5px;
 
   @include responsive-only(lt-sm) {
     padding: 0;
+  }
+
+  .shipment-table-items {
+    @include responsive-only(lt-sm) {
+      position: relative;
+    }
+  }
+
+  .shipment-table-headers, .shipment-table-items {
+    .order-number {
+      min-width: 100px;
+
+      @include responsive-only(lt-sm) {
+        min-width: 50px;
+        font-weight: 600;
+      }
+
+    }
+    .driver {
+      min-width: 100px;
+    }
+
+    .egais {
+      min-width: 60px;
+
+      @include responsive-only(lt-sm) {
+        min-width: 36px !important;
+        position: absolute;
+        right: 5px;
+        top: 10px;
+      }
+
+    }
+
+    .salesman {
+      min-width: 100px;
+    }
+    .outlet {
+      line-height: 19px;
+      min-width: 350px;
+      flex: 1;
+
+      @include responsive-only(gt-xs) {
+        min-width: 150px;
+      }
+
+      @include responsive-only(lt-sm) {
+        height: 33px;
+        order: -1;
+        border-bottom: 1px solid silver;
+      }
+
+      .outlet-address {
+
+        @include responsive-only(lt-sm) {
+          flex-flow: column nowrap;
+          display: flex;
+          line-height: 16px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin-right: 40px;
+        }
+
+      }
+
+      .address {
+        color: gray;
+        display: block;
+        @extend .ellipsis;
+
+      }
+
+    }
+
+    .cost {
+
+      line-height: 20px;
+      min-width: 100px;
+      text-align: right;
+
+      .cost-diff-price {
+
+        @include responsive-only(lt-sm) {
+          display: flex;
+          flex-flow: row nowrap;
+        }
+      }
+
+      .diff {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-end;
+
+        @include responsive-only(lt-sm) {
+          line-height: 17px;
+          padding-left: 3px;
+          &:before {
+            content: ' (';
+          }
+
+          &:after {
+            content: ')';
+          }
+
+        }
+
+        > * {
+          font-weight: 400;
+          color: gray;
+        }
+
+      }
+
+      label {
+        @include responsive-only(lt-sm) {
+          flex: 0;
+        }
+      }
+
+      @include responsive-only(lt-sm) {
+        order: 1;
+      }
+
+    }
+
+    .quantity {
+      min-width: 100px;
+      text-align: right;
+    }
   }
 
   .shipment-table-headers {
@@ -19,42 +150,6 @@
 
     @include responsive-only(lt-sm) {
       display: none;
-    }
-
-    .order-number {
-      min-width: 100px;
-      flex: 0.1;
-
-      @include responsive-only(lt-sm) {
-        min-width: 50px;
-        border: 1px solid red;
-      }
-    }
-    .driver {
-      min-width: 100px;
-      flex: 0.2;
-    }
-
-    .egais {
-      min-width: 50px;
-      flex: 0.05;
-    }
-
-    .salesman {
-      min-width: 100px;
-      flex: 0.2;
-    }
-    .outlet {
-      min-width: 100px;
-      flex: 0.3;
-    }
-    .cost {
-      min-width: 100px;
-      flex: 0.1;
-    }
-    .quantity {
-      min-width: 50px;
-      flex: 0.1;
     }
 
   }
@@ -75,7 +170,6 @@
       line-height: 39px;
       display: flex;
       height: 40px;
-      padding-left: 5px;
 
       @include responsive-only(lt-sm) {
         line-height: 14px;
@@ -88,50 +182,7 @@
         margin-bottom: 10px;
       }
 
-      .order-number {
-        min-width: 100px;
-        flex: 0.1;
-      }
-
-      .egais {
-        min-width: 50px;
-        flex: 0.05;
-      }
-
-      .driver {
-        min-width: 100px;
-        flex: 0.2;
-      }
-      .salesman {
-        min-width: 100px;
-        flex: 0.2;
-      }
-      .outlet {
-        @extend .ellipsis;
-        min-width: 100px;
-        flex: 0.3;
-      }
-      .cost {
-        min-width: 100px;
-        flex: 0.1;
-      }
-      .quantity {
-        min-width: 50px;
-        flex: 0.1;
-      }
-
       .order-number, .driver, .salesman, .outlet, .cost, .quantity, .egais {
-
-
-        label {
-          font-weight: 600;
-          margin: 0;
-
-          @include responsive-only(gt-xs) {
-            display: none;
-          }
-
-        }
 
         @include responsive-only(lt-sm) {
           display: flex;
@@ -140,9 +191,24 @@
           align-items: center;
           min-width: 50px;
           font-size: 14px;
-          line-height: 19px;
+          line-height: 17px;
+
+          span {
+            font-weight: 600;
+          }
 
         }
+
+        label {
+          margin: 0;
+          font-weight: normal;
+
+          @include responsive-only(gt-xs) {
+            display: none;
+          }
+
+        }
+
       }
 
     }
