@@ -5,7 +5,8 @@
     bindings: {
       hideEmpty: '<',
       value: '<',
-      label: '@'
+      label: '@',
+      weight: '@'
     },
 
     controller: currencyValueController,
@@ -16,6 +17,12 @@
   });
 
   function currencyValueController() {
+
+    let vm = this;
+
+    if (!vm.weight) {
+      vm.weight = 600
+    }
 
   }
 
