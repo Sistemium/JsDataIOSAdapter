@@ -31,7 +31,6 @@
      Functions
      */
 
-
     function onSalesmanChange() {
 
       vm.ready = false;
