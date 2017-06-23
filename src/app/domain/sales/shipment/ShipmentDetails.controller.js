@@ -22,9 +22,6 @@
      */
 
     const appWindow = angular.element($window);
-
-    console.log(appWindow);
-
     Shipment.bindOne($state.params.id, $scope, 'vm.shipment');
 
     /*
