@@ -21,7 +21,6 @@
      Listeners
      */
 
-    const appWindow = angular.element($window);
     Shipment.bindOne($state.params.id, $scope, 'vm.shipment');
 
     /*
