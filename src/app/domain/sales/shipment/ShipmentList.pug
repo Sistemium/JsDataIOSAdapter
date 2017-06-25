@@ -4,7 +4,7 @@
       .order-number №
       .egais ЕГАИС
       .driver Водитель
-      .salesman ТП
+      .salesman(ng-if='!vm.currentSalesman') ТП
       .outlet Точка
       .price Стоимость
       .quantity Позиции
@@ -31,7 +31,7 @@
           label Водитель:
           span {{shipment.driver.tinyName}}
 
-        .salesman
+        .salesman(ng-if='!vm.currentSalesman')
           label ТП:
           span {{shipment.salesman.tinyName}}
 

@@ -31,8 +31,9 @@
      Functions
      */
 
-    function onSalesmanChange() {
+    function onSalesmanChange(salesman) {
 
+      vm.currentSalesman = salesman;
       vm.ready = false;
 
       startPage = 1;
