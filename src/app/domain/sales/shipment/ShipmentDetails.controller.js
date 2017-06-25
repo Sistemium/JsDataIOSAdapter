@@ -2,7 +2,7 @@
 
 (function () {
 
-  function ShipmentDetailsController(Schema, $scope, saControllerHelper, $state, $q, $window) {
+  function ShipmentDetailsController(Schema, $scope, saControllerHelper, $state, $q) {
 
     const vm = saControllerHelper
       .setup(this, $scope);
