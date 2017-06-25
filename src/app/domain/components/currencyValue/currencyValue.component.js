@@ -5,8 +5,7 @@
     bindings: {
       hideEmpty: '<',
       value: '<',
-      label: '@',
-      weight: '@'
+      label: '@'
     },
 
     controller: currencyValueController,
