@@ -6,8 +6,8 @@
       .driver Водитель
       .salesman(ng-if='!vm.currentSalesman') ТП
       .outlet Точка
-      .price Стоимость
-      .quantity Позиции
+      .cost Стоимость
+      .positions Позиций
 
     .shipment-list.scroll-y(
     resize
@@ -46,10 +46,10 @@
             currency-value(value='shipment.totalCost()')
             .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
               span +
-              currency-value(value='shipment.totalCostDoc() - shipment.totalCost()' weight='400')
+              currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
 
-        .quantity
-          label Количество:
+        .positions
+          label Позиций:
           span {{ shipment.totalPositions() }}
 
         // TODO: show diff from shipment.totalCostDoc() if > 0.01

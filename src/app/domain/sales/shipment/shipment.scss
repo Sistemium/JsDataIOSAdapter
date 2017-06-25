@@ -1,3 +1,5 @@
+@import "../../../styles/variables";
+
 .shipment-list-view {
 
   $table-padding-left: 5;
@@ -25,7 +27,7 @@
 
     }
     .driver {
-      min-width: 100px;
+      min-width: 110px;
     }
 
     .egais {
@@ -41,15 +43,22 @@
     }
 
     .salesman {
-      min-width: 100px;
+      min-width: 110px;
     }
+
+    currency-value {
+      strong {
+        font-weight: normal;
+      }
+    }
+
     .outlet {
       line-height: 19px;
-      min-width: 350px;
+      min-width: 330px;
       flex: 1;
 
       @include responsive-only(gt-xs) {
-        min-width: 150px;
+        min-width: 130px;
       }
 
       @include responsive-only(lt-sm) {
@@ -93,6 +102,7 @@
           display: flex;
           flex-flow: row nowrap;
         }
+
       }
 
       .diff {
@@ -132,7 +142,7 @@
 
     }
 
-    .quantity {
+    .positions {
       min-width: 100px;
       text-align: right;
     }
@@ -152,6 +162,12 @@
       display: none;
     }
 
+  }
+
+  @include responsive-only(lt-md) {
+    .positions {
+      display: none;
+    }
   }
 
   .shipment-list {
@@ -182,7 +198,7 @@
         margin-bottom: 10px;
       }
 
-      .order-number, .driver, .salesman, .outlet, .cost, .quantity, .egais {
+      .order-number, .driver, .salesman, .outlet, .cost, .positions, .egais {
 
         @include responsive-only(lt-sm) {
           display: flex;
