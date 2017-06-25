@@ -6,7 +6,6 @@ before-tag-name='li'
 
   .list-group-item.catalogue-article(
   ng-repeat='stock in vm.stock track by stock.id'
-  ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
   )
 
     a.thumb(
@@ -22,6 +21,7 @@ before-tag-name='li'
 
     .article-wrapper(
     ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
+    ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )
       .article-name-first
 
