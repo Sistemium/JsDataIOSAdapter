@@ -18,7 +18,10 @@
     vs-scrolled-to-end='vm.getData()'
     vs-excess='10'
     )
-      .shipment(ng-repeat='shipment in vm.data' ng-click='vm.itemClick(shipment, $event)')
+      .shipment(
+      ng-repeat='shipment in vm.data track by shipment.id'
+      ng-click='vm.itemClick(shipment, $event)'
+      )
 
         .ndoc
           label №
