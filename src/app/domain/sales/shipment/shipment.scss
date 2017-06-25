@@ -10,7 +10,7 @@
     padding: 0;
   }
 
-  .scroll-y {
+  .shipment {
     @include responsive-only(lt-sm) {
       position: relative;
     }
