@@ -127,14 +127,10 @@
 
         });
 
-        return $q.all([
-          ...posQ,
-
-          $q.when().then(() => {
+        return $q.all(posQ)
+          .then(() => {
             startPage++
-          })
-
-        ]);
+          });
 
       });
 
