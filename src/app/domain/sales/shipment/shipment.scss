@@ -1,6 +1,6 @@
 @import "../../../styles/variables";
 
-.shipment-list-view {
+.shipment-list {
 
   $table-padding-left: 5;
 
@@ -10,14 +10,15 @@
     padding: 0;
   }
 
-  .shipment-table-items {
+  .scroll-y {
     @include responsive-only(lt-sm) {
       position: relative;
     }
   }
 
-  .shipment-table-headers, .shipment-table-items {
-    .order-number {
+  .headers, .scroll-y {
+
+    .ndoc {
       min-width: 100px;
 
       @include responsive-only(lt-sm) {
@@ -26,6 +27,7 @@
       }
 
     }
+
     .driver {
       min-width: 110px;
     }
@@ -148,7 +150,7 @@
     }
   }
 
-  .shipment-table-headers {
+  .headers {
     border-bottom: 2px solid #DDD;
     display: flex;
     flex: 1;
@@ -170,13 +172,13 @@
     }
   }
 
-  .shipment-list {
+  .scroll-y {
 
-    > * {
+    * {
       outline: none;
     }
 
-    .shipment-table-items {
+    .shipment {
 
       &:hover {
         background-color: #CFE1EE;
@@ -198,7 +200,7 @@
         margin-bottom: 10px;
       }
 
-      .order-number, .driver, .salesman, .outlet, .cost, .positions, .egais {
+      .ndoc, .driver, .salesman, .outlet, .cost, .positions, .egais {
 
         @include responsive-only(lt-sm) {
           display: flex;

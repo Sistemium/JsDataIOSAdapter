@@ -1,7 +1,9 @@
-.ui-view(cg-busy='{promise: vm.busy, message: "Подождите, идет загрузка"}')
-  .shipment-list-view(ng-if='vm.ready')
-    .shipment-table-headers
-      .order-number №
+.ui-view(cg-busy='vm.cgBusy')
+
+  .shipment-list(ng-if='vm.ready')
+
+    .headers
+      .ndoc №
       .egais ЕГАИС
       .driver Водитель
       .salesman(ng-if='!vm.currentSalesman') ТП
@@ -9,16 +11,16 @@
       .cost Стоимость
       .positions Позиций
 
-    .shipment-list.scroll-y(
+    .scroll-y(
     resize
     resize-offset-top='5'
     vs-repeat='{{vm.isWideScreen() ? 40 : 131}}'
     vs-scrolled-to-end='vm.getData()'
     vs-excess='10'
     )
-      .shipment-table-items(ng-repeat='shipment in vm.data' ng-click='vm.itemClick(shipment, $event)')
+      .shipment(ng-repeat='shipment in vm.data' ng-click='vm.itemClick(shipment, $event)')
 
-        .order-number
+        .ndoc
           label №
           span {{shipment.ndoc}}
 
@@ -51,5 +53,3 @@
         .positions
           label Позиций:
           span {{ shipment.totalPositions() }}
-
-        // TODO: show diff from shipment.totalCostDoc() if > 0.01
