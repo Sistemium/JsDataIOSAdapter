@@ -19,7 +19,8 @@
       onStateChange,
       itemClick,
       getData,
-      isWideScreen
+      isWideScreen,
+      rowHeight
 
     });
 
@@ -30,6 +31,10 @@
     /*
      Functions
      */
+
+    function rowHeight() {
+      return isWideScreen() ? 40 : (vm.currentSalesman ? 114 : 131);
+    }
 
     function onSalesmanChange(salesman) {
 

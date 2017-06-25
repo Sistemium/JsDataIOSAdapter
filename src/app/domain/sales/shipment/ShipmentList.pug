@@ -14,7 +14,7 @@
     .scroll-y(
     resize
     resize-offset-top='5'
-    vs-repeat='{{vm.isWideScreen() ? 40 : 131}}'
+    vs-repeat='{{vm.rowHeight()}}'
     vs-scrolled-to-end='vm.getData()'
     vs-excess='10'
     )
