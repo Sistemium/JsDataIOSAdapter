@@ -34,7 +34,8 @@
 
         .driver
           label Водитель:
-          span {{shipment.driver.tinyName}}
+          driver-popover(driver='shipment.driver' popover-open='vm.driverPopoverOpen[shipment.id]' ng-if='shipment.driver')
+            span {{shipment.driver.tinyName}}
 
         .salesman(ng-if='!vm.currentSalesman')
           label ТП:
