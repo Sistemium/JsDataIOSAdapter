@@ -7,7 +7,7 @@
       href
       popover-is-open='vm.isUncashingPopoverOpen'
       popover-placement='auto bottom-left'
-      ng-class='{disabled: !!vm.uncashing}'
+      ng-class='{disabled: !!vm.uncashing || !vm.uncashings.length}'
       uib-popover-template='"app/domain/debts/uncashingPopover.template.html"'
       )
         span.title
