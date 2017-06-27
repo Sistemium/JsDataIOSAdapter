@@ -288,6 +288,8 @@
 
         let count = event.data.length;
 
+        // FIXME: article won't appear if wasn't in stock
+
         _.each(vm.stock, stock => {
           let updated = event.index[stock.id];
           if (!updated) return;
