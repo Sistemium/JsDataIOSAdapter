@@ -103,8 +103,9 @@ before-tag-name='li'
         discount='vm.discounts[stock.articleId]'
         )
 
-    .right(
+    fieldset.right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
+    ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )
 
       button.btn.btn-default(
