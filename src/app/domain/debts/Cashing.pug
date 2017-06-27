@@ -41,7 +41,7 @@
 
   .scroll-y(
   resize resize-property='height'
-  resize-offset-top='45'
+  resize-offset-top='5'
   cg-busy='vm.cgBusy'
   )
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
@@ -68,7 +68,7 @@
         span &nbsp;
         a(href ui-sref='sales.debtByOutlet') Долги
 
-  .footer
+  //.footer
 
     .buttons
 
