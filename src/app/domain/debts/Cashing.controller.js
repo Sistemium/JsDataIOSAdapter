@@ -47,7 +47,7 @@
 
     });
 
-    // refresh();
+    findUncashings();
 
     /*
      Functions
@@ -109,7 +109,25 @@
 
 
     function totalCashed() {
-      return _.sumBy(vm.uncashed, 'summ');
+      return vm.totalOnHands;
+    }
+
+    function findUncashings() {
+
+      let filter = {authId: Auth.authId()};
+      let where = {
+        processing: {
+          '!=': 'draft'
+        },
+        authId: {
+          '==': filter.authId
+        }
+      };
+
+      vm.rebindAll(Uncashing, {where}, 'vm.uncashings');
+
+      return Uncashing.findAll(filter);
+
     }
 
 
@@ -118,23 +136,6 @@
       let filter = {uncashingId: vm.uncashingId};
 
       return Cashing.findAllWithRelations(filter, {bypassCache: true})()
-        .then(() => {
-
-          let filter = {authId: Auth.authId()};
-          let where = {
-            processing: {
-              '!=': 'draft'
-            },
-            authId: {
-              '==': filter.authId
-            }
-          };
-
-          vm.rebindAll(Uncashing, {where}, 'vm.uncashings');
-
-          return Uncashing.findAll(filter);
-
-        })
         .then(() => {
           vm.rebindAll(Cashing, filter, 'vm.uncashed', groupCashingsByOutlet);
         })
@@ -183,6 +184,10 @@
       });
 
       vm.uncashedByOutlet = _.orderBy(data, ['ord', 'outlet.name', 'outlet.address']);
+
+      if (!vm.uncashingId) {
+        vm.totalOnHands = _.sumBy(vm.uncashed, 'summ');
+      }
 
     }
 
