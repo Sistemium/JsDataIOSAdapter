@@ -2,20 +2,26 @@
 
 (function () {
 
-  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets) {
+  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets, Auth) {
 
-    const {Cashing, Outlet} = Schema.models();
+    const {Cashing, Outlet, Uncashing} = Schema.models();
 
     const vm = saControllerHelper
       .setup(this, $scope)
       .use({
+
+        uncashingId: null,
+        wasModified: true,
 
         totalCashed,
         onStateChange,
         doUncashingClick,
         editClick,
         deleteCashingClick,
-        outletClick
+        outletClick,
+
+        uncashingClick,
+        onHandsClick
 
       });
 
@@ -41,11 +47,22 @@
 
     });
 
-    refresh();
+    // refresh();
 
     /*
      Functions
      */
+
+    function onHandsClick() {
+      $state.go(rootState);
+    }
+
+    function uncashingClick(uncashing) {
+      if (uncashing) {
+        vm.currentUncashing = uncashing;
+        $state.go(`${rootState}.uncashed`, {uncashingId: uncashing.id});
+      }
+    }
 
     function outletClick(outlet) {
       if (outlet) {
@@ -65,12 +82,23 @@
       vm.editing = !vm.editing;
     }
 
-    function onStateChange(to) {
-      if (to.name === rootState && vm.wasModified) {
+    function onStateChange(to, params) {
+
+      let uncashingId = params.uncashingId || null;
+
+      if (uncashingId !== vm.uncashingId) {
+        vm.wasModified = true;
+      }
+
+      vm.isUncashingPopoverOpen = false;
+      vm.editing = false;
+      vm.uncashing = to.name === `${rootState}.uncashing`;
+      vm.uncashingId = uncashingId;
+
+      if (vm.wasModified) {
         refresh();
       }
 
-      vm.uncashing = to.name === `${rootState}.uncashing`;
     }
 
 
@@ -87,9 +115,26 @@
 
     function getData() {
 
-      let filter = {uncashingId: null};
+      let filter = {uncashingId: vm.uncashingId};
 
       return Cashing.findAllWithRelations(filter, {bypassCache: true})()
+        .then(() => {
+
+          let filter = {authId: Auth.authId()};
+          let where = {
+            processing: {
+              '!=': 'draft'
+            },
+            authId: {
+              '==': filter.authId
+            }
+          };
+
+          vm.rebindAll(Uncashing, {where}, 'vm.uncashings');
+
+          return Uncashing.findAll(filter);
+
+        })
         .then(() => {
           vm.rebindAll(Cashing, filter, 'vm.uncashed', groupCashingsByOutlet);
         })

@@ -1,0 +1,20 @@
+.uncashing-popover.scroll-y(
+resize resize-offset-top='50'
+)
+  .option.divider
+    .title На руках
+
+  .option
+    a(href ng-click='vm.onHandsClick($event)')
+      currency-value.summ(value='vm.totalCashed()')
+
+  .option.divider
+    .title Сдано ранее
+
+  .option(
+  ng-repeat='uncashing in vm.uncashings track by uncashing.id'
+  ng-class='{active: vm.uncashingId === uncashing.id}'
+  )
+    a(href ng-click='vm.uncashingClick(uncashing, $event)')
+      .name {{ ::uncashing.date | amUtc | amLocal | amCalendar }}
+      currency-value.summ(value='uncashing.summ')

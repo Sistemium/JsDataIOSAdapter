@@ -24,6 +24,9 @@
             {
               name: 'uncashing',
               url: '/uncashing'
+            }, {
+              name: 'uncashed',
+              url: '/:uncashingId'
             }
           ]
 

@@ -1,12 +1,25 @@
 .uncashed
 
-  .scroll-y(
-  resize resize-property='height'
-  resize-offset-top='45'
-  cg-busy='vm.cgBusy'
-  )
+  .alert.alert-default
 
-    .buttons
+    .popovers.spaced
+      a.popover-trigger(
+      href
+      popover-is-open='vm.isUncashingPopoverOpen'
+      popover-placement='auto bottom-left'
+      ng-class='{disabled: !!vm.uncashing}'
+      uib-popover-template='"app/domain/debts/uncashingPopover.template.html"'
+      )
+        span.title
+          currency-value(value='vm.totalCashed()' label='На руках:' ng-if='!vm.uncashingId')
+          currency-value(
+          value='vm.currentUncashing.summ'
+          label='Сдано {{ vm.currentUncashing.date | amUtc| amLocal | amCalendar }}:'
+          ng-if='vm.uncashingId'
+          )
+        span.caret
+
+    .totals.buttons(ng-hide='vm.uncashingId')
 
       outlet-cashing-popover(
       comment-text-placeholder='Точка'
@@ -26,6 +39,11 @@
 
       uncash-popover(uncashed='vm.uncashed' ng-disabled='!vm.uncashed.length' is-popover-open='vm.uncashing')
 
+  .scroll-y(
+  resize resize-property='height'
+  resize-offset-top='45'
+  cg-busy='vm.cgBusy'
+  )
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
 
       .title
