@@ -16,44 +16,55 @@
     resize-offset-top='5'
     vs-repeat='{{vm.rowHeight()}}'
     vs-scrolled-to-end='vm.getData()'
+    vs-scrolled-to-end-offset='15'
     vs-excess='10'
     )
-      .shipment(
+      .repeated-item(
       ng-repeat='shipment in vm.data track by shipment.id'
-      ng-click='vm.itemClick(shipment, $event)'
+      id='{{::shipment.id}}'
       )
 
-        .ndoc
-          label №
-          span {{shipment.ndoc}}
+        .date(ng-if='!shipment.ndoc && !shipment.isFooter')
+          .title {{ ::shipment.date }}
 
-        .egais
-          egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
-            i.glyphicon(ng-class='shipment.egaisCached().egaisTtnCls')
-            i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
+        .shipment(ng-if='shipment.ndoc' ng-click='vm.itemClick(shipment, $event)')
 
-        .driver
-          label Водитель:
-          driver-popover(driver='shipment.driver' popover-open='vm.driverPopoverOpen[shipment.id]' ng-if='shipment.driver')
-            span {{shipment.driver.tinyName}}
+          .ndoc
+            label №
+            span {{shipment.ndoc}}
 
-        .salesman(ng-if='!vm.currentSalesman')
-          label ТП:
-          span {{shipment.salesman.tinyName}}
+          .egais
+            egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
+              i.glyphicon(ng-class='shipment.egaisCached().egaisTtnCls')
+              i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
 
-        .outlet
-          .outlet-address
-            span {{shipment.outlet.name}}
-            span.address {{shipment.outlet.address}}
+          .driver
+            label Водитель:
+            driver-popover(driver='shipment.driver' popover-open='vm.driverPopoverOpen[shipment.id]' ng-if='shipment.driver')
+              span {{shipment.driver.tinyName}}
 
-        .cost
-          label Стоимость:
-          .cost-diff-price
-            currency-value(value='shipment.totalCost()')
-            .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
-              span +
-              currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
+          .salesman(ng-if='!vm.currentSalesman')
+            label ТП:
+            span {{shipment.salesman.tinyName}}
 
-        .positions
-          label Позиций:
-          span {{ shipment.totalPositions() }}
+          .outlet
+            .outlet-address
+              span {{shipment.outlet.name}}
+              span.address {{shipment.outlet.address}}
+
+          .cost
+            label Стоимость:
+            .cost-diff-price
+              currency-value(value='shipment.totalCost()')
+              .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
+                span +
+                currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
+
+          .positions
+            label Позиций:
+            span {{ shipment.totalPositions() }}
+
+        .date.footer(ng-if='::shipment.isFooter')
+          currency-value(value='shipment.totalCost')
+          .spacing
+

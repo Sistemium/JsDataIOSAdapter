@@ -64,6 +64,38 @@
       return !saMedia.xsWidth && !saMedia.xxsWidth;
     }
 
+    function calcTotals(data) {
+
+      let grouped = _.groupBy(data, 'date');
+
+      _.each(grouped, (dateItems, date) => {
+
+        let totalCost = 0;
+
+        _.each(dateItems, (shipment) => {
+
+          if (shipment.totalCost && !shipment.isFooter) {
+            totalCost += shipment.totalCost();
+          }
+
+        });
+
+        let footer = {
+          date,
+          id: `${date}-footer`,
+          isFooter: true,
+          totalCost
+        };
+
+        let lastShipmentIdx = _.findLastIndex(data, {date});
+        data.splice(lastShipmentIdx + 1, 0, footer);
+
+      });
+
+      return data;
+
+    }
+
     function itemClick(item, $event) {
 
       let driverPopoverOpen = _.find(vm.driverPopoverOpen, val => val);
@@ -92,7 +124,7 @@
         return;
       }
 
-      let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date,ndoc'});
+      let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date,-ndoc'});
 
       let options = {
         pageSize: pageSize,
@@ -110,37 +142,41 @@
         }
       }
 
-      busyGettingData = Shipment.findAll(filter, options).then((res) => {
+      busyGettingData = Shipment.findAll(filter, options).then(res => {
 
         if (!res.length) {
           gotAllData = true;
         }
 
-        vm.data.push(...res);
+        let dates = _.groupBy(res, 'date');
 
-        vm.data = _.orderBy(_.uniq(vm.data, 'id'), ['date', 'ndoc'], ['desc', 'asc']);
-
-        _.each(res, shipment => shipment.DSLoadRelations(['Outlet', 'Driver']));
-
-        if (startPage === 1) {
-          ShipmentEgais.findAll(positionsFilter, {bypassCache: true, limit: 5000});
-        }
-
-        let posQ = _.map(vm.data, (item) => {
-
-          return ShipmentPosition.findAll({shipmentId: item.id});
-
+        dates = _.map(dates, (val, date) => {
+          return {date, id: date};
         });
+
+        dates.push(...res);
+
+        let filteredData = _.filter(vm.data, item => !item.isFooter);
+
+        dates.push(...filteredData);
+
+        _.each(res, shipment => shipment.DSLoadRelations(['Outlet', 'Driver', 'ShipmentEgais']));
+
+        let posQ = _.map(res, shipment => shipment.DSLoadRelations(['ShipmentPosition']));
 
         return $q.all(posQ)
           .then(() => {
-            startPage++
+            let data = _.orderBy(_.uniqBy(dates, 'id'), ['date', 'isFooter', 'ndoc'], ['desc', 'desc', 'desc']);
+            vm.data = calcTotals(data);
+            startPage++;
           });
 
       });
 
       vm.setBusy(busyGettingData)
-        .finally(() => busyGettingData = false);
+        .finally(() => {
+          busyGettingData = false;
+        });
 
     }
 

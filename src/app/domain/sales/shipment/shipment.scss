@@ -2,12 +2,53 @@
 
 .shipment-list {
 
+  $font-size-sm: 14px;
   $table-padding-left: 5;
+  $gray-border-color: #DDD;
 
   padding: 0 5px;
 
   @include responsive-only(lt-sm) {
     padding: 0;
+  }
+
+  .date {
+
+    padding: 6px 0 5px;
+
+    .title {
+      font-size: 150%;
+    }
+
+  }
+
+  .date.footer {
+
+    text-align: right;
+
+    currency-value {
+      strong {
+        font-weight: bold;
+      }
+    }
+
+    .spacing {
+      display: inline;
+      padding-left: 95px;
+    }
+
+    @include responsive-only(lt-sm) {
+
+      currency-value:before {
+        content: 'Итого: '
+
+      }
+      border: 1px solid #DDD;
+      border-radius: $border-radius;
+      background: $gray-background-color;
+      padding-right: 7px;
+    }
+
   }
 
   .shipment {
@@ -17,6 +58,30 @@
   }
 
   .headers, .scroll-y {
+
+    .repeated-item {
+      .totals {
+
+        height: 38px;
+        background-color: $gray-background-color;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        padding: 3px;
+        border-top: 1px solid #DDD;
+        border-bottom: 1px solid #DDD;
+
+        @include responsive-only(lt-sm) {
+          height: 40px;
+          margin: 5px 0;
+          border-radius: $border-radius;
+          padding: 5px;
+        }
+
+      }
+    }
 
     .ndoc {
       min-width: 100px;
@@ -30,6 +95,18 @@
 
     .driver {
       min-width: 110px;
+      padding-right: 7px;
+
+      @include responsive-only(gt-xs) {
+        max-width: 110px;
+
+      }
+
+      @include responsive-only(lt-sm) {
+        padding: 0;
+
+      }
+
     }
 
     .egais {
@@ -169,6 +246,13 @@
   @include responsive-only(lt-md) {
     .positions {
       display: none;
+
+    }
+
+    .date.footer {
+      .spacing {
+        padding: 0;
+      }
     }
   }
 
@@ -189,14 +273,29 @@
       display: flex;
       height: 40px;
 
+      driver-popover {
+        position: static;
+        ng-transclude {
+          //@extend .ellipsis;
+          span {
+            @extend .ellipsis;
+            display: block;
+          }
+          min-width: 0;
+        }
+        a {
+          @extend %flex-row;
+        }
+      }
+
       @include responsive-only(lt-sm) {
-        line-height: 14px;
+        line-height: $font-size-sm;
         flex-flow: column nowrap;
         height: auto;
-        border: 1px solid #DDD;
-        background-color: #f5f5f5;
+        border: 1px solid $gray-border-color;
+        background-color: $gray-background-color;
         padding: 5px;
-        border-radius: 9px;
+        border-radius: $border-radius;
         margin-bottom: 10px;
       }
 
@@ -208,7 +307,7 @@
           flex-flow: row nowrap;
           align-items: center;
           min-width: 50px;
-          font-size: 14px;
+          font-size: $font-size-sm;
           line-height: 17px;
 
           span {
