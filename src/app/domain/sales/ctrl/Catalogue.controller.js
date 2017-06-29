@@ -75,6 +75,7 @@
       removeFilterClick,
       thumbClick,
 
+      onSearchEnter,
       onStateChange,
       // articleRowHeight,
       alertCheck,
@@ -225,6 +226,10 @@
      Handlers
      */
 
+    function onSearchEnter() {
+      setCurrentArticleGroup();
+    }
+
     function thumbClick(stock) {
 
       $scope.imagesAll = $scope.imagesAll || _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
@@ -322,8 +327,10 @@
       vm.showOnlyOrdered = showOnlyOrdered || !vm.showOnlyOrdered;
       vm.firstLevelGroups = null;
 
-      if (vm.showOnlyOrdered && vm.currentArticleGroup) {
+      if (vm.showOnlyOrdered) {
         vm.currentArticleGroup = null;
+        vm.search = '';
+        vm.filters = [];
       }
 
       vm.setBusy(_.map(
@@ -779,7 +786,7 @@
         articles = _.filter(articles, article => ids.indexOf(article.articleGroupId) > -1);
       }
 
-      if (vm.search || vm.filters) {
+      if (vm.search || vm.filters.length) {
 
         let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
 
