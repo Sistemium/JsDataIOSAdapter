@@ -1,17 +1,34 @@
 @import "../../../styles/variables";
 
+$font-size-sm: 14px;
+$table-padding-left: 5;
+
+$width-driver: 110px;
+$width-ndoc: 100px;
+$width-egais: 60px;
+$width-salesman: 110px;
+$width-outlet: 330px;
+$width-cost: 100px;
+$width-positions: 100px;
+
+$gray-border-color: #DDD;
+$position-hover-color: #CFE1EE;
+
+$font-weight-bold: 600;
+$font-weight-normal: 400;
+
+$line-height-basic: 20px;
+
 .shipment-list {
-
-  $font-size-sm: 14px;
-  $table-padding-left: 5;
-  $gray-border-color: #DDD;
-  $width-driver: 110px;
-
 
   padding: 0 5px;
 
   @include responsive-only(lt-sm) {
     padding: 0;
+  }
+
+  .repeated-item {
+    height: 40px;
   }
 
   .date {
@@ -30,13 +47,13 @@
 
     currency-value {
       strong {
-        font-weight: bold;
+        font-weight: $font-weight-bold;
       }
     }
 
     .spacing {
       display: inline;
-      padding-left: 95px;
+      padding-left: $width-cost - 4;
     }
 
     @include responsive-only(lt-sm) {
@@ -45,7 +62,7 @@
         content: 'Итого: '
 
       }
-      border: 1px solid #DDD;
+      border: 1px solid $gray-border-color;
       border-radius: $border-radius;
       background: $gray-background-color;
       padding-right: 7px;
@@ -61,36 +78,12 @@
 
   .headers, .scroll-y {
 
-    .repeated-item {
-      .totals {
-
-        height: 38px;
-        background-color: $gray-background-color;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: center;
-        font-weight: bold;
-        padding: 3px;
-        border-top: 1px solid #DDD;
-        border-bottom: 1px solid #DDD;
-
-        @include responsive-only(lt-sm) {
-          height: 40px;
-          margin: 5px 0;
-          border-radius: $border-radius;
-          padding: 5px;
-        }
-
-      }
-    }
-
     .ndoc {
-      min-width: 100px;
+      min-width: $width-ndoc;
 
       @include responsive-only(lt-sm) {
-        min-width: 50px;
-        font-weight: 600;
+        min-width: $width-ndoc / 2;
+        font-weight: $font-weight-bold;
       }
 
     }
@@ -100,22 +93,20 @@
       padding-right: 7px;
 
       @include responsive-only(gt-xs) {
-        max-width: 110px;
-
+        max-width: $width-driver;
       }
 
       @include responsive-only(lt-sm) {
         padding: 0;
-
       }
 
     }
 
     .egais {
-      min-width: 60px;
+      min-width: $width-egais;
 
       @include responsive-only(lt-sm) {
-        min-width: 36px !important;
+        min-width: $width-egais / 2 !important;
         position: absolute;
         right: 5px;
         top: 10px;
@@ -124,28 +115,28 @@
     }
 
     .salesman {
-      min-width: 110px;
+      min-width: $width-salesman;
     }
 
     currency-value {
       strong {
-        font-weight: normal;
+        font-weight: $font-weight-normal;
       }
     }
 
     .outlet {
-      line-height: 19px;
-      min-width: 330px;
+      line-height: $line-height-basic;
+      min-width: $width-outlet;
       flex: 1;
 
       @include responsive-only(gt-xs) {
-        min-width: 130px;
+        min-width: $width-outlet - 200;
       }
 
       @include responsive-only(lt-sm) {
         height: 33px;
         order: -1;
-        border-bottom: 1px solid silver;
+        border-bottom: 1px solid $gray-border-color;
       }
 
       .outlet-address {
@@ -153,7 +144,7 @@
         @include responsive-only(lt-sm) {
           flex-flow: column nowrap;
           display: flex;
-          line-height: 16px;
+          line-height: 15px;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -173,8 +164,8 @@
 
     .cost {
 
-      line-height: 20px;
-      min-width: 100px;
+      line-height: $line-height-basic;
+      min-width: $width-cost;
       text-align: right;
 
       .cost-diff-price {
@@ -192,8 +183,12 @@
         justify-content: flex-end;
 
         @include responsive-only(lt-sm) {
-          line-height: 17px;
-          padding-left: 3px;
+
+          > span {
+            line-height: 15px;
+          }
+
+          padding-left: 5px;
           &:before {
             content: ' (';
           }
@@ -205,7 +200,7 @@
         }
 
         > * {
-          font-weight: 400;
+          font-weight: $font-weight-normal;
           color: gray;
         }
 
@@ -224,19 +219,19 @@
     }
 
     .positions {
-      min-width: 100px;
+      min-width: $width-positions;
       text-align: right;
     }
   }
 
   .headers {
-    border-bottom: 2px solid #DDD;
+    border-bottom: 2px solid $gray-border-color;
     display: flex;
     flex: 1;
     padding-bottom: 8px;
 
     > * {
-      font-weight: 700;
+      font-weight: $font-weight-bold;
     }
 
     @include responsive-only(lt-sm) {
@@ -267,18 +262,17 @@
     .shipment {
 
       &:hover {
-        background-color: #CFE1EE;
+        background-color: $position-hover-color;
       }
 
-      border-bottom: 1px solid #DDD;
-      line-height: 39px;
+      border-bottom: 1px solid $gray-border-color;
+      line-height: $line-height-basic * 2;
       display: flex;
       height: 40px;
 
       driver-popover {
         position: static;
         ng-transclude {
-          //@extend .ellipsis;
           span {
             @extend .ellipsis;
             display: block;
@@ -313,7 +307,7 @@
           line-height: 17px;
 
           span {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
           }
 
         }
