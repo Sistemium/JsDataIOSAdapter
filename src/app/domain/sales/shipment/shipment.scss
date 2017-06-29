@@ -5,6 +5,8 @@
   $font-size-sm: 14px;
   $table-padding-left: 5;
   $gray-border-color: #DDD;
+  $width-driver: 110px;
+
 
   padding: 0 5px;
 
@@ -94,7 +96,7 @@
     }
 
     .driver {
-      min-width: 110px;
+      min-width: $width-driver;
       padding-right: 7px;
 
       @include responsive-only(gt-xs) {
