@@ -3,9 +3,11 @@
   function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia, IOS) {
 
     const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
-    const {saControllerHelper} = Helpers;
+    const {saControllerHelper, ScrollHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
+
+    const rootState = 'sales.shipmentList';
 
     const pageSize = 50;
     let startPage = 1;
@@ -15,6 +17,7 @@
 
       driverPopoverOpen: {},
       data: [],
+      rootState,
 
       onStateChange,
       itemClick,
@@ -22,11 +25,12 @@
       isWideScreen,
       rowHeight
 
-    });
+    })
+      .use(ScrollHelper);
 
     SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
-    $scope.$on('rootClick', () => $state.go('sales.shipmentList'));
+    $scope.$on('rootClick', () => $state.go(rootState));
 
     /*
      Functions

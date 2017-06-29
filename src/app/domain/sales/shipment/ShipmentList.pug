@@ -11,7 +11,8 @@
       .cost Стоимость
       .positions Позиций
 
-    .scroll-y(
+    #scroll-main.scroll-y(
+    elem-ready='vm.restoreScrollPosition()'
     resize
     resize-offset-top='5'
     vs-repeat='{{vm.rowHeight()}}'
@@ -21,7 +22,7 @@
     )
       .repeated-item(
       ng-repeat='shipment in vm.data track by shipment.id'
-      id='{{::shipment.id}}'
+      ng-style='{"min-height": vm.rowHeight() + "px" }'
       )
 
         .date(ng-if='!shipment.ndoc && !shipment.isFooter')
