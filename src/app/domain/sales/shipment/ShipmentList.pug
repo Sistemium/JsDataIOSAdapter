@@ -22,7 +22,6 @@
     )
       .repeated-item(
       ng-repeat='shipment in vm.data track by shipment.id'
-      ng-style='{"min-height": vm.rowHeight() + "px" }'
       )
 
         .date(ng-if='!shipment.ndoc && !shipment.isFooter')
