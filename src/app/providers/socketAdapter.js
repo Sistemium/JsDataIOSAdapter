@@ -57,6 +57,8 @@
           }
         });
 
+        parsed['where:'] = JSON.stringify(where);
+
       }
 
       if (_.isArray(options.groupBy)) {
