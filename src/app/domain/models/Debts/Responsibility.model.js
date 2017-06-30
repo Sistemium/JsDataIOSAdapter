@@ -4,7 +4,7 @@
 
   angular.module('Models').run(Responsibility);
 
-  function Responsibility(Schema, localStorageService) {
+  function Responsibility(Schema, localStorageService, $timeout) {
 
     const lsKey = 'Responsibility';
 
@@ -72,7 +72,7 @@
         item.flagged = true;
       }
       data[item.id] = item.flagged;
-      model.inject(item);
+      $timeout().then(() => model.inject(item));
     });
 
     localStorageService.set(lsKey, data);
