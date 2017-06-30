@@ -116,8 +116,9 @@
         .then(outlets => {
 
           let outletById = _.groupBy(outlets, 'id');
+          let responsibility = SalesmanAuth.responsibility();
 
-          return Debt.groupBy({}, ['outletId'])
+          return Debt.groupBy({responsibility}, ['outletId'])
             .then(debtsByOutlet => {
               return _.filter(debtsByOutlet, debt => outletById[debt.outletId]);
             });
@@ -144,6 +145,8 @@
       if (!IOS.isIos()) {
         filter = {isOverdue: true};
       }
+
+      filter.responsibility = SalesmanAuth.responsibility();
 
       return Debt.groupBy(filter, ['outletId'])
         .then(overdueDebtsByOutlet => {

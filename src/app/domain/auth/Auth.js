@@ -167,6 +167,10 @@
 
       roles: () => {
         return roles && roles.roles;
+      },
+
+      role: code => {
+        return _.get(roles.roles, code);
       }
 
     });

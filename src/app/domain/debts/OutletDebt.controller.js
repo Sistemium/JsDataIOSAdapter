@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr, SalesmanAuth) {
 
     const {Debt, Outlet, Cashing} = Schema.models();
 
@@ -89,7 +89,9 @@
 
       // TODO: summ>0 in findAll filter
 
-      return Debt.findAll({outletId})
+      let responsibility = SalesmanAuth.responsibility();
+
+      return Debt.findAll({outletId, responsibility})
         .then(data => vm.debts = _.filter(data, debt => debt.summ > 0))
         .then(data => {
 

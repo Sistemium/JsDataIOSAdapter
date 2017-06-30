@@ -27,6 +27,8 @@
       watchCurrent,
       makeFilter,
 
+      responsibility,
+
       getCurrentUser: () => currentSalesman,
       isLoggedIn: () => !!currentSalesman
 
@@ -61,6 +63,9 @@
 
     }));
 
+    function responsibility() {
+      return _.get(currentSalesman, 'responsibility') || Auth.role('saleType');
+    }
 
     function logout() {
       currentSalesman = undefined;
