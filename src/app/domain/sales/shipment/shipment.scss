@@ -28,7 +28,15 @@ $line-height-basic: 20px;
   }
 
   .repeated-item {
-    height: 40px;
+
+    @include responsive-only(gt-xs) {
+      height: 40px;
+    }
+
+    @include responsive-only(lt-sm) {
+      height: 132px;
+    }
+
   }
 
   .date {
