@@ -56,10 +56,15 @@
     ];
 
     _.each(items, item => {
-      item.flagged = data[item.id] || false;
+      item.flagged = data[item.id];
+      if (_.isUndefined(item.flagged)) {
+        item.flagged = true;
+      }
+      data[item.id] = item.flagged;
       model.inject(item);
     });
 
+    localStorageService.set(lsKey, data);
 
     function toggled() {
       return _.map(model.filter({flagged: true}), item => item.id);
