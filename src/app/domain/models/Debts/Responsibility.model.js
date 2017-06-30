@@ -17,6 +17,15 @@
         toggle: function () {
 
           data[this.id] = this.flagged = !this.flagged;
+
+          if (!toggled().length) {
+            _.each(model.getAll(), item => {
+              if (item.id !== this.id) {
+                data[item.id] = item.flagged = true;
+              }
+            });
+          }
+
           localStorageService.set(lsKey, data);
 
         }
