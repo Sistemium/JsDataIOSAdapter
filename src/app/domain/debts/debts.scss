@@ -125,6 +125,10 @@
     border-bottom: $headers-border;
     justify-content: space-between;
 
+    @include responsive-only(xxs) {
+      display: block;
+    }
+
     label {
       color: $black;
     }
