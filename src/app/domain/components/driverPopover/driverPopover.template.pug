@@ -1,5 +1,4 @@
 .name {{ vm.driver.name }}
-.phone
+.phone(ng-if='vm.driver.mobileNumber')
   label Телефон:
-  = ' '
   a(href='tel:{{ vm.driver.mobileNumber }}') {{ vm.driver.mobileNumber }}

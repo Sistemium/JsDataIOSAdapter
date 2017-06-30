@@ -30,7 +30,7 @@
         .shipment(ng-if='shipment.ndoc' ng-click='vm.itemClick(shipment, $event)')
 
           .ndoc
-            label №:  
+            label №:
             span {{shipment.ndoc}}
 
           .egais
@@ -40,7 +40,7 @@
 
           .driver
             label Водитель:
-            driver-popover(driver='shipment.driver' popover-open='vm.driverPopoverOpen[shipment.id]' ng-if='shipment.driver')
+            driver-popover(driver='shipment.driver' ng-if='shipment.driver')
               span {{shipment.driver.tinyName}}
 
           .salesman(ng-if='!vm.currentSalesman')
