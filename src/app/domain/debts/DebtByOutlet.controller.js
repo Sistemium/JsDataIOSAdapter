@@ -151,7 +151,7 @@
       if (!responsibility) return debtsByOutlet;
 
       let where = _.assign({
-        dateE: {'<=': moment().format()},
+        dateE: {'<=': moment().format()}
       }, responsibility);
 
       let filter = {where};

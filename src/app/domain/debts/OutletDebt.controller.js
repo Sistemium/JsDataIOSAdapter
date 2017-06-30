@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr, SalesmanAuth) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
