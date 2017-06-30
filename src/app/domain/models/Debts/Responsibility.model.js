@@ -1,0 +1,70 @@
+(function () {
+
+  angular.module('Models').run(Responsibility);
+
+  function Responsibility(Schema, localStorageService) {
+
+    const lsKey = 'Responsibility';
+
+    const data = localStorageService.get(lsKey) || {};
+
+    const model = Schema.register({
+
+      name: 'Responsibility',
+
+      methods: {
+
+        toggle: function () {
+
+          data[this.id] = this.flagged = !this.flagged;
+          localStorageService.set(lsKey, data);
+
+        }
+
+      },
+
+      meta: {
+
+        toggled,
+
+        jsdFilter: function() {
+
+          let responsibility = toggled();
+
+          let where = {
+            responsibility: {'in': responsibility}
+          };
+
+          return responsibility.length ? where : false;
+
+        }
+      }
+
+    });
+
+    const items = [
+      {
+        id: 'op',
+        name: 'ОП'
+      }, {
+        id: 'mvz',
+        name: 'МВЗ'
+      }, {
+        id: 'etp',
+        name: 'ЭТП'
+      }
+    ];
+
+    _.each(items, item => {
+      item.flagged = data[item.id] || false;
+      model.inject(item);
+    });
+
+
+    function toggled() {
+      return _.map(model.filter({flagged: true}), item => item.id);
+    }
+
+  }
+
+})();

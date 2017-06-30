@@ -4,7 +4,7 @@
 
   function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr, SalesmanAuth) {
 
-    const {Debt, Outlet, Cashing} = Schema.models();
+    const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
     const vm = saControllerHelper
       .setup(this, $scope)
@@ -89,9 +89,14 @@
 
       // TODO: summ>0 in findAll filter
 
-      let responsibility = SalesmanAuth.responsibility();
+      let responsibility = Responsibility.meta.jsdFilter();
 
-      return Debt.findAll({outletId, responsibility})
+      if (!responsibility) {
+        vm.data = [];
+        return;
+      }
+
+      return Debt.findAll({outletId, where: responsibility})
         .then(data => vm.debts = _.filter(data, debt => debt.summ > 0))
         .then(data => {
 

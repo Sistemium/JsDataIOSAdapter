@@ -84,6 +84,8 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
             = ' '
             span {{ debt.dateE | amDifference:null | amDurationFormat }}
 
+          small.flag.responsible {{ ::debt.responsible.name }}
+
           span {{ ::debt.ndoc }}
 
         currency-value.cashed(
