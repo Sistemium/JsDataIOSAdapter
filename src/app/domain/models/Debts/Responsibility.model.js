@@ -41,7 +41,7 @@
           let responsibility = toggled();
 
           let where = {
-            responsibility: {'in': responsibility}
+            responsibility: {'==': responsibility}
           };
 
           return responsibility.length ? where : false;

@@ -96,7 +96,11 @@
         return;
       }
 
-      return Debt.findAll({outletId, where: responsibility})
+      let where = _.assign({
+        outletId: {'==': outletId},
+      }, responsibility);
+
+      return Debt.findAll({where})
         .then(data => vm.debts = _.filter(data, debt => debt.summ > 0))
         .then(data => {
 
