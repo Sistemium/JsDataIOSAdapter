@@ -7,6 +7,7 @@
 
   function ScrollHelper(localStorageService, saEtc) {
 
+
     function setupController(vm) {
 
       let {rootState} = vm;
@@ -19,8 +20,8 @@
 
       vm.restoreScrollPosition = restoreScrollPosition;
 
-      function restoreScrollPosition() {
-        scrollTo(getSavedScrollPosition(rootState));
+      function restoreScrollPosition(isWide) {
+        scrollTo(getSavedScrollPosition(rootState), isWide);
       }
 
     }
@@ -50,7 +51,6 @@
       let elem = getScrollerElement();
 
       if (!elem) {
-        console.warn('no scroller element');
         return;
       }
 
