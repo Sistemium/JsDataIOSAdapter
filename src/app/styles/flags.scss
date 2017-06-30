@@ -10,7 +10,7 @@
 %flagged {
 
   background-color: $state-info-bg;
-  border-color: $primary-color;
+  border-color: lighten($primary-color, 30%);
 
 }
 

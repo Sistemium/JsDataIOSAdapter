@@ -57,7 +57,7 @@
           }
         });
 
-        parsed['where:'] = JSON.stringify(where);
+        parsed['where:'] = angular.toJson(where);
 
       }
 

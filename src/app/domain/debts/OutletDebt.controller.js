@@ -97,7 +97,7 @@
       }
 
       let where = _.assign({
-        outletId: {'==': outletId},
+        outletId: {'==': outletId}
       }, responsibility);
 
       return Debt.findAll({where})
