@@ -23,7 +23,8 @@ driver-popover {
   }
 
   span.caret {
-    top: 4px;
+    position: inherit;
+    padding-top: 4px;
   }
 
 }
