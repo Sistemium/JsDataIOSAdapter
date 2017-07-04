@@ -1,6 +1,6 @@
 .ui-view(cg-busy='vm.cgBusy')
 
-  .shipment-list(ng-if='vm.ready')
+  .shipment-list(ng-if='vm.ready' ng-class='{"pointer-event-class": vm.busy }')
 
     .headers
       .ndoc №
@@ -64,7 +64,7 @@
             label Позиций:
             span {{ shipment.totalPositions() }}
 
-        .date.footer(ng-if='::shipment.isFooter')
+        .date.footer(ng-if='::shipment.isFooter && !vm.busy')
           currency-value(value='shipment.totalCost')
           .spacing
 
