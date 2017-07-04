@@ -118,6 +118,8 @@
       }
     }
 
+    const STAPI_OPTION_ORDER_BY = 'x-order-by:';
+
     function paramsToOptions(params) {
 
       let parsed = {};
@@ -138,6 +140,17 @@
 
       if (params.offset) {
         parsed.startPage = Math.ceil(params.offset / (params.limit || 1)) + 1;
+      }
+
+      let stApiOrder = params[STAPI_OPTION_ORDER_BY];
+
+      if (stApiOrder) {
+        let desc = _.startsWith(stApiOrder, '-');
+        parsed.sortBy = _.replace(stApiOrder, '-', '');
+        if (desc) {
+          parsed.directon = 'DESC';
+        }
+        delete params[STAPI_OPTION_ORDER_BY];
       }
 
       delete params.limit;
