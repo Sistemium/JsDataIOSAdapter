@@ -1,50 +1,110 @@
 (function (module) {
 
-  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, IOS) {
+  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia, IOS) {
 
-    const {SaleOrder, Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
-    const {saControllerHelper} = Helpers;
+    const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
+    const {saControllerHelper, ScrollHelper} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    let initDate = SaleOrder.meta.nextShipmentDate();
+    const rootState = 'sales.shipmentList';
+
+    const pageSize = 50;
+    let startPage = 1;
+    let gotAllData = false;
 
     vm.use({
 
-      date: $state.params.date,
-      initDate,
       driverPopoverOpen: {},
+      data: [],
+      rootState,
 
       onStateChange,
       itemClick,
-      totalCost,
-      totalPositions
+      getData,
+      isWideScreen,
+      rowHeight
 
-    });
+    })
+      .use(ScrollHelper);
 
-    if (!vm.date) return setDate(initDate);
+    SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
-    SalesmanAuth.watchCurrent($scope, getData);
-
-    vm.watchScope('vm.date', _.debounce(setDate, 300));
-    $scope.$on('rootClick', () => $state.go('sales.shipmentList'));
+    $scope.$on('rootClick', () => $state.go(rootState));
 
     /*
      Functions
      */
 
-    function totalCost() {
-      return _.sumBy(vm.data, shipment => shipment.totalCost());
+    function rowHeight() {
+      return isWideScreen() ? 40 : 130;
     }
 
-    function totalPositions() {
-      return _.sumBy(vm.data, 'positions.length');
+    function onSalesmanChange(salesman) {
+
+      vm.currentSalesman = salesman;
+      vm.ready = false;
+
+      startPage = 1;
+      gotAllData = false;
+
+      let filter = SalesmanAuth.makeFilter();
+
+      if (vm.data.length) {
+        vm.data = [];
+        cleanup();
+      }
+
+      vm.setBusy([
+        Driver.findAll(filter),
+        Outlet.findAll(filter)
+      ]).then(() => {
+        return getData(filter);
+      });
+
     }
 
+    function isWideScreen() {
+      return !saMedia.xsWidth && !saMedia.xxsWidth;
+    }
+
+    function calcTotals(data) {
+
+      let grouped = _.groupBy(data, 'date');
+
+      _.each(grouped, (dateItems, date) => {
+
+        let totalCost = 0;
+
+        _.each(dateItems, (shipment) => {
+
+          if (shipment.totalCost && !shipment.isFooter) {
+            totalCost += shipment.totalCost();
+          }
+
+        });
+
+        let footer = {
+          date,
+          id: `${date}-footer`,
+          isFooter: true,
+          totalCost
+        };
+
+        let lastShipmentIdx = _.findLastIndex(data, {date});
+        data.splice(lastShipmentIdx + 1, 0, footer);
+
+      });
+
+      return data;
+
+    }
 
     function itemClick(item, $event) {
+
       let driverPopoverOpen = _.find(vm.driverPopoverOpen, val => val);
       if ($event.defaultPrevented || driverPopoverOpen) return;
+
       $state.go('.item', {id: item.id});
     }
 
@@ -58,45 +118,70 @@
       ShipmentEgais.ejectAll();
     }
 
-    function getData(salesman) {
+    let busyGettingData;
 
-      let date = vm.date;
+    function getData() {
 
-      let filter = SalesmanAuth.makeFilter({date});
+      vm.ready = true;
+
+      if (busyGettingData || gotAllData) {
+        return;
+      }
+
+      let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date,-ndoc'});
+
+      let options = {
+        pageSize: pageSize,
+        startPage: startPage + 1,
+        bypassCache: true
+      };
 
       let positionsFilter = _.clone(filter);
 
       if (IOS.isIos()) {
-        positionsFilter = {where: {'shipment.date': {'==': date}}};
+        positionsFilter = {where: {}};
 
         if (filter.salesmanId) {
           positionsFilter.where['shipment.salesmanId'] = {'==': filter.salesmanId};
         }
       }
 
-      vm.currentSalesman = salesman;
+      busyGettingData = Shipment.findAll(filter, options).then(res => {
 
-      let outletFilter = _.omit(Outlet.meta.salesmanFilter(filter), 'date');
-      let shipmentRelations = ['Driver', 'Outlet'];
+        if (!res.length) {
+          gotAllData = true;
+        }
 
-      let busy = $q.all([
-        Driver.findAll(),
-        Outlet.findAll(outletFilter),
-        Shipment.findAllWithRelations(filter, {bypassCache: true})(shipmentRelations),
-        ShipmentPosition.findAll(positionsFilter, {bypassCache: true, limit: 5000}),
-        ShipmentEgais.findAll(positionsFilter, {bypassCache: true, limit: 5000})
-      ])
-        .then(() => {
-          _.assign(filter, {orderBy:['outlet.name', 'outlet.address']});
-          vm.rebindAll(Shipment, filter, 'vm.data');
+        let dates = _.groupBy(res, 'date');
+
+        dates = _.map(dates, (val, date) => {
+          return {date, id: date};
         });
 
-      vm.setBusy(busy);
+        dates.push(...res);
 
-    }
+        let filteredData = _.filter(vm.data, item => !item.isFooter);
 
-    function setDate(date) {
-      $state.go('.', {date: date || initDate});
+        dates.push(...filteredData);
+
+        _.each(res, shipment => shipment.DSLoadRelations(['Outlet', 'Driver', 'ShipmentEgais']));
+
+        let posQ = _.map(res, shipment => shipment.DSLoadRelations(['ShipmentPosition']));
+
+        return $q.all(posQ)
+          .then(() => {
+            let data = _.orderBy(_.uniqBy(dates, 'id'), ['date', 'isFooter', 'ndoc'], ['desc', 'desc', 'desc']);
+            vm.data = calcTotals(data);
+            startPage++;
+          });
+
+      });
+
+      vm.setBusy(busyGettingData)
+        .finally(() => {
+          busyGettingData = false;
+        });
+
     }
 
   }

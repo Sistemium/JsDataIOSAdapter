@@ -10,6 +10,7 @@
       toastr,
       PhotoHelper,
       LocationHelper,
+      ScrollHelper,
       ClickHelper,
       saMedia,
       moment
@@ -23,6 +24,7 @@
         toastr,
         PhotoHelper,
         LocationHelper,
+        ScrollHelper,
         ClickHelper,
         saMedia,
         moment

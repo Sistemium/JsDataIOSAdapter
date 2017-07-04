@@ -19,10 +19,10 @@
     .totals.animate-show(ng-hide='vm.busy')
 
       .info
-        strong {{ vm.shipment.positions.length | number:0 }}
+        strong {{ vm.shipment.positions.length | number: 0 }}
         span {{ vm.shipment.positionsCountRu() }}
         span на сумму
-        strong {{ vm.shipment.totalCost() | number:2 }}
+        strong {{ vm.shipment.totalCost() | number: 2 }}
         span ₽
 
 

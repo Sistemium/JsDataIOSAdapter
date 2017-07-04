@@ -1,54 +1,70 @@
-section.ui-view.shipmentList(cg-busy='vm.cgBusy')
+.ui-view(cg-busy='vm.cgBusy')
 
-  .row.datepicker-with-buttons
+  .shipment-list(ng-if='vm.ready' ng-class='{"pointer-event-class": vm.busy }')
 
-    sab-date-picker.col-sm-4.col-lg-3(
-    value='vm.date'
-    init-date='vm.initDate'
-    clear-text='Ближайшая доставка'
+    .headers
+      .ndoc №
+      .egais ЕГАИС
+      .driver Водитель
+      .salesman(ng-if='!vm.currentSalesman') ТП
+      .outlet Точка
+      .cost Стоимость
+      .positions Позиций
+
+    #scroll-main.scroll-y(
+    elem-ready='vm.restoreScrollPosition()'
+    resize
+    resize-offset-top='5'
+    vs-repeat='{{vm.rowHeight()}}'
+    vs-scrolled-to-end='vm.getData()'
+    vs-scrolled-to-end-offset='15'
+    vs-excess='10'
     )
+      .repeated-item(
+      ng-repeat='shipment in vm.data track by shipment.id'
+      )
 
-  #scroll-main(
-  resize
-  resize-offset-top='5'
-  ng-if='vm.data.length'
-  )
-    table.table.table-striped.table-hover
-      thead
-        tr
-          th №
-          th Водитель
-          th(ng-if='!vm.currentSalesman') ТП
-          th Точка
-          th.number Стоимость
-          th.number Позиций
-      tbody
-        tr.clickable(
-        ng-repeat='item in vm.data track by item.id'
-        ng-click='vm.itemClick(item, $event)'
-        )
-          td.ndoc(ng-class='item.workflowStep.cls')
-            span.ndoc {{ ::item.ndoc }}
-            egais-popover(shipment='item' ng-if='item.egais')
-              i.glyphicon(ng-class='item.egais.egaisTtnCls')
-              i.glyphicon(ng-class='item.egais.egaisActCls')
-          td.tinyName
-            driver-popover(driver='item.driver' popover-open='vm.driverPopoverOpen[item.id]' ng-if='item.driver')
-              span {{ ::item.driver.tinyName }}
-          td.tinyName(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
-          td
-            div {{ ::item.outlet.name }}
-            .gray {{ ::item.outlet.address }}
-          td.number
-            span.addCostDoc.gray(ng-if='item.totalCostDoc() - item.totalCost() > 0.01')
-              | (+{{ ::item.totalCostDoc() - item.totalCost() | number:2 }})&nbsp;
-            span.cost {{ ::item.totalCost() | number:2 }}
-          td.number {{ ::item.positions.length | number:0 }}
+        .date(ng-if='!shipment.ndoc && !shipment.isFooter')
+          .title {{ ::shipment.date }}
 
-      tfoot
-        tr
-          th(colspan='{{ vm.currentSalesman ? 3 : 4 }}') Итого:
-          th.number {{ ::vm.totalCost() | number:2 }}
-          th.number {{ ::vm.totalPositions() | number:0 }}
+        .shipment(ng-if='shipment.ndoc' ng-click='vm.itemClick(shipment, $event)')
 
-  .alert.alert-info.centered(ng-show='!vm.data.length') Нет отгрузок за указанную дату
+          .ndoc
+            label №:
+            span {{shipment.ndoc}}
+
+          .egais
+            egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
+              i.glyphicon(ng-class='shipment.egaisCached().egaisTtnCls')
+              i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
+
+          .driver
+            label Водитель:
+            driver-popover(driver='shipment.driver' ng-if='shipment.driver')
+              span {{shipment.driver.tinyName}}
+
+          .salesman(ng-if='!vm.currentSalesman')
+            label ТП:
+            span {{shipment.salesman.tinyName}}
+
+          .outlet
+            .outlet-address
+              span {{shipment.outlet.name}}
+              span.address {{shipment.outlet.address}}
+
+          .cost
+            label Стоимость:
+            .cost-diff-price
+              currency-value(value='shipment.totalCost()')
+              .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
+                span +
+                currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
+
+          .positions
+            label Позиций:
+            span {{ shipment.totalPositions() }}
+
+        .date.footer(ng-if='::shipment.isFooter && !vm.busy')
+          currency-value(value='shipment.totalCost')
+          .spacing
+

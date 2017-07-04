@@ -6,6 +6,10 @@ egais-popover {
   background-color: $state-info-bg;
   padding-top: 4px;
 
+  @media(max-width: 767px) {
+    padding-top: 0;
+  }
+
   position: relative;
   display: inline;
 

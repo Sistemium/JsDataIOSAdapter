@@ -17,6 +17,12 @@
 
   function currencyValueController() {
 
+    let vm = this;
+
+    if (!vm.weight) {
+      vm.weight = 600
+    }
+
   }
 
 })(angular.module('webPage'));

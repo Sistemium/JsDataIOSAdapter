@@ -1,54 +1,31 @@
-.news-feed
+.ui-view(cg-busy='{promise: vm.busy, message: "Загрузка новостей"}')
+  .news-feed(ng-if='!vm.busy')
+    .news(ng-if='vm.isAdmin')
+      .no-news
+        p(ng-if='!vm.news') Новостей не найдено. Предлагаем
+        p(ng-if='vm.news') Количество новостей {{vm.news.length}}. Предлагаем
 
-  .duration(ng-class='{"warning": vm.news.beginDate > vm.news.endDate }')
-    label.control-label Период действия новости
-    .date-pickers
-      .begin
-        span.pretext.control-label С
-        sab-date-picker.help-style(
-        value='vm.news.beginDate'
-        clear-text='Сегодня'
-        )
-      .end
-        span.pretext.control-label По
-        sab-date-picker(
-        value='vm.news.endDate'
-        min-date='vm.news.beginDate'
-        clear-text='Сегодня'
-        )
+          a(
+          ng-click='vm.goToCreateNews()'
+          ) cоздать новость.
 
-    span#helpBlock3.help-block(ng-if='vm.news.beginDate > vm.news.endDate') Дата введена некорректно
-
-  form(name='vm.newsFeedForm')
-    .subject(ng-class='{"has-error": !vm.newsFeedForm.subject.$pristine && !vm.news.subject.length}')
-      label.control-label(for='newsSubject') Тема новости
-      input.form-control(
-      type='text'
-      ng-model='vm.news.subject'
-      id='newsSubject'
-      aria-describedby='helpBlock'
-      name='subject'
-      )
-      span#helpBlock.help-block(
-      ng-if=' !vm.newsFeedForm.subject.$pristine && !vm.news.subject.length'
-      ) Поле обязательно для ввода
-
-    .text(ng-class='{"has-error": !vm.newsFeedForm.body.$pristine && !vm.news.body.length}')
-      label.control-label(for='newsText') Текст новости
-      textarea.form-control(
-      type='text'
-      rows='5'
-      ng-model='vm.news.body'
-      id='newsText'
-      aria-describedby='helpBlock2'
-      name='body'
-      )
-      span#helpBlock2.help-block(
-      ng-if='!vm.newsFeedForm.body.$pristine && !vm.news.body.length'
-      ) Поле обязательно для ввода
-
-
-  button.btn.btn-primary(
-  ng-click='vm.submitNews()'
-  ng-disabled='!(vm.news.body.length && vm.news.subject.length) || vm.news.beginDate > vm.news.endDate'
-  ) Сохранить новость
+      .news-repeater.scroll-y(resize resize-offset-top='15' vs-repeat='155')
+        .news-item(ng-repeat='news in vm.news track by news.id' ng-click='vm.showAdditionalInfo(news)')
+          .line-1
+            label.subject {{news.subject}}
+            valid-lifetime(date-b='news.dateB' date-e='news.dateE')
+          .line-2
+            .news-body(
+            )
+              p {{news.body}}
+          .line-3
+            label Оценка:
+            span(
+            uib-rating
+            ng-model='news.userNewsMessage.rating'
+            max='5'
+            ng-click='vm.saveRating($event, news.userNewsMessage.rating, news.id)'
+            titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+            enable-reset='false'
+            aria-labelledby='default-rating'
+            )

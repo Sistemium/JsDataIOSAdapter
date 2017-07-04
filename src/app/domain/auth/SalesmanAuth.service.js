@@ -123,7 +123,9 @@
     function watchCurrent(scope, callback) {
       let un1 = scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
       let un2 = scope.$on(LOGOUT_EVENT, () => callback(null));
-      callback(currentSalesman);
+      if (isAuthorized) {
+        callback(currentSalesman);
+      }
       scope.$on('$destroy', () => {
         un1();
         un2();
@@ -148,9 +150,9 @@
 
     function salesModuleRun() {
 
-      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet'];
+      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage'];
 
-      const {Workflow, SaleOrder, Outlet} = Schema.models();
+      const {Workflow, SaleOrder, Outlet, NewsMessage} = Schema.models();
 
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
@@ -173,12 +175,17 @@
           }
 
           function setBadges() {
+
             let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
             SaleOrder.groupBy(filter)
               .then(data => {
-                data = _.filter(data, 'totalCost');
                 Menu.setItemData('sales.saleOrders', {badge: data.length});
               });
+
+            NewsMessage.findAll().then(data => {
+              Menu.setItemData('newsFeed', {badge: data.length});
+            });
           }
 
           $rootScope.$on('menu-show', setBadges);
@@ -218,7 +225,6 @@
         }
 
       }
-
 
     }
 
