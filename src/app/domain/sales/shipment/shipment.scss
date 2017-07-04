@@ -19,6 +19,10 @@ $font-weight-normal: 400;
 
 $line-height-basic: 20px;
 
+.pointer-event-class {
+  pointer-events: none;
+}
+
 .shipment-list {
 
   padding: 0 5px;
@@ -97,7 +101,9 @@ $line-height-basic: 20px;
     }
 
     .driver {
+
       min-width: $width-driver;
+      cursor: pointer;
 
       @include responsive-only(gt-xs) {
         max-width: $width-driver;
@@ -290,7 +296,10 @@ $line-height-basic: 20px;
           @include responsive-only(lt-sm) {
             height: 15px;
           }
+        }
 
+        & > a:hover {
+          text-decoration: none;
         }
 
         ng-transclude {
