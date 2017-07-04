@@ -40,7 +40,7 @@ hr(ng-hide='vm.hideHashes')
         ng-class='{blocked: o.isActive === false}'
         )
           span.comment-text(ng-if='o.commentText') {{ o.commentText }}
-          a.green(ng-if='o.locationId')
+          a.green(ng-if='o.locationId' href ng-click='vm.outletLocationClick(o)')
             i.glyphicon.glyphicon-map-marker
           a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
 

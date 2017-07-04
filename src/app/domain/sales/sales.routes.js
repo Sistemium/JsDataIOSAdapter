@@ -108,7 +108,7 @@
       var outlet = {
 
         name: 'outlet',
-        url: '/outlet/:id',
+        url: '/outlet/:id?showLocation',
 
         templateUrl: 'app/domain/sales/views/outlet.html',
         controller: 'OutletController',
