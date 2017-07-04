@@ -37,7 +37,7 @@
      */
 
     function rowHeight() {
-      return isWideScreen() ? 40 : (vm.currentSalesman ? 114 : 130);
+      return isWideScreen() ? 40 : 130;
     }
 
     function onSalesmanChange(salesman) {
