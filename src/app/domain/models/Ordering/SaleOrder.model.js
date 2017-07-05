@@ -65,6 +65,7 @@
       },
 
       computed: {
+
         workflowStep: ['authId', 'processing', function (authId, processing) {
           let wf = SaleOrder.meta.workflowSaleOrder;
           if (authId && authId !== Auth.authId()) {
@@ -72,6 +73,7 @@
           }
           return _.get(wf, processing);
         }]
+
       },
 
       methods: {
@@ -83,6 +85,11 @@
         },
 
         positionsCountRu,
+
+        processingMessages: function() {
+          if (!this.processingMessage) return null;
+          return _.map(this.processingMessage.split('|'), msg => _.trim(msg));
+        },
 
         isValid: function () {
           return this.date &&

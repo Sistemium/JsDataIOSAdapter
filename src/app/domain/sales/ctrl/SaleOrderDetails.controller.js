@@ -37,7 +37,7 @@
 
     vm.watchScope('vm.saleOrder.processingMessage', processingMessage => {
       if (!processingMessage) return;
-      toastr.error(processingMessage);
+      _.each(vm.saleOrder.processingMessages(), msg => toastr.error(msg));
     });
 
     vm.watchScope('vm.saleOrder.date', newValue => {
