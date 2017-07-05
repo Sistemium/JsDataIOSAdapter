@@ -172,6 +172,8 @@
 
           if (Auth.isAuthorized('supervisor')) {
             getWorkflow('SaleOrder.v2.sv', 'workflowSaleOrderSupervisor');
+          } else {
+            getWorkflow('SaleOrder.v2', 'workflowSaleOrderSupervisor');
           }
 
           function setBadges() {
