@@ -36,8 +36,6 @@
 
     const SalesmanAuth = service;
 
-    salesModuleRun();
-
     $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
       let needRoles = _.get(next, 'data.auth');
@@ -48,20 +46,20 @@
 
         if (!isAuthorized) {
           event.preventDefault();
-        }
-
-        if (initPromise) {
           redirectTo = {
             state: next,
             params: nextParams
           };
-        } else {
-          // TODO: maybe add toast with error message
+        } else if (event.defaultPrevented) {
+          event.defaultPrevented = false;
         }
 
       }
 
     }));
+
+    salesModuleRun();
+
 
     function responsibility() {
       return _.get(currentSalesman, 'responsibility') || Auth.role('saleType');
@@ -87,6 +85,7 @@
       }
 
       if (redirectTo) {
+        console.info('SalesmanAuth redirect to:', redirectTo.state, redirectTo.params);
         $state.go(redirectTo.state, redirectTo.params);
         redirectTo = false;
       }
@@ -168,13 +167,20 @@
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
-          getWorkflow('SaleOrder.v2', 'workflowSaleOrder');
+          $rootScope.$on('menu-show', setBadges);
 
-          if (Auth.isAuthorized('supervisor')) {
-            getWorkflow('SaleOrder.v2.sv', 'workflowSaleOrderSupervisor');
-          } else {
-            getWorkflow('SaleOrder.v2', 'workflowSaleOrderSupervisor');
-          }
+          setBadges();
+
+          return getWorkflow('SaleOrder.v2', 'workflowSaleOrder')
+            .then(() => {
+
+              if (Auth.isAuthorized('supervisor')) {
+                return getWorkflow('SaleOrder.v2.sv', 'workflowSaleOrderSupervisor');
+              } else {
+                return getWorkflow('SaleOrder.v2', 'workflowSaleOrderSupervisor');
+              }
+
+            });
 
           function setBadges() {
 
@@ -190,15 +196,11 @@
             });
           }
 
-          $rootScope.$on('menu-show', setBadges);
-
-          setBadges();
-
         });
 
       function getWorkflow(code, codeAs) {
 
-        Workflow.findAll({code})
+        return Workflow.findAll({code})
           .then(workflow => {
             SaleOrder.meta[codeAs] = _.get(_.first(workflow), 'workflow');
           })
