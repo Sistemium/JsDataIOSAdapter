@@ -30,7 +30,12 @@
 
     SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
-    $scope.$on('rootClick', () => $state.go(rootState));
+    $scope.$on('rootClick', () => {
+      if ($state.current.name === rootState) {
+        vm.scrollTop();
+      }
+      $state.go(rootState);
+    });
 
     /*
      Functions
