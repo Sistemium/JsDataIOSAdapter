@@ -34,13 +34,18 @@
       let options = {limit: 1, cacheResponse:false};
 
       if (IOS.isIos()) {
+
         delete filter.outletId;
         delete filter.articleId;
+        delete filter['x-order-by:'];
+
         filter.where = {
           'ANY shipment': {'outletId': {'==': vm.outlet.id}},
           articleId: {'==': vm.article.id}
         };
+
         options.limit = 100;
+
       }
 
       vm.busy = ShipmentPosition.findAll(filter, options)
