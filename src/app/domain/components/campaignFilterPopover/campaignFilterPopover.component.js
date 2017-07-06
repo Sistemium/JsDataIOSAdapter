@@ -57,16 +57,7 @@
 
     function campaignGroupsSearch(campaignGroup) {
 
-      let where = {
-        dateB: {
-          "<=": campaignGroup.dateE
-        },
-        dateE: {
-          ">=": campaignGroup.dateB
-        }
-      };
-
-      vm.busy = Campaign.findAllWithRelations({where})(['CampaignPicture'])
+      vm.busy = Campaign.findAllWithRelations(Campaign.meta.filterByGroup(campaignGroup))(['CampaignPicture'])
         .then(campaigns => {
 
           let campaignsFilteredByPhoto = _.filter(campaigns, campaign => {

@@ -37,7 +37,26 @@
 
       },
 
-      omit: ['photoCount', 'showAllPhotos']
+      omit: ['photoCount', 'showAllPhotos'],
+
+      meta: {
+
+        filterByGroup: function (campaignGroup) {
+
+          let where = {
+            dateB: {
+              "<=": campaignGroup.dateE
+            },
+            dateE: {
+              ">=": campaignGroup.dateB
+            }
+          };
+
+          return {where};
+
+        }
+
+      }
 
     });
 

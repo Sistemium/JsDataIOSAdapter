@@ -136,9 +136,12 @@
           }
 
           $scope.$watch('vm.campaignGroupId', campaignGroupId => {
-            Campaign.findAll({campaignGroupId})
-              .then(campaigns => vm.campaigns = campaigns);
+
             vm.campaignGroup = CampaignGroup.get(campaignGroupId);
+
+            Campaign.findAll(Campaign.meta.filterByGroup(vm.campaignGroup))
+              .then(campaigns => vm.campaigns = campaigns);
+
           });
 
         });

@@ -57,10 +57,12 @@
 
           if (!vm.campaignGroup) return;
 
-          let filter = {campaignGroupId: vm.campaignGroup.id};
+          let filter = Campaign.meta.filterByGroup(vm.campaignGroup);
 
           return Campaign.findAllWithRelations(filter)('CampaignPicture')
             .then(campaigns => {
+
+              // FIXME: copy-pasted in campaignFilterPopover
 
               vm.campaigns = _.filter(campaigns, (elem) => {
                 return elem.campaignPictures.length > 0
