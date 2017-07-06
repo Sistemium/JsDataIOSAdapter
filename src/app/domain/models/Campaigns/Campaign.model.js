@@ -35,7 +35,9 @@
         teamName: ['name', teamNameFn],
         title: ['name', titleFn]
 
-      }
+      },
+
+      omit: ['photoCount', 'showAllPhotos']
 
     });
 
