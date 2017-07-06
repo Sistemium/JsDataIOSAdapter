@@ -20,6 +20,10 @@
 
       vm.restoreScrollPosition = restoreScrollPosition;
 
+      vm.scrollTop = () => {
+        scrollTo(0);
+      };
+
       function restoreScrollPosition(isWide) {
         scrollTo(getSavedScrollPosition(rootState), isWide);
       }
