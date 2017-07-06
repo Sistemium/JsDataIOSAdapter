@@ -50,7 +50,7 @@
       vm.currentSalesman = salesman;
       vm.ready = false;
 
-      startPage = 1;
+      startPage = 0;
       gotAllData = false;
 
       let filter = SalesmanAuth.makeFilter();
