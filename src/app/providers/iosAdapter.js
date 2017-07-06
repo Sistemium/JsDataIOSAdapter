@@ -148,7 +148,7 @@
         let desc = _.startsWith(stApiOrder, '-');
         parsed.sortBy = _.replace(stApiOrder, '-', '');
         if (desc) {
-          parsed.directon = 'DESC';
+          parsed.direction = 'DESC';
         }
         delete params[STAPI_OPTION_ORDER_BY];
       }
