@@ -18,6 +18,7 @@
     Schema.register({
 
       name: 'NewsMessage',
+
       relations: {
         hasOne: {
           UserNewsMessage: {
