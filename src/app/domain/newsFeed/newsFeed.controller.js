@@ -70,14 +70,15 @@
         });
 
       } else if (to.name === 'newsFeed') {
+
         vm.setBusy(
-          NewsMessage.findAll({bypassCache: true}).then((news) => {
-            return news;
+          NewsMessage.findAll({}, {bypassCache: true})
+        )
+          .then(news => {
+            vm.rebindAll(NewsMessage, {}, 'vm.news');
+            return UserNewsMessage.findAll();
           })
-        ).then(news => {
-          vm.news = news;
-          UserNewsMessage.findAll();
-        }).catch(e => console.error(e));
+          .catch(e => console.error(e));
 
       } else if (to.name === 'newsFeed.create') {
         vm.news = {};
