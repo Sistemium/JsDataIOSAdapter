@@ -176,6 +176,10 @@
     quantity-edit {
       flex-shrink: 0;
       white-space: nowrap;
+      font-size: 115%;
+      span.ng-binding {
+        color: $green;
+      }
     }
 
   }
