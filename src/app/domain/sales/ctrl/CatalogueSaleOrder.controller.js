@@ -155,6 +155,7 @@
         if (position.volume % packageRel === 0) {
           minus = packageRel;
         }
+        vm.lastPlus[id] = minus;
       }
 
       addPositionVolume(article.id, -minus);
