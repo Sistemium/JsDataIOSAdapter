@@ -150,6 +150,11 @@
 
       if (!minus) {
         minus = 1;
+        let {id, packageRel} = article;
+        let position = getPosition(id);
+        if (position.volume % packageRel === 0) {
+          minus = packageRel;
+        }
       }
 
       addPositionVolume(article.id, -minus);
