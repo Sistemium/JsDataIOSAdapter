@@ -143,12 +143,13 @@
   .article-name-third {
 
     width: 100%;
-    @extend %flex-row;
-    justify-content: flex-end;
+    //@extend %flex-row;
+    //justify-content: flex-end;
     min-height: 20px;
+    text-align: right;
 
-    & > div {
-      display: flex;
+    > div {
+      //display: flex;
       overflow: scroll;
 
       & > i.red {
@@ -156,7 +157,7 @@
         top: 0;
       }
 
-      & > small.gray > span {
+      span {
         white-space: nowrap;
       }
 
@@ -219,7 +220,8 @@
 
     width: 100%;
     color: gray;
-    display: inline-block;
+    display: block;
+    min-height: 20px;
 
     @extend .ellipsis;
 
