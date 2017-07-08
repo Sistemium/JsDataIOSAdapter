@@ -77,6 +77,8 @@ before-tag-name='li'
 
       .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
 
+        small.flagged(ng-if='stock.article.hasAction') A
+
         i.recently-shipped.glyphicon.glyphicon-star-empty(
         ng-if='vm.articleStats[stock.articleId]'
         uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"

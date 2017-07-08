@@ -245,17 +245,17 @@
     font-size: 85%;
   }
 
-  .compDiscount {
+  .flag {
+    border-color: $primary-color;
+    background-color: $primary-color;
+    color: $white;
 
-    &.flag {
-      border-color: $primary-color;
+    &:hover {
       background-color: $primary-color;
-      color: $white;
-
-      &:hover {
-        background-color: $primary-color;
-      }
     }
+  }
+
+  .compDiscount {
 
     @extend %flaggable;
 
