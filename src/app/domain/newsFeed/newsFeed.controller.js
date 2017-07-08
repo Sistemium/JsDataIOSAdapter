@@ -74,7 +74,7 @@
         vm.setBusy(
           NewsMessage.findAll({}, {bypassCache: true})
         )
-          .then(news => {
+          .then(() => {
             vm.rebindAll(NewsMessage, {}, 'vm.news');
             return UserNewsMessage.findAll();
           })
