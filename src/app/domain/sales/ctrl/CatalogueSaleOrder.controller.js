@@ -18,7 +18,9 @@
       searchOutletClick,
       clearSearchOutletClick,
       saleOrderSaveDraftClick,
-      setProcessingClick
+      setProcessingClick,
+      minusButtonClick,
+      lastPlus: {}
 
     });
 
@@ -142,11 +144,25 @@
       saEtc.focusElementById(id);
     }
 
+    function minusButtonClick(article) {
+
+      let minus = vm.lastPlus[article.id];
+
+      if (!minus) {
+        minus = 1;
+      }
+
+      addPositionVolume(article.id, -minus);
+
+    }
+
     function kPlusButtonClick(event, article, price) {
+      vm.lastPlus[article.id] = article.packageRel;
       addPositionVolume(article.id, article.packageRel, price);
     }
 
     function bPlusButtonClick(event, article, price) {
+      vm.lastPlus[article.id] = 1;
       addPositionVolume(article.id, 1, price);
     }
 
@@ -185,6 +201,10 @@
 
       let position = getPosition(articleId);
 
+      if (!position && volume <= 0) {
+        return;
+      }
+
       if (!position) {
         // FIXME: duplicated with code in quantityEdit
         position = SaleOrderPosition.createInstance({
@@ -198,7 +218,7 @@
         SaleOrderPosition.inject(position);
       }
 
-      position.volume += volume;
+      position.volume = _.max([position.volume + volume, 0]);
 
       let factor = !vm.noFactor && _.get(position, 'article.factor') || 1;
       let notFactored = position.volume % factor;

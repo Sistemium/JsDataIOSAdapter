@@ -39,6 +39,12 @@ before-tag-name='li'
           small.gray(ng-if='!vm.noFactor && stock.article.factor > 1') : {{::stock.article.factor}}
 
         // TODO: allow removing restricted positions
+        a.minus.btn-default(
+        ng-if='vm.saleOrderPositionByArticle[stock.articleId].volume'
+        href stm-click='minusButton' click-payload='stock.article'
+        )
+          i.glyphicon.glyphicon-minus
+
         quantity-edit(
         ng-if='vm.saleOrder'
         article='stock.article'
