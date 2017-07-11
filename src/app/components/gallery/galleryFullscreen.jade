@@ -13,7 +13,7 @@
     // TODO: Swipes
     a.main-photo-block.noPreventDefault(
     href
-    ng-click='vm.closeGalleryClick()'
+    ng-click='vm.largeImageClick()'
     ng-swipe-right='vm.prevImageClick()'
     ng-swipe-left='vm.nextImageClick()'
     ng-swipe-up='vm.closeGalleryClick()'
@@ -42,7 +42,7 @@
         )
           i.glyphicon.glyphicon-question-sign
 
-      p.index {{index + 1}} / {{imagesAll.length}} [{{ vm.zoom }}]
+      p.index {{index + 1}} / {{imagesAll.length}}
 
     .ng-thumbnails-wrapper
       #ng-thumbnails-scroll(

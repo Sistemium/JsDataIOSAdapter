@@ -25,7 +25,8 @@
         nextImageClick: setNextImage,
         prevImageClick: setPrevImage,
 
-        closeGalleryClick: () => vm.zoom === 1 && cleanup(),
+        largeImageClick: () => vm.zoom === 1 && cleanup(),
+        closeGalleryClick: () => cleanup(),
 
         deleteClick
 
