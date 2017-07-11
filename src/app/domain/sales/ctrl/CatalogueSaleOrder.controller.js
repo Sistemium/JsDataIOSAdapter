@@ -77,6 +77,20 @@
       vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume');
     });
 
+    vm.watchScope('vm.saleOrder.outletId', () => {
+      if (!vm.saleOrder) {
+        vm.lastSaleOrderId = false;
+        return;
+      }
+      if (vm.saleOrder.id !== vm.lastSaleOrderId) {
+        vm.lastSaleOrderId = vm.saleOrder.id;
+        return;
+      }
+      console.warn(vm.saleOrder.id, vm.lastSaleOrderId);
+      let commentText = _.get(vm.saleOrder, 'outlet.saleOrderComment') || null;
+      vm.saleOrder.commentText = commentText;
+    });
+
     /*
      Handlers
      */
