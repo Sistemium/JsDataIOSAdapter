@@ -29,14 +29,14 @@
             // IOS
 
             if (SaleOrder.hasChanges(id)) {
-              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with changes');
+              return DEBUG('CatalogueSaleOrder:onJSData:ios', 'ignore saleOrder with changes');
             }
 
             if (data.deviceTs < _.get(vm, 'saleOrder.ts')) {
-              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old deviceTs');
+              return DEBUG('CatalogueSaleOrder:onJSData:ios', 'ignore saleOrder with old deviceTs');
             }
 
-            DEBUG('CatalogueSaleOrder:onJSData injecting', resource);
+            DEBUG('CatalogueSaleOrder:onJSData injecting:ios', resource);
             SaleOrder.inject(data);
 
             if (vm.date === data.date) {
