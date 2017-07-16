@@ -56,6 +56,8 @@
           .commentText {{ cashing.commentText }}
           .ndoc
             span {{ cashing.ndoc || cashing.debt.ndoc }}
+            = ' '
+            small.gray(ng-if='::cashing.debt.date') от&nbsp;{{ ::cashing.debt.date | amDateFormat:'DD/MM/YYYY' }}
             a.detete-btn(href ng-click='vm.deleteCashingClick(cashing)' ng-if='vm.editing')
               i.glyphicon.glyphicon-trash
           currency-value.summ(value='cashing.summ')
