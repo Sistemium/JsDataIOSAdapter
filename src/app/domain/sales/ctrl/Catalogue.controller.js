@@ -510,7 +510,7 @@
       return PriceType.findAllWithRelations()(['PriceType'])
         .then((result) => {
 
-          if (Auth.getAccount().org === 'dev') {
+          if (Auth.getOrg() === 'bs') {
 
             let firstPriceType = _.first(result);
             _.set(PriceType.get(firstPriceType.id), 'isVisible', true);

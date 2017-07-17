@@ -146,6 +146,10 @@
         return currentUser;
       },
 
+      getOrg: () => {
+        return _.indexOf(['dev', 'bs'], currentUser.org) !== -1 ? 'bs' : currentUser.org;
+      },
+
       isLoggedIn: () => {
         return !!currentUser;
       },

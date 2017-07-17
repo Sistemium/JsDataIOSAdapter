@@ -89,7 +89,7 @@
             this.outletId &&
             this.salesmanId &&
             this.contractId &&
-            (Auth.getAccount().org !== 'dev' ? this.priceTypeId : true);
+            (Auth.getOrg() !== 'bs' ? this.priceTypeId : true);
         },
 
         safeSave: function onSaleOrderChange() {
