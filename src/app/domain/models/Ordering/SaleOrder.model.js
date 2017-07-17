@@ -88,8 +88,9 @@
           return this.date &&
             this.outletId &&
             this.salesmanId &&
-            this.contractId &&
-            this.priceTypeId;
+            (Auth.getAccount().org !== 'dev' ?
+              this.contractId && this.priceTypeId :
+              true);
         },
 
         safeSave: function onSaleOrderChange() {
