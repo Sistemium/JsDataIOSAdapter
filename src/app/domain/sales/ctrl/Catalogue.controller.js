@@ -7,7 +7,7 @@
   const FONT_SIZE_KEY = 'catalogue.fontSize';
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout,
-                               DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper, Auth) {
+                               DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper) {
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
     const {
@@ -508,33 +508,21 @@
       };
 
       return PriceType.findAllWithRelations()(['PriceType'])
-        .then((result) => {
+        .then(() => {
 
-          if (Auth.getOrg() === 'bs') {
+          // TODO: move to model
+          return OutletSalesmanContract.groupBy({}, [''])
+            .then(auths => {
 
-            let firstPriceType = _.first(result);
-            _.set(PriceType.get(firstPriceType.id), 'isVisible', true);
-            PriceType.meta.setDefault(firstPriceType);
-
-            vm.priceTypes = PriceType.filter({isVisible: true});
-
-          } else {
-
-            // TODO: move to model
-            return OutletSalesmanContract.groupBy({}, [''])
-              .then(auths => {
-
-                _.each(auths, auth => {
-                  let priceTypeId = auth.priceTypeId;
-                  if (!priceTypeId) return;
-                  _.set(PriceType.get(priceTypeId), 'isVisible', true);
-                });
-
-                vm.priceTypes = PriceType.filter({isVisible: true});
-
+              _.each(auths, auth => {
+                let priceTypeId = auth.priceTypeId;
+                if (!priceTypeId) return;
+                _.set(PriceType.get(priceTypeId), 'isVisible', true);
               });
 
-          }
+              vm.priceTypes = PriceType.filter({isVisible: true});
+
+            });
 
         })
         .then(() => ArticleGroup.cachedFindAll({}, options))
