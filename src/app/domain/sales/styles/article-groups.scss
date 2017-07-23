@@ -1,5 +1,21 @@
 @import "../../../styles/variables";
 
+.iOS {
+
+  #article-groups {
+
+    .preceding-groups, .following-groups {
+      .list-group-item {
+        > a:hover:not(.active) {
+          background-color: darken($gray-background-color, 10%);
+        }
+      }
+
+    }
+  }
+
+}
+
 #article-groups {
 
   flex: 1;
@@ -8,12 +24,14 @@
 
   .preceding-groups, .following-groups {
     padding-left: 0;
-    .list-group-item a {
+    .list-group-item {
 
-      background-color: $gray-background-color;
+      & + .list-group-item {
+        border-top-color: $gray-background-color;
+      }
 
-      &:hover {
-        background-color: white !important;
+      > a:not(:hover) {
+        background-color: darken($gray-background-color, 10%);
       }
 
     }

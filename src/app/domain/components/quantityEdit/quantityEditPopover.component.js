@@ -60,7 +60,7 @@
      Listeners
      */
 
-    $scope.$watchGroup(['vm.boxes', 'vm.bottles'], onQtyChange);
+    $scope.$watchGroup(['vm.boxes', 'vm.bottles'], _.debounce(onQtyChange, 750));
     $scope.$watch('vm.position.id', onPositionChange);
 
     /*
@@ -98,12 +98,27 @@
 
     function onQtyChange(newValues, oldValues) {
       if (newValues[1] != oldValues[1] || newValues[0] != oldValues[0]) {
+
         let volume = parseInt(newValues[0] * position.article.packageRel || 0)
           + parseInt(newValues[1] || 0);
+
+        let factor = _.get(position, 'article.factor') || 1;
+        let notFactored = volume % factor;
+
+        if (notFactored) {
+          volume = volume - notFactored + factor;
+        }
+
         position.volume = _.max([0, volume]);
+
+        if (notFactored) {
+          setQty();
+        }
+
         injectPosition();
         position.updateCost();
         saleOrder.updateTotalCost();
+
       }
     }
 

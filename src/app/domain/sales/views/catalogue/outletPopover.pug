@@ -24,6 +24,8 @@ vs-repeat='55'
   ng-repeat='outlet in vm.outlets | filter:vm.outletSearch track by outlet.id'
   )
     a(href stm-click='searchOutlet' click-payload='outlet' ng-click='vm.isOutletPopoverOpen=false')
-      .name {{::outlet.name}}
+      .name
+        span {{ ::outlet.name }}
+        span.comment-text(ng-if='outlet.commentText') {{ outlet.commentText }}
       .gray.address
         small {{::outlet.address}}

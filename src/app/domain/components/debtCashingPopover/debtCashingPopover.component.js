@@ -50,6 +50,10 @@
      Functions
      */
 
+    function cashWholeClick() {
+      doCashing(vm.debt.uncashed());
+    }
+
     function cashPartClick() {
 
       if (vm.cashPart) {
@@ -112,7 +116,8 @@
         debtId: vm.debt.id,
         summ: summ,
         outletId: vm.debt.outletId,
-        date: moment().format()
+        date: moment().format(),
+        commentText: vm.commentText || null
       });
 
       let q = vm.doNotSave ? $q.resolve(Cashing.inject(cashing)) : Cashing.create(cashing);
@@ -120,13 +125,10 @@
       q.then(saved => {
         vm.cashings.push(saved);
         vm.isPopoverOpen = false;
+        vm.commentText = '';
         $scope.$emit('DebtOrCashingModified');
       });
 
-    }
-
-    function cashWholeClick() {
-      doCashing(vm.debt.uncashed());
     }
 
     function $onInit() {

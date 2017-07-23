@@ -1,6 +1,6 @@
 @import "variables";
 
-%flag {
+%flag, .flagged {
 
   @extend %flaggable;
   @extend %flagged;
@@ -10,7 +10,7 @@
 %flagged {
 
   background-color: $state-info-bg;
-  border-color: $primary-color;
+  border-color: lighten($primary-color, 30%);
 
 }
 
@@ -23,5 +23,11 @@
   padding: 2px 4px;
   border-radius: 3px;
   margin: -2px 4px -2px 0;
+
+  @media (max-width: 767px) {
+    margin: -2px 0 -2px 0;
+    padding: 0 2px;
+    line-height: 20px;
+  }
 
 }

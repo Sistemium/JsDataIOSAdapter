@@ -6,6 +6,7 @@
 
     const SALES_ROLES = ['salesman', 'supervisor'];
     const PICKING_ROLES = ['picker'];
+    const ADMIN_ROLES = ['admin', 'tester'];
 
     const items = [{
       title: 'Сборка',
@@ -63,11 +64,11 @@
     // }, {
       title: 'Тесты',
       state: 'playground',
-      needRoles: ['admin', 'tester']
+      needRoles: ADMIN_ROLES
     }, {
-      title: 'Новости',
+      title: 'Лента новостей',
       state: 'newsFeed',
-      needRoles: ['admin', 'tester']
+      needRoles: ADMIN_ROLES
     }];
 
 
@@ -89,7 +90,6 @@
       };
 
     }
-
 
     return {
       root,

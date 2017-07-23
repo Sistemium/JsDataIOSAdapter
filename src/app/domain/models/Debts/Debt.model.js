@@ -13,6 +13,10 @@
           Outlet: {
             localField: 'outlet',
             localKey: 'outletId'
+          },
+          Responsibility: {
+            localField: 'responsible',
+            localKey: 'responsibility'
           }
         },
         hasMany: {

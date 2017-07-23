@@ -13,7 +13,7 @@
     // TODO: Swipes
     a.main-photo-block.noPreventDefault(
     href
-    ng-click='vm.closeGalleryClick()'
+    ng-click='vm.largeImageClick()'
     ng-swipe-right='vm.prevImageClick()'
     ng-swipe-left='vm.nextImageClick()'
     ng-swipe-up='vm.closeGalleryClick()'
@@ -27,7 +27,7 @@
       ng-src='{{ currentImageSrc }}'
       ng-if='!loading'
       alt='Ошибка загрузки изображения'
-      ng-pinch-zoom max-scale='4'
+      ng-pinch-zoom max-scale='8' zoom-fn='vm.setZoom'
       )
 
     .image-info

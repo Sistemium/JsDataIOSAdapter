@@ -2,22 +2,22 @@
 
 (function () {
 
-  function CampaignsController(Schema, saControllerHelper, $scope, $state, GalleryHelper, localStorageService, $window) {
+  function CampaignsController( saControllerHelper, $scope, $state, GalleryHelper, localStorageService, $window) {
 
-    const {Campaign} = Schema.models();
     const sectionElem = document.getElementsByClassName('campaigns');
     const appWindow = angular.element($window);
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
       .use({
-        thumbClick,
+
         currentItem: localStorageService.get('lastState').params.campaignGroupId || '',
-        currentTeam: '',
         initGroupId: $state.params.campaignGroupId,
-        showPhotos: '',
-        showHiddenPic,
-        limit: getSectionWidth()
+        limit: getSectionWidth(),
+
+        thumbClick,
+        showHiddenPic
+
       });
 
     /*
@@ -34,7 +34,7 @@
       if (!campaignGroupId) return;
 
       $state.go('.', {campaignGroupId}, {notify: false});
-      vm.setBusy(refresh(campaignGroupId));
+      // vm.setBusy(refresh(campaignGroupId));
 
     });
 
@@ -57,7 +57,7 @@
 
     function showHiddenPic(campaign) {
 
-      if (campaign.id == vm.showCampaignPhotosId) {
+      if (campaign.id === vm.showCampaignPhotosId) {
         vm.showCampaignPhotosId = '';
       } else {
         vm.showCampaignPhotosId = campaign.id;
@@ -65,20 +65,20 @@
 
     }
 
-    function refresh(campaignGroupId) {
-
-      return Campaign.findAllWithRelations({campaignGroupId})('CampaignPicture')
-        .then(campaigns => {
-          vm.campaigns = _.filter(campaigns, function (campaign) {
-            campaign.showAllPhotos = false;
-            campaign.photoCount = campaign.campaignPictures.length;
-            return campaign.campaignPictures.length
-          });
-
-        })
-        .catch(e => console.error(e));
-
-    }
+    // function refresh(campaignGroupId) {
+    //
+    //   return Campaign.findAllWithRelations({campaignGroupId})('CampaignPicture')
+    //     .then(campaigns => {
+    //       vm.campaigns = _.filter(campaigns, function (campaign) {
+    //         campaign.showAllPhotos = false;
+    //         campaign.photoCount = campaign.campaignPictures.length;
+    //         return campaign.campaignPictures.length
+    //       });
+    //
+    //     })
+    //     .catch(e => console.error(e));
+    //
+    // }
 
     function thumbClick(picture) {
 

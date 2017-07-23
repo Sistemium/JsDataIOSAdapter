@@ -1,13 +1,359 @@
-.shipmentList {
+@import "../../../styles/variables";
 
-  #scroll-main {
-    tfoot th {
+$font-size-sm: 14px;
+$table-padding-left: 5;
+
+$width-driver: 110px;
+$width-ndoc: 100px;
+$width-egais: 60px;
+$width-salesman: 110px;
+$width-outlet: 330px;
+$width-cost: 100px;
+$width-positions: 100px;
+
+$gray-border-color: #DDD;
+$position-hover-color: #CFE1EE;
+
+$font-weight-bold: 600;
+$font-weight-normal: 400;
+
+$line-height-basic: 20px;
+
+.shipment-list {
+
+  padding: 0 5px;
+
+  @include responsive-only(lt-sm) {
+    padding: 0;
+  }
+
+  .repeated-item {
+
+    @include responsive-only(gt-xs) {
+      height: 40px;
+    }
+
+    @include responsive-only(lt-sm) {
+      height: 130px;
+    }
+
+  }
+
+  .date {
+
+    padding: 6px 0 5px;
+
+    .title {
+      font-size: 150%;
+    }
+
+  }
+
+  .date.footer {
+
+    text-align: right;
+
+    currency-value {
+      strong {
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .spacing {
+      display: inline;
+      padding-left: $width-cost - 4;
+    }
+
+    @include responsive-only(lt-sm) {
+
+      currency-value:before {
+        content: 'Итого: '
+
+      }
+      border: 1px solid $gray-border-color;
+      border-radius: $border-radius;
+      background: $gray-background-color;
+      padding-right: 7px;
+    }
+
+  }
+
+  .shipment {
+    @include responsive-only(lt-sm) {
+      position: relative;
+    }
+  }
+
+  .headers, .scroll-y {
+
+    .ndoc {
+      min-width: $width-ndoc;
+
+      @include responsive-only(lt-sm) {
+        min-width: $width-ndoc / 2;
+        font-weight: $font-weight-bold;
+      }
+
+    }
+
+    .driver {
+
+      min-width: $width-driver;
+      cursor: pointer;
+
+      @include responsive-only(gt-xs) {
+        max-width: $width-driver;
+      }
+
+      @include responsive-only(lt-sm) {
+        padding: 0;
+      }
+
+    }
+
+    .egais {
+      min-width: $width-egais;
+
+      @include responsive-only(lt-sm) {
+        min-width: $width-egais / 2 !important;
+        position: absolute;
+        right: 5px;
+        top: 10px;
+      }
+
+    }
+
+    .salesman {
+      min-width: $width-salesman;
+    }
+
+    currency-value {
+      strong {
+        font-weight: $font-weight-normal;
+      }
+    }
+
+    .outlet {
+      line-height: $line-height-basic;
+      min-width: $width-outlet;
+      flex: 1;
+
+      @include responsive-only(gt-xs) {
+        min-width: $width-outlet - 200;
+      }
+
+      @include responsive-only(lt-sm) {
+        height: 33px;
+        order: -1;
+        border-bottom: 1px solid $gray-border-color;
+      }
+
+      .outlet-address {
+
+        @include responsive-only(lt-sm) {
+          flex-flow: column nowrap;
+          display: flex;
+          line-height: 15px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin-right: 40px;
+        }
+
+      }
+
+      .address {
+        color: gray;
+        display: block;
+        @extend .ellipsis;
+
+      }
+
+    }
+
+    .cost {
+
+      line-height: $line-height-basic;
+      min-width: $width-cost;
+      text-align: right;
+
+      .cost-diff-price {
+
+        @include responsive-only(lt-sm) {
+          display: flex;
+          flex-flow: row nowrap;
+        }
+
+      }
+
+      .diff {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-end;
+
+        @include responsive-only(lt-sm) {
+
+          > span {
+            line-height: 15px;
+          }
+
+          padding-left: 5px;
+          &:before {
+            content: ' (';
+          }
+
+          &:after {
+            content: ')';
+          }
+
+        }
+
+        > * {
+          font-weight: $font-weight-normal;
+          color: gray;
+        }
+
+      }
+
+      label {
+        @include responsive-only(lt-sm) {
+          flex: 0;
+        }
+      }
+
+      @include responsive-only(lt-sm) {
+        order: 1;
+      }
+
+    }
+
+    .positions {
+      min-width: $width-positions;
       text-align: right;
     }
   }
 
-  td.ndoc {
-    white-space: nowrap;
+  .headers {
+    border-bottom: 2px solid $gray-border-color;
+    display: flex;
+    flex: 1;
+    padding-bottom: 8px;
+
+    > * {
+      font-weight: $font-weight-bold;
+    }
+
+    @include responsive-only(lt-sm) {
+      display: none;
+    }
+
+  }
+
+  @include responsive-only(lt-md) {
+    .positions {
+      display: none;
+
+    }
+
+    .date.footer {
+      .spacing {
+        padding: 0;
+      }
+    }
+  }
+
+  .scroll-y {
+
+    * {
+      outline: none;
+    }
+
+    .shipment {
+
+      &:hover {
+        background-color: $position-hover-color;
+      }
+
+      border-bottom: 1px solid $gray-border-color;
+      line-height: $line-height-basic * 2;
+      display: flex;
+      height: 40px;
+
+      driver-popover {
+
+        position: relative;
+        @include responsive-only(lt-sm) {
+          height: 17px;
+        }
+
+        & > a {
+          display: inline-flex;
+          height: 40px;
+          @include responsive-only(lt-sm) {
+            height: 15px;
+          }
+        }
+
+        & > a:hover {
+          text-decoration: none;
+        }
+
+        ng-transclude {
+          span {
+
+            @extend .ellipsis;
+            width: 85px;
+            display: inline-block;
+
+            @include responsive-only(lt-sm) {
+              width: 100%;
+            }
+
+          }
+        }
+
+      }
+
+      @include responsive-only(lt-sm) {
+        line-height: $font-size-sm;
+        flex-flow: column nowrap;
+        height: auto;
+        border: 1px solid $gray-border-color;
+        background-color: $gray-background-color;
+        padding: 5px;
+        border-radius: $border-radius;
+      }
+
+      .ndoc, .driver, .salesman, .outlet, .cost, .positions, .egais {
+
+        @include responsive-only(lt-sm) {
+          display: flex;
+          justify-content: space-between;
+          flex-flow: row nowrap;
+          align-items: center;
+          min-width: 50px;
+          font-size: $font-size-sm;
+          line-height: 15px;
+
+          span {
+            font-weight: $font-weight-bold;
+          }
+
+        }
+
+        label {
+          margin: 0;
+          font-weight: normal;
+
+          @include responsive-only(gt-xs) {
+            display: none;
+          }
+
+        }
+
+      }
+
+    }
   }
 
 }

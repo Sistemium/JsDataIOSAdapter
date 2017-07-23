@@ -15,13 +15,18 @@
 
       _.assign(vm, {
 
+        zoom: 1,
+
+        setZoom: _.throttle(zoom => $scope.$apply(() => vm.zoom = zoom), 200),
+
         thumbnailClick,
         fullScreenThumbnailClick,
 
         nextImageClick: setNextImage,
         prevImageClick: setPrevImage,
 
-        closeGalleryClick: cleanup,
+        largeImageClick: () => vm.zoom === 1 && cleanup(),
+        closeGalleryClick: () => cleanup(),
 
         deleteClick
 
@@ -76,11 +81,11 @@
       }
 
       function setNextImage() {
-        setImageByIndex($scope.index + 1);
+        vm.zoom === 1 && setImageByIndex($scope.index + 1);
       }
 
       function setPrevImage() {
-        setImageByIndex($scope.index - 1);
+        vm.zoom === 1 && setImageByIndex($scope.index - 1);
       }
 
       function setImageByIndex(index) {

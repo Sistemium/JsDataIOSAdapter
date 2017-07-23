@@ -18,7 +18,9 @@
       searchOutletClick,
       clearSearchOutletClick,
       saleOrderSaveDraftClick,
-      setProcessingClick
+      setProcessingClick,
+      minusButtonClick,
+      lastPlus: {}
 
     });
 
@@ -68,11 +70,25 @@
 
     vm.watchScope('vm.saleOrder.processingMessage', processingMessage => {
       if (!processingMessage) return;
-      toastr.error(processingMessage);
+      _.each(vm.saleOrder.processingMessages(), msg => toastr.error(msg));
     });
 
     vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
       vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume');
+    });
+
+    vm.watchScope('vm.saleOrder.outletId', () => {
+      if (!vm.saleOrder) {
+        vm.lastSaleOrderId = false;
+        return;
+      }
+      if (vm.saleOrder.id !== vm.lastSaleOrderId) {
+        vm.lastSaleOrderId = vm.saleOrder.id;
+        return;
+      }
+      console.warn(vm.saleOrder.id, vm.lastSaleOrderId);
+      let commentText = _.get(vm.saleOrder, 'outlet.saleOrderComment') || null;
+      vm.saleOrder.commentText = commentText;
     });
 
     /*
@@ -142,11 +158,31 @@
       saEtc.focusElementById(id);
     }
 
+    function minusButtonClick(article) {
+
+      let minus = vm.lastPlus[article.id];
+
+      if (!minus) {
+        minus = 1;
+        let {id, packageRel} = article;
+        let position = getPosition(id);
+        if (position.volume % packageRel === 0) {
+          minus = packageRel;
+        }
+        vm.lastPlus[id] = minus;
+      }
+
+      addPositionVolume(article.id, -minus);
+
+    }
+
     function kPlusButtonClick(event, article, price) {
+      vm.lastPlus[article.id] = article.packageRel;
       addPositionVolume(article.id, article.packageRel, price);
     }
 
     function bPlusButtonClick(event, article, price) {
+      vm.lastPlus[article.id] = 1;
       addPositionVolume(article.id, 1, price);
     }
 
@@ -185,6 +221,10 @@
 
       let position = getPosition(articleId);
 
+      if (!position && volume <= 0) {
+        return;
+      }
+
       if (!position) {
         // FIXME: duplicated with code in quantityEdit
         position = SaleOrderPosition.createInstance({
@@ -198,7 +238,7 @@
         SaleOrderPosition.inject(position);
       }
 
-      position.volume += volume;
+      position.volume = _.max([position.volume + volume, 0]);
 
       let factor = !vm.noFactor && _.get(position, 'article.factor') || 1;
       let notFactored = position.volume % factor;

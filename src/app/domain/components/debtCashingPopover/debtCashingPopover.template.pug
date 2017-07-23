@@ -13,10 +13,11 @@
     )
       span Оплачено частично
 
-    form(ng-if='vm.cashPart' name="cashForm" ng-submit='vm.onSubmit()')
+    form(name="cashForm" ng-submit='vm.onSubmit()')
 
       .form-group
         input#sumToCash.form-control(
+        ng-if='vm.cashPart'
         ng-model='vm.cashed'
         type='number'
         name='cashed'
@@ -28,7 +29,17 @@
 
         .error(ng-if='cashForm.$dirty && !cashForm.$valid') Некорректная сумма
 
+      .form-group
+        textarea#commentText.form-control(
+        ng-model='vm.commentText'
+        type='text'
+        name='commentText'
+        autocomplete="off"
+        placeholder='Комментарий'
+        )
+
       button.btn.btn-primary(
+      ng-if='vm.cashPart'
       type='submit'
       value='submit'
       ng-disabled='!cashForm.$valid'
@@ -47,3 +58,4 @@
         i.glyphicon.glyphicon-trash
       span.cts {{ cashing.deviceCts | amUtc | amLocal | amCalendar }}
       strong.summ {{ cashing.summ | number:2 }}
+      small.comment-text(ng-if='cashing.commentText') {{ cashing.commentText }}

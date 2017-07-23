@@ -1,5 +1,6 @@
 @import "../../styles/variables";
 @import "../../styles/alerts";
+@import "../../styles/flags";
 
 .debt-by-outlet {
 
@@ -100,9 +101,33 @@
 
   }
 
+  .flag {
+
+    display: inline-block;
+    @extend %flaggable;
+
+    &.flagged {
+      @extend %flagged;
+    }
+
+    & + .flag {
+      margin-left: $margin;
+    }
+
+    &.responsible {
+      margin-right: $margin;
+    }
+
+  }
+
   .header {
 
     border-bottom: $headers-border;
+    justify-content: space-between;
+
+    @include responsive-only(xxs) {
+      display: block;
+    }
 
     label {
       color: $black;
@@ -283,7 +308,7 @@
       .tip {
         position: relative;
         top: -1px;
-        margin-right: 8px;
+        margin-right: $margin;
         color: $state-info-text;
         @include responsive-only(lt-sm) {
           display: inline-block;

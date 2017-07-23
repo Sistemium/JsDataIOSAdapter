@@ -23,6 +23,10 @@
       text-align: right;
       white-space: nowrap;
       text-overflow: ellipsis;
+
+      .comment-text {
+        margin-right: 5px;
+      }
     }
 
     .item {
@@ -43,7 +47,6 @@
       margin-top: 10px;
     }
   }
-
 
   .visitPhotos {
     @media (max-width: $screen-xs) {
@@ -69,7 +72,6 @@
   hr {
     border: none;
   }
-
 
 }
 
@@ -102,7 +104,6 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   color: black;
 }
 
-
 .tab-pane .questionGroup {
   overflow-x: hidden;
 }
@@ -129,4 +130,29 @@ i.recently-shipped {
 
 .outlet.blocked .name, .address.blocked a, .outlet.blocked .address {
   @extend %blocked;
+}
+
+.option.outlet {
+  .name {
+    @extend %flex-row;
+    justify-content: space-between;
+    .span {
+      flex: 1;
+      flex-grow: 100;
+    }
+    .comment-text {
+      text-align: right;
+      flex: 0;
+    }
+  }
+}
+
+.outlet, .territory .address {
+  .comment-text {
+    color: $state-warning-text;
+    background: $state-warning-bg;
+    padding: 0 3px;
+    border: solid 1px $state-warning-border;
+    border-radius: 3px;
+  }
 }

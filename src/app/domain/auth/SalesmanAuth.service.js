@@ -27,14 +27,14 @@
       watchCurrent,
       makeFilter,
 
+      responsibility,
+
       getCurrentUser: () => currentSalesman,
       isLoggedIn: () => !!currentSalesman
 
     };
 
     const SalesmanAuth = service;
-
-    salesModuleRun();
 
     $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
 
@@ -46,21 +46,24 @@
 
         if (!isAuthorized) {
           event.preventDefault();
-        }
-
-        if (initPromise) {
           redirectTo = {
             state: next,
             params: nextParams
           };
-        } else {
-          // TODO: maybe add toast with error message
+        } else if (event.defaultPrevented) {
+          event.defaultPrevented = false;
         }
 
       }
 
     }));
 
+    salesModuleRun();
+
+
+    function responsibility() {
+      return _.get(currentSalesman, 'responsibility') || Auth.role('saleType');
+    }
 
     function logout() {
       currentSalesman = undefined;
@@ -82,6 +85,7 @@
       }
 
       if (redirectTo) {
+        console.info('SalesmanAuth redirect to:', redirectTo.state, redirectTo.params);
         $state.go(redirectTo.state, redirectTo.params);
         redirectTo = false;
       }
@@ -118,7 +122,9 @@
     function watchCurrent(scope, callback) {
       let un1 = scope.$on(LOGIN_EVENT, () => callback(currentSalesman));
       let un2 = scope.$on(LOGOUT_EVENT, () => callback(null));
-      callback(currentSalesman);
+      if (isAuthorized) {
+        callback(currentSalesman);
+      }
       scope.$on('$destroy', () => {
         un1();
         un2();
@@ -143,9 +149,9 @@
 
     function salesModuleRun() {
 
-      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet'];
+      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage'];
 
-      const {Workflow, SaleOrder, Outlet} = Schema.models();
+      const {Workflow, SaleOrder, Outlet, NewsMessage, UserNewsMessage} = Schema.models();
 
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
@@ -161,30 +167,45 @@
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
-          getWorkflow('SaleOrder.v2', 'workflowSaleOrder');
-
-          if (Auth.isAuthorized('supervisor')) {
-            getWorkflow('SaleOrder.v2.sv', 'workflowSaleOrderSupervisor');
-          }
-
-          function setBadges() {
-            let filter = SalesmanAuth.makeFilter({processing: 'draft'});
-            SaleOrder.groupBy(filter)
-              .then(data => {
-                data = _.filter(data, 'totalCost');
-                Menu.setItemData('sales.saleOrders', {badge: data.length});
-              });
-          }
-
           $rootScope.$on('menu-show', setBadges);
 
           setBadges();
+
+          return getWorkflow('SaleOrder.v2', 'workflowSaleOrder')
+            .then(() => {
+
+              if (Auth.isAuthorized('supervisor')) {
+                return getWorkflow('SaleOrder.v2.sv', 'workflowSaleOrderSupervisor');
+              } else {
+                return getWorkflow('SaleOrder.v2', 'workflowSaleOrderSupervisor');
+              }
+
+            });
+
+          function setBadges() {
+
+            let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+            SaleOrder.groupBy(filter)
+              .then(data => {
+                Menu.setItemData('sales.saleOrders', {badge: data.length});
+              });
+
+            NewsMessage.findAll()
+              .then(() => {
+                return UserNewsMessage.findAll();
+              })
+              .then(() => {
+                let unRated = _.filter(NewsMessage.getAll(), message => !_.get(message, 'userNewsMessage.rating'));
+                Menu.setItemData('newsFeed', {badge: unRated.length});
+              });
+          }
 
         });
 
       function getWorkflow(code, codeAs) {
 
-        Workflow.findAll({code})
+        return Workflow.findAll({code})
           .then(workflow => {
             SaleOrder.meta[codeAs] = _.get(_.first(workflow), 'workflow');
           })
@@ -213,7 +234,6 @@
         }
 
       }
-
 
     }
 

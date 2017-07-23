@@ -122,7 +122,8 @@
       let needRoles = _.get(next, 'data.auth');
 
       if (needRoles && !event[needRoles]) {
-        console.warn(`Should be prevented state change to ${next.name} from ${from.name} by ${needRoles}`);
+        event.preventDefault();
+        console.info(`Should be prevented state change to ${next.name} from ${from.name} by ${needRoles}`);
       }
 
     });
@@ -171,6 +172,10 @@
 
       roles: () => {
         return roles && roles.roles;
+      },
+
+      role: code => {
+        return _.get(roles.roles, code);
       }
 
     });

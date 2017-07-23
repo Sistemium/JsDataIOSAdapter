@@ -8,7 +8,9 @@
     bindings: {
       currentItem: '=',
       initItemId: '<',
-      currentTeam: '='
+      currentTeam: '=',
+      campaigns: '=',
+      busy: '='
     },
 
     controller: campaignFilterPopoverController,
@@ -38,27 +40,29 @@
           vm.campaignGroups = groups;
 
           if (vm.initItemId) {
-            campaignGroupsSearch(vm.initItemId);
             vm.currentItem = _.find(groups, {id: vm.initItemId});
-            if (vm.currentItem) return;
+            if (vm.currentItem) {
+              campaignGroupsSearch(vm.currentItem);
+              return;
+            }
           }
+
           vm.currentItem = _.find(vm.campaignGroups, group => group.dateB <= today && today <= group.dateE);
-          campaignGroupsSearch(vm.currentItem.id);
+          campaignGroupsSearch(vm.currentItem);
 
         });
 
 
     }
 
-    function campaignGroupsSearch(campaignGroupId) {
+    function campaignGroupsSearch(campaignGroup) {
 
-      let filter = {campaignGroupId: campaignGroupId};
-
-      return Campaign.findAllWithRelations(filter)(['CampaignPicture'])
+      vm.busy = Campaign.findAllWithRelations(Campaign.meta.filterByGroup(campaignGroup))(['CampaignPicture'])
         .then(campaigns => {
 
-          let campaignsFilteredByPhoto = _.filter(campaigns, (elem) => {
-            return elem.campaignPictures.length > 0
+          let campaignsFilteredByPhoto = _.filter(campaigns, campaign => {
+            campaign.showAllPhotos = false;
+            return (campaign.photoCount = _.get(campaign, 'campaignPictures.length'));
           });
 
           vm.teams = _.map(_.groupBy(campaignsFilteredByPhoto, 'teamName'), (campaigns, name) => {
@@ -67,12 +71,14 @@
             };
           });
 
+          vm.campaigns = campaignsFilteredByPhoto;
+
         });
 
     }
 
     function itemClick(item) {
-      campaignGroupsSearch(item.id);
+      campaignGroupsSearch(item);
       vm.isGroupPopoverOpen = false;
       vm.currentItem = item;
       vm.currentTeam = '';

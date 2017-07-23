@@ -4,11 +4,13 @@
 
   function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth, localStorageService, saEtc, IOS) {
 
-    const {Debt, Outlet, Cashing, Partner} = Schema.models();
+    const {Debt, Outlet, Cashing, Partner, Responsibility} = Schema.models();
 
     const vm = saControllerHelper
       .setup(this, $scope)
       .use({
+
+        responsibilities: Responsibility.getAll(),
 
         itemClick,
         totalCashed,
@@ -16,7 +18,8 @@
         totalOverdue,
         onStateChange,
         totalCashedClick,
-        restoreScrollPosition
+        restoreScrollPosition,
+        responsibilityClick
 
       });
 
@@ -40,6 +43,11 @@
     /*
      Functions
      */
+
+    function responsibilityClick(responsibility) {
+      responsibility.toggle();
+      refresh();
+    }
 
     function saveScrollPosition() {
       return localStorageService.set('debtByOutlet.scroll', _.get(getScrollerElement(), 'scrollTop'));
@@ -117,7 +125,11 @@
 
           let outletById = _.groupBy(outlets, 'id');
 
-          return Debt.groupBy({}, ['outletId'])
+          let where = Responsibility.meta.jsdFilter();
+
+          if (!where) return [];
+
+          return Debt.groupBy({where}, ['outletId'])
             .then(debtsByOutlet => {
               return _.filter(debtsByOutlet, debt => outletById[debt.outletId]);
             });
@@ -135,14 +147,17 @@
 
     function getOverdue(debtsByOutlet) {
 
-      let where = {
+      let responsibility = Responsibility.meta.jsdFilter();
+      if (!responsibility) return debtsByOutlet;
+
+      let where = _.assign({
         dateE: {'<=': moment().format()}
-      };
+      }, responsibility);
 
       let filter = {where};
 
       if (!IOS.isIos()) {
-        filter = {isOverdue: true};
+        filter.isOverdue = true;
       }
 
       return Debt.groupBy(filter, ['outletId'])

@@ -5,7 +5,7 @@
   angular.module('webPage')
     .config(function (stateHelperProvider) {
 
-      var prePreOrders = {
+      const prePreOrders = {
 
         name: 'prePreOrders',
         url: '/prePreOrders?state',
@@ -30,7 +30,7 @@
 
       };
 
-      var visit = {
+      const visit = {
 
         name: 'visit',
         url: '/visit?visitId',
@@ -45,7 +45,7 @@
 
       };
 
-      var visitCreate = {
+      const visitCreate = {
 
         name: 'visitCreate',
         url: '/visitCreate?visitId',
@@ -62,7 +62,7 @@
 
       };
 
-      var addOutletToPartner = {
+      const addOutletToPartner = {
 
         name: 'addOutletToPartner',
         url: '/partner/:id/addOutlet',
@@ -77,7 +77,7 @@
 
       };
 
-      var partner = {
+      const partner = {
 
         name: 'partner',
         url: '/partner/:id',
@@ -90,7 +90,7 @@
 
       };
 
-      var editPartner = {
+      const editPartner = {
 
         name: 'editPartner',
         url: '/partner/:id/edit',
@@ -105,10 +105,10 @@
 
       };
 
-      var outlet = {
+      const outlet = {
 
         name: 'outlet',
-        url: '/outlet/:id',
+        url: '/outlet/:id?showLocation',
 
         templateUrl: 'app/domain/sales/views/outlet.html',
         controller: 'OutletController',
@@ -118,7 +118,7 @@
 
       };
 
-      var addOutlet = {
+      const addOutlet = {
 
         name: 'addOutlet',
         url: '/addOutlet',
@@ -133,7 +133,7 @@
 
       };
 
-      var editOutlet = {
+      const editOutlet = {
 
         name: 'editOutlet',
         url: '/outlet/:id/edit',
@@ -148,7 +148,7 @@
 
       };
 
-      var territory = {
+      const territory = {
 
         name: 'territory',
         url: '/territory',
@@ -159,7 +159,7 @@
 
       };
 
-      var salesTerritory = _.assign({
+      const salesTerritory = _.assign({
 
         data: {
           title: 'Клиенты'
@@ -169,7 +169,7 @@
 
       }, territory);
 
-      var visits = {
+      const visits = {
 
         name: 'visits',
         url: '/visits?date',

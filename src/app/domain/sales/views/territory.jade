@@ -39,7 +39,8 @@ hr(ng-hide='vm.hideHashes')
         ng-repeat='o in p.outlets | orderBy:"address"'
         ng-class='{blocked: o.isActive === false}'
         )
-          a.green(ng-if='o.locationId')
+          span.comment-text(ng-if='o.commentText') {{ o.commentText }}
+          a.green(ng-if='o.locationId' href ng-click='vm.outletLocationClick(o)')
             i.glyphicon.glyphicon-map-marker
           a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
 

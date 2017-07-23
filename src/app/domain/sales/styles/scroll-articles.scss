@@ -22,6 +22,26 @@
     display: block;
   }
 
+  a.minus {
+
+    border: solid 1px $border-gray;
+    padding: 0 4px 0 3px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-right: 1em;
+
+    color: $gray !important;
+
+    @include responsive-only(xxs) {
+      display: none;
+    }
+
+    i {
+      top: 2px;
+    }
+
+  }
+
   img {
 
     margin: -1px !important;
@@ -93,9 +113,10 @@
     margin-right: 2px;
 
     button {
-      padding: 3px 5px;
+
+      padding: 0px 5px;
       width: 29px;
-      height: 27px;
+      height: 24px;
       font-size: 13px;
       line-height: 1.5;
       border-radius: 3px;
@@ -120,12 +141,15 @@
   }
 
   .article-name-third {
-    width: 100%;
-    @extend %flex-row;
-    justify-content: flex-end;
 
-    & > div {
-      display: flex;
+    width: 100%;
+    //@extend %flex-row;
+    //justify-content: flex-end;
+    min-height: 20px;
+    text-align: right;
+
+    > div {
+      //display: flex;
       overflow: scroll;
 
       & > i.red {
@@ -133,7 +157,7 @@
         top: 0;
       }
 
-      & > small.gray > span {
+      span {
         white-space: nowrap;
       }
 
@@ -148,8 +172,7 @@
   }
 
   .article-wrapper {
-    width: 70%;
-    @extend .flex-1;
+    flex: 1;
     min-width: 0;
   }
 
@@ -157,6 +180,7 @@
 
     display: flex;
     width: 100%;
+    min-height: 20px;
 
     .name-first {
       @extend .ellipsis;
@@ -176,6 +200,12 @@
     quantity-edit {
       flex-shrink: 0;
       white-space: nowrap;
+      font-size: 110%;
+      min-width: 60px;
+      text-align: right;
+      span.ng-binding {
+        color: $green;
+      }
     }
 
   }
@@ -190,7 +220,8 @@
 
     width: 100%;
     color: gray;
-    display: inline-block;
+    display: block;
+    min-height: 20px;
 
     @extend .ellipsis;
 
@@ -201,7 +232,7 @@
   }
 
   .discount {
-    color: green;
+    color: $red;
   }
 
   .nowrap {
@@ -214,17 +245,17 @@
     font-size: 85%;
   }
 
-  .compDiscount {
+  .flag {
+    border-color: $primary-color;
+    background-color: $primary-color;
+    color: $white;
 
-    &.flag {
-      border-color: $primary-color;
+    &:hover {
       background-color: $primary-color;
-      color: $white;
-
-      &:hover {
-        background-color: $primary-color;
-      }
     }
+  }
+
+  .compDiscount {
 
     @extend %flaggable;
 

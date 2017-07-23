@@ -35,6 +35,27 @@
         teamName: ['name', teamNameFn],
         title: ['name', titleFn]
 
+      },
+
+      omit: ['photoCount', 'showAllPhotos'],
+
+      meta: {
+
+        filterByGroup: function (campaignGroup) {
+
+          let where = {
+            dateB: {
+              "<=": campaignGroup.dateE
+            },
+            dateE: {
+              ">=": campaignGroup.dateB
+            }
+          };
+
+          return {where};
+
+        }
+
       }
 
     });

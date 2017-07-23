@@ -80,7 +80,7 @@ campaign-popover {
 
     @include responsive-only(gt-xs) {
       max-width: 400px;
-      font-size: 15px;
+      //font-size: 15px;
 
       #campaign-popover-scroll {
         width: 359px;
@@ -131,6 +131,7 @@ campaign-popover {
         .name {
           @extend .ellipsis;
           margin-right: 10px;
+          font-weight: bold;
         }
 
         .pictures {

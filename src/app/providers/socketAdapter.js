@@ -4,26 +4,32 @@
 
   angular.module('Models').service('SocketAdapter', function (Sockets) {
 
-    var DEBUG = debug('stg:SocketAdapter');
-    var Defaults = function () {
-    };
-    var defaultsPrototype = Defaults.prototype;
+    const DEBUG = debug('stg:SocketAdapter');
+    const Defaults = function () {};
+
+    const defaultsPrototype = Defaults.prototype;
+
     defaultsPrototype.basePath = '';
 
-    var SocketAdapter = function (options) {
-      options || (options = {});
+    function SocketAdapter(options) {
+
       this.defaults = new Defaults();
-      _.assign(this.defaults, options);
-    };
+      _.assign(this.defaults, options || {});
+
+    }
 
     function emit(options) {
-      var q = Sockets.emitQ('jsData', options);
+
+      let q = Sockets.emitQ('jsData', options);
+
       q.then(function (data) {
         DEBUG('emit:success', options.resource, data, options);
       }, function (err) {
         DEBUG('emit:catch', err, options);
       });
+
       return q;
+
     }
 
     function paramsToOptions(params, options) {
@@ -44,12 +50,14 @@
 
       if (where) {
 
-        _.each(where, function (val, key) {
+        _.each(where, (val, key) => {
           if (val.likei) {
             parsed['searchFields:'] = key;
             parsed['searchFor:'] = val.likei;
           }
         });
+
+        parsed['where:'] = angular.toJson(where);
 
       }
 

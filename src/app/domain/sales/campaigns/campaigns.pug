@@ -1,9 +1,11 @@
-section.campaigns(cg-busy='vm.cgBusy')
+section.campaigns(cg-busy='vm.busy')
 
   campaign-filter-popover(
   current-item='vm.campaignGroup'
   init-item-id='vm.initGroupId'
   current-team='vm.currentTeam'
+  campaigns='vm.campaigns'
+  busy='vm.busy'
   )
 
   .scroll-y.selectivity-increasing-class(resize resize-offset-top='5')

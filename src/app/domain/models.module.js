@@ -7,7 +7,7 @@
       || 'https://api.sistemium.com/v4d/dev/'
     ;
 
-  angular.module('Models', ['sistemium'])
+  angular.module('Models', ['sistemium', 'LocalStorageModule'])
     .config(ModelsConfig)
     .service('Schema', Schema)
     .service('models', Models)

@@ -5,6 +5,13 @@ cg-busy='vm.cgBusy'
   //.alert.alert-default
 
   .header
+    .responsibility-filter
+      a.flag(
+      href
+      ng-click='vm.responsibilityClick(item)'
+      ng-class='{flagged: item.flagged}'
+      ng-repeat='item in vm.responsibilities track by item.id'
+      ) {{ ::item.name }}
     .totals
       label.total.overdue(ng-if='vm.totalOverdue()') Просрочено
       label.total.cashed(ng-if='vm.totalCashed()') На руках

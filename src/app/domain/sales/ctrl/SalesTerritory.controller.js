@@ -19,6 +19,7 @@
       refresh,
       partnerClick,
       outletClick,
+      outletLocationClick,
       addOutletClick,
       hashClick,
       onStateChange,
@@ -77,7 +78,7 @@
     }
 
     function visitsIsRootState() {
-      return (rootState == 'sales.visits');
+      return rootState === 'sales.visits';
     }
 
     function rowHeight(partner) {
@@ -130,12 +131,17 @@
       $state.go('.partner', {id: partner.id});
     }
 
-    function outletClick(outlet) {
+    function outletClick(outlet, params) {
       if (visitsIsRootState()) {
         return $state.go(`${rootState}.outlet.visitCreate`, {id: outlet.id});
       }
-      $state.go('.outlet', {id: outlet.id});
+      $state.go(`.outlet`, _.assign({id: outlet.id}, params || {}));
     }
+
+    function outletLocationClick(outlet) {
+      outletClick(outlet, {showLocation: true})
+    }
+
 
     function addOutletClick() {
       $state.go('.addOutlet');

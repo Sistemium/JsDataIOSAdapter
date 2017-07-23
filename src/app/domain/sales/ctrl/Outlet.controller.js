@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers, $timeout) {
 
     // TODO: allow to add/change location for an existing outlet
 
@@ -24,7 +24,7 @@
       isEditable: $state.current.name === 'sales.territory.outlet',
 
       visitClick: (visit) => $state.go('.visit', {visitId: visit.id}),
-      mapClick: () => vm.popover = false,
+      mapClick: () => vm.mapPopoverIsOpen = false,
 
       refresh,
       newVisitClick,
@@ -53,6 +53,15 @@
           }
 
         });
+
+    });
+
+    $timeout(() => {
+      vm.mapPopoverIsOpen = $state.params.showLocation === 'true';
+      vm.watchScope('vm.mapPopoverIsOpen', () => {
+        let showLocation = vm.mapPopoverIsOpen ? true : '';
+        $state.go('.', {showLocation}, {notify: false});
+      });
 
     });
 

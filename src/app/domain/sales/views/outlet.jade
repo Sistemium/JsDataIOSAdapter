@@ -15,9 +15,9 @@ section.ui-view.outlet
       i.glyphicon.glyphicon-camera
     button.btn.btn-default.ml-5(
     popover-placement="bottom-left auto"
-    popover-trigger='outsideClick'
+    popover-trigger='"outsideClick"'
     uib-popover-template="'app/domain/sales/views/location.html'"
-    popover-is-open='vm.popover'
+    popover-is-open='vm.mapPopoverIsOpen'
     type='button'
     ng-class='{green: vm.map}'
     ng-disabled='!vm.map'
