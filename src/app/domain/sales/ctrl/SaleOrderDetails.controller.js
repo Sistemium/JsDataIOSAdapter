@@ -33,13 +33,6 @@
      Listeners
      */
 
-    // FIXME: copy-pasted from CatalogueSaleOrder.controller
-
-    vm.watchScope('vm.saleOrder.processingMessage', processingMessage => {
-      if (!processingMessage) return;
-      _.each(vm.saleOrder.processingMessages(), msg => toastr.error(msg));
-    });
-
     vm.watchScope('vm.saleOrder.date', newValue => {
       if (!newValue) return;
       vm.rebindAll(SaleOrder, {date: newValue}, 'draftSaleOrders');
