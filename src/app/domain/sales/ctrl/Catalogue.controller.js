@@ -602,7 +602,9 @@
       if (!priceType.prices()) {
         DEBUG('filterStock', 'cachedFindAll Price');
         return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000})
-          .then(filterStock);
+          .then(prices => {
+            return (_.isEmpty(prices)) ? prices : filterStock();
+          });
       }
 
       DEBUG('filterStock', 'prices');
