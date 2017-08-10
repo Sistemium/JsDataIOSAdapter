@@ -57,7 +57,7 @@
         hasMany: {
           StockBatch: {
             localField: 'stockBatches',
-            foreignKey: 'article'
+            foreignKey: 'articleId'
           },
           SaleOrderPosition: {
             localField: 'saleOrders',
@@ -106,12 +106,12 @@
           return volume / this.packageRel;
         },
 
-        boxPcs: function (volume) {
+        boxPcs: function (volume, noHalves) {
 
           var rel = this.packageRel;
           var box = rel > 1 ? Math.floor(volume / rel) : 0;
           var pcs = volume - box * rel;
-          let half = pcs * 2 === rel;
+          let half = pcs * 2 === rel && !noHalves;
 
           return {
             box: box,
