@@ -30,7 +30,7 @@
     }
 
     function weighingRequired() {
-      return true;
+      return false;
     }
 
     function weighingPossible() {
