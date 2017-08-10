@@ -113,7 +113,7 @@
 
           let ps = _.first(pss);
 
-          if (!ps) {
+          if (!ps && $state.current.name !== 'picking.orderList') {
 
             $state.go('picking.orderList', {state: 'notdone'});
             return;
@@ -146,7 +146,7 @@
                     if (!_.endsWith($state.current.name, 'selectedOrders')) {
                       $state.go('picking.orderList.selectedOrders');
                     } else {
-                      $state.go('^');
+                      // $state.go('^');
                     }
                   } else {
                     $state.go('picking.orderList', {state: 'notdone'});
@@ -261,13 +261,13 @@
               }
             });
 
+            setSelected();
+
+            if (!vm.selectedItems.length) {
+              findUnfinishedPickingSession();
+            }
+
           });
-
-          if (!vm.selectedItems.length && vm.mode !== 'orderList') {
-            findUnfinishedPickingSession();
-          }
-
-          setSelected();
 
         });
     }
