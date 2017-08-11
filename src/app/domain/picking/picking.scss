@@ -1,0 +1,25 @@
+@import "../../styles/variables";
+
+.picking-article-list {
+
+  small.list-group-item-text, .list-group-item-heading {
+
+    * + * {
+      margin-left: 4px;
+    }
+
+    .tag {
+      border: solid 1px $border-gray;
+      padding: 0 5px;
+      display: inline-block;
+      background: none;
+      border-radius: 3px;
+      a {
+        color: $green;
+        font-weight: 500;
+      }
+    }
+
+  }
+
+}

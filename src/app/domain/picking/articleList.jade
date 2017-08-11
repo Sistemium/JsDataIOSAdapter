@@ -3,24 +3,32 @@ h3.clearfix(ng-show='vm.title') {{ vm.title }}
 
 section.sa-error-widget
 
-section.ui-view.scroll-y(resize resize-offset-top='50')
+section.ui-view.scroll-y.picking-article-list(resize resize-offset-top='50')
   h4(ng-repeat-start='group in vm.groups track by group.name') {{ ::group.name }}
   ul.list-group(ng-repeat-end)
     li.list-group-item.display-flex.animate-show(
       ng-repeat='item in group.articles | orderBy: vm.orderBy as filteredResult track by item.id'
     )
       //.sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
+
       .flex-1
+
         h5.list-group-item-heading
           a(ui-sref='.article({id:item.id})')
             | {{ ::item.article.firstName }}&nbsp;{{ ::item.article.pieceVolume | stnumber:1 }}
+
+          small.gray (1&nbsp;x&nbsp;{{ ::item.article.packageRel }})
+
         small.list-group-item-text
+
+          .tag(
+          ng-repeat='tag in ::item.article.tags track by tag.code'
+          ng-class='::tag.code'
+          )
+            a {{ tag.label }}
+
           span {{ ::item.article.lastName }}
-          = ' '
-          span.gray (1&nbsp;x&nbsp;{{ ::item.article.packageRel }})
-          = ' '
-          //span.gray {{ item.article.category }}
-          //= ' '
+
           span {{ ::item.article.factory }}
 
       .flex-right
