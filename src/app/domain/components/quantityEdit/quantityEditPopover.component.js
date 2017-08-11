@@ -140,7 +140,7 @@
     }
 
     function setQty() {
-      let boxPcs = position ? position.article.boxPcs(position.volume) : {};
+      let boxPcs = position ? position.article.boxPcs(position.volume, false) : {};
       _.assign(vm, {
         boxes: boxPcs.box,
         bottles: boxPcs.pcs

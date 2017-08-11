@@ -103,7 +103,7 @@
               }, 0);
 
               const article = positions[0].Article;
-              const boxPcs = article && article.boxPcs(totalVolume);
+              const boxPcs = article && article.boxPcs(totalVolume, true);
               const picked = isPicked(positions);
               const totalUnPicked = totalUnPickedVolume (positions);
 

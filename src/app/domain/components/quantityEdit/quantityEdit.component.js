@@ -31,7 +31,7 @@
 
         if (!article || !position || !position.volume) return;
 
-        return article.boxPcs(position.volume).full;
+        return article.boxPcs(position.volume, false).full;
 
       }
 
