@@ -108,9 +108,11 @@
 
         boxPcs: function (volume, noHalves) {
 
-          var rel = this.packageRel;
-          var box = rel > 1 ? Math.floor(volume / rel) : 0;
-          var pcs = volume - box * rel;
+          noHalves = noHalves || _.isUndefined(noHalves);
+
+          let rel = this.packageRel;
+          let box = rel > 1 ? Math.floor(volume / rel) : 0;
+          let pcs = volume - box * rel;
           let half = pcs * 2 === rel && !noHalves;
 
           return {
