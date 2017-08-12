@@ -134,12 +134,10 @@
                   vm.selectedItems = PO.getAll(poIds);
                   vm.hasSelected = !!vm.selectedItems.length;
 
-                  _.each(vm.selectedItems, (po) => {
-                    po.selected = true;
-                  });
+                  _.each(vm.selectedItems, po => po.selected = true);
 
                   if (vm.hasSelected) {
-                    console.info('vm.hasSelected');
+
                     if (!_.endsWith($state.current.name, 'selectedOrders')) {
                       $state.go('picking.orderList.selectedOrders');
                     } else {
