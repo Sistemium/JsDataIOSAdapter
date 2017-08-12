@@ -131,10 +131,7 @@
               }, {bypassCache: true, cacheResponse: false})
                 .then(() => {
 
-                  vm.selectedItems = PO.filter({
-                    where: {id: {'in': poIds}}
-                  });
-
+                  vm.selectedItems = PO.getAll(poIds);
                   vm.hasSelected = !!vm.selectedItems.length;
 
                   _.each(vm.selectedItems, (po) => {
