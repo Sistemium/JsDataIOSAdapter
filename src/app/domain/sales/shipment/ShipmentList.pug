@@ -65,7 +65,7 @@ cg-busy='vm.cgBusy'
           label Позиций:
           span {{ shipment.totalPositions() }}
 
-      .date.footer(ng-if='::shipment.isFooter && !vm.busy')
+      .date.footer(ng-if='shipment.isFooter')
         currency-value(value='shipment.totalCost')
         .spacing
 

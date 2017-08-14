@@ -49,6 +49,6 @@ section(cg-busy='vm.busy')
     button.btn.btn-primary(ng-click='vm.startPicking()')
       | Собирать
 
-  .pull-right(ng-show='vm.pickingSession && vm.shouldWeighing')
+  .pull-right(ng-show='vm.pickingSession && vm.shouldWeighing()')
     button.btn.btn-success(ng-click='vm.getWeighing()')
       | Взвесить

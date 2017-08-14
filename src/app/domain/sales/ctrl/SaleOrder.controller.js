@@ -24,12 +24,13 @@
 
       itemClick,
       newItemClick,
-      onStateChange,
       getDayClass
 
     });
 
     SalesmanAuth.watchCurrent($scope, getData);
+
+    $scope.$on('$destroy', cleanup);
 
     /*
      Listeners
@@ -41,10 +42,6 @@
     /*
      Handlers
      */
-
-    function onStateChange(to) {
-      if (!/sales.saleOrders/.test(to.name)) cleanup();
-    }
 
     /*
      Functions

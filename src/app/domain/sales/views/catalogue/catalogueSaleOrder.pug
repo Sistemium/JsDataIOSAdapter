@@ -61,3 +61,12 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
     ng-if='vm.saleOrder.totalCost'
     ng-disabled='!vm.saleOrder.isValid()'
     ) {{ label }}
+
+.alert.alert-info.processingMessage.animate-show.spaced(
+uib-alert
+ng-repeat='processingMessage in vm.saleOrder.processingMessages() track by $index'
+close='vm.saleOrder.processingMessage = null'
+)
+  strong(ng-class='vm.saleOrder.workflowStep.messageCls')
+    i.glyphicon.glyphicon-warning-sign
+  span {{ processingMessage }}

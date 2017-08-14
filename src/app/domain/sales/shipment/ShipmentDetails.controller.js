@@ -34,8 +34,12 @@
 
     function getData() {
 
-      return Shipment.find($state.params.id)
-        .then(item => item.DSLoadRelations('ShipmentPosition'))
+      let bypassCache = true;
+
+      // TODO: subscribe to socket and do not bypassCache
+
+      return Shipment.find($state.params.id, {bypassCache})
+        .then(item => item.DSLoadRelations('ShipmentPosition', {bypassCache}))
         .then(item => $q.all(_.map(item.positions, position => position.DSLoadRelations())))
         .catch(e => console.error(e));
     }

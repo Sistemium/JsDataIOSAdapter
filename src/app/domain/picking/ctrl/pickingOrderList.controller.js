@@ -113,7 +113,7 @@
 
           let ps = _.first(pss);
 
-          if (!ps) {
+          if (!ps && $state.current.name !== 'picking.orderList') {
 
             $state.go('picking.orderList', {state: 'notdone'});
             return;
@@ -131,22 +131,17 @@
               }, {bypassCache: true, cacheResponse: false})
                 .then(() => {
 
-                  vm.selectedItems = PO.filter({
-                    where: {id: {'in': poIds}}
-                  });
-
+                  vm.selectedItems = PO.getAll(poIds);
                   vm.hasSelected = !!vm.selectedItems.length;
 
-                  _.each(vm.selectedItems, (po) => {
-                    po.selected = true;
-                  });
+                  _.each(vm.selectedItems, po => po.selected = true);
 
                   if (vm.hasSelected) {
-                    console.info('vm.hasSelected');
+
                     if (!_.endsWith($state.current.name, 'selectedOrders')) {
                       $state.go('picking.orderList.selectedOrders');
                     } else {
-                      $state.go('^');
+                      // $state.go('^');
                     }
                   } else {
                     $state.go('picking.orderList', {state: 'notdone'});
@@ -261,13 +256,13 @@
               }
             });
 
+            setSelected();
+
+            if (!vm.selectedItems.length) {
+              findUnfinishedPickingSession();
+            }
+
           });
-
-          if (!vm.selectedItems.length && vm.mode !== 'orderList') {
-            findUnfinishedPickingSession();
-          }
-
-          setSelected();
 
         });
     }

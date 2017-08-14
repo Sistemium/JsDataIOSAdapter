@@ -21,11 +21,11 @@
       ['sparkling', 'игристое', /игристое/i],
       ['rose', 'розовое', /розовый|розовое|розов\./i],
       ['red', 'красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
-      ['white', 'белое', /[^A-я]бел[. ]|белое|белый/i],
+      ['white', 'белое', /([^A-я]|^)бел[. ]|белое|белый/i],
       ['semiDry', 'п/сух', /полусухое|п\/сух\.?/ig],
-      ['semiSweet', 'п/сл', /полуслад[^ ,"]*|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
+      ['semiSweet', 'п/сл', /п\/слад\.|полуслад[^ ,"]*|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
       ['dry', 'сухое', /сухое|сух[.,]+|[ .,]+сух(?=[ ]|$)/i],
-      ['sweet', 'сладкое', /[ ]+сладк[^ ,"]*|сладкое|сл\./i],
+      ['sweet', 'сладкое', /([ ]|^)+сладк[^ ,"]*|сладкое|сл\./i],
       ['brut', 'брют', /брют/i],
       ['gift', 'п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
     ];
@@ -57,7 +57,7 @@
         hasMany: {
           StockBatch: {
             localField: 'stockBatches',
-            foreignKey: 'article'
+            foreignKey: 'articleId'
           },
           SaleOrderPosition: {
             localField: 'saleOrders',
@@ -106,12 +106,14 @@
           return volume / this.packageRel;
         },
 
-        boxPcs: function (volume) {
+        boxPcs: function (volume, noHalves) {
 
-          var rel = this.packageRel;
-          var box = rel > 1 ? Math.floor(volume / rel) : 0;
-          var pcs = volume - box * rel;
-          let half = pcs * 2 === rel;
+          noHalves = noHalves || _.isUndefined(noHalves);
+
+          let rel = this.packageRel;
+          let box = rel > 1 ? Math.floor(volume / rel) : 0;
+          let pcs = volume - box * rel;
+          let half = pcs * 2 === rel && !noHalves;
 
           return {
             box: box,

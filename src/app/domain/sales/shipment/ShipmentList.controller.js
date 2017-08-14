@@ -19,7 +19,6 @@
       data: [],
       rootState,
 
-      onStateChange,
       itemClick,
       getData,
       isWideScreen,
@@ -36,6 +35,8 @@
       }
       $state.go(rootState);
     });
+
+    $scope.$on('$destroy', cleanup);
 
     /*
      Functions
@@ -111,10 +112,6 @@
       if ($event.defaultPrevented || driverPopoverOpen) return;
 
       $state.go('.item', {id: item.id});
-    }
-
-    function onStateChange(to) {
-      if (!/sales.shipmentList/.test(to.name)) cleanup();
     }
 
     function cleanup() {

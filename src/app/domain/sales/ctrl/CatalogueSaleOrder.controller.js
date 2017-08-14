@@ -68,11 +68,6 @@
     vm.onScope('kPlusButtonClick', kPlusButtonClick);
     vm.onScope('bPlusButtonClick', bPlusButtonClick);
 
-    vm.watchScope('vm.saleOrder.processingMessage', processingMessage => {
-      if (!processingMessage) return;
-      _.each(vm.saleOrder.processingMessages(), msg => toastr.error(msg));
-    });
-
     vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
       vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume');
     });

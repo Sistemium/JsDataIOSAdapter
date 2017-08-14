@@ -68,7 +68,7 @@
 
         workflowStep: ['authId', 'processing', function (authId, processing) {
           let wf = SaleOrder.meta.workflowSaleOrder;
-          if (authId && authId !== Auth.authId()) {
+          if (!authId || authId !== Auth.authId()) {
             wf = SaleOrder.meta.workflowSaleOrderSupervisor;
           }
           return _.get(wf, processing);

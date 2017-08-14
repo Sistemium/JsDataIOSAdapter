@@ -2,11 +2,6 @@
 
 sale-order-alert {
 
-  .alert {
-    margin-bottom: 11px;
-    @extend %rounded-borders;
-  }
-
   .header {
 
     @extend %flex-center;
@@ -18,6 +13,15 @@ sale-order-alert {
       min-height: 40px;
     }
 
+  }
+
+}
+
+.catalogue {
+
+  .alert {
+    margin-bottom: 11px;
+    @extend %rounded-borders;
   }
 
 }

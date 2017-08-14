@@ -56,7 +56,7 @@
 
               let position = _.last(_.orderBy(positions,'shipment.date'));
 
-              vm.volume = _.get(vm.article.boxPcs(position.volume), 'full');
+              vm.volume = _.get(vm.article.boxPcs(position.volume, false), 'full');
               vm.date = _.get(position, 'shipment.date');
               vm.price = _.get(position, 'price');
 

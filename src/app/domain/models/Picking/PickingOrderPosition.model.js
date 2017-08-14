@@ -64,7 +64,7 @@
           },
 
           boxPcs: function (volume) {
-            return this.Article && this.Article.boxPcs (angular.isUndefined(volume) ? this.volume : volume) || {};
+            return this.Article && this.Article.boxPcs(angular.isUndefined(volume) ? this.volume : volume, true) || {};
           },
 
           linkStockBatch: function (sb, code, volume) {
@@ -88,7 +88,7 @@
           },
 
           unPickedBoxPcs: function () {
-            return this.boxPcs (this.unPickedVolume());
+            return this.boxPcs(this.unPickedVolume(), true);
           }
 
         },
@@ -103,7 +103,7 @@
               }, 0);
 
               const article = positions[0].Article;
-              const boxPcs = article && article.boxPcs(totalVolume);
+              const boxPcs = article && article.boxPcs(totalVolume, true);
               const picked = isPicked(positions);
               const totalUnPicked = totalUnPickedVolume (positions);
 

@@ -63,16 +63,7 @@
 
         positionsCountRu,
 
-        egaisCached: function () {
-
-          if (!this.cachedEgais) {
-            this.cachedEgais = this.egais || null;
-          }
-
-          return this.cachedEgais;
-
-        },
-
+        egaisCached: cachedValue('egaisCached'),
         totalCost: cachedValue('totalCost'),
         totalCostDoc: cachedValue('totalCostDoc'),
         totalPositions: cachedValue('positions')
@@ -96,6 +87,7 @@
 
     function setCaches(shipment) {
       caches[shipment.id] = {
+        egaisCached: shipment.egais || null,
         totalCostDoc: _.sumBy(shipment.positions, pos => pos.volume * pos.priceDoc) || null,
         totalCost: Schema.aggregate('cost').sum(shipment.positions) || null,
         positions: shipment.positions.length || null
@@ -107,7 +99,7 @@
     }
 
     function ifPositionsChanged() {
-      return Schema.model('ShipmentPosition').lastModified();
+      return `${Schema.model('ShipmentPosition').lastModified()}|${Schema.model('ShipmentEgais').lastModified()}`;
     }
 
     function positionsCountRu(count) {

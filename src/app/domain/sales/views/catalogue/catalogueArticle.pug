@@ -21,7 +21,7 @@ before-tag-name='li'
 
     .article-wrapper(
     ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
-    ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
+    ng-disabled='vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )
       .article-name-first
 
@@ -46,6 +46,7 @@ before-tag-name='li'
           i.glyphicon.glyphicon-minus
 
         quantity-edit(
+        ng-disabled='vm.restrictedArticles[stock.articleId]'
         ng-if='vm.saleOrder'
         article='stock.article'
         sale-order='vm.saleOrder'

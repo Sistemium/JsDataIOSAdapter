@@ -47,7 +47,7 @@
           name: a.name,
           speakable: _.trim(say),
           volume: pickedVolume
-            ? a.boxPcs(pickedVolume).full
+            ? a.boxPcs(pickedVolume, true).full
             : say
         };
       }
@@ -71,7 +71,7 @@
             unp: unp,
             num: $scope.vm.orders.indexOf(pop.PickingOrder) + 1,
             // TODO: check packageRels
-            volume: Language.speakableBoxPcs(a.boxPcs(unp))
+            volume: Language.speakableBoxPcs(a.boxPcs(unp, true))
           });
         }
 

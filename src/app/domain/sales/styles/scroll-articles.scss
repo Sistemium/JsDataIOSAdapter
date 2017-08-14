@@ -284,6 +284,18 @@
       font-weight: bold;
     }
 
+    &.red {
+      a {
+        color: $red;
+      }
+    }
+
+    &.rose {
+      a {
+        color: deeppink;
+      }
+    }
+
   }
 
   .pieceVolume {
