@@ -96,7 +96,7 @@
             this.outletId &&
             this.salesmanId &&
             this.contractId &&
-            (Auth.getOrg() !== 'bs' ? this.priceTypeId : true);
+            this.priceTypeId;
         },
 
         safeSave: function onSaleOrderChange() {

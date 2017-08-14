@@ -526,7 +526,7 @@
         .then(() => {
 
           // TODO: move to model
-          return OutletSalesmanContract.groupBy({}, [''])
+          return OutletSalesmanContract.groupBy({}, ['priceTypeId'])
             .then(auths => {
 
               _.each(auths, auth => {
@@ -601,10 +601,7 @@
 
       if (!priceType.prices()) {
         DEBUG('filterStock', 'cachedFindAll Price');
-        return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000})
-          .then(prices => {
-            return (_.isEmpty(prices)) ? prices : filterStock();
-          });
+        return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000});
       }
 
       DEBUG('filterStock', 'prices');
