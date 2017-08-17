@@ -113,6 +113,7 @@
     }
 
     .egais {
+
       min-width: $width-egais;
 
       @include responsive-only(lt-sm) {
@@ -120,6 +121,12 @@
         position: absolute;
         right: 5px;
         top: 10px;
+      }
+
+      egais-popover > a > ng-transclude {
+        min-width: $width-egais-inner;
+        text-align: center;
+        display: inline-block;
       }
 
     }
