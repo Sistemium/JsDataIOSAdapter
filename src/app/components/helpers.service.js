@@ -13,7 +13,8 @@
       ScrollHelper,
       ClickHelper,
       saMedia,
-      moment
+      moment,
+      DomainOption
     ) {
 
       return {
@@ -27,7 +28,8 @@
         ScrollHelper,
         ClickHelper,
         saMedia,
-        moment
+        moment,
+        DomainOption
 
       };
 

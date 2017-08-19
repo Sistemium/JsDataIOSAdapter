@@ -10,11 +10,16 @@
     };
 
     return {
-      hasInactiveActions
+      hasInactiveActions,
+      hasSaleOrderKS
     };
 
     function hasInactiveActions() {
       return customerCode() === 'bs';
+    }
+
+    function hasSaleOrderKS() {
+      return customerCode() === 'r50';
     }
 
     function customerCode () {
