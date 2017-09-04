@@ -31,12 +31,19 @@
       value: 0
     };
 
+    const sortableOptions = {
+      containment: '#scrollable-container',
+      scrollableContainer: '#scrollable-container'
+    };
+
     angular.extend(vm, {
 
       progress: progress,
 
       selectedItems: selected,
       totals: PO.agg(vm, 'selectedItems'),
+
+      sortableOptions,
 
       startPicking,
       finishPicking,

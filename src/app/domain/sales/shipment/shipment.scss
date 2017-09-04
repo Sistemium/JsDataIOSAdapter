@@ -1,25 +1,26 @@
 @import "../../../styles/variables";
 
-$font-size-sm: 14px;
-$table-padding-left: 5;
-
-$width-driver: 110px;
-$width-ndoc: 100px;
-$width-egais: 60px;
-$width-salesman: 110px;
-$width-outlet: 330px;
-$width-cost: 100px;
-$width-positions: 100px;
-
-$gray-border-color: #DDD;
-$position-hover-color: #CFE1EE;
-
-$font-weight-bold: 600;
-$font-weight-normal: 400;
-
-$line-height-basic: 20px;
-
 .shipment-list {
+
+  $font-size-sm: 14px;
+  $table-padding-left: 5;
+
+  $width-driver: 110px;
+  $width-ndoc: 120px;
+  $width-egais: 60px;
+  $width-egais-inner: 30px;
+  $width-salesman: 110px;
+  $width-outlet: 330px;
+  $width-cost: 100px;
+  $width-positions: 100px;
+
+  $gray-border-color: #DDD;
+  $position-hover-color: #CFE1EE;
+
+  $font-weight-bold: 600;
+  $font-weight-normal: 400;
+
+  $line-height-basic: 20px;
 
   padding: 0 5px;
 
@@ -112,6 +113,7 @@ $line-height-basic: 20px;
     }
 
     .egais {
+
       min-width: $width-egais;
 
       @include responsive-only(lt-sm) {
@@ -119,6 +121,12 @@ $line-height-basic: 20px;
         position: absolute;
         right: 5px;
         top: 10px;
+      }
+
+      egais-popover > a > ng-transclude {
+        min-width: $width-egais-inner;
+        text-align: center;
+        display: inline-block;
       }
 
     }
