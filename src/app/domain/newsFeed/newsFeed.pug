@@ -3,7 +3,7 @@
     .news(ng-if='vm.isAdmin')
       .no-news
         p {{vm.newsFeedHeader()}}
-        p Предлагаем
+        p(ng-if='vm.isNewsMaker()') Предлагаем
           a(
           ng-click='vm.goToCreateNews()'
           ) cоздать новость.

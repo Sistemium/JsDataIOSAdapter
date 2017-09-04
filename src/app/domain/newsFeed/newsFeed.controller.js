@@ -24,7 +24,8 @@
       updateNews,
       newsHasChanges,
       revertChanges,
-      newsFeedHeader
+      newsFeedHeader,
+      isNewsMaker
 
     });
 
@@ -214,6 +215,9 @@
     function newsFeedHeader() {
       return vm.news.length ? `Количество новостей — ${vm.news.length}.` : `Новостей не найдено.`;
     }
+
+    function isNewsMaker() {
+      return false;
     }
 
   }
