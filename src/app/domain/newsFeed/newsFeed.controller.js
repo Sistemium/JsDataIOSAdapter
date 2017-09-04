@@ -212,7 +212,8 @@
     }
 
     function newsFeedHeader() {
-      return vm.news.count ? `Количество новостей ${vm.news.length}.` : 'Новостей не найдено.';
+      return vm.news.length ? `Количество новостей — ${vm.news.length}.` : `Новостей не найдено.`;
+    }
     }
 
   }
