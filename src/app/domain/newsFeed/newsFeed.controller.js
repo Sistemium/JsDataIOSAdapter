@@ -23,7 +23,8 @@
       editNews,
       updateNews,
       newsHasChanges,
-      revertChanges
+      revertChanges,
+      newsFeedHeader
 
     });
 
@@ -209,6 +210,11 @@
       })
 
     }
+
+    function newsFeedHeader() {
+      return vm.news.count ? `Количество новостей ${vm.news.length}.` : 'Новостей не найдено.';
+    }
+
   }
 
   angular.module('webPage')

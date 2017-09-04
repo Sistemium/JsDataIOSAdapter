@@ -2,9 +2,8 @@
   .news-feed(ng-if='!vm.busy')
     .news(ng-if='vm.isAdmin')
       .no-news
-        p(ng-if='!vm.news') Новостей не найдено. Предлагаем
-        p(ng-if='vm.news') Количество новостей {{vm.news.length}}. Предлагаем
-
+        p {{vm.newsFeedHeader()}}
+        p Предлагаем
           a(
           ng-click='vm.goToCreateNews()'
           ) cоздать новость.
