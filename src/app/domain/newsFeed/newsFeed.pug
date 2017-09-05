@@ -9,21 +9,21 @@
           ) cоздать новость.
 
       .news-repeater.scroll-y(resize resize-offset-top='15' vs-repeat='155')
-        .news-item(ng-repeat='news in vm.news track by news.id' ng-click='vm.showAdditionalInfo(news)')
+        .news-item(ng-repeat='newsMessage in vm.news track by news.id' ng-click='vm.showAdditionalInfo(news)')
           .line-1
-            label.subject {{news.subject}}
-            valid-lifetime(date-b='news.dateB' date-e='news.dateE')
+            label.subject {{newsMessage.subject}}
+            valid-lifetime(date-b='newsMessage.dateB' date-e='newsMessage.dateE')
           .line-2
             .news-body(
             )
-              p {{news.body}}
+              p {{newsMessage.body}}
           .line-3
             label Оценка:
             span(
             uib-rating
-            ng-model='news.userNewsMessage.rating'
+            ng-model='newsMessage.userNewsMessage.rating'
             max='5'
-            ng-click='vm.saveRating($event, news.userNewsMessage.rating, news.id)'
+            ng-click='vm.saveRating($event, newsMessage.userNewsMessage.rating, newsMessage.id)'
             titles='["Один", "Два", "Три", "Четыре", "Пять"]'
             enable-reset='false'
             aria-labelledby='default-rating'

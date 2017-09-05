@@ -89,13 +89,13 @@
 
     }
 
-    function saveRating(ev, val, id) {
+    function saveRating(event, newRating, newsMessageId) {
 
-      let numericRating = val || undefined;
+      let numericRating = newRating || undefined;
 
-      if (!val) {
+      if (!newRating) {
 
-        let writtenRating = ev.srcElement.title;
+        let writtenRating = event.srcElement.title;
 
         switch (writtenRating) {
           case 'Один':
@@ -120,28 +120,34 @@
 
       }
 
-      UserNewsMessage.findAll({newsMessageId: id}, {bypassCache: true}).then((rating) => {
+      UserNewsMessage.findAll({newsMessageId: newsMessageId}, {bypassCache: true})
+        .then(userNewsMessages => {
 
-        let ratingId = rating.length ? _.first(rating).id : undefined;
-        let recordRating = rating.length ? _.first(rating).rating : 0;
+          let userNewsMessage = _.first(userNewsMessages);
+          let userNewsMessageId = userNewsMessage.id;
+          let recordRating = userNewsMessage.rating;
 
-        if (numericRating && (recordRating !== numericRating)) {
+          if (numericRating && (recordRating !== numericRating)) {
 
-          let objToWrite = ratingId ? {id: ratingId, rating: numericRating, newsMessageId: id} : {
-            rating: numericRating,
-            newsMessageId: id
-          };
+            let objToWrite = userNewsMessageId ? {
+              id: userNewsMessageId,
+              rating: numericRating,
+              newsMessageId: newsMessageId
+            } : {
+              rating: numericRating,
+              newsMessageId: newsMessageId
+            };
 
-          UserNewsMessage.create(objToWrite).then(() => {
-            toastr.success('Ваша оценка принята', {timeOut: 1000});
-          });
+            UserNewsMessage.create(objToWrite).then(() => {
+              toastr.success('Ваша оценка принята', {timeOut: 1000});
+            });
 
-        }
+          }
 
-      });
+        });
 
 
-      ev.stopPropagation();
+      event.stopPropagation();
 
     }
 
