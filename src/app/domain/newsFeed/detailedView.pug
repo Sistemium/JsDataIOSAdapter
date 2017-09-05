@@ -1,11 +1,15 @@
 .detailed-view
   .news-item
     .line-1
-      label.subject {{vm.news.subject}}
-      valid-lifetime(date-b='vm.news.dateB' date-e='vm.news.dateE' ng-if='vm.news.dateE || vm.news.dateB')
+      label.subject {{vm.newsMessage.subject}}
+      valid-lifetime(
+      date-b='vm.newsMessage.dateB'
+      date-e='vm.newsMessage.dateE'
+      ng-if='vm.newsMessage.dateE || vm.newsMessage.dateB'
+      )
     .line-2
       .news-body.scroll-y(resize resize-offset-top='60')
-        p {{vm.news.body}}
+        p {{vm.newsMessage.body}}
     .line-3
 
       // TODO: Show if user has admin/editor? rights
@@ -15,17 +19,17 @@
       .rating-block
 
         .rating-mean
-          label(ng-if='vm.news.rating') Среднее:
+          label(ng-if='vm.newsMessage.rating') Среднее:
           span.flex-1
-          span {{vm.news.rating}}
+          span {{vm.newsMessage.rating}}
 
         .rating
           label Оценка:
           span(
           uib-rating
-          ng-model='vm.ratings[vm.news.id]'
+          ng-model='vm.ratings[vm.newsMessage.id]'
           max='5'
-          ng-click='vm.saveRating($event, vm.ratings[vm.news.id], vm.news.id)'
+          ng-click='vm.saveRating($event, vm.ratings[vm.newsMessage.id], vm.newsMessage.id)'
           titles='["Один", "Два", "Три", "Четыре", "Пять"]'
           enable-reset='false'
           aria-labelledby='default-rating'

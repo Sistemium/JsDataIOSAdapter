@@ -4,57 +4,57 @@ resize-offset-top='0'
 resize-property='height'
 )
 
-  .duration(ng-class='{"warning": vm.news.dateB > vm.news.dateE }')
+  .duration(ng-class='{"warning": vm.newsMessage.dateB > vm.newsMessage.dateE }')
     label.control-label Период действия
     .date-pickers
       .begin
         span.pretext.control-label С
         sab-date-picker.help-style(
-        value='vm.news.dateB'
+        value='vm.newsMessage.dateB'
         clear-text='Сегодня'
         )
       .end
         span.pretext.control-label По
         sab-date-picker(
-        value='vm.news.dateE'
-        min-date='vm.news.dateB'
+        value='vm.newsMessage.dateE'
+        min-date='vm.newsMessage.dateB'
         clear-text='Сегодня'
         )
 
-    span#helpBlock3.help-block(ng-if='vm.news.dateB > vm.news.dateE') Дата введена некорректно
+    span#helpBlock3.help-block(ng-if='vm.newsMessage.dateB > vm.newsMessage.dateE') Дата введена некорректно
 
   form(
   name='vm.newsFeedForm'
   )
-    .subject(ng-class='{"has-error": !vm.newsFeedForm.subject.$pristine && !vm.news.subject.length}')
+    .subject(ng-class='{"has-error": !vm.newsFeedForm.subject.$pristine && !vm.newsMessage.subject.length}')
       label.control-label(for='newsSubject') Тема
       input.form-control(
       type='text'
-      ng-model='vm.news.subject'
+      ng-model='vm.newsMessage.subject'
       id='newsSubject'
       aria-describedby='helpBlock'
       name='subject'
       autocomplete='off'
       )
       span#helpBlock.help-block(
-      ng-if=' !vm.newsFeedForm.subject.$pristine && !vm.news.subject.length'
+      ng-if=' !vm.newsFeedForm.subject.$pristine && !vm.newsMessage.subject.length'
       ) Поле обязательно для ввода
 
     .text(
-    ng-class='{"has-error": !vm.newsFeedForm.body.$pristine && !vm.news.body.length}'
+    ng-class='{"has-error": !vm.newsFeedForm.body.$pristine && !vm.newsMessage.body.length}'
     )
       label.control-label(for='newsText') Текст
       textarea.form-control(
       type='text'
       rows='5'
-      ng-model='vm.news.body'
+      ng-model='vm.newsMessage.body'
       id='newsText'
       aria-describedby='helpBlock2'
       name='body'
       wrap='hard'
       )
       span#helpBlock2.help-block(
-      ng-if='!vm.newsFeedForm.body.$pristine && !vm.news.body.length'
+      ng-if='!vm.newsFeedForm.body.$pristine && !vm.newsMessage.body.length'
       ) Поле обязательно для ввода
 
     .version(ng-class='{"has-error": vm.newsFeedForm.version.$error.pattern ' +
@@ -65,7 +65,7 @@ resize-property='height'
       input.form-control(
       name='version'
       id='version'
-      ng-model='vm.news.appVersion'
+      ng-model='vm.newsMessage.appVersion'
       ng-pattern='vm.regExForCurrVersion'
       aria-describedby='helpBlock4, helpBlock5'
       autocomplete='off'
@@ -79,8 +79,8 @@ resize-property='height'
       button.btn.btn-primary(
       ng-if='vm.currentState === "create"'
       ng-click='vm.submitNews()'
-      ng-disabled='!(vm.news.body.length && vm.news.subject.length && vm.news.appVersion)' +
-      ' || vm.news.dateB > vm.news.dateE'
+      ng-disabled='!(vm.newsMessage.body.length && vm.newsMessage.subject.length && vm.newsMessage.appVersion)' +
+      ' || vm.newsMessage.dateB > vm.newsMessage.dateE'
       ) Сохранить новость
 
       // TODO: buttons
@@ -95,7 +95,7 @@ resize-property='height'
       disabled
       ng-if='vm.currentState === "edit"'
       ng-click='vm.updateNews()'
-      ng-disabled='!(vm.news.body.length && vm.news.subject.length && vm.news.appVersion)' +
-      ' || vm.news.dateB > vm.news.dateE' +
+      ng-disabled='!(vm.newsMessage.body.length && vm.newsMessage.subject.length && vm.newsMessage.appVersion)' +
+      ' || vm.newsMessage.dateB > vm.newsMessage.dateE' +
       ' || !vm.newsHasChanges()'
       ) Обновить новость

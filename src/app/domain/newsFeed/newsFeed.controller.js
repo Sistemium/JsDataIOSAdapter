@@ -62,8 +62,8 @@
 
       if (params && (vm.currentState === 'edit' || vm.currentState === 'detailed')) {
 
-        NewsMessage.find(params.id).then(news => {
-          vm.news = news;
+        NewsMessage.find(params.id).then(newsMessage => {
+          vm.newsMessage = newsMessage;
           findUserNewsMessages();
         }).catch((e) => {
           if (e.error === 404) {
@@ -87,8 +87,8 @@
           .catch(e => console.error(e));
 
       } else if (to.name === 'newsFeed.create') {
-        vm.news = {};
-        vm.news.appVersion = saApp.version();
+        vm.newsMessage = {};
+        vm.newsMessage.appVersion = saApp.version();
       }
 
     }
@@ -178,7 +178,7 @@
 
     function clearForm() {
       vm.newsFeedForm.$setPristine();
-      delete vm.news;
+      delete vm.newsMessage;
     }
 
     function newsHasChanges() {
@@ -195,9 +195,9 @@
 
     function updateNews() {
 
-      vm.news.id = $state.params.id;
+      vm.newsMessage.id = $state.params.id;
 
-      NewsMessage.create(vm.news).then(() => {
+      NewsMessage.create(vm.newsMessage).then(() => {
 
         toastr.success('Новость обновлена', {timeOut: 3000});
 
@@ -213,11 +213,11 @@
     function submitNews() {
 
       vm.newNews = {
-        'body': vm.news.body,
-        'subject': vm.news.subject,
-        'dateB': vm.news.dateB,
-        'dateE': vm.news.dateE,
-        'appVersion': vm.news.appVersion
+        'body': vm.newsMessage.body,
+        'subject': vm.newsMessage.subject,
+        'dateB': vm.newsMessage.dateB,
+        'dateE': vm.newsMessage.dateE,
+        'appVersion': vm.newsMessage.appVersion
       };
 
       NewsMessage.create(vm.newNews).then(() => {
