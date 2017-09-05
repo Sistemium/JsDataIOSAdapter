@@ -62,7 +62,7 @@
 
       if (params && (vm.currentState === 'edit' || vm.currentState === 'detailed')) {
 
-        NewsMessage.find(params.id).then((news) => {
+        NewsMessage.find(params.id).then(news => {
           vm.news = news;
           findUserNewsMessages();
         }).catch((e) => {
