@@ -62,7 +62,7 @@
 
         NewsMessage.find(params.id).then((news) => {
           vm.news = news;
-          UserNewsMessage.findAll();
+          findUserNewsMessages();
         }).catch((e) => {
           if (e.error === 404) {
             toastr.error('Ошибка. Новость не найдена', {timeOut: 5000});
@@ -77,8 +77,10 @@
           NewsMessage.findAll({}, {bypassCache: true})
         )
           .then(() => {
+
             vm.rebindAll(NewsMessage, {}, 'vm.news');
-            return UserNewsMessage.findAll();
+            return findUserNewsMessages();
+
           })
           .catch(e => console.error(e));
 
@@ -86,6 +88,16 @@
         vm.news = {};
         vm.news.appVersion = saApp.version();
       }
+
+    }
+
+    function findUserNewsMessages() {
+
+      UserNewsMessage.findAll()
+        .then(userNewsMessages => {
+
+
+        });
 
     }
 
