@@ -9,7 +9,7 @@
           ) cоздать новость.
 
       .news-repeater.scroll-y(resize resize-offset-top='15' vs-repeat='155')
-        .news-item(ng-repeat='newsMessage in vm.news track by news.id' ng-click='vm.showAdditionalInfo(news)')
+        .news-item(ng-repeat='newsMessage in vm.news track by news.id' ng-click='vm.showAdditionalInfo(newsMessage)')
           .line-1
             label.subject {{newsMessage.subject}}
             valid-lifetime(date-b='newsMessage.dateB' date-e='newsMessage.dateE')
