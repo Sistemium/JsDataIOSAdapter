@@ -23,9 +23,9 @@
           label Оценка:
           span(
           uib-rating
-          ng-model='vm.news.userNewsMessage.rating'
+          ng-model='vm.ratings[vm.news.id]'
           max='5'
-          ng-click='vm.saveRating($event, vm.news.userNewsMessage.rating, vm.news.id)'
+          ng-click='vm.saveRating($event, vm.ratings[vm.news.id], vm.news.id)'
           titles='["Один", "Два", "Три", "Четыре", "Пять"]'
           enable-reset='false'
           aria-labelledby='default-rating'

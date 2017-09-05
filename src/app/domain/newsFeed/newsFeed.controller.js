@@ -25,7 +25,9 @@
       newsHasChanges,
       revertChanges,
       newsFeedHeader,
-      isNewsMaker
+      isNewsMaker,
+
+      ratings: {}
 
     });
 
@@ -96,6 +98,9 @@
       UserNewsMessage.findAll()
         .then(userNewsMessages => {
 
+          _.forEach(userNewsMessages, userNewsMessage => {
+            vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
+          })
 
         });
 
