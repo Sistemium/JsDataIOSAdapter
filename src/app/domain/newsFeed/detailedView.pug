@@ -14,8 +14,9 @@
 
       // TODO: Show if user has admin/editor? rights
       .buttons
-        button.btn-warning.btn.glyphicon.glyphicon-pencil(ng-click='vm.editNews()' ng-if='vm.isNewsMaker()')
-        button.btn-warning.btn.glyphicon.glyphicon-camera(ng-click='vm.addPhoto()' ng-if='vm.isNewsMaker()')
+        section(ng-if='vm.isNewsMaker()')
+          button.btn-warning.btn.glyphicon.glyphicon-pencil(ng-click='vm.editNews()')
+          button.btn-warning.btn.glyphicon.glyphicon-camera(ng-click='vm.addPhoto()')
       .rating-block
 
         .rating-mean
