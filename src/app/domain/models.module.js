@@ -3,9 +3,9 @@
 (function () {
 
   let basePath = window.localStorage.getItem('JSData.BasePath')
-      || location.protocol === 'https:' && '/api/dev/'
-      || 'https://api.sistemium.com/v4d/dev/'
-    ;
+    || location.protocol === 'https:' && '/api/dev/'
+    || 'https://api.sistemium.com/v4d/dev/'
+  ;
 
   angular.module('Models', ['sistemium', 'LocalStorageModule'])
     .config(ModelsConfig)
@@ -193,7 +193,7 @@
 
     let res = this.createInstance();
 
-    _.forOwn(source, (val,key) => {
+    _.forOwn(source, (val, key) => {
       if (_.isObject(val) || _.isFunction(val)) return;
       res[key] = val;
     });
