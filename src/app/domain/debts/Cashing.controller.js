@@ -124,7 +124,9 @@
         }
       };
 
-      vm.rebindAll(Uncashing, {where}, 'vm.uncashings');
+      let orderBy = [['date', 'DESC'], ['deviceCts', 'DESC']];
+
+      vm.rebindAll(Uncashing, {where, orderBy}, 'vm.uncashings');
 
       return Uncashing.findAll(filter);
 

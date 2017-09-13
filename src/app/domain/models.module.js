@@ -3,9 +3,9 @@
 (function () {
 
   let basePath = window.localStorage.getItem('JSData.BasePath')
-      || location.protocol === 'https:' && '/api/dev/'
-      || 'https://api.sistemium.com/v4d/dev/'
-    ;
+    || location.protocol === 'https:' && '/api/dev/'
+    || 'https://api.sistemium.com/v4d/dev/'
+  ;
 
   angular.module('Models', ['sistemium', 'LocalStorageModule'])
     .config(ModelsConfig)
@@ -130,6 +130,7 @@
       return $q((resolve, reject) => {
 
         let options = {
+          bypassCache: true,
           cacheResponse: false,
           groupBy: groupByColumns,
           afterFindAll: (options, data) => {
@@ -138,7 +139,10 @@
           }
         };
 
-        this.findAll(params, options)
+        // fix for js-data bug
+        let groupByParams = _.assign({_: true}, params);
+
+        this.findAll(groupByParams, options)
           .catch(reject);
 
       });
@@ -189,7 +193,7 @@
 
     let res = this.createInstance();
 
-    _.forOwn(source, (val,key) => {
+    _.forOwn(source, (val, key) => {
       if (_.isObject(val) || _.isFunction(val)) return;
       res[key] = val;
     });

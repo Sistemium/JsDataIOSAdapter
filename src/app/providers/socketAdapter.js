@@ -68,6 +68,7 @@
       delete parsed.where;
       delete parsed.offset;
       delete parsed.limit;
+      delete parsed._;
 
       return parsed;
     }
