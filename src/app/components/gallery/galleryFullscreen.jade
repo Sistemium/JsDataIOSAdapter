@@ -1,6 +1,14 @@
 .ng-gallery.ng-gallery-fullscreen(
 )
 
+  .camera-roll
+
+    a(
+    href
+    ng-click='vm.sendToCameraRollClick()'
+    )
+      i.glyphicon.glyphicon-save-file.btn-lg
+
   a.left-right-chevron(
   href
   ng-click='vm.prevImageClick()'

@@ -5,7 +5,7 @@
   angular.module('webPage')
     .service('GalleryHelper', GalleryHelper);
 
-  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window) {
+  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window, IOS, toastr) {
 
     function setupController(vm, $scope) {
 
@@ -27,6 +27,7 @@
 
         largeImageClick: () => vm.zoom === 1 && cleanup(),
         closeGalleryClick: () => cleanup(),
+        sendToCameraRollClick: () => sendToCameraRoll(),
 
         deleteClick
 
@@ -78,6 +79,29 @@
         $scope.opened = false;
         $body.unbind('keydown', onKeyDown);
         fullscreenElement && fullscreenElement.remove();
+      }
+
+      function sendToCameraRoll() {
+
+        $window['cameraRollCallback'] = cameraRollCallback;
+        IOS.handler('sendToCameraRoll').postMessage({
+          callback: 'cameraRollCallback',
+          imageID:vm.currentImage.id,
+          imageURL:$scope.currentImageSrc
+        });
+
+      }
+
+      function cameraRollCallback(data) {
+
+        if (data.success){
+
+          return toastr.success(data.title);
+
+        }
+
+        return toastr.error(data.detail, data.title);
+
       }
 
       function setNextImage() {

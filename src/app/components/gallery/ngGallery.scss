@@ -58,6 +58,13 @@
     margin: 1px;
   }
 
+  .camera-roll{
+    position: fixed;
+    left: 0;
+    margin: 1px;
+    z-index: 1;
+  }
+
   .main-view {
 
     flex: 1;
