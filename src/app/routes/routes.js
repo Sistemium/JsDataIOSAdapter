@@ -42,55 +42,7 @@
           controllerAs: 'vm'
         })
 
-        .state({
-          name: 'newsFeed',
-          url: '/newsFeed',
-          templateUrl: 'app/domain/newsFeed/newsFeed.html',
-          controller: 'NewsFeedController',
-          controllerAs: 'vm',
-          data: {
-            title: 'Лента новостей'
-          },
-
-          children: [{
-            name: 'create',
-            url: '/create',
-            templateUrl: 'app/domain/newsFeed/createAndEditNews.html',
-            controller: 'NewsFeedController',
-            controllerAs: 'vm',
-
-            data: {
-              title: 'Создать новость'
-            }
-
-          }, {
-            name: 'detailed',
-            url: '/:id',
-            templateUrl: 'app/domain/newsFeed/detailedView.html',
-            controller: 'NewsFeedController',
-            controllerAs: 'vm',
-
-            data: {
-              title: 'Новость'
-            }
-
-          }, {
-            name: 'edit',
-            url: '/:id/edit',
-            templateUrl: 'app/domain/newsFeed/createAndEditNews.html',
-            controller: 'NewsFeedController',
-            controllerAs: 'vm',
-
-            data: {
-              title: 'Редактирование новости'
-            }
-
-          }
-
-          ]
-
-
-        });
+      ;
 
     });
 

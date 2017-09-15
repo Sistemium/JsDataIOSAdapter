@@ -1,0 +1,125 @@
+@import "../../../styles/variables";
+
+.edit-news-message {
+
+  form > * {
+
+    background: $gray-background-color;
+    padding: 10px;
+    border-radius: $border-radius;
+
+    @include responsive-only(lt-sm) {
+      margin: 5px 0;
+    }
+
+    & + * {
+      margin-top: 10px;
+    }
+
+  }
+
+  .help-block {
+    margin-bottom: 0;
+    text-align: right;
+    color: $red;
+  }
+
+  .warning, .ng-touched.ng-invalid {
+
+    border: 1px solid $red;
+
+  }
+
+  .ng-invalid.ng-untouched + .help-block {
+    display: none !important;
+  }
+
+  .date-pickers {
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+
+    .begin, .end {
+
+      display: flex;
+      flex-flow: row nowrap;
+
+      span.pretext {
+        width: 25px;
+        margin-left: 10px;
+        line-height: 34px;
+      }
+
+      sab-date-picker {
+        flex: 1
+      }
+
+    }
+
+    .begin {
+      margin-bottom: 5px;
+    }
+
+    .pretext {
+      font-size: 15px;
+    }
+
+  }
+
+  .buttons {
+
+    display: flex;
+    margin: 5px 0;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+
+    button.btn.btn-primary {
+
+      margin: 0 5px;
+
+      @media (max-width: $screen-xs) {
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+    }
+
+    button.btn.btn-primary:last-of-type {
+      margin-right: 0;
+    }
+
+  }
+
+  form {
+
+    display: flex;
+    flex-flow: column nowrap;
+
+    .help-block {
+      margin-bottom: 0;
+      text-align: right;
+    }
+
+    .subject {
+
+    }
+
+    .text {
+
+      textarea {
+        resize: vertical;
+        min-height: 138px;
+      }
+
+      textarea::-webkit-scrollbar {
+        display: inherit;
+      }
+
+    }
+
+  }
+
+}
