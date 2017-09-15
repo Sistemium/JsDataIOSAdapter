@@ -25,7 +25,7 @@
 
     vm.use({
 
-      isAdmin: Auth.isAuthorized('salesman'),
+      isAdmin: Auth.isAuthorized('admin'),
       appVersionRe: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
 
       $onInit,
