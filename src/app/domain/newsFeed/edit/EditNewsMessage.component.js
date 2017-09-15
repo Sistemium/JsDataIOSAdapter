@@ -17,7 +17,7 @@
     });
 
 
-  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp) {
+  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp, Auth) {
 
     const {NewsMessage} = Schema.models();
 
@@ -25,6 +25,7 @@
 
     vm.use({
 
+      isAdmin: Auth.isAuthorized('salesman'),
       appVersionRe: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
 
       $onInit,

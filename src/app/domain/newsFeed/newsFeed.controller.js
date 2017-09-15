@@ -56,11 +56,11 @@
 
     function onJSData(event) {
 
-      if (event.resource !== 'NewsMessage') {
+      if (event.resource !== 'NewsMessage' || !event.data) {
         return;
       }
 
-      let id = event.data.id;
+      let {id} = event.data;
 
       NewsMessage.find(id, {bypassCache: true})
         .then(msg => console.info('updated newsMessage', msg));

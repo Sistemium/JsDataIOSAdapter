@@ -17,31 +17,32 @@ resize-offset-top='0'
 resize-property='height'
 )
 
-  .duration(ng-class='{"warning": vm.newsMessage.dateB > vm.newsMessage.dateE }')
-
-    label.control-label Период действия
-
-    .date-pickers
-      .begin
-        span.pretext.control-label С
-
-        sab-date-picker.help-style(
-        value='vm.newsMessage.dateB'
-        clear-text='Сегодня'
-        )
-      .end
-        span.pretext.control-label По
-        sab-date-picker(
-        value='vm.newsMessage.dateE'
-        min-date='vm.newsMessage.dateB'
-        clear-text='Сегодня'
-        )
-
-    span#helpBlock3.help-block(ng-if='vm.newsMessage.dateB > vm.newsMessage.dateE') Дата введена некорректно
-
   form(
   name='vm.newsFeedForm'
   )
+
+    .duration(ng-class='{"warning": vm.newsMessage.dateB > vm.newsMessage.dateE }')
+
+      label.control-label Период действия
+
+      .date-pickers
+        .begin
+          span.pretext.control-label С
+
+          sab-date-picker.help-style(
+          value='vm.newsMessage.dateB'
+          clear-text='Сегодня'
+          )
+        .end
+          span.pretext.control-label По
+          sab-date-picker(
+          value='vm.newsMessage.dateE'
+          min-date='vm.newsMessage.dateB'
+          clear-text='Сегодня'
+          )
+
+      span#helpBlock3.help-block(ng-if='vm.newsMessage.dateB > vm.newsMessage.dateE') Дата введена некорректно
+
     .subject
 
       label.control-label(for='subject') Тема
@@ -77,7 +78,7 @@ resize-property='height'
       ng-if='vm.newsFeedForm.body.$error.required'
       ) Поле обязательно для ввода
 
-    .version
+    .version(ng-if='vm.isAdmin')
 
       label.control-label(for='version') Версия программы
 

@@ -2,20 +2,23 @@
 
 .edit-news-message {
 
-  .duration, .subject, .text, .version {
+  form > * {
 
     background: $gray-background-color;
     padding: 10px;
-    margin: 10px 0;
     border-radius: $border-radius;
 
     @include responsive-only(lt-sm) {
       margin: 5px 0;
     }
 
+    & + * {
+      margin-top: 10px;
+    }
+
   }
 
-  .helpBlock {
+  .help-block {
     margin-bottom: 0;
     text-align: right;
     color: $red;
@@ -91,7 +94,7 @@
     display: flex;
     flex-flow: column nowrap;
 
-    .helpBlock {
+    .help-block {
       margin-bottom: 0;
       text-align: right;
     }

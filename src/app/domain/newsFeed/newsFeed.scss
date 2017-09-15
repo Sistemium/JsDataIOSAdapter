@@ -19,16 +19,23 @@
     border-radius: 9px;
 
     p {
+
       font-size: 16px;
       font-weight: 500;
       margin: 0;
       text-align: center;
+
       a {
         margin: 0 0 0 $padding;
         cursor: pointer;
       }
+
     }
 
+  }
+
+  .scroll-y {
+    padding-top: $padding * 2;
   }
 
   .scroll-y > .news-message {
@@ -121,7 +128,7 @@
 
       span {
 
-        color: #2768b7;
+        color: $primary-color;
         margin-left: 2px;
 
         & > * {
