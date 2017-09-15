@@ -30,6 +30,10 @@
 
   }
 
+  .ng-invalid.ng-untouched + .help-block {
+    display: none !important;
+  }
+
   .date-pickers {
 
     display: flex;
