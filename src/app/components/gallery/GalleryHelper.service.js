@@ -27,7 +27,7 @@
 
         largeImageClick: () => vm.zoom === 1 && cleanup(),
         closeGalleryClick: () => cleanup(),
-        sendToCameraRollClick: () => sendToCameraRoll(),
+        sendToCameraRollClick,
 
         deleteClick
 
@@ -81,26 +81,13 @@
         fullscreenElement && fullscreenElement.remove();
       }
 
-      function sendToCameraRoll() {
+      function sendToCameraRollClick() {
 
-        $window['cameraRollCallback'] = cameraRollCallback;
-        IOS.handler('sendToCameraRoll').postMessage({
-          callback: 'cameraRollCallback',
-          imageID:vm.currentImage.id,
-          imageURL:$scope.currentImageSrc
-        });
-
-      }
-
-      function cameraRollCallback(data) {
-
-        if (data.success){
-
-          return toastr.success(data.title);
-
-        }
-
-        return toastr.error(data.detail, data.title);
+        IOS.sendToCameraRoll(vm.currentImage)
+          .then(() => {
+            toastr.success('Изображение сохранено');
+          })
+          .catch(err => toastr.error(angular.toJSON(err)));
 
       }
 
