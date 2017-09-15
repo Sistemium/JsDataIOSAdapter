@@ -1,18 +1,27 @@
 // TODO: show avatarPhoto or take photo button
 
 h3.pull-left.outlet.max-width-75p
-  a.inherit-colors(href ui-sref='^.partner({id: vm.outlet.partner.id})' ng-class='vm.partnerNavClass') {{ vm.outlet.partner.name }}
+
+  a.inherit-colors(
+  href ui-sref='^.partner({id: vm.outlet.partner.id})'
+  ng-class='vm.partnerNavClass'
+  ) {{ vm.outlet.partner.name }}
+
   = ' '
+
   small
-    a.inherit-colors(href ng-click='vm.outletClick()' ng-class='vm.outletNavClass') {{ vm.outlet.address }}
+    a.inherit-colors(href ng-click='vm.outletClick()' ng-class='vm.outletNavClass')
+      | {{ vm.outlet.address }}
     a.ml-em(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState && vm.isEditable')
       i.glyphicon.glyphicon-edit
 
 section.ui-view.outlet
 
   h3.pull-right.with-map
+
     button.btn.ml-5.btn-default(ng-click='vm.takePhoto()')
       i.glyphicon.glyphicon-camera
+
     button.btn.btn-default.ml-5(
     popover-placement="bottom-left auto"
     popover-trigger='"outsideClick"'
@@ -34,9 +43,19 @@ section.ui-view.outlet
       a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
         img(ng-src='{{vm.thumbnails[pic.id]}}')
 
-  hr.clear-both
+  section.outlet-info
 
-  .header-button
+    .license-info(ng-if='vm.outlet.licenseInfo')
+      label Лицензия
+      span {{ vm.outlet.licenseInfo }}
+
+    .license-info(ng-if='vm.outlet.egaisCode')
+      label ЕГАИС ИД
+      span {{ vm.outlet.egaisCode }}
+
+  //hr.clear-both
+
+  //.header-button
     h4.pull-left
       span Визиты
 
@@ -45,7 +64,7 @@ section.ui-view.outlet
     ng-disabled='!vm.currentSalesman'
     ) Новый визит
 
-  .scroll-y(resize resize-offset-top)
+  //.scroll-y(resize resize-offset-top)
     table.table.table-striped.clear-both.table-hover(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
       thead
         tr
