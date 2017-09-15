@@ -9,7 +9,9 @@
       dateE: '<'
     },
 
-    template: '<label>Срок:</label> <span> {{vm.formattedDate}} ({{vm.humanizedDuration}}) </span>',
+    template: '<div class="valid-life-time" ng-if="vm.dateB || vm.dateE">' +
+    '<label>Актуально:</label> <span>{{vm.formattedDate}}</span> <span>(еще {{vm.humanizedDuration}})</span>' +
+    '</div>',
 
     controller: validLifetimeController,
     controllerAs: 'vm'
@@ -21,14 +23,20 @@
     let vm = this;
 
     _.assign(vm, {
-      formattedDate: $onInit()
+      $onInit
     });
 
     function $onInit() {
+      if (vm.dateB || vm.dateE) {
+        vm.formattedDate = formattedDate();
+      }
+    }
+
+    function formattedDate() {
 
       let duration = moment(vm.dateE).diff(moment(vm.dateB));
 
-      if (duration === 0) {
+      if (!duration) {
         duration = 86400000;
       }
 
@@ -43,6 +51,7 @@
       } else {
         return vm.dateB.slice(2) + '/' + vm.dateE.slice(2)
       }
+
     }
 
   }

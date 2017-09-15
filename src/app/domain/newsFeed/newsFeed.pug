@@ -1,30 +1,33 @@
-.ui-view(cg-busy='{promise: vm.busy, message: "Загрузка новостей"}')
-  .news-feed(ng-if='!vm.busy')
-    .news(ng-if='vm.isAdmin')
-      .no-news
-        p {{vm.newsFeedHeader()}}
-        p(ng-if='vm.isNewsMaker()') Предлагаем
-          a(
-          ng-click='vm.goToCreateNews()'
-          ) cоздать новость.
+.news-feed.ui-view()
 
-      .news-repeater.scroll-y(resize resize-offset-top='15' vs-repeat='155')
-        .news-item(ng-repeat='newsMessage in vm.news track by newsMessage.id' ng-click='vm.showAdditionalInfo(newsMessage)')
-          .line-1
-            label.subject {{newsMessage.subject}}
-            valid-lifetime(date-b='newsMessage.dateB' date-e='newsMessage.dateE')
-          .line-2
-            .news-body(
-            )
-              p {{newsMessage.body}}
-          .line-3
-            label Оценка:
-            span(
-            uib-rating
-            ng-model='vm.ratings[newsMessage.id]'
-            max='5'
-            ng-click='vm.saveRating($event, vm.ratings[newsMessage.id], newsMessage.id)'
-            titles='["Один", "Два", "Три", "Четыре", "Пять"]'
-            enable-reset='false'
-            aria-labelledby='default-rating'
-            )
+  .buttons
+
+    button.btn.btn-primary(
+    ng-disabled='!vm.isNewsMaker'
+    ng-click='vm.createNewsMessageClick()'
+    ) Добавить новость
+
+  .scroll-y(resize resize-offset-top='15' vs-repeat='155')
+
+    .news-message(
+    ng-repeat='newsMessage in vm.newsMessages track by newsMessage.id'
+    ng-click='vm.newsMessageClick(newsMessage)'
+    )
+
+      .header
+        label.subject {{newsMessage.subject}}
+        valid-lifetime(date-b='newsMessage.dateB' date-e='newsMessage.dateE')
+
+      .body
+        p {{newsMessage.body}}
+
+      .rating
+        label Оценка:
+        span(
+        uib-rating
+        enable-reset='false'
+        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+        ng-model='vm.ratings[newsMessage.id]'
+        max='5'
+        ng-click='$event.preventDefault();vm.newsRatingClick(newsMessage)'
+        )

@@ -4,34 +4,21 @@
 
   function NewsFeedController($state, Schema, saControllerHelper, $scope, saApp, toastr, Sockets, Auth) {
 
-    let NewsMessage = Schema.model('NewsMessage');
-    let UserNewsMessage = Schema.model('UserNewsMessage');
+    const {NewsMessage, UserNewsMessage} = Schema.models();
 
-    const vm = saControllerHelper
-      .setup(this, $scope);
+    const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
-      goToCreateNews,
-      showAdditionalInfo,
-      onStateChange,
-      submitNews,
-      clearForm,
-      saveRating,
-      isAdmin: Auth.isAdmin(),
-      regExForCurrVersion: /^\d{1,2}\.\d{1,2}\.\d{1,2}$/,
 
-      editNews,
-      updateNews,
-      newsHasChanges,
-      revertChanges,
-      newsFeedHeader,
-      isNewsMaker,
+      newsRatingClick,
+      newsMessageClick,
+      createNewsMessageClick,
+
+      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin', 'supervisor']),
 
       ratings: {}
 
     });
-
-    $scope.$on('$stateChangeStart', onStateChange);
 
     vm.onScope('rootClick', () => {
       $state.go('newsFeed');
@@ -39,9 +26,33 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
+    vm.rebindAll(NewsMessage, {}, 'vm.newsMessages');
+
+    refresh();
+
     /*
      Functions
      */
+
+    function refresh() {
+      vm.setBusy([
+        NewsMessage.findAll(),
+        findUserNewsMessages()
+      ]);
+    }
+
+    function findUserNewsMessages() {
+
+      return UserNewsMessage.findAll()
+        .then(userNewsMessages => {
+
+          _.forEach(userNewsMessages, userNewsMessage => {
+            vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
+          })
+
+        });
+
+    }
 
     function onJSData(event) {
 
@@ -56,192 +67,39 @@
 
     }
 
-    function onStateChange(to, params) {
+    function newsRatingClick(newsMessage) {
 
-      vm.currentState = to.name.split('.')[1] || to.name;
+      let newsMessageId = newsMessage.id;
 
-      if (params && (vm.currentState === 'edit' || vm.currentState === 'detailed')) {
-
-        NewsMessage.find(params.id).then(newsMessage => {
-          vm.newsMessage = newsMessage;
-          findUserNewsMessages();
-        }).catch((e) => {
-          if (e.error === 404) {
-            toastr.error('Ошибка. Новость не найдена', {timeOut: 5000});
-          } else {
-            toastr.error('Ошибка сервера', {timeOut: 5000});
-          }
-        });
-
-      } else if (to.name === 'newsFeed') {
-
-        vm.setBusy(
-          NewsMessage.findAll({}, {bypassCache: true})
-        )
-          .then(() => {
-
-            vm.rebindAll(NewsMessage, {}, 'vm.news');
-            return findUserNewsMessages();
-
-          })
-          .catch(e => console.error(e));
-
-      } else if (to.name === 'newsFeed.create') {
-        vm.newsMessage = {};
-        vm.newsMessage.appVersion = saApp.version();
-      }
-
-    }
-
-    function findUserNewsMessages() {
-
-      UserNewsMessage.findAll()
-        .then(userNewsMessages => {
-
-          _.forEach(userNewsMessages, userNewsMessage => {
-            vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
-          })
-
-        });
-
-    }
-
-    function saveRating(event, newRating, newsMessageId) {
-
-      let numericRating = newRating || undefined;
-
-      if (!newRating) {
-
-        let writtenRating = event.srcElement.title;
-
-        switch (writtenRating) {
-          case 'Один':
-            numericRating = 1;
-            break;
-          case 'Два':
-            numericRating = 2;
-            break;
-          case 'Три':
-            numericRating = 3;
-            break;
-          case 'Четыре':
-            numericRating = 4;
-            break;
-          case 'Пять':
-            numericRating = 5;
-            break;
-          default:
-            numericRating = null;
-
-        }
-
-      }
-
-      UserNewsMessage.findAll({newsMessageId: newsMessageId}, {bypassCache: true})
+      UserNewsMessage.findAll({newsMessageId}, {bypassCache: true})
         .then(userNewsMessages => {
 
           let userNewsMessage = _.first(userNewsMessages);
-          let userNewsMessageId = userNewsMessage.id;
-          let recordRating = userNewsMessage.rating;
 
-          if (numericRating && (recordRating !== numericRating)) {
-
-            let objToWrite = userNewsMessageId ? {
-              id: userNewsMessageId,
-              rating: numericRating,
-              newsMessageId: newsMessageId
-            } : {
-              rating: numericRating,
-              newsMessageId: newsMessageId
-            };
-
-            UserNewsMessage.create(objToWrite).then(() => {
-              toastr.success('Ваша оценка принята', {timeOut: 1000});
-            });
-
+          if (!userNewsMessage) {
+            userNewsMessage = UserNewsMessage.createInstance({newsMessageId});
           }
+
+          userNewsMessage.rating = vm.ratings[newsMessageId];
+
+          UserNewsMessage.create(userNewsMessage)
+            .then(() => {
+              toastr.success('Ваша оценка принята', {timeOut: 1000});
+            })
+            .catch(e => console.error(e));
 
         });
 
-
-      event.stopPropagation();
-
     }
 
-    function goToCreateNews() {
+    function createNewsMessageClick() {
       $state.go('.create');
     }
 
-    function showAdditionalInfo(item) {
-      $state.go('.detailed', {id: item.id});
+    function newsMessageClick(item) {
+      $state.go('.show', {newsMessageId: item.id});
     }
 
-    function clearForm() {
-      vm.newsFeedForm.$setPristine();
-      delete vm.newsMessage;
-    }
-
-    function newsHasChanges() {
-      return NewsMessage.hasChanges($state.params.id);
-    }
-
-    function revertChanges() {
-      NewsMessage.revert($state.params.id);
-    }
-
-    function editNews() {
-      $state.go('^.edit', {id: $state.params.id});
-    }
-
-    function updateNews() {
-
-      vm.newsMessage.id = $state.params.id;
-
-      NewsMessage.create(vm.newsMessage).then(() => {
-
-        toastr.success('Новость обновлена', {timeOut: 3000});
-
-      }).catch((e) => {
-        console.error(e);
-        if (e) {
-          toastr.error('Новость не обновлена', {timeOut: 5000});
-        }
-      })
-
-    }
-
-    function submitNews() {
-
-      vm.newNews = {
-        'body': vm.newsMessage.body,
-        'subject': vm.newsMessage.subject,
-        'dateB': vm.newsMessage.dateB,
-        'dateE': vm.newsMessage.dateE,
-        'appVersion': vm.newsMessage.appVersion
-      };
-
-      NewsMessage.create(vm.newNews).then(() => {
-
-        vm.clearForm();
-        delete vm.newNews;
-        toastr.success('Новость сохранена', {timeOut: 3000});
-
-      }).catch((e) => {
-        console.error(e);
-        if (e) {
-          toastr.error('Новость не сохранена', {timeOut: 5000});
-        }
-      })
-
-    }
-
-    function newsFeedHeader() {
-      return vm.news.length ? `Количество новостей — ${vm.news.length}` : `Новостей не найдено`;
-    }
-
-    function isNewsMaker() {
-      return false;
-    }
 
   }
 

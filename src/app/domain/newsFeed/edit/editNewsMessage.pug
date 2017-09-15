@@ -1,0 +1,96 @@
+.buttons
+
+  button.btn.btn-warning.animate-show(
+  ng-show='vm.hasChanges()'
+  ng-click='vm.cancelClick()'
+  ) Отменить
+
+  button.btn.btn-primary(
+  ng-disabled='!vm.isValid()'
+  ng-click='vm.saveClick()'
+  ) {{ vm.hasChanges() ? 'Сохранить' : 'Готово' }}
+
+
+.edit-news-message.scroll-y(
+resize
+resize-offset-top='0'
+resize-property='height'
+)
+
+  .duration(ng-class='{"warning": vm.newsMessage.dateB > vm.newsMessage.dateE }')
+
+    label.control-label Период действия
+
+    .date-pickers
+      .begin
+        span.pretext.control-label С
+
+        sab-date-picker.help-style(
+        value='vm.newsMessage.dateB'
+        clear-text='Сегодня'
+        )
+      .end
+        span.pretext.control-label По
+        sab-date-picker(
+        value='vm.newsMessage.dateE'
+        min-date='vm.newsMessage.dateB'
+        clear-text='Сегодня'
+        )
+
+    span#helpBlock3.help-block(ng-if='vm.newsMessage.dateB > vm.newsMessage.dateE') Дата введена некорректно
+
+  form(
+  name='vm.newsFeedForm'
+  )
+    .subject
+
+      label.control-label(for='subject') Тема
+
+      input.form-control#subject(
+      type='text'
+      ng-model='vm.newsMessage.subject'
+      required
+      aria-describedby='helpBlock'
+      name='subject'
+      autocomplete='off'
+      )
+
+      span#helpBlock.help-block(
+      ng-if='vm.newsFeedForm.subject.$error.required'
+      ) Поле обязательно для ввода
+
+    .text
+
+      label.control-label(for='body') Текст
+
+      textarea.form-control#body(
+      type='text'
+      rows='5'
+      required
+      ng-model='vm.newsMessage.body'
+      aria-describedby='helpBlock2'
+      name='body'
+      wrap='hard'
+      )
+
+      span#helpBlock2.help-block(
+      ng-if='vm.newsFeedForm.body.$error.required'
+      ) Поле обязательно для ввода
+
+    .version
+
+      label.control-label(for='version') Версия программы
+
+      input.form-control#version(
+      name='version'
+      required
+      ng-model='vm.newsMessage.appVersion'
+      ng-pattern='vm.appVersionRe'
+      aria-describedby='helpBlock4, helpBlock5'
+      autocomplete='off'
+      )
+
+      span#helpBlock4.help-block(ng-if='vm.newsFeedForm.version.$error.pattern')
+        | Версия введена некорректно
+      span#helpBlock5.help-block(ng-if='vm.newsFeedForm.version.$error.required')
+        | Поле обязательно для ввода
