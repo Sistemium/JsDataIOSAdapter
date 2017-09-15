@@ -1,10 +1,9 @@
 .ng-gallery.ng-gallery-fullscreen(
 )
 
-  .camera-roll
+  .camera-roll(ng-if='vm.isIos')
 
     a(
-    href
     ng-click='vm.sendToCameraRollClick()'
     )
       i.glyphicon.glyphicon-save-file.btn-lg

@@ -19,6 +19,8 @@
 
         setZoom: _.throttle(zoom => $scope.$apply(() => vm.zoom = zoom), 200),
 
+        isIos: IOS.isIos(),
+
         thumbnailClick,
         fullScreenThumbnailClick,
 
