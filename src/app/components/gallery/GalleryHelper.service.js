@@ -89,7 +89,7 @@
           .then(() => {
             toastr.success('Изображение сохранено');
           })
-          .catch(err => toastr.error(angular.toJSON(err)));
+          .catch(err => toastr.error(angular.toJson(err)));
 
       }
 
