@@ -12,11 +12,14 @@ h3.clearfix
     span Бут.:
     label {{ vm.totals.totalVolume () | number:0 }}
 
-section(cg-busy='vm.busy')
+section#scrollable-container.scroll-y(cg-busy='vm.busy' resize resize-offset-top='60')
   .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
     i {{ vm.progress.value }} / {{ vm.progress.max }}
 
-  ul.list-group(as-sortable ng-model='vm.selectedItems')
+  ul.list-group(
+  as-sortable="vm.sortableOptions"
+  ng-model='vm.selectedItems'
+  )
     li.list-group-item.display-flex(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
@@ -41,7 +44,7 @@ section(cg-busy='vm.busy')
           label {{ item.totalUnPickedVolume() | number:0 }}
           span Б.
 
-  .pull-right(ng-hide='vm.progress')
+  .text-right(ng-hide='vm.progress')
     button.btn.btn-default(ng-click='vm.pausePicking()')
       | Отложить
     button.btn.btn-warning(ng-click='vm.finishPicking()')
@@ -49,6 +52,6 @@ section(cg-busy='vm.busy')
     button.btn.btn-primary(ng-click='vm.startPicking()')
       | Собирать
 
-  .pull-right(ng-show='vm.pickingSession && vm.shouldWeighing')
+  //.pull-right(ng-show='vm.pickingSession && vm.shouldWeighing()')
     button.btn.btn-success(ng-click='vm.getWeighing()')
       | Взвесить

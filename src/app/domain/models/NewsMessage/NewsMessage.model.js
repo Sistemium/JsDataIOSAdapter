@@ -4,20 +4,10 @@
 
   angular.module('Models').run(function (Schema) {
 
-    function getRating() {
-
-      var rating = this.ratingsTotal / this.ratingsCount;
-
-      if (rating) {
-        return rating % 1 != 0 ? rating.toFixed(1) : rating
-      }
-
-
-    }
-
     Schema.register({
 
       name: 'NewsMessage',
+
       relations: {
         hasOne: {
           UserNewsMessage: {
@@ -28,12 +18,16 @@
       },
 
       computed: {
-        rating: ['news', getRating]
+        rating: ['ratingsTotal', 'ratingsCount', commonRating]
       },
 
       methods: {}
 
     });
+
+    function  commonRating(ratingsTotal, ratingsCount) {
+      return ratingsCount ? ratingsTotal / ratingsCount : null;
+    }
 
   });
 

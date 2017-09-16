@@ -8,28 +8,29 @@ section.has-navbar-fixed-bottom.ui-view
       span Позиций:
       label {{ vm.currentTotals.positionsCount () | number:0 }}
 
-  table.table.table-hover
-    thead
-      tr
-        th(colspan='5')
-          .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
-            i {{ vm.progress.value }} / {{ vm.progress.max }}
-      tr
-        th.hidden-xs Статус
-        th Номер
-        th.number Позиций
-        th.number Коробок
-    tbody
-      tr(
-        ng-repeat='order in vm.pickingOrders track by order.id'
-        ng-click='vm.toggleSelect(order)'
-        ng-class='vm.rowClass(order)'
-      )
-        td.hidden-xs
-          i(ng-class="order.processingClass")
-        td {{ order.ndoc }}
-        td.number {{ order.positionsCount() | number:0 }}
-        td.number {{ order.totalBoxVolume() | number:0 }}
+  .scroll-y.clear-both(resize resize-offset-top='55')
+    table.table.table-hover
+      thead
+        tr
+          th(colspan='5')
+            .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
+              i {{ vm.progress.value }} / {{ vm.progress.max }}
+        tr
+          th.hidden-xs Статус
+          th Номер
+          th.number Позиций
+          th.number Коробок
+      tbody
+        tr(
+          ng-repeat='order in vm.pickingOrders track by order.id'
+          ng-click='vm.toggleSelect(order)'
+          ng-class='vm.rowClass(order)'
+        )
+          td.hidden-xs
+            i(ng-class="order.processingClass")
+          td {{ order.ndoc }}
+          td.number {{ order.positionsCount() | number:0 }}
+          td.number {{ order.totalBoxVolume() | number:0 }}
 
 nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')
   .container

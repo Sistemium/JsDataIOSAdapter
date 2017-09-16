@@ -1,70 +1,71 @@
-.ui-view(cg-busy='vm.cgBusy')
+.shipment-list.ui-view(
+cg-busy='vm.cgBusy'
+)
 
-  .shipment-list(ng-if='vm.ready' ng-class='{"pointer-event-class": vm.busy }')
+  .headers
+    .ndoc №
+    .egais ЕГАИС
+    .driver Водитель
+    .salesman(ng-if='!vm.currentSalesman') ТП
+    .outlet Точка
+    .cost Стоимость
+    .positions Позиций
 
-    .headers
-      .ndoc №
-      .egais ЕГАИС
-      .driver Водитель
-      .salesman(ng-if='!vm.currentSalesman') ТП
-      .outlet Точка
-      .cost Стоимость
-      .positions Позиций
-
-    #scroll-main.scroll-y(
-    elem-ready='vm.restoreScrollPosition()'
-    resize
-    resize-offset-top='5'
-    vs-repeat='{{vm.rowHeight()}}'
-    vs-scrolled-to-end='vm.getData()'
-    vs-scrolled-to-end-offset='15'
-    vs-excess='10'
+  #scroll-main.scroll-y(
+  ng-if='vm.ready'
+  elem-ready='vm.restoreScrollPosition()'
+  resize
+  resize-offset-top='5'
+  vs-repeat='{{vm.rowHeight()}}'
+  vs-scrolled-to-end='vm.getData()'
+  vs-scrolled-to-end-offset='15'
+  vs-excess='10'
+  )
+    .repeated-item(
+    ng-repeat='shipment in vm.data track by shipment.id'
     )
-      .repeated-item(
-      ng-repeat='shipment in vm.data track by shipment.id'
-      )
 
-        .date(ng-if='!shipment.ndoc && !shipment.isFooter')
-          .title {{ ::shipment.date }}
+      .date(ng-if='!shipment.ndoc && !shipment.isFooter')
+        .title {{ ::shipment.date }}
 
-        .shipment(ng-if='shipment.ndoc' ng-click='vm.itemClick(shipment, $event)')
+      .shipment(ng-if='shipment.ndoc' ng-click='vm.itemClick(shipment, $event)')
 
-          .ndoc
-            label №:
-            span {{shipment.ndoc}}
+        .ndoc
+          label №:
+          span {{shipment.ndoc}}
 
-          .egais
-            egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
-              i.glyphicon(ng-class='shipment.egaisCached().egaisTtnCls')
-              i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
+        .egais
+          egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
+            i.glyphicon(ng-class='shipment.egaisCached().egaisTtnCls')
+            i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
 
-          .driver
-            label Водитель:
-            driver-popover(driver='shipment.driver' ng-if='shipment.driver')
-              span {{shipment.driver.tinyName}}
+        .driver
+          label Водитель:
+          driver-popover(driver='shipment.driver' ng-if='shipment.driver')
+            span {{shipment.driver.tinyName}}
 
-          .salesman(ng-if='!vm.currentSalesman')
-            label ТП:
-            span {{shipment.salesman.tinyName}}
+        .salesman(ng-if='!vm.currentSalesman')
+          label ТП:
+          span {{shipment.salesman.tinyName}}
 
-          .outlet
-            .outlet-address
-              span {{shipment.outlet.name}}
-              span.address {{shipment.outlet.address}}
+        .outlet
+          .outlet-address
+            span {{shipment.outlet.name}}
+            span.address {{shipment.outlet.address}}
 
-          .cost
-            label Стоимость:
-            .cost-diff-price
-              currency-value(value='shipment.totalCost()')
-              .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
-                span +
-                currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
+        .cost
+          label Стоимость:
+          .cost-diff-price
+            currency-value(value='shipment.totalCost()')
+            .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
+              span +
+              currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
 
-          .positions
-            label Позиций:
-            span {{ shipment.totalPositions() }}
+        .positions
+          label Позиций:
+          span {{ shipment.totalPositions() }}
 
-        .date.footer(ng-if='::shipment.isFooter && !vm.busy')
-          currency-value(value='shipment.totalCost')
-          .spacing
+      .date.footer(ng-if='shipment.isFooter')
+        currency-value(value='shipment.totalCost')
+        .spacing
 

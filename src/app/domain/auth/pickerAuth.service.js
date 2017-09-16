@@ -4,8 +4,8 @@
 
   function PickerAuth($window, $rootScope, $state) {
 
-    var currentPicker;
-    var redirectTo;
+    let currentPicker;
+    let redirectTo;
 
     function logout() {
       currentPicker = undefined;
@@ -15,17 +15,27 @@
 
     function init() {
 
-      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
+      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', (event, next, nextParams) => {
 
-        var needRoles = _.get(next, 'data.auth');
+        let needRoles = _.get(next, 'data.auth');
 
-        if (needRoles === 'pickerAuth' && !currentPicker) {
-          event.preventDefault();
-          redirectTo = {
-            state: next,
-            params: nextParams
-          };
-          $state.go('login');
+        if (needRoles === 'pickerAuth') {
+
+          let isAuthorized = !!currentPicker;
+
+          if (!isAuthorized) {
+            event.preventDefault();
+            redirectTo = {
+              state: next,
+              params: nextParams
+            };
+            return $state.go('login');
+          } else if (event.defaultPrevented) {
+            event.defaultPrevented = false;
+          }
+
+          event[needRoles] = true;
+
         }
 
       }));
@@ -53,8 +63,8 @@
       logout: logout,
 
       login: function (user,to) {
-        
-        var redirect = to || redirectTo;
+
+        let redirect = to || redirectTo;
 
         if (!user || !user.id) {
           $window.localStorage.removeItem('currentPickerId');

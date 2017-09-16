@@ -155,6 +155,7 @@
 
       delete params.limit;
       delete params.offset;
+      delete params._;
 
       return parsed;
 

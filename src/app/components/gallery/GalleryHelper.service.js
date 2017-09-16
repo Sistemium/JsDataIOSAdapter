@@ -5,7 +5,7 @@
   angular.module('webPage')
     .service('GalleryHelper', GalleryHelper);
 
-  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window) {
+  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window, IOS, toastr) {
 
     function setupController(vm, $scope) {
 
@@ -19,13 +19,17 @@
 
         setZoom: _.throttle(zoom => $scope.$apply(() => vm.zoom = zoom), 200),
 
+        isIos: IOS.isIos(),
+
         thumbnailClick,
         fullScreenThumbnailClick,
 
         nextImageClick: setNextImage,
         prevImageClick: setPrevImage,
 
-        closeGalleryClick: () => vm.zoom === 1 && cleanup(),
+        largeImageClick: () => vm.zoom === 1 && cleanup(),
+        closeGalleryClick: () => cleanup(),
+        sendToCameraRollClick,
 
         deleteClick
 
@@ -77,6 +81,16 @@
         $scope.opened = false;
         $body.unbind('keydown', onKeyDown);
         fullscreenElement && fullscreenElement.remove();
+      }
+
+      function sendToCameraRollClick() {
+
+        IOS.sendToCameraRoll(vm.currentImage)
+          .then(() => {
+            toastr.success('Изображение сохранено');
+          })
+          .catch(err => toastr.error(angular.toJson(err)));
+
       }
 
       function setNextImage() {

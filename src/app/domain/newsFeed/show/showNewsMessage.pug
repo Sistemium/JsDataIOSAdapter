@@ -1,0 +1,44 @@
+.show-news-message
+
+  .news-message
+
+    .header
+
+      .subject {{ vm.newsMessage.subject }}
+
+      fieldset.buttons(ng-if='vm.isNewsMaker')
+
+        a.btn.btn-link(href ng-click='vm.editClick()')
+          i.glyphicon.glyphicon-edit
+
+        a.btn.btn-link(href ng-click='vm.addPhotoClick()')
+          i.glyphicon.glyphicon-camera
+
+      //valid-lifetime(
+      //date-b='vm.newsMessage.dateB'
+      //date-e='vm.newsMessage.dateE'
+      //ng-if='vm.newsMessage.dateE || vm.newsMessage.dateB'
+      //)
+
+    .body.scroll-y(resize resize-offset-top='60')
+      p {{ vm.newsMessage.body }}
+
+    .footer.spaced
+
+      .common-rating
+
+        label(ng-if='vm.newsMessage.rating') Средняя оценка:
+
+        strong {{ vm.newsMessage.rating }}
+
+      .rating
+
+        label Ваша оценка:
+        span(
+        uib-rating
+        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+        enable-reset='false'
+        max='5'
+        ng-model='vm.userNewsMessage.rating'
+        ng-click='vm.newsRatingClick()'
+        )

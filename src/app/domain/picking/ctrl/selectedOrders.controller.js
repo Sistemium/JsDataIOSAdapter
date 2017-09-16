@@ -7,14 +7,14 @@
     const picker = Schema.model('Picker').getCurrent();
 
     if (!picker) {
-      return $state.go ('login');
+      return $state.go('login');
     }
 
     const PO = Schema.model('PickingOrder');
     const POP = Schema.model('PickingOrderPosition');
-    const POS = Schema.model('PickingOrderSession');
-    const PS = Schema.model('PickingSession');
-    const PSW = Schema.model('PickingSessionWeighing');
+    const PickingOrderSession = Schema.model('PickingOrderSession');
+    const PickingSession = Schema.model('PickingSession');
+    const PickingSessionWeighing = Schema.model('PickingSessionWeighing');
 
     let vm = this;
 
@@ -23,7 +23,7 @@
     let allPositions = [];
 
     _.each(selected, po => {
-      Array.prototype.push.apply(allPositions,po.positions);
+      Array.prototype.push.apply(allPositions, po.positions);
     });
 
     let progress = {
@@ -31,12 +31,19 @@
       value: 0
     };
 
-    angular.extend(vm,{
+    const sortableOptions = {
+      containment: '#scrollable-container',
+      scrollableContainer: '#scrollable-container'
+    };
+
+    angular.extend(vm, {
 
       progress: progress,
 
       selectedItems: selected,
-      totals: PO.agg (vm, 'selectedItems'),
+      totals: PO.agg(vm, 'selectedItems'),
+
+      sortableOptions,
 
       startPicking,
       finishPicking,
@@ -47,13 +54,13 @@
 
     });
 
-    function ejectOthers () {
-      Schema.model ('PickingOrderPositionPicked').ejectAll();
-      Schema.model ('StockBatch').ejectAll();
+    function ejectOthers() {
+      Schema.model('PickingOrderPositionPicked').ejectAll();
+      Schema.model('StockBatch').ejectAll();
     }
 
-    function loadRelationsPOP (pop) {
-      return POP.loadRelations(pop,['PickingOrderPositionPicked']);
+    function loadRelationsPOP(pop) {
+      return POP.loadRelations(pop, ['PickingOrderPositionPicked']);
     }
 
     function weighing() {
@@ -66,8 +73,7 @@
         })
         .catch((err) => {
           return $q.reject(err);
-        })
-      ;
+        });
 
     }
 
@@ -84,18 +90,14 @@
           if (!err || !err.status) return $q.reject(err);
           return weighingError();
 
-        })
-      ;
+        });
 
     }
 
     function getWeighing() {
 
       return getWeight()
-        .then((weight) => {
-          createPickingSessionWeighing(weight);
-        })
-      ;
+        .then(createPickingSessionWeighing);
 
     }
 
@@ -112,8 +114,7 @@
 
           return confirmWeighingModal(response.data.weight);
 
-        })
-      ;
+        });
 
     }
 
@@ -122,10 +123,7 @@
       return ConfirmModal.show({
         text: `Вес: ${weight} кг. Записать?`
       })
-        .then(() => {
-          return weight;
-        })
-      ;
+        .then(() => weight);
 
     }
 
@@ -145,7 +143,7 @@
       if (vm.pickingSession) {
 
         vm.pickingSession.processing = 'finished';
-        PS.save(vm.pickingSession);
+        PickingSession.save(vm.pickingSession);
         vm.pickingSession = undefined;
 
       }
@@ -156,11 +154,11 @@
     }
 
     function getCurrentPickingSession() {
-      PS.findAll({
+      PickingSession.findAll({
         pickerId: picker.id,
         siteId: picker.siteId,
         processing: 'picking'
-      }, { bypassCache: true })
+      }, {bypassCache: true})
         .then(pss => {
           vm.pickingSession = _.first(pss);
         })
@@ -169,25 +167,21 @@
 
     function createPickingSession(weight) {
 
-      vm.pickingSession = PS.inject({
+      PickingSession.create({
         processing: 'picking',
         pickerId: picker.id,
         siteId: picker.siteId
-      });
+      })
+        .then(pickingSession => {
 
-      PS.save(vm.pickingSession)
-        .then(() => {
+          vm.pickingSession = pickingSession;
 
           createPickingSessionWeighing(weight);
 
-          _.forEach(vm.selectedItems, po => {
-            POS.save(
-              POS.inject({
-                pickingSessionId: vm.pickingSession.id,
-                pickingOrderId: po.id
-              })
-            );
-          });
+          return _.map(vm.selectedItems, po => PickingOrderSession.create({
+            pickingSessionId: vm.pickingSession.id,
+            pickingOrderId: po.id
+          }));
 
         })
         .then(() => {
@@ -204,12 +198,10 @@
 
       if (vm.shouldWeighing()) {
 
-        PSW.save(
-          PSW.inject({
-            pickingSessionId: vm.pickingSession.id,
-            weight: weight
-          })
-        );
+        return PickingSessionWeighing.create({
+          pickingSessionId: vm.pickingSession.id,
+          weight: weight
+        });
 
       }
 
@@ -285,7 +277,7 @@
       ;
     }
 
-    vm.busy = saAsync.chunkSerial (4, allPositions, loadRelationsPOP, chunk => {
+    vm.busy = saAsync.chunkSerial(4, allPositions, loadRelationsPOP, chunk => {
       progress.value += chunk.length;
     }, _.noop)
       .then(getCurrentPickingSession());

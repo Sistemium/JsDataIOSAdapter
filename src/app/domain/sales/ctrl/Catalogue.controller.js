@@ -9,7 +9,7 @@
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout,
                                DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper) {
 
-    const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr} = Helpers;
+    const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr, DomainOption} = Helpers;
     const {
       Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
       CatalogueAlert,
@@ -39,6 +39,7 @@
       showOnlyOrdered: $state.params.ordered === 'true',
       lowStockThreshold: LOW_STOCK_THRESHOLD,
 
+      hasKS: DomainOption.hasSaleOrderKS(),
       currentArticleGroup: null,
       ancestors: [],
       articleGroupIds: {},
@@ -602,7 +603,9 @@
       if (!priceType.prices()) {
         DEBUG('filterStock', 'cachedFindAll Price');
         return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000})
-          .then(filterStock);
+          .then(prices => {
+            return _.isEmpty(prices) ? prices : filterStock();
+          });
       }
 
       DEBUG('filterStock', 'prices');

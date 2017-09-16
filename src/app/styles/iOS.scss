@@ -47,8 +47,8 @@
 
   .display-flex {
     > button {
-      margin-top: -9px;
-      margin-bottom: -9px;
+      margin-top: -8px;
+      margin-bottom: -8px;
     }
   }
 
@@ -99,7 +99,7 @@ body.iOS {
   //overflow-y: scroll;
   //-webkit-overflow-scrolling: touch;
   .has-navbar-fixed-bottom {
-    margin-bottom: 120px;
+    //margin-bottom: 120px;
   }
 
   //-webkit-overflow-scrolling: touch;

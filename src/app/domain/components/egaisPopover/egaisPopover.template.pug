@@ -4,8 +4,8 @@
 .status
   span {{ vm.egais.egaisTtnStatus }}
   span {{ vm.egais.egaisTtnNdoc }}
-.status
+.status(ng-if='vm.egais.egaisActCls')
   i.glyphicon(ng-class='vm.egais.egaisActCls')
   span {{ vm.egais.egaisActTs | amUtc | amLocal | amCalendar:null:vm.format }}
-.status
+.status(ng-if='vm.egais.egaisActStatus')
   span {{ vm.egais.egaisActStatus }}

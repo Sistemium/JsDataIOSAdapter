@@ -1,0 +1,90 @@
+// TODO: show avatarPhoto or take photo button
+
+.outlet-view.outlet
+
+  .header
+
+    .title
+
+      .partner-name
+        a.inherit-colors(
+        href ui-sref='^.partner({id: vm.outlet.partner.id})'
+        ng-class='vm.partnerNavClass'
+        ) {{ vm.outlet.partner.name }}
+
+      .address
+        a.inherit-colors(
+        href ng-click='vm.outletClick()'
+        ng-class='vm.outletNavClass'
+        ) {{ vm.outlet.address }}
+
+    .avatar
+
+      a.thumb(href ng-click='vm.thumbnailClick()')
+        img(
+        ng-src='{{vm.outlet.avatar.srcThumbnail}}'
+        ng-class='!vm.outlet.avatar.srcThumbnail && "placeholder"'
+        )
+
+  .ui-view
+
+    .outlet-info
+
+      .fields
+
+        .comment-text(ng-if='vm.outlet.commentText')
+          strong {{ vm.outlet.commentText }}
+
+        .license-info(ng-if='vm.outlet.licenseInfo')
+          label Лицензия
+          span {{ vm.outlet.licenseInfo }}
+
+        .egais-code(ng-if='vm.outlet.egaisCode')
+          label ЕГАИС ИД
+          span {{ vm.outlet.egaisCode }}
+
+      .buttons.with-map
+
+        a.btn.btn-link(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState && vm.isEditable')
+          i.glyphicon.glyphicon-edit
+
+        a.btn.btn-link(ng-click='vm.takePhoto()')
+          i.glyphicon.glyphicon-camera
+
+        a.btn.btn-link(
+        popover-placement="bottom-left auto"
+        popover-trigger='"outsideClick"'
+        uib-popover-template="'app/domain/sales/views/location.html'"
+        popover-is-open='vm.mapPopoverIsOpen'
+        type='button'
+        ng-class='{green: vm.map}'
+        ng-disabled='!vm.map'
+        )
+          i.glyphicon.glyphicon-map-marker
+
+
+  //hr.clear-both
+
+  //.header-button
+    h4.pull-left
+      span Визиты
+
+    button.btn.ml-em.btn-success.pull-right.btn-sm(
+    ng-click='vm.newVisitClick()'
+    ng-disabled='!vm.currentSalesman'
+    ) Новый визит
+
+  //.scroll-y(resize resize-offset-top)
+    table.table.table-striped.clear-both.table-hover(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
+      thead
+        tr
+          th(ng-if='!vm.currentSalesman')
+          th Дата
+          th.number Фото
+          th.number Ответы
+      tbody
+        tr.clickable(ng-repeat='visit in vm.visits | orderBy:"-deviceCts" track by visit.id' ng-click='vm.visitClick(visit)')
+          td(ng-if='!vm.currentSalesman') {{ visit.salesman.shortName }}
+          td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
+          td.number {{ visit.photos.length | number: 0 }}
+          td.number {{ visit.answers.length | number: 0 }}

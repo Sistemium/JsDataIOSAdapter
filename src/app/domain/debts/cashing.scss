@@ -108,6 +108,9 @@
 
         .ndoc {
           text-align: left;
+          @include responsive-only(gt-xxs) {
+            width: $field-width * 1.85;
+          }
           .detete-btn {
             margin-left: 5px;
             color: $red;

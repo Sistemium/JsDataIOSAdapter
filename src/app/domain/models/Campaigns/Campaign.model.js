@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, DomainOption) {
 
     Schema.register({
 
@@ -45,12 +45,16 @@
 
           let where = {
             dateB: {
-              "<=": campaignGroup.dateE
+              '<=': campaignGroup.dateE
             },
             dateE: {
-              ">=": campaignGroup.dateB
+              '>=': campaignGroup.dateB
             }
           };
+
+          if (DomainOption.hasInactiveActions()) {
+            where.isActive = {'==': true};
+          }
 
           return {where};
 

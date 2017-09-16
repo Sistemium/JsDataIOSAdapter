@@ -1,6 +1,6 @@
 @import "variables";
 
-%flag {
+%flag, .flagged {
 
   @extend %flaggable;
   @extend %flagged;

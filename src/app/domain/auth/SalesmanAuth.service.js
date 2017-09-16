@@ -151,7 +151,7 @@
 
       let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage'];
 
-      const {Workflow, SaleOrder, Outlet, NewsMessage} = Schema.models();
+      const {Workflow, SaleOrder, Outlet, NewsMessage, UserNewsMessage} = Schema.models();
 
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
@@ -191,9 +191,14 @@
                 Menu.setItemData('sales.saleOrders', {badge: data.length});
               });
 
-            NewsMessage.findAll().then(data => {
-              Menu.setItemData('newsFeed', {badge: data.length});
-            });
+            NewsMessage.findAll()
+              .then(() => {
+                return UserNewsMessage.findAll();
+              })
+              .then(() => {
+                let unRated = _.filter(NewsMessage.getAll(), message => !_.get(message, 'userNewsMessage.rating'));
+                Menu.setItemData('newsFeed', {badge: unRated.length});
+              });
           }
 
         });
