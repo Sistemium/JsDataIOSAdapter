@@ -24,7 +24,9 @@
         p {{newsMessage.body}}
 
       .rating
-        label Оценка:
+
+        label {{ vm.ratings[newsMessage.id] ? 'Ваша оценка:' : 'Оцените:' }}
+
         span(
         uib-rating
         enable-reset='false'

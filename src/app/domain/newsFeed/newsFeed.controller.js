@@ -46,7 +46,7 @@
 
     function cacheRatings() {
 
-      vm.ratings = {};
+      // vm.ratings = {};
 
       _.forEach(vm.userNewsMessages, userNewsMessage => {
         vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
@@ -84,7 +84,7 @@
 
           UserNewsMessage.create(userNewsMessage)
             .then(() => {
-              toastr.success('Ваша оценка принята', {timeOut: 1000});
+              toastr.success('Ваша оценка принята', 'Спасибо!', {timeOut: 1000});
             })
             .catch(e => console.error(e));
 
