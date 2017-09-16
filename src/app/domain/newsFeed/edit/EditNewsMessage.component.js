@@ -17,7 +17,7 @@
     });
 
 
-  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp, Auth) {
+  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp, Auth, toastr) {
 
     const {NewsMessage} = Schema.models();
 
@@ -32,13 +32,41 @@
       cancelClick,
       saveClick,
       hasChanges,
-      isValid
+      isValid,
+      deleteClick
 
     });
 
     /*
     Functions
      */
+
+    function deleteClick() {
+
+      if (vm.deleting) {
+        return;
+      }
+
+      let options = {timeOut: 2000, onTap, onHidden};
+
+      vm.deleting = toastr.warning('Нажмите, чтобы подтвердить удаление', 'Внимание!', options);
+
+      function onTap() {
+
+        if (!vm.newsMessage.id) {
+          $state.go('^');
+        }
+
+        return vm.newsMessage.DSDestroy()
+          .then(() => $state.go('^'));
+
+      }
+
+      function onHidden() {
+        delete vm.deleting;
+      }
+
+    }
 
     function isValid() {
       return vm.newsMessage && vm.newsMessage.subject && vm.newsMessage.body;

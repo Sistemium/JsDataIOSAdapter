@@ -1,6 +1,12 @@
 .buttons
 
-  button.btn.btn-warning.animate-show(
+  button.btn.animate-show(
+  ng-click='vm.deleteClick()'
+  ng-class='vm.deleting ? "btn-danger" : "btn-link"'
+  )
+    i.glyphicon.glyphicon-trash
+
+  button.btn.btn-warning.animate-show.ng-hide(
   ng-show='vm.hasChanges()'
   ng-click='vm.cancelClick()'
   ) Отменить
