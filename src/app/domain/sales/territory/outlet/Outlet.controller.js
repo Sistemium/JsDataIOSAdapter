@@ -126,6 +126,10 @@
 
     function thumbnailClick() {
 
+      if (!vm.outlet.avatar) {
+        return takePhoto();
+      }
+
       let src = vm.outlet.avatar.srcFullscreen;
       let title = vm.outlet.partner.shortName + ' (' + vm.outlet.address + ')';
 
