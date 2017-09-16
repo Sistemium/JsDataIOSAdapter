@@ -71,7 +71,7 @@
           hideNavs: true
         },
 
-        templateUrl: 'app/domain/sales/views/addOutlet.html',
+        templateUrl: 'app/domain/sales/territory/outlet/addOutlet.html',
         controller: 'AddOutletController',
         controllerAs: 'vm'
 
@@ -110,7 +110,7 @@
         name: 'outlet',
         url: '/outlet/:id?showLocation',
 
-        templateUrl: 'app/domain/sales/views/outlet.html',
+        templateUrl: 'app/domain/sales/territory/outlet/outlet.html',
         controller: 'OutletController',
         controllerAs: 'vm',
 
@@ -127,7 +127,7 @@
           hideNavs: true
         },
 
-        templateUrl: 'app/domain/sales/views/addOutlet.html',
+        templateUrl: 'app/domain/sales/territory/outlet/addOutlet.html',
         controller: 'AddOutletController',
         controllerAs: 'vm'
 
@@ -138,7 +138,7 @@
         name: 'editOutlet',
         url: '/outlet/:id/edit',
 
-        templateUrl: 'app/domain/sales/views/editOutlet.html',
+        templateUrl: 'app/domain/sales/territory/outlet/editOutlet.html',
         controller: 'EditOutletController',
         controllerAs: 'vm',
 
@@ -153,7 +153,7 @@
         name: 'territory',
         url: '/territory',
 
-        templateUrl: 'app/domain/sales/views/territory.html',
+        templateUrl: 'app/domain/sales/territory/territory.html',
         controller: 'SalesTerritoryController',
         controllerAs: 'vm'
 

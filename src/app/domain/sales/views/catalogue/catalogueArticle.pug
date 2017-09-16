@@ -16,7 +16,7 @@ before-tag-name='li'
     )
       img(
       ng-src='{{ ::stock.article.avatar.srcThumbnail }}'
-      ng-class='::stock.article.avatar.srcThumbnail || "placeholder"'
+      ng-class='::!stock.article.avatar.srcThumbnail && "placeholder"'
       )
 
     .article-wrapper(

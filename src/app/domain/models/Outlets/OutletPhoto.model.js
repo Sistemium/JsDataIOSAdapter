@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema, PhotoHelper) {
 
-    Schema.register ({
+    const config = PhotoHelper.setupModel({
 
       name: 'OutletPhoto',
 
@@ -24,6 +24,8 @@
       }
 
     });
+
+    Schema.register (config);
 
   });
 

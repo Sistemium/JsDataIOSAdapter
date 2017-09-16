@@ -71,8 +71,8 @@
 
     function onStateChange (to) {
 
-      var isRootState = (to.name === rootState);
-      var disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
+      let isRootState = (to.name === rootState);
+      let disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
 
       _.assign(vm, {
         isRootState,
@@ -124,12 +124,12 @@
       return PhotoHelper.importThumbnail(op, vm.thumbnails);
     }
 
-    function thumbnailClick(pic) {
+    function thumbnailClick() {
 
-      var src = vm.thumbnails[pic.id];
-      var title = vm.outlet.partner.shortName + ' (' + vm.outlet.address + ')';
+      let src = vm.outlet.avatar.srcFullscreen;
+      let title = vm.outlet.partner.shortName + ' (' + vm.outlet.address + ')';
 
-      return PhotoHelper.thumbnailClick('OutletPhoto', pic, src, title);
+      return PhotoHelper.thumbnailClick('OutletPhoto', vm.outlet.avatar, src, title);
 
     }
 
