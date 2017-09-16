@@ -43,7 +43,7 @@
           label ЕГАИС ИД
           span {{ vm.outlet.egaisCode }}
 
-      .buttons
+      .buttons.with-map
 
         a.btn.btn-link(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState && vm.isEditable')
           i.glyphicon.glyphicon-edit
@@ -51,7 +51,7 @@
         a.btn.btn-link(ng-click='vm.takePhoto()')
           i.glyphicon.glyphicon-camera
 
-        a.btn.btn-link.with-map(
+        a.btn.btn-link(
         popover-placement="bottom-left auto"
         popover-trigger='"outsideClick"'
         uib-popover-template="'app/domain/sales/views/location.html'"

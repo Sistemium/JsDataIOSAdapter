@@ -3,6 +3,7 @@
 .outlet-view {
 
   $thumb-size: 110px;
+  $padding: 5px;
 
   .header {
 
@@ -13,8 +14,8 @@
 
       display: inline-block;
 
-      border-radius: 3px;
-      padding: 5px;
+      border-radius: $padding;
+      padding: $padding;
       border: solid 1px $state-info-border;
 
       img {
@@ -38,7 +39,7 @@
         font-size: 150%;
       }
       > * {
-        margin: 5px 0;
+        margin: $padding 0;
       }
 
     }
@@ -51,10 +52,21 @@
     flex-direction: row;
 
     .fields {
+
       position: relative;
       top: -45px;
       flex: 1;
       padding-right: 20px;
+
+      > * {
+        display: flex;
+        flex-direction: row;
+      }
+
+      > * + * {
+        margin-top: $padding;
+      }
+
     }
 
     .buttons {
