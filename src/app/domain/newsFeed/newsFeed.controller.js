@@ -2,7 +2,7 @@
 
 (function () {
 
-  function NewsFeedController($state, Schema, saControllerHelper, $scope, saApp, toastr, Sockets, Auth) {
+  function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth) {
 
     const {NewsMessage, UserNewsMessage} = Schema.models();
 
@@ -14,7 +14,7 @@
       newsMessageClick,
       createNewsMessageClick,
 
-      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin', 'supervisor']),
+      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
       ratings: {}
 

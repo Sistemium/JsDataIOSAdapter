@@ -1,13 +1,15 @@
-.news-feed.ui-view()
+.news-feed.ui-view(cg-busy='vm.cgBusy')
 
-  .buttons
+  .buttons(ng-if='vm.isNewsMaker')
 
     button.btn.btn-primary(
-    ng-disabled='!vm.isNewsMaker'
     ng-click='vm.createNewsMessageClick()'
     ) Добавить новость
 
-  .scroll-y(resize resize-offset-top='15' vs-repeat='155')
+  .scroll-y(resize resize-offset-top='15' vs-repeat='155' resize-property='height')
+
+    .no-news(ng-if='vm.newsMessages && !vm.newsMessages.length')
+      p Новостей нет. Авторизованные пользователи могут добавить новость.
 
     .news-message(
     ng-repeat='newsMessage in vm.newsMessages track by newsMessage.id'

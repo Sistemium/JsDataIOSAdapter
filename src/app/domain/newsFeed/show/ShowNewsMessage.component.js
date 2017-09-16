@@ -29,7 +29,7 @@
       editClick,
       newsRatingClick,
 
-      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin', 'supervisor'])
+      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin'])
 
     });
 
