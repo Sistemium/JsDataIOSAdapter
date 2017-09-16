@@ -42,9 +42,9 @@
   .scroll-y > .news-message {
 
     outline: none;
-    background: $gray-background-color;
+    //background: $gray-background-color;
     padding: 10px;
-    height: 135px;
+    height: 150px;
 
     border-radius: $border-radius;
 
@@ -57,9 +57,11 @@
       background-color: darken($gray-background-color, 5%);
 
       .body {
+
         p:after {
           background-color: darken($gray-background-color, 5%);
         }
+
       }
 
     }
@@ -76,15 +78,22 @@
         @extend .ellipsis;
 
         flex: 1;
-        font-size: 130%;
+        font-size: 120%;
         margin-right: 10px;
 
-        @include responsive-only(lt-md) {
-          font-size: 100%;
-        }
+        //@include responsive-only(lt-md) {
+        //  font-size: 100%;
+        //}
 
       }
 
+    }
+
+    valid-lifetime {
+      font-size: 80%;
+      label {
+        font-weight: normal;
+      }
     }
 
     .body {
@@ -106,6 +115,7 @@
         position: absolute;
         right: 0;
         bottom: 2px;
+        color: $primary-color;
       }
 
       p:after {
@@ -123,12 +133,16 @@
     .rating {
 
       height: 30px;
-      margin-top: $padding;
+      margin-top: $padding * 2;
 
       display: flex;
       justify-content: flex-end;
       align-items: center;
 
+      label {
+        font-weight: normal;
+        color: $gray;
+      }
 
       span {
 
