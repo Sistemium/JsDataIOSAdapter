@@ -27,6 +27,7 @@
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
     vm.rebindAll(NewsMessage, {}, 'vm.newsMessages');
+    vm.rebindAll(UserNewsMessage, {}, 'vm.userNewsMessages', cacheRatings);
 
     refresh();
 
@@ -37,20 +38,17 @@
     function refresh() {
       vm.setBusy([
         NewsMessage.findAll(),
-        findUserNewsMessages()
+        UserNewsMessage.findAll()
       ]);
     }
 
-    function findUserNewsMessages() {
+    function cacheRatings() {
 
-      return UserNewsMessage.findAll()
-        .then(userNewsMessages => {
+      vm.ratings = {};
 
-          _.forEach(userNewsMessages, userNewsMessage => {
-            vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
-          })
-
-        });
+      _.forEach(vm.userNewsMessages, userNewsMessage => {
+        vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
+      })
 
     }
 

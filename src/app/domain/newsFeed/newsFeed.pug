@@ -29,5 +29,5 @@
         titles='["Один", "Два", "Три", "Четыре", "Пять"]'
         ng-model='vm.ratings[newsMessage.id]'
         max='5'
-        ng-click='$event.preventDefault();vm.newsRatingClick(newsMessage)'
+        ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'
         )
