@@ -25,9 +25,11 @@
 
     .footer.spaced
 
-      .common-rating
+      .common-rating(
+      ng-if='vm.newsMessage.rating && vm.userNewsMessage.rating'
+      )
 
-        label(ng-if='vm.newsMessage.rating') Средняя оценка:
+        label Средняя оценка:
 
         strong {{ vm.newsMessage.rating }}
 
