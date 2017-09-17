@@ -27,7 +27,7 @@
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
     vm.rebindAll(NewsMessage, {
-      orderBy: [['ts', 'DESC']]
+      orderBy: [['ts', 'DESC'], ['deviceTs', 'DESC']]
     }, 'vm.newsMessages');
     vm.rebindAll(UserNewsMessage, {}, 'vm.userNewsMessages', cacheRatings);
 
