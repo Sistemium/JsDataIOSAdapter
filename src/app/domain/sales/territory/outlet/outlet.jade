@@ -20,10 +20,10 @@
 
     .avatar
 
-      a.thumb(href ng-click='vm.thumbnailClick()')
+      a.thumb(href ng-click='vm.thumbClick()')
         img(
-        ng-src='{{vm.outlet.avatar.srcThumbnail}}'
-        ng-class='!vm.outlet.avatar.srcThumbnail && "placeholder"'
+        ng-src='{{vm.avatarSrc}}'
+        ng-class='!vm.avatarSrc && "placeholder"'
         )
 
   .ui-view

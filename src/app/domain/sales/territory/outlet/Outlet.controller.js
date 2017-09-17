@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers, $timeout) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers, $timeout, GalleryHelper) {
 
     // TODO: allow to add/change location for an existing outlet
 
@@ -20,7 +20,7 @@
       isUpdateLocationEnabled: true,
       collapsePhotosSection: true,
       collapseVisitsSection: false,
-      thumbnails: {},
+      photos: [],
       isEditable: $state.current.name === 'sales.territory.outlet',
 
       visitClick: (visit) => $state.go('.visit', {visitId: visit.id}),
@@ -31,9 +31,7 @@
       editOutletClick,
       takePhoto,
       outletClick,
-      thumbnailClick,
-      togglePhotosSection,
-      toggleVisitsSection,
+      thumbClick,
       confirmLocationYesClick,
       confirmLocationNoClick,
       updateLocationClick,
@@ -41,13 +39,17 @@
 
     });
 
+    GalleryHelper.setupController(vm, $scope);
+
     SalesmanAuth.watchCurrent($scope, refresh);
 
-    Outlet.bindOne(stateFilter, $scope, 'vm.outlet', function () {
+    Outlet.bindOne(stateFilter, $scope, 'vm.outlet', () => {
 
-      Outlet.loadRelations(vm.outlet, ['OutletPhoto', 'Location', 'Partner'])
-        .then(function (outlet) {
-          _.each(outlet.photos, importThumbnail);
+      if (!vm.outlet) return;
+
+      Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner'])
+        .then(outlet => {
+
           if (outlet.location) {
             initMap(outlet.location);
           }
@@ -69,7 +71,7 @@
      Functions
      */
 
-    function onStateChange (to) {
+    function onStateChange(to) {
 
       let isRootState = (to.name === rootState);
       let disableNavs = !!_.get(to, 'data.disableNavs') || isRootState;
@@ -97,7 +99,15 @@
 
       vm.currentSalesman = salesman;
 
-      OutletPhoto.bindAll(currentFilter(), $scope, 'vm.photos');
+      vm.rebindAll(OutletPhoto, {
+        outletId: stateFilter,
+        orderBy: [['deviceTs', 'DESC'], ['ts', 'DESC']]
+      }, 'vm.photos', () => {
+        let avatar = _.first(vm.photos);
+        vm.avatar = avatar;
+        vm.avatarSrc = _.get(avatar, 'srcThumbnail');
+      });
+
       Visit.bindAll(currentFilter(), $scope, 'vm.visits');
 
       vm.busy = $q.all([
@@ -116,33 +126,28 @@
     }
 
     function takePhoto() {
-      return PhotoHelper.takePhoto('OutletPhoto', {outletId: vm.outlet.id}, vm.thumbnails)
-        .then(() => vm.collapsePhotosSection = false);
+      return PhotoHelper.makePhoto('OutletPhoto', {outletId: vm.outlet.id})
+        .then(setAvatar);
     }
 
-    function importThumbnail(op) {
-      return PhotoHelper.importThumbnail(op, vm.thumbnails);
+    function setAvatar(picture) {
+      if (!picture) return console.error('setAvatar with no picture');
+      // vm.outlet.avatarPictureId = picture.id;
+      // return Outlet.create(vm.outlet);
     }
 
-    function thumbnailClick() {
+    function thumbClick() {
 
-      if (!vm.outlet.avatar) {
+      if (!vm.avatar) {
         return takePhoto();
       }
 
-      let src = vm.outlet.avatar.srcFullscreen;
-      let title = vm.outlet.partner.shortName + ' (' + vm.outlet.address + ')';
 
-      return PhotoHelper.thumbnailClick('OutletPhoto', vm.outlet.avatar, src, title);
+      vm.commentText = `${vm.outlet.partner.shortName} (${vm.outlet.address})`;
+      $scope.imagesAll = vm.photos;
 
-    }
+      vm.thumbnailClick(vm.avatar);
 
-    function togglePhotosSection() {
-      vm.collapsePhotosSection = !vm.collapsePhotosSection;
-    }
-
-    function toggleVisitsSection() {
-      vm.collapseVisitsSection = !vm.collapseVisitsSection;
     }
 
     function updateLocationClick($event) {
