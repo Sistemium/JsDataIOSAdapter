@@ -17,7 +17,7 @@
     });
 
 
-  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp, Auth, toastr) {
+  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp, Auth, $timeout) {
 
     const {NewsMessage} = Schema.models();
 
@@ -44,14 +44,12 @@
     function deleteClick() {
 
       if (vm.deleting) {
-        return;
+        return onConfirm();
       }
 
-      let options = {timeOut: 2000, onTap, onHidden};
+      vm.deleting = $timeout(2000).then(onTimeout);
 
-      vm.deleting = toastr.warning('Нажмите, чтобы подтвердить удаление', 'Внимание!', options);
-
-      function onTap() {
+      function onConfirm() {
 
         if (!vm.newsMessage.id) {
           $state.go('^');
@@ -62,7 +60,7 @@
 
       }
 
-      function onHidden() {
+      function onTimeout() {
         delete vm.deleting;
       }
 
