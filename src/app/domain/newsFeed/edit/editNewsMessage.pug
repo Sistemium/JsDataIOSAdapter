@@ -2,16 +2,17 @@
 
   .buttons
 
+    button.btn.btn-warning.animate-show(
+    ng-show='vm.hasChanges()'
+    ng-click='vm.cancelClick()'
+    ) Отменить
+
     button.btn.animate-show(
+    ng-if='vm.newsMessage.id'
     ng-click='vm.deleteClick()'
     ng-class='vm.deleting ? "btn-danger" : "btn-default"'
     )
       i.glyphicon.glyphicon-trash
-
-    button.btn.btn-warning.animate-show.ng-hide(
-    ng-show='vm.hasChanges()'
-    ng-click='vm.cancelClick()'
-    ) Отменить
 
     button.btn.btn-primary(
     ng-disabled='!vm.isValid()'

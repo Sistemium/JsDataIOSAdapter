@@ -90,7 +90,8 @@
         vm.rebindOne(NewsMessage, $state.params.newsMessageId, 'vm.newsMessage');
       } else {
         vm.newsMessage = NewsMessage.createInstance({
-          appVersion: saApp.version()
+          appVersion: saApp.version(),
+          authId: Auth.getAccount().authId
         });
       }
 

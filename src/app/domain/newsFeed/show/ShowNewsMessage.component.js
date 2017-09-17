@@ -56,9 +56,10 @@
     function setRating() {
 
       let newsMessageId = vm.newsMessageId;
+      let {authId} = Auth.getAccount();
 
       vm.userNewsMessage = _.first(vm.userNewsMessages) ||
-        UserNewsMessage.createInstance({newsMessageId});
+        UserNewsMessage.createInstance({newsMessageId, authId});
 
     }
 

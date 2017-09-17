@@ -77,7 +77,8 @@
           let userNewsMessage = _.first(userNewsMessages);
 
           if (!userNewsMessage) {
-            userNewsMessage = UserNewsMessage.createInstance({newsMessageId});
+            let {authId} = Auth.getAccount();
+            userNewsMessage = UserNewsMessage.createInstance({newsMessageId, authId});
           }
 
           userNewsMessage.rating = vm.ratings[newsMessageId];

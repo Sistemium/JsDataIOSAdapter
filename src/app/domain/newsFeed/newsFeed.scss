@@ -142,12 +142,13 @@
       label {
         font-weight: normal;
         color: $gray;
+        margin-right: $padding;
       }
 
       span {
 
         color: $primary-color;
-        margin-left: 2px;
+        margin-left: $padding;
 
         & > * {
           user-select: none;
