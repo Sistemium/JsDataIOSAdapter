@@ -16,7 +16,7 @@
     .header {
 
       display: flex;
-      flex-flow: row wrap;
+      flex-flow: row nowrap;
       justify-content: space-between;
       align-items: center;
 
@@ -32,8 +32,13 @@
         @include responsive-only(lt-sm) {
           font-size: 120%;
           margin-right: $padding;
+          font-weight: bold;
         }
 
+      }
+
+      .buttons {
+        text-align: right;
       }
 
     }
