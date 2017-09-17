@@ -25,41 +25,60 @@
 
     vm.use({
 
-      $onInit,
-      editClick,
-      newsRatingClick,
+      newsMessageId: $state.params.newsMessageId,
+      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
-      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin'])
+      editClick,
+      $onInit,
+      newsRatingClick
 
     });
+
+    /*
+    Init
+     */
+
+    function $onInit() {
+
+      vm.newsMessageId = vm.newsMessageId || vm.newsMessage.id;
+
+      let newsMessageId = vm.newsMessageId;
+
+      vm.rebindOne(NewsMessage, newsMessageId, 'vm.newsMessage');
+      vm.rebindAll(UserNewsMessage, {newsMessageId}, 'vm.userNewsMessages', setRating);
+
+    }
 
     /*
     Functions
      */
 
+    function setRating() {
+
+      let newsMessageId = vm.newsMessageId;
+
+      vm.userNewsMessage = _.first(vm.userNewsMessages) ||
+        UserNewsMessage.createInstance({newsMessageId});
+
+    }
+
+    /*
+    Handlers
+     */
+
     function newsRatingClick() {
+
       vm.userNewsMessage.DSCreate()
-        .then(() => {
-          toastr.success('Ваша оценка принята', {timeOut: 1000});
-        })
+        .then(() => toastr.success('Ваша оценка принята', {timeOut: 1000}))
         .catch(e => console.error(e));
+
     }
 
     function editClick() {
+
       let newsMessageId = vm.newsMessage.id;
       $state.go('^.edit', {newsMessageId});
-    }
 
-    function $onInit() {
-      let newsMessageId = $state.params.newsMessageId;
-      vm.rebindOne(NewsMessage, newsMessageId, 'vm.newsMessage');
-      vm.rebindAll(UserNewsMessage, {newsMessageId}, 'vm.userNewsMessages', setRating);
-    }
-
-    function setRating() {
-      if (!vm.newsMessage) return;
-      let newsMessageId = vm.newsMessage.id;
-      vm.userNewsMessage = vm.newsMessage.userNewsMessage || UserNewsMessage.createInstance({newsMessageId});
     }
 
   }
