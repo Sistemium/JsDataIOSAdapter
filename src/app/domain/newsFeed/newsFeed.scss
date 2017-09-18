@@ -9,6 +9,10 @@
     text-align: right;
     margin: 20px 0 $padding;
 
+    @include responsive-only(lt-sm) {
+      margin-top: 0;
+    }
+
   }
 
   .no-news {
