@@ -20,7 +20,7 @@
 
     .avatar
 
-      a.thumb(href ng-click='vm.thumbClick()')
+      a.thumb(href ng-click='vm.thumbClick()' ng-class='{disabled: !vm.avatar}')
         img(
         ng-src='{{vm.avatarSrc}}'
         ng-class='!vm.avatarSrc && "placeholder"'
@@ -48,7 +48,7 @@
         a.btn.btn-link(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState && vm.isEditable')
           i.glyphicon.glyphicon-edit
 
-        a.btn.btn-link(ng-click='vm.takePhoto()')
+        a.btn.btn-link.disabled(ng-click='vm.takePhoto()' )
           i.glyphicon.glyphicon-camera
 
         a.btn.btn-link(
