@@ -2,7 +2,9 @@
 
 (function () {
 
-  function trackFocused(IOS, $rootScope) {
+  let inFocus = false;
+
+  function trackFocused(IOS, $rootScope, $timeout) {
     return {
 
       restrict: 'A',
@@ -12,11 +14,16 @@
         if (!IOS.isIos()) return;
 
         element.on('focus', function () {
+          inFocus = true;
           $rootScope.hasInputInFocus = true;
+          // $rootScope.$apply();
         });
 
         element.on('blur', function () {
-          $rootScope.hasInputInFocus = false;
+          inFocus = false;
+          $timeout(500).then(() => {
+            $rootScope.hasInputInFocus = inFocus;
+          });
         });
 
       }

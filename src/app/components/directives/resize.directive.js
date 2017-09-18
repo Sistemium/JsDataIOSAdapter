@@ -2,7 +2,7 @@
 
 (function () {
 
-  function resize($window, $uibPosition, $timeout) {
+  function resize($window, $uibPosition, $timeout, $rootScope) {
 
     const SCREEN_XS_MAX = 768;
     const SCREEN_SM_MIN = 480;
@@ -21,7 +21,9 @@
 
       function resizeOffsetTop(newValue) {
         let offset = newValue.windowWidth > SCREEN_SM_MIN ? offsetTopMinus : offsetTopMinusXs;
-        if (!newValue || newValue.disableResize) return;
+        if (!newValue || $rootScope.hasInputInFocus || newValue.disableResize) {
+          return;
+        }
         element.css(scope.resizeProperty, (newValue.windowHeight - newValue.offsetTop - offset) + 'px');
       }
 
@@ -32,12 +34,14 @@
           windowHeight: $window.innerHeight,// - bodyRect.top,
           windowWidth: $window.innerWidth,
           offsetTop: offset ? offset.top : 0,
-          disableResize: scope.hasInputInFocus
+          disableResize: !!$rootScope.hasInputInFocus
         };
       }
 
       function setValues(newValue) {
-        if (!newValue || newValue.disableResize) return;
+        if (!newValue || newValue.disableResize || $rootScope.hasInputInFocus) {
+          return;
+        }
         _.assign(property, newValue);
         _.assign(property, {
           xsWidth: _.get(newValue, 'windowWidth') < SCREEN_XS_MAX
