@@ -54,6 +54,7 @@ close='vm.saleOrder.processingMessage = null'
   label.control-label.col-md-3.col-sm-4(for='commentText') Комментарий
   .col-md-9.col-sm-8
     input#commentText.form-control(
+    track-focused
     ng-model='vm.saleOrder.commentText'
     ng-model-options='{debounce: 2000}'
     )
