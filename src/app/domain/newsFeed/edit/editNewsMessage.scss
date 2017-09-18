@@ -9,6 +9,11 @@
     text-align: right;
     margin: $margin * 2 0 $margin;
 
+    @include responsive-only(lt-sm) {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-end;
