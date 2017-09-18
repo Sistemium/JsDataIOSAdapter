@@ -114,7 +114,11 @@
         controller: 'OutletController',
         controllerAs: 'vm',
 
-        children: [angular.copy(visit), visitCreate]
+        children: [angular.copy(visit), visitCreate],
+
+        data: {
+          rootState: 'sales.territory'
+        }
 
       };
 
