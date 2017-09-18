@@ -71,19 +71,23 @@
 
       .rating {
 
-        margin-left: $padding;
+        margin-left: $padding*2;
 
         span {
 
           > * {
             outline: none;
-            margin-left: $padding;
+            margin-left: $padding * 1.5;
           }
 
           cursor: pointer;
           color: $primary-color;
-          margin-left: 2px;
+          margin-left: 0;
 
+        }
+
+        i {
+          top: 2px;
         }
 
       }
