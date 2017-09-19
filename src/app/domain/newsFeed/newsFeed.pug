@@ -23,15 +23,25 @@
       .body
         p {{newsMessage.body}}
 
-      .rating
+      .footer
 
-        label {{ vm.ratings[newsMessage.id] ? 'Ваша оценка:' : 'Оцените:' }}
-
-        span(
-        uib-rating
-        enable-reset='false'
-        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
-        ng-model='vm.ratings[newsMessage.id]'
-        max='5'
-        ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'
+        .common-rating(
+        ng-if='vm.showCommonRating(newsMessage)'
         )
+
+          label Средняя оценка:
+
+          strong {{ newsMessage.rating }} ({{ newsMessage.ratingsCount }})
+
+        .rating
+
+          label {{ vm.ratings[newsMessage.id] ? 'Ваша оценка:' : 'Оцените:' }}
+
+          span(
+          uib-rating
+          enable-reset='false'
+          titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+          ng-model='vm.ratings[newsMessage.id]'
+          max='5'
+          ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'
+          )

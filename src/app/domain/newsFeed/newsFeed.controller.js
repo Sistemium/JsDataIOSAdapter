@@ -13,12 +13,16 @@
       newsRatingClick,
       newsMessageClick,
       createNewsMessageClick,
+      showCommonRating,
 
+      isAdmin: Auth.isAuthorized('admin'),
       isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
       ratings: {}
 
     });
+
+    const {authId} = Auth.getAccount();
 
     vm.onScope('rootClick', () => {
       $state.go('newsFeed');
@@ -36,6 +40,11 @@
     /*
      Functions
      */
+
+    function showCommonRating(newsMessage) {
+      return newsMessage.rating &&
+        (vm.isAdmin || _.get(newsMessage, 'userNewsMessage.rating') || newsMessage.authId === authId);
+    }
 
     function refresh() {
       vm.setBusy([

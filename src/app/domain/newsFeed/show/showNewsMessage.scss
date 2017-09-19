@@ -63,7 +63,7 @@
 
       //margin-top: $padding * 5;
 
-      @include responsive-only(lt-sm) {
+      @include responsive-only(xxs) {
         .common-rating {
           display: none;
         }

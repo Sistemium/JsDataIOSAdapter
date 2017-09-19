@@ -30,13 +30,16 @@
 
       editClick,
       $onInit,
-      newsRatingClick
+      newsRatingClick,
+      showCommonRating
 
     });
 
     /*
     Init
      */
+
+    const {authId} = Auth.getAccount();
 
     function $onInit() {
 
@@ -53,10 +56,14 @@
     Functions
      */
 
+    function showCommonRating() {
+      return _.get(vm, 'newsMessage.rating') &&
+        (_.get(vm, 'userNewsMessage.rating') || _.get(vm, 'newsMessage.authId') === authId);
+    }
+
     function setRating() {
 
       let newsMessageId = vm.newsMessageId;
-      let {authId} = Auth.getAccount();
 
       vm.userNewsMessage = _.first(vm.userNewsMessages) ||
         UserNewsMessage.createInstance({newsMessageId, authId});
