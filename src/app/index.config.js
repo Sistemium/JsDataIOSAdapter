@@ -94,7 +94,7 @@
         })
       ));
 
-      if (_.get(autorization, 'roles.salesman')) {
+      if (Auth.isAuthorized(['salesman', 'supervisor'])) {
         console.info($injector.get('SalesmanAuth'));
       }
 

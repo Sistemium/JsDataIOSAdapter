@@ -1,0 +1,85 @@
+@import "../../../../styles/variables";
+
+.outlet-view {
+
+  $thumb-size: 110px;
+  $padding: 5px;
+
+  .header {
+
+    display: flex;
+    flex-direction: row;
+
+    .thumb {
+
+      display: inline-block;
+
+      border-radius: $padding;
+      padding: $padding;
+      border: solid 1px $state-info-border;
+
+      img {
+        text-align: center;
+        object-fit: contain;
+        min-height: $thumb-size;
+        max-height: $thumb-size;
+        max-width: $thumb-size;
+        min-width: $thumb-size;
+      }
+
+    }
+
+    .title {
+
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .partner-name {
+        font-size: 150%;
+      }
+      > * {
+        margin: $padding 0;
+      }
+
+    }
+
+  }
+
+  .outlet-info {
+
+    display: flex;
+    flex-direction: row;
+
+    .fields {
+
+      position: relative;
+      top: -45px;
+      flex: 1;
+      padding-right: 20px;
+
+      > * {
+        display: flex;
+        flex-direction: row;
+      }
+
+      > * + * {
+        margin-top: $padding;
+      }
+
+    }
+
+    .buttons {
+      min-width: $thumb-size;
+    }
+
+    label {
+      color: $gray;
+      font-weight: normal;
+      margin-right: 1em;
+      min-width: 75px;
+    }
+
+  }
+
+}

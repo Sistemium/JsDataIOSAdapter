@@ -5,6 +5,7 @@
   angular.module('webPage').service('Menu', function (InitService, Auth) {
 
     const SALES_ROLES = ['salesman', 'supervisor'];
+    const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
     const PICKING_ROLES = ['picker'];
     const ADMIN_ROLES = ['admin', 'tester'];
 
@@ -43,7 +44,7 @@
     }, {
       title: 'Акции',
       state: 'sales.campaigns',
-      needRoles: SALES_ROLES
+      needRoles: MARKETING_ROLES
     }, {
       title: 'Фото-отчёты',
       state: 'sales.photoReports',
@@ -68,7 +69,7 @@
     }, {
       title: 'Лента новостей',
       state: 'newsFeed',
-      needRoles: ADMIN_ROLES
+      needRoles: MARKETING_ROLES
     }];
 
 

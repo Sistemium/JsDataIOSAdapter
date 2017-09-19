@@ -2,7 +2,7 @@
 
 (function () {
 
-  function NewsFeedController($state, Schema, saControllerHelper, $scope, saApp, toastr, Sockets, Auth) {
+  function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth) {
 
     const {NewsMessage, UserNewsMessage} = Schema.models();
 
@@ -13,12 +13,16 @@
       newsRatingClick,
       newsMessageClick,
       createNewsMessageClick,
+      showCommonRating,
 
-      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin', 'supervisor']),
+      isAdmin: Auth.isAuthorized('admin'),
+      isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
       ratings: {}
 
     });
+
+    const {authId} = Auth.getAccount();
 
     vm.onScope('rootClick', () => {
       $state.go('newsFeed');
@@ -26,7 +30,10 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
-    vm.rebindAll(NewsMessage, {}, 'vm.newsMessages');
+    vm.rebindAll(NewsMessage, {
+      orderBy: [['cts', 'DESC'], ['deviceCts', 'DESC'], ['dateE', 'DESC']]
+    }, 'vm.newsMessages');
+    vm.rebindAll(UserNewsMessage, {}, 'vm.userNewsMessages', cacheRatings);
 
     refresh();
 
@@ -34,23 +41,25 @@
      Functions
      */
 
+    function showCommonRating(newsMessage) {
+      return newsMessage.rating &&
+        (vm.isAdmin || _.get(newsMessage, 'userNewsMessage.rating') || newsMessage.authId === authId);
+    }
+
     function refresh() {
       vm.setBusy([
         NewsMessage.findAll(),
-        findUserNewsMessages()
+        UserNewsMessage.findAll()
       ]);
     }
 
-    function findUserNewsMessages() {
+    function cacheRatings() {
 
-      return UserNewsMessage.findAll()
-        .then(userNewsMessages => {
+      // vm.ratings = {};
 
-          _.forEach(userNewsMessages, userNewsMessage => {
-            vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
-          })
-
-        });
+      _.forEach(vm.userNewsMessages, userNewsMessage => {
+        vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
+      })
 
     }
 
@@ -77,14 +86,15 @@
           let userNewsMessage = _.first(userNewsMessages);
 
           if (!userNewsMessage) {
-            userNewsMessage = UserNewsMessage.createInstance({newsMessageId});
+            let {authId} = Auth.getAccount();
+            userNewsMessage = UserNewsMessage.createInstance({newsMessageId, authId});
           }
 
           userNewsMessage.rating = vm.ratings[newsMessageId];
 
           UserNewsMessage.create(userNewsMessage)
             .then(() => {
-              toastr.success('Ваша оценка принята', {timeOut: 1000});
+              toastr.success('Ваша оценка принята', 'Спасибо!', {timeOut: 1000});
             })
             .catch(e => console.error(e));
 

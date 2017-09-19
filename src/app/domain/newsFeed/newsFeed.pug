@@ -1,13 +1,15 @@
-.news-feed.ui-view()
+.news-feed.ui-view(cg-busy='vm.cgBusy')
 
-  .buttons
+  .buttons(ng-if='vm.isNewsMaker')
 
-    button.btn.btn-primary(
-    ng-disabled='!vm.isNewsMaker'
+    button.btn.btn-link(
     ng-click='vm.createNewsMessageClick()'
     ) Добавить новость
 
-  .scroll-y(resize resize-offset-top='15' vs-repeat='155')
+  .no-news(ng-if='!vm.busy && !vm.newsMessages.length')
+    p Новостей нет. Авторизованные пользователи могут добавить новость.
+
+  .scroll-y(resize resize-offset-top='5' vs-repeat='170' resize-property='height')
 
     .news-message(
     ng-repeat='newsMessage in vm.newsMessages track by newsMessage.id'
@@ -15,19 +17,31 @@
     )
 
       .header
-        label.subject {{newsMessage.subject}}
+        label.subject {{ newsMessage.subject }}
         valid-lifetime(date-b='newsMessage.dateB' date-e='newsMessage.dateE')
 
       .body
         p {{newsMessage.body}}
 
-      .rating
-        label Оценка:
-        span(
-        uib-rating
-        enable-reset='false'
-        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
-        ng-model='vm.ratings[newsMessage.id]'
-        max='5'
-        ng-click='$event.preventDefault();vm.newsRatingClick(newsMessage)'
+      .footer
+
+        .common-rating(
+        ng-if='vm.showCommonRating(newsMessage)'
         )
+
+          label Средняя оценка:
+
+          strong {{ newsMessage.rating }} ({{ newsMessage.ratingsCount }})
+
+        .rating
+
+          label {{ vm.ratings[newsMessage.id] ? 'Ваша оценка:' : 'Оцените:' }}
+
+          span(
+          uib-rating
+          enable-reset='false'
+          titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+          ng-model='vm.ratings[newsMessage.id]'
+          max='5'
+          ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'
+          )

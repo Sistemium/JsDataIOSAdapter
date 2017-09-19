@@ -17,7 +17,7 @@
     });
 
 
-  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp, Auth) {
+  function EditNewsMessageController($state, Schema, saControllerHelper, $scope, saApp, Auth, $timeout) {
 
     const {NewsMessage} = Schema.models();
 
@@ -32,13 +32,39 @@
       cancelClick,
       saveClick,
       hasChanges,
-      isValid
+      isValid,
+      deleteClick
 
     });
 
     /*
     Functions
      */
+
+    function deleteClick() {
+
+      if (vm.deleting) {
+        return onConfirm();
+      }
+
+      vm.deleting = $timeout(2000).then(onTimeout);
+
+      function onConfirm() {
+
+        if (!vm.newsMessage.id) {
+          $state.go('^');
+        }
+
+        return vm.newsMessage.DSDestroy()
+          .then(() => $state.go('^'));
+
+      }
+
+      function onTimeout() {
+        delete vm.deleting;
+      }
+
+    }
 
     function isValid() {
       return vm.newsMessage && vm.newsMessage.subject && vm.newsMessage.body;
@@ -64,7 +90,8 @@
         vm.rebindOne(NewsMessage, $state.params.newsMessageId, 'vm.newsMessage');
       } else {
         vm.newsMessage = NewsMessage.createInstance({
-          appVersion: saApp.version()
+          appVersion: saApp.version(),
+          authId: Auth.getAccount().authId
         });
       }
 
