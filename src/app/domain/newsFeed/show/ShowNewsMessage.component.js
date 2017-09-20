@@ -27,6 +27,7 @@
 
       newsMessageId: $state.params.newsMessageId,
       isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
+      ratingTitles: NewsMessage.meta.ratingTitles,
 
       editClick,
       $onInit,
@@ -77,7 +78,10 @@
     function newsRatingClick() {
 
       vm.userNewsMessage.DSCreate()
-        .then(() => toastr.success('Ваша оценка принята', {timeOut: 1000}))
+        .then(() => {
+          let msg = `Ваша оценка "${_.upperCase(vm.ratingTitles[vm.userNewsMessage.rating - 1])}" принята`;
+          toastr.success(msg, 'Спасибо!', {timeOut: 3000});
+        })
         .catch(e => console.error(e));
 
     }

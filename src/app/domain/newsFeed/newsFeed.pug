@@ -22,6 +22,7 @@
 
       .body
         p {{newsMessage.body}}
+        //.author {{ newsMessage.authorAccount.name }}
 
       .footer
 
@@ -44,7 +45,7 @@
           span(
           uib-rating
           enable-reset='false'
-          titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+          titles='vm.ratingTitles'
           ng-model='vm.ratings[newsMessage.id]'
           max='5'
           ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'

@@ -31,14 +31,14 @@
 
         label Средняя оценка:
 
-        strong {{ vm.newsMessage.rating }}
+        strong {{ vm.newsMessage.rating | number }}
 
       .rating(ng-if='!vm.newsMessage.isAuthor()')
 
         label Ваша оценка:
         span(
         uib-rating
-        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+        titles='vm.ratingTitles'
         enable-reset='false'
         max='5'
         ng-model='vm.userNewsMessage.rating'

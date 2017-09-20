@@ -104,8 +104,11 @@
     }
 
     valid-lifetime {
+      margin-left: $padding;
       font-size: 80%;
+      color: $black;
       label {
+        color: $gray;
         font-weight: normal;
       }
     }
@@ -143,6 +146,12 @@
 
         background-color: $white;
 
+      }
+
+      .author {
+        text-align: right;
+        font-style: italic;
+        margin: 5px 10px;
       }
     }
 

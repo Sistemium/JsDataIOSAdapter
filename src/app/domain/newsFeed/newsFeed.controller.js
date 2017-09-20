@@ -4,7 +4,7 @@
 
   function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth, IOS) {
 
-    const {NewsMessage, UserNewsMessage} = Schema.models();
+    const {NewsMessage, UserNewsMessage, Account} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -18,7 +18,8 @@
       isAdmin: !IOS.isIos() && Auth.isAuthorized('admin'),
       isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
-      ratings: {}
+      ratings: {},
+      ratingTitles: NewsMessage.meta.ratingTitles
 
     });
 
@@ -50,8 +51,9 @@
 
     function refresh() {
       vm.setBusy([
-        NewsMessage.findAll(),
-        UserNewsMessage.findAll()
+        Account.findAll({}, {bypassCache: true}),
+        NewsMessage.findAll({}, {bypassCache: true}),
+        UserNewsMessage.findAll({}, {bypassCache: true})
       ]);
     }
 
@@ -96,7 +98,8 @@
 
           UserNewsMessage.create(userNewsMessage)
             .then(() => {
-              toastr.success('Ваша оценка принята', 'Спасибо!', {timeOut: 1000});
+              let msg = `Ваша оценка "${_.upperCase(vm.ratingTitles[userNewsMessage.rating - 1])}" принята`;
+              toastr.success(msg, 'Спасибо!', {timeOut: 3000});
             })
             .catch(e => console.error(e));
 
