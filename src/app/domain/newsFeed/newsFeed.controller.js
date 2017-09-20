@@ -2,7 +2,7 @@
 
 (function () {
 
-  function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth) {
+  function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth, IOS) {
 
     const {NewsMessage, UserNewsMessage} = Schema.models();
 
@@ -15,7 +15,7 @@
       createNewsMessageClick,
       showCommonRating,
 
-      isAdmin: Auth.isAuthorized('admin'),
+      isAdmin: !IOS.isIos() && Auth.isAuthorized('admin'),
       isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
       ratings: {}
@@ -30,8 +30,10 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
+    let cts = IOS.isIos() ? 'deviceCts' : 'cts';
+
     vm.rebindAll(NewsMessage, {
-      orderBy: [['cts', 'DESC'], ['deviceCts', 'DESC'], ['dateE', 'DESC']]
+      orderBy: [[cts, 'DESC']]
     }, 'vm.newsMessages');
     vm.rebindAll(UserNewsMessage, {}, 'vm.userNewsMessages', cacheRatings);
 

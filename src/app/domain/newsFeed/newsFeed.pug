@@ -12,8 +12,8 @@
   .scroll-y(resize resize-offset-top='5' vs-repeat='170' resize-property='height')
 
     .news-message(
-    ng-repeat='newsMessage in vm.newsMessages track by newsMessage.id'
     ng-click='vm.newsMessageClick(newsMessage)'
+    ng-repeat='newsMessage in vm.newsMessages track by newsMessage.id'
     )
 
       .header
@@ -27,13 +27,17 @@
 
         .common-rating(
         ng-if='vm.showCommonRating(newsMessage)'
+        ng-click='$event.stopPropagation()'
         )
 
           label Средняя оценка:
 
-          strong {{ newsMessage.rating }} ({{ newsMessage.ratingsCount }})
+          strong {{ newsMessage.rating | number }}
 
-        .rating
+          news-message-ratings-popover(news-message='newsMessage' ng-if='vm.isAdmin')
+            span ({{ newsMessage.ratingsCount }})
+
+        .rating(ng-if='!newsMessage.isAuthor()')
 
           label {{ vm.ratings[newsMessage.id] ? 'Ваша оценка:' : 'Оцените:' }}
 
@@ -45,3 +49,7 @@
           max='5'
           ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'
           )
+
+        .rating(ng-if='newsMessage.isAuthor()')
+          span Вы автор
+          span.hidden-xs &nbsp;этой новости

@@ -33,7 +33,7 @@
 
         strong {{ vm.newsMessage.rating }}
 
-      .rating
+      .rating(ng-if='!vm.newsMessage.isAuthor()')
 
         label Ваша оценка:
         span(
@@ -44,3 +44,5 @@
         ng-model='vm.userNewsMessage.rating'
         ng-click='vm.newsRatingClick()'
         )
+
+      .rating(ng-if='vm.newsMessage.isAuthor()') Вы автор этой новости
