@@ -85,11 +85,16 @@
 
       function sendToCameraRollClick() {
 
+        $scope.loading = true;
+
         IOS.sendToCameraRoll(vm.currentImage)
           .then(() => {
             toastr.success('Изображение сохранено');
           })
-          .catch(err => toastr.error(angular.toJson(err)));
+          .catch(err => toastr.error(angular.toJson(err)))
+          .finally(() => {
+            $scope.loading = false;
+          });
 
       }
 

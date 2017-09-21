@@ -1,9 +1,10 @@
 .ng-gallery.ng-gallery-fullscreen(
 )
 
-  .camera-roll(ng-if='vm.isIos')
+  .camera-roll(ng-if='vm.isIos' ng-disabled='loading')
 
     a(
+    href
     ng-click='vm.sendToCameraRollClick()'
     )
       i.glyphicon.glyphicon-save-file.btn-lg
@@ -17,7 +18,6 @@
 
   .main-view
 
-    // TODO: Swipes
     a.main-photo-block.noPreventDefault(
     href
     ng-click='vm.largeImageClick()'
