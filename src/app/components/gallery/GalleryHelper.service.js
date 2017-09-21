@@ -133,19 +133,36 @@
 
         return $q((resolve, reject) => {
 
-          const image = _.assign(new Image(), {
+          if (IOS.isIos()) {
 
-            onload: function () {
-              if (this.complete === false || this.naturalWidth === 0) {
-                reject();
-              }
-              resolve(image);
-            },
+            return IOS.loadImage(img)
+              .then(image => {
+                img.DSRefresh(image)
+                  .then(() => preLoad(img, resolve, reject))
+                  .catch(err => reject(err));
+              }).catch(err => reject(err));
 
-            onerror: reject,
-            src: img.srcFullscreen
+          }
 
-          });
+          preLoad(img, resolve, reject);
+
+        });
+
+      }
+
+      function preLoad(img, resolve, reject) {
+
+        const image = _.assign(new Image(), {
+
+          onload: function () {
+            if (this.complete === false || this.naturalWidth === 0) {
+              reject();
+            }
+            resolve(image);
+          },
+
+          onerror: reject,
+          src: img.srcFullscreen
 
         });
 
