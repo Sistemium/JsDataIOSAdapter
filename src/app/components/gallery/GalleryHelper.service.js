@@ -5,7 +5,7 @@
   angular.module('webPage')
     .service('GalleryHelper', GalleryHelper);
 
-  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window, IOS, toastr) {
+  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window, IOS) {
 
     function setupController(vm, $scope) {
 
@@ -85,16 +85,12 @@
 
       function sendToCameraRollClick() {
 
-        $scope.loading = true;
-
-        IOS.sendToCameraRoll(vm.currentImage)
-          .then(() => {
-            toastr.success('Изображение сохранено');
-          })
-          .catch(err => toastr.error(angular.toJson(err)))
-          .finally(() => {
-            $scope.loading = false;
-          });
+        $scope.cgBusySaving = {
+          promise: IOS.sendToCameraRoll(vm.currentImage),
+          minDuration: 1500,
+          delay: 0,
+          message: 'Сохранение в фото-пленку'
+        };
 
       }
 
