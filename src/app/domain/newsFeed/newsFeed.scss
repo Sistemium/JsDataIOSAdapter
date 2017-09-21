@@ -6,7 +6,7 @@
       background: none;
     }
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-    .body {
+    .body, &:hover .body {
       p:after {
         background-color: $white;
       }
