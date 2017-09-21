@@ -15,6 +15,8 @@
         scope.resizeFn = scope.$eval(attrs.resizeFn);
       }
 
+      let minHeight = attrs.resizeMinHeight || 0;
+
       scope.resizeProperty = attrs.resizeProperty || 'max-height';
       let offsetTopMinus = attrs.resizeOffsetTop ? parseInt(attrs.resizeOffsetTop) : 0;
       let offsetTopMinusXs = attrs.resizeOffsetTopXs ? parseInt(attrs.resizeOffsetTopXs) : offsetTopMinus;
@@ -24,7 +26,11 @@
         if (!newValue || $rootScope.hasInputInFocus || newValue.disableResize) {
           return;
         }
-        element.css(scope.resizeProperty, (newValue.windowHeight - newValue.offsetTop - offset) + 'px');
+        let height = newValue.windowHeight - newValue.offsetTop - offset;
+        if (height < minHeight) {
+          height = minHeight;
+        }
+        element.css(scope.resizeProperty, height + 'px');
       }
 
       function getWindowDimensions() {
