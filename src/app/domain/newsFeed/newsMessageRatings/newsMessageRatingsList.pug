@@ -1,6 +1,6 @@
 .news-message-ratings-list
   .scroll-y(
-  resize resize-offset-top='20'
+  resize resize-offset-top='20' resize-min-height='60'
   vs-repeat
   )
     .user-news-message(ng-repeat='userNewsMessage in vm.userNewsMessages track by userNewsMessage.id')

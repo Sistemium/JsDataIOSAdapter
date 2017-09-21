@@ -57,11 +57,11 @@
 
   }
 
-  .scroll-y {
+  > .scroll-y {
     padding-top: $padding * 2;
   }
 
-  .scroll-y > .news-message {
+  > .scroll-y > .news-message {
 
     outline: none;
     //background: $gray-background-color;
