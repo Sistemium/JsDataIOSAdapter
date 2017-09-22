@@ -192,11 +192,10 @@
               });
 
             NewsMessage.findAll()
+              .then(() => UserNewsMessage.findAll())
               .then(() => {
-                return UserNewsMessage.findAll();
-              })
-              .then(() => {
-                let unRated = _.filter(NewsMessage.getAll(), message => !_.get(message, 'userNewsMessage.rating'));
+                let actual = NewsMessage.filter(NewsMessage.meta.filterActual());
+                let unRated = _.filter(actual, message => message.isUnrated());
                 Menu.setItemData('newsFeed', {badge: unRated.length});
               });
           }

@@ -33,9 +33,9 @@
 
     let cts = IOS.isIos() ? 'deviceCts' : 'cts';
 
-    vm.rebindAll(NewsMessage, {
-      orderBy: [[cts, 'DESC']]
-    }, 'vm.newsMessages');
+    let filter = NewsMessage.meta.filterActual({orderBy: [[cts, 'DESC']]});
+
+    vm.rebindAll(NewsMessage, filter, 'vm.newsMessages');
     vm.rebindAll(UserNewsMessage, {}, 'vm.userNewsMessages', cacheRatings);
 
     refresh();
