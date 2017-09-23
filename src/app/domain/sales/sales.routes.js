@@ -5,31 +5,6 @@
   angular.module('webPage')
     .config(function (stateHelperProvider) {
 
-      const prePreOrders = {
-
-        name: 'prePreOrders',
-        url: '/prePreOrders?state',
-
-        templateUrl: 'app/domain/sales/views/prePreOrderList.html',
-        controller: 'PrePreOrderListController',
-        controllerAs: 'vm',
-
-        data: {
-          needRoles: 'preOrdering'
-        },
-
-        children: [
-          {
-            name: 'selectedOrder',
-            url: '/selected',
-            templateUrl: 'app/domain/views/selectedPrePreOrder.html',
-            controller: 'SelectedPrePreOrderController',
-            controllerAs: 'vm'
-          }
-        ]
-
-      };
-
       const visit = {
 
         name: 'visit',
@@ -201,7 +176,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [salesTerritory, prePreOrders, visits]
+          children: [salesTerritory, visits]
 
         })
       ;

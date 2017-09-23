@@ -59,10 +59,6 @@
       // needRoles: SALES_ROLES
       // needRoles: ['admin', 'tester']
     // }, {
-    //   title: 'Предзаказы',
-    //   state: 'sales.prePreOrders',
-    //   needRoles: 'pre-ordering'
-    // }, {
       title: 'Тесты',
       state: 'playground',
       needRoles: ADMIN_ROLES
