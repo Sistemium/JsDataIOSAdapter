@@ -28,6 +28,7 @@
       span прочее
 
   .totals
+    label.ndoc Накладная
     label.total(ng-if='vm.cashingTotal') На руках
     label.total Остаток долга
     label.cash-this(ng-if='vm.toSummCashingInProgress')
@@ -86,7 +87,8 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
 
           small.flag.responsible {{ ::debt.responsible.name }}
 
-          span {{ ::debt.ndoc }}
+          currency-value.summ-origin(value='debt.summOrigin')
+          span.ndoc {{ ::debt.ndoc }}
 
         currency-value.cashed(
         ng-click='vm.debtClick(debt, $event)'

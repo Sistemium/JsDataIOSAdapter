@@ -300,6 +300,16 @@
     .cashed {
     }
 
+    .summ-origin {
+      strong {
+        font-weight: normal;
+      }
+      text-align: right;
+      @include responsive-only(gt-xxs) {
+        min-width: 80px;
+      }
+    }
+
     .ndoc {
 
       font-weight: normal;
@@ -314,6 +324,10 @@
           display: inline-block;
           min-width: 120px;
         }
+      }
+
+      > .ndoc {
+        margin-left: $margin;
       }
 
     }
