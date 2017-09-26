@@ -78,12 +78,12 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
           small.tip.overdue(ng-if='debt.isOverdue()')
             span Просрочено
             = ' '
-            span {{ debt.dateE | amDifference:null | amDurationFormat }}
+            span {{ debt.paymentTerm() | amDurationFormat }}
 
           small.tip(ng-if='!debt.isOverdue()')
             span На оплату
             = ' '
-            span {{ debt.dateE | amDifference:null | amDurationFormat }}
+            span {{ debt.paymentTerm() | amDurationFormat }}
 
           small.flag.responsible {{ ::debt.responsible.name }}
 
