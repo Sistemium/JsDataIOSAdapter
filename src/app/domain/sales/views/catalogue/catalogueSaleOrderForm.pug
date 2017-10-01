@@ -23,7 +23,7 @@ close='vm.saleOrder.processingMessage = null'
   init-date='vm.saleOrderInitDate'
   )
 
-.form-group.form-group-switch
+.form-group.form-group-switch(ng-if='vm.docDiscountsOption')
   label.control-label.col-md-9.col-sm-8 Скидки в накладную?
   .col-md-3.col-sm-4
     toggle-switch(

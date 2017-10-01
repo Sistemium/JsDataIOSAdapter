@@ -11,8 +11,20 @@
 
     return {
       hasInactiveActions,
-      hasSaleOrderKS
+      hasSaleOrderKS,
+      saleOrderOptions
     };
+
+    function saleOrderOptions() {
+      if (customerCode() === 'r50') {
+        return {
+          docDiscountsOption: true
+        };
+      }
+
+      return {};
+
+    }
 
     function hasInactiveActions() {
       return customerCode() === 'bs';
