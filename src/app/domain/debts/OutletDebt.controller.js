@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr, IOS) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
@@ -39,12 +39,14 @@
 
     function debtClick(debt, event) {
 
+      IOS.copyToClipboard(debt.ndoc);
+
       if (event.defaultPrevented || !vm.summToCash) return;
 
       event.preventDefault();
 
       let uncashed = debt.uncashed();
-      let toCashRemains= vm.summToCash - (_.sumBy(vm.unsavedCashings, 'summ') || 0);
+      let toCashRemains = vm.summToCash - (_.sumBy(vm.unsavedCashings, 'summ') || 0);
       let summ = _.min([vm.summToCash && toCashRemains, uncashed]);
 
       if (!toCashRemains && !debt.checked) {
