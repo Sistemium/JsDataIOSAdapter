@@ -64,37 +64,21 @@
 
       if (!file) return;
 
-      if (IOS.isIos()) {
+      upload(file)
+        .then(imsData => {
 
-        Upload.base64DataUrl(file)
-          .then(base64 => {
+          let picturesInfo = imsData.pictures;
+          let href = _.get(_.find(picturesInfo, {name: 'largeImage'}), 'src');
+          let thumbnailHref = _.get(_.find(picturesInfo, {name: 'thumbnail'}), 'src');
 
-            IOS.saveImage(vm.modelName, vm.model, base64)
-              .then(res => {
-                Schema.model(vm.modelName).inject(res);
-              });
+          _.assign(vm.model, {picturesInfo, href, thumbnailHref});
 
-          });
+          if (vm.modelName) {
+            Schema.model(vm.modelName).create(vm.model)
+              .then(savedModel => vm.model = savedModel);
+          }
 
-      } else {
-
-        upload(file)
-          .then(imsData => {
-
-            let picturesInfo = imsData.pictures;
-            let href = _.get(_.find(picturesInfo, {name: 'largeImage'}), 'src');
-            let thumbnailHref = _.get(_.find(picturesInfo, {name: 'thumbnail'}), 'src');
-
-            _.assign(vm.model, {picturesInfo, href, thumbnailHref});
-
-            if (vm.modelName) {
-              Schema.model(vm.modelName).create(vm.model)
-                .then(savedModel => vm.model = savedModel);
-            }
-
-          });
-
-      }
+        });
 
     }
 
