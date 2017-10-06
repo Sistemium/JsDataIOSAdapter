@@ -1,5 +1,6 @@
 .form.photo-report-form(
 name='photoReportForm'
+cg-busy='vm.busySavingPhoto'
 )
 
   a.campaignGroup(
@@ -37,11 +38,12 @@ name='photoReportForm'
     model='vm.photoReport'
     ng-show='!vm.photoReport.id'
     model-name='PhotoReport'
+    busy='vm.busySavingPhoto'
     )
       i.glyphicon.glyphicon-camera
       span Добавить фото
 
-    .thumb(ng-if='vm.photoReport.id')
+    //.thumb(ng-if='vm.photoReport.id')
       loading-circle(ng-if='!vm.photoReport.srcThumbnail')
       img(ng-src='{{vm.photoReport.srcThumbnail}}' ng-if='vm.photoReport.srcThumbnail')
       a.remove(
@@ -52,7 +54,7 @@ name='photoReportForm'
 
     input(type='hidden' ng-model='vm.photoReport.id' required)
 
-  .buttons(ng-if='vm.photoReport.id')
+  //.buttons(ng-if='vm.photoReport.id')
     button.btn.btn-success(ng-click='vm.onSubmit()') Готово
 
   choice-list(

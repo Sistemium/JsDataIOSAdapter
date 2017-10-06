@@ -42,6 +42,8 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
+    $scope.$watch('vm.photoReport.id', onSubmit);
+
     /*
      Functions
      */
@@ -93,6 +95,11 @@
     function onSubmit() {
 
       let {photoReport} = vm;
+
+      if (!photoReport.id) {
+        return;
+      }
+
       vm.onSubmitFn(photoReport);
 
       // _.assign(photoReport, {
