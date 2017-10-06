@@ -4,19 +4,19 @@
 
   angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log, IosParser) {
 
-    var ios = $window.webkit;
-    var requests = {};
-    var counter = 1;
-    var deb = $window.debug('stg:IosAdapter');
+    let ios = $window.webkit;
+    const requests = {};
+    let counter = 1;
+    const deb = $window.debug('stg:IosAdapter');
 
 
-    var IosAdapter = function (schema) {
+    function IosAdapter(schema) {
 
       function iosCallback(name, parser) {
         return function (data, req) {
 
-          var id = req && req.options && req.options.requestId;
-          var request = id && requests [id];
+          let id = req && req.options && req.options.requestId;
+          let request = id && requests [id];
 
           if (request) {
 
@@ -50,7 +50,7 @@
 
       $window.iSistemiumIOSErrorCallback = iosCallback('reject');
 
-    };
+    }
 
     function jsdParamsToIOSWhere(params) {
 
@@ -66,11 +66,11 @@
 
     function requestFromIOS(type, entity, params, options) {
 
-      var id = counter++;
+      let id = counter++;
 
       options.requestId = id;
 
-      var message = {
+      let message = {
 
         entity: entity,
         options: options
@@ -85,7 +85,7 @@
         message.where = jsdParamsToIOSWhere(params);
       }
 
-      var promise = new DSUtils.Promise(function (resolve, reject) {
+      let promise = new DSUtils.Promise(function (resolve, reject) {
 
         requests [id] = {
           promise: promise,
@@ -103,7 +103,7 @@
 
     if (!ios) {
 
-      var mock = {
+      let mock = {
         postMessage: function (req) {
           $log.log(req);
         }
