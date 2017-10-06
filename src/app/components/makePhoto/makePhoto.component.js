@@ -7,7 +7,8 @@
     bindings: {
       folder: '<',
       model: '=',
-      modelName: '@'
+      modelName: '@',
+      busy: '='
     },
 
     transclude: true,
@@ -41,7 +42,7 @@
      */
 
     function makePhotoClick() {
-      return PhotoHelper.makePhoto(vm.modelName, vm.model || {})
+      vm.busy = PhotoHelper.makePhoto(vm.modelName, vm.model || {})
         .then(res => {
           vm.model = res;
         });
@@ -64,7 +65,7 @@
 
       if (!file) return;
 
-      upload(file)
+      vm.busy = upload(file)
         .then(imsData => {
 
           let picturesInfo = imsData.pictures;
