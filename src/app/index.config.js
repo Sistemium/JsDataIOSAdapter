@@ -96,6 +96,10 @@
 
       if (Auth.isAuthorized(['salesman', 'supervisor'])) {
         console.info($injector.get('SalesmanAuth'));
+        if (lastState) {
+          // console.warn('Resoiring last state', lastState.name, lastState.params);
+          $state.go(lastState.name, lastState.params);
+        }
       }
 
     });
