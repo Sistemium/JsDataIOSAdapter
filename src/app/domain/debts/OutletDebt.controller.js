@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr, IOS) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
@@ -38,8 +38,6 @@
     }
 
     function debtClick(debt, event) {
-
-      IOS.copyToClipboard(debt.ndoc);
 
       if (event.defaultPrevented || !vm.summToCash) return;
 
