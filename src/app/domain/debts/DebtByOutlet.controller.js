@@ -208,7 +208,7 @@
 
     function loadNotProcessed(data) {
 
-      return Cashing.findAll(SalesmanAuth.makeFilter({isProcessed: false}))
+      return Cashing.findAll(SalesmanAuth.makeFilter({isProcessed: false}, {bypassCache: true}))
         .then(cashings => {
           cashings = _.filter(cashings, 'debtId');
           return _.groupBy(cashings, 'outletId');
