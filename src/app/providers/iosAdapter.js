@@ -71,7 +71,7 @@
     function requestFromIOS(type, entity, params, options) {
 
       let id = counter;
-      
+
       counter = counter + 2;
 
       options.requestId = id;
