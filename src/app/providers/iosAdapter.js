@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log, IosParser) {
+  angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log, IosParser, IOS) {
 
     let ios = $window.webkit;
     const requests = {};
@@ -18,24 +18,28 @@
           let id = req && req.options && req.options.requestId;
           let request = id && requests [id];
 
-          if (request) {
+          if (!request) {
+            return IOS.iosCallback(name, data, req);
+          }
 
-            if (name === 'resolve') {
 
-              if (parser) {
-                parser(data, request.message.entity);
-              }
+          if (name === 'resolve') {
 
-              if (_.get(request, 'message.options.oneObject') && angular.isArray(data)) {
-                data = data.length ? data[0] : undefined;
-              }
+            if (parser) {
+              parser(data, request.message.entity);
             }
 
-            deb(name, req.entity, data);
-
-            request [name](data);
-            delete requests [id];
+            if (_.get(request, 'message.options.oneObject') && angular.isArray(data)) {
+              data = data.length ? data[0] : undefined;
+            }
           }
+
+          deb(name, req.entity, data);
+
+          request[name](data);
+
+          delete requests [id];
+
 
         }
       }
@@ -66,7 +70,9 @@
 
     function requestFromIOS(type, entity, params, options) {
 
-      let id = counter++;
+      let id = counter;
+      
+      counter = counter + 2;
 
       options.requestId = id;
 
