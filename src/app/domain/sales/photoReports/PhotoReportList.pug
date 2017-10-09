@@ -41,7 +41,7 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
 
       a.btn.btn-link.edit-toggler(
       href ng-click='vm.editing = !vm.editing'
-      ng-class='{disabled: !vm.data.length || !vm.editing}'
+      ng-class='{disabled: !vm.data.length && !vm.editing}'
       )
         //span {{ vm.editing ? 'Готово' : 'Удалить' }}
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
