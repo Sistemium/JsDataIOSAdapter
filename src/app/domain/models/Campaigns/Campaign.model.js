@@ -58,6 +58,10 @@
 
           return {where};
 
+        },
+
+        label: {
+          accusative: 'акцию'
         }
 
       }

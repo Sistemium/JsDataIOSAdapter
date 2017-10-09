@@ -64,7 +64,10 @@
       },
 
       meta: {
-        salesmanFilter
+        salesmanFilter,
+        label: {
+          accusative: 'точку'
+        }
       }
 
     });
