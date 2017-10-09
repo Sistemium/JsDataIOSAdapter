@@ -46,6 +46,8 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
         //span {{ vm.editing ? 'Готово' : 'Удалить' }}
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
+  .alert.alert-info(ng-if='!vm.busy && !vm.data.length') Нет фото-отчетов в указанном периоде
+
   #scroll-main.scroll-y(
   resize
   resize-offset-top='10'

@@ -103,6 +103,10 @@
 
   }
 
+  > .alert {
+    margin-top: 20px;
+  }
+
   .photo-report {
 
     @extend %flex-row;
