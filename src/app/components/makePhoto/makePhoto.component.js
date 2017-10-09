@@ -75,7 +75,7 @@
           _.assign(vm.model, {picturesInfo, href, thumbnailHref});
 
           if (vm.modelName) {
-            Schema.model(vm.modelName).create(vm.model)
+            return Schema.model(vm.modelName).create(vm.model)
               .then(savedModel => vm.model = savedModel);
           }
 
