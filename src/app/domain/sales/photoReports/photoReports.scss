@@ -1,7 +1,7 @@
 @import "../../../styles/variables";
+@import "../../../styles/buttons";
 
 .photo-report-list {
-
 
   [disabled] {
     @extend %disabled;
@@ -11,17 +11,52 @@
   $padding: 5px;
   $small: 85%;
 
-  .filters {
+  .header {
+
+    display: flex;
+    //align-items: flex-start;
+    flex-wrap: wrap;
+
     margin-bottom: $padding*2;
+
+    .filters {
+      flex: 1;
+    }
+
+    > *, sab-dropdown {
+    }
+
+    sab-dropdown {
+      display: block;
+      min-width: 270px;
+      & + * {
+        margin-top: $padding*2;
+      }
+    }
+
   }
 
   .buttons {
 
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    text-align: right;
+    flex-direction: column;
+
+    @include responsive-only(xxs) {
+      margin-top: $padding * 2;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: stretch;
+      width: 100%;
+      margin-left: 0;
+    }
+
+    align-items: flex-end;
+    //justify-content: space-between;
+    //text-align: right;
+
+    //width: 270px;
+
+    margin-left: $padding * 2;
 
     > * {
       display: block;
@@ -31,14 +66,38 @@
       i {
         top: 3px;
       }
-      margin-right: 10px;
+      //margin-right: 10px;
     }
 
     make-photo-report {
-      flex: 1;
+      //flex: 1;
       .make-photo-report {
         display: block;
         width: 100%;
+      }
+    }
+
+    make-photo {
+
+      flex: 1;
+
+      &[disabled] ng-transclude {
+        @extend %link-button;
+      }
+
+      ng-transclude {
+
+        @extend %primary-button;
+        width: 100%;
+        display: block;
+
+        i {
+          //margin-right: 10px;
+          padding: 0 $padding;
+          font-size: 120%;
+          top: 3px;
+        }
+
       }
     }
 

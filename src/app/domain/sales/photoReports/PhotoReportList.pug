@@ -1,25 +1,50 @@
 section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
 
-  .filters.row
+  .header
 
-    .col-sm-7.col-md-8.col-lg-9
+    .filters
 
-      //sab-date-picker.col-sm-4.col-lg-3(
-      //value='vm.date'
-      //init-date='vm.initDate'
-      //clear-text='Сегодня'
-      //)
+      sab-dropdown(
+      ng-model='vm.campaignGroupId'
+      items-data-source-name='CampaignGroup'
+      items-data='vm.campaignGroups'
+      )
 
-    .col-sm-5.col-md-4.col-lg-3
-      .buttons
+      sab-dropdown(
+      ng-model='vm.campaignId'
+      items-data-source-name='Campaign'
+      items-name-property='title'
+      items-group-property='teamName'
+      items-data='vm.campaigns'
+      allow-clear='true'
+      )
 
-        a.btn.btn-link.edit-toggler(
-        href ng-click='vm.editing = !vm.editing'
-        ng-class='{disabled: !vm.data.length}'
-        )
-          i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+      sab-dropdown(
+      ng-model='vm.outletId'
+      items-data-source-name='Outlet'
+      items-name-property='address'
+      items-group-property='name'
+      items-data='vm.outlets'
+      allow-clear='true'
+      )
 
-        make-photo-report(is-popover-open='vm.isPopoverOpen')
+    .buttons
+
+      make-photo(
+      ng-disabled='!vm.photoReport'
+      model='vm.photoReport'
+      model-name='PhotoReport'
+      busy='vm.cgBusy'
+      )
+        i.glyphicon.glyphicon-camera
+        //span Добавить фото
+
+      a.btn.btn-link.edit-toggler(
+      href ng-click='vm.editing = !vm.editing'
+      ng-class='{disabled: !vm.data.length || !vm.editing}'
+      )
+        //span {{ vm.editing ? 'Готово' : 'Удалить' }}
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
   #scroll-main.scroll-y(
   resize
@@ -34,13 +59,13 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
         a.thumb(ng-click='vm.thumbClick(item)')
           img(ng-src='{{ item.srcThumbnail }}')
 
-
         .outlet
           .name {{ item.outlet.name }}
           .address
             small.gray {{ item.outlet.address }}
 
         .campaign {{ item.campaign.title }} ({{ item.campaign.campaignGroup.shortName }})
+
         .deviceCts
 
           a.remove(
