@@ -11,6 +11,7 @@
       .use({
         toSummCashingInProgress: false,
         totalSumm,
+        totalSummDoc,
         trashUndebtedClick,
         confirmation: {},
         debtClick,
@@ -146,6 +147,10 @@
 
     function totalSumm() {
       return _.sumBy(vm.debts, debt => debt.uncashed());
+    }
+
+    function totalSummDoc() {
+      return _.sumBy(vm.debts, debt => debt.summDoc - debt.summ);
     }
 
   }
