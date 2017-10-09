@@ -77,5 +77,5 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
           )
             i.glyphicon.glyphicon-trash
 
-          span {{ item.deviceCts | amUtc | amLocal | amCalendar }}
+          span {{ ::item.deviceCts | amUtc | amLocal | amCalendar }}
 
