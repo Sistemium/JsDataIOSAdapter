@@ -8,6 +8,7 @@
     const {saControllerHelper, toastr} = Helpers;
 
     const LOCAL_STORAGE_KEY = 'photoReportForm.defaults';
+    const DEFAULT_FIELDS = ['campaignId', 'outletId', 'campaignGroupId'];
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
@@ -20,7 +21,9 @@
 
         addItemClick,
         thumbClick,
-        deleteClick
+        deleteClick,
+
+        $onInit
 
       });
 
@@ -34,9 +37,23 @@
       vm.outletId = null;
     });
 
+    vm.watchScope('vm.busySavingPhoto', onBusySavingPhoto);
+
     /*
      Functions
      */
+
+    function $onInit() {
+
+      _.assign(vm, localStorageService.get(LOCAL_STORAGE_KEY));
+
+    }
+
+    function saveDefaults() {
+
+      localStorageService.set(LOCAL_STORAGE_KEY, _.pick(vm, DEFAULT_FIELDS));
+
+    }
 
     function onJSData(event) {
 
@@ -48,6 +65,13 @@
 
       PhotoReport.inject(data);
 
+    }
+
+    function onBusySavingPhoto(promise) {
+      if (promise && promise.then) {
+        vm.cgBusy = {promise, message: 'Сохранение фото'};
+        promise.then(createDraft);
+      }
     }
 
     function deleteClick(picture) {
@@ -73,19 +97,29 @@
 
       let {campaignId, outletId} = vm;
 
-      if (vm.campaignId) {
-        filter.campaignId = vm.campaignId;
+      if (campaignId) {
+        filter.campaignId = campaignId;
       }
 
-      if (vm.outletId) {
-        filter.outletId = vm.outletId;
+      if (outletId) {
+        filter.outletId = outletId;
       }
+
+      saveDefaults();
 
       vm.rebindAll(PhotoReport, filter, 'vm.data');
 
       let q = PhotoReport.findAllWithRelations(filter, {bypassCache: true})(['Outlet']);
 
+      createDraft();
+
       vm.setBusy(q);
+
+    }
+
+    function createDraft() {
+
+      let {campaignId, outletId} = vm;
 
       if (campaignId && outletId) {
         vm.photoReport = PhotoReport.createInstance({campaignId, outletId})
@@ -127,8 +161,6 @@
           vm.campaignGroups = _.filter(groups, campaignGroup => {
             return moment().isAfter(campaignGroup.dateB) && moment().add(-90, 'days').isBefore(campaignGroup.dateE);
           });
-
-          vm.campaignGroupId = localStorageService.get(`${LOCAL_STORAGE_KEY}.campaignGroupId`);
 
           if (!vm.campaignGroupId) {
             let today = moment().format();
