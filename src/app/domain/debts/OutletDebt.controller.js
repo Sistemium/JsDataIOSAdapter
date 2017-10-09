@@ -112,36 +112,41 @@
 
           return Cashing.findAll({outletId, isProcessed: false})
             .then(() => {
-              vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', () => {
-
-                let cashingTotalByDebt = {};
-                let cashingTotal = 0;
-
-                _.each(vm.cashings, cashing => {
-                  let total = cashingTotalByDebt[cashing.debtId] || 0;
-                  total += cashing.summ;
-                  cashingTotalByDebt[cashing.debtId] = total;
-                  cashingTotal += cashing.summ;
-                });
-
-                vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
-
-                vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
-                vm.cashingTotal = cashingTotal;
-
-              });
+              vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', updateCashingTotals);
             })
-            .then(() => data);
+            .then(() => vm.rawData = data);
 
-        })
-        .then(data => {
-          vm.data = _.filter(data, date => {
-            return _.find(date.items, debt => {
-              return Math.abs(debt.uncashed()) > 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
-            })
-          });
         })
         .catch(e => console.error(e));
+
+    }
+
+    function updateFilters(data) {
+      vm.data = _.filter(data, date => {
+        return _.find(date.items, debt => {
+          return Math.abs(debt.uncashed()) > 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
+        })
+      });
+    }
+
+    function updateCashingTotals() {
+
+      let cashingTotalByDebt = {};
+      let cashingTotal = 0;
+
+      _.each(vm.cashings, cashing => {
+        let total = cashingTotalByDebt[cashing.debtId] || 0;
+        total += cashing.summ;
+        cashingTotalByDebt[cashing.debtId] = total;
+        cashingTotal += cashing.summ;
+      });
+
+      vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
+
+      vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
+      vm.cashingTotal = cashingTotal;
+
+      updateFilters(vm.rawData);
 
     }
 
