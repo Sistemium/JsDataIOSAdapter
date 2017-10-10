@@ -13,7 +13,8 @@
       hasInactiveActions,
       hasSaleOrderKS,
       saleOrderOptions,
-      saleOrdersDisabled
+      saleOrdersDisabled,
+      visitsDisabled
     };
 
     function saleOrderOptions() {
@@ -42,6 +43,10 @@
     }
 
     function saleOrdersDisabled() {
+      return customerCode() === 'bs';
+    }
+
+    function visitsDisabled() {
       return customerCode() === 'bs';
     }
 
