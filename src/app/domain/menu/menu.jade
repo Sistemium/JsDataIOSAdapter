@@ -4,7 +4,10 @@
     small {{header.small}}
 .row
   .col-sm-6.col-md-4(ng-repeat='item in items track by item.state')
-    button.btn.btn-default.btn-block.thumbnail.btn-lg(ui-sref='{{::item.state}}')
+    button.btn.btn-default.btn-block.thumbnail.btn-lg(
+    ui-sref='{{::item.state}}'
+    ng-disabled='item.disabled()'
+    )
       .caption
         span {{::item.title}}
         .badge(ng-if='item.badge') {{ item.badge }}

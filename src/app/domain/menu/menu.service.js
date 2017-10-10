@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').service('Menu', function (InitService, Auth) {
+  angular.module('webPage').service('Menu', function (InitService, Auth, DomainOption) {
 
     const SALES_ROLES = ['salesman', 'supervisor'];
     const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
@@ -24,7 +24,8 @@
     }, {
       title: 'Заказы',
       state: 'sales.saleOrders',
-      needRoles: SALES_ROLES
+      needRoles: SALES_ROLES,
+      disabled: DomainOption.saleOrdersDisabled
     }, {
       title: 'Отгрузки',
       state: 'sales.shipmentList',

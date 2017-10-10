@@ -59,6 +59,8 @@
       filters: [],
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
 
+      saleOrdersDisabled: DomainOption.saleOrdersDisabled(),
+
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
       setSaleOrderClick,

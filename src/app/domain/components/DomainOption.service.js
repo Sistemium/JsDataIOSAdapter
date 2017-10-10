@@ -12,7 +12,8 @@
     return {
       hasInactiveActions,
       hasSaleOrderKS,
-      saleOrderOptions
+      saleOrderOptions,
+      saleOrdersDisabled
     };
 
     function saleOrderOptions() {
@@ -38,6 +39,10 @@
       let org = _.get(Auth.getAccount(), 'org');
       if (!org) return false;
       return customerAlias[org] || org;
+    }
+
+    function saleOrdersDisabled() {
+      return customerCode() === 'bs';
     }
 
   }
