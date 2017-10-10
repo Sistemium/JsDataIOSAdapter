@@ -97,8 +97,14 @@
 
       let {campaignId, outletId} = vm;
 
+      let where = {};
+
       if (campaignId) {
         filter.campaignId = campaignId;
+      } else {
+        where.campaignId = {
+          in: _.map(vm.campaigns, 'id')
+        };
       }
 
       if (outletId) {
@@ -107,9 +113,10 @@
 
       saveDefaults();
 
-      vm.rebindAll(PhotoReport, filter, 'vm.data');
-
-      let q = PhotoReport.findAllWithRelations(filter, {bypassCache: true})(['Outlet']);
+      let q = PhotoReport.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])
+        .then(() => {
+          vm.rebindAll(PhotoReport, _.assign({where}, filter), 'vm.data');
+        });
 
       createDraft();
 
@@ -149,7 +156,7 @@
         unWatchRefresh();
       }
 
-      unWatchRefresh = $scope.$watchGroup(['vm.campaignId', 'vm.outletId', 'vm.campaignGroupId'], loadPhotoReports);
+      unWatchRefresh = $scope.$watchGroup(['vm.campaignId', 'vm.outletId'], loadPhotoReports);
 
     }
 
@@ -167,30 +174,34 @@
             vm.campaignGroupId = _.get(_.find(groups, group => group.dateB <= today && today <= group.dateE), 'id');
           }
 
-          $scope.$watch('vm.campaignGroupId', campaignGroupId => {
-
-            vm.campaignGroup = CampaignGroup.get(campaignGroupId);
-
-            if (!campaignGroupId) {
-              vm.campaigns = [];
-              return;
-            }
-
-            Campaign.findAll(Campaign.meta.filterByGroup(vm.campaignGroup))
-              .then(campaigns => {
-
-                vm.campaigns = campaigns;
-
-                if (vm.campaignId && !_.find(campaigns, {id: vm.campaignId})) {
-                  vm.campaignId = null;
-                }
-
-              });
-
-          });
+          $scope.$watch('vm.campaignGroupId', onCampaignGroupChange);
 
         });
 
+
+    }
+
+    function onCampaignGroupChange(campaignGroupId) {
+
+      vm.campaignGroup = CampaignGroup.get(campaignGroupId);
+
+      if (!campaignGroupId) {
+        vm.campaigns = [];
+        return;
+      }
+
+      Campaign.findAll(Campaign.meta.filterByGroup(vm.campaignGroup))
+        .then(campaigns => {
+
+          vm.campaigns = campaigns;
+
+          if (vm.campaignId && !_.find(campaigns, {id: vm.campaignId})) {
+            vm.campaignId = null;
+          }
+
+          loadPhotoReports();
+
+        });
 
     }
 
