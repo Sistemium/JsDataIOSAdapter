@@ -21,6 +21,12 @@
 
       computed: {
         shortName: ['name', shortName]
+      },
+
+      meta: {
+        label: {
+          accusative: 'период'
+        }
       }
 
     });

@@ -2,9 +2,10 @@
 
 (function () {
 
-  angular.module('webPage').service('Menu', function (InitService, Auth) {
+  angular.module('webPage').service('Menu', function (InitService, Auth, DomainOption) {
 
     const SALES_ROLES = ['salesman', 'supervisor'];
+    const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
     const PICKING_ROLES = ['picker'];
     const ADMIN_ROLES = ['admin', 'tester'];
 
@@ -23,7 +24,8 @@
     }, {
       title: 'Заказы',
       state: 'sales.saleOrders',
-      needRoles: SALES_ROLES
+      needRoles: SALES_ROLES,
+      disabled: DomainOption.saleOrdersDisabled
     }, {
       title: 'Отгрузки',
       state: 'sales.shipmentList',
@@ -43,24 +45,21 @@
     }, {
       title: 'Акции',
       state: 'sales.campaigns',
-      needRoles: SALES_ROLES
+      needRoles: MARKETING_ROLES
     }, {
       title: 'Фото-отчёты',
       state: 'sales.photoReports',
       needRoles: SALES_ROLES
     }, {
-    //   title: 'Визиты',
-    //   state: 'sales.visits',
-    //   needRoles: SALES_ROLES
-    // }, {
+      title: 'Визиты',
+      state: 'sales.visits',
+      needRoles: SALES_ROLES,
+      disabled: DomainOption.visitsDisabled
+    }, {
       // title: 'Фотопоток',
       // state: 'photos.stream',
       // needRoles: SALES_ROLES
       // needRoles: ['admin', 'tester']
-    // }, {
-    //   title: 'Предзаказы',
-    //   state: 'sales.prePreOrders',
-    //   needRoles: 'pre-ordering'
     // }, {
       title: 'Тесты',
       state: 'playground',
@@ -68,7 +67,7 @@
     }, {
       title: 'Лента новостей',
       state: 'newsFeed',
-      needRoles: ADMIN_ROLES
+      needRoles: MARKETING_ROLES
     }];
 
 

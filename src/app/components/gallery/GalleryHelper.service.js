@@ -5,7 +5,7 @@
   angular.module('webPage')
     .service('GalleryHelper', GalleryHelper);
 
-  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window, IOS, toastr) {
+  function GalleryHelper($q, $templateRequest, $compile, $timeout, $document, $window, IOS) {
 
     function setupController(vm, $scope) {
 
@@ -85,11 +85,12 @@
 
       function sendToCameraRollClick() {
 
-        IOS.sendToCameraRoll(vm.currentImage)
-          .then(() => {
-            toastr.success('Изображение сохранено');
-          })
-          .catch(err => toastr.error(angular.toJson(err)));
+        $scope.cgBusySaving = {
+          promise: IOS.sendToCameraRoll(vm.currentImage),
+          minDuration: 1500,
+          delay: 0,
+          message: 'Сохранение в фото-пленку'
+        };
 
       }
 
@@ -128,19 +129,36 @@
 
         return $q((resolve, reject) => {
 
-          const image = _.assign(new Image(), {
+          if (IOS.isIos()) {
 
-            onload: function () {
-              if (this.complete === false || this.naturalWidth === 0) {
-                reject();
-              }
-              resolve(image);
-            },
+            return IOS.loadImage(img)
+              .then(image => {
+                img.DSRefresh(image)
+                  .then(() => preLoad(img, resolve, reject))
+                  .catch(err => reject(err));
+              }).catch(err => reject(err));
 
-            onerror: reject,
-            src: img.srcFullscreen
+          }
 
-          });
+          preLoad(img, resolve, reject);
+
+        });
+
+      }
+
+      function preLoad(img, resolve, reject) {
+
+        const image = _.assign(new Image(), {
+
+          onload: function () {
+            if (this.complete === false || this.naturalWidth === 0) {
+              reject();
+            }
+            resolve(image);
+          },
+
+          onerror: reject,
+          src: img.srcFullscreen
 
         });
 

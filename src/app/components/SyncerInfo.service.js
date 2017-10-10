@@ -2,9 +2,16 @@
 
   module.service('SyncerInfo', SyncerInfo);
 
-  function SyncerInfo($window) {
+  function SyncerInfo($window, $timeout) {
 
     const CALLBACK = 'unsyncedInfoCallback';
+    const syncerState = {};
+
+    bind(status => $timeout(() => stateInfoCallback(status)));
+
+    return {
+      watch
+    };
 
     function bind(callback) {
 
@@ -25,7 +32,6 @@
 
     }
 
-    const syncerState = {};
 
     function stateInfoCallback(state) {
       _.assign(syncerState, {
@@ -37,12 +43,6 @@
       let unwatch = scope.$watch(() => syncerState, callback, true);
       scope.$on('$destroy', unwatch);
     }
-
-    bind(stateInfoCallback);
-
-    return {
-      watch
-    };
 
   }
 

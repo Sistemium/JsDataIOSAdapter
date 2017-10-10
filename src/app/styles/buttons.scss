@@ -78,3 +78,13 @@ a.disabled, .disabled a {
   padding: 6px;
   border-radius: 6px;
 }
+
+%link-button {
+  background: none;
+  border: solid 1px $border-gray;
+  color: $primary-color;
+  text-align: center;
+  padding: 6px;
+  border-radius: 6px;
+}
+

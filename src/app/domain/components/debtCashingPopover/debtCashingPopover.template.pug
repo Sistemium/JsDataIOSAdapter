@@ -24,6 +24,7 @@
         placeholder='Укажите сумму'
         step='0.01'
         max='{{vm.debt.uncashed()}}'
+        track-focused
         required
         )
 
@@ -36,6 +37,7 @@
         name='commentText'
         autocomplete="off"
         placeholder='Комментарий'
+        track-focused
         )
 
       button.btn.btn-primary(

@@ -49,6 +49,7 @@
       isOpenOutletPopover: false,
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
+      hideBoxes: localStorageService.get('hideBoxes') || false,
       showImages: localStorageService.get('showImages') || false,
       showFirstLevel: localStorageService.get('showFirstLevel') || false,
       stockWithPicIndex: [],
@@ -58,6 +59,8 @@
       filters: [],
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
 
+      saleOrdersDisabled: DomainOption.saleOrdersDisabled(),
+
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
       setSaleOrderClick,
@@ -66,6 +69,7 @@
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
       toggleShowFirstLevelClick,
+      toggleHideBoxesClick,
 
       compDiscountClick,
       bPlusButtonClick,
@@ -270,6 +274,12 @@
       if (!vm.showImages) return;
 
       ArticlePicture.findAll({}, {limit: 10000});
+
+    }
+
+    function toggleHideBoxesClick() {
+
+      vm.hideBoxes = !vm.hideBoxes;
 
     }
 

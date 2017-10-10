@@ -5,31 +5,6 @@
   angular.module('webPage')
     .config(function (stateHelperProvider) {
 
-      const prePreOrders = {
-
-        name: 'prePreOrders',
-        url: '/prePreOrders?state',
-
-        templateUrl: 'app/domain/sales/views/prePreOrderList.html',
-        controller: 'PrePreOrderListController',
-        controllerAs: 'vm',
-
-        data: {
-          needRoles: 'preOrdering'
-        },
-
-        children: [
-          {
-            name: 'selectedOrder',
-            url: '/selected',
-            templateUrl: 'app/domain/views/selectedPrePreOrder.html',
-            controller: 'SelectedPrePreOrderController',
-            controllerAs: 'vm'
-          }
-        ]
-
-      };
-
       const visit = {
 
         name: 'visit',
@@ -39,7 +14,7 @@
           // hideNavs: true
         },
 
-        templateUrl: 'app/domain/sales/views/VisitCreate.html',
+        templateUrl: 'app/domain/sales/visits/VisitCreate.html',
         controller: 'VisitCreateController',
         controllerAs: 'vm'
 
@@ -56,7 +31,7 @@
           hideNavs: true
         },
 
-        templateUrl: 'app/domain/sales/views/VisitCreate.html',
+        templateUrl: 'app/domain/sales/visits/VisitCreate.html',
         controller: 'VisitCreateController',
         controllerAs: 'vm'
 
@@ -114,7 +89,11 @@
         controller: 'OutletController',
         controllerAs: 'vm',
 
-        children: [angular.copy(visit), visitCreate]
+        children: [angular.copy(visit), visitCreate],
+
+        data: {
+          rootState: 'sales.territory'
+        }
 
       };
 
@@ -174,7 +153,7 @@
         name: 'visits',
         url: '/visits?date',
 
-        templateUrl: 'app/domain/sales/views/visits.html',
+        templateUrl: 'app/domain/sales/visits/visits.html',
         controller: 'VisitsController',
         controllerAs: 'vm',
 
@@ -197,7 +176,7 @@
             auth: 'SalesmanAuth'
           },
 
-          children: [salesTerritory, prePreOrders, visits]
+          children: [salesTerritory, visits]
 
         })
       ;

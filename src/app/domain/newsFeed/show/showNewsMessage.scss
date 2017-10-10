@@ -2,19 +2,21 @@
 
 .show-news-message {
 
+  $padding: 10px;
+
   label {
     color: $gray;
   }
 
   .news-message {
 
-    padding: 10px 0;
+    padding: $padding 0;
     border-radius: $border-radius;
 
     .header {
 
       display: flex;
-      flex-flow: row wrap;
+      flex-flow: row nowrap;
       justify-content: space-between;
       align-items: center;
 
@@ -24,21 +26,26 @@
 
       .subject {
 
-        font-size: 150%;
+        font-size: 170%;
         font-weight: 400;
 
         @include responsive-only(lt-sm) {
           font-size: 120%;
-          margin-right: 10px;
+          margin-right: $padding;
+          font-weight: bold;
         }
 
+      }
+
+      .buttons {
+        text-align: right;
       }
 
     }
 
     .body {
 
-      margin: 10px 0;
+      margin: $padding 0;
 
       p {
         line-height: 1.5em;
@@ -54,19 +61,19 @@
       justify-content: space-between;
       align-items: center;
 
+      color: $gray;
+
+      @include responsive-only(xxs) {
+        .common-rating {
+          display: none;
+        }
+      }
+
       .rating {
 
-        span {
-
-          > * {
-            outline: none;
-          }
-
-          cursor: pointer;
-          color: $primary-color;
-          margin-left: 2px;
-
-        }
+        margin-left: $padding*2;
+        flex: 1;
+        text-align: right;
 
       }
 

@@ -1,10 +1,12 @@
-.page-header(ng-if='header')
+.page-header(ng-if='vm.header')
   h2
-    div {{header.title}}
-    small {{header.small}}
+    div {{ vm.header.title }}
+    small {{ vm.header.small }}
 .row
-  .col-sm-6.col-md-4(ng-repeat='item in items track by item.state')
-    button.btn.btn-default.btn-block.thumbnail.btn-lg(ui-sref='{{::item.state}}')
+  .col-sm-6.col-md-4(ng-repeat='item in vm.items track by item.state' ng-if='vm.isVisible(item)')
+    button.btn.btn-default.btn-block.thumbnail.btn-lg(
+    ui-sref='{{ ::item.state }}'
+    )
       .caption
-        span {{::item.title}}
+        span {{ ::item.title }}
         .badge(ng-if='item.badge') {{ item.badge }}

@@ -23,7 +23,7 @@
     });
 
 
-  function saleOrderAlertController(Schema, toastr, $state, $timeout) {
+  function saleOrderAlertController(Schema, toastr, $state, $timeout, DomainOption) {
 
     const {SaleOrder} = Schema.models();
 
@@ -36,7 +36,7 @@
       deleteSaleOrderClick,
       saleOrderMinDate: moment().toDate(),
       saleOrderInitDate: nextWorkDay
-    });
+    }, DomainOption.saleOrderOptions());
 
     function deleteSaleOrderClick() {
 

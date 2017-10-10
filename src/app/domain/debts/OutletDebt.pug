@@ -28,8 +28,10 @@
       span прочее
 
   .totals
+    label.ndoc Накладная
+    label.total(ng-if='vm.totalSummDoc()') Бух+
     label.total(ng-if='vm.cashingTotal') На руках
-    label.total Остаток долга
+    label.total Остаток упр
     label.cash-this(ng-if='vm.toSummCashingInProgress')
 
 .scroll-y(
@@ -77,16 +79,19 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
           small.tip.overdue(ng-if='debt.isOverdue()')
             span Просрочено
             = ' '
-            span {{ debt.dateE | amDifference:null | amDurationFormat }}
+            span {{ debt.paymentTerm() | amDurationFormat }}
 
           small.tip(ng-if='!debt.isOverdue()')
             span На оплату
             = ' '
-            span {{ debt.dateE | amDifference:null | amDurationFormat }}
+            span {{ debt.paymentTerm() | amDurationFormat }}
 
           small.flag.responsible {{ ::debt.responsible.name }}
 
-          span {{ ::debt.ndoc }}
+          currency-value.summ-origin(value='debt.summOrigin')
+          span.ndoc {{ ::debt.ndoc }}
+
+        currency-value.summ-origin-doc(value='debt.summDoc - debt.summ' hide-empty='true')
 
         currency-value.cashed(
         ng-click='vm.debtClick(debt, $event)'
@@ -106,8 +111,10 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
 
     label Итого:
 
-    a(href ng-click='$parent.vm.totalCashedClick()')
-      currency-value(value='vm.cashingTotal' ng-if='vm.cashingTotal')
+    currency-value(value='vm.totalSummDoc()')
+
+    a(href ng-click='$parent.vm.totalCashedClick()' ng-if='vm.cashingTotal')
+      currency-value(value='vm.cashingTotal')
 
     currency-value(value='vm.totalSumm()')
 

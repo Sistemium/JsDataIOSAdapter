@@ -1,4 +1,4 @@
-span.pull-right(ng-if='vm.currentState!=="saleOrder"')
+span.pull-right(ng-if='vm.currentState!=="saleOrder" && !vm.saleOrdersDisabled')
   a(
   href
   uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'

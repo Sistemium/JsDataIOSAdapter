@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run((Schema) => {
+  angular.module('Models').run((Schema, moment) => {
 
     Schema.register({
 
@@ -27,20 +27,21 @@
         }
       },
 
-      defaultValues: {
-      },
+      defaultValues: {},
 
       watchChanges: false,
 
-      meta: {
-      },
+      meta: {},
 
       methods: {
         uncashed: function () {
           return this.summ - Schema.aggregate('summ').sum(_.filter(this.cashings, cashing => !cashing.isProcessed));
         },
-        isOverdue: function() {
+        isOverdue: function () {
           return this.dateE < moment().format();
+        },
+        paymentTerm: function () {
+          return moment().add(-1, 'day').diff(this.dateE);
         }
       }
 

@@ -20,7 +20,7 @@
 
       date: $state.params.date ? $state.params.date : SaleOrder.meta.nextShipmentDate(),
       initDate: SaleOrder.meta.nextShipmentDate(),
-      maxDate: moment().add(7, 'days').format(),
+      maxDate: moment().add(14, 'days').format(),
 
       itemClick,
       newItemClick,

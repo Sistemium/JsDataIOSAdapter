@@ -20,25 +20,29 @@
       //ng-if='vm.newsMessage.dateE || vm.newsMessage.dateB'
       //)
 
-    .body.scroll-y(resize resize-offset-top='60')
+    .body.scroll-y(resize resize-offset-top='40')
       p {{ vm.newsMessage.body }}
 
     .footer.spaced
 
-      .common-rating
+      .common-rating(
+      ng-if='vm.showCommonRating()'
+      )
 
-        label(ng-if='vm.newsMessage.rating') Средняя оценка:
+        label Средняя оценка:
 
-        strong {{ vm.newsMessage.rating }}
+        strong {{ vm.newsMessage.rating | number }}
 
-      .rating
+      .rating(ng-if='!vm.newsMessage.isAuthor()')
 
         label Ваша оценка:
         span(
         uib-rating
-        titles='["Один", "Два", "Три", "Четыре", "Пять"]'
+        titles='vm.ratingTitles'
         enable-reset='false'
         max='5'
         ng-model='vm.userNewsMessage.rating'
         ng-click='vm.newsRatingClick()'
         )
+
+      .rating(ng-if='vm.newsMessage.isAuthor()') Вы автор этой новости

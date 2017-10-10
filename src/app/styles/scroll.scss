@@ -1,3 +1,6 @@
+@import "variables";
+
+
 // if flickering add display: block property;
 
 #scroll-main, .scroll-y {
@@ -29,4 +32,8 @@
     background-color: $gray-background-color;
   }
 
+}
+
+.domain-ui-view {
+  //overflow: hidden;
 }

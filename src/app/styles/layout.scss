@@ -24,12 +24,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 span.editable {
+
   outline: none;
   padding-bottom: 1px;
   border-bottom: 1px;
+
   &.focused {
     border-bottom: solid 1px gray;
   }
+
   label {
     border-right: solid 1px transparent;
     padding-right: 1px;
@@ -37,6 +40,7 @@ span.editable {
     min-height: 0.9em;
     cursor: pointer;
   }
+
 }
 
 hr {
@@ -48,9 +52,6 @@ hr {
   margin-top: 17px;
 }
 
-.em6 {
-  min-width: 6em;
-}
 
 p.list-group-item-text {
   label {
@@ -65,21 +66,11 @@ p.list-group-item-text {
   margin-left: 1em;
 }
 
-.ml-15 {
-  margin-left: 15px;
-}
 
 .ml-10 {
   margin-left: 10px;
 }
 
-.mb-0 {
-  margin-bottom: 0px;
-}
-
-.mb--1 {
-  margin-bottom: -1px;
-}
 
 .centered {
   text-align: center;
@@ -89,9 +80,6 @@ p.list-group-item-text {
   width: 100%;
 }
 
-.mr--8 {
-  margin-right: -8px;
-}
 
 .scroll-horizontal {
   white-space: nowrap;
@@ -99,9 +87,6 @@ p.list-group-item-text {
   -webkit-overflow-scrolling: touch;
 }
 
-.p-6 {
-  padding: 6px;
-}
 
 .header-button {
   h4 {
@@ -119,13 +104,6 @@ p.list-group-item-text {
   }
 }
 
-// TODO: something a bit smarter needed
-.max-width-75p {
-  max-width: 75%;
-  @media (max-width: 450px) {
-    max-width: 200px;
-  }
-}
 
 small i.glyphicon {
   font-size: 80%;

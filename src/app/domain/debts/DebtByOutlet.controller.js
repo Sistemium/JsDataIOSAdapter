@@ -15,6 +15,7 @@
         itemClick,
         totalCashed,
         totalSumm,
+        totalSummDoc,
         totalOverdue,
         onStateChange,
         totalCashedClick,
@@ -112,6 +113,10 @@
       return _.sumBy(data || vm.data, 'sum(summ)');
     }
 
+    function totalSummDoc(data) {
+      return _.sumBy(data || vm.data, 'sum(summDoc)');
+    }
+
     function itemClick(item) {
       let outletId = item.outletId;
       if (!outletId) return;
@@ -183,6 +188,7 @@
           items,
           'sum(cashed)': totalCashed(items),
           'sum(summ)': totalSumm(items),
+          'sum(summDoc)': totalSummDoc(items),
           overdue: totalOverdue(items)
         }
       });
@@ -208,7 +214,7 @@
 
     function loadNotProcessed(data) {
 
-      return Cashing.findAll(SalesmanAuth.makeFilter({isProcessed: false}))
+      return Cashing.findAll(SalesmanAuth.makeFilter({isProcessed: false}, {bypassCache: true}))
         .then(cashings => {
           cashings = _.filter(cashings, 'debtId');
           return _.groupBy(cashings, 'outletId');

@@ -1,0 +1,17 @@
+@import "variables";
+
+span[uib-rating] > span {
+
+  color: $primary-color;
+
+  & > * {
+    user-select: none;
+    outline: none;
+    margin-left: 10px;
+  }
+
+  i {
+    top: 2px;
+  }
+
+}

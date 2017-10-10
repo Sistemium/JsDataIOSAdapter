@@ -6,7 +6,16 @@
 
     Schema.register({
 
-      name: 'UserNewsMessage'
+      name: 'UserNewsMessage',
+
+      relations: {
+        hasOne: {
+          Account: {
+            localField: 'authorAccount',
+            localKey: 'authorId'
+          }
+        }
+      }
 
     });
 

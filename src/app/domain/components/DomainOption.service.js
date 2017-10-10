@@ -11,8 +11,22 @@
 
     return {
       hasInactiveActions,
-      hasSaleOrderKS
+      hasSaleOrderKS,
+      saleOrderOptions,
+      saleOrdersDisabled,
+      visitsDisabled
     };
+
+    function saleOrderOptions() {
+      if (customerCode() === 'r50') {
+        return {
+          docDiscountsOption: true
+        };
+      }
+
+      return {};
+
+    }
 
     function hasInactiveActions() {
       return customerCode() === 'bs';
@@ -26,6 +40,14 @@
       let org = _.get(Auth.getAccount(), 'org');
       if (!org) return false;
       return customerAlias[org] || org;
+    }
+
+    function saleOrdersDisabled() {
+      return customerCode() === 'bs';
+    }
+
+    function visitsDisabled() {
+      return customerCode() === 'bs';
     }
 
   }

@@ -25,22 +25,22 @@
     }
 
     function syncerInfoClick() {
+
       const text = 'Проверьте подключение к интернет или обратитесь в техподдержку';
       const title = 'Требуется передать данные';
-      const options = {
-        onTap: () => {
 
-          if ($window.webkit) {
-            $window.webkit.messageHandlers.remoteControl.postMessage({
-              remoteCommands: {
-                STMSyncer: 'upload'
-              }
-            });
+      const options = {};
+
+      if ($window.webkit) {
+        $window.webkit.messageHandlers.remoteControl.postMessage({
+          remoteCommands: {
+            STMSyncer: 'upload'
           }
+        });
+      }
 
-        }
-      };
       toastr.error(text, title, options);
+
     }
 
   }

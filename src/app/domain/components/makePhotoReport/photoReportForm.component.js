@@ -42,6 +42,8 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
+    $scope.$watch('vm.photoReport.id', onSubmit);
+
     /*
      Functions
      */
@@ -52,6 +54,7 @@
         vm.campaignGroupId = campaignGroup.id;
       }
       vm.listShown = vm.showCampaignGroupList = !vm.showCampaignGroupList;
+      saveDefaults();
     }
 
     function chooseCampaignClick(campaign) {
@@ -59,6 +62,7 @@
         vm.photoReport.campaign = campaign;
       }
       vm.listShown = vm.showCampaignList = !vm.showCampaignList;
+      saveDefaults();
     }
 
     function chooseOutletClick(outlet) {
@@ -66,6 +70,7 @@
         vm.photoReport.outlet = outlet;
       }
       vm.listShown = vm.showOutletList = !vm.showOutletList;
+      saveDefaults();
     }
 
     function onJSData(event) {
@@ -93,6 +98,11 @@
     function onSubmit() {
 
       let {photoReport} = vm;
+
+      if (!photoReport.id) {
+        return;
+      }
+
       vm.onSubmitFn(photoReport);
 
       // _.assign(photoReport, {

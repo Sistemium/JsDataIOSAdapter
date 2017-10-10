@@ -100,14 +100,16 @@
       vm.setBusy(
         Outlet.findAll(outletFilter, {bypassCache: true, limit: 3000})
           .then(outlets => {
-            DEBUG('refresh', 'outlets');
+
             return Partner.findAll(filter, {bypassCache: true, limit: 3000})
               .then(() => outlets);
+
           })
       )
         .then(outlets => {
-          DEBUG('refresh', 'partners');
+
           if (!vm.salesman) return;
+
           let filter = {
             where: {
               id: {
@@ -115,13 +117,14 @@
               }
             }
           };
+
           Outlet.ejectAll(filter);
-          DEBUG('refresh', 'outlets ejectAll');
+
           filter.where.id.notIn = _.uniq(_.map(outlets, 'partnerId'));
-          DEBUG('refresh', 'uniq');
           Partner.ejectAll(filter);
-          DEBUG('refresh', 'partners ejectAll');
+
           saEtc.scrolTopElementById(SCROLL_MAIN);
+
         })
         .catch(e => console.error(e));
 
