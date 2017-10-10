@@ -13,7 +13,7 @@ cg-busy='vm.cgBusy'
       ng-repeat='item in vm.responsibilities track by item.id'
       ) {{ ::item.name }}
     .totals
-      label.total(ng-if='vm.totalSummDoc()') Бух+
+      label.total(ng-if='vm.totalSummDoc() != vm.totalSumm()') Бух+
       label.total.overdue(ng-if='vm.totalOverdue()') Просрочено
       label.total.cashed(ng-if='vm.totalCashed()') На руках
       label.total Остаток долга
@@ -58,6 +58,7 @@ cg-busy='vm.cgBusy'
 
       label Итого:
 
+      currency-value(value='vm.totalSummDoc() - vm.totalSumm()' hide-empty='true')
       currency-value.overdue(value='vm.totalOverdue()' hide-empty='true')
       a(href ng-click='vm.totalCashedClick()' ng-if='vm.totalCashed()')
         currency-value(value='vm.totalCashed()')
