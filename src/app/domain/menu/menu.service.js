@@ -51,10 +51,11 @@
       state: 'sales.photoReports',
       needRoles: SALES_ROLES
     }, {
-    //   title: 'Визиты',
-    //   state: 'sales.visits',
-    //   needRoles: SALES_ROLES
-    // }, {
+      title: 'Визиты',
+      state: 'sales.visits',
+      needRoles: SALES_ROLES,
+      disabled: DomainOption.visitsDisabled
+    }, {
       // title: 'Фотопоток',
       // state: 'photos.stream',
       // needRoles: SALES_ROLES
