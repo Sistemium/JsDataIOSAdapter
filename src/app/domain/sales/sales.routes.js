@@ -14,7 +14,7 @@
           // hideNavs: true
         },
 
-        templateUrl: 'app/domain/sales/views/VisitCreate.html',
+        templateUrl: 'app/domain/sales/visits/VisitCreate.html',
         controller: 'VisitCreateController',
         controllerAs: 'vm'
 
@@ -31,7 +31,7 @@
           hideNavs: true
         },
 
-        templateUrl: 'app/domain/sales/views/VisitCreate.html',
+        templateUrl: 'app/domain/sales/visits/VisitCreate.html',
         controller: 'VisitCreateController',
         controllerAs: 'vm'
 
@@ -153,7 +153,7 @@
         name: 'visits',
         url: '/visits?date',
 
-        templateUrl: 'app/domain/sales/views/visits.html',
+        templateUrl: 'app/domain/sales/visits/visits.html',
         controller: 'VisitsController',
         controllerAs: 'vm',
 
