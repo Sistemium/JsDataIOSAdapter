@@ -43,8 +43,6 @@
 
     function onDebtChecked() {
 
-      console.warn(vm.debts);
-
       _.remove(cashings, cashing => {
 
         if (vm.debts[cashing.debtId]) {
