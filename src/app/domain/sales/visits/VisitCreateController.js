@@ -60,9 +60,9 @@
     if (creatingMode) {
 
       buttons.push({
-        // label: 'Отмена',
+        label: 'Отменить',
         // class: 'btn-default',
-        fa: 'glyphicon glyphicon-trash',
+        // fa: 'glyphicon glyphicon-trash',
         clickFn: 'deleteVisit'
       });
 
