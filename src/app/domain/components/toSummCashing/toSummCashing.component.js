@@ -37,8 +37,6 @@
 
     const cashings = [];
 
-    $scope.$watchCollection('vm.debts', onDebtChecked);
-
     /*
      Functions
      */
@@ -95,7 +93,7 @@
 
     function cancelClick() {
 
-      unbindUnsaved();
+      unwatchDebts();
 
       _.remove(cashings, cashing => {
         cashing.DSEject();
@@ -111,23 +109,19 @@
       return vm.inProgress && !summRemains();
     }
 
-    let unbindUnsaved = _.noop;
+    let unwatchDebts = _.noop;
 
     function onSubmit() {
 
       if (!vm.inProgress) {
-        unbindUnsaved();
-        unbindUnsaved = $scope.$watch(() => Cashing.lastModified(), setCashings);
+        unwatchDebts();
       }
 
       vm.inProgress = true;
       vm.popoverOpen = false;
 
-    }
+      unwatchDebts = $scope.$watchCollection('vm.debts', onDebtChecked);
 
-    function setCashings() {
-      let outletCashings = Cashing.filter({outletId: vm.outlet.id});
-      vm.cashings = _.filter(outletCashings, cashing => !cashing.DSLastSaved());
     }
 
     function summRemains() {
@@ -141,13 +135,15 @@
         $q.all(_.map(vm.cashings, cashing => cashing.DSCreate()))
           .then(() => {
 
-            unbindUnsaved();
             vm.popoverOpen = false;
             vm.inProgress = false;
             _.remove(cashings);
             vm.summ = null;
 
-        });
+          });
+
+
+        unwatchDebts();
 
         return;
 
