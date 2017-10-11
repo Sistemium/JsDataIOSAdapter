@@ -24,6 +24,13 @@
     }
   }
 
+  visit-indicator a {
+    margin-right: 20px;
+    @media (max-width: $screen-xs-max) {
+      margin-right: 15px;
+    }
+  }
+
   > a + a {
     margin-left: 20px;
     @media (max-width: $screen-xs-max) {
@@ -36,7 +43,7 @@
   }
 
   a.home {
-    background: $cg-background-color;
+    background: $gray-background-color;
     padding: 0 8px;
     line-height: 37px;
     border-radius: 9px;

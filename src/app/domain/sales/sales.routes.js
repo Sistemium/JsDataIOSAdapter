@@ -27,8 +27,8 @@
 
         data: {
           disableNavs: true,
-          hideTopBar: false,
-          hideNavs: true
+          hideTopBar: false
+          // hideNavs: true
         },
 
         templateUrl: 'app/domain/sales/visits/VisitCreate.html',

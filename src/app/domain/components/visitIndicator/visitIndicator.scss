@@ -1,0 +1,17 @@
+@import "../../../styles/variables";
+
+.visit-indicator > a {
+
+  background: #F5F5F5;
+  padding: 0 8px;
+  line-height: 37px;
+  border-radius: 9px;
+  font-size: 21px;
+  display: inline-block;
+
+  i {
+    top: 2px;
+    color: $red;
+  }
+
+}

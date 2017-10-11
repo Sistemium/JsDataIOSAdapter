@@ -27,6 +27,10 @@
 
     $scope.$on('$stateChangeSuccess', onStateChange);
 
+    if (localStorageService.get('debug.performance')) {
+      setTimeout(measure, 1000);
+    }
+
     // $scope.$on('$stateChangeStart', onStateChange);
 
     function onStateChange(event, to) {
@@ -52,11 +56,6 @@
       vm.lastDigest = Math.round($window.performance.now() - a);
       setTimeout(measure, 2000);
     }
-
-    if (localStorageService.get('debug.performance')) {
-      setTimeout(measure, 1000);
-    }
-
 
   }
 
