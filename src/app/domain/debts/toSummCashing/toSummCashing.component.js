@@ -12,7 +12,7 @@
       summ: '=?'
     },
 
-    templateUrl: 'app/domain/components/toSummCashing/toSummCashing.html',
+    templateUrl: 'app/domain/debts/toSummCashing/toSummCashing.html',
 
     controller: toSummCashingController,
     controllerAs: 'vm'
