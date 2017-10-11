@@ -14,7 +14,7 @@
     to-summ-cashing(
     outlet='vm.outlet'
     popover-open='vm.toSummCashingPopoverOpen'
-    cashings='vm.unsavedCashings'
+    debts='vm.checkedDebts'
     summ='vm.summToCash'
     in-progress='vm.toSummCashingInProgress'
     )
@@ -103,7 +103,7 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
           currency-value(value='debt.uncashed()')
 
         a.cash-this(href ng-click='vm.debtClick(debt, $event)' ng-if='vm.toSummCashingInProgress')
-          i.glyphicon(ng-class='debt.checked ? "glyphicon-check" : "glyphicon-unchecked"')
+          i.glyphicon(ng-class='vm.checkedDebts[debt.id] ? "glyphicon-check" : "glyphicon-unchecked"')
 
 .footer
 

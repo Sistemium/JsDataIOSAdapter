@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
@@ -15,7 +15,8 @@
         trashUndebtedClick,
         confirmation: {},
         debtClick,
-        unsavedCashings: []
+        unsavedCashings: [],
+        checkedDebts: {}
       });
 
     const {outletId} = $state.params;
@@ -31,50 +32,22 @@
      */
 
     function clearChecks() {
-      _.each(vm.data, group => {
-        _.each(group.items, item => {
-          item.checked = false;
-        });
-      });
+      vm.checkedDebts = {};
     }
 
     function debtClick(debt, event) {
 
-      if (event.defaultPrevented || !vm.summToCash) return;
+      if (event.defaultPrevented) return;
 
       event.preventDefault();
 
-      let uncashed = debt.uncashed();
-      let toCashRemains = vm.summToCash - (_.sumBy(vm.unsavedCashings, 'summ') || 0);
-      let summ = _.min([vm.summToCash && toCashRemains, uncashed]);
 
-      if (!toCashRemains && !debt.checked) {
-        return toastr.error('Нажмите "Готово", чтобы завершить подбор', 'Сумма уже подобрана');
-      }
+      let checked = vm.checkedDebts[debt.id];
 
-      if (uncashed > 0 && summ > 0) {
-
-        debt.checked = true;
-
-        Cashing.inject({
-          summ,
-          debtId: debt.id,
-          outletId: debt.outletId,
-          date: moment().format()
-        });
-
+      if (checked) {
+        delete vm.checkedDebts[debt.id];
       } else {
-
-        debt.checked = false;
-
-        let cashings = Cashing.filter({debtId: debt.id});
-
-        _.each(cashings, cashing => {
-          if (!cashing.DSLastSaved()) {
-            Cashing.eject(cashing);
-          }
-        });
-
+        vm.checkedDebts[debt.id] = debt;
       }
 
     }
