@@ -1,0 +1,14 @@
+.copy-selected
+
+  button.btn.btn-danger(
+  ng-if='vm.inProgress'
+  ng-click='vm.cancelClick($event)'
+  ) Отмена
+
+  button.btn.btn-default.copying(
+  ng-click='vm.triggerClick()'
+  ng-disabled='vm.isReady()'
+  ng-if='vm.isIos()'
+  )
+    i.glyphicon.glyphicon-copy(ng-if='!vm.inProgress')
+    span(ng-if='vm.inProgress') Готово, скопировать

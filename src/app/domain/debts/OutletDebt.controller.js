@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, $filter) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
@@ -10,22 +10,31 @@
       .setup(this, $scope)
       .use({
         toSummCashingInProgress: false,
+        copyingInProgress: false,
         totalSumm,
         totalSummDoc,
         trashUndebtedClick,
         confirmation: {},
         debtClick,
         unsavedCashings: [],
-        checkedDebts: {}
+        checkedDebts: {},
+        inCheckingProgress,
+        textFromDebt
       });
 
     const {outletId} = $state.params;
+
+    const dateFilter = $filter('date');
+
+    const numberFilter = $filter('number');
 
     vm.setBusy(getData(outletId));
 
     Outlet.bindOne(outletId, $scope, 'vm.outlet');
 
     vm.watchScope('vm.toSummCashingInProgress', clearChecks);
+
+    vm.watchScope('vm.copyingInProgress', clearChecks);
 
     /*
      Functions
@@ -40,7 +49,6 @@
       if (event.defaultPrevented) return;
 
       event.preventDefault();
-
 
       let checked = vm.checkedDebts[debt.id];
 
@@ -129,6 +137,14 @@
 
     function totalSummDoc() {
       return _.sumBy(vm.debts, debt => debt.summDoc - debt.summ);
+    }
+
+    function inCheckingProgress() {
+      return vm.copyingInProgress || vm.toSummCashingInProgress;
+    }
+
+    function textFromDebt(debt) {
+      return `${debt.ndoc} ${numberFilter(debt.summOrigin, 2)} ₽ от ${dateFilter(debt.date)} остаток ${numberFilter(debt.summ, 2)} ₽ \n`
     }
 
   }

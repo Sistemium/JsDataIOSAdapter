@@ -11,12 +11,21 @@
       span.caret
 
   .totals
+
+    copy-selected(
+    selected-items='vm.checkedDebts'
+    in-progress='vm.copyingInProgress'
+    text-from-item='vm.textFromDebt'
+    ng-if='!vm.toSummCashingInProgress'
+    )
+
     to-summ-cashing(
     outlet='vm.outlet'
     popover-open='vm.toSummCashingPopoverOpen'
     debts='vm.checkedDebts'
     summ='vm.summToCash'
     in-progress='vm.toSummCashingInProgress'
+    ng-if='!vm.copyingInProgress'
     )
 
 .header
@@ -32,11 +41,11 @@
     label.total(ng-if='vm.totalSummDoc()') Бух+
     label.total(ng-if='vm.cashingTotal') На руках
     label.total Остаток упр
-    label.cash-this(ng-if='vm.toSummCashingInProgress')
+    label.cash-this(ng-if='vm.inCheckingProgress()')
 
 .scroll-y(
 resize resize-offset-top='40'
-ng-class='vm.toSummCashingInProgress && "in-progress"'
+ng-class='vm.inCheckingProgress() && "in-progress"'
 )
 
   .cashing-undebted(ng-if='vm.undebtedCashings.length')
@@ -99,10 +108,10 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
         ng-if='vm.cashingTotal'
         )
 
-        debt-cashing-popover.summ(debt='debt' do-not-save='vm.toSummCashingInProgress')
+        debt-cashing-popover.summ(debt='debt' do-not-save='vm.inCheckingProgress()')
           currency-value(value='debt.uncashed()')
 
-        a.cash-this(href ng-click='vm.debtClick(debt, $event)' ng-if='vm.toSummCashingInProgress')
+        a.cash-this(href ng-click='vm.debtClick(debt, $event)' ng-if='vm.inCheckingProgress()')
           i.glyphicon(ng-class='vm.checkedDebts[debt.id] ? "glyphicon-check" : "glyphicon-unchecked"')
 
 .footer
@@ -118,4 +127,4 @@ ng-class='vm.toSummCashingInProgress && "in-progress"'
 
     currency-value(value='vm.totalSumm()')
 
-    label.cash-this(ng-if='vm.toSummCashingInProgress')
+    label.cash-this(ng-if='vm.inCheckingProgress()')
