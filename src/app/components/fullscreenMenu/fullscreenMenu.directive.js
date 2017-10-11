@@ -1,23 +1,17 @@
 'use strict';
 
-(function() {
+(function () {
 
   angular.module('webPage')
-    .directive('fullscreenMenu', fullScreenMenu);
+    .component('fullscreenMenu', {
 
-  function fullScreenMenu() {
-    return {
+      scope: {},
 
-      restrict: 'E',
-      templateUrl: 'app/components/navbar/fullscreenMenu.html',
-      scope: {
-      },
+      templateUrl: 'app/components/fullscreenMenu/fullscreenMenu.html',
       controller: fullScreenMenuController,
-      controllerAs: 'vm',
-      bindToController: true
+      controllerAs: 'vm'
 
-    };
-  }
+    });
 
   function fullScreenMenuController(saControllerHelper, IOS, $scope) {
 
