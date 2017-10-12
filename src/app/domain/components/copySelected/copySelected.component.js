@@ -54,7 +54,7 @@
 
     function isReady() {
 
-      return vm.inProgress && !Object.values(vm.selectedItems).length;
+      return vm.inProgress && Object.values(vm.selectedItems).length;
 
     }
 

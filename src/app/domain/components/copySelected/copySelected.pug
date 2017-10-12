@@ -5,9 +5,10 @@
   ng-click='vm.cancelClick($event)'
   ) Отмена
 
-  button.btn.btn-default.copying(
+  button.btn(
   ng-click='vm.triggerClick()'
-  ng-disabled='vm.isReady()'
+  ng-disabled='vm.inProgress && !vm.isReady()'
+  ng-class='vm.isReady() && "btn-success" || vm.inProgress && "btn-warning" || "btn-primary"'
   ng-if='vm.isIos()'
   )
     i.glyphicon.glyphicon-copy(ng-if='!vm.inProgress')
