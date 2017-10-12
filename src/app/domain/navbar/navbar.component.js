@@ -1,19 +1,16 @@
 (function () {
 
-  function acmeNavbar() {
-    return {
+  angular.module('webPage')
+    .component('navbar', {
 
-      restrict: 'E',
-      templateUrl: 'app/components/navbar/root-navbar.html',
+      templateUrl: 'app/domain/navbar/navbar.html',
 
       scope: {},
 
       controller: NavbarController,
-      controllerAs: 'vm',
-      bindToController: true
+      controllerAs: 'vm'
 
-    };
-  }
+    });
 
   function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, $window, localStorageService) {
 
@@ -29,6 +26,11 @@
     });
 
     $scope.$on('$stateChangeSuccess', onStateChange);
+
+    if (localStorageService.get('debug.performance')) {
+      setTimeout(measure, 1000);
+    }
+
     // $scope.$on('$stateChangeStart', onStateChange);
 
     function onStateChange(event, to) {
@@ -55,15 +57,6 @@
       setTimeout(measure, 2000);
     }
 
-    if (localStorageService.get('debug.performance')) {
-      setTimeout(measure, 1000);
-    }
-
-
   }
-
-  angular
-    .module('webPage')
-    .directive('navbar', acmeNavbar);
 
 })();

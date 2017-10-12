@@ -1,9 +1,9 @@
-h3.pull-right.with-map
+h3.buttons.pull-right.with-map
 
-  button.btn.ml-em.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
+  button.btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
     i.glyphicon.glyphicon-camera
-  = ' '
-  button.btn.btn-default.ml-5(
+
+  button.btn.btn-default(
   ng-disabled='!vm.visit.checkInLocation'
   popover-placement="bottom-left auto"
   popover-trigger='outsideClick'
@@ -14,17 +14,7 @@ h3.pull-right.with-map
   )
     i.glyphicon.glyphicon-map-marker
 
-h4.clear-left.pull-left.visit
-
-  span(ng-class='vm.creatingMode ? "text-danger" : "gray"') {{ vm.creatingMode ? 'Новый визит' : 'Визит' }}
-  span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
-  small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ({{ vm.visit.salesman.tinyName }})
-  small
-    a(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
-      i.glyphicon.glyphicon-trash
-
-.buttons.pull-right.clear-right(ng-if='vm.buttons.length')
-  button.btn.ml-10(
+  button.btn(
   type='button'
   ng-class='b.class || "btn-default"'
   ng-disabled='b.isDisabled()'
@@ -34,6 +24,16 @@ h4.clear-left.pull-left.visit
     i(ng-if='b.fa' ng-class='b.fa')
     span(ng-if='b.label') {{ b.label }}
 
+h4.clear-left.pull-left.visit
+
+  span(ng-class='vm.creatingMode ? "text-danger" : "gray"') {{ vm.creatingMode ? 'Новый визит' : 'Визит' }}
+  span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+  small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ({{ vm.visit.salesman.tinyName }})
+  small
+    a(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
+      i.glyphicon.glyphicon-trash
+
+//.buttons.pull-right.clear-right(ng-if='vm.buttons.length')
 
 .clear-both
 

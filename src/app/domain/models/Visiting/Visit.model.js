@@ -52,23 +52,33 @@
       },
 
       computed: {
+
+        finished
+
       },
 
       methods: {
+
         answerByQuestion: function (q) {
           return _.findWhere(this.answers,{ questionId:q.id });
         },
+
         duration: function() {
-          var start = _.get(this, 'checkInLocation.deviceCts');
-          var finish = _.get(this, 'checkOutLocation.deviceCts');
+          let start = _.get(this, 'checkInLocation.deviceCts');
+          let finish = _.get(this, 'checkOutLocation.deviceCts');
           if (start && finish) {
-            var diff = moment(finish).diff(start,'seconds');
+            let diff = moment(finish).diff(start,'seconds');
             return diff > 60 ? Math.round(diff/60) + ' мин' : diff + ' сек';
           }
         }
+
       }
 
     });
+
+    function finished() {
+      return this.checkInLocationId && !!this.checkOutLocationId;
+    }
 
   });
 

@@ -21,8 +21,8 @@
 
     vm.use({
 
-      buttons: buttons,
-      creatingMode: creatingMode,
+      buttons,
+      creatingMode,
       thumbnails: {},
 
       mapOptions: {
@@ -58,12 +58,14 @@
      */
 
     if (creatingMode) {
+
       buttons.push({
-        // label: 'Отмена',
+        label: 'Отменить',
         // class: 'btn-default',
-        fa: 'glyphicon glyphicon-trash',
+        // fa: 'glyphicon glyphicon-trash',
         clickFn: 'deleteVisit'
       });
+
       buttons.push({
         label: !creatingMode ? 'Готово' : 'Завершить',
         clickFn: 'save',
@@ -72,6 +74,7 @@
           return creatingMode && !_.get(vm, 'visit.checkInLocationId') || vm.saving;
         }
       });
+
     }
 
     vm.importData = function (name) {
@@ -161,14 +164,14 @@
 
     $scope.$on('$destroy', function () {
 
-      if (creatingMode) {
-        if (!Visit.lastSaved(vm.visit)) {
-          Visit.eject(vm.visit);
-          _.each(answersByQuestion, function (ans) {
-            VA.eject(ans);
-          });
-        }
+      if (!creatingMode || Visit.lastSaved(vm.visit)) {
+        return;
       }
+
+      Visit.eject(vm.visit);
+      _.each(answersByQuestion, function (ans) {
+        VA.eject(ans);
+      });
 
     });
 
@@ -234,7 +237,7 @@
 
           } else {
 
-            var message = 'Требуемая точность — ' + REQUIRED_ACCURACY + 'м. ';
+            let message = 'Требуемая точность — ' + REQUIRED_ACCURACY + 'м. ';
             message += 'Достигнутая точность — ' + location.horizontalAccuracy + 'м.';
             return ConfirmModal.showMessageAskRepeat(message, getLocation, $q.reject());
 
@@ -250,7 +253,7 @@
 
     function goBack() {
 
-      if (rootState == 'sales.visits') {
+      if (rootState === 'sales.visits') {
         return $state.go(rootState);
       }
 
@@ -283,63 +286,73 @@
         vm.saving = false;
       }
 
-      vm.busy = $q(function (resolve, reject) {
+      vm.busy = $q((resolve, reject) => {
 
         if (creatingMode) {
 
           getLocation()
-            .then(function (checkOutLocation) {
+            .then(checkOutLocation => {
+
               vm.visit.checkOutLocationId = checkOutLocation.id;
+
               Visit.save(vm.visit)
-                .then(function (visit) {
-                  var cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
-                  var diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
+                .then(visit => {
+
+                  let cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
+                  let diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
+
                   toastr.info(diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек', 'Визит завершен');
                   resolve(visit);
+
                   quit();
+
                 }, function (err) {
                   reject(err);
                   toastr.error(angular.toJson(err), 'Не удалось сохранить визит');
                 });
-            }, function (err) {
+            }, err => {
               reject(err);
               toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
             });
 
         } else {
+
           Visit.save(vm.visit)
             .then(resolve, reject)
             .then(quit);
+
         }
 
-      }).then(done, done);
+      })
+        .then(done, done);
 
     }
 
     function deleteVisit() {
+
       if (!Visit.lastSaved(vm.visit)) {
         return quit();
       }
+
       ConfirmModal.show({
         text: 'Действительно удалить запись об этом визите?'
       })
         .then(function () {
           Visit.destroy(vm.visit)
             .then(quit);
-        })
-      ;
-    }
+        });
 
+    }
 
     function postRefresh() {
 
       let index = _.groupBy(vm.visit.answers, 'questionId');
 
-      answersByQuestion = _.mapValues(index, function (ansArray) {
+      answersByQuestion = _.mapValues(index, ansArray => {
         return ansArray[0];
       });
 
-      vm.answers = _.mapValues(answersByQuestion, function (ans) {
+      vm.answers = _.mapValues(answersByQuestion, ans => {
 
         if (!ans.data) {
           return ans.data;
@@ -350,7 +363,7 @@
             return moment(ans.data, 'YYYY-MM-DD').toDate();
           }
           case 'boolean': {
-            return (ans.data == '1');
+            return ans.data === '1';
           }
         }
 
