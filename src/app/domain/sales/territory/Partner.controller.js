@@ -2,11 +2,11 @@
 
 (function () {
 
-  function PartnerController(Schema, $state, $scope, ConfirmModal) {
+  function PartnerController(Schema, $state, $scope, ConfirmModal, saControllerHelper, SalesmanAuth) {
 
-    let vm = this;
+    const vm = saControllerHelper.setup(this, $scope);
 
-    _.assign(vm, {
+    vm.use({
 
       partner: null,
       outlets: [],
@@ -20,23 +20,31 @@
 
     });
 
-    let {Partner, Outlet} = Schema.models();
-    let rootState = 'sales.territory.partner';
+    const {Partner, Outlet} = Schema.models();
+    const rootState = 'sales.territory.partner';
 
-    $scope.$on('$stateChangeSuccess', function (e, to) {
+    $scope.$on('$stateChangeSuccess', (e, to) => {
       vm.disableNavs = !!_.get(to, 'data.disableNavs') || to.name === rootState;
     });
 
-    findPartner();
+    SalesmanAuth.watchCurrent($scope, findPartner);
+
+    /*
+    Functions
+     */
 
     function findPartner() {
 
-      vm.busyMessage = 'Загрузка контрагента…';
+      let q = Partner.find($state.params.id)
+        .then(partner => {
 
-      vm.busy = Partner.find($state.params.id)
-        .then((partner) => {
           vm.partner = partner;
-          return Outlet.findAllWithRelations({partnerId: partner.id}, {bypassCache: true})('Visit')
+
+          let filter = SalesmanAuth.makeFilter({partnerId: partner.id});
+
+          filter = Outlet.meta.salesmanFilter(filter);
+
+          return Outlet.findAllWithRelations(filter, {bypassCache: true})('Visit')
             .then(outlets => {
 
               vm.outlets = outlets;
@@ -46,7 +54,10 @@
               });
 
             });
+
         });
+
+      return vm.setBusy(q);
 
     }
 
@@ -54,10 +65,10 @@
       ConfirmModal.show({
         text: `Действительно удалить запись о контрагенте ${vm.partner.name}?`
       })
-        .then(function () {
+        .then(() => {
           return Partner.destroy(vm.partner.id)
             .then(quit)
-            .catch((err) => alert(err.text));
+            .catch(err => alert(err.text));
         })
     }
 
