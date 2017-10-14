@@ -12,13 +12,14 @@
 
     });
 
-  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, $window, localStorageService) {
+  function NavbarController(Auth, Menu, $scope, $rootScope, saControllerHelper, $window, localStorageService, $state) {
 
     const DEFAULT_TITLE = 'Главное меню';
     const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
+      backClick,
       auth: Auth,
       menu: Menu.root(),
       rootClick: () => $rootScope.$broadcast('rootClick')
@@ -31,7 +32,15 @@
       setTimeout(measure, 1000);
     }
 
-    // $scope.$on('$stateChangeStart', onStateChange);
+    /*
+    Functions
+     */
+
+    function backClick() {
+
+      $state.go('^');
+
+    }
 
     function onStateChange(event, to) {
 
