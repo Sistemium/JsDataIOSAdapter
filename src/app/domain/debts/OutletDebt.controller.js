@@ -101,7 +101,7 @@
         .then(() => {
           vm.totals = {
             totalSumm: totalSumm(),
-            totalSummDoc: totalSummDoc(),
+            totalSummDoc: totalSummDoc()
           };
         })
         .catch(e => console.error(e));
