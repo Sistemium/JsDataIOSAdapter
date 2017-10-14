@@ -13,14 +13,12 @@
         responsibilities: Responsibility.getAll(),
 
         itemClick,
-        totalCashed,
-        totalSumm,
-        totalSummDoc,
-        totalOverdue,
         onStateChange,
         totalCashedClick,
         restoreScrollPosition,
-        responsibilityClick
+        responsibilityClick,
+
+        totals: {}
 
       });
 
@@ -183,17 +181,26 @@
       let byPartnerId = _.groupBy(data, 'outlet.partnerId');
 
       vm.data = _.map(byPartnerId, (items, partnerId) => {
+
         return {
           partner: Partner.get(partnerId),
-          items,
+          items: _.orderBy(items, 'outlet.name'),
           'sum(cashed)': totalCashed(items),
           'sum(summ)': totalSumm(items),
           'sum(summDoc)': totalSummDoc(items),
           overdue: totalOverdue(items)
         }
+
       });
 
-      vm.data = _.orderBy(vm.data, 'partner.name');
+      vm.data = _.orderBy(vm.data, 'partner.shortName');
+
+      vm.totals = {
+        totalCashed: totalCashed(),
+        totalSumm: totalSumm(),
+        totalSummDoc: totalSummDoc(),
+        totalOverdue: totalOverdue()
+      };
 
     }
 
