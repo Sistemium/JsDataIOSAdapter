@@ -27,3 +27,9 @@
     }
   }
 }
+
+to-summ-cashing {
+  > button.btn.btn-default {
+    color: $primary-color !important;
+  }
+}
