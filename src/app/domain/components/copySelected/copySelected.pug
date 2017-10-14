@@ -1,4 +1,4 @@
-.copy-selected
+.copy-selected(ng-if='vm.isIos')
 
   button.btn.btn-danger(
   ng-if='vm.inProgress'
@@ -9,7 +9,6 @@
   ng-click='vm.triggerClick()'
   ng-disabled='vm.inProgress && !vm.isReady()'
   ng-class='vm.isReady() && "btn-success" || vm.inProgress && "btn-warning" || "btn-link"'
-  ng-if='vm.isIos()'
   )
     i.glyphicon.glyphicon-share(ng-if='!vm.inProgress')
     span(ng-if='vm.inProgress && !vm.isReady()') Выберите долги

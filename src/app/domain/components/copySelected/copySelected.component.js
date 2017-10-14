@@ -18,7 +18,7 @@
   function copySelectedController(IOS, toastr) {
 
     const vm = _.assign(this, {
-      isIos: IOS.isIos,
+      isIos: IOS.isIos(),
       triggerClick,
       isReady,
       cancelClick
