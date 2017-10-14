@@ -53,6 +53,8 @@
 
     .totals {
 
+      display: flex;
+      justify-items: flex-end;
       align-items: center;
 
       to-summ-cashing {
@@ -140,25 +142,30 @@
       font-weight: 500;
     }
 
-    .buttons {
+  }
 
-      flex: 1;
-      display: flex;
-      text-align: left;
-      justify-content: space-between;
-      align-items: center;
+  .totals.buttons {
 
-      i + span {
-        margin-left: $margin;
-      }
-
-      @include responsive-only(lt-sm) {
-        .btn {
-          padding-left: 0;
-        }
-      }
-
+    > * {
+      min-width: 0;
     }
+
+    //flex: 1;
+    display: flex;
+    text-align: left;
+    justify-content: flex-end;
+    align-items: center;
+
+    i + span {
+      margin-left: $margin;
+    }
+
+    @include responsive-only(lt-sm) {
+      .btn {
+        padding-left: 0;
+      }
+    }
+
   }
 
   .footer {

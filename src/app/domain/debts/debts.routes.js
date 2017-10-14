@@ -45,7 +45,7 @@
             rootState: 'sales.debtByOutlet'
           },
 
-          children:[
+          children: [
             {
 
               name: 'outletDebt',
@@ -54,8 +54,24 @@
               controller: 'OutletDebtController as vm',
 
               data: {
+                title: 'Долги в точке',
                 disableSalesmanFilter: true
-              }
+              },
+
+              children: [
+                {
+
+                  name: 'cashing',
+                  url: '/cashing',
+                  templateUrl: 'app/domain/debts/OutletCashing.html',
+
+                  data: {
+                    title: 'Выручка в точке',
+                    disableSalesmanFilter: true
+                  }
+
+                }
+              ]
 
             }
           ]
