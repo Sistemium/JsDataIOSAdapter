@@ -15,7 +15,7 @@
 
   });
 
-  function copySelectedController(IOS) {
+  function copySelectedController(IOS, toastr) {
 
     const vm = _.assign(this, {
       isIos: IOS.isIos,
@@ -40,7 +40,10 @@
 
         });
 
-        IOS.copyToClipboard(textToCopy);
+        IOS.copyToClipboard(textToCopy)
+          .then(() => {
+            toastr.success('Выбранные долги скопированы в буфер обмена');
+          });
 
         vm.inProgress = false;
 
