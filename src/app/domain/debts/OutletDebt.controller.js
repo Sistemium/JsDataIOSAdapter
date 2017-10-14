@@ -101,7 +101,8 @@
         .then(() => {
           vm.totals = {
             totalSumm: totalSumm(),
-            totalSummDoc: totalSummDoc()
+            totalSummDoc: totalSummDoc(),
+            totalSummDocPlus: totalSummDoc() - totalSumm()
           };
         })
         .catch(e => console.error(e));
@@ -142,7 +143,7 @@
     }
 
     function totalSummDoc() {
-      return _.sumBy(vm.debts, debt => debt.summDoc - debt.summ);
+      return _.sumBy(vm.debts, debt => debt.summDoc);
     }
 
     function inCheckingProgress() {

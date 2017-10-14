@@ -14,6 +14,10 @@
     text-align: left;
   }
 
+  .summDocPlus {
+    color: $gray;
+  }
+
   *.overdue {
     color: $state-warning-text;
   }
@@ -133,6 +137,7 @@
 
     label {
       color: $black;
+      font-weight: 500;
     }
 
     .buttons {
@@ -308,7 +313,7 @@
       }
       text-align: right;
       @include responsive-only(gt-xxs) {
-        min-width: 80px;
+        min-width: 120px;
       }
     }
 

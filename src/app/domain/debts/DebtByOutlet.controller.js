@@ -182,12 +182,18 @@
 
       vm.data = _.map(byPartnerId, (items, partnerId) => {
 
+        _.each(items, item => {
+
+          item.summDocPlus = item['sum(summDoc)'] - item['sum(summ)'] - (item['sum(cashed)'] || 0);
+
+        });
+
         return {
           partner: Partner.get(partnerId),
           items: _.orderBy(items, 'outlet.name'),
           'sum(cashed)': totalCashed(items),
           'sum(summ)': totalSumm(items),
-          'sum(summDoc)': totalSummDoc(items),
+          'sum(summDoc)': totalSummDoc(items) ,
           overdue: totalOverdue(items)
         }
 
@@ -198,7 +204,7 @@
       vm.totals = {
         totalCashed: totalCashed(),
         totalSumm: totalSumm(),
-        totalSummDoc: totalSummDoc(),
+        totalSummDocPlus: totalSummDoc() - totalSumm(),
         totalOverdue: totalOverdue()
       };
 
