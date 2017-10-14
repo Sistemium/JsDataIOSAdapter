@@ -49,6 +49,8 @@
 
     .totals {
 
+      align-items: center;
+
       to-summ-cashing {
 
         @include responsive-only(xxs) {
