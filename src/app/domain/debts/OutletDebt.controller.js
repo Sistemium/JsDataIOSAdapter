@@ -6,20 +6,20 @@
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
-    const vm = saControllerHelper
-      .setup(this, $scope)
+    const vm = saControllerHelper.setup(this, $scope)
       .use({
+
         toSummCashingInProgress: false,
         copyingInProgress: false,
-        totalSumm,
-        totalSummDoc,
-        trashUndebtedClick,
-        confirmation: {},
-        debtClick,
-        unsavedCashings: [],
-        checkedDebts: {},
         inCheckingProgress,
+
+        confirmation: {},
+        checkedDebts: {},
+        unsavedCashings: [],
+        trashUndebtedClick,
+        debtClick,
         textFromDebt
+
       });
 
     const {outletId} = $state.params;
@@ -97,6 +97,12 @@
             })
             .then(() => vm.rawData = data);
 
+        })
+        .then(() => {
+          vm.totals = {
+            totalSumm: totalSumm(),
+            totalSummDoc: totalSummDoc(),
+          };
         })
         .catch(e => console.error(e));
 
