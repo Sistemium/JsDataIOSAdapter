@@ -64,6 +64,7 @@
                   name: 'cashing',
                   url: '/cashing',
                   templateUrl: 'app/domain/debts/OutletCashing.html',
+                  controller: 'OutletCashingController as vm',
 
                   data: {
                     title: 'Выручка в точке',
