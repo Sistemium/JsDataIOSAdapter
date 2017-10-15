@@ -7,9 +7,7 @@
     .ndoc № документа
     .comment-text Комментарий
 
-    a.editing(href ng-click='vm.editClick()')
-      i.glyphicon.glyphicon-edit(ng-if='!vm.editing')
-      i.glyphicon.glyphicon-lock(ng-if='vm.editing')
+    .editing
 
 
   .scroll-y.cashings(
@@ -31,5 +29,5 @@
       href ng-click='vm.deleteCashingClick(cashing)'
       ng-class='{confirmation: vm.confirmation === cashing.id}'
       )
-        i.glyphicon.glyphicon-trash(ng-if='vm.editing && !cashing.isProcessed')
+        i.glyphicon.glyphicon-trash(ng-if='!cashing.uncashingId')
 

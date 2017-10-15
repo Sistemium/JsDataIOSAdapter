@@ -166,12 +166,17 @@
       return Debt.groupBy(filter, ['outletId'])
         .then(overdueDebtsByOutlet => {
           _.each(overdueDebtsByOutlet, item => {
+
             let outletDebt = _.find(debtsByOutlet, {outletId: item.outletId});
+
             if (outletDebt) {
               outletDebt.overdue = item['sum(summ)'];
             }
+
           });
+
           return debtsByOutlet;
+
         });
 
     }
@@ -184,7 +189,7 @@
 
         _.each(items, item => {
 
-          item.summDocPlus = item['sum(summDoc)'] - item['sum(summ)'] - (item['sum(cashed)'] || 0);
+          item.summDocPlus = item['sum(summDoc)'] - item['sum(summ)'] - (item.notProcessed || 0);
 
         });
 
@@ -213,14 +218,21 @@
     function loadCashed(data) {
 
       return Cashing.groupBy(SalesmanAuth.makeFilter({uncashingId: null}), ['outletId'])
-        .then(cashingGrouped => {
-          _.each(cashingGrouped, outletCashings => {
+        .then(cashingsGrouped => {
+
+          _.each(cashingsGrouped, outletCashings => {
+
             let {outletId} = outletCashings;
             let item = _.find(data, {outletId});
+
             if (!item) return;
+
             item['sum(cashed)'] = outletCashings['sum(summ)'];
+
           });
+
           return data;
+
         });
 
     }
@@ -228,18 +240,29 @@
     function loadNotProcessed(data) {
 
       return Cashing.findAll(SalesmanAuth.makeFilter({isProcessed: false}, {bypassCache: true}))
+
         .then(cashings => {
           cashings = _.filter(cashings, 'debtId');
           return _.groupBy(cashings, 'outletId');
         })
-      // FIXME: copy-pasted
+
         .then(cashingGrouped => {
+
           _.each(cashingGrouped, (outletCashings, outletId) => {
+
             let item = _.find(data, {outletId});
+
             if (!item) return;
-            item['sum(summ)'] -= _.sumBy(outletCashings, 'summ');
+
+            let notProcessed = _.sumBy(outletCashings, 'summ');
+
+            item.notProcessed = notProcessed;
+            item['sum(summ)'] -= notProcessed;
+
           });
+
           return data;
+
         });
 
     }

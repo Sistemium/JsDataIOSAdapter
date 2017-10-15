@@ -8,7 +8,6 @@
 
     const vm = saControllerHelper.setup(this, $scope)
       .use({
-        editClick,
         deleteCashingClick
       });
 
@@ -49,10 +48,6 @@
       }
 
 
-    }
-
-    function editClick() {
-      vm.editing = !vm.editing;
     }
 
 

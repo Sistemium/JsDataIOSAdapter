@@ -117,7 +117,8 @@
         summ: summ,
         outletId: vm.debt.outletId,
         date: moment().format(),
-        commentText: vm.commentText || null
+        commentText: vm.commentText || null,
+        isProcessed: false
       });
 
       let q = vm.doNotSave ? $q.resolve(Cashing.inject(cashing)) : Cashing.create(cashing);

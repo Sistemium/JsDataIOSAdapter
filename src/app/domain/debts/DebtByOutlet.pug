@@ -60,6 +60,6 @@ cg-busy='vm.cgBusy'
 
       currency-value(value='vm.totals.totalSummDocPlus' hide-empty='true')
       currency-value.overdue(value='vm.totals.totalOverdue' hide-empty='true')
-      a(href ng-click='vm.totalCashedClick()' ng-if='totals.vm.totalCashed')
+      a(href ng-click='vm.totalCashedClick()' ng-if='vm.totals.totalCashed')
         currency-value(value='vm.totals.totalCashed')
       currency-value(value='vm.totals.totalSumm')
