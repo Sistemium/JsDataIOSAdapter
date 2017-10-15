@@ -30,34 +30,24 @@
 
     function triggerClick() {
 
+      vm.inProgress = !vm.inProgress;
+
       if (vm.inProgress) {
-
-        let textToCopy = '';
-
-        Object.values(vm.selectedItems).forEach(debt => {
-
-          textToCopy += vm.textFromItem(debt);
-
-        });
-
-        IOS.copyToClipboard(textToCopy)
-          .then(() => {
-            toastr.success('Выбранные долги скопированы в буфер обмена');
-          });
-
-        vm.inProgress = false;
-
         return;
-
       }
 
-      vm.inProgress = true;
+      let textToCopy = _.map(vm.selectedItems, vm.textFromItem).join('\n');
+
+      IOS.copyToClipboard(textToCopy)
+        .then(() => {
+          toastr.success('Выбранные долги скопированы в буфер обмена');
+        });
 
     }
 
     function isReady() {
 
-      return vm.inProgress && Object.values(vm.selectedItems).length;
+      return vm.inProgress && !_.isEmpty(vm.selectedItems);
 
     }
 

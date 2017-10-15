@@ -14,13 +14,9 @@
 
     a.btn.btn-default(
     ui-sref='.'
-    ) Показать долги
+    ) Долги в точке
 
   .totals.buttons(ng-if='vm.currentState === "outletDebt"')
-
-    a.btn.btn-default(
-    ui-sref='.cashing'
-    ) История выручки
 
     copy-selected(
     selected-items='vm.checkedDebts'
@@ -28,6 +24,11 @@
     text-from-item='vm.textFromDebt'
     ng-if='!vm.toSummCashingInProgress'
     )
+
+    a.btn.btn-default(
+    ui-sref='.cashing'
+    ng-if='!vm.copyingInProgress && !vm.toSummCashingInProgress'
+    ) История выручки
 
     to-summ-cashing(
     outlet='vm.outlet'
