@@ -9,17 +9,28 @@
 
     });
 
-  function visitIndicatorController($scope, $state, Schema) {
+  function visitIndicatorController($scope, $state, Schema, SalesmanAuth) {
 
     const {Visit} = Schema.models();
 
     const vm = _.assign(this, {indicatorClick});
 
-    Visit.bindAll({finished: false}, $scope, 'vm.visits', onVisit);
+    SalesmanAuth.watchCurrent($scope, getData);
 
     /*
     Functions
      */
+
+    function getData() {
+
+      let filter = SalesmanAuth.makeFilter({
+        finished: false,
+        date: moment().format()
+      });
+
+      Visit.bindAll(filter, $scope, 'vm.visits', onVisit);
+
+    }
 
     function onVisit() {
       vm.currentVisit = _.first(vm.visits);

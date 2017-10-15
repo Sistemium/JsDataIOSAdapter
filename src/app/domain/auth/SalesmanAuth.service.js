@@ -187,7 +187,7 @@
             let filter = SalesmanAuth.makeFilter({processing: 'draft'});
 
             Schema.model('Visit')
-              .findAll({date: moment().format(), finished: false});
+              .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
 
             SaleOrder.groupBy(filter)
               .then(data => {
