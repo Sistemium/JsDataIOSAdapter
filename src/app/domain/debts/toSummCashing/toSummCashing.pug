@@ -4,15 +4,14 @@ ng-click='vm.cancelClick($event)'
 ) Отмена
 
 button.btn(
-href
 ng-disabled='vm.isDisabled'
 ng-click='vm.triggerClick()'
-ng-class='vm.isReady() && "btn-success" || vm.inProgress && "btn-warning" || "btn-primary"'
+ng-class='vm.isReady() && "btn-success" || vm.inProgress && "btn-warning" || "btn-default"'
 popover-trigger='"none"'
 popover-is-open='vm.popoverOpen'
 popover-placement='auto bottom-right'
-uib-popover-template='"app/domain/components/toSummCashing/toSummCashing.template.html"'
+uib-popover-template='"app/domain/debts/toSummCashing/toSummCashing.template.html"'
 )
-  span(ng-if='!vm.inProgress') Подбор под сумму
+  span(ng-if='!vm.inProgress') Подбор выручки
   span(ng-if='vm.inProgress && !vm.isReady()') Осталось подобрать {{ vm.summRemains() | number:2 }}
   span(ng-if='vm.isReady()') Готово, сохранить выбор

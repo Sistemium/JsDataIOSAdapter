@@ -18,7 +18,7 @@
         ng-class='vm.outletNavClass'
         ) {{ vm.outlet.address }}
 
-    .avatar
+    .avatar(ng-if='vm.isRootState')
 
       a.thumb(href ng-click='vm.thumbClick()' ng-class='{disabled: !vm.avatar}')
         img(

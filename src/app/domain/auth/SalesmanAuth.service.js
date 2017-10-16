@@ -186,6 +186,9 @@
 
             let filter = SalesmanAuth.makeFilter({processing: 'draft'});
 
+            Schema.model('Visit')
+              .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
+
             SaleOrder.groupBy(filter)
               .then(data => {
                 Menu.setItemData('sales.saleOrders', {badge: data.length});

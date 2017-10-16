@@ -7,7 +7,8 @@
     const CALLBACK = 'unsyncedInfoCallback';
     const syncerState = {};
 
-    bind(status => $timeout(() => stateInfoCallback(status)));
+    $timeout(3000)
+      .then(() => bind(status => $timeout(() => stateInfoCallback(status))));
 
     return {
       watch

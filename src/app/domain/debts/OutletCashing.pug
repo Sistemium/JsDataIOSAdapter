@@ -1,0 +1,33 @@
+.outlet-cashing
+
+  .header
+
+    .device-cts Дата
+    .summ Сумма
+    .ndoc № документа
+    .comment-text Комментарий
+
+    .editing
+
+
+  .scroll-y.cashings(
+  resize resize-offset-top='5'
+  )
+    .cashing(ng-repeat='cashing in vm.data track by cashing.id')
+
+      .device-cts {{ ::cashing.deviceCts | amUtc | amLocal | amDateFormat: 'DD.MM.YYY' }}
+
+      currency-value.summ(value='cashing.summ')
+
+      .ndoc {{ cashing.ndoc || cashing.debt.ndoc }}
+        = ' '
+        span(ng-if='::cashing.debt.date') от&nbsp;{{ ::cashing.debt.date | amDateFormat:'DD.MM.YYYY' }}
+
+      .comment-text {{ cashing.commentText }}
+
+      a.editing(
+      href ng-click='vm.deleteCashingClick(cashing)'
+      ng-class='{confirmation: vm.confirmation === cashing.id}'
+      )
+        i.glyphicon.glyphicon-trash(ng-if='!cashing.uncashingId')
+

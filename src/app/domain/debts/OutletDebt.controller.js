@@ -2,23 +2,31 @@
 
 (function () {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, toastr) {
+  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, $filter) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
-    const vm = saControllerHelper
-      .setup(this, $scope)
+    const vm = saControllerHelper.setup(this, $scope)
       .use({
+
         toSummCashingInProgress: false,
-        totalSumm,
-        totalSummDoc,
-        trashUndebtedClick,
+        copyingInProgress: false,
+        inCheckingProgress,
+
         confirmation: {},
+        checkedDebts: {},
+        unsavedCashings: [],
+        trashUndebtedClick,
         debtClick,
-        unsavedCashings: []
+        textFromDebt
+
       });
 
     const {outletId} = $state.params;
+
+    const dateFilter = $filter('date');
+
+    const numberFilter = $filter('number');
 
     vm.setBusy(getData(outletId));
 
@@ -26,55 +34,28 @@
 
     vm.watchScope('vm.toSummCashingInProgress', clearChecks);
 
+    vm.watchScope('vm.copyingInProgress', clearChecks);
+
     /*
      Functions
      */
 
     function clearChecks() {
-      _.each(vm.data, group => {
-        _.each(group.items, item => {
-          item.checked = false;
-        });
-      });
+      vm.checkedDebts = {};
     }
 
     function debtClick(debt, event) {
 
-      if (event.defaultPrevented || !vm.summToCash) return;
+      if (event.defaultPrevented) return;
 
       event.preventDefault();
 
-      let uncashed = debt.uncashed();
-      let toCashRemains = vm.summToCash - (_.sumBy(vm.unsavedCashings, 'summ') || 0);
-      let summ = _.min([vm.summToCash && toCashRemains, uncashed]);
+      let checked = vm.checkedDebts[debt.id];
 
-      if (!toCashRemains && !debt.checked) {
-        return toastr.error('Нажмите "Готово", чтобы завершить подбор', 'Сумма уже подобрана');
-      }
-
-      if (uncashed > 0 && summ > 0) {
-
-        debt.checked = true;
-
-        Cashing.inject({
-          summ,
-          debtId: debt.id,
-          outletId: debt.outletId,
-          date: moment().format()
-        });
-
+      if (checked) {
+        delete vm.checkedDebts[debt.id];
       } else {
-
-        debt.checked = false;
-
-        let cashings = Cashing.filter({debtId: debt.id});
-
-        _.each(cashings, cashing => {
-          if (!cashing.DSLastSaved()) {
-            Cashing.eject(cashing);
-          }
-        });
-
+        vm.checkedDebts[debt.id] = debt;
       }
 
     }
@@ -117,6 +98,13 @@
             .then(() => vm.rawData = data);
 
         })
+        .then(() => {
+          vm.totals = {
+            totalSumm: totalSumm(),
+            totalSummDoc: totalSummDoc(),
+            totalSummDocPlus: totalSummDoc() - totalSumm()
+          };
+        })
         .catch(e => console.error(e));
 
     }
@@ -155,7 +143,16 @@
     }
 
     function totalSummDoc() {
-      return _.sumBy(vm.debts, debt => debt.summDoc - debt.summ);
+      return _.sumBy(vm.debts, debt => debt.summDoc);
+    }
+
+    function inCheckingProgress() {
+      return vm.copyingInProgress || vm.toSummCashingInProgress;
+    }
+
+    function textFromDebt(debt) {
+      return `${debt.ndoc} от ${dateFilter(debt.date)} (${numberFilter(debt.summOriginDoc, 2)} ₽)` +
+        ` остаток долга: ${numberFilter(debt.summ, 2)} ₽`;
     }
 
   }

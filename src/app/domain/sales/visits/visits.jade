@@ -24,7 +24,7 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
 
   #scroll-main(
   resize
-  ng-style='{height: (windowHeight - offsetTop) + "px"}'
+  resize-offset-top='5'
   ng-if='vm.selectedDayVisits.length'
   )
     table.table.table-striped.clear-both.table-hover
@@ -34,9 +34,9 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
           th Точка
           th Время
           th.number.hidden-xs Фото
-          th.number.hidden-xs Ответов
+          //th.number.hidden-xs Ответов
       tbody
-        tr.clickable(
+        tr.visit.clickable.visit(
         ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
         ng-click='vm.visitClick(visit)'
         )
@@ -46,9 +46,10 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
             .gray {{ visit.outlet.address }}
           td
             div {{ visit.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
-            div {{ visit.duration() }}
+            .duration(ng-if='visit.finished') {{ visit.duration() }}
             div {{ vm.outletDistance(visit) }}
+            .not-finished(ng-if='!visit.finished') Не завершен!
           td.number.hidden-xs {{ visit.photos.length | number: 0 }}
-          td.number.hidden-xs {{ visit.answers.length | number: 0 }}
+          //td.number.hidden-xs {{ visit.answers.length | number: 0 }}
 
   .alert.alert-info.centered(ng-hide='vm.selectedDayVisits.length') Нет визитов на указанную дату
