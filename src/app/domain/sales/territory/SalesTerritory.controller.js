@@ -125,7 +125,6 @@
           Partner.ejectAll(filter);
 
           bindData();
-          onPartnerChange();
 
           saEtc.scrolTopElementById(SCROLL_MAIN);
 
