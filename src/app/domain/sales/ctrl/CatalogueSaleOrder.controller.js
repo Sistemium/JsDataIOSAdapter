@@ -113,7 +113,7 @@
 
       let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
 
-      Outlet.findAll(filter)
+      Outlet.findAll(filter, {bypassCache: true})
         .then(data => {
           vm.outlets = _.orderBy(data, 'name');
         });
