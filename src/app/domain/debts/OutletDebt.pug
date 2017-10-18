@@ -124,8 +124,14 @@
           ng-if='vm.cashingTotal'
           )
 
-          debt-cashing-popover.summ(debt='debt' do-not-save='vm.inCheckingProgress()')
+          debt-cashing-popover.summ(debt='debt' ng-if='!vm.inCheckingProgress()')
             currency-value(value='debt.uncashed()')
+
+          currency-value.summ(
+          value='debt.uncashed()'
+          ng-if='vm.inCheckingProgress()'
+          ng-click='vm.debtClick(debt, $event)'
+          )
 
           a.cash-this(href ng-click='vm.debtClick(debt, $event)' ng-if='vm.inCheckingProgress()')
             i.glyphicon(ng-class='vm.checkedDebts[debt.id] ? "glyphicon-check" : "glyphicon-unchecked"')
