@@ -2,7 +2,7 @@
 
 (function () {
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper, $filter, geolib) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper, $filter, geolib, Sockets) {
 
     const {Visit, Outlet} = Schema.models();
     const numberFilter = $filter('number');
@@ -12,6 +12,8 @@
     let today = todayFn();
 
     let vm = saControllerHelper.setup(this, $scope);
+
+    // let SUBSCRIPTIONS = ['Visit'];
 
     vm.use({
 
@@ -58,9 +60,32 @@
 
     });
 
+    // Sockets.jsDataSubscribe(SUBSCRIPTIONS);
+    Sockets.onJsData('jsData:update', onJSData);
+
     /*
      Functions
      */
+
+    function onJSData(event) {
+
+      if (event.resource !== 'Visit') {
+        return;
+      }
+
+      let model = Schema.model(event.resource);
+
+      if (!model) {
+        return;
+      }
+
+      console.warn(event.data);
+
+      let instance = model.inject(event.data);
+
+      model.loadRelations(instance);
+
+    }
 
     function outletDistance(visit) {
       let outletLocation = _.get(visit, 'outlet.location');
@@ -87,7 +112,7 @@
 
       return vm.setBusy(
         // TODO: have to renew this at days and visits change
-        Visit.groupBy(salesmanFilter(),['date'])
+        Visit.groupBy(salesmanFilter(), ['date'])
           .then(res => eventsWithVisitDays(res)),
         'Загрузка данных визитов'
       );
@@ -121,7 +146,7 @@
       vm.rebindAll(Visit, filter, 'vm.selectedDayVisits', () => {
         _.map(vm.selectedDayVisits, visit => {
           return visit.outletId && Outlet.loadRelations(visit.outletId, 'Location')
-              .catch(e => console.warn(e, visit.outletId));
+            .catch(e => console.warn(e, visit.outletId));
         })
       });
 
