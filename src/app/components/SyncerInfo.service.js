@@ -35,9 +35,18 @@
 
 
     function stateInfoCallback(state) {
+
+      let status = _.first(state);
+
+      let isSending = status === 'syncerIsSendingData';
+      let hasUnsynced = isSending || status === 'haveUnsyncedObjects';
+
       _.assign(syncerState, {
-        hasUnsynced: _.first(state) === 'haveUnsyncedObjects'
+        isSending, hasUnsynced
       });
+
+      console.warn(syncerState, state, status);
+
     }
 
     function watch(scope, callback) {
