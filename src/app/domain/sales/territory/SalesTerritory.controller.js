@@ -101,10 +101,10 @@
       DEBUG('refresh', 'start');
 
       vm.setBusy(
-        Outlet.findAll(outletFilter, {bypassCache: true, limit: 3000})
+        Outlet.findAll(outletFilter, {bypassCache: true, limit: 10000})
           .then(outlets => {
 
-            return Partner.findAll(filter, {bypassCache: true, limit: 3000})
+            return Partner.findAll(filter, {bypassCache: true, limit: 10000})
               .then(() => outlets);
 
           })
