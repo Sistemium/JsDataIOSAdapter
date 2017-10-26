@@ -103,12 +103,12 @@
             small.tip.overdue(ng-if='::debt.isOverdue()')
               span Просрочено
               = ' '
-              span {{ ::debt.paymentTerm() | amDurationFormat }}
+              span {{ ::debt.paymentTerm() | days }}
 
             small.tip(ng-if='::!debt.isOverdue()')
               span На оплату
               = ' '
-              span {{ ::debt.paymentTerm() | amDurationFormat }}
+              span {{ ::debt.paymentTerm() | days }}
 
             small.flag.responsible {{ ::debt.responsible.name }}
 
