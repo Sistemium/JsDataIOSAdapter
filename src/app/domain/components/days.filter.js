@@ -12,7 +12,7 @@
       return function (num) {
 
         let key;
-        
+
         let val = Math.abs(num);
 
         let last2 = val % 100;
