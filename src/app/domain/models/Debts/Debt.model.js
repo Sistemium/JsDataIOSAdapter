@@ -41,7 +41,7 @@
           return this.dateE < moment().format();
         },
         paymentTerm: function () {
-          return moment.duration(moment().add(-1, 'day').diff(this.dateE)).days();
+          return Math.floor(moment.duration(moment().diff(this.dateE)).asDays());
         }
       }
 
