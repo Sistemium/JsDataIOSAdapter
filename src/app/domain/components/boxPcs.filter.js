@@ -1,21 +1,25 @@
-angular.module('core.services')
-  .filter('boxPcs', function($filter) {
+(function () {
 
-    var boxesFilter = $filter ('boxes');
-    var bottlesFilter = $filter ('bottles');
+  angular.module('core.services')
+    .filter('boxPcs', function ($filter) {
 
-    return function boxPcsFilter (boxPcs) {
+      var boxesFilter = $filter('boxes');
+      var bottlesFilter = $filter('bottles');
 
-      var res = [];
+      return function boxPcsFilter(boxPcs) {
 
-      if (boxPcs.box) {
-        res.push (boxesFilter (boxPcs.box));
-      }
-      if (boxPcs.pcs) {
-        res.push (bottlesFilter (boxPcs.pcs));
-      }
+        var res = [];
 
-      return res.join (' ');
+        if (boxPcs.box) {
+          res.push(boxesFilter(boxPcs.box));
+        }
+        if (boxPcs.pcs) {
+          res.push(bottlesFilter(boxPcs.pcs));
+        }
 
-    };
-  });
+        return res.join(' ');
+
+      };
+    });
+
+})();
