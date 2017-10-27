@@ -34,12 +34,12 @@
 
     function onSaleOrderChange() {
 
-      let filter = {
-        outletId: vm.saleOrder.outletId,
-        salesmanId: vm.saleOrder.salesmanId
+      let where = {
+        outletId: {'==': vm.saleOrder.outletId},
+        salesmanId: {'==': vm.saleOrder.salesmanId}
       };
 
-      vm.busy = OutletSalesmanContract.findAllWithRelations(filter)()
+      vm.busy = OutletSalesmanContract.findAllWithRelations({where})()
         .then(res => {
 
           vm.currentOption = _.find(res, {contractId: vm.saleOrder.contractId});
@@ -57,7 +57,9 @@
         })
         .finally(() => vm.busy = false);
 
-      OutletSalesmanContract.bindAll(filter, $scope, 'vm.data');
+      where.contractId = {'!=': null};
+
+      OutletSalesmanContract.bindAll({where}, $scope, 'vm.data');
 
     }
 
