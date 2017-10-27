@@ -7,7 +7,7 @@
     // TODO: allow to add/change location for an existing outlet
 
     const {PhotoHelper, LocationHelper, toastr, saControllerHelper} = Helpers;
-    const {Outlet, Visit, OutletPhoto, Location} = Schema.models();
+    const {Outlet, Visit, OutletPhoto, Location, OutletSalesmanContract} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -54,6 +54,8 @@
             initMap(outlet.location);
           }
 
+          return loadContracts(outlet);
+
         });
 
     });
@@ -70,6 +72,13 @@
     /*
      Functions
      */
+
+    function loadContracts(outlet) {
+
+      return OutletSalesmanContract.findAllWithRelations({outletId: outlet.id}, {bypassCache: true})('Contract')
+        .then(data => vm.outletSalesmanContracts = data);
+
+    }
 
     function onStateChange(to) {
 

@@ -62,29 +62,14 @@
         )
           i.glyphicon.glyphicon-map-marker
 
-
-  //hr.clear-both
-
-  //.header-button
-    h4.pull-left
-      span Визиты
-
-    button.btn.ml-em.btn-success.pull-right.btn-sm(
-    ng-click='vm.newVisitClick()'
-    ng-disabled='!vm.currentSalesman'
-    ) Новый визит
-
-  //.scroll-y(resize resize-offset-top)
-    table.table.table-striped.clear-both.table-hover(ng-hide='vm.collapseVisitsSection || !vm.visits.length')
-      thead
-        tr
-          th(ng-if='!vm.currentSalesman')
-          th Дата
-          th.number Фото
-          th.number Ответы
-      tbody
-        tr.clickable(ng-repeat='visit in vm.visits | orderBy:"-deviceCts" track by visit.id' ng-click='vm.visitClick(visit)')
-          td(ng-if='!vm.currentSalesman') {{ visit.salesman.shortName }}
-          td {{ visit.deviceCts | amUtc | amLocal | amCalendar }}
-          td.number {{ visit.photos.length | number: 0 }}
-          td.number {{ visit.answers.length | number: 0 }}
+    .outlet-salesman-contracts
+      .headers
+        .salesman ТП
+        .contract Договор
+        .credit-limit Лимит
+        .credit-remains Остаток
+      .outlet-salesman-contract(ng-repeat='osc in vm.outletSalesmanContracts track by osc.id')
+        .salesman {{ ::osc.salesman.shortName }}
+        .contract {{ ::osc.contract.name }}
+        .credit-limit {{ ::osc.contract.creditLimit | number:2 }}
+        .credit-remains {{ ::osc.contract.creditRemains | number:2 }}
