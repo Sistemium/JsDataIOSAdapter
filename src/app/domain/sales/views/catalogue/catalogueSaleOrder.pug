@@ -41,7 +41,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
       span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
       a(
       href
-      ng-if='!vm.saleOrder.outletId || saleOrderExpanded && vm.saleOrder.workflowStep.editable'
+      ng-if='!vm.saleOrder.outletId || saleOrderExpanded && vm.saleOrder.workflowStep.editable || !vm.saleOrder.id'
       popover-is-open='vm.isOutletPopoverOpen'
       uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
       )

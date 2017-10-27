@@ -44,7 +44,8 @@
 
       vm.saleOrder = SaleOrder.createInstance({
         salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
-        date: moment().add(1, 'days').format()
+        date: moment().add(1, 'days').format(),
+        processing: 'draft'
       });
 
     }
