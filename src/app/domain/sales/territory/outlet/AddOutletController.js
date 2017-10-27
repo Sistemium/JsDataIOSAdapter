@@ -2,7 +2,7 @@
 
 (function () {
 
-  function AddOutletController($state, ConfirmModal, Schema, saEtc, LocationHelper, saControllerHelper, $scope) {
+  function AddOutletController($state, ConfirmModal, Schema, saEtc, LocationHelper, saControllerHelper, $scope, SalesmanAuth) {
 
     const LOCATION_ACCURACY = 100;
 
@@ -28,6 +28,12 @@
     const {Partner, Outlet, Location, LegalForm} = Schema.models();
 
     vm.setBusy(checkLocation(), 'Получение геопозиции');
+
+    SalesmanAuth.watchCurrent($scope, salesman => vm.salesman = salesman);
+
+    /*
+    Functions
+     */
 
     function checkLocation() {
 
@@ -97,7 +103,9 @@
 
       vm.isInCreatingPartnerProcess = true;
 
-      let filteredLegalForm = _.find(vm.legalForms, (lf) => _.toLower(name).indexOf(_.toLower(lf.name + ' ')) === 0);
+      let filteredLegalForm = _.find(vm.legalForms, lf => {
+        return _.toLower(name).indexOf(_.toLower(lf.name + ' ')) === 0;
+      });
 
       if (filteredLegalForm) {
 
@@ -128,8 +136,28 @@
       vm.busyMessage = 'Создание точки';
 
       vm.busy = saveAll()
+        .then(saveSalesmanContract)
         .then(quit)
         .catch(ConfirmModal.showErrorAskRepeat(saveNewData));
+
+    }
+
+    function saveSalesmanContract() {
+
+      let salesmanId = _.get(vm.salesman, 'id');
+      let outletId = vm.newOutlet.id;
+
+      if (!salesmanId || !outletId) {
+        console.warn('saveSalesmanContract no salesman');
+        return;
+      }
+
+      let {OutletSalesmanContract} = Schema.models();
+
+      return OutletSalesmanContract.create({
+        outletId,
+        salesmanId
+      });
 
     }
 
