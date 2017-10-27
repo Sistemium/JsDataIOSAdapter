@@ -112,7 +112,7 @@
 
             small.flag.responsible {{ ::debt.responsible.name }}
 
-            currency-value.summ-origin(value='debt.summOriginDoc')
+            currency-value.summ-origin(value='debt.summOriginDoc || debt.summOrigin')
             span.ndoc {{ ::debt.ndoc }}
 
           .summ-doc(ng-if='vm.totals.totalSummDocPlus')
