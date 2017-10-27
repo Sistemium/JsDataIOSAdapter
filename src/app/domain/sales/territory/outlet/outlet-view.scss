@@ -88,7 +88,10 @@
 
     &.headers {
       color: $gray;
-      border-bottom: solid 1px $border-gray;
+    }
+
+    & + * {
+      border-top: solid 1px $border-gray;
     }
 
     > * {
