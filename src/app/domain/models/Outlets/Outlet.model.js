@@ -82,7 +82,11 @@
           }
         };
 
-        filter = _.assign({where: bySalesman}, _.omit(filter, 'salesmanId'));
+        _.each(_.omit(filter, 'salesmanId'), (val, key) => {
+          bySalesman[key] = {'==': val};
+        });
+
+        filter = {where: bySalesman};
 
       }
 
