@@ -4,7 +4,7 @@
 
   angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log, IosParser, IOS) {
 
-    let ios = $window.webkit;
+    let ios = IOS.isIos ? IOS : undefined;
     const requests = {};
     let counter = 1;
     const deb = $window.debug('stg:IosAdapter');
@@ -21,7 +21,6 @@
           if (!request) {
             return IOS.iosCallback(name, data, req);
           }
-
 
           if (name === 'resolve') {
 
@@ -100,7 +99,7 @@
           reject: reject
         };
 
-        ios.messageHandlers[type].postMessage(message);
+        ios.handler(type).postMessage(message);
 
       });
 
@@ -116,10 +115,8 @@
       };
 
       ios = {
-        messageHandlers: {
-          findAll: mock,
-          find: mock,
-          updateAll: mock
+        handler(){
+          return mock;
         }
       }
     }
