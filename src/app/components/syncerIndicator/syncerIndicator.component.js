@@ -21,17 +21,24 @@
     });
 
     function $onInit() {
-      SyncerInfo.watch($scope, info => _.assign(vm, info));
+      SyncerInfo.watch($scope, _.debounce(info => _.assign(vm, info), 1000));
     }
 
     function syncerInfoClick() {
 
-      const text = 'Проверьте подключение к интернет или обратитесь в техподдержку';
-      const title = 'Требуется передать данные';
+      let text = 'Проверьте подключение к интернет или обратитесь в техподдержку';
+      let title = 'Требуется передать данные';
+      let style = 'error';
+
+      if (vm.isSending) {
+        title = 'Идет передача данных на сервер';
+        text = 'Не разрывайте соединение с интернет, пока это облако не пропадет';
+        style = 'info';
+      }
 
       const options = {};
 
-      if ($window.webkit) {
+      if ($window.webkit && !vm.isSending) {
         $window.webkit.messageHandlers.remoteControl.postMessage({
           remoteCommands: {
             STMSyncer: 'upload'
@@ -39,7 +46,7 @@
         });
       }
 
-      toastr.error(text, title, options);
+      toastr[style](text, title, options);
 
     }
 

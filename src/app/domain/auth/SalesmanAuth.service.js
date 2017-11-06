@@ -149,7 +149,7 @@
 
     function salesModuleRun() {
 
-      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage'];
+      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage', 'Visit'];
 
       const {Workflow, SaleOrder, Outlet, NewsMessage, UserNewsMessage} = Schema.models();
 
@@ -160,7 +160,7 @@
             SUBSCRIPTIONS.push('RecordStatus');
           }
 
-          Sockets.onJsData('jsData:update', onRecordStatus);
+          Sockets.onJsData('jsData:update', onJSData);
 
           if (salesmanAuth.getCurrentUser() || salesmanAuth.hasOptions) {
             DEBUG('Sales module will jsDataSubscribe:', SUBSCRIPTIONS);
@@ -215,7 +215,7 @@
 
       }
 
-      function onRecordStatus(event) {
+      function onJSData(event) {
 
         if (event.resource === 'Outlet') {
           if (event.data.name) {
@@ -232,7 +232,7 @@
             .model(event.data.name)
             .eject(event.data.objectXid);
         } catch (e) {
-          console.warn('onRecordStatus error:', e);
+          console.warn('onJSData error:', e);
         }
 
       }

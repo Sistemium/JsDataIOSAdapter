@@ -35,24 +35,6 @@
 
     SalesmanAuth.watchCurrent($scope, refresh);
 
-    vm.rebindAll(Partner, {}, 'vm.partnersData', () => {
-
-      let outletsByPartner = _.groupBy(Outlet.getAll(), 'partnerId');
-
-      vm.partnersSorted = _.orderBy(
-        _.filter(
-          _.map(vm.partnersData, partner =>
-            _.assign(
-              _.pick(partner, ['name', 'shortName', 'id']),
-              {outlets: outletsByPartner[partner.id]})),
-          'outlets'
-        ),
-        ['shortName', 'name']
-      );
-
-      setupHash();
-
-    });
 
     vm.onScope('rootClick', () => $state.go(rootState));
 
@@ -67,6 +49,27 @@
     /*
      Functions
      */
+
+    function bindData() {
+
+      vm.rebindAll(Partner, {}, 'vm.partnersData', onPartnerChange);
+
+    }
+
+    function onPartnerChange() {
+
+      let outletsByPartner = _.groupBy(Outlet.getAll(), 'partnerId');
+
+      let partnersData = _.map(vm.partnersData, partner => {
+        let columns = _.pick(partner, ['name', 'shortName', 'id']);
+        return _.assign(columns, {outlets: outletsByPartner[partner.id]})
+      })
+
+      vm.partnersSorted = _.orderBy(_.filter(partnersData, 'outlets'), ['shortName', 'name']);
+
+      setupHash();
+
+    }
 
     function onStateChange(to) {
       _.assign(vm, {
@@ -98,17 +101,15 @@
       DEBUG('refresh', 'start');
 
       vm.setBusy(
-        Outlet.findAll(outletFilter, {bypassCache: true, limit: 3000})
+        Outlet.findAll(outletFilter, {bypassCache: true, limit: 10000})
           .then(outlets => {
 
-            return Partner.findAll(filter, {bypassCache: true, limit: 3000})
+            return Partner.findAll(filter, {bypassCache: true, limit: 10000})
               .then(() => outlets);
 
           })
       )
         .then(outlets => {
-
-          if (!vm.salesman) return;
 
           let filter = {
             where: {
@@ -122,6 +123,8 @@
 
           filter.where.id.notIn = _.uniq(_.map(outlets, 'partnerId'));
           Partner.ejectAll(filter);
+
+          bindData();
 
           saEtc.scrolTopElementById(SCROLL_MAIN);
 

@@ -82,4 +82,36 @@
 
   }
 
+  .outlet-salesman-contracts > * {
+
+    display: flex;
+
+    &.headers {
+      color: $gray;
+    }
+
+    & + * {
+      border-top: solid 1px $border-gray;
+    }
+
+    > * {
+      padding: $padding 0;
+      flex: 1;
+      min-width: 80px;
+
+      & + * {
+        margin-left: $padding;
+      }
+    }
+
+    > .salesman {
+      flex: 2;
+    }
+
+    > .contract {
+      flex: 3;
+    }
+
+  }
+
 }

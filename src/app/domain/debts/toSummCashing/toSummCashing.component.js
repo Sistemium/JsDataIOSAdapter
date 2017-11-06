@@ -130,7 +130,7 @@
 
       if (vm.isReady()) {
 
-        $q.all(_.map(vm.cashings, cashing => cashing.DSCreate()))
+        $q.all(_.map(cashings, cashing => cashing.DSCreate()))
           .then(() => {
 
             vm.popoverOpen = false;

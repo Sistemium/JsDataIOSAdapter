@@ -2,7 +2,7 @@ h3 Новая точка
 
 hr
 
-section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
+section.row-fluid(cg-busy='vm.cgBusy')
   form.form-horizontal(
   ng-if='vm.newLocation'
   name="addOutletForm"
@@ -20,7 +20,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
       label.col-sm-4.control-label(for="inputName")
         | {{ vm.isInCreatingPartnerProcess ? 'Новый контрагент' : 'Контрагент' }}
       fieldset.col-sm-8(
-      ng-disabled='vm.haveFixedPartner'
+      ng-disabled='vm.fixedPartner'
       )
         input#inputName.form-control(
         ng-if='vm.isInCreatingPartnerProcess'
@@ -40,7 +40,7 @@ section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
         add-button-click-fn='vm.addPartnerBtnClick'
         input-id='inputName'
         input-class='form-control'
-        input-editable='{{!vm.haveFixedPartner}}'
+        input-editable='{{!vm.fixedPartner}}'
         trim-enabled='false'
         placeholder='Название контрагента'
         placeholder-focused='Выберите или напишите новое название'

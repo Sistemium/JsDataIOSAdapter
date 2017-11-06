@@ -2,19 +2,20 @@
 
 (function () {
 
-  function AddOutletController($state, ConfirmModal, Schema, saEtc, LocationHelper) {
+  function AddOutletController($state, ConfirmModal, Schema, saEtc, LocationHelper, saControllerHelper, $scope, SalesmanAuth) {
 
-    var vm = this;
-    const locationMinAccuracy = 100;
+    const LOCATION_ACCURACY = 100;
 
-    _.assign(vm, {
+    const vm = saControllerHelper.setup(this, $scope);
+
+    vm.use({
 
       selectedPartner: null,
       newOutlet: null,
       partners: [],
       legalForms: [],
       isInCreatingPartnerProcess: false,
-      haveFixedPartner: false,
+      fixedPartner: !!$state.params.id,
 
       submit,
       cancel,
@@ -24,38 +25,40 @@
 
     });
 
-    var Partner = Schema.model('Partner');
-    var Outlet = Schema.model('Outlet');
-    var Location = Schema.model('Location');
-    var LegalForm = Schema.model('LegalForm');
+    const {Partner, Outlet, Location, LegalForm} = Schema.models();
 
-    vm.haveFixedPartner = angular.isDefined($state.params.id);
+    vm.setBusy(checkLocation(), 'Получение геопозиции');
 
-    vm.busyMessage = 'Получение геопозиции…';
-    vm.busy = checkLocation();
+    SalesmanAuth.watchCurrent($scope, salesman => vm.salesman = salesman);
+
+    /*
+    Functions
+     */
 
     function checkLocation() {
 
-      return LocationHelper.getLocation(locationMinAccuracy, null, 'Outlet')
-        .then((data) => {
+      return LocationHelper.getLocation(LOCATION_ACCURACY, null, 'Outlet')
+        .then(data => {
 
-          vm.busyMessage = 'Загрузка данных…';
+          vm.busyMessage = 'Загрузка данных';
           vm.newLocation = Location.inject(data);
-          return startController();
+
+          if (vm.fixedPartner) {
+            return getFixedPartner();
+          } else {
+            return getPartners();
+          }
 
         })
         .catch(ConfirmModal.showErrorAskRepeat(checkLocation, quit));
 
     }
 
-    function startController() {
-      return vm.haveFixedPartner ? getFixedPartner() : getPartners();
-    }
 
     function getFixedPartner() {
 
       return Partner.find($state.params.id)
-        .then((partner) => {
+        .then(partner => {
 
           vm.name = partner;
           selectPartner(partner);
@@ -67,7 +70,7 @@
 
     function getPartners() {
 
-      return Partner.findAll({},{cacheResponse: false})
+      return Partner.findAll({}, {cacheResponse: false})
         .then((partners) => {
 
           vm.partners = _.sortBy(partners, (p) => [_.toLower(p.shortName), _.toLower(p.name)]);
@@ -100,7 +103,9 @@
 
       vm.isInCreatingPartnerProcess = true;
 
-      var filteredLegalForm = _.find(vm.legalForms, (lf) => _.toLower(name).indexOf(_.toLower(lf.name + ' ')) === 0);
+      let filteredLegalForm = _.find(vm.legalForms, lf => {
+        return _.toLower(name).indexOf(_.toLower(lf.name + ' ')) === 0;
+      });
 
       if (filteredLegalForm) {
 
@@ -120,26 +125,46 @@
     }
 
     function addPartnerFieldsCheck() {
-      return (vm.name && vm.selectedLegalForm && vm.inn && vm.address);
+      return vm.name && vm.selectedLegalForm && vm.inn && vm.address;
     }
 
     function saveNewData() {
 
-      var partner = vm.selectedPartner || vm.newPartner || injectPartner(vm.name, vm.inn, vm.selectedLegalForm);
+      let partner = vm.selectedPartner || vm.newPartner || injectPartner(vm.name, vm.inn, vm.selectedLegalForm);
       vm.newOutlet || injectOutlet(partner, vm.address, vm.newLocation);
 
-      vm.busyMessage = 'Создание точки…';
+      vm.busyMessage = 'Создание точки';
 
       vm.busy = saveAll()
+        .then(saveSalesmanContract)
         .then(quit)
         .catch(ConfirmModal.showErrorAskRepeat(saveNewData));
+
+    }
+
+    function saveSalesmanContract() {
+
+      let salesmanId = _.get(vm.salesman, 'id');
+      let outletId = vm.newOutlet.id;
+
+      if (!salesmanId || !outletId) {
+        console.warn('saveSalesmanContract no salesman');
+        return;
+      }
+
+      let {OutletSalesmanContract} = Schema.models();
+
+      return OutletSalesmanContract.create({
+        outletId,
+        salesmanId
+      });
 
     }
 
     function injectPartner(name, inn, legalForm) {
 
       vm.newPartner = Partner.inject({
-        name: legalForm.name + ' "' + name + '"',
+        name: `${legalForm.name} "${name}"`,
         inn: inn,
         legalFormId: legalForm.id,
         source: 'user'

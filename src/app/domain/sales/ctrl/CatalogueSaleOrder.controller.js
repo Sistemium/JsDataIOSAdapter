@@ -44,7 +44,8 @@
 
       vm.saleOrder = SaleOrder.createInstance({
         salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
-        date: moment().add(1, 'days').format()
+        date: moment().add(1, 'days').format(),
+        processing: 'draft'
       });
 
     }
@@ -113,7 +114,7 @@
 
       let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
 
-      Outlet.findAll(filter)
+      Outlet.findAll(filter, {bypassCache: true})
         .then(data => {
           vm.outlets = _.orderBy(data, 'name');
         });

@@ -151,7 +151,7 @@
 
             console.error(err);
             toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
-            $state.go('^');
+            $state.go('sales.visits');
 
           });
       })

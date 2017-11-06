@@ -11,7 +11,17 @@
   @extend %rounded-borders;
 
   a {
-    color: $red !important;
+
+    i.glyphicon {
+      color: $green;
+    }
+
+    &.idle {
+      i.glyphicon {
+        color: $red !important;
+      }
+    }
+
   }
 
 }
