@@ -37,7 +37,7 @@
           resolve: resolve
         };
 
-        $window.webkit.messageHandlers.sound.postMessage({
+        IOS.handler('sound').postMessage({
           text: text.replace(/[^а-я0-9,]/ig, ' '),
           rate: rate,
           pitch: pitch,
@@ -58,7 +58,7 @@
     }
 
     function say(text) {
-      var sp = $window.webkit ? speaker : mockSpeaker;
+      var sp = IOS.isIos() ? speaker : mockSpeaker;
       lastSpeech = text;
       return sp(text);
     }

@@ -202,7 +202,7 @@
 
   }
 
-  function registerAdapters($window, DS, IosAdapter, SocketAdapter, Schema, InitService) {
+  function registerAdapters($window, DS, IosAdapter, SocketAdapter, Schema, InitService, IOS) {
 
     _.assign(DS.defaults, {
       watchChanges: false,
@@ -210,7 +210,7 @@
       omit: ['ts', 'cts', 'deviceTs', 'deviceCts', 'deviceAts', 'lts']
     });
 
-    if ($window.webkit) {
+    if (IOS.isIos()) {
       const iosAdapter = new IosAdapter(Schema);
       DS.registerAdapter('ios', iosAdapter, {default: true});
     } else {

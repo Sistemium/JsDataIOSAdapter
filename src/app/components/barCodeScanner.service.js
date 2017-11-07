@@ -2,7 +2,7 @@
 
 (function () {
 
-    angular.module('core.services').service('BarCodeScanner', function ($window) {
+    angular.module('core.services').service('BarCodeScanner', function ($window, IOS) {
 
       return {
 
@@ -19,8 +19,8 @@
           $window.barCodeScannerFn = scanProcessor;
           $window.barCodeScannerPowerFn = barCodeScannerPowerFn;
 
-          if ($window.webkit) {
-            $window.webkit.messageHandlers.barCodeScannerOn.postMessage({
+          if (IOS.isIos()) {
+            IOS.handler('barCodeScannerOn').postMessage({
               scanCallback: 'barCodeScannerFn',
               powerButtonCallback: 'barCodeScannerPowerFn'
             });
