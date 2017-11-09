@@ -33,6 +33,7 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
           th(ng-if='!vm.selectedSalesmanId') ТП
           th Точка
           th Время
+          th.hidden-xs До точки
           th.number.hidden-xs Фото
           //th.number.hidden-xs Ответов
       tbody
@@ -47,8 +48,8 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
           td
             div {{ visit.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
             .duration(ng-if='visit.finished') {{ visit.duration() }}
-            div {{ vm.outletDistance(visit) }}
             .not-finished(ng-if='!visit.finished') Не завершен!
+          td.hidden-xs {{ ::vm.outletDistance(visit) }}
           td.number.hidden-xs {{ visit.photos.length | number: 0 }}
           //td.number.hidden-xs {{ visit.answers.length | number: 0 }}
 
