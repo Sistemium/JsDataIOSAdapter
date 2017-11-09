@@ -3,6 +3,12 @@ ng-if='vm.disableNavs'
 )
   span {{ vm.partner.name }}
 
+  .fields
+
+    .inn(ng-if='vm.partner.inn')
+      label ИНН
+      strong {{ vm.partner.inn }}
+
   small
     a.ml-em(
     href
@@ -16,7 +22,7 @@ ng-if='vm.disableNavs'
       i.glyphicon.glyphicon-edit
 
 
-section.ui-view.partner
+section.partner(ui-view)
 
   hr.clear-both
 
