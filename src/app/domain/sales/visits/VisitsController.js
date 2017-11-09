@@ -133,23 +133,26 @@
 
     function filterVisitsBySelectedDate() {
 
+      const visitRelations = ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto'];
+
       let dateFilter = {date: dateFormatted(vm.selectedDate)};
       let filter = salesmanFilter(dateFilter);
 
-      vm.setBusy(
-        Visit.findAllWithRelations(filter, {bypassCache: true})(
-          ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto']
-        ).catch(e => console.warn(e)),
-        'Загрузка данных дня'
-      );
-
-      vm.rebindAll(Visit, filter, 'vm.selectedDayVisits', () => {
-        _.map(vm.selectedDayVisits, visit => {
-          return visit.outletId && Outlet.loadRelations(visit.outletId, 'Location')
-            .catch(e => console.warn(e, visit.outletId));
+      let q = Visit.findAllWithRelations(filter, {bypassCache: true})(visitRelations)
+        .then(() => {
+          vm.rebindAll(Visit, filter, 'vm.selectedDayVisits', loadOutletLocations);
         })
-      });
+        .catch(e => console.warn(e));
 
+      vm.setBusy(q, 'Загрузка данных дня');
+
+    }
+
+    function loadOutletLocations() {
+      _.map(vm.selectedDayVisits, visit => {
+        return visit.outletId && Outlet.loadRelations(visit.outletId, 'Location')
+          .catch(e => console.warn(e, visit.outletId));
+      });
     }
 
     function salesmanFilter(filter) {
