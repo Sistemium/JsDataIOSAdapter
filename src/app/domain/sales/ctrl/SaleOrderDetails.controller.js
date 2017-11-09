@@ -95,7 +95,10 @@
     function setProcessingClick(processing) {
 
       vm.saleOrder.processing = processing;
-      vm.saleOrder.DSCreate()
+
+      vm.saleOrder.updateTotalCost();
+
+      vm.saleOrder.safeSave()
         .then(saleOrder => {
           let {desc, label} = _.get(saleOrder, 'workflowStep');
           toastr.info(desc, `Статус заказа: ${label}`);
