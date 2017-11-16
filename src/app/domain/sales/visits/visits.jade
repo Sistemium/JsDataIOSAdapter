@@ -41,15 +41,15 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
         ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
         ng-click='vm.visitClick(visit)'
         )
-          td(ng-if='!vm.selectedSalesmanId') {{ visit.salesman.shortName }}
+          td(ng-if='!vm.selectedSalesmanId') {{ ::visit.salesman.shortName }}
           td
-            div {{ visit.outlet.name }}
-            .gray {{ visit.outlet.address }}
+            div {{ ::visit.outlet.name }}
+            .gray {{ ::visit.outlet.address }}
           td
-            div {{ visit.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
-            .duration(ng-if='visit.finished') {{ visit.duration() }}
+            div {{ ::visit.checkInLocation.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
+            .duration(ng-if='visit.finished') {{ ::visit.duration() }}
             .not-finished(ng-if='!visit.finished') Не завершен!
-          td.hidden-xs {{ ::vm.outletDistance(visit) }}
+          td.hidden-xs {{ vm.outletDistance(visit) }}
           td.number.hidden-xs {{ visit.photos.length | number: 0 }}
           //td.number.hidden-xs {{ visit.answers.length | number: 0 }}
 
