@@ -34,10 +34,14 @@
 
       methods: {
 
+        updateTs: function() {
+          this.deviceTs = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+        },
+
         updateCost: function () {
           this.priceDoc = this.price;
           this.cost = parseFloat((this.price * this.volume).toFixed(2));
-          this.deviceTs = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+          this.updateTs();
         },
 
         safeSave: function () {

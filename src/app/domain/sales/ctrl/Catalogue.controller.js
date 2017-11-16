@@ -250,7 +250,8 @@
       if (!position) return;
 
       position.isCompDiscount = !position.isCompDiscount;
-      position.DSCreate();
+      position.updateTs();
+      position.safeSave();
 
     }
 
