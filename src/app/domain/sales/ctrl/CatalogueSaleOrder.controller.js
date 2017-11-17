@@ -18,7 +18,6 @@
       searchOutletClick,
       clearSearchOutletClick,
       saleOrderSaveDraftClick,
-      setProcessingClick,
       minusButtonClick,
       lastPlus: {}
 
@@ -95,23 +94,6 @@
      Handlers
      */
 
-    // FIXME: copy-pasted from SaleOrderDetails.controller
-
-    function setProcessingClick(processing) {
-
-      vm.saleOrder.processing = processing;
-
-      vm.saleOrder.updateTotalCost();
-
-      vm.saleOrder.safeSave()
-        .then(saleOrder => {
-          let {desc, label} = _.get(saleOrder, 'workflowStep');
-          toastr.info(desc, `Статус заказа: ${label}`);
-          $scope.$parent.saleOrderExpanded = false;
-        })
-        .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
-
-    }
 
     function onSalesmanChange(salesman) {
 

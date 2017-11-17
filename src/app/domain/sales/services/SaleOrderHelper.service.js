@@ -141,10 +141,39 @@
         return vm.saleOrder && _.find(vm.saleOrder.positions, {articleId: articleId});
       }
 
+      function setProcessingClick(processing) {
+
+        let {saleOrder} = vm;
+
+        if (_.get(saleOrder, 'workflowStep.editable')) {
+          saleOrder.updateTotalCost();
+        }
+
+        saleOrder.processing = processing;
+
+        saleOrder.safeSave()
+          .then(saleOrder => {
+
+            let workflowStep = _.get(saleOrder, 'workflowStep');
+
+            if (!workflowStep) {
+              return;
+            }
+
+            let {desc, label} = workflowStep;
+
+            toastr.info(desc, `Статус заказа: ${label}`);
+
+          })
+          .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
+
+      }
+
+
       $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
       $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
-      _.defaults(vm, {});
+      _.defaults(vm, {setProcessingClick});
 
     }
 

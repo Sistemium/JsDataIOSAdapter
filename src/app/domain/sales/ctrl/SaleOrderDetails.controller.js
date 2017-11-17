@@ -17,7 +17,6 @@
 
       toggleEditClick: () => $state.go('sales.catalogue.saleOrder', {saleOrderId: vm.saleOrder.id}),
 
-      setProcessingClick,
       setSaleOrderClick,
       copySaleOrderClick
 
@@ -92,20 +91,6 @@
       $state.go($state.current.name, {id: saleOrder.id}, {inherit: true});
     }
 
-    function setProcessingClick(processing) {
-
-      vm.saleOrder.processing = processing;
-
-      vm.saleOrder.updateTotalCost();
-
-      vm.saleOrder.safeSave()
-        .then(saleOrder => {
-          let {desc, label} = _.get(saleOrder, 'workflowStep');
-          toastr.info(desc, `Статус заказа: ${label}`);
-        })
-        .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
-
-    }
 
     function safeSave() {
       return vm.saleOrder && vm.saleOrder.safeSave();
