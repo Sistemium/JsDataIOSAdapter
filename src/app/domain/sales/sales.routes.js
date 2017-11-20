@@ -57,7 +57,7 @@
         name: 'partner',
         url: '/partner/:id',
 
-        templateUrl: 'app/domain/sales/views/partner.html',
+        templateUrl: 'app/domain/sales/territory/partner/partner.html',
         controller: 'PartnerController',
         controllerAs: 'vm',
 
@@ -70,7 +70,7 @@
         name: 'editPartner',
         url: '/partner/:id/edit',
 
-        templateUrl: 'app/domain/sales/views/editPartner.html',
+        templateUrl: 'app/domain/sales/territory/partner/editPartner.html',
         controller: 'EditPartnerController',
         controllerAs: 'vm',
 

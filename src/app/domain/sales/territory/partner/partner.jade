@@ -1,0 +1,58 @@
+.partner-view
+
+  h3(ng-if='vm.disableNavs')
+    span {{ vm.partner.name }}
+
+    small
+      a.ml-em(
+      href
+      ng-click='vm.deletePartnerClick()'
+      )
+        i.glyphicon.glyphicon-trash
+      a.ml-em(
+      href
+      ng-click='vm.editPartnerClick()'
+      )
+        i.glyphicon.glyphicon-edit
+
+  .fields
+
+    .inn(ng-if='vm.partner.inn')
+      label ИНН:
+      span &nbsp;
+      strong {{ vm.partner.inn }}
+
+  section.partner(ui-view)
+
+    hr.clear-both
+
+    .header-button
+      h4.pull-left
+        span(
+        ng-class='{disabled: !vm.outlets.length}'
+        ) Точки:
+      button.btn.ml-em.btn-success.pull-right.btn-sm(
+      ng-click='vm.newOutletClick()'
+      ) Добавить точку
+
+    .scroll-y.clear-both(
+    resize resize-offset-top
+    )
+      table.table.table-striped.table-hover(
+      ng-hide='vm.collapseOutletsSection || !vm.outlets.length'
+      )
+        thead
+          tr
+            th Адрес
+            th.number Визиты
+            th.number
+              .glyphicon.glyphicon-time
+        tbody
+          tr.clickable(
+          ng-repeat='outlet in vm.outlets | orderBy:"address" track by outlet.id'
+          ng-click='vm.outletClick(outlet)'
+          )
+            td
+              a {{ outlet.address }}
+            td.number {{ outlet.visits.length | number: 0 }}
+            td.number {{ vm.outletLastVisitDate[outlet.id] | amUtc | amLocal | amCalendar }}
