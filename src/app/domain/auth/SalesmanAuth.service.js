@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SalesmanAuth($rootScope, $state, Schema, localStorageService, InitService, Sockets, IOS, DEBUG, Menu, Auth) {
+  function SalesmanAuth($rootScope, $state, Schema, localStorageService, InitService, Sockets, IOS, DEBUG, Menu, Auth, DomainOption) {
 
     const LOGIN_EVENT = 'salesman-login';
     const LOGOUT_EVENT = 'salesman-logout';
@@ -186,8 +186,10 @@
 
             let filter = SalesmanAuth.makeFilter({processing: 'draft'});
 
-            Schema.model('Visit')
-              .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
+            if (!DomainOption.visitsDisabled()) {
+              Schema.model('Visit')
+                .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
+            }
 
             SaleOrder.groupBy(filter)
               .then(data => {
