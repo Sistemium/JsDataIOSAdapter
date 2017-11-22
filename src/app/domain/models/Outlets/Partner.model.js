@@ -34,7 +34,11 @@
 
       computed: {
         shortName: ['name',function (name) {
-          var match = name.match(/"([^"]*[^ ])"/) || name.match(/"([^"]*[^ "]*)"/);
+          if (!name) {
+            return;
+          }
+          name = name.replace(/"[КK]"/i,'');
+          let match = name.match(/"([^"]*[^ ])"/) || name.match(/"([^"]*[^ "]*)"/);
           return match ? match[1] : name;
         }]
       }
