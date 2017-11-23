@@ -40,7 +40,7 @@
       console.log('Auth', autorization);
 
       let org = _.get(autorization, 'account.org');
-      let isTestOrg = /^(dev|dr50)$/.test(org);
+      let isTestOrg = /^(dev|dr50|r50p)$/.test(org);
 
       let appConfig =
           // InitService.localDevMode ? {} :

@@ -4,7 +4,7 @@
 
   angular.module('Models').run(Responsibility);
 
-  function Responsibility(Schema, localStorageService, $timeout) {
+  function Responsibility(Schema, localStorageService, $timeout, DomainOption) {
 
     const lsKey = 'Responsibility';
 
@@ -65,6 +65,10 @@
         name: 'ЭТП'
       }
     ];
+
+    if (!DomainOption.hasMVZ()) {
+      _.remove(items, {id: 'mvz'});
+    }
 
     _.each(items, item => {
       item.flagged = data[item.id];

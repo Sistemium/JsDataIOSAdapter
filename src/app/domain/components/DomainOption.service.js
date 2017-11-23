@@ -10,6 +10,7 @@
     };
 
     return {
+      hasMVZ,
       hasInactiveActions,
       hasSaleOrderKS,
       saleOrderOptions,
@@ -47,7 +48,11 @@
     }
 
     function visitsDisabled() {
-      return customerCode() === 'bs';
+      return customerCode() !== 'r50';
+    }
+
+    function hasMVZ() {
+      return customerCode() === 'r50';
     }
 
   }
