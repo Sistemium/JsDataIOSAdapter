@@ -8,7 +8,7 @@
     const LOGOUT_EVENT = 'salesman-logout';
     const LOCAL_STORAGE_KEY = 'currentSalesmanId';
 
-    const {Salesman} = Schema.models();
+    const {Salesman, Responsibility} = Schema.models();
 
     let currentSalesman;
     let redirectTo;
@@ -170,6 +170,8 @@
           $rootScope.$on('menu-show', setBadges);
 
           setBadges();
+
+          Responsibility.meta.initData(DomainOption);
 
           return getWorkflow('SaleOrder.v2', 'workflowSaleOrder')
             .then(() => {
