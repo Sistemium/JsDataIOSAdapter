@@ -1,4 +1,4 @@
-(function(){
+(function () {
 
   angular.module('webPage').service('DomainOption', DomainOption);
 
@@ -29,18 +29,24 @@
 
     }
 
+    function customerCode() {
+      let org = _.get(Auth.getAccount(), 'org');
+      if (!org) return false;
+      return customerAlias[org] || org;
+    }
+
+    function site() {
+      let site = _.get(Auth.roles(), 'site');
+      if (!site) return 1;
+      return site;
+    }
+
     function hasInactiveActions() {
       return customerCode() === 'bs';
     }
 
     function hasSaleOrderKS() {
       return customerCode() === 'r50';
-    }
-
-    function customerCode () {
-      let org = _.get(Auth.getAccount(), 'org');
-      if (!org) return false;
-      return customerAlias[org] || org;
     }
 
     function saleOrdersDisabled() {
@@ -52,7 +58,7 @@
     }
 
     function hasMVZ() {
-      return customerCode() === 'r50';
+      return customerCode() === 'r50' && site() === 1;
     }
 
   }
