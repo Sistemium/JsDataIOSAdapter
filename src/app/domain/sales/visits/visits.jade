@@ -46,7 +46,7 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
             div {{ ::visit.outlet.name }}
             .gray {{ ::visit.outlet.address }}
           td
-            div {{ ::visit.checkInLocation.deviceCts | amUtc | amLocal | amDateFormat:'HH:mm' }}
+            div {{ ::visit.checkInLocation.timestamp | amUtc | amLocal | amDateFormat:'HH:mm' }}
             .duration(ng-if='visit.finished') {{ ::visit.duration() }}
             .not-finished(ng-if='!visit.finished') Не завершен!
           td.hidden-xs {{ vm.outletDistance(visit) }}

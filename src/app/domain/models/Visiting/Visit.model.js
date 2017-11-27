@@ -64,8 +64,8 @@
         },
 
         duration: function() {
-          let start = _.get(this, 'checkInLocation.deviceCts');
-          let finish = _.get(this, 'checkOutLocation.deviceCts');
+          let start = _.get(this, 'checkInLocation.timestamp');
+          let finish = _.get(this, 'checkOutLocation.timestamp');
           if (start && finish) {
             let diff = moment(finish).diff(start,'seconds');
             return diff > 60 ? Math.round(diff/60) + ' мин' : diff + ' сек';
