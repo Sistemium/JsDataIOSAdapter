@@ -4,7 +4,7 @@
 
   angular.module('Models').run(Responsibility);
 
-  function Responsibility(Schema, localStorageService, $timeout) {
+  function Responsibility(Schema, localStorageService) {
 
     const lsKey = 'Responsibility';
 
