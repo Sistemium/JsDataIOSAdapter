@@ -2,7 +2,9 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth) {
+  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth, DS) {
+
+    let caches = {};
 
     const wDict = {
       w1: 'позиция',
@@ -78,6 +80,10 @@
 
       methods: {
 
+        totalCostCached: cachedValue('totalCost'),
+        totalPositionsCached: cachedValue('positionsCount'),
+        totalBoxesCached: cachedValue('totalBoxes'),
+
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
           this.totalCostDoc = this.totalCost;
@@ -86,7 +92,7 @@
 
         positionsCountRu,
 
-        processingMessages: function() {
+        processingMessages: function () {
           if (!this.processingMessage) return null;
           return _.map(this.processingMessage.split('|'), msg => _.trim(msg));
         },
@@ -157,6 +163,28 @@
       }
 
     });
+
+    function cachedValue(name) {
+      return function () {
+        if (!caches[this.id]) {
+          setCaches(this);
+        }
+        return caches[this.id][name];
+      }
+    }
+
+    function setCaches(saleOrder) {
+
+      let positions = saleOrder.positions;
+
+      caches[saleOrder.id] = {
+        positions,
+        positionsCount: positions.length || null,
+        totalCost: Schema.aggregate('cost').sum(positions) || null,
+        totalBoxes: Schema.aggregate('boxVolume').sumFn(positions) || null
+      };
+
+    }
 
     function positionsCountRu(count) {
       return wDict[Language.countableState(count || this.positions.length)];
