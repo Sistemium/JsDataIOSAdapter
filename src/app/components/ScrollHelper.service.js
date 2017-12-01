@@ -2,11 +2,7 @@
 
 (function () {
 
-  angular.module('sistemium.services')
-    .service('ScrollHelper', ScrollHelper);
-
   function ScrollHelper(localStorageService, saEtc) {
-
 
     function setupController(vm) {
 
@@ -69,5 +65,8 @@
     return {setupController};
 
   }
+
+  angular.module('sistemium.services')
+    .service('ScrollHelper', ScrollHelper);
 
 })();
