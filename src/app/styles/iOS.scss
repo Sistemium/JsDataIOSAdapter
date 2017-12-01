@@ -1,4 +1,4 @@
-.iOS {
+.iOS, body.mobile {
 
   .hidden-ios {
     display: none;
@@ -91,7 +91,7 @@
 
 }
 
-body.iOS {
+body.iOS, body.mobile {
 
   //position: relative;
   padding-top: 0;
