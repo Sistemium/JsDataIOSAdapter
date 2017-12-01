@@ -6,7 +6,6 @@
 
     function setupController(vm, $scope) {
 
-
       function onJSData(event) {
 
         const saleOrderId = _.get(vm, 'saleOrder.id');
