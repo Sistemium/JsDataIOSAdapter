@@ -37,7 +37,8 @@
       }
 
       if (nv && !vm.busy) {
-        vm.busy = loadData();
+        vm.busy = loadData()
+          .finally(() => vm.ready = true);
       }
 
     });
