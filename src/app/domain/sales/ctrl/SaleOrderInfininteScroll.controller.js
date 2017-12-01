@@ -23,7 +23,6 @@
 
       itemClick,
       newItemClick,
-      getDayClass,
       getData,
       rowHeight
 
@@ -153,31 +152,6 @@
 
     function newItemClick() {
       $state.go('sales.catalogue.saleOrder');
-    }
-
-    function getDayClass(data) {
-
-      let {date, mode} = data;
-
-      if (mode === 'day') {
-
-        let events = _.keyBy(eventsGroupedByDate[moment(date).format()], 'processing');
-        if (!events) return;
-
-        let draft = events['draft'];
-        if (draft && draft['count()']) {
-          return 'haveDraft';
-        }
-
-        if (moment(date).isSame(moment(), 'day')) {
-          return 'today';
-        }
-
-        let counts = _.sumBy(_.values(events), 'count()');
-        if (counts) return 'haveSaleOrder';
-
-      }
-
     }
 
   }

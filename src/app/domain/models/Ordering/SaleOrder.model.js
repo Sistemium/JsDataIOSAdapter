@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth, DS) {
+  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth) {
 
     let caches = {};
 

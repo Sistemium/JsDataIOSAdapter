@@ -26,7 +26,7 @@
   }
 
   &.flip-vertical {
-    -webkittransform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
     transform: scale(1, -1);
   }
 
@@ -40,6 +40,7 @@
 .scalable {
   -webkit-transition: $short-duration linear;
   transition: transform $short-duration linear;
+  backface-visibility: hidden;
   &.scale-y-50 {
     -webkit-transform: scale(1, 1.5);
     transform: scale(1, 1.5);
