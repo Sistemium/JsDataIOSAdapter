@@ -1,7 +1,279 @@
 @import "../../../styles/variables";
 @import "../../../styles/flags";
 
+$position-hover-color: #CFE1EE;
+
+$width-processing: 0.1;
+$width-salesman: 0.135;
+$width-outlet: 0.9;
+$width-totals: 0.13;
+$row-padding-right: 10px;
+
+$headers: (
+    ($width-processing, 'processing'),
+    ($width-salesman, 'salesman'),
+    ($width-outlet, 'outlet'),
+    ($width-totals, 'totals')
+);
+
+@mixin initHeadersWidth {
+
+  @each $var, $class in $headers {
+
+    $flex-basis: 100px * $var * 10;
+
+    @include responsive-only(gt-xs) {
+      .#{$class} {
+        flex: $var;
+        flex-basis: $flex-basis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+
+  }
+
+  .outlet {
+    @include responsive-only(md) {
+      flex-basis: 850px;
+    }
+
+    @include responsive-only(sm) {
+      flex-basis: 600px;
+    }
+
+  }
+
+}
+
 .sale-orders {
+
+  .headers {
+
+    @include responsive-only(lt-sm) {
+      display: none;
+    }
+
+    @include responsive-only(gt-xs) {
+      display: flex;
+      border-bottom: 2px solid $gray-border-color;
+      padding-bottom: 8px;
+
+      > div {
+        font-weight: bold;
+      }
+    }
+
+    @include initHeadersWidth;
+
+  }
+
+  #scroll-main > .clickable {
+
+    border-bottom: 2px solid $gray-border-color;
+
+    @include responsive-only(lt-sm) {
+      margin: 10px 0;
+      border: none;
+    }
+
+    .date {
+      height: 60px;
+      cursor: default;
+      padding: 15px 0;
+
+      @include responsive-only(lt-sm) {
+        height: 152px;
+        padding: 60px 5px;
+      }
+
+      .title {
+        font-size: 150%;
+      }
+
+    }
+
+    .sale-order {
+
+      & > .row-data:hover {
+
+        background-color: $position-hover-color;
+        border-bottom-color: darken($position-hover-color, 10%);
+
+        @include responsive-only(lt-sm) {
+          & > div {
+            border-bottom: 1px solid darken($position-hover-color, 10%);
+          }
+        }
+
+        & + .processing-message {
+          background-color: $position-hover-color;
+        }
+
+      }
+
+      @include responsive-only(lt-sm) {
+        border: 1px solid silver;
+      }
+
+    }
+
+    .row-data {
+
+      height: 40px;
+      flex-flow: row nowrap;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+
+      @include responsive-only(lt-sm) {
+        border-bottom: none;
+        flex-flow: column nowrap;
+        height: 130px;
+      }
+
+      & {
+
+        @include initHeadersWidth;
+
+        & {
+
+          @include responsive-only(lt-sm) {
+
+            div {
+              align-items: center;
+            }
+
+            .totals {
+              flex: 0.45;
+              justify-content: space-between;
+              align-items: stretch;
+            }
+
+            .outlet {
+
+              flex: 0.45;
+              flex-flow: column nowrap;
+              align-items: flex-start;
+              order: -1;
+
+              .name {
+                font-weight: 600;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                width: 100%;
+              }
+
+              .gray {
+                width: 100%;
+              }
+
+            }
+          }
+
+        }
+        & > div {
+
+          @include responsive-only(lt-sm) {
+
+            border-bottom: 1px solid #f5f5f5;
+            width: 100%;
+            padding: 0 5px;
+
+            display: flex;
+            flex: 0.3;
+            justify-content: space-between;
+
+          }
+
+          & label {
+
+            font-weight: normal;
+            margin: 0;
+
+            @include responsive-only(gt-xs) {
+              display: none;
+            }
+
+          }
+
+        }
+
+      }
+
+      & > div:last-of-type {
+        padding-right: 0;
+
+        @include responsive-only(lt-sm) {
+          padding-right: 5px;
+        }
+
+      }
+
+      & > .outlet {
+
+        > div {
+          height: 20px;
+          @extend .ellipsis;
+        }
+
+      }
+
+      .totals {
+
+        display: flex;
+        flex-flow: column nowrap;
+
+        .position, .cost {
+
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between;
+          align-items: baseline;
+
+        }
+
+        .position {
+          span:last-of-type {
+            font-weight: bold;
+          }
+        }
+
+      }
+
+      .no-totals {
+
+        @include responsive-only(gt-xs) {
+          height: 0;
+        }
+
+      }
+
+    }
+
+    .processing-message {
+
+      @extend .ellipsis;
+      height: 20px;
+      display: block;
+
+      span:first-of-type {
+        padding: 0 5px;
+        > .glyphicon {
+          top: 2px;
+        }
+
+      }
+
+      span:last-of-type {
+        font-style: italic;
+      }
+
+    }
+
+  }
 
 }
 
@@ -68,7 +340,6 @@
 
 }
 
-
 .sale-order.alert {
   .processingMessage {
 
@@ -122,13 +393,3 @@
   }
 }
 
-.processing {
-
-  span + span i {
-    margin-left: $margin-bottom-xs/2;
-  }
-
-  &.blue {
-    color: $info-color;
-  }
-}
