@@ -7,10 +7,10 @@
 
       stateHelperProvider
         .state({
-          url: '/saleOrders?date',
+          url: '/saleOrders',
           name: 'sales.saleOrders',
           templateUrl: 'app/domain/sales/views/saleOrders.html',
-          controller: 'SaleOrderController',
+          controller: 'SaleOrderInfiniteScrollController',
           controllerAs: 'vm',
 
           data: {
