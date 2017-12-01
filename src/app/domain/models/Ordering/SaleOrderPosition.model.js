@@ -70,7 +70,11 @@
 
         discountPercent: function () {
           return this.priceOrigin ? _.round ( 100.0 * this.price / this.priceOrigin - 100, 2) : undefined;
-        }
+        },
+
+        boxVolume: function () {
+          return this.article && this.article.boxVolume(this.volume) || 0;
+        },
 
       }
 
