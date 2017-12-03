@@ -35,7 +35,7 @@
 
           strong {{ newsMessage.rating | number }}
 
-          news-message-ratings-popover(news-message='newsMessage' ng-if='vm.isAdmin')
+          news-message-ratings-popover(news-message='newsMessage' ng-if='vm.isNewsMaker')
             span ({{ newsMessage.ratingsCount }})
 
         .rating(ng-if='!newsMessage.isAuthor()')

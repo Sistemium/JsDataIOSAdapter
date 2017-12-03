@@ -43,7 +43,7 @@
 
     }
 
-    .body {
+    > .body {
 
       margin: $padding 0;
 
@@ -53,27 +53,53 @@
         white-space: pre-line;
       }
 
+      .commentaries {
+        text-align: right;
+        .commentary {
+          margin: 4px 0;
+          .author {
+            color: $gray;
+          }
+        }
+      }
+
     }
 
     .footer {
 
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      .ratings {
 
-      color: $gray;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: $gray;
 
-      @include responsive-only(xxs) {
-        .common-rating {
-          display: none;
+        @include responsive-only(xxs) {
+          .common-rating {
+            display: none;
+          }
         }
+
+        .rating {
+
+          margin-left: $padding*2;
+          flex: 1;
+          text-align: right;
+
+        }
+
       }
 
-      .rating {
+      form.commentary {
 
-        margin-left: $padding*2;
-        flex: 1;
-        text-align: right;
+        display: flex;
+        margin-top: $padding;
+
+        input {
+          flex: 1;
+          display: block;
+          margin-right: 10px;
+        }
 
       }
 

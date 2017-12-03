@@ -17,9 +17,9 @@
     });
 
 
-  function ShowNewsMessageController($state, $scope, Schema, saControllerHelper, Auth, toastr) {
+  function ShowNewsMessageController($state, $scope, Schema, saControllerHelper, Auth, toastr, saEtc, moment, $timeout) {
 
-    const {NewsMessage, UserNewsMessage} = Schema.models();
+    const {NewsMessage, UserNewsMessage, Commentary} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -32,7 +32,8 @@
       editClick,
       $onInit,
       newsRatingClick,
-      showCommonRating
+      showCommonRating,
+      onCommentarySubmit
 
     });
 
@@ -51,11 +52,46 @@
       vm.rebindOne(NewsMessage, newsMessageId, 'vm.newsMessage');
       vm.rebindAll(UserNewsMessage, {newsMessageId}, 'vm.userNewsMessages', setRating);
 
+      let where = {ownerXid: {'==': newsMessageId}};
+      let orderBy = [['timestamp', 'ASC']];
+
+      vm.rebindAll(Commentary, {where, orderBy}, 'vm.commentaries');
+
+      Commentary.findAll({where});
+
+      initCommentary();
+
     }
 
     /*
     Functions
      */
+
+    function scrollComments() {
+
+      let elem = saEtc.getElementById('bodyScroll');
+
+      if (elem) {
+        elem.scrollTop = elem.scrollHeight;
+      }
+
+    }
+
+    function initCommentary() {
+      vm.commentary = Commentary.createInstance({
+        ownerXid: vm.newsMessageId,
+        source: 'NewsMessage',
+        authId
+      });
+    }
+
+    function onCommentarySubmit() {
+      vm.commentary.timestamp = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+      vm.commentary.DSCreate()
+        .then(initCommentary)
+        .then(() => $timeout(100))
+        .then(scrollComments);
+    }
 
     function showCommonRating() {
       return _.get(vm, 'newsMessage.rating') &&

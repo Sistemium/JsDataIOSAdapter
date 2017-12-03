@@ -20,29 +20,50 @@
       //ng-if='vm.newsMessage.dateE || vm.newsMessage.dateB'
       //)
 
-    .body.scroll-y(resize resize-offset-top='40')
+    .body.scroll-y#bodyScroll(resize resize-offset-top='80')
       p {{ vm.newsMessage.body }}
+
+      .commentaries
+        .commentary(ng-repeat='commentary in vm.commentaries track by commentary.id')
+          .author {{ commentary.timestamp | amUtc | amLocal | amCalendar }} {{ commentary.authorAccount.name }}:
+          .body {{ commentary.body }}
 
     .footer.spaced
 
-      .common-rating(
-      ng-if='vm.showCommonRating()'
-      )
-
-        label Средняя оценка:
-
-        strong {{ vm.newsMessage.rating | number }}
-
-      .rating(ng-if='!vm.newsMessage.isAuthor()')
-
-        label Ваша оценка:
-        span(
-        uib-rating
-        titles='vm.ratingTitles'
-        enable-reset='false'
-        max='5'
-        ng-model='vm.userNewsMessage.rating'
-        ng-click='vm.newsRatingClick()'
+      .ratings
+        .common-rating(
+        ng-if='vm.showCommonRating()'
         )
 
-      .rating(ng-if='vm.newsMessage.isAuthor()') Вы автор этой новости
+          label Средняя оценка:
+
+          strong {{ vm.newsMessage.rating | number }}
+
+        .rating(ng-if='!vm.newsMessage.isAuthor()')
+
+          label Ваша оценка:
+          span(
+          uib-rating
+          titles='vm.ratingTitles'
+          enable-reset='false'
+          max='5'
+          ng-model='vm.userNewsMessage.rating'
+          ng-click='vm.newsRatingClick()'
+          )
+
+        .rating(ng-if='vm.newsMessage.isAuthor()') Вы автор этой новости
+
+      form.commentary(ng-submit='vm.onCommentarySubmit()' name='commentaryForm')
+
+        input.form-control(
+        autocomplete='off'
+        type='text'
+        placeholder='Ваш коментарий к этой новости'
+        ng-model='vm.commentary.body'
+        required
+        autofocus
+        min-length='1'
+        )
+
+        button.btn.btn-primary(type='submit' ng-disabled='commentaryForm.$invalid')
+          i.glyphicon.glyphicon-comment
