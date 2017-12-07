@@ -19,12 +19,23 @@
           i.glyphicon.glyphicon-camera
 
     .pictures
-      a.picture(
-      href
-      ng-click='vm.thumbClick(picture)'
+
+      .picture(
       ng-repeat='picture in vm.newsMessagePictures | orderBy:"deviceCts" track by picture.id'
       )
-        img(ng-src='{{picture.srcThumbnail}}')
+        a.thumb(
+        href
+        ng-click='vm.thumbClick(picture)'
+        )
+          img(ng-src='{{picture.srcThumbnail}}')
+
+        a.remove(
+        href
+        ng-if='vm.isNewsMaker'
+        ng-click='vm.pictureRemoveClick(picture)'
+        ng-class='{confirmation: vm.confirmation === picture.id}'
+        )
+          i.glyphicon.glyphicon-remove
 
     .body.scroll-y#bodyScroll(resize resize-offset-top='80')
       p {{ vm.newsMessage.body }}

@@ -39,7 +39,8 @@
       newsRatingClick,
       showCommonRating,
       onCommentarySubmit,
-      thumbClick
+      thumbClick,
+      pictureRemoveClick
 
     });
 
@@ -79,6 +80,30 @@
     /*
     Functions
      */
+
+    function pictureRemoveClick(picture) {
+
+      if (vm.confirmation === picture.id) {
+        let promise = picture.DSDestroy()
+          .then(cleanup);
+
+        vm.cgBusy = {promise, message: 'Удаление изображения'};
+
+        return;
+      }
+
+      vm.confirmation = picture.id;
+
+      $timeout(2000)
+        .then(cleanup);
+
+      function cleanup() {
+        if (picture.id === vm.confirmation) {
+          vm.confirmation = false;
+        }
+      }
+
+    }
 
     function thumbClick(picture) {
 

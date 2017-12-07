@@ -51,13 +51,32 @@
       display: flex;
       flex-flow: row wrap;
 
+      .picture {
+
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: flex-start;
+
+        .remove {
+          margin-left: $padding/2;
+          opacity: 0.5;
+          &.confirmation {
+            color: $red;
+            opacity: 1;
+          }
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
       img {
         object-fit: contain;
         max-height: $picture-width;
       }
 
       .picture + .picture {
-        margin-left: $padding
+        margin-left: $padding * 2;
       }
 
     }
