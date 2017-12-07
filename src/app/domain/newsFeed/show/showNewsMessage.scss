@@ -3,6 +3,7 @@
 .show-news-message {
 
   $padding: 10px;
+  $picture-width: 50px;
 
   label {
     color: $gray;
@@ -39,6 +40,24 @@
 
       .buttons {
         text-align: right;
+      }
+
+    }
+
+    .pictures {
+
+      margin: $padding 0;
+
+      display: flex;
+      flex-flow: row wrap;
+
+      img {
+        object-fit: contain;
+        max-height: $picture-width;
+      }
+
+      .picture + .picture {
+        margin-left: $padding
       }
 
     }

@@ -17,11 +17,16 @@
     });
 
 
-  function ShowNewsMessageController($state, $scope, Schema, saControllerHelper, Auth, toastr, saEtc, moment, $timeout) {
+  function ShowNewsMessageController(
+    $state, $scope, Schema, saControllerHelper, Auth, toastr, saEtc, moment, $timeout,
+    GalleryHelper
+  ) {
 
-    const {NewsMessage, UserNewsMessage, Commentary} = Schema.models();
+    const {NewsMessage, UserNewsMessage, Commentary, NewsMessagePicture} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
+
+    GalleryHelper.setupController(vm, $scope);
 
     vm.use({
 
@@ -33,7 +38,8 @@
       $onInit,
       newsRatingClick,
       showCommonRating,
-      onCommentarySubmit
+      onCommentarySubmit,
+      thumbClick
 
     });
 
@@ -49,23 +55,55 @@
 
       let newsMessageId = vm.newsMessageId;
 
+      let filter = {newsMessageId};
+
       vm.rebindOne(NewsMessage, newsMessageId, 'vm.newsMessage');
-      vm.rebindAll(UserNewsMessage, {newsMessageId}, 'vm.userNewsMessages', setRating);
+      vm.rebindAll(UserNewsMessage, filter, 'vm.userNewsMessages', setRating);
+      vm.rebindAll(NewsMessagePicture, filter, 'vm.newsMessagePictures');
 
       let where = {ownerXid: {'==': newsMessageId}};
       let orderBy = [['timestamp', 'ASC']];
 
       vm.rebindAll(Commentary, {where, orderBy}, 'vm.commentaries');
 
+      vm.watchScope('vm.busySavingPicture', onBusySavingPicture);
+
       Commentary.findAll({where});
+      NewsMessagePicture.findAll(filter);
 
       initCommentary();
+      createNewsMessagePicture();
 
     }
 
     /*
     Functions
      */
+
+    function thumbClick(picture) {
+
+      $scope.imagesAll = vm.newsMessagePictures;
+
+      vm.commentText = vm.newsMessage.subject;
+      vm.thumbnailClick(picture);
+
+    }
+
+    function onBusySavingPicture(promise) {
+
+      if (!promise || !promise.then) {
+        return;
+      }
+
+      vm.cgBusy = {promise, message: 'Сохранение изображения'};
+
+      promise.then(createNewsMessagePicture);
+
+    }
+
+    function createNewsMessagePicture() {
+      vm.newsMessagePicture = NewsMessagePicture.createInstance({newsMessageId: vm.newsMessageId});
+    }
 
     function scrollComments() {
 

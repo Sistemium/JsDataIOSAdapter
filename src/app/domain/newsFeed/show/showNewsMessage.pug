@@ -1,6 +1,6 @@
 .show-news-message
 
-  .news-message
+  .news-message(cg-busy='vm.cgBusy')
 
     .header
 
@@ -11,14 +11,20 @@
         a.btn.btn-link(href ng-click='vm.editClick()')
           i.glyphicon.glyphicon-edit
 
-        a.btn.btn-link(href ng-click='vm.addPhotoClick()')
+        make-photo.btn(
+        model='vm.newsMessagePicture'
+        model-name='NewsMessagePicture'
+        busy='vm.busySavingPicture'
+        )
           i.glyphicon.glyphicon-camera
 
-      //valid-lifetime(
-      //date-b='vm.newsMessage.dateB'
-      //date-e='vm.newsMessage.dateE'
-      //ng-if='vm.newsMessage.dateE || vm.newsMessage.dateB'
-      //)
+    .pictures
+      a.picture(
+      href
+      ng-click='vm.thumbClick(picture)'
+      ng-repeat='picture in vm.newsMessagePictures | orderBy:"deviceCts" track by picture.id'
+      )
+        img(ng-src='{{picture.srcThumbnail}}')
 
     .body.scroll-y#bodyScroll(resize resize-offset-top='80')
       p {{ vm.newsMessage.body }}
