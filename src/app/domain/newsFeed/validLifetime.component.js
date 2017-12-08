@@ -11,8 +11,8 @@
 
     template: '<div class="valid-life-time" ng-if="vm.dateB || vm.dateE">' +
       '&nbsp;<label>Актуально:</label>' +
-      '&nbsp;<span>{{vm.formattedDate}}</span>' +
-      '<span ng-if="vm.humanizedDuration">&nbsp;({{vm.humanizedDuration}})</span>' +
+      '&nbsp;<span class="period">{{vm.formattedDate}}</span>' +
+      '<span class="humanized" ng-if="vm.humanizedDuration">&nbsp;({{vm.humanizedDuration}})</span>' +
     '</div>',
 
     controller: validLifetimeController,

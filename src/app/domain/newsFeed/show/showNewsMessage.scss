@@ -46,7 +46,7 @@
 
     .pictures {
 
-      margin: $padding 0;
+      margin: $padding * 2 0;
 
       display: flex;
       flex-flow: row wrap;
@@ -92,18 +92,27 @@
       }
 
       .commentaries {
+
+        margin-top: $padding * 2;
         text-align: right;
+
         .commentary {
+
           margin: 4px 0;
+
           .author {
             color: $gray;
           }
+
         }
+
       }
 
     }
 
     .footer {
+
+      margin-top: $padding * 2;
 
       .ratings {
 

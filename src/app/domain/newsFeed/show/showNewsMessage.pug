@@ -37,7 +37,7 @@
         )
           i.glyphicon.glyphicon-remove
 
-    .body.scroll-y#bodyScroll(resize resize-offset-top='80')
+    .body.scroll-y#bodyScroll(resize resize-offset-top='95')
       p {{ vm.newsMessage.body }}
 
       .commentaries
@@ -78,7 +78,6 @@
         placeholder='Ваш коментарий к этой новости'
         ng-model='vm.commentary.body'
         required
-        autofocus
         min-length='1'
         )
 

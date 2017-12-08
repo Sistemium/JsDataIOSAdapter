@@ -14,6 +14,14 @@
   }
 }
 
+.valid-life-time {
+  @include responsive-only(xxs) {
+    label, .period {
+      display: none;
+    }
+  }
+}
+
 .news-feed {
 
   $padding: 5px;

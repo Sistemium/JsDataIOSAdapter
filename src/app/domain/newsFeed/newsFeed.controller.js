@@ -23,6 +23,8 @@
 
     });
 
+    vm.discloseRatings = vm.isNewsMaker && !IOS.isIos();
+
     const {authId} = Auth.getAccount();
 
     vm.onScope('rootClick', () => {
