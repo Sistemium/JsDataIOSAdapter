@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth) {
+  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth, $rootScope) {
 
     let caches = {};
 
@@ -57,7 +57,7 @@
         docDiscounts: true
       },
 
-      watchChanges: true,
+      //watchChanges: true,
 
       meta: {
         positionsCountRu,
@@ -83,6 +83,9 @@
         totalCostCached: cachedValue('totalCost'),
         totalPositionsCached: cachedValue('positionsCount'),
         totalBoxesCached: cachedValue('totalBoxes'),
+        outletAddress: cachedValue('outletAddress'),
+        outletName: cachedValue('outletName'),
+        salesmanTinyName: cachedValue('salesmanTinyName'),
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
@@ -165,6 +168,7 @@
     });
 
     function cachedValue(name) {
+
       return function () {
         if (!caches[this.id]) {
           setCaches(this);
@@ -175,19 +179,40 @@
 
     function setCaches(saleOrder) {
 
-      let positions = saleOrder.positions;
+      let {id, outlet, salesman} = saleOrder;
+
+      const {SaleOrderPosition} = Schema.models();
 
       caches[saleOrder.id] = {
-        positions,
-        positionsCount: positions.length || null,
-        totalCost: Schema.aggregate('cost').sum(positions) || null,
-        totalBoxes: Schema.aggregate('boxVolume').sumFn(positions) || null
+        outletAddress: outlet.address,
+        outletName: outlet.name,
+        salesmanTinyName: salesman.tinyName
       };
+
+      SaleOrderPosition.findAll({saleOrderId: id}, {cacheResponse: false})
+        .then(positions => {
+          _.assign(caches[saleOrder.id], {
+            //positions,
+            positionsCount: positions.length || null,
+            totalCost: Schema.aggregate('cost').sum(positions) || null,
+            totalBoxes: Schema.aggregate('boxVolume').sumFn(positions) || null
+          })
+        });
 
     }
 
     function positionsCountRu(count) {
       return wDict[Language.countableState(count || this.positions.length)];
+    }
+
+    $rootScope.$watch(ifPositionsChanged, clearCaches);
+
+    function clearCaches() {
+      caches = {};
+    }
+
+    function ifPositionsChanged() {
+      return `${Schema.model('SaleOrder').lastModified()}`;
     }
 
     function nextShipmentDate() {
