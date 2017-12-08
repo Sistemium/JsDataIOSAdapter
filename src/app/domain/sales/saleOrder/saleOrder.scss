@@ -51,6 +51,10 @@ $headers: (
 
   .headers {
 
+    > :last-of-type {
+      text-align: right;
+    }
+
     @include responsive-only(lt-sm) {
       display: none;
     }
@@ -71,21 +75,28 @@ $headers: (
 
   #scroll-main > .clickable {
 
+    position: relative;
+
     border-bottom: 2px solid $gray-border-color;
 
     @include responsive-only(lt-sm) {
+
       margin: 10px 0;
       border: none;
+
+      > * {
+        padding: 0 5px;
+      }
+
     }
 
     .date {
       height: 60px;
       cursor: default;
-      padding: 15px 0;
+      padding: 30px 0;
 
       @include responsive-only(lt-sm) {
-        height: 152px;
-        padding: 60px 5px;
+        height: 86px;
       }
 
       .title {
@@ -96,21 +107,8 @@ $headers: (
 
     .sale-order {
 
-      & > .row-data:hover {
-
+      &:hover {
         background-color: $position-hover-color;
-        border-bottom-color: darken($position-hover-color, 10%);
-
-        @include responsive-only(lt-sm) {
-          & > div {
-            border-bottom: 1px solid darken($position-hover-color, 10%);
-          }
-        }
-
-        & + .processing-message {
-          background-color: $position-hover-color;
-        }
-
       }
 
       @include responsive-only(lt-sm) {
@@ -121,98 +119,91 @@ $headers: (
 
     .row-data {
 
-      height: 40px;
-      flex-flow: row nowrap;
-      display: flex;
-      align-items: center;
       border-bottom: 2px solid transparent;
 
+      @include responsive-only(gt-xs) {
+        flex-flow: row nowrap;
+        display: flex;
+        align-items: center;
+      }
+
+      .outlet .address {
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+
+        .gray {
+          min-width: 0;
+          @extend .ellipsis;
+          flex: 1;
+        }
+
+        .salesman {
+          margin-left: 6px;
+          flex: .3;
+          text-align: right;
+        }
+
+        @include responsive-only(gt-xs) {
+          .salesman {
+            display: none;
+          }
+        }
+      }
+
+      @include initHeadersWidth;
+
       @include responsive-only(lt-sm) {
+
         border-bottom: none;
         flex-flow: column nowrap;
-        height: 130px;
-      }
+        height: 64px;
+        position: relative;
 
-      & {
-
-        @include initHeadersWidth;
-
-        & {
-
-          @include responsive-only(lt-sm) {
-
-            div {
-              align-items: center;
-            }
-
-            .totals {
-              flex: 0.45;
-              justify-content: space-between;
-              align-items: stretch;
-            }
-
-            .outlet {
-
-              flex: 0.45;
-              flex-flow: column nowrap;
-              align-items: flex-start;
-              order: -1;
-
-              .name {
-                font-weight: 600;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                width: 100%;
-              }
-
-              .gray {
-                width: 100%;
-              }
-
-            }
-          }
-
+        .processing {
+          position: absolute;
+          right: 0;
+          width: auto;
+          top: 0;
         }
-        & > div {
 
-          @include responsive-only(lt-sm) {
+        > .salesman {
+          display: none;
+        }
 
-            border-bottom: 1px solid #f5f5f5;
+        div {
+          align-items: center;
+        }
+
+        .totals {
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between;
+        }
+
+        .outlet {
+          flex-flow: column nowrap;
+          align-items: flex-start;
+          order: -1;
+
+          .name {
+            font-weight: 600;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             width: 100%;
-            padding: 0 5px;
-
-            display: flex;
-            flex: 0.3;
-            justify-content: space-between;
-
           }
 
-          & label {
-
-            font-weight: normal;
-            margin: 0;
-
-            @include responsive-only(gt-xs) {
-              display: none;
-            }
-
+          .address {
+            width: 100%;
           }
 
         }
 
       }
 
-      & > div:last-of-type {
-        padding-right: 0;
-
-        @include responsive-only(lt-sm) {
-          padding-right: 5px;
-        }
-
-      }
-
-      & > .outlet {
+      > .outlet {
 
         > div {
           height: 20px;
@@ -223,21 +214,12 @@ $headers: (
 
       .totals {
 
-        display: flex;
-        flex-flow: column nowrap;
-
-        .position, .cost {
-
-          display: flex;
-          flex-flow: row nowrap;
-          justify-content: space-between;
-          align-items: baseline;
-
-        }
+        text-align: right;
 
         .position {
-          span:last-of-type {
-            font-weight: bold;
+          span {
+            color: $gray;
+            margin-left: 5px;
           }
         }
 
@@ -255,20 +237,24 @@ $headers: (
 
     .processing-message {
 
-      @extend .ellipsis;
       height: 20px;
-      display: block;
+      font-style: italic;
+      text-align: right;
+      color: $gray;
+      display: flex;
+      justify-content: flex-end;
 
-      span:first-of-type {
-        padding: 0 5px;
-        > .glyphicon {
-          top: 2px;
-        }
-
+      span {
+        @extend .ellipsis;
+        display: block;
+        min-width: calc(100% - 25px);
       }
 
-      span:last-of-type {
-        font-style: italic;
+      .icon {
+        min-width: 20px;
+        .glyphicon {
+          right: 2px;
+        }
       }
 
     }
@@ -375,15 +361,11 @@ $headers: (
     margin-bottom: 1px;
 
     &.blue, &.info {
-      background-color: $state-info-bg;
-      border-color: $state-info-border;
-      color: $state-info-text;
+      @include colorInit($state-info-bg, $state-info-border, $state-info-text);
     }
 
     &.green, &.success {
-      background-color: $state-success-bg;
-      border-color: $state-success-border;
-      color: $state-success-text;
+      @include colorInit($state-success-bg, $state-success-border, $state-success-text);
     }
 
     i + span {
