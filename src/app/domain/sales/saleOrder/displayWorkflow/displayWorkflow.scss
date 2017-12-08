@@ -1,0 +1,55 @@
+.display-workflow {
+  .workflows {
+
+    display: flex;
+    flex-flow: row wrap;
+    margin-bottom: 15px;
+    user-select: none;
+    justify-content: flex-start;
+
+    @include responsive-only(lt-sm) {
+      margin-bottom: 0;
+      border-bottom: 1px solid $gray-border-color;
+    }
+
+    @include responsive-only(xxs) {
+      justify-content: space-between;
+    }
+
+    > .workflow {
+
+      outline: none;
+      border: 1px solid $border-gray;
+      margin: 5px;
+      padding: 5px;
+      cursor: pointer;
+
+      &:hover {
+        border: 1px solid $gray !important;
+        transition: all .5s;
+      }
+
+
+      &.current-workflow {
+        border: 1px solid #000 !important;
+      }
+
+      span.name {
+        padding-right: 10px;
+      }
+
+      &.blue {
+        @include colorInit($state-info-bg, $state-info-border, $state-info-text);
+      }
+
+      &.green {
+        @include colorInit($state-success-bg, $state-success-border, $state-success-text);
+      }
+
+      &.orange {
+        @include colorInit($state-warning-bg, $state-warning-border, $state-warning-text);
+      }
+    }
+
+  }
+}

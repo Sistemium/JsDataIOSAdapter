@@ -1,0 +1,12 @@
+.display-workflow
+
+  .workflows
+    .workflow(
+    ng-repeat='workflow in vm.workflows track by $index'
+    ng-click='vm.onWorkflowChange(workflow)'
+    ng-class='[' +
+    '{"current-workflow": workflow.processing === vm.currentWorkflow},' +
+    ' vm.supplementaryWorkflowData[workflow.processing].cls]'
+    )
+      span.name {{ vm.supplementaryWorkflowData[workflow.processing].translation || workflow.processing }}
+      span.count {{ workflow['count()'] }}
