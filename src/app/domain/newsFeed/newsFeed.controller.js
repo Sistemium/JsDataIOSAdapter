@@ -50,10 +50,10 @@
     }
 
     function refresh() {
+      let options = {bypassCache: true};
       vm.setBusy([
         Account.findAll({}, {bypassCache: true}),
-        NewsMessage.findAll({}, {bypassCache: true}),
-        UserNewsMessage.findAll({}, {bypassCache: true})
+        NewsMessage.findAllWithRelations(filter, options)('UserNewsMessage', false, false, options)
       ]);
     }
 
