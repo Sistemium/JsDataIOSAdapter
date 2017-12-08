@@ -44,22 +44,28 @@
 
       let idx = 0;
 
-      let preSlides = _.map(newsMessages, newsMessage => {
+      let slides = [];
 
-        let slide = _.pick(newsMessage, ['id', 'subject']);
+      _.each(newsMessages, newsMessage => {
 
-        let picture = _.first(newsMessage.pictures);
+        _.each(newsMessage.pictures, picture => {
 
-        if (picture && picture.srcThumbnail) {
+          if (!picture.srcThumbnail) {
+            return;
+          }
+
+          let slide = _.pick(newsMessage, ['id', 'subject']);
+
           slide.srcThumbnail = picture.srcThumbnail;
           slide.idx = idx++;
-        }
 
-        return slide;
+          slides.push(slide);
+
+        });
 
       });
 
-      vm.slides = _.filter(preSlides, 'srcThumbnail');
+      vm.slides = slides;
 
     }
 

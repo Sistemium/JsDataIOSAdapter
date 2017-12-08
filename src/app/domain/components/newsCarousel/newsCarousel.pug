@@ -1,5 +1,5 @@
 .news-carousel(uib-carousel active='vm.currentSlide' interval='vm.interval')
-  .slide(uib-slide ng-repeat='slide in vm.slides track by slide.id' index='slide.idx')
+  .slide(uib-slide ng-repeat='slide in vm.slides track by slide.idx' index='slide.idx')
     .carousel-caption
       h4 {{ ::slide.subject }}
     a(href ng-click='vm.imageClick(slide)')
