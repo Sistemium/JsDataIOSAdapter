@@ -15,8 +15,13 @@
       hasSaleOrderKS,
       saleOrderOptions,
       saleOrdersDisabled,
-      visitsDisabled
+      visitsDisabled,
+      showNewsCarousel
     };
+
+    function showNewsCarousel() {
+      return customerCode() === 'r50' && Auth.isAuthorized('salesman');
+    }
 
     function saleOrderOptions() {
       if (customerCode() === 'r50') {

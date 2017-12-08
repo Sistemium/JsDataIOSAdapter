@@ -9,6 +9,7 @@
       name: 'NewsMessage',
 
       relations: {
+
         hasOne: {
           UserNewsMessage: {
             localField: 'userNewsMessage',
@@ -18,7 +19,15 @@
             localField: 'authorAccount',
             localKey: 'authorId'
           }
+        },
+
+        hasMany: {
+          NewsMessagePicture: {
+            localField: 'pictures',
+            foreignKey: 'newsMessageId'
+          }
         }
+
       },
 
       computed: {
