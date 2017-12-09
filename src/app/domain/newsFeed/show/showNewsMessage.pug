@@ -70,7 +70,11 @@
 
         .rating(ng-if='vm.newsMessage.isAuthor()') Вы автор этой новости
 
-      form.commentary(ng-submit='vm.onCommentarySubmit()' name='commentaryForm')
+      form.commentary(
+      ng-submit='vm.onCommentarySubmit()'
+      name='commentaryForm'
+      ng-hide='vm.disableCommentaries'
+      )
 
         input.form-control(
         autocomplete='off'

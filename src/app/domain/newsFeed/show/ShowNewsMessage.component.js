@@ -69,7 +69,9 @@
 
       vm.watchScope('vm.busySavingPicture', onBusySavingPicture);
 
-      Commentary.findAll({where});
+      Commentary.findAll({where})
+        .catch(() => vm.disableCommentaries = true);
+
       NewsMessagePicture.findAll(filter);
 
       initCommentary();
