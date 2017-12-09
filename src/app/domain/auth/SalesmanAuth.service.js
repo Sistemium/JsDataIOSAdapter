@@ -149,7 +149,10 @@
 
     function salesModuleRun() {
 
-      let SUBSCRIPTIONS = ['Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage', 'Visit'];
+      let SUBSCRIPTIONS = [
+        'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage', 'Visit',
+        'Commentary'
+      ];
 
       const {Workflow, SaleOrder, Outlet, NewsMessage} = Schema.models();
 

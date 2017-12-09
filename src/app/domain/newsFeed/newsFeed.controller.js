@@ -4,7 +4,7 @@
 
   function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth, IOS) {
 
-    const {NewsMessage, UserNewsMessage, Account} = Schema.models();
+    const {NewsMessage, UserNewsMessage, Account, Commentary} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -31,7 +31,7 @@
       $state.go('newsFeed');
     });
 
-    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    const unSubscribeJSD = Sockets.onJsData('jsData:update', onJSData)
 
     let cts = IOS.isIos() ? 'deviceCts' : 'cts';
 
@@ -42,9 +42,16 @@
 
     refresh();
 
+    $scope.$on('$destroy', onDestroy);
+
     /*
      Functions
      */
+
+    function onDestroy() {
+      unSubscribeJSD();
+      Commentary.ejectAll();
+    }
 
     function showCommonRating(newsMessage) {
       return newsMessage.rating &&
@@ -71,15 +78,24 @@
 
     function onJSData(event) {
 
-      if (event.resource !== 'NewsMessage' || !event.data) {
+      const handlers = {onJSDCommentary, onJSDNewsMessage};
+
+      let handler = handlers[`onJSD${event.resource}`];
+
+      if (!event.data || !handler) {
         return;
       }
 
-      let {id} = event.data;
+      handler(event.data);
 
-      NewsMessage.find(id, {bypassCache: true})
-        .then(msg => console.info('updated newsMessage', msg));
+    }
 
+    function onJSDCommentary(data) {
+      Commentary.inject(data);
+    }
+
+    function onJSDNewsMessage(data) {
+      NewsMessage.inject(data);
     }
 
     function newsRatingClick(newsMessage) {
@@ -116,7 +132,6 @@
     function newsMessageClick(item) {
       $state.go('.show', {newsMessageId: item.id});
     }
-
 
   }
 
