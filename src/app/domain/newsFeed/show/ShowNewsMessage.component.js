@@ -63,7 +63,7 @@
       vm.rebindAll(NewsMessagePicture, filter, 'vm.newsMessagePictures');
 
       let where = {ownerXid: {'==': newsMessageId}};
-      let orderBy = [['timestamp', 'ASC']];
+      let orderBy = [['timestamp', 'DESC']];
 
       vm.rebindAll(Commentary, {where, orderBy}, 'vm.commentaries');
 
@@ -137,7 +137,7 @@
       let elem = saEtc.getElementById('bodyScroll');
 
       if (elem) {
-        elem.scrollTop = elem.scrollHeight;
+        elem.scrollTop = 0;
       }
 
     }
