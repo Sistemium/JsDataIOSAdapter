@@ -4,7 +4,9 @@
 
   function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth, IOS) {
 
-    const {NewsMessage, UserNewsMessage, Account, Commentary} = Schema.models();
+    const {NewsMessage, UserNewsMessage, Account, Commentary, NewsMessagePicture} = Schema.models();
+
+    const SUBSCRIPTIONS = ['NewsMessage', 'Commentary', 'NewsMessagePicture'];
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -31,7 +33,10 @@
       $state.go('newsFeed');
     });
 
+    const unSubscribeCollections = Sockets.jsDataSubscribe(SUBSCRIPTIONS);
     const unSubscribeJSD = Sockets.onJsData('jsData:update', onJSData);
+
+    $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
 
     let cts = IOS.isIos() ? 'deviceCts' : 'cts';
 
@@ -50,6 +55,7 @@
 
     function onDestroy() {
       unSubscribeJSD();
+      unSubscribeCollections();
       Commentary.ejectAll();
     }
 
@@ -76,9 +82,22 @@
 
     }
 
+    function onJSDataDestroy(event) {
+
+      let id = _.get(event, 'data.id');
+      let model = Schema.model(event.resource);
+
+      if (!id || !model || SUBSCRIPTIONS.indexOf(event.resource) === -1) {
+        return;
+      }
+
+      model.eject(id);
+
+    }
+
     function onJSData(event) {
 
-      const handlers = {onJSDCommentary, onJSDNewsMessage};
+      const handlers = {onJSDCommentary, onJSDNewsMessage, onJSDNewsMessagePicture};
 
       let handler = handlers[`onJSD${event.resource}`];
 
@@ -96,6 +115,10 @@
 
     function onJSDNewsMessage(data) {
       NewsMessage.inject(data);
+    }
+
+    function onJSDNewsMessagePicture(data) {
+      NewsMessagePicture.inject(data);
     }
 
     function newsRatingClick(newsMessage) {
