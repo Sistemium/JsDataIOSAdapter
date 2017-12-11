@@ -31,7 +31,7 @@
       $state.go('newsFeed');
     });
 
-    const unSubscribeJSD = Sockets.onJsData('jsData:update', onJSData)
+    const unSubscribeJSD = Sockets.onJsData('jsData:update', onJSData);
 
     let cts = IOS.isIos() ? 'deviceCts' : 'cts';
 
