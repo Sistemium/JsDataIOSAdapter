@@ -150,8 +150,7 @@
     function salesModuleRun() {
 
       let SUBSCRIPTIONS = [
-        'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'NewsMessage', 'Visit',
-        'Commentary'
+        'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'Visit'
       ];
 
       const {Workflow, SaleOrder, Outlet, NewsMessage} = Schema.models();
@@ -203,7 +202,7 @@
 
             let actualFilter = NewsMessage.meta.filterActual();
 
-            NewsMessage.findAllWithRelations(actualFilter)('UserNewsMessage')
+            NewsMessage.findAllWithRelations(actualFilter, {bypassCache: true})('UserNewsMessage')
               .then(actual => {
                 let unRated = _.filter(actual, message => message.isUnrated());
                 Menu.setItemData('newsFeed', {badge: unRated.length});

@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('Sales')
+  angular.module('webPage')
     .component('newsCarousel', {
 
       templateUrl: 'app/domain/components/newsCarousel/newsCarousel.html',
