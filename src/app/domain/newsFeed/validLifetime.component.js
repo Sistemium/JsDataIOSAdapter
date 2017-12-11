@@ -20,6 +20,8 @@
 
   };
 
+  /** @ngInject */
+
   function validLifetimeController($scope) {
 
     let vm = this;
