@@ -5,6 +5,12 @@
 
   .alert {
     @extend %header-alert;
+
+    .comment small {
+      font-style: italic;
+      color: $black;
+    }
+
   }
 
 }
