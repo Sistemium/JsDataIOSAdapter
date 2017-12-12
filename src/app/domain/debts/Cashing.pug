@@ -19,7 +19,13 @@
           )
         span.caret
 
-    .totals.buttons(ng-hide='vm.uncashingId')
+    .totals.buttons(ng-if='vm.uncashingId')
+      button.btn(
+      ng-class='vm.confirmCancelCurrentUncashing ? "btn-danger" : "btn-warning"'
+      ng-click='vm.cancelCurrentUncashingClick()'
+      ) {{ vm.confirmCancelCurrentUncashing ? 'Точно удалить?' : 'Удалить' }}
+
+    .totals.buttons(ng-if='!vm.uncashingId')
 
       outlet-cashing-popover(
       comment-text-placeholder='Точка'

@@ -18,6 +18,7 @@
         doUncashingClick,
         editClick,
         deleteCashingClick,
+        cancelCurrentUncashingClick,
         outletClick,
 
         uncashingClick,
@@ -58,6 +59,28 @@
     /*
      Functions
      */
+
+    function cancelCurrentUncashingClick() {
+
+      if (!vm.confirmCancelCurrentUncashing) {
+        vm.confirmCancelCurrentUncashing = true;
+        return $timeout(2000)
+          .then(() => vm.confirmCancelCurrentUncashing = false);
+      }
+
+      let busy = $q.all(_.map(vm.currentUncashing.cashings, cashing => {
+        cashing.uncashingId = null;
+        return cashing.DSCreate();
+      }));
+
+      return busy.then(() => {
+        vm.currentUncashing.DSDestroy();
+      })
+        .then(() => {
+          $state.go(rootState);
+        });
+
+    }
 
     function onHandsClick() {
       $state.go(rootState);
