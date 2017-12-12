@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets, Auth) {
+  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets, Auth, $q, $timeout) {
 
     const {Cashing, Outlet, Uncashing} = Schema.models();
 
@@ -37,9 +37,15 @@
     vm.onScope('rootClick', () => $state.go(rootState));
     vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);
 
-    vm.watchScope('vm.uncashing', uncashing => {
+    onStateChange($state.current, $state.params);
+
+    vm.watchScope('vm.uncashing', () => {
+
+      let uncashing = vm.uncashing;
 
       let targetState = rootState + (uncashing ? '.uncashing' : '');
+
+      if (vm.uncashingId) return;
 
       if ($state.current.name !== targetState) {
         $state.go(targetState);
@@ -59,7 +65,6 @@
 
     function uncashingClick(uncashing) {
       if (uncashing) {
-        vm.currentUncashing = uncashing;
         $state.go(`${rootState}.uncashed`, {uncashingId: uncashing.id});
       }
     }
@@ -94,6 +99,8 @@
       vm.editing = false;
       vm.uncashing = to.name === `${rootState}.uncashing`;
       vm.uncashingId = uncashingId;
+
+      vm.rebindOne(Uncashing, uncashingId, 'vm.currentUncashing');
 
       if (vm.wasModified) {
         refresh();

@@ -6,7 +6,8 @@
 
     bindings: {
       uncashed: '<',
-      isPopoverOpen: '='
+      isPopoverOpen: '=',
+      cgBusy: '=busy'
     },
 
     templateUrl: 'app/domain/components/uncashPopover/uncashPopover.html',
@@ -29,7 +30,7 @@
 
   });
 
-  function uncashingFormController(Schema, $scope, $q, localStorageService, Sockets, Auth) {
+  function uncashingFormController(Schema, $scope, $q, localStorageService, Sockets, Auth, toastr) {
 
     let vm = this;
 
@@ -79,6 +80,10 @@
       let {uncashing} = vm;
       let uncashed = _.clone(vm.uncashed);
 
+      if (!uncashing || !uncashed || !uncashed.length) {
+        return toastr.error('Ошибка сохранения выручки', 'Повторите попытку');
+      }
+
       _.assign(uncashing, {
         date: moment().format(),
         summ: totalSumm(),
@@ -86,11 +91,10 @@
         processing: 'upload'
       });
 
-      Uncashing.create(uncashing)
+      vm.cgBusy = Uncashing.create(uncashing)
         .then(uncashing => {
           return $q.all(_.map(uncashed, cashing => {
             cashing.uncashingId = uncashing.id;
-            // TODO: here could be useful PATCH method
             return cashing.DSCreate();
           }))
         })
@@ -103,6 +107,10 @@
     const DEFAULT_FIELDS = ['uncashingPlaceId', 'type'];
 
     function saveDefaults() {
+
+      if (!vm.uncashing) {
+        return;
+      }
 
       localStorageService.set('uncashing.defaults', _.pick(vm.uncashing, DEFAULT_FIELDS))
 
@@ -117,7 +125,7 @@
       let {authId} = Auth.getAccount();
       let processing = 'draft';
 
-      Uncashing.findAll({authId, processing}, {limit: 1, bypassCache: true})
+      vm.cgBusy = Uncashing.findAll({authId, processing}, {limit: 1, bypassCache: true})
         .then(uncashings => {
 
           let draft = _.first(uncashings);
@@ -142,9 +150,9 @@
 
           _.assign(vm, {uncashingPicture, uncashing});
 
-          $scope.$watch('vm.uncashing.type', () => {
+          $scope.$on('$destroy', $scope.$watch('vm.uncashing.type', () => {
             Uncashing.save(vm.uncashing);
-          });
+          }));
 
         });
     }

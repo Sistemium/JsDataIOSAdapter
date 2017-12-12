@@ -144,7 +144,7 @@
 
       currency-value(value='vm.totals.totalSummDoc' ng-if='vm.totals.totalSummDocPlus')
 
-      a(href ng-click='$parent.vm.totalCashedClick()' ng-if='vm.cashingTotal')
+      a(href ng-click='vm.totalCashedClick()' ng-if='vm.cashingTotal')
         currency-value(value='vm.cashingTotal')
 
       currency-value(value='vm.totals.totalSumm')

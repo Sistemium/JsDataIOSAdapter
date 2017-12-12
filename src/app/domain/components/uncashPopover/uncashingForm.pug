@@ -1,4 +1,4 @@
-form.uncashingForm(name="uncashForm")
+form.uncashingForm(name="uncashForm" cg-busy='{promise: vm.cgBusy, delay: 0}')
 
   .form-group
 
@@ -40,6 +40,8 @@ form.uncashingForm(name="uncashForm")
     name='commentText'
     placeholder='Комментарий'
     )
+
+  input(type='hidden' ng-model='vm.uncashing.type' required)
 
   button.btn.btn-success(
   ng-click='vm.onSubmit()'
