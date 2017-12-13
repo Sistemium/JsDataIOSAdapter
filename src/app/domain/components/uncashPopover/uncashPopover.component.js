@@ -49,9 +49,17 @@
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
+    $scope.$on('$destroy', $scope.$watch('vm.busySavingPhoto', onBusySavingPhoto));
+
     /*
      Functions
      */
+
+    function onBusySavingPhoto(promise) {
+      if (promise && promise.then) {
+        vm.cgBusy = promise;
+      }
+    }
 
     function onJSData(event) {
 
