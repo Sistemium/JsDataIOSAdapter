@@ -42,12 +42,12 @@
     Functions
      */
 
-      let isTestOrg = /^(dev|dr50|r50p)$/.test(org);
     function onAuth(authorization) {
 
       console.log('Auth', authorization);
 
       let org = _.get(authorization, 'account.org');
+      let isTestOrg = /^(dev|dr50)$/.test(org);
 
       let appConfig =
         // InitService.localDevMode ? {} :
