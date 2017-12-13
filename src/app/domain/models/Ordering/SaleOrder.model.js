@@ -68,11 +68,14 @@
 
       computed: {
 
-        workflowStep: ['authId', 'processing', function (authId, processing) {
+        workflowStep: ['authId', 'processing', (authId, processing) => {
+
           let wf = SaleOrder.meta.workflowSaleOrder;
+
           if (!authId || authId !== Auth.authId()) {
             wf = SaleOrder.meta.workflowSaleOrderSupervisor;
           }
+
           return _.get(wf, processing);
         }]
 
