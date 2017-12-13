@@ -5,7 +5,7 @@
   function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService) {
 
     const {ScrollHelper, saControllerHelper} = Helpers;
-    let {SaleOrder, SaleOrderPosition, Outlet, Workflow} = Schema.models();
+    let {SaleOrder, SaleOrderPosition, Outlet} = Schema.models();
 
     let vm = saControllerHelper
       .setup(this, $scope)
@@ -13,6 +13,7 @@
 
     const pageSize = 50;
     let startPage = 1;
+
     let gotAllData = false;
     let busyGettingData;
 
@@ -21,11 +22,11 @@
       data: [],
       rootState: 'sales.saleOrders',
 
+      isReady: false,
       itemClick,
       newItemClick,
       getData,
       rowHeight,
-      $onInit,
       onWorkflowChange
 
     })
@@ -47,9 +48,9 @@
 
     $scope.$on('$destroy', cleanup);
 
-    SalesmanAuth.watchCurrent($scope, onSalesmanChange);
-
     $scope.$watch('vm.currentWorkflow', onWorkflowChange);
+
+    SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
     /*
      Handlers
@@ -58,24 +59,6 @@
     /*
      Functions
      */
-
-    function $onInit() {
-
-      vm.workflowDictionary = {};
-
-      Workflow.findAll({code: 'SaleOrder.v2'})
-        .then((res) => {
-          let workflowTranslations = _.get(res[0], 'workflow');
-          _.each(workflowTranslations, (workflow, key) => {
-            _.assign(vm.workflowDictionary, ({
-              [key]: {
-                translation: _.get(workflow, 'label'),
-                cls: _.get(workflow, 'cls')
-              }
-            }));
-          });
-        })
-    }
 
     function onWorkflowChange() {
 
@@ -86,37 +69,32 @@
 
     function getWorkflows(salesmanId) {
 
+      vm.currentWorkflows = {};
+
       let filter;
 
       if (salesmanId) {
         filter = {salesmanId: salesmanId}
       }
 
-      SaleOrder.groupBy(filter, ['processing'])
-        .then(res => {
-          vm.currentWorkflows = _.map(res, item => _.pick(item, ['processing', 'count()']));
-        });
+      vm.workflowPromise = $q.when(SaleOrder.groupBy(filter, ['processing']));
 
     }
 
     function rowHeight() {
-      return isWideScreen() ? 62 : 86;
+      return isWideScreen() ? 62 : 82;
     }
 
     function isWideScreen() {
       return !saMedia.xsWidth && !saMedia.xxsWidth;
     }
 
-    function resetVariables(resetWorkflow) {
+    function resetVariables() {
 
       vm.data = [];
       gotAllData = false;
       startPage = 1;
       localStorageService.remove(vm.rootState + '.scroll');
-
-      if (resetWorkflow) {
-        vm.currentWorkflow = null;
-      }
 
     }
 
@@ -126,7 +104,7 @@
 
       getWorkflows(vm.currentSalesman);
 
-      resetVariables(true);
+      resetVariables();
 
       getData();
 
@@ -140,9 +118,15 @@
 
     function getData() {
 
+      if (!vm.currentWorkflow) {
+        vm.currentWorkflow = localStorageService.get('currentWorkflow');
+      }
+
       if (busyGettingData || gotAllData) {
         return;
       }
+
+      vm.isReady = false;
 
       let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date'});
 
@@ -200,6 +184,7 @@
 
       vm.setBusy(busyGettingData)
         .then(() => {
+          vm.isReady = true;
           busyGettingData = false;
         });
 
