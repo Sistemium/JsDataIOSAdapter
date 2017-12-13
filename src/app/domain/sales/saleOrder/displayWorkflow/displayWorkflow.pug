@@ -1,12 +1,25 @@
 .display-workflow
 
-  .workflows
-    .workflow(
-    ng-repeat='workflow in vm.workflows track by $index'
-    ng-click='vm.onWorkflowChange(workflow)'
-    ng-class='[' +
-    '{"current-workflow": workflow.processing === vm.currentWorkflow},' +
-    ' vm.supplementaryWorkflowData[workflow.processing].cls]'
+  .dropdown(uib-dropdown)
+    button#btn-append-to-single-button.btn.btn-primary(
+    type='button'
+    uib-dropdown-toggle
     )
-      span.name {{ vm.supplementaryWorkflowData[workflow.processing].translation || workflow.processing }}
-      span.count {{ workflow['count()'] }}
+      span {{ vm.translatedWorkflow }}
+      span.caret
+    ul.scroll-y.dropdown-menu(
+    uib-dropdown-menu
+    role='menu'
+    aria-labelledby='btn-append-to-single-button'
+    resize
+    resize-offset-top='2'
+    )
+      li(
+      role='menuitem'
+      ng-repeat='workflow in vm.workflowDictionary track by workflow.workflowName'
+      ng-click='vm.onWorkflowChange(workflow.workflowName)'
+      ng-class='[{"current-workflow": workflow.workflowName === vm.currentWorkflow}, workflow.cls]'
+      )
+        a(href='')
+          span {{workflow.translation || workflow.workflowName}}
+          span {{workflow.cnt}}
