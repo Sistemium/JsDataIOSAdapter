@@ -1,9 +1,8 @@
 section.ui-view.sale-orders(cg-busy='vm.cgBusy')
 
   display-workflow(
-  workflows='vm.currentWorkflows'
-  supplementary-workflow-data='vm.workflowDictionary'
   current-workflow='vm.currentWorkflow'
+  workflows-in-promise='vm.workflowPromise'
   )
 
   .headers
@@ -45,7 +44,7 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
               .gray {{ ::item.outlet.address }}
               .salesman(ng-if='!vm.currentSalesman') {{ ::item.salesmanTinyName() }}
 
-          .totals(ng-class='{"no-totals": !item.totalPositionsCached()}')
+          .totals
             .position
               strong {{ item.totalPositionsCached() || 0 }}
               span П
@@ -56,9 +55,11 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
 
         .processing-message
 
-          span {{ ::item.commentText }}
+          span.comment-text {{ ::item.commentText }}
           span.icon(
           ng-if='item.processingMessage'
           ng-class='item.workflowStep.messageCls'
           )
             i.glyphicon.glyphicon-warning-sign
+
+  .alert.alert-info.centered(ng-if='!vm.data.length && vm.isReady') Нет заказов

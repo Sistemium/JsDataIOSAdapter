@@ -1,13 +1,13 @@
 @import "../../../styles/variables";
 @import "../../../styles/flags";
 
-$position-hover-color: #CFE1EE;
-
 $width-processing: 0.1;
 $width-salesman: 0.135;
 $width-outlet: 0.9;
 $width-totals: 0.13;
 $row-padding-right: 10px;
+
+$processing-xs-max-width: 65px;
 
 $headers: (
     ($width-processing, 'processing'),
@@ -73,6 +73,10 @@ $headers: (
 
   }
 
+  #scroll-main + .alert {
+    margin-top: 20px;
+  }
+
   #scroll-main > .clickable {
 
     position: relative;
@@ -93,10 +97,10 @@ $headers: (
     .date {
       height: 60px;
       cursor: default;
-      padding: 30px 0;
+      padding: 28px 0;
 
       @include responsive-only(lt-sm) {
-        height: 86px;
+        height: 82px;
       }
 
       .title {
@@ -119,12 +123,30 @@ $headers: (
 
     .row-data {
 
-      border-bottom: 2px solid transparent;
-
       @include responsive-only(gt-xs) {
         flex-flow: row nowrap;
         display: flex;
         align-items: center;
+      }
+
+      .processing {
+
+        @include responsive-only(gt-xs) {
+          padding-right: 10px;
+        }
+
+        &.orange {
+          color: $state-warning-text;
+        }
+
+        &.green {
+          color: $state-success-text;
+        }
+
+        &.blue {
+          color: $state-info-text;
+        }
+
       }
 
       .outlet .address {
@@ -156,16 +178,18 @@ $headers: (
 
       @include responsive-only(lt-sm) {
 
-        border-bottom: none;
         flex-flow: column nowrap;
-        height: 64px;
+        height: 60px;
         position: relative;
 
         .processing {
+          max-width: $processing-xs-max-width;
           position: absolute;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           right: 0;
-          width: auto;
-          top: 0;
+          top: 1px;
         }
 
         > .salesman {
@@ -192,7 +216,8 @@ $headers: (
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            width: 100%;
+            width: calc(100% - #{$processing-xs-max-width});
+            display: block;
           }
 
           .address {
@@ -225,14 +250,6 @@ $headers: (
 
       }
 
-      .no-totals {
-
-        @include responsive-only(gt-xs) {
-          height: 0;
-        }
-
-      }
-
     }
 
     .processing-message {
@@ -243,11 +260,13 @@ $headers: (
       color: $gray;
       display: flex;
       justify-content: flex-end;
+      align-items: center;
 
-      span {
+      .comment-text {
         @extend .ellipsis;
         display: block;
-        min-width: calc(100% - 25px);
+        padding-left: 5px;
+        //max-width: calc(100% - 25px);
       }
 
       .icon {
