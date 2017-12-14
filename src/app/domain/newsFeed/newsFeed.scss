@@ -25,6 +25,7 @@
 .news-feed {
 
   $padding: 5px;
+  $margin: $padding * 2;
 
   label {
     margin-bottom: 0;
@@ -129,6 +130,12 @@
     .body {
 
       max-height: 56px;
+
+      img {
+        float: left;
+        max-height: 56px;
+        margin-right: $margin;
+      }
 
       p {
         margin: 5px 10px;

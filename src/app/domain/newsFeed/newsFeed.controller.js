@@ -82,9 +82,11 @@
 
       vm.rebindAll(NewsMessage, filter, 'vm.newsMessages');
 
+      const relations = ['UserNewsMessage', 'NewsMessagePicture'];
+
       vm.setBusy([
         Account.findAll({}, options),
-        NewsMessage.findAllWithRelations(filter, options)('UserNewsMessage', false, false, options)
+        NewsMessage.findAllWithRelations(filter, options)(relations, false, false, options)
       ]);
 
     }

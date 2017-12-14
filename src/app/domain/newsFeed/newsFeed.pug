@@ -40,7 +40,9 @@
         valid-lifetime(date-b='newsMessage.dateB' date-e='newsMessage.dateE')
 
       .body
-        p {{newsMessage.body}}
+        p
+          img(ng-if='newsMessage.pictures.length' ng-src='{{newsMessage.pictures[0].srcThumbnail}}')
+          span {{newsMessage.body}}
         //.author {{ newsMessage.authorAccount.name }}
 
       .footer
