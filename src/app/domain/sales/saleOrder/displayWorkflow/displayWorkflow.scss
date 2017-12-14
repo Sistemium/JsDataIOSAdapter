@@ -50,8 +50,11 @@
         width: 100%;
       }
 
-      span:first-of-type {
+      .name {
         height: 20px;
+      }
+      .caret {
+        align-self: center;
       }
 
     }
@@ -65,21 +68,29 @@
 
     ul.dropdown-menu {
 
-      * {
+      > * {
         cursor: pointer;
       }
 
       li {
-
+        min-width: 250px;
         min-height: 25px;
 
-        &.current-workflow {
-          background-color: $position-hover-color;
+        &.current-workflow a {
+          background-color: darken($gray-background-color, 10%);
+          color: black;
         }
 
         a {
+          border-left: 10px solid transparent;
+          padding: 3px 10px;
           display: flex;
           justify-content: space-between;
+        }
+
+        &:hover a {
+          background-color: darken($gray-background-color, 10%);
+          color: black;
         }
 
         &.blue > * {
@@ -92,6 +103,10 @@
 
         &.orange > * {
           @include colorInit($state-warning-bg, $state-warning-border, $state-warning-text);
+        }
+
+        &.red > * {
+          @include colorInit($state-danger-bg, $state-danger-border, $state-danger-text);
         }
 
       }
