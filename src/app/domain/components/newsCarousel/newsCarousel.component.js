@@ -23,11 +23,9 @@
 
     const options = {bypassCache: true};
 
-    let filter = NewsMessage.meta.filterActual({forceShow: true});
+    let filter = NewsMessage.meta.filterActual();
 
-    NewsMessage.bindAll(filter, $scope, 'vm.newsMessages', makeSlides);
-
-    NewsMessage.findAllWithRelations(filter, options)('NewsMessagePicture')
+    NewsMessage.findAllWithRelations(filter, options)(['NewsMessagePicture', 'UserNewsMessage'])
       .then(makeSlides);
 
     /*
@@ -38,9 +36,7 @@
       $state.go('newsFeed.show', {newsMessageId: slide.id});
     }
 
-    function makeSlides() {
-
-      let {newsMessages} = vm;
+    function makeSlides(newsMessages) {
 
       let idx = 0;
 
@@ -48,11 +44,17 @@
 
       _.each(newsMessages, newsMessage => {
 
-        _.each(newsMessage.pictures, picture => {
+        if (!newsMessage.forceShow && !newsMessage.isUnrated()) {
+          return;
+        }
 
-          if (!picture.srcThumbnail) {
-            return;
-          }
+        let {pictures} = newsMessage;
+
+        if (!pictures.length) {
+          pictures = [{srcThumbnail: '/images/new-message.png'}];
+        }
+
+        _.each(pictures, picture => {
 
           let slide = _.pick(newsMessage, ['id', 'subject']);
 
