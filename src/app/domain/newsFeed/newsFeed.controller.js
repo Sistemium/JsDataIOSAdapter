@@ -21,7 +21,13 @@
       isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
       ratings: {},
-      ratingTitles: NewsMessage.meta.ratingTitles
+      ratingTitles: NewsMessage.meta.ratingTitles,
+
+      filterActualClick: filterClicker('Actual'),
+      filterPastClick: filterClicker('Past'),
+      filterFutureClick: filterClicker('Future'),
+
+      filter: 'Actual'
 
     });
 
@@ -40,9 +46,6 @@
 
     let cts = IOS.isIos() ? 'deviceCts' : 'cts';
 
-    let filter = NewsMessage.meta.filterActual({orderBy: [[cts, 'DESC']]});
-
-    vm.rebindAll(NewsMessage, filter, 'vm.newsMessages');
     vm.rebindAll(UserNewsMessage, {}, 'vm.userNewsMessages', cacheRatings);
 
     refresh();
@@ -52,6 +55,13 @@
     /*
      Functions
      */
+
+    function filterClicker(time) {
+      return () => {
+        vm.filter = time;
+        refresh();
+      }
+    }
 
     function onDestroy() {
       unSubscribeJSD();
@@ -65,11 +75,18 @@
     }
 
     function refresh() {
+
       let options = {bypassCache: true};
+
+      let filter = NewsMessage.meta[`filter${vm.filter}`]({orderBy: [[cts, 'DESC']]});
+
+      vm.rebindAll(NewsMessage, filter, 'vm.newsMessages');
+
       vm.setBusy([
-        Account.findAll({}, {bypassCache: true}),
+        Account.findAll({}, options),
         NewsMessage.findAllWithRelations(filter, options)('UserNewsMessage', false, false, options)
       ]);
+
     }
 
     function cacheRatings() {

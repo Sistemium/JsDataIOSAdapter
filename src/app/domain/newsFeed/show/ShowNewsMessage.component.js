@@ -72,6 +72,7 @@
       Commentary.findAll({where})
         .catch(() => vm.disableCommentaries = true);
 
+      NewsMessage.find(newsMessageId);
       NewsMessagePicture.findAll(filter);
 
       initCommentary();

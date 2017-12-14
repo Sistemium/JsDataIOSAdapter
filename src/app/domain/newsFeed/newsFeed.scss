@@ -30,13 +30,22 @@
     margin-bottom: 0;
   }
 
-  > .buttons {
+  .header {
 
-    text-align: right;
-    margin: 20px 0 $padding;
+    @include responsive-only(gt-xxs) {
+      display: flex;
+      justify-content: space-between;
+    }
 
-    @include responsive-only(lt-sm) {
-      margin-top: 0;
+    > .buttons {
+
+      text-align: right;
+      margin: 20px 0 $padding;
+
+      @include responsive-only(lt-sm) {
+        margin-top: 0;
+      }
+
     }
 
   }
