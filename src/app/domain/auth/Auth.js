@@ -48,7 +48,7 @@
       currentUser = rolesArray = roles = rolesPromise = false;
       clearAccessToken();
       $rootScope.$broadcast('auth-logout');
-      $state.go('home');
+      location.replace('');
     }
 
     function init(authProtocol) {
