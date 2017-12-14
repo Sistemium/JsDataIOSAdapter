@@ -20,7 +20,7 @@
     };
 
     function showNewsCarousel() {
-      return customerCode() === 'r50' && Auth.isAuthorized(['salesman', 'newsMaker']);
+      return customerCode().match(/r50?/) && Auth.isAuthorized(['salesman', 'newsMaker']);
     }
 
     function saleOrderOptions() {
