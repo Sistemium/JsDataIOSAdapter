@@ -147,6 +147,10 @@ $headers: (
           color: $state-info-text;
         }
 
+        &.red {
+          color: $state-danger-text;
+        }
+
       }
 
       .outlet .address {
