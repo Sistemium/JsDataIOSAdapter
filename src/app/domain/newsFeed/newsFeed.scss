@@ -30,7 +30,7 @@
     margin-bottom: 0;
   }
 
-  .header {
+  > .header {
 
     @include responsive-only(gt-xxs) {
       display: flex;
