@@ -19,7 +19,7 @@
       account,
       show: !IOS.isIos() && account,
 
-      logoutClick,
+      logoutClick
 
     });
 
