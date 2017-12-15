@@ -77,7 +77,7 @@
         filter = {salesmanId: salesmanId}
       }
 
-      vm.workflowPromise = $q.when(SaleOrder.groupBy(filter, ['processing']));
+      vm.workflowPromise = SaleOrder.groupBy(filter, ['processing']);
 
     }
 
@@ -131,8 +131,6 @@
       let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date'});
 
       if (vm.currentWorkflow) {
-
-        filter.where = {};
 
         filter.where = {
           processing: {

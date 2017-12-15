@@ -1,5 +1,7 @@
 (function () {
 
+  const LOCALSTORAGE_KEY = 'currentWorkflow';
+
   angular.module('webPage')
     .component('displayWorkflow', {
 
@@ -27,18 +29,23 @@
       translatedWorkflow: '',
       dropdownClicked: null,
 
-      onWorkflowChange,
+      onWorkflowClick,
       $onInit
+
     });
 
     $scope.$watch('vm.workflowsInPromise', () => {
       loadCurrentWorkflows();
     });
 
+    /*
+    Functions
+     */
+
     function $onInit() {
 
       if (!vm.currentWorkflow) {
-        vm.currentWorkflow = localStorageService.get('currentWorkflow') || null;
+        vm.currentWorkflow = localStorageService.get(LOCALSTORAGE_KEY) || null;
       }
 
     }
@@ -67,15 +74,15 @@
 
     }
 
-    function onWorkflowChange(workflow) {
+    function onWorkflowClick(workflow) {
 
       findTranslation(workflow);
 
       if (vm.currentWorkflow === workflow) {
-        localStorageService.set('currentWorkflow', null);
+        localStorageService.set(LOCALSTORAGE_KEY, null);
         vm.currentWorkflow = null;
       } else {
-        localStorageService.set('currentWorkflow', workflow);
+        localStorageService.set(LOCALSTORAGE_KEY, workflow);
         vm.currentWorkflow = workflow;
       }
 
@@ -84,7 +91,8 @@
     function loadSupplementaryWorkflowData() {
 
       Workflow.findAll({code: 'SaleOrder.v2'})
-        .then((res) => {
+        .then(res => {
+
           let workflowTranslations = _.get(res[0], 'workflow');
 
           let mergedWorkflows = _.merge(workflowTranslations, vm.currentWorkflows);
@@ -114,7 +122,7 @@
       vm.workflowDictionary = [];
 
       vm.workflowsInPromise
-        .then((res) => {
+        .then(res => {
 
           _.each(res, item => {
 

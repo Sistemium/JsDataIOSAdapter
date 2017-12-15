@@ -19,7 +19,7 @@
       li(
       role='menuitem'
       ng-repeat='workflow in vm.workflowDictionary track by workflow.workflowName'
-      ng-click='vm.onWorkflowChange(workflow.workflowName)'
+      ng-click='vm.onWorkflowClick(workflow.workflowName)'
       ng-class='[{"current-workflow": workflow.workflowName === vm.currentWorkflow}, workflow.cls]'
       )
         a(href='')
