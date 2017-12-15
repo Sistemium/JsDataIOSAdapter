@@ -24,7 +24,9 @@
     return saDebug.log('stg:log');
   }
 
-  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService, $injector) {
+  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService,
+               IOS, PickerAuth, localStorageService, $injector,
+               appcache) {
 
     let lastState = localStorageService.get('lastState');
 
@@ -76,6 +78,10 @@
 
         if (!accessToken) {
           return;
+        }
+
+        if (!IOS.isIos() && !InitService.localDevMode) {
+          appcache.checkUpdate();
         }
 
         Sockets.emit('authorization', {accessToken: accessToken}, ack => {

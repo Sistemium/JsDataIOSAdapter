@@ -26,7 +26,7 @@
     };
 
     function onUpdate() {
-      toastr.error('Нажмите, чтобы применить его', 'Получено обновление', {
+      toastr.error('Нажмите, чтобы применить его', 'Получено обновление программы', {
         timeOut: 0,
         extendedTimeOut: 0,
         onTap: function () {
