@@ -1,12 +1,13 @@
 .display-workflow
 
   .dropdown(uib-dropdown)
-    button#btn-append-to-single-button.btn.btn-primary(
+    .dropdown-button#btn-append-to-single-button(
     type='button'
     uib-dropdown-toggle
     )
-      span.name {{ vm.translatedWorkflow }}
-      span.caret
+      a
+        span.name {{ vm.translatedWorkflow }}
+        span.caret(ng-if='vm.translatedWorkflow')
 
     ul.scroll-y.dropdown-menu(
     uib-dropdown-menu

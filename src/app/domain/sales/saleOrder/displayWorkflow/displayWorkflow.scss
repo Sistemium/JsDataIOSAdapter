@@ -9,7 +9,7 @@
 
     @include responsive-only(lt-sm) {
       margin-bottom: 0;
-      border-bottom: 1px solid $gray-border-color;
+      border-bottom: 1px solid silver;
     }
 
     @include responsive-only(xxs) {
@@ -40,28 +40,50 @@
   .dropdown {
     margin-bottom: 15px;
 
-    & button {
+    & .dropdown-button {
+
+      border-radius: 10px;
+      background-color: $gray-background-color;
+      border: none;
       min-width: 150px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: inline-block;
+      padding: 7px 10px;
+      cursor: pointer;
+      user-select: none;
+
+      &:focus {
+        background-color: $gray-background-color;
+        border: 1px solid #000;
+      }
 
       @include responsive-only(xxs) {
         width: 100%;
       }
 
-      .name {
-        height: 20px;
-      }
-      .caret {
-        align-self: center;
+      a {
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        text-decoration: none;
+
+        .name {
+          height: 20px;
+        }
+        .caret {
+          align-self: center;
+        }
+
       }
 
     }
 
     & ul {
+
+      border-color: silver;
+
       @include responsive-only(xxs) {
-        border-color: $gray;
         width: 100%;
       }
     }
