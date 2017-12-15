@@ -6,11 +6,14 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController(Auth, Menu) {
-    var vm = this;
 
-    vm.Auth = Auth;
-    vm.data = Menu.root();
+  function MainController(Menu, DomainOption) {
+
+    _.assign(this,{
+      data: Menu.root(),
+      showCarousel: DomainOption.showNewsCarousel()
+    });
 
   }
+
 })();

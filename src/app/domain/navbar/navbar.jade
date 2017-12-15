@@ -19,6 +19,8 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
   fullscreen-menu(ng-show='vm.isHomeState')
 
+  account-menu(ng-if='vm.isHomeState')
+
   // TODO: add component config option to unhardcode domain content
   .sales-navs(ng-if='vm.isSalesState')
 

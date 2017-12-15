@@ -9,6 +9,7 @@
       name: 'NewsMessage',
 
       relations: {
+
         hasOne: {
           UserNewsMessage: {
             localField: 'userNewsMessage',
@@ -18,7 +19,15 @@
             localField: 'authorAccount',
             localKey: 'authorId'
           }
+        },
+
+        hasMany: {
+          NewsMessagePicture: {
+            localField: 'pictures',
+            foreignKey: 'newsMessageId'
+          }
         }
+
       },
 
       computed: {
@@ -32,7 +41,9 @@
 
       meta: {
         ratingTitles: ['Плохо', 'Так себе', 'Нормально', 'Хорошо', 'Отлично'],
-        filterActual
+        filterActual,
+        filterPast,
+        filterFuture
       }
 
     });
@@ -60,6 +71,34 @@
           },
           dateE: {
             '>=': today
+          }
+        }
+      }, filter);
+
+    }
+
+    function filterFuture(filter) {
+
+      let today = moment().format();
+
+      return _.assign({
+        where: {
+          dateB: {
+            '>': today
+          }
+        }
+      }, filter);
+
+    }
+
+    function filterPast(filter) {
+
+      let today = moment().format();
+
+      return _.assign({
+        where: {
+          dateE: {
+            '<': today
           }
         }
       }, filter);

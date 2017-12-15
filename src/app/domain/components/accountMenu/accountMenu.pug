@@ -1,0 +1,9 @@
+.account-menu(ng-if='vm.show')
+  a(
+  href
+  popover-is-open='vm.popoverOpen'
+  popover-placement='bottom-right auto'
+  uib-popover-template='"app/domain/components/accountMenu/accountMenuPopover.template.html"'
+  )
+    span {{ vm.account.name }}
+    //i.glyphicon.glyphicon-user

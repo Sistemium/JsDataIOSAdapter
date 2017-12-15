@@ -89,6 +89,16 @@
         ng-if='vm.newsFeedForm.body.$error.required'
         ) Поле обязательно для ввода
 
+      .force-show.toggler
+
+        label.control-label Показывать принудительно?
+
+        toggle-switch(
+        ng-model='vm.newsMessage.forceShow'
+        on-label='Да'
+        off-label='Нет'
+        )
+
       .version(ng-if='vm.isAdmin')
 
         label.control-label(for='version') Версия программы

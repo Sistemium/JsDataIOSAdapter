@@ -15,8 +15,13 @@
       hasSaleOrderKS,
       saleOrderOptions,
       saleOrdersDisabled,
-      visitsDisabled
+      visitsDisabled,
+      showNewsCarousel
     };
+
+    function showNewsCarousel() {
+      return customerCode().match(/r50?/) && Auth.isAuthorized(['salesman', 'newsMaker']);
+    }
 
     function saleOrderOptions() {
       if (customerCode() === 'r50') {
