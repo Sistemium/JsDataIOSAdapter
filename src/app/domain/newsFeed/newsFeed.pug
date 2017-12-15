@@ -28,7 +28,7 @@
   .no-news(ng-if='!vm.busy && !vm.newsMessages.length')
     p Новостей нет. Авторизованные пользователи могут добавить новость.
 
-  .scroll-y(resize resize-offset-top='5' vs-repeat='170' resize-property='height')
+  .scroll-y(resize resize-offset-top='5' vs-repeat='150' resize-property='height')
 
     .news-message(
     ng-click='vm.newsMessageClick(newsMessage)'

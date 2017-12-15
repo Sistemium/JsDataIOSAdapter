@@ -25,10 +25,12 @@
     ng-if='!vm.toSummCashingInProgress'
     )
 
-    a.btn.btn-default(
+    a.btn.btn-default.cashing-history(
     ui-sref='.cashing'
     ng-if='!vm.copyingInProgress && !vm.toSummCashingInProgress'
-    ) История выручки
+    )
+      span История
+      span.hidden-xs выручки
 
     to-summ-cashing(
     outlet='vm.outlet'

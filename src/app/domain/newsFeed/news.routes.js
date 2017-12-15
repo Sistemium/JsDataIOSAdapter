@@ -33,7 +33,7 @@
           template: '<show-news-message></show-news-message>',
 
           data: {
-            title: 'Новость',
+            // title: 'Новость',
             rootState: 'newsFeed'
           }
 

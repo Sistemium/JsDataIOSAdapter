@@ -38,6 +38,7 @@
   $line-height-basic: 20px;
 
   padding: 0 5px;
+  min-height: 150px;
 
   @include responsive-only(lt-sm) {
     padding: 0;
