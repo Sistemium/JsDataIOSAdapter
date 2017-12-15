@@ -1,40 +1,91 @@
 .display-workflow {
-  .workflows {
 
-    display: flex;
-    flex-flow: row wrap;
-    margin-bottom: 15px;
-    user-select: none;
-    justify-content: flex-start;
+  > a {
+    padding: 10px 10px;
+    background: $border-gray;
+    border-radius: 10px;
+    min-width: 80px;
+  }
 
-    @include responsive-only(lt-sm) {
-      margin-bottom: 0;
-      border-bottom: 1px solid silver;
-    }
+  .popover {
+    padding: 0;
+  }
 
-    @include responsive-only(xxs) {
-      justify-content: space-between;
-    }
+  .popover-content {
+    padding: 0;
+  }
+  .workflow-popover {
 
-    > .workflow {
+    .workflows {
 
-      outline: none;
-      border: 1px solid $border-gray;
-      margin: 5px;
-      padding: 5px;
-      cursor: pointer;
+      display: flex;
+      flex-flow: column nowrap;
+      user-select: none;
 
-      &:hover {
-        border: 1px solid $gray !important;
-        transition: all .5s;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      //@include responsive-only(lt-sm) {
+      //  margin-bottom: 0;
+      //  border-bottom: 1px solid silver;
+      //}
+      //
+      //@include responsive-only(xxs) {
+      //  justify-content: space-between;
+      //}
+
+      > .workflow {
+
+        outline: none;
+        cursor: pointer;
+
+        &:not(:last-of-type) {
+          border-bottom: 1px solid $border-gray;
+        }
+
+        &.blue > * {
+          @include colorInit($state-info-bg, $state-info-border, $state-info-text);
+        }
+
+        &.green > * {
+          @include colorInit($state-success-bg, $state-success-border, $state-success-text);
+        }
+
+        &.orange > * {
+          @include colorInit($state-warning-bg, $state-warning-border, $state-warning-text);
+        }
+
+        &.red > * {
+          @include colorInit($state-danger-bg, $state-danger-border, $state-danger-text);
+        }
+
+        a {
+          border-left: 10px solid transparent;
+          padding: 7px 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          text-decoration: none;
+
+          .name {
+            height: 20px;
+          }
+          .caret {
+            align-self: center;
+          }
+
+        }
+
+        span.name {
+          padding-right: 10px;
+        }
+
       }
 
-      span.name {
-        padding-right: 10px;
-      }
-
     }
-
   }
 
   .dropdown {

@@ -1,27 +1,12 @@
 .display-workflow
 
-  .dropdown(uib-dropdown)
-    .dropdown-button#btn-append-to-single-button(
-    type='button'
-    uib-dropdown-toggle
-    )
-      a
-        span.name {{ vm.translatedWorkflow }}
-        span.caret(ng-if='vm.translatedWorkflow')
+  a(
+  href
+  uib-popover-template="'app/domain/sales/saleOrder/displayWorkflow/displayWorkflowPopover.html'"
+  popover-placement='bottom-right auto'
+  spopover-trigger='outsideClick'
+  spopover-is-open='vm.isOpen'
+  )
+    span.name {{ vm.translatedWorkflow }}
+    span.caret(ng-if='vm.translatedWorkflow')
 
-    ul.scroll-y.dropdown-menu(
-    uib-dropdown-menu
-    role='menu'
-    aria-labelledby='btn-append-to-single-button'
-    resize
-    resize-offset-top='2'
-    )
-      li(
-      role='menuitem'
-      ng-repeat='workflow in vm.workflowDictionary track by workflow.workflowName'
-      ng-click='vm.onWorkflowClick(workflow.workflowName)'
-      ng-class='[{"current-workflow": workflow.workflowName === vm.currentWorkflow}, workflow.cls]'
-      )
-        a(href='')
-          span {{workflow.translation || workflow.workflowName}}
-          span {{workflow.cnt}}
