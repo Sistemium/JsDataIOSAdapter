@@ -31,6 +31,10 @@
       state: 'sales.shipmentList',
       needRoles: SALES_ROLES
     }, {
+      title: 'Лента новостей',
+      state: 'newsFeed',
+      needRoles: MARKETING_ROLES
+    }, {
       title: 'Долги',
       state: 'sales.debtByOutlet',
       needRoles: SALES_ROLES
@@ -64,10 +68,6 @@
       title: 'Тесты',
       state: 'playground',
       needRoles: ADMIN_ROLES
-    }, {
-      title: 'Лента новостей',
-      state: 'newsFeed',
-      needRoles: MARKETING_ROLES
     }];
 
 
