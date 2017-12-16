@@ -38,8 +38,6 @@
     vm.onScope('rootClick', () => $state.go(rootState));
     vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);
 
-    onStateChange($state.current, $state.params);
-
     vm.watchScope('vm.uncashing', () => {
 
       let uncashing = vm.uncashing;
