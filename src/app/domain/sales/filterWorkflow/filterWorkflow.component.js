@@ -3,21 +3,21 @@
   const LOCALSTORAGE_KEY = 'currentWorkflow';
 
   angular.module('webPage')
-    .component('displayWorkflow', {
+    .component('filterWorkflow', {
 
-      templateUrl: 'app/domain/sales/saleOrder/displayWorkflow/displayWorkflow.html',
+      templateUrl: 'app/domain/sales/filterWorkflow/filterWorkflow.html',
 
       bindings: {
         currentWorkflow: '=',
         workflowsInPromise: '<'
       },
 
-      controller: WorkflowController,
+      controller: filterWorkflowController,
       controllerAs: 'vm'
 
     });
 
-  function WorkflowController(saControllerHelper, $scope, localStorageService, Schema) {
+  function filterWorkflowController(saControllerHelper, $scope, localStorageService, Schema) {
 
     const vm = saControllerHelper.setup(this, $scope);
     let {Workflow} = Schema.models();
