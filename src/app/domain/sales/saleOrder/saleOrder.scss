@@ -5,7 +5,6 @@ $width-processing: 0.1;
 $width-salesman: 0.135;
 $width-outlet: 0.9;
 $width-totals: 0.13;
-$row-padding-right: 10px;
 
 $processing-xs-max-width: 65px;
 
@@ -50,6 +49,8 @@ $headers: (
 .sale-orders {
 
   .headers {
+
+    margin-top: $navbar-padding-vertical;
 
     > :last-of-type {
       text-align: right;

@@ -1,4 +1,4 @@
-section.ui-view.sale-orders(cg-busy='vm.cgBusy')
+.sale-orders(ui-view)
 
   display-workflow(
   current-workflow='vm.currentWorkflow'
@@ -12,6 +12,7 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
     .totals Итоги
 
   #scroll-main.scroll-y(
+  cg-busy='vm.cgBusy'
   elem-ready='vm.restoreScrollPosition()'
   resize
   resize-offset-top='5'
