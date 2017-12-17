@@ -1,12 +1,13 @@
 .display-workflow
 
   a(
+  ng-if='vm.workflow'
   href
   uib-popover-template="'app/domain/sales/saleOrder/displayWorkflow/displayWorkflowPopover.html'"
-  popover-placement='bottom-right auto'
-  spopover-trigger='outsideClick'
-  spopover-is-open='vm.isOpen'
+  popover-placement='bottom-left auto'
+  popover-is-open='vm.popoverIsOpen'
   )
-    span.name {{ vm.translatedWorkflow }}
-    span.caret(ng-if='vm.translatedWorkflow')
+    span(ng-if='vm.currentWorkflow') Статус:
+    span.name {{ vm.workflow[vm.currentWorkflow].label || 'Выберите статус' }}
+    span.caret
 

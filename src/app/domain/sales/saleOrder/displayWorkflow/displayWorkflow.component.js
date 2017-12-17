@@ -24,19 +24,15 @@
 
     vm.use({
 
-      currentWorkflows: {},
+      stats: {},
       workflowDictionary: {},
-      translatedWorkflow: '',
-      dropdownClicked: null,
 
       onWorkflowClick,
       $onInit
 
     });
 
-    $scope.$watch('vm.workflowsInPromise', () => {
-      loadCurrentWorkflows();
-    });
+    $scope.$watch('vm.workflowsInPromise', refresh);
 
     /*
     Functions
@@ -50,33 +46,7 @@
 
     }
 
-    function findTranslation(workflow, isInit) {
-
-      let initMsg = 'Выберите статус';
-
-      if (!isInit) {
-        if (workflow === vm.currentWorkflow) {
-          vm.translatedWorkflow = initMsg;
-          return;
-        }
-      }
-
-      if (workflow === 'bad') {
-        vm.translatedWorkflow = 'bad';
-        return;
-      }
-
-      let translationWorkflow = _.find(vm.workflowDictionary, el => {
-        return el.workflowName === workflow;
-      });
-
-      vm.translatedWorkflow = _.get(translationWorkflow, 'translation') || initMsg;
-
-    }
-
-    function onWorkflowClick(workflow) {
-
-      findTranslation(workflow);
+    function onWorkflowClick(workflow = null) {
 
       if (vm.currentWorkflow === workflow) {
         localStorageService.set(LOCALSTORAGE_KEY, null);
@@ -86,6 +56,8 @@
         vm.currentWorkflow = workflow;
       }
 
+      vm.popoverIsOpen = false;
+
     }
 
     function loadSupplementaryWorkflowData() {
@@ -93,32 +65,28 @@
       Workflow.findAll({code: 'SaleOrder.v2'})
         .then(res => {
 
-          let workflowTranslations = _.get(res[0], 'workflow');
+          vm.workflow = _.get(res[0], 'workflow');
 
-          let mergedWorkflows = _.merge(workflowTranslations, vm.currentWorkflows);
+          let items = _.map(vm.workflow, (workflow, processing) => {
 
-          _.each(mergedWorkflows, (workflow, key) => {
+            let item = _.pick(workflow, ['label', 'cls']);
 
-            vm.workflowDictionary.push({
-              workflowName: key,
-              translation: _.get(workflow, 'label'),
-              cls: _.get(workflow, 'cls'),
-              cnt: _.get(vm.currentWorkflows[key], 'cnt') || 0
+            return _.assign(item, {
+              processing,
+              cnt: _.get(vm.stats[processing], 'count()') || 0
             });
 
           });
 
-          vm.workflowDictionary = _.orderBy(vm.workflowDictionary, ['cnt'], ['desc']);
-
-          findTranslation(vm.currentWorkflow, true);
+          vm.workflowDictionary = _.orderBy(items, ['cnt'], ['desc']);
 
         })
 
     }
 
-    function loadCurrentWorkflows() {
+    function refresh() {
 
-      vm.currentWorkflows = {};
+      vm.stats = {};
       vm.workflowDictionary = [];
 
       vm.workflowsInPromise
@@ -126,15 +94,7 @@
 
           _.each(res, item => {
 
-            let workflow = _.get(item, 'processing');
-
-            let obj = {
-              [workflow]: {
-                cnt: _.get(item, 'count()')
-              }
-            };
-
-            _.assign(vm.currentWorkflows, obj);
+            vm.stats[item.processing] = item;
 
           });
 
