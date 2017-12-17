@@ -51,7 +51,7 @@
         let {pictures} = newsMessage;
 
         if (!pictures.length) {
-          pictures = [{srcThumbnail: '/images/new-message.png'}];
+          pictures = [{srcThumbnail: 'images/new-message.png'}];
         }
 
         _.each(pictures, picture => {
