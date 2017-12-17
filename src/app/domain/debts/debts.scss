@@ -51,6 +51,11 @@
 
   .alert {
 
+    @include responsive-only(lt-sm) {
+      margin-bottom: 0;
+    }
+
+
     .totals {
 
       display: flex;
@@ -318,6 +323,7 @@
 
     .debt {
       @extend %table-row;
+      position: relative;
       & *:focus {
         outline: none;
       }
