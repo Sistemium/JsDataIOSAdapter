@@ -57,7 +57,7 @@
         docDiscounts: true
       },
 
-      //watchChanges: true,
+      watchChanges: true,
 
       meta: {
         positionsCountRu,

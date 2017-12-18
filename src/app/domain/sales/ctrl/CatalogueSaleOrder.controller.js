@@ -25,8 +25,8 @@
 
     if (saleOrderId) {
 
-      SaleOrder.watchChanges = true;
-      
+      // SaleOrder.watchChanges = true;
+
       vm.setBusy(
         SaleOrder.find(saleOrderId, {bypassCache: true})
           .then(() => SaleOrder.loadRelations(saleOrderId, ['Outlet', 'Contract']))
@@ -64,7 +64,7 @@
     // vm.watchScope('vm.saleOrder.totalCost', _.debounce(onSaleOrderCostChange, 500));
 
     $scope.$on('$destroy', () => {
-      SaleOrder.watchChanges = false;
+      // SaleOrder.watchChanges = false;
       SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
     });
 
