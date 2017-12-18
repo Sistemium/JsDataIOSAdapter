@@ -1,5 +1,4 @@
 .debt-by-outlet.ui-view(
-cg-busy='vm.cgBusy'
 )
 
   //.alert.alert-default
@@ -22,6 +21,7 @@ cg-busy='vm.cgBusy'
   resize resize-offset-top='40' resize-offset-top-xs='32'
   ng-if='vm.data.length'
   elem-ready='vm.restoreScrollPosition()'
+  cg-busy='vm.cgBusy'
   )
 
     .partner-debt-total(ng-repeat='group in vm.data track by group.partner.id')

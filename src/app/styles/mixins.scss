@@ -116,6 +116,12 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 
 }
 
+@mixin colorInit($bgc, $bdc, $col) {
+  background-color: $bgc;
+  border-color: $bdc;
+  color: $col;
+}
+
 
 %disabled {
   opacity: 0.7;

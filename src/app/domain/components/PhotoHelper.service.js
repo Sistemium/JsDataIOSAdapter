@@ -156,7 +156,7 @@
           return actingImageSrc(this, 'thumbnail');
         },
         srcFullscreen : function() {
-          return actingImageSrc(this, 'smallImage');
+          return actingImageSrc(this, 'largeImage');
         }
 
       });

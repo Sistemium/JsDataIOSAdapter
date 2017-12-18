@@ -14,21 +14,39 @@
   }
 }
 
+.valid-life-time {
+  @include responsive-only(xxs) {
+    label, .period {
+      display: none;
+    }
+  }
+}
+
 .news-feed {
 
   $padding: 5px;
+  $margin: $padding * 2;
 
   label {
     margin-bottom: 0;
   }
 
-  > .buttons {
+  > .header {
 
-    text-align: right;
-    margin: 20px 0 $padding;
+    @include responsive-only(gt-xxs) {
+      display: flex;
+      justify-content: space-between;
+    }
 
-    @include responsive-only(lt-sm) {
-      margin-top: 0;
+    > .buttons {
+
+      text-align: right;
+      margin: 20px 0 $padding;
+
+      @include responsive-only(lt-sm) {
+        margin-top: 0;
+      }
+
     }
 
   }
@@ -67,7 +85,7 @@
     border-radius: $border-radius;
 
     & + .news-message {
-      margin-top: 20px;
+      //margin-top: 20px;
     }
 
     &:hover, &:hover .body p:after {
@@ -112,6 +130,12 @@
     .body {
 
       max-height: 56px;
+
+      img {
+        float: left;
+        max-height: 56px;
+        margin-right: $margin;
+      }
 
       p {
         margin: 5px 10px;

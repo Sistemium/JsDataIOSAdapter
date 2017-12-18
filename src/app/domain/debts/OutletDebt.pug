@@ -25,10 +25,12 @@
     ng-if='!vm.toSummCashingInProgress'
     )
 
-    a.btn.btn-default(
+    a.btn.btn-default.cashing-history(
     ui-sref='.cashing'
     ng-if='!vm.copyingInProgress && !vm.toSummCashingInProgress'
-    ) История выручки
+    )
+      span История
+      span.hidden-xs выручки
 
     to-summ-cashing(
     outlet='vm.outlet'
@@ -144,7 +146,7 @@
 
       currency-value(value='vm.totals.totalSummDoc' ng-if='vm.totals.totalSummDocPlus')
 
-      a(href ng-click='$parent.vm.totalCashedClick()' ng-if='vm.cashingTotal')
+      a(href ng-click='vm.totalCashedClick()' ng-if='vm.cashingTotal')
         currency-value(value='vm.cashingTotal')
 
       currency-value(value='vm.totals.totalSumm')

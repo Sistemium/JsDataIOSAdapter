@@ -5,6 +5,12 @@
 
   .alert {
     @extend %header-alert;
+
+    .comment small {
+      font-style: italic;
+      color: $black;
+    }
+
   }
 
 }
@@ -23,7 +29,6 @@
   $width-cost: 100px;
   $width-positions: 100px;
 
-  $position-hover-color: #CFE1EE;
 
   $font-weight-bold: 600;
   $font-weight-normal: 400;
@@ -31,6 +36,7 @@
   $line-height-basic: 20px;
 
   padding: 0 5px;
+  min-height: 150px;
 
   @include responsive-only(lt-sm) {
     padding: 0;

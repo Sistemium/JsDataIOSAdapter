@@ -17,6 +17,7 @@
         checkedDebts: {},
         unsavedCashings: [],
         trashUndebtedClick,
+        totalCashedClick,
         debtClick,
         textFromDebt
 
@@ -42,6 +43,10 @@
 
     function clearChecks() {
       vm.checkedDebts = {};
+    }
+
+    function totalCashedClick() {
+      $state.go('sales.cashing');
     }
 
     function debtClick(debt, event) {

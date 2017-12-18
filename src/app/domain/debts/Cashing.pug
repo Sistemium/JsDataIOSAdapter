@@ -1,4 +1,4 @@
-.uncashed
+.uncashed(cg-busy='vm.cgBusy')
 
   .alert.alert-default
 
@@ -14,12 +14,18 @@
           currency-value(value='vm.totalCashed()' label='На руках:' ng-if='!vm.uncashingId')
           currency-value(
           value='vm.currentUncashing.summ'
-          label='Сдано {{ vm.currentUncashing.date | amUtc| amLocal | amCalendar }}:'
+          label='Сдано {{ vm.currentUncashing.date | amDateFormat:"DD.MM.YYYY" }}:'
           ng-if='vm.uncashingId'
           )
         span.caret
 
-    .totals.buttons(ng-hide='vm.uncashingId')
+    .totals.buttons(ng-if='vm.uncashingId')
+      button.btn(
+      ng-class='vm.confirmCancelCurrentUncashing ? "btn-danger" : "btn-warning"'
+      ng-click='vm.cancelCurrentUncashingClick()'
+      ) {{ vm.confirmCancelCurrentUncashing ? 'Точно удалить?' : 'Удалить' }}
+
+    .totals.buttons(ng-if='!vm.uncashingId')
 
       outlet-cashing-popover(
       comment-text-placeholder='Точка'
@@ -37,7 +43,11 @@
       a.btn.btn-link(href ng-click='vm.editClick()' ng-disabled='!vm.uncashed.length')
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
-      uncash-popover(uncashed='vm.uncashed' ng-disabled='!vm.uncashed.length' is-popover-open='vm.uncashing')
+      uncash-popover(
+      uncashed='vm.uncashed'
+      ng-class='{disabled: !vm.uncashed.length}'
+      is-popover-open='vm.uncashing'
+      )
 
   .scroll-y(
   resize resize-property='height'

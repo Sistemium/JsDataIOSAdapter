@@ -1,4 +1,15 @@
-section.ui-view.sale-orders(cg-busy='vm.cgBusy')
+.sale-orders(ui-view)
+
+  .buttons
+
+    filter-workflow(
+    current-workflow='vm.currentWorkflow'
+    workflows-in-promise='vm.workflowPromise'
+    )
+
+    button.btn.btn-primary(ng-click='vm.newItemClick($event)')
+      i.glyphicon.glyphicon-plus
+      span Добавить заказ
 
   .headers
     .processing Статус
@@ -7,7 +18,7 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
     .totals Итоги
 
   #scroll-main.scroll-y(
-  ng-if='vm.data.length'
+  cg-busy='vm.cgBusy'
   elem-ready='vm.restoreScrollPosition()'
   resize
   resize-offset-top='5'
@@ -19,45 +30,43 @@ section.ui-view.sale-orders(cg-busy='vm.cgBusy')
     .clickable(
     ng-repeat='item in vm.data track by item.id'
     )
-      .date(ng-if='!item.ts')
+      .date(ng-if='!item.outletId')
         .title {{ ::item.date }}
 
       .sale-order(
-      ng-if='item.ts'
+      ng-if='item.outletId'
       ng-click='vm.itemClick(item)'
       )
         .row-data
 
           .processing(ng-class='item.workflowStep.cls')
-            label Статус
-            span {{ ::item.workflowStep.label }}
+            span {{ item.workflowStep.label }}
 
           .salesman(ng-if='!vm.currentSalesman')
-            label ТП
-            span.name {{ item.salesman.tinyName }}
+            span.name {{ ::item.salesmanTinyName() }}
 
-          .outlet
-            span.name {{ ::item.outlet.name }}
-            .gray {{ ::item.outlet.address }}
+          .outlet(ng-class='{blocked: item.outlet.isActive === false}')
+            span.name {{ ::item.outletName() }}
+            .address
+              .gray {{ ::item.outlet.address }}
+              .salesman(ng-if='!vm.currentSalesman') {{ ::item.salesmanTinyName() }}
 
-          .totals(ng-class='{"no-totals": !item.totalPositionsCached()}')
+          .totals
             .position
-              label Позиций
-              span.hidden-xs П
-              span {{ item.totalPositionsCached() || 'Нет позиций' }}
+              strong {{ item.totalPositionsCached() || 0 }}
+              span П
             .cost
-              label Cумма
-              span.hidden-xs C
               currency-value(
               value='item.totalCostCached() || 0'
               )
-        .processing-message.alert-default(ng-if='item.ts')
-          span(
+
+        .processing-message
+
+          span.comment-text {{ ::item.commentText }}
+          span.icon(
           ng-if='item.processingMessage'
           ng-class='item.workflowStep.messageCls'
           )
             i.glyphicon.glyphicon-warning-sign
-          span {{item.processingMessage}}
-
 
   .alert.alert-info.centered(ng-if='!vm.data.length && vm.isReady') Нет заказов

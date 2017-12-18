@@ -1,0 +1,13 @@
+.filter-workflow
+
+  a(
+  ng-if='vm.workflow'
+  href
+  uib-popover-template="'app/domain/sales/filterWorkflow/filterWorkflowPopover.html'"
+  popover-placement='bottom-left auto'
+  popover-is-open='vm.popoverIsOpen'
+  )
+    span.title(ng-if='vm.currentWorkflow') Статус:
+    span.name {{ vm.workflow[vm.currentWorkflow].label || 'Выберите статус' }}
+    span.caret
+

@@ -5,7 +5,7 @@
 .debt-by-outlet {
 
   $margin: 6px;
-  $field-width: 110px;
+  $field-width: 100px;
   $headers-border: solid 1px $border-gray;
 
   label {
@@ -51,16 +51,26 @@
 
   .alert {
 
+    @include responsive-only(lt-sm) {
+      margin-bottom: 0;
+    }
+
+
     .totals {
 
       display: flex;
       justify-items: flex-end;
       align-items: center;
 
+      span.hidden-xs {
+        margin-left: 4px;
+      }
+
       to-summ-cashing {
 
         @include responsive-only(xxs) {
-          width: 100%;
+
+          flex: 1;
 
           button {
 
@@ -69,6 +79,7 @@
 
             & + button {
               margin-top: $margin;
+              margin-left: 0;
             }
 
           }
@@ -161,11 +172,15 @@
       margin-left: $margin;
     }
 
-    @include responsive-only(lt-sm) {
-      .btn {
-        padding-left: 0;
-      }
+    .btn {
+      padding: 5px;
     }
+
+    //@include responsive-only(lt-sm) {
+    //  .btn {
+    //    padding-left: 0;
+    //  }
+    //}
 
   }
 
@@ -308,6 +323,7 @@
 
     .debt {
       @extend %table-row;
+      position: relative;
       & *:focus {
         outline: none;
       }

@@ -13,7 +13,7 @@
 
     });
 
-  function fullScreenMenuController(saControllerHelper, IOS, $scope) {
+  function fullScreenMenuController(saControllerHelper, IOS, $scope, $timeout) {
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -27,7 +27,8 @@
 
     });
 
-    toggleFullScreen();
+    $timeout(500)
+      .then(toggleFullScreen);
 
     function toggleFullScreen() {
 

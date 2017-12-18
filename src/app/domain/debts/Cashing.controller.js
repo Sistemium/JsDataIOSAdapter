@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets, Auth) {
+  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets, Auth, $q, $timeout) {
 
     const {Cashing, Outlet, Uncashing} = Schema.models();
 
@@ -18,6 +18,7 @@
         doUncashingClick,
         editClick,
         deleteCashingClick,
+        cancelCurrentUncashingClick,
         outletClick,
 
         uncashingClick,
@@ -37,9 +38,13 @@
     vm.onScope('rootClick', () => $state.go(rootState));
     vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);
 
-    vm.watchScope('vm.uncashing', uncashing => {
+    vm.watchScope('vm.uncashing', () => {
+
+      let uncashing = vm.uncashing;
 
       let targetState = rootState + (uncashing ? '.uncashing' : '');
+
+      if (vm.uncashingId) return;
 
       if ($state.current.name !== targetState) {
         $state.go(targetState);
@@ -53,13 +58,34 @@
      Functions
      */
 
+    function cancelCurrentUncashingClick() {
+
+      if (!vm.confirmCancelCurrentUncashing) {
+        vm.confirmCancelCurrentUncashing = true;
+        return $timeout(2000)
+          .then(() => vm.confirmCancelCurrentUncashing = false);
+      }
+
+      let busy = $q.all(_.map(vm.currentUncashing.cashings, cashing => {
+        cashing.uncashingId = null;
+        return cashing.DSCreate();
+      }));
+
+      return busy.then(() => {
+        vm.currentUncashing.DSDestroy();
+      })
+        .then(() => {
+          $state.go(rootState);
+        });
+
+    }
+
     function onHandsClick() {
       $state.go(rootState);
     }
 
     function uncashingClick(uncashing) {
       if (uncashing) {
-        vm.currentUncashing = uncashing;
         $state.go(`${rootState}.uncashed`, {uncashingId: uncashing.id});
       }
     }
@@ -94,6 +120,8 @@
       vm.editing = false;
       vm.uncashing = to.name === `${rootState}.uncashing`;
       vm.uncashingId = uncashingId;
+
+      vm.rebindOne(Uncashing, uncashingId, 'vm.currentUncashing');
 
       if (vm.wasModified) {
         refresh();

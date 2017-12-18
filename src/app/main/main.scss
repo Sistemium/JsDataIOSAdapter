@@ -1,0 +1,63 @@
+@import "../styles/variables";
+
+section.main {
+
+  display: flex;
+
+  flex-direction: column;
+
+  .stm-menu {
+    flex: 1;
+  }
+
+  .news-carousel {
+
+    $image-height: 135px;
+
+    .carousel-indicators {
+      display: none;
+    }
+
+    @media (max-height: 450px) {
+      display: none;
+    }
+
+    .carousel-caption {
+
+      color: $gray;
+      padding: 0;
+      margin-bottom: 10px;
+      position: static;
+      text-shadow: none;
+
+      h4 {
+        margin: 0;
+      }
+
+    }
+
+    .carousel-inner {
+
+      display: block;
+      //height: 150px;
+      margin: 10px 0;
+      text-align: center;
+
+      @include responsive-only(lt-sm) {
+        margin-bottom: 5px;
+      }
+
+      img {
+        max-height: $image-height;
+        min-height: $image-height;
+      }
+
+    }
+
+    .carousel-control {
+      background-image: none;
+    }
+
+  }
+
+}

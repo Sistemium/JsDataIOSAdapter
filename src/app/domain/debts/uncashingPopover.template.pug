@@ -17,5 +17,5 @@ resize resize-offset-top='50'
   ng-class='{active: vm.uncashingId === uncashing.id}'
   )
     a(href ng-click='vm.uncashingClick(uncashing, $event)')
-      .name {{ ::uncashing.date | amUtc | amLocal | amDateFormat:'DD/MM/YYYY' }}
+      .name {{ ::uncashing.date | amDateFormat:'DD.MM.YYYY' }}
       currency-value.summ(value='uncashing.summ')

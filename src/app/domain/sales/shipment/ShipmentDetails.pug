@@ -9,8 +9,9 @@
           .name
             span(ng-if='vm.shipment.outlet.id') {{ vm.shipment.outlet.name }}
             span.animate-show.spaced
+              small {{ vm.shipment.ndoc }}
               small на
-              small.strong {{ vm.shipment.date }}
+              small.strong {{ vm.shipment.date | amDateFormat:"DD.MM.YYYY" }}
           .address
             small {{vm.shipment.outlet.address}}
           .comment
@@ -24,7 +25,6 @@
         span на сумму
         strong {{ vm.shipment.totalCost() | number: 2 }}
         span ₽
-
 
   .animate-show#scroll-main(
   resize resize-offset-top='5' resize-property='height'

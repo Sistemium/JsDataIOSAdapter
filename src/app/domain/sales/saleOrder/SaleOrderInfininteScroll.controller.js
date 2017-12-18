@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, IOS, $q, Helpers, SaleOrderHelper, saMedia) {
+  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService) {
 
     const {ScrollHelper, saControllerHelper} = Helpers;
     let {SaleOrder, SaleOrderPosition, Outlet} = Schema.models();
@@ -13,6 +13,7 @@
 
     const pageSize = 50;
     let startPage = 1;
+
     let gotAllData = false;
     let busyGettingData;
 
@@ -21,10 +22,12 @@
       data: [],
       rootState: 'sales.saleOrders',
 
+      isReady: false,
       itemClick,
       newItemClick,
       getData,
-      rowHeight
+      rowHeight,
+      onWorkflowChange
 
     })
       .use(ScrollHelper);
@@ -45,8 +48,9 @@
 
     $scope.$on('$destroy', cleanup);
 
-    SalesmanAuth
-      .watchCurrent($scope, onSalesmanChange);
+    $scope.$watch('vm.currentWorkflow', onWorkflowChange);
+
+    SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
     /*
      Handlers
@@ -56,53 +60,91 @@
      Functions
      */
 
+    function onWorkflowChange() {
+
+      resetVariables();
+      getData();
+
+    }
+
+    function getWorkflows(salesmanId) {
+
+      vm.currentWorkflows = {};
+
+      let filter;
+
+      if (salesmanId) {
+        filter = {salesmanId: salesmanId}
+      }
+
+      vm.workflowPromise = SaleOrder.groupBy(filter, ['processing']);
+
+    }
+
     function rowHeight() {
-      return isWideScreen() ? 62 : 162;
+      return isWideScreen() ? 62 : 82;
     }
 
     function isWideScreen() {
       return !saMedia.xsWidth && !saMedia.xxsWidth;
     }
 
-    function onSalesmanChange(salesman) {
+    function resetVariables() {
 
-      vm.currentSalesman = _.get(salesman, 'id') || _.get(SalesmanAuth.getCurrentUser(), 'id') || null;
       vm.data = [];
       gotAllData = false;
       startPage = 1;
+      localStorageService.remove(vm.rootState + '.scroll');
+
+    }
+
+    function onSalesmanChange(salesman) {
+
+      vm.currentSalesman = _.get(salesman, 'id') || _.get(SalesmanAuth.getCurrentUser(), 'id') || null;
+
+      getWorkflows(vm.currentSalesman);
+
+      resetVariables();
+
       getData();
 
     }
 
     function cleanup() {
+      SaleOrder.ejectAll();
       SaleOrderPosition.ejectAll();
       Outlet.ejectAll();
     }
 
     function getData() {
 
+      if (!vm.currentWorkflow) {
+        vm.currentWorkflow = localStorageService.get('currentWorkflow');
+      }
+
       if (busyGettingData || gotAllData) {
-        console.warn('Busy working on previous request');
         return;
       }
 
+      vm.isReady = false;
+
       let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date'});
+
+      if (vm.currentWorkflow) {
+
+        filter.where = {
+          processing: {
+            '==': vm.currentWorkflow
+          }
+        };
+
+      }
 
       let options = {
         pageSize: pageSize,
         startPage: startPage,
         bypassCache: true
       };
-
-      //TODO: WTF??
-      //if (IOS.isIos()) {
-      //  let positionsFilter = _.clone(filter);
-      //  positionsFilter = {where: {}};
-      //
-      //  if (filter.salesmanId) {
-      //    positionsFilter.where['shipment.salesmanId'] = {'==': filter.salesmanId};
-      //  }
-      //}
 
       busyGettingData = SaleOrder.findAll(filter, options)
         .then(res => {
@@ -128,7 +170,7 @@
 
           saleOrdersWithDates = _.uniqBy(saleOrdersWithDates, 'id');
 
-          let promises = _.map(res, saleOrder => saleOrder.DSLoadRelations(['SaleOrderPosition', 'Outlet']));
+          let promises = _.map(res, saleOrder => saleOrder.DSLoadRelations(['Outlet']));
 
           return $q.all(promises)
             .then(() => {
@@ -140,13 +182,13 @@
 
       vm.setBusy(busyGettingData)
         .then(() => {
+          vm.isReady = true;
           busyGettingData = false;
         });
 
     }
 
     function itemClick(item) {
-      console.log(vm);
       $state.go('.item', {id: item.id});
     }
 

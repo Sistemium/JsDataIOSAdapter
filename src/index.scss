@@ -17,8 +17,9 @@ tr:focus {
 }
 
 body {
-  //padding-top: 20px;
-  //margin-bottom: 50px;
+  > .container {
+    overflow-y: hidden;
+  }
 }
 
 .domain-ui-view {
