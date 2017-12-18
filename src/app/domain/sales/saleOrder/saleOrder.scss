@@ -48,6 +48,21 @@ $headers: (
 
 .sale-orders {
 
+  > .buttons {
+
+    display: flex;
+    justify-content: space-between;
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+    }
+
+    > * + * {
+      margin-top: 6px;
+    }
+
+  }
+
   .headers {
 
     margin-top: $navbar-padding-vertical;

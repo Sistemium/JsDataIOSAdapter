@@ -7,7 +7,7 @@
   popover-placement='bottom-left auto'
   popover-is-open='vm.popoverIsOpen'
   )
-    span(ng-if='vm.currentWorkflow') Статус:
+    span.title(ng-if='vm.currentWorkflow') Статус:
     span.name {{ vm.workflow[vm.currentWorkflow].label || 'Выберите статус' }}
     span.caret
 

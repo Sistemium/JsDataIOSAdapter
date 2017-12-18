@@ -1,9 +1,15 @@
 .sale-orders(ui-view)
 
-  filter-workflow(
-  current-workflow='vm.currentWorkflow'
-  workflows-in-promise='vm.workflowPromise'
-  )
+  .buttons
+
+    filter-workflow(
+    current-workflow='vm.currentWorkflow'
+    workflows-in-promise='vm.workflowPromise'
+    )
+
+    button.btn.btn-primary(ng-click='vm.newItemClick($event)')
+      i.glyphicon.glyphicon-plus
+      span Добавить заказ
 
   .headers
     .processing Статус
