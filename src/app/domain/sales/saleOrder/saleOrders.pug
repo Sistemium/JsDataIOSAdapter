@@ -45,7 +45,7 @@
           .salesman(ng-if='!vm.currentSalesman')
             span.name {{ ::item.salesmanTinyName() }}
 
-          .outlet
+          .outlet(ng-class='{blocked: item.outlet.isActive === false}')
             span.name {{ ::item.outletName() }}
             .address
               .gray {{ ::item.outlet.address }}
