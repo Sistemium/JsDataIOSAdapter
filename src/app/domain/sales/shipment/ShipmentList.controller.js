@@ -1,6 +1,6 @@
 (function (module) {
 
-  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia, IOS) {
+  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia) {
 
     const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
     const {saControllerHelper, ScrollHelper} = Helpers;
@@ -80,21 +80,15 @@
 
       _.each(grouped, (dateItems, date) => {
 
-        let totalCost = 0;
-
-        _.each(dateItems, (shipment) => {
-
-          if (shipment.totalCost && !shipment.isFooter) {
-            totalCost += shipment.totalCost();
-          }
-
-        });
-
         let footer = {
           date,
           id: `${date}-footer`,
           isFooter: true,
-          totalCost
+          totalCost: () => _.sumBy(dateItems, shipment => {
+
+            return shipment.totalCost && !shipment.isFooter && shipment.totalCost() || 0;
+
+          })
         };
 
         let lastShipmentIdx = _.findLastIndex(data, {date});
@@ -138,46 +132,40 @@
         bypassCache: true
       };
 
-      let positionsFilter = _.clone(filter);
+      // let positionsFilter = _.clone(filter);
+      //
+      // if (IOS.isIos()) {
+      //   positionsFilter = {where: {}};
+      //
+      //   if (filter.salesmanId) {
+      //     positionsFilter.where['shipment.salesmanId'] = {'==': filter.salesmanId};
+      //   }
+      // }
 
-      if (IOS.isIos()) {
-        positionsFilter = {where: {}};
+      busyGettingData = Shipment.findAllWithRelations(filter, options)(['Outlet', 'Driver'])
+        .then(res => {
 
-        if (filter.salesmanId) {
-          positionsFilter.where['shipment.salesmanId'] = {'==': filter.salesmanId};
-        }
-      }
+          if (!res.length) {
+            gotAllData = true;
+          }
 
-      busyGettingData = Shipment.findAll(filter, options).then(res => {
+          let dates = _.groupBy(res, 'date');
 
-        if (!res.length) {
-          gotAllData = true;
-        }
-
-        let dates = _.groupBy(res, 'date');
-
-        dates = _.map(dates, (val, date) => {
-          return {date, id: date};
-        });
-
-        dates.push(...res);
-
-        let filteredData = _.filter(vm.data, item => !item.isFooter);
-
-        dates.push(...filteredData);
-
-        _.each(res, shipment => shipment.DSLoadRelations(['Outlet', 'Driver', 'ShipmentEgais']));
-
-        let posQ = _.map(res, shipment => shipment.DSLoadRelations(['ShipmentPosition']));
-
-        return $q.all(posQ)
-          .then(() => {
-            let data = _.orderBy(_.uniqBy(dates, 'id'), ['date', 'isFooter', 'ndoc'], ['desc', 'desc', 'desc']);
-            vm.data = calcTotals(data);
-            startPage++;
+          dates = _.map(dates, (val, date) => {
+            return {date, id: date};
           });
 
-      });
+          dates.push(...res);
+
+          let filteredData = _.filter(vm.data, item => !item.isFooter);
+
+          dates.push(...filteredData);
+
+          let data = _.orderBy(_.uniqBy(dates, 'id'), ['date', 'isFooter', 'ndoc'], ['desc', 'desc', 'desc']);
+          vm.data = calcTotals(data);
+          startPage++;
+
+        });
 
       vm.setBusy(busyGettingData)
         .finally(() => {

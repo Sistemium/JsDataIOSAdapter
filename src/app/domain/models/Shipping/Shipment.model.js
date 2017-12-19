@@ -86,12 +86,31 @@
     }
 
     function setCaches(shipment) {
-      caches[shipment.id] = {
-        egaisCached: shipment.egais || null,
-        totalCostDoc: _.sumBy(shipment.positions, pos => pos.volume * pos.priceDoc) || null,
-        totalCost: Schema.aggregate('cost').sum(shipment.positions) || null,
-        positions: shipment.positions.length || null
+
+      let cache = caches[shipment.id] = {
+        egaisCached: shipment.egais || null
       };
+
+      let shipmentId = shipment.id;
+
+      const {ShipmentEgais, ShipmentPosition} = Schema.models();
+
+      ShipmentPosition.findAll({shipmentId}, {cacheResponse: false})
+        .then(positions => {
+          _.assign(cache, {
+            positions: positions.length || 0,
+            totalCostDoc: _.sumBy(positions, pos => pos.volume * pos.priceDoc) || 0,
+            totalCost: Schema.aggregate('cost').sum(positions) || 0
+          })
+        });
+
+      ShipmentEgais.findAll({shipmentId}, {cacheResponse: false})
+        .then(egais => {
+          _.assign(cache, {
+            egaisCached: _.first(egais) || null
+          });
+        });
+
     }
 
     function clearCaches() {

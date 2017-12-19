@@ -66,6 +66,6 @@ cg-busy='vm.cgBusy'
           span {{ shipment.totalPositions() }}
 
       .date.footer(ng-if='shipment.isFooter')
-        currency-value(value='shipment.totalCost')
+        currency-value(value='shipment.totalCost()')
         .spacing
 
