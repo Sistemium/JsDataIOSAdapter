@@ -5,7 +5,7 @@
   function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService) {
 
     const {ScrollHelper, saControllerHelper} = Helpers;
-    let {SaleOrder, SaleOrderPosition, Outlet} = Schema.models();
+    let {SaleOrder} = Schema.models();
 
     let vm = saControllerHelper
       .setup(this, $scope)
@@ -112,8 +112,8 @@
 
     function cleanup() {
       SaleOrder.ejectAll();
-      SaleOrderPosition.ejectAll();
-      Outlet.ejectAll();
+      // SaleOrderPosition.ejectAll();
+      // Outlet.ejectAll();
     }
 
     function getData() {
