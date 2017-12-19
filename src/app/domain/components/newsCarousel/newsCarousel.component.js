@@ -42,6 +42,8 @@
 
       let slides = [];
 
+      newsMessages = _.orderBy(newsMessages, ['cts', 'deviceCts'], ['desc', 'desc']);
+
       _.each(newsMessages, newsMessage => {
 
         if (!newsMessage.forceShow && !newsMessage.isUnrated()) {
