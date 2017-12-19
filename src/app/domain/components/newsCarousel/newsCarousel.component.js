@@ -60,6 +60,7 @@
 
         slide.srcThumbnail = pictures[0].srcThumbnail;
         slide.idx = idx++;
+        slide.forceShow = newsMessage.forceShow;
 
         slides.push(slide);
 

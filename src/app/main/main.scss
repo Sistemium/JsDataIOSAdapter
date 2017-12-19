@@ -31,6 +31,10 @@ section.main {
       position: static;
       text-shadow: none;
 
+      &.red {
+        color: $red;
+      }
+
       h4 {
         margin: 0;
         @include responsive-only(xxs) {
