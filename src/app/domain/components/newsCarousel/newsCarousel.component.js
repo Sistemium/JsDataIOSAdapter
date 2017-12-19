@@ -54,16 +54,12 @@
           pictures = [{srcThumbnail: 'images/new-message.png'}];
         }
 
-        _.each(pictures, picture => {
+        let slide = _.pick(newsMessage, ['id', 'subject']);
 
-          let slide = _.pick(newsMessage, ['id', 'subject']);
+        slide.srcThumbnail = pictures[0].srcThumbnail;
+        slide.idx = idx++;
 
-          slide.srcThumbnail = picture.srcThumbnail;
-          slide.idx = idx++;
-
-          slides.push(slide);
-
-        });
+        slides.push(slide);
 
       });
 
