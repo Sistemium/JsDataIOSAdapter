@@ -13,7 +13,8 @@
           url: '/cashing',
 
           templateUrl: 'app/domain/debts/Cashing.html',
-          controller: 'CashingController as vm',
+          controller: 'CashingController',
+          controllerAs: 'vm',
 
           data: {
             title: 'Выручка',

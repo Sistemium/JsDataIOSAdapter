@@ -151,7 +151,7 @@
           return Uncashing.create(draft);
 
         })
-        .then(uncashing => Uncashing.loadRelations(uncashing))
+        .then(uncashing => uncashing.DSLoadRelations('UncashingPicture'))
         .then(uncashing => {
 
           let uncashingPicture = uncashing.picture || UncashingPicture.createInstance({uncashingId: uncashing.id});

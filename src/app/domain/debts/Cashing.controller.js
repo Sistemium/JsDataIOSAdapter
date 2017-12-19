@@ -22,7 +22,10 @@
         outletClick,
 
         uncashingClick,
-        onHandsClick
+        onHandsClick,
+        cashingClick,
+
+        checking: {}
 
       });
 
@@ -84,6 +87,11 @@
       $state.go(rootState);
     }
 
+    function cashingClick(cashing) {
+      vm.checking[cashing.id] = !vm.checking[cashing.id];
+      fillToUncashData();
+    }
+
     function uncashingClick(uncashing) {
       if (uncashing) {
         $state.go(`${rootState}.uncashed`, {uncashingId: uncashing.id});
@@ -132,7 +140,9 @@
 
     function refresh() {
       vm.setBusy(getData())
-        .then(() => vm.wasModified = false);
+        .then(() => {
+          vm.wasModified = false;
+        });
     }
 
 
@@ -173,8 +183,19 @@
 
     }
 
+    function fillToUncashData() {
+      vm.toUncash = _.filter(vm.uncashed, cashing => vm.checking[cashing.id]);
+      vm.totalChecked = _.sumBy(vm.toUncash, 'summ');
+    }
+
 
     function groupCashingsByOutlet() {
+
+      vm.checking = {};
+
+      _.each(vm.uncashed, cashing => vm.checking[cashing.id] = true);
+
+      fillToUncashData();
 
       let data = _.groupBy(vm.uncashed, cashing => {
 
