@@ -34,7 +34,7 @@
 
       let today = moment().format();
 
-      CampaignGroup.findAll()
+      CampaignGroup.findAll(CampaignGroup.meta.filterActual())
         .then(groups => {
 
           vm.campaignGroups = groups;

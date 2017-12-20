@@ -26,13 +26,32 @@
       meta: {
         label: {
           accusative: 'период'
-        }
+        },
+        filterActual
       }
 
     });
 
     function shortName(name) {
       return _.last(name.match(/\((.*)\)/));
+    }
+
+    function filterActual(filter) {
+
+      let dateB = moment().add(-7, 'months').format();
+      let dateE = moment().add(2, 'months').format();
+
+      return _.assign({
+        where: {
+          dateB: {
+            '>=': dateB
+          },
+          dateE: {
+            '<=': dateE
+          }
+        }
+      }, filter);
+
     }
 
   });
