@@ -6,6 +6,9 @@
 
     .name {
       @extend %flex-center;
+      .flex-1 {
+        @extend .ellipsis;
+      }
     }
 
     .address {

@@ -187,11 +187,20 @@ sale-order-alert {
         width: 370px;
       }
     }
+
+    .outlet > .info {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+    }
+
   }
 
   .address, .name {
     @extend .ellipsis;
   }
+
+
 
   .totals {
 
