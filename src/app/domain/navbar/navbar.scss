@@ -4,10 +4,17 @@
 .root-navbar {
 
   @extend %flex-center;
+  overflow-x: scroll;
 
   margin-bottom: -7px;
   margin-top: $margin-bottom-xs;
   height: 37px;
+
+  .last-digest {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+  }
 
   > .separator {
     @extend .flex-1;
