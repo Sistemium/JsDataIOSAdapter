@@ -388,6 +388,7 @@ $headers: (
 }
 
 .popovers {
+
   .processing {
 
     display: inline-block;
@@ -396,15 +397,14 @@ $headers: (
     border-radius: $border-radius/2;
     border: solid 1px darken($gray-background-color, 10%);
     padding: 4px 8px;
-    margin-top: 1px;
-    margin-bottom: 1px;
+
 
     &.blue, &.info {
-      @include colorInit($state-info-bg, $state-info-border, $state-info-text);
+      @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
     }
 
     &.green, &.success {
-      @include colorInit($state-success-bg, $state-success-border, $state-success-text);
+      @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
     }
 
     i + span {
@@ -412,5 +412,6 @@ $headers: (
     }
 
   }
+
 }
 
