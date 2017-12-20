@@ -5,6 +5,7 @@
 
   @extend %flex-center;
   overflow-x: scroll;
+  overflow-y: hidden;
 
   margin-bottom: -7px;
   margin-top: $margin-bottom-xs;
