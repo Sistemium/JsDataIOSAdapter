@@ -168,7 +168,7 @@
 
           if (!vm.campaignGroupId) {
             let today = moment().format();
-            vm.campaignGroupId = _.get(_.find(groups, group => group.dateB <= today && today <= group.dateE), 'id');
+            vm.campaignGroupId = _.get(_.find(campaignGroups, group => group.dateB <= today && today <= group.dateE), 'id');
           }
 
           $scope.$watch('vm.campaignGroupId', onCampaignGroupChange);
