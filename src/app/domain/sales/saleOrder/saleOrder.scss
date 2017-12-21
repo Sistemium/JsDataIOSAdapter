@@ -302,68 +302,7 @@ $headers: (
 
 }
 
-.sale-order-details {
 
-  td .spaced {
-    display: block;
-    text-align: right;
-  }
-
-  sale-order-alert .totals {
-
-    .toggle-edit {
-      margin-left: 6px;
-    }
-
-    .has-positions {
-
-      white-space: nowrap;
-
-      .info {
-        display: inline;
-        white-space: normal;
-      }
-
-    }
-
-  }
-
-  #scroll-main {
-    padding-bottom: 15px;
-  }
-
-  .discount {
-    color: green;
-    margin-right: 4px;
-  }
-
-  .flag {
-    @extend %flag;
-  }
-
-  td.price > * {
-
-    @extend %flex-row;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-
-  }
-
-  .price, .cost {
-    @include responsive-only(lt-sm) {
-      display: none;
-    }
-
-    currency-value {
-      flex: 1;
-      strong {
-        font-weight: normal;
-      }
-    }
-  }
-
-}
 
 .sale-order.alert {
   .processingMessage {
