@@ -32,6 +32,7 @@
     .totals.buttons(ng-if='!vm.uncashingId')
 
       outlet-cashing-popover(
+      ng-class='{disabled: vm.uncashing}'
       comment-text-placeholder='Точка'
       is-popover-open='vm.plusPopoverOpen'
       )
@@ -40,11 +41,12 @@
       outlet-cashing-popover(
       summ-sign='-1'
       ndoc-placeholder='№ заявки'
+      ng-class='{disabled: vm.uncashing}'
       is-popover-open='vm.minusPopoverOpen'
       )
         i.glyphicon.glyphicon-minus
 
-      a.btn.btn-link(href ng-click='vm.editClick()' ng-disabled='!vm.uncashed.length')
+      a.btn.btn-link(href ng-click='vm.editClick()' ng-disabled='!vm.uncashed.length || vm.uncashing')
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
       uncash-popover(
@@ -54,6 +56,7 @@
       )
 
   .scroll-y(
+  ng-class='{disabled: vm.uncashing}'
   resize resize-property='height'
   resize-offset-top='5'
   cg-busy='vm.cgBusy'
