@@ -119,12 +119,15 @@
     //margin-right: 2px;
     min-width: 35px;
 
+    .plus-box {
+      font-weight: bold;
+    }
+
     button {
 
       padding: 0 5px;
       height: 24px;
       width: 100%;
-      font-size: 13px;
       line-height: 1.5;
       border-radius: 3px;
       display: block;
@@ -133,10 +136,12 @@
 
       &:first-child {
         top: -2px;
+        font-size: inherit;
       }
 
       &:last-child {
         bottom: -2px;
+        font-size: inherit;
       }
 
     }

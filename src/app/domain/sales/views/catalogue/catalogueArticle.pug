@@ -118,7 +118,7 @@ before-tag-name='li'
     ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )
 
-      button.btn.btn-default(
+      button.btn.btn-default.plus-box(
       ng-hide=':: vm.hideBoxes || !vm.noFactor && stock.article.factor === stock.article.packageRel'
       ng-click='vm.kPlusButtonClick(stock)'
       ) +{{ ::stock.article.packageRel }}
