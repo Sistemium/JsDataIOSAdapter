@@ -35,8 +35,8 @@ before-tag-name='li'
           a.pieceVolume(
           href ng-click='vm.pieceVolumeClick(stock.article.pieceVolume)'
           ) {{::stock.article.pieceVolume}}л
-          small.gray(ng-if='!vm.saleOrder') x {{::stock.article.packageRel}}
-          small.gray(ng-if='!vm.saleOrder && stock.article.factor > 1') : {{::stock.article.factor}}
+          small.gray(ng-if='::!vm.saleOrder || vm.hideBoxes') x {{::stock.article.packageRel}}
+          small.gray(ng-if='::!vm.saleOrder && stock.article.factor > 1') : {{::stock.article.factor}}
 
         // TODO: allow removing restricted positions
         a.minus.btn-default(
