@@ -1,52 +1,53 @@
 @import "../../../styles/variables";
 @import "../../../styles/flags";
 
-$width-processing: 0.1;
-$width-salesman: 0.135;
-$width-outlet: 0.9;
-$width-totals: 0.13;
-
-$processing-xs-max-width: 65px;
-
-$headers: (
-    ($width-processing, 'processing'),
-    ($width-salesman, 'salesman'),
-    ($width-outlet, 'outlet'),
-    ($width-totals, 'totals')
-);
-
-@mixin initHeadersWidth {
-
-  @each $var, $class in $headers {
-
-    $flex-basis: 100px * $var * 10;
-
-    @include responsive-only(gt-xs) {
-      .#{$class} {
-        flex: $var;
-        flex-basis: $flex-basis;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-    }
-
-  }
-
-  .outlet {
-    @include responsive-only(md) {
-      flex-basis: 850px;
-    }
-
-    @include responsive-only(sm) {
-      flex-basis: 600px;
-    }
-
-  }
-
-}
 
 .sale-orders {
+
+  $width-processing: 0.1;
+  $width-salesman: 0.135;
+  $width-outlet: 0.9;
+  $width-totals: 0.13;
+
+  $processing-xs-max-width: 65px;
+
+  $headers: (
+      ($width-processing, 'processing'),
+      ($width-salesman, 'salesman'),
+      ($width-outlet, 'outlet'),
+      ($width-totals, 'totals')
+  );
+
+  @mixin initHeadersWidth {
+
+    @each $var, $class in $headers {
+
+      $flex-basis: 100px * $var * 10;
+
+      @include responsive-only(gt-xs) {
+        .#{$class} {
+          flex: $var;
+          flex-basis: $flex-basis;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+    }
+
+    .outlet {
+      @include responsive-only(md) {
+        flex-basis: 850px;
+      }
+
+      @include responsive-only(sm) {
+        flex-basis: 600px;
+      }
+
+    }
+
+  }
 
   > .buttons {
 
