@@ -14,7 +14,8 @@
       ClickHelper,
       saMedia,
       moment,
-      DomainOption
+      DomainOption,
+      GalleryHelper
     ) {
 
       return {
@@ -29,7 +30,8 @@
         ClickHelper,
         saMedia,
         moment,
-        DomainOption
+        DomainOption,
+        GalleryHelper
 
       };
 
