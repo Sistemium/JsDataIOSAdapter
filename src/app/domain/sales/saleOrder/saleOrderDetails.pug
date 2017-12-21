@@ -101,7 +101,9 @@
       thead
         tr
           th Товар
-          th.number Количество
+          th.number
+            .hidden-xs Количество
+            .visible-xs Кол-во
           th.number.price Цена
           th.number.cost Стоимость
       tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflowStep.editable}')

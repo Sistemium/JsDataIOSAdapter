@@ -8,6 +8,10 @@
     text-align: right;
   }
 
+  th {
+    white-space: nowrap;
+  }
+
   sale-order-alert .totals {
 
     .toggle-edit {
@@ -47,9 +51,18 @@
     align-items: center;
     height: 100%;
 
+    strong {
+      font-weight: normal;
+    }
+
+    currency-value {
+      flex: 1;
+    }
+
   }
 
-  .price, .cost {
+  .cost {
+
     @include responsive-only(lt-sm) {
       display: none;
     }
