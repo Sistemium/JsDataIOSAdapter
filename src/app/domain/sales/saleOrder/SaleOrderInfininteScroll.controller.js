@@ -82,7 +82,7 @@
     }
 
     function rowHeight() {
-      return isWideScreen() ? 62 : 82;
+      return isWideScreen() ? 62 : 92;
     }
 
     function isWideScreen() {
@@ -111,7 +111,12 @@
     }
 
     function cleanup() {
-      SaleOrder.ejectAll();
+      let where = {
+        processing: {
+          '!=': 'draft'
+        }
+      };
+      SaleOrder.ejectAll({where});
       // SaleOrderPosition.ejectAll();
       // Outlet.ejectAll();
     }
