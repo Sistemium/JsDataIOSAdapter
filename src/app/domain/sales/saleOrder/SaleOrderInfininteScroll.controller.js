@@ -82,7 +82,7 @@
     }
 
     function rowHeight() {
-      return isWideScreen() ? 62 : 92;
+      return isWideScreen() ? 61 : 91;
     }
 
     function isWideScreen() {

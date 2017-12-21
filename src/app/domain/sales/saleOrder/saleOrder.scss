@@ -90,24 +90,22 @@
 
   }
 
-  #scroll-main + .alert {
-    margin-top: 20px;
+  #scroll-main {
+    margin-top: 10px;
+    & + .alert {
+      margin-top: 20px;
+    }
   }
 
   #scroll-main > .clickable {
 
     position: relative;
 
-    border-bottom: 2px solid $gray-border-color;
+    border-bottom: 1px solid $gray-border-color;
 
     @include responsive-only(lt-sm) {
 
       margin: 10px 0;
-      border: none;
-
-      > * {
-        padding: 0 5px;
-      }
 
     }
 
@@ -133,7 +131,6 @@
       }
 
       @include responsive-only(lt-sm) {
-        border: 1px solid silver;
       }
 
     }
