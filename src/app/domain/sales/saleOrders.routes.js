@@ -21,7 +21,7 @@
           children: [{
             url: '/:id',
             name: 'item',
-            templateUrl: 'app/domain/sales/views/saleOrder/saleOrderDetails.html',
+            templateUrl: 'app/domain/sales/saleOrder/saleOrderDetails.html',
             controller: 'SaleOrderDetailsController',
             controllerAs: 'vm'
           }]
