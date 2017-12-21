@@ -2,7 +2,8 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, SalesmanAuth, SaleOrderHelper, $timeout) {
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q,
+                                        SalesmanAuth, SaleOrderHelper, $timeout, DomainOption) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
     const {saControllerHelper, ClickHelper, saEtc, toastr} = Helpers;
@@ -15,6 +16,7 @@
 
     vm.use({
 
+      noFactor: !DomainOption.hasArticleFactors(),
       searchOutletClick,
       clearSearchOutletClick,
       saleOrderSaveDraftClick,
@@ -72,7 +74,7 @@
     vm.onScope('bPlusButtonClick', bPlusButtonClick);
 
     vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
-      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume');
+      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
     });
 
     vm.watchScope('vm.saleOrder.outletId', () => {

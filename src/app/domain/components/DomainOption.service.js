@@ -16,7 +16,8 @@
       saleOrderOptions,
       saleOrdersDisabled,
       visitsDisabled,
-      showNewsCarousel
+      showNewsCarousel,
+      hasArticleFactors
     };
 
     function showNewsCarousel() {
@@ -44,6 +45,10 @@
       let site = _.get(Auth.roles(), 'site');
       if (!site) return 1;
       return site;
+    }
+
+    function hasArticleFactors() {
+      return customerCode() === 'r50';
     }
 
     function hasInactiveActions() {
