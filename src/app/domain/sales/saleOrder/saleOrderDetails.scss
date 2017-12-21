@@ -33,6 +33,9 @@
 
   #scroll-main {
     padding-bottom: 15px;
+    @include responsive-only(xxs) {
+      font-size: 85%;
+    }
   }
 
   .discount {

@@ -13,6 +13,12 @@
 
   }
 
+  table {
+    @include responsive-only(xxs) {
+      font-size: 85%;
+    }
+  }
+
   th {
     white-space: nowrap;
   }
