@@ -91,7 +91,7 @@
 
     vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
 
-    onStateChange($state.name, $state.params);
+    // onStateChange($state.name, $state.params);
 
     /*
      Listeners
