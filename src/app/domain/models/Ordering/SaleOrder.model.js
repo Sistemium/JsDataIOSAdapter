@@ -43,15 +43,6 @@
         }
       },
 
-      fieldTypes: {
-        // date: Schema.config.parseDate,
-        // totalCost: Schema.config.parseDecimal,
-        // totalCostDoc: Schema.config.parseDecimal,
-        cashOnShipment: Schema.config.parseBool,
-        docDiscounts: Schema.config.parseBool,
-        spoilerNotNeeded: Schema.config.parseBool
-      },
-
       defaultValues: {
         processing: 'draft',
         docDiscounts: true
