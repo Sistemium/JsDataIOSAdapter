@@ -7,7 +7,7 @@
     const SALES_ROLES = ['salesman', 'supervisor'];
     const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
     const PICKING_ROLES = ['picker'];
-    const ADMIN_ROLES = ['admin', 'tester'];
+    // const ADMIN_ROLES = ['admin', 'tester'];
 
     const items = [{
       title: 'Сборка',
@@ -59,15 +59,15 @@
       state: 'sales.visits',
       needRoles: SALES_ROLES,
       disabled: DomainOption.visitsDisabled
-    }, {
+    // }, {
       // title: 'Фотопоток',
       // state: 'photos.stream',
       // needRoles: SALES_ROLES
       // needRoles: ['admin', 'tester']
     // }, {
-      title: 'Тесты',
-      state: 'playground',
-      needRoles: ADMIN_ROLES
+    //   title: 'Тесты',
+    //   state: 'playground',
+    //   needRoles: ADMIN_ROLES
     }];
 
 

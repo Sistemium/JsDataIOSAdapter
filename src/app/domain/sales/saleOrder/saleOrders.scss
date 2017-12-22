@@ -1,52 +1,53 @@
 @import "../../../styles/variables";
 @import "../../../styles/flags";
 
-$width-processing: 0.1;
-$width-salesman: 0.135;
-$width-outlet: 0.9;
-$width-totals: 0.13;
-
-$processing-xs-max-width: 65px;
-
-$headers: (
-    ($width-processing, 'processing'),
-    ($width-salesman, 'salesman'),
-    ($width-outlet, 'outlet'),
-    ($width-totals, 'totals')
-);
-
-@mixin initHeadersWidth {
-
-  @each $var, $class in $headers {
-
-    $flex-basis: 100px * $var * 10;
-
-    @include responsive-only(gt-xs) {
-      .#{$class} {
-        flex: $var;
-        flex-basis: $flex-basis;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-    }
-
-  }
-
-  .outlet {
-    @include responsive-only(md) {
-      flex-basis: 850px;
-    }
-
-    @include responsive-only(sm) {
-      flex-basis: 600px;
-    }
-
-  }
-
-}
 
 .sale-orders {
+
+  $width-processing: 0.1;
+  $width-salesman: 0.135;
+  $width-outlet: 0.9;
+  $width-totals: 0.13;
+
+  $processing-xs-max-width: 65px;
+
+  $headers: (
+      ($width-processing, 'processing'),
+      ($width-salesman, 'salesman'),
+      ($width-outlet, 'outlet'),
+      ($width-totals, 'totals')
+  );
+
+  @mixin initHeadersWidth {
+
+    @each $var, $class in $headers {
+
+      $flex-basis: 100px * $var * 10;
+
+      @include responsive-only(gt-xs) {
+        .#{$class} {
+          flex: $var;
+          flex-basis: $flex-basis;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+    }
+
+    .outlet {
+      @include responsive-only(md) {
+        flex-basis: 850px;
+      }
+
+      @include responsive-only(sm) {
+        flex-basis: 600px;
+      }
+
+    }
+
+  }
 
   > .buttons {
 
@@ -89,34 +90,43 @@ $headers: (
 
   }
 
-  #scroll-main + .alert {
-    margin-top: 20px;
+
+  #scroll-main {
+
+    margin-top: 10px;
+    min-height: 50px;
+
+    & + .alert {
+      margin-top: 20px;
+    }
+
   }
 
   #scroll-main > .clickable {
 
     position: relative;
 
-    border-bottom: 2px solid $gray-border-color;
+    > * {
+      border-bottom: 1px solid $gray-border-color;
+    }
 
     @include responsive-only(lt-sm) {
 
-      margin: 10px 0;
-      border: none;
-
-      > * {
-        padding: 0 5px;
+      .sale-order {
+        padding: 5px 0;
       }
 
     }
 
     .date {
-      height: 60px;
+
+      height: 61px;
+      padding-top: 25px;
       cursor: default;
-      padding: 28px 0;
 
       @include responsive-only(lt-sm) {
-        height: 82px;
+        padding-top: 50px;
+        height: 91px;
       }
 
       .title {
@@ -132,7 +142,6 @@ $headers: (
       }
 
       @include responsive-only(lt-sm) {
-        border: 1px solid silver;
       }
 
     }
@@ -302,68 +311,7 @@ $headers: (
 
 }
 
-.sale-order-details {
 
-  td .spaced {
-    display: block;
-    text-align: right;
-  }
-
-  sale-order-alert .totals {
-
-    .toggle-edit {
-      margin-left: 6px;
-    }
-
-    .has-positions {
-
-      white-space: nowrap;
-
-      .info {
-        display: inline;
-        white-space: normal;
-      }
-
-    }
-
-  }
-
-  #scroll-main {
-    padding-bottom: 15px;
-  }
-
-  .discount {
-    color: green;
-    margin-right: 4px;
-  }
-
-  .flag {
-    @extend %flag;
-  }
-
-  td.price > * {
-
-    @extend %flex-row;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-
-  }
-
-  .price, .cost {
-    @include responsive-only(lt-sm) {
-      display: none;
-    }
-
-    currency-value {
-      flex: 1;
-      strong {
-        font-weight: normal;
-      }
-    }
-  }
-
-}
 
 .sale-order.alert {
   .processingMessage {
@@ -388,6 +336,7 @@ $headers: (
 }
 
 .popovers {
+
   .processing {
 
     display: inline-block;
@@ -396,15 +345,14 @@ $headers: (
     border-radius: $border-radius/2;
     border: solid 1px darken($gray-background-color, 10%);
     padding: 4px 8px;
-    margin-top: 1px;
-    margin-bottom: 1px;
+
 
     &.blue, &.info {
-      @include colorInit($state-info-bg, $state-info-border, $state-info-text);
+      @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
     }
 
     &.green, &.success {
-      @include colorInit($state-success-bg, $state-success-border, $state-success-text);
+      @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
     }
 
     i + span {
@@ -412,5 +360,6 @@ $headers: (
     }
 
   }
+
 }
 

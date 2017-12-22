@@ -5,7 +5,7 @@
   function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService) {
 
     const {ScrollHelper, saControllerHelper} = Helpers;
-    let {SaleOrder, SaleOrderPosition, Outlet} = Schema.models();
+    let {SaleOrder} = Schema.models();
 
     let vm = saControllerHelper
       .setup(this, $scope)
@@ -82,7 +82,7 @@
     }
 
     function rowHeight() {
-      return isWideScreen() ? 62 : 82;
+      return isWideScreen() ? 61 : 91;
     }
 
     function isWideScreen() {
@@ -111,9 +111,14 @@
     }
 
     function cleanup() {
-      SaleOrder.ejectAll();
-      SaleOrderPosition.ejectAll();
-      Outlet.ejectAll();
+      let where = {
+        processing: {
+          '!=': 'draft'
+        }
+      };
+      SaleOrder.ejectAll({where});
+      // SaleOrderPosition.ejectAll();
+      // Outlet.ejectAll();
     }
 
     function getData() {

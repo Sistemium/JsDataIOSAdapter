@@ -42,7 +42,7 @@
       .body
         p
           img(ng-if='newsMessage.pictures.length' ng-src='{{newsMessage.pictures[0].srcThumbnail}}')
-          span {{newsMessage.body}}
+          span(ng-bind-html='::newsMessage.htmlView()')
         //.author {{ newsMessage.authorAccount.name }}
 
       .footer

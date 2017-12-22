@@ -34,7 +34,9 @@
 
       @extend %flex-row;
       @include responsive-only(xxs) {
-        display: block;
+        uncash-popover {
+          flex: 1;
+        }
       }
       align-items: center;
       text-align: right;
@@ -98,12 +100,16 @@
         }
 
         > * + * {
-          margin-left: 1em;
+          margin-left: 10px;
         }
 
         > * {
           width: $field-width;
           display: inline-block;
+        }
+
+        .cash-this {
+          width: 20px;
         }
 
         .ndoc {
@@ -123,6 +129,10 @@
 
         &:last-child strong {
           font-weight: bold;
+        }
+
+        &.total {
+          padding-right: 30px;
         }
 
       }

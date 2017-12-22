@@ -116,7 +116,7 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
 
 }
 
-@mixin colorInit($bgc, $bdc, $col) {
+@mixin backgroundBorderColor($bgc, $bdc, $col) {
   background-color: $bgc;
   border-color: $bdc;
   color: $col;

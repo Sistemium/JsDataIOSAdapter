@@ -74,12 +74,15 @@
     }
 
     function deletePhotoClick() {
-      if (vm.uncashingPicture.id) {
-        UncashingPicture.destroy(vm.uncashingPicture)
-          .then(() => {
-            vm.uncashingPicture = UncashingPicture.createInstance({uncashingId: vm.uncashing.id});
-          });
+
+      let {id} = vm.uncashingPicture;
+
+      vm.uncashingPicture = UncashingPicture.createInstance({uncashingId: vm.uncashing.id});
+
+      if (id) {
+        vm.cgBusy = UncashingPicture.destroy(id);
       }
+
     }
 
 
@@ -90,6 +93,10 @@
 
       if (!uncashing || !uncashed || !uncashed.length) {
         return toastr.error('Ошибка сохранения выручки', 'Повторите попытку');
+      }
+
+      if (uncashing.type === 'bank' && !vm.uncashingPicture.id) {
+        return toastr.error('Ошибка сохранения выручки', 'Отсутсвует фотография чека');
       }
 
       _.assign(uncashing, {
@@ -151,7 +158,7 @@
           return Uncashing.create(draft);
 
         })
-        .then(uncashing => Uncashing.loadRelations(uncashing))
+        .then(uncashing => uncashing.DSLoadRelations('UncashingPicture'))
         .then(uncashing => {
 
           let uncashingPicture = uncashing.picture || UncashingPicture.createInstance({uncashingId: uncashing.id});

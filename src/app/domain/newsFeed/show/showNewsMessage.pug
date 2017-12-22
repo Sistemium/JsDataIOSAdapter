@@ -38,7 +38,7 @@
           i.glyphicon.glyphicon-remove
 
     .body.scroll-y#bodyScroll(resize resize-offset-top='95')
-      p {{ vm.newsMessage.body }}
+      p(ng-bind-html='::vm.newsMessage.htmlView()')
 
       .commentaries
         .commentary(ng-repeat='commentary in vm.commentaries track by commentary.id')

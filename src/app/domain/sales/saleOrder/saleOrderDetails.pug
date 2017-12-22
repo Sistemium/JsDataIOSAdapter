@@ -5,7 +5,6 @@
   sale-order-alert(expanded='saleOrderExpanded' sale-order='vm.saleOrder')
 
     popovers
-
       a.popover-trigger(
       href
       uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
@@ -13,24 +12,16 @@
       ng-disabled='saleOrderExpanded'
       )
         .outlet(ng-class='{blocked: vm.saleOrder.outlet.isActive === false}')
-          .name
-            span(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
-            span(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+          .info
+            span.name(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+            span.name(ng-if='!vm.saleOrder.outlet.id') Новый заказ
             span.animate-show.spaced
               small на
-              small.strong {{ vm.saleOrder.date }}
-
+              small.strong {{ vm.saleOrder.date | amDateFormat:'DD.MM.YYYY' }}
               small(
               ng-class='["processing", vm.saleOrder.workflowStep.cls, vm.saleOrder.processing]'
               )
                 span {{ vm.saleOrder.workflowStep.label }}
-                span(
-                ng-if='vm.saleOrder.processingMessage'
-                ng-class='vm.saleOrder.workflowStep.messageCls'
-                )
-                  i.glyphicon.glyphicon-warning-sign
-
-              // TODO: show date with amCalendar but without time
           .address
             small {{vm.saleOrder.outlet.address}}
         span.caret
@@ -101,7 +92,9 @@
       thead
         tr
           th Товар
-          th.number Количество
+          th.number
+            .hidden-xs Количество
+            .visible-xs Кол-во
           th.number.price Цена
           th.number.cost Стоимость
       tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflowStep.editable}')

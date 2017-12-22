@@ -1,0 +1,90 @@
+@import "../../../styles/variables";
+@import "../../../styles/flags";
+
+.sale-order-details {
+
+  td .spaced {
+    display: block;
+    text-align: right;
+  }
+
+  th {
+    white-space: nowrap;
+  }
+
+  sale-order-alert .totals {
+
+    .toggle-edit {
+      margin-left: 6px;
+    }
+
+    .has-positions {
+
+      white-space: nowrap;
+
+      .info {
+        display: inline;
+        white-space: normal;
+      }
+
+    }
+
+  }
+
+  #scroll-main {
+    padding-bottom: 15px;
+    @include responsive-only(xxs) {
+      font-size: 85%;
+    }
+  }
+
+  .discount {
+    color: green;
+    margin-right: 4px;
+  }
+
+  .flag {
+    @extend %flag;
+  }
+
+  td.price > * {
+
+    @extend %flex-row;
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+      align-items: flex-end;
+      > * + * {
+        margin-top: 3px;
+      }
+    }
+
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+
+    strong {
+      font-weight: normal;
+    }
+
+    currency-value {
+      flex: 1;
+    }
+
+  }
+
+  .cost {
+
+    @include responsive-only(lt-sm) {
+      display: none;
+    }
+
+    currency-value {
+      flex: 1;
+      strong {
+        font-weight: normal;
+      }
+    }
+  }
+
+}

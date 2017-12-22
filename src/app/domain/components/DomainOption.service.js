@@ -16,11 +16,12 @@
       saleOrderOptions,
       saleOrdersDisabled,
       visitsDisabled,
-      showNewsCarousel
+      showNewsCarousel,
+      hasArticleFactors
     };
 
     function showNewsCarousel() {
-      return customerCode().match(/r50?/) && Auth.isAuthorized(['salesman', 'newsMaker']);
+      return customerCode().match(/r50?/) && Auth.isAuthorized(['salesman', 'newsMaker', 'supervisor']);
     }
 
     function saleOrderOptions() {
@@ -44,6 +45,10 @@
       let site = _.get(Auth.roles(), 'site');
       if (!site) return 1;
       return site;
+    }
+
+    function hasArticleFactors() {
+      return customerCode() === 'r50';
     }
 
     function hasInactiveActions() {

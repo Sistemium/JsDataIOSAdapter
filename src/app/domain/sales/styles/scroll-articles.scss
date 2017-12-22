@@ -70,7 +70,7 @@
 
     min-height: 80px;
     padding: 0 10px;
-    width: 99.8%;
+    //width: 99.8%;
 
     @extend %flex-row;
     @extend .spaced;
@@ -82,10 +82,16 @@
     }
 
     @include responsive-only(xxs) {
+
+      padding: 0;
+      border-right: none;
+      border-left: none;
+      border-radius: 0;
+
       a.thumb {
         position: absolute;
         top: 5px;
-        left: 5px;
+        left: 0;
         img {
           max-width: 40px;
           max-height: 40px;
@@ -108,16 +114,20 @@
 
   .right {
 
-    margin-left: 1em;
+    margin-left: 10px;
     text-align: right;
-    margin-right: 2px;
+    //margin-right: 2px;
+    min-width: 35px;
+
+    .plus-box {
+      font-weight: bold;
+    }
 
     button {
 
-      padding: 0px 5px;
-      width: 29px;
+      padding: 0 5px;
       height: 24px;
-      font-size: 13px;
+      width: 100%;
       line-height: 1.5;
       border-radius: 3px;
       display: block;
@@ -126,10 +136,12 @@
 
       &:first-child {
         top: -2px;
+        font-size: inherit;
       }
 
       &:last-child {
         bottom: -2px;
+        font-size: inherit;
       }
 
     }
@@ -143,14 +155,15 @@
   .article-name-third {
 
     width: 100%;
-    //@extend %flex-row;
-    //justify-content: flex-end;
     min-height: 20px;
     text-align: right;
+    //overflow: scroll;
+
+    > * + i {
+      margin-left: 4px;
+    }
 
     > div {
-      //display: flex;
-      overflow: scroll;
 
       & > i.red {
         padding-left: 1px;
@@ -163,12 +176,10 @@
 
     }
 
-    small span.gray {
-      margin: 0 4px;
-      &:last-child {
-        margin-right: 0;
-      }
+    small > * + * {
+      margin-left: 4px;
     }
+
   }
 
   .article-wrapper {
@@ -188,23 +199,31 @@
     }
 
     .article-info {
+
       margin-left: 5px;
       white-space: nowrap;
       flex-shrink: 0;
       flex-grow: 1;
-      > *:last-child {
-        margin-right: 1em;
-      }
+      padding-right: 6px;
+
+      //@include responsive-only(xxs) {
+      //  small {
+      //    display: none;
+      //  }
+      //}
+
     }
 
     quantity-edit {
       flex-shrink: 0;
       white-space: nowrap;
       font-size: 110%;
-      min-width: 60px;
       text-align: right;
       span.ng-binding {
         color: $green;
+      }
+      @include responsive-only(gt-xs) {
+        min-width: 60px;
       }
     }
 

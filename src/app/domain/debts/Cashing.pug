@@ -11,7 +11,11 @@
       uib-popover-template='"app/domain/debts/uncashingPopover.template.html"'
       )
         span.title
-          currency-value(value='vm.totalCashed()' label='На руках:' ng-if='!vm.uncashingId')
+          currency-value(
+          value='vm.totalChecked'
+          label='{{ vm.totalChecked === vm.totalCashed() ? "На руках" : "Выбрано"}}:'
+          ng-if='!vm.uncashingId'
+          )
           currency-value(
           value='vm.currentUncashing.summ'
           label='Сдано {{ vm.currentUncashing.date | amDateFormat:"DD.MM.YYYY" }}:'
@@ -28,6 +32,7 @@
     .totals.buttons(ng-if='!vm.uncashingId')
 
       outlet-cashing-popover(
+      ng-class='{disabled: vm.uncashing}'
       comment-text-placeholder='Точка'
       is-popover-open='vm.plusPopoverOpen'
       )
@@ -36,20 +41,22 @@
       outlet-cashing-popover(
       summ-sign='-1'
       ndoc-placeholder='№ заявки'
+      ng-class='{disabled: vm.uncashing}'
       is-popover-open='vm.minusPopoverOpen'
       )
         i.glyphicon.glyphicon-minus
 
-      a.btn.btn-link(href ng-click='vm.editClick()' ng-disabled='!vm.uncashed.length')
+      a.btn.btn-link(href ng-click='vm.editClick()' ng-disabled='!vm.uncashed.length || vm.uncashing')
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
 
       uncash-popover(
-      uncashed='vm.uncashed'
+      uncashed='vm.toUncash'
       ng-class='{disabled: !vm.uncashed.length}'
       is-popover-open='vm.uncashing'
       )
 
   .scroll-y(
+  ng-class='{disabled: vm.uncashing}'
   resize resize-property='height'
   resize-offset-top='5'
   cg-busy='vm.cgBusy'
@@ -62,15 +69,24 @@
           a(href ng-click='vm.outletClick(item.outlet)') {{ item.outlet.address }}
 
       .cashings
+
         .cashing(ng-repeat='cashing in item.cashings track by cashing.id')
+
           .commentText {{ cashing.commentText }}
+
           .ndoc
             span {{ cashing.ndoc || cashing.debt.ndoc }}
             = ' '
             small.gray(ng-if='::cashing.debt.date') от&nbsp;{{ ::cashing.debt.date | amDateFormat:'DD/MM/YYYY' }}
             a.detete-btn(href ng-click='vm.deleteCashingClick(cashing)' ng-if='vm.editing')
               i.glyphicon.glyphicon-trash
+
           currency-value.summ(value='cashing.summ')
+
+          a.cash-this(href ng-click='vm.cashingClick(cashing, $event)' ng-if='vm.checking')
+            i.glyphicon(ng-class='vm.checking[cashing.id] ? "glyphicon-check" : "glyphicon-unchecked"')
+
+
         .cashing.total(ng-if='item.cashings.length > 1')
           currency-value.summ(value='item.totalSumm')
 

@@ -55,19 +55,19 @@
         }
 
         &.blue > * {
-          @include colorInit($state-info-bg, $state-info-border, $state-info-text);
+          @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
         }
 
         &.green > * {
-          @include colorInit($state-success-bg, $state-success-border, $state-success-text);
+          @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
         }
 
         &.orange > * {
-          @include colorInit($state-warning-bg, $state-warning-border, $state-warning-text);
+          @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
         }
 
         &.red > * {
-          @include colorInit($state-danger-bg, $state-danger-border, $state-danger-text);
+          @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
         }
 
         a {
@@ -176,19 +176,19 @@
         }
 
         &.blue > * {
-          @include colorInit($state-info-bg, $state-info-border, $state-info-text);
+          @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
         }
 
         &.green > * {
-          @include colorInit($state-success-bg, $state-success-border, $state-success-text);
+          @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
         }
 
         &.orange > * {
-          @include colorInit($state-warning-bg, $state-warning-border, $state-warning-text);
+          @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
         }
 
         &.red > * {
-          @include colorInit($state-danger-bg, $state-danger-border, $state-danger-text);
+          @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
         }
 
       }

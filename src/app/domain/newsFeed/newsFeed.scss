@@ -41,10 +41,10 @@
     > .buttons {
 
       text-align: right;
-      margin: 20px 0 $padding;
+      margin-bottom: $padding;
 
-      @include responsive-only(lt-sm) {
-        margin-top: 0;
+      @include responsive-only(xxs) {
+        margin-top: 5px;
       }
 
     }

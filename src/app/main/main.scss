@@ -13,6 +13,7 @@ section.main {
   .news-carousel {
 
     $image-height: 135px;
+    $image-height-xs: 85px;
 
     .carousel-indicators {
       display: none;
@@ -30,8 +31,15 @@ section.main {
       position: static;
       text-shadow: none;
 
+      &.red {
+        color: $red;
+      }
+
       h4 {
         margin: 0;
+        @include responsive-only(xxs) {
+          font-size: 75%;
+        }
       }
 
     }
@@ -50,6 +58,10 @@ section.main {
       img {
         max-height: $image-height;
         min-height: $image-height;
+        @include responsive-only(xxs) {
+          max-height: $image-height-xs;
+          min-height: $image-height-xs;
+        }
       }
 
     }

@@ -99,6 +99,7 @@
     function getData() {
 
       return SaleOrder.find($state.params.id)
+        .then(saleOrder => saleOrder.DSLoadRelations('SaleOrderPosition', {bypassCache: true}))
         .then(saleOrder => SaleOrder.loadRelations(saleOrder))
         .then(saleOrder => {
 

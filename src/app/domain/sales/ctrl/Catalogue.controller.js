@@ -60,6 +60,7 @@
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
 
       saleOrdersDisabled: DomainOption.saleOrdersDisabled(),
+      noFactor: !DomainOption.hasArticleFactors(),
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -90,7 +91,7 @@
 
     vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
 
-    onStateChange($state.name, $state.params);
+    // onStateChange($state.name, $state.params);
 
     /*
      Listeners
@@ -221,7 +222,7 @@
         .then(() => {
           return vm.saleOrder.outlet.DSLoadRelations('Partner')
             .then(outlet => {
-              vm.noFactor = _.get(outlet, 'partner.allowAnyVolume');
+              vm.noFactor = _.get(outlet, 'partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
             });
         });
 

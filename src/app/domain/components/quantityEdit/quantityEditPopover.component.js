@@ -20,7 +20,7 @@
   };
 
   /** @ngInject */
-  function quantityEditController($scope, IOS, Schema) {
+  function quantityEditController($scope, IOS, Schema, DomainOption) {
 
     const {SaleOrderPosition} = Schema.models();
 
@@ -36,6 +36,7 @@
       showBottles: article.packageRel > 1,
       type: IOS.isIos() ? 'number' : 'text',
       bottleLabel: _.upperCase(article.pcsLabel),
+      noFactor: !DomainOption.hasArticleFactors() || _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume'),
 
       incrementBoxes: () => changeVolume(article.packageRel),
       incrementBottles: () => changeVolume(1),
@@ -91,35 +92,41 @@
       //   return vm.deleteConfirmation = true;
       // }
       // if (position.id) {
-        changeVolume(-position.volume);
+      changeVolume(-position.volume);
       // }
       if (vm.popoverOpen) vm.popoverOpen = false;
     }
 
     function onQtyChange(newValues, oldValues) {
-      if (newValues[1] != oldValues[1] || newValues[0] != oldValues[0]) {
 
-        let volume = parseInt(newValues[0] * position.article.packageRel || 0)
-          + parseInt(newValues[1] || 0);
-
-        let factor = _.get(position, 'article.factor') || 1;
-        let notFactored = volume % factor;
-
-        if (notFactored) {
-          volume = volume - notFactored + factor;
-        }
-
-        position.volume = _.max([0, volume]);
-
-        if (notFactored) {
-          setQty();
-        }
-
-        injectPosition();
-        position.updateCost();
-        saleOrder.updateTotalCost();
-
+      if (newValues[1] === oldValues[1] && newValues[0] === oldValues[0]) {
+        return;
       }
+
+      let volume = parseInt(newValues[0] * position.article.packageRel || 0)
+        + parseInt(newValues[1] || 0);
+
+      let factor = articleFactor(position);
+      let notFactored = volume % factor;
+
+      if (notFactored) {
+        volume = volume - notFactored + factor;
+      }
+
+      position.volume = _.max([0, volume]);
+
+      if (notFactored) {
+        setQty();
+      }
+
+      injectPosition();
+      position.updateCost();
+      saleOrder.updateTotalCost();
+
+    }
+
+    function articleFactor(position) {
+      return !vm.noFactor && _.get(position, 'article.factor') || 1;
     }
 
     function changeVolume(addVolume) {
@@ -127,7 +134,7 @@
       position.volume += addVolume;
       position.volume = _.max([0, position.volume]);
 
-      let factor = _.get(position, 'article.factor') || 1;
+      let factor = articleFactor(position);
       let notFactored = position.volume % factor;
 
       if (notFactored) {

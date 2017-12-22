@@ -36,8 +36,10 @@
       thead
         tr
           th Товар
-          th.number Количество
-          th.number.hidden-xs Цена
+          th.number
+            .hidden-xs Количество
+            .visible-xs Кол-во
+          th.number Цена
           th.number.hidden-xs Стоимость
       tbody
         tr(
@@ -45,7 +47,7 @@
         )
           td {{ item.article.name }}
           td.number
-            quantity-edit.disabled(position='item')
-          td.number.hidden-xs
+            | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
+          td.number
             span {{ item.price | number:2 }}
           td.number.hidden-xs {{ item.cost | number:2}}
