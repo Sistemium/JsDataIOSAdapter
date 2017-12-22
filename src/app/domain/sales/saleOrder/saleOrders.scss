@@ -90,11 +90,16 @@
 
   }
 
+
   #scroll-main {
+
     margin-top: 10px;
+    min-height: 50px;
+
     & + .alert {
       margin-top: 20px;
     }
+
   }
 
   #scroll-main > .clickable {
