@@ -101,21 +101,26 @@
 
     position: relative;
 
-    border-bottom: 1px solid $gray-border-color;
+    > * {
+      border-bottom: 1px solid $gray-border-color;
+    }
 
     @include responsive-only(lt-sm) {
 
-      margin: 10px 0;
+      .sale-order {
+        padding: 5px 0;
+      }
 
     }
 
     .date {
-      height: 60px;
+
+      height: 61px;
       cursor: default;
       padding: 28px 0;
 
       @include responsive-only(lt-sm) {
-        height: 82px;
+        height: 81px;
       }
 
       .title {
