@@ -116,11 +116,12 @@
     .date {
 
       height: 61px;
+      padding-top: 25px;
       cursor: default;
-      padding: 28px 0;
 
       @include responsive-only(lt-sm) {
-        height: 81px;
+        padding-top: 50px;
+        height: 91px;
       }
 
       .title {
