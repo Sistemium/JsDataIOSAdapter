@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService) {
+  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService, Sockets) {
 
     const {ScrollHelper, saControllerHelper} = Helpers;
     let {SaleOrder} = Schema.models();
@@ -36,6 +36,8 @@
      Listeners
      */
 
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJsData));
+
     $scope.$on('rootClick', () => {
 
       if ($state.current.name === vm.rootState) {
@@ -52,9 +54,50 @@
 
     SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
+    const JSD_DESTROY = 'DS.afterEject'; //'DS.afterDestroy';
+
+    SaleOrder.on(JSD_DESTROY, onDestroySaleOrder);
+
     /*
      Handlers
      */
+
+    function onDestroySaleOrder(model, saleOrder) {
+
+      console.warn('onDestroySaleOrder', saleOrder);
+
+      let {date, id} = saleOrder;
+
+      let groupedByDate = _.get(_.groupBy(vm.data, {date: date}), true);
+
+      if (_.size(groupedByDate) <= 2) {
+        _.remove(vm.data, {id: date});
+      }
+
+      _.remove(vm.data, {id: id});
+
+    }
+
+    function onJsData(event) {
+
+      console.log(event);
+
+      let {data, resource} = event;
+
+      console.warn(resource, data);
+
+      let dateIdx = _.findIndex(vm.data, {id: data.date}) + 1;
+
+      if (dateIdx) {
+        let splicedData = vm.data.splice(dateIdx);
+
+        vm.data.push(data);
+        vm.data.push(...splicedData);
+      }
+
+      $scope.$apply();
+
+    }
 
     /*
      Functions
@@ -111,17 +154,22 @@
     }
 
     function cleanup() {
+
+      SaleOrder.off(JSD_DESTROY, onDestroySaleOrder);
+
       let where = {
         processing: {
           '!=': 'draft'
         }
       };
+
       SaleOrder.ejectAll({where});
-      // SaleOrderPosition.ejectAll();
-      // Outlet.ejectAll();
+
     }
 
     function getData() {
+
+      console.log('fired');
 
       if (!vm.currentWorkflow) {
         vm.currentWorkflow = localStorageService.get('currentWorkflow');
@@ -146,8 +194,8 @@
       }
 
       let options = {
-        pageSize: pageSize,
-        startPage: startPage,
+        pageSize,
+        startPage,
         bypassCache: true
       };
 
