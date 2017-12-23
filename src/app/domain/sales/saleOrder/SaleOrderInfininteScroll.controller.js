@@ -81,21 +81,15 @@
 
     function onJsData(event) {
 
-      console.log(event);
-
       let {data, resource} = event;
+
+      if (resource !== 'SaleOrder') {
+        return;
+      }
 
       console.warn(resource, data);
 
-      let dateIdx = _.findIndex(vm.data, {id: data.date}) + 1;
-
-      if (dateIdx) {
-        let splicedData = vm.data.splice(dateIdx);
-
-        vm.data.push(data);
-        vm.data.push(...splicedData);
-      }
-
+      mergeViewData(data);
 
     }
 
