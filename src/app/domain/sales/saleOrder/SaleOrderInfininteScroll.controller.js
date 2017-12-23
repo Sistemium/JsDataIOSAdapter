@@ -129,6 +129,8 @@
     function resetVariables() {
 
       vm.data = [];
+
+      saleOrders = [];
       gotAllData = false;
       startPage = 1;
       localStorageService.remove(vm.rootState + '.scroll');
