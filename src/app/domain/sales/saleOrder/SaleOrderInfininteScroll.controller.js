@@ -27,8 +27,7 @@
       itemClick,
       newItemClick,
       getData,
-      rowHeight,
-      onWorkflowChange
+      rowHeight
 
     })
       .use(ScrollHelper);
@@ -104,15 +103,9 @@
 
     }
 
-    function getWorkflows(salesmanId) {
+    function getWorkflows() {
 
-      vm.currentWorkflows = {};
-
-      let filter;
-
-      if (salesmanId) {
-        filter = {salesmanId: salesmanId}
-      }
+      let filter = SalesmanAuth.makeFilter();
 
       vm.workflowPromise = SaleOrder.groupBy(filter, ['processing']);
 
