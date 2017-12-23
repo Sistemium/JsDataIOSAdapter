@@ -16,6 +16,7 @@
 
     let gotAllData = false;
     let busyGettingData;
+    let saleOrders = [];
 
     vm.use({
 
@@ -167,6 +168,26 @@
 
     }
 
+    function mergeViewData(withData) {
+
+      saleOrders.push(...withData);
+
+      let saleOrdersWithDates = [];
+      let dates = _.groupBy(saleOrders, 'date');
+
+      dates = _.map(dates, (val, date) => {
+        return {date, id: date};
+      });
+
+      saleOrdersWithDates.push(...dates);
+      saleOrdersWithDates.push(...saleOrders);
+
+      saleOrdersWithDates = _.uniqBy(saleOrdersWithDates, 'id');
+
+      vm.data = _.orderBy(saleOrdersWithDates, ['date'], ['desc']);
+
+    }
+
     function getData() {
 
       console.log('fired');
@@ -206,29 +227,13 @@
             gotAllData = true;
           }
 
-          let saleOrdersWithDates = [];
-
-          let dates = _.groupBy(res, 'date');
-
-          dates = _.map(dates, (val, date) => {
-            return {date, id: date};
-          });
-
-          saleOrdersWithDates.push(...dates);
-          saleOrdersWithDates.push(...res);
-
-          if (vm.data.length) {
-            saleOrdersWithDates.push(...vm.data);
-          }
-
-          saleOrdersWithDates = _.uniqBy(saleOrdersWithDates, 'id');
 
           let promises = _.map(res, saleOrder => saleOrder.DSLoadRelations(['Outlet']));
 
           return $q.all(promises)
             .then(() => {
-              vm.data = _.orderBy(saleOrdersWithDates, ['date'], ['desc']);
               startPage++;
+              mergeViewData(res);
             });
 
         });
