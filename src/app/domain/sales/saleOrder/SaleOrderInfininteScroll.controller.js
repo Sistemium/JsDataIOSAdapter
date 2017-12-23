@@ -96,7 +96,6 @@
         vm.data.push(...splicedData);
       }
 
-      $scope.$apply();
 
     }
 
