@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema) {
 
-    Schema.register ({
+    const Stock = Schema.register({
 
       name: 'Stock',
 
@@ -24,13 +24,74 @@
       notify: false,
 
       meta: {
+        data: null,
+        indexByArticleId: {},
+        cachedFindAll,
+        getAll,
+        getByArticleId,
+        loadArticle
       }
 
-      // fieldTypes: {
-      //   volume: 'int'
-      // }
-
     });
+
+    function getByArticleId(articleId) {
+      return Stock.meta.indexByArticleId[articleId]
+    }
+
+    function getAll() {
+      return Stock.meta.data;
+    }
+
+    function loadArticle(article) {
+
+      const articleId = article.id;
+
+      if (Stock.meta.indexByArticleId[articleId]) {
+        return Stock.meta.indexByArticleId[articleId];
+      }
+
+      return Stock.findAll({articleId}, {afterFindAll, cacheResponse: false});
+
+      function afterFindAll(options, data) {
+
+        let item = _.first(data) || {};
+
+        let {indexByArticleId} = Stock.meta;
+
+        indexByArticleId[articleId] = item;
+        item.article = article;
+
+        Stock.meta.data.push(item);
+
+        return null;
+
+      }
+    }
+
+    function cachedFindAll(filter, options) {
+
+      const {Article} = Schema.models();
+
+      return Stock.findAll(filter, _.assign(options, {afterFindAll, cacheResponse: false}));
+
+      function afterFindAll(options, data) {
+
+        let indexByArticleId = {};
+
+        _.each(data, item => {
+          let {articleId} = item;
+          indexByArticleId[articleId] = item;
+          item.article = Article.get(articleId);
+        });
+
+        Stock.meta.data = data;
+        Stock.meta.indexByArticleId = indexByArticleId;
+
+        return [];
+
+      }
+
+    }
 
   });
 

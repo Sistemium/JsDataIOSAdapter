@@ -347,9 +347,9 @@
       }
 
       vm.setBusy(_.map(
-        _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.filter({articleId: pos.articleId}).length),
+        _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.meta.getByArticleId(pos.articleId)),
         pos => Article.find(pos.articleId)
-          .then(article => Article.loadRelations(article, 'Stock'))
+          .then(Stock.meta.loadArticle)
       ))
         .then(reloadVisible)
         .catch(error => console.error(error));
@@ -569,7 +569,7 @@
             ArticlePicture.findAll({}, options);
           }
         })
-        .then(() => Stock.cachedFindAll({
+        .then(() => Stock.meta.cachedFindAll({
           volumeNotZero: true,
           where: volumeNotZero
         }, options))
@@ -601,7 +601,7 @@
       if (!vm.currentPriceType) return;
 
       let stockCache = _.orderBy(_.map(
-        Stock.getAll(),
+        Stock.meta.getAll(),
         stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
       ), item => item.article && item.article.name);
 

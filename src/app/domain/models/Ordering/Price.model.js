@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, $q) {
 
     const Price = Schema.register({
 
@@ -23,13 +23,32 @@
       // linkRelations: false,
       notify: false,
 
-
-      cachedFindAll: function(filter, options) {
-        return Schema.config.cachedFindAll.call(Price, filter, options)
-          .then(data => Price.meta.data = _.assign(Price.meta.data || {}, _.groupBy(data, 'priceTypeId') || {}));
+      meta: {
+        data: {}
       },
 
-      meta: {
+      cachedFindAll: function(filter, options) {
+
+        const {priceTypeId} = filter;
+
+        if (!priceTypeId) {
+          return $q.reject('priceTypeId param must be specified for Price.cachedFindAll()');
+        }
+
+        let data = Price.meta.data[priceTypeId];
+
+        if (data) {
+          return data;
+        }
+
+        return Price.findAll(filter, _.assign(options, {afterFindAll, cacheResponse: false}));
+
+        function afterFindAll(options, data) {
+          Price.meta.data[priceTypeId] = data;
+          // options.cacheResponse = false;
+          return [];
+        }
+
       }
 
     });
