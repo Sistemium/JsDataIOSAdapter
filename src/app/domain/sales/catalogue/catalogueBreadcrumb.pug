@@ -4,6 +4,7 @@ span.pull-right(ng-if='vm.currentState!=="saleOrder" && !vm.saleOrdersDisabled')
   uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
   popover-placement='auto bottom-left'
   popover-is-open='vm.isSaleOrderPopoverOpen'
+  ng-click='vm.onSaleOrderClick()'
   )
     span Заказ
     span.caret

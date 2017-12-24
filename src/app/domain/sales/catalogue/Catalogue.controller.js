@@ -71,6 +71,7 @@
       toggleShowImagesClick,
       toggleShowFirstLevelClick,
       toggleHideBoxesClick,
+      onSaleOrderClick,
 
       compDiscountClick,
       bPlusButtonClick,
@@ -158,10 +159,12 @@
     }));
 
     SalesmanAuth.watchCurrent($scope, salesman => {
+
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
       vm.currentSalesman = salesman;
       vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
-      SaleOrder.findAllWithRelations(filter)('Outlet');
+
     });
 
     vm.watchScope(
@@ -231,6 +234,18 @@
     /*
      Handlers
      */
+
+    function onSaleOrderClick() {
+
+      if (vm.isSaleOrderPopoverOpen) {
+        return;
+      }
+
+      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+      vm.saleOrderBusy = SaleOrder.findAllWithRelations(filter)('Outlet');
+
+    }
 
     function onSearchEnter() {
       setCurrentArticleGroup();
