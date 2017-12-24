@@ -155,6 +155,8 @@
 
       const {Workflow, SaleOrder, Outlet, NewsMessage} = Schema.models();
 
+      $rootScope.$on('menu-show', setBadges);
+
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
 
@@ -170,9 +172,7 @@
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
-          $rootScope.$on('menu-show', setBadges);
-
-          setBadges();
+          // setBadges();
 
           Responsibility.meta.initData(DomainOption);
 
@@ -187,28 +187,6 @@
 
             });
 
-          function setBadges() {
-
-            let filter = SalesmanAuth.makeFilter({processing: 'draft'});
-
-            if (!DomainOption.visitsDisabled()) {
-              Schema.model('Visit')
-                .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
-            }
-
-            SaleOrder.groupBy(filter)
-              .then(data => {
-                Menu.setItemData('sales.saleOrders', {badge: data.length});
-              });
-
-            let actualFilter = NewsMessage.meta.filterActual();
-
-            NewsMessage.findAllWithRelations(actualFilter, {bypassCache: true})('UserNewsMessage')
-              .then(actual => {
-                let unRated = _.filter(actual, message => message.isUnrated());
-                Menu.setItemData('newsFeed', {badge: unRated.length});
-              });
-          }
 
         });
 
@@ -258,6 +236,29 @@
 
         model.eject(id);
 
+      }
+
+      function setBadges() {
+
+        let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+        if (!DomainOption.visitsDisabled()) {
+          Schema.model('Visit')
+            .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
+        }
+
+        SaleOrder.groupBy(filter)
+          .then(data => {
+            Menu.setItemData('sales.saleOrders', {badge: data.length});
+          });
+
+        let actualFilter = NewsMessage.meta.filterActual();
+
+        NewsMessage.findAllWithRelations(actualFilter, {bypassCache: true})('UserNewsMessage')
+          .then(actual => {
+            let unRated = _.filter(actual, message => message.isUnrated());
+            Menu.setItemData('newsFeed', {badge: unRated.length});
+          });
       }
 
     }
