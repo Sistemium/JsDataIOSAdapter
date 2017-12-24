@@ -49,7 +49,7 @@
               return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts');
             }
 
-            SaleOrder.find(id, {bypassCache: true, cacheResponse:false})
+            SaleOrder.find(id, {bypassCache: true, cacheResponse: false})
               .then(saleOrder => {
 
                 if (SaleOrder.hasChanges(id)) return;
@@ -116,22 +116,14 @@
 
       }
 
-      const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
-
       function onJSDataDestroy(event) {
 
-        const saleOrderId = _.get(vm, 'saleOrder.id');
-
-        DEBUG('onJSDataDestroy', event);
+        DEBUG('SaleOrderHelper onJSDataDestroy', event);
         let id = _.get(event, 'data.id');
-        if (!id) return;
 
-        if (SUBSCRIPTIONS.indexOf(event.resource) > -1) {
-          Schema.model(event.resource).eject(id);
-          if (id === saleOrderId) {
-            toastr.error('Заказ удален');
-            $state.go('^');
-          }
+        if (id && id === _.get(vm, 'saleOrder.id')) {
+          toastr.error('Заказ удален');
+          $state.go('^');
         }
 
       }

@@ -163,6 +163,7 @@
           }
 
           Sockets.onJsData('jsData:update', onJSData);
+          Sockets.onJsData('jsData:destroy', onJSDataDestroy);
 
           if (salesmanAuth.getCurrentUser() || salesmanAuth.hasOptions) {
             DEBUG('Sales module will jsDataSubscribe:', SUBSCRIPTIONS);
@@ -240,6 +241,22 @@
         } catch (e) {
           console.warn('onJSData error:', e);
         }
+
+      }
+
+      function onJSDataDestroy(event) {
+
+        DEBUG('onJSDataDestroy', event);
+
+        let id = _.get(event, 'data.id');
+
+        if (!id) return;
+
+        let model = Schema.model(event.resource);
+
+        if (!model) return;
+
+        model.eject(id);
 
       }
 
