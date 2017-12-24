@@ -46,7 +46,7 @@
           color: $white;
         }
 
-        &:hover {
+        &:hover:not(.active) {
           background-color: $gray-background-color;
         }
 

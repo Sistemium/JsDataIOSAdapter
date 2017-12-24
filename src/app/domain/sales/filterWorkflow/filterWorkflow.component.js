@@ -48,13 +48,8 @@
 
     function onWorkflowClick(workflow = null) {
 
-      if (vm.currentWorkflow === workflow) {
-        localStorageService.set(LOCALSTORAGE_KEY, null);
-        vm.currentWorkflow = null;
-      } else {
-        localStorageService.set(LOCALSTORAGE_KEY, workflow);
-        vm.currentWorkflow = workflow;
-      }
+      localStorageService.set(LOCALSTORAGE_KEY, workflow);
+      vm.currentWorkflow = workflow;
 
       vm.popoverIsOpen = false;
 
@@ -78,7 +73,7 @@
 
           });
 
-          vm.workflowDictionary = _.orderBy(items, ['cnt'], ['desc']);
+          vm.workflowDictionary = _.orderBy(items, ['cnt', 'cls'], ['desc', 'asc']);
 
         })
 
