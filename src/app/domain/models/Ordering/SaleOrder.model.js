@@ -77,9 +77,6 @@
         totalCostCached: cachedValue('totalCost'),
         totalPositionsCached: cachedValue('positionsCount'),
         totalBoxesCached: cachedValue('totalBoxes'),
-        outletAddress: cachedValue('outletAddress'),
-        outletName: cachedValue('outletName'),
-        salesmanTinyName: cachedValue('salesmanTinyName'),
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
@@ -173,15 +170,11 @@
 
     function setCaches(saleOrder) {
 
-      let {id, outlet, salesman} = saleOrder;
+      let {id} = saleOrder;
 
       const {SaleOrderPosition} = Schema.models();
 
-      caches[saleOrder.id] = {
-        outletAddress: outlet.address,
-        outletName: outlet.name,
-        salesmanTinyName: salesman.tinyName
-      };
+      caches[saleOrder.id] = {};
 
       SaleOrderPosition.findAll({saleOrderId: id}, {cacheResponse: false})
         .then(positions => {
