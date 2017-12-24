@@ -105,6 +105,10 @@
     position: relative;
     border-bottom: 1px solid $gray-border-color;
 
+    .outlet {
+      color: $black;
+    }
+
     @include responsive-only(lt-sm) {
 
       a.sale-order {
@@ -239,6 +243,7 @@
         }
 
         .outlet {
+
           flex-flow: column nowrap;
           align-items: flex-start;
           order: -1;
