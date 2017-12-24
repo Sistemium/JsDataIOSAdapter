@@ -62,7 +62,7 @@
 
         .processing-message
 
-          span.comment-text {{ ::item.commentText }}
+          span.comment-text {{ item.commentText }}
           span.icon(
           ng-if='item.processingMessage'
           ng-class='item.workflowStep.messageCls'
