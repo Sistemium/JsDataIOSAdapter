@@ -2,8 +2,13 @@ section
 
   h2 Playground
 
-  h4 Data
-  pre {{ vm.data | json }}
+  p Started at: {{ vm.started }}
+  p Finished "Price" in {{ vm.finished || '?' }} ms.
 
-  h4 Error
-  pre {{ vm.err | json }}
+  .data(ng-if='vm.data')
+    h4 Data
+    pre {{ vm.data | json }}
+
+  .error(ng-if='vm.err')
+    h4 Error
+    pre {{ vm.err | json }}
