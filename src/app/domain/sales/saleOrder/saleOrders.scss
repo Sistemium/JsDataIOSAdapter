@@ -119,13 +119,13 @@
 
     .date {
 
-      height: 61px;
+      height: 60px;
       padding-top: 25px;
       cursor: default;
 
       @include responsive-only(lt-sm) {
         padding-top: 50px;
-        height: 91px;
+        height: 90px;
       }
 
       .title {
@@ -157,14 +157,13 @@
 
         text-align: center;
 
-        padding-right: 9px;
+        @include responsive-only(gt-xs) {
+          padding-right: 6px;
+        }
 
         .badge {
           font-weight: normal;
           padding: 4px 6px;
-          @include responsive-only(xxs) {
-            //padding: 2px 4px;
-          }
         }
 
         &.blue .badge {
@@ -237,9 +236,15 @@
         }
 
         .totals {
-          display: flex;
-          flex-flow: row nowrap;
-          justify-content: space-between;
+
+          .cost {
+            float: right;
+          }
+
+          .position {
+            float: left;
+          }
+
         }
 
         .outlet {

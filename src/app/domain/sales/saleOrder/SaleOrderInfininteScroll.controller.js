@@ -2,6 +2,9 @@
 
 (function () {
 
+  const LIST_ITEM_HEIGHT_XS = 90;
+  const LIST_ITEM_HEIGHT = 60;
+
   function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers,
                                              SaleOrderHelper, saMedia, localStorageService, Sockets) {
 
@@ -120,7 +123,7 @@
     }
 
     function rowHeight() {
-      return isWideScreen() ? 61 : 91;
+      return isWideScreen() ? LIST_ITEM_HEIGHT : LIST_ITEM_HEIGHT_XS;
     }
 
     function isWideScreen() {
