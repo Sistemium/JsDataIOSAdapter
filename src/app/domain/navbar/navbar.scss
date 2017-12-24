@@ -7,9 +7,9 @@
   overflow-x: scroll;
   overflow-y: hidden;
 
-  margin-bottom: -7px;
+  margin-bottom: 10px;
   margin-top: $margin-bottom-xs;
-  height: 37px;
+  //height: 37px;
 
   .last-digest {
     position: fixed;
@@ -47,7 +47,8 @@
   }
 
   & + hr {
-    margin: 9px 0;
+    margin-top: 9px;
+    margin-bottom: 9px;
   }
 
   a.home {

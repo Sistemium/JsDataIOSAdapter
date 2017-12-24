@@ -51,7 +51,13 @@ sab-dropdown .popover {
   .caret {
     display: none;
   }
+
 }
+
+a[disabled] + .popover {
+  display: none !important;
+}
+
 
 span.caret {
 
