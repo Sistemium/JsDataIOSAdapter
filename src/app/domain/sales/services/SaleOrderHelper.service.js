@@ -121,7 +121,7 @@
         DEBUG('SaleOrderHelper onJSDataDestroy', event);
         let id = _.get(event, 'data.id');
 
-        if (id && id === _.get(vm, 'saleOrder.id')) {
+        if (id && id === _.get(vm, 'saleOrder.id') || id === $state.params.id) {
           toastr.error('Заказ удален');
           $state.go('^');
         }
