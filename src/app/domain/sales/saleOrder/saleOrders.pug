@@ -30,7 +30,9 @@
     .list-item(
     ng-repeat='item in vm.data track by item.id'
     )
-      .list-group-header.date(ng-if='!item.outletId')
+      .list-group-header.date(
+      ng-if='!item.outletId'
+      )
         .title {{ ::item.date | amDateFormat:'DD.MM.YYYY' }}
 
       a.sale-order(

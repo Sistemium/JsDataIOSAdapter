@@ -3,7 +3,7 @@
 (function () {
 
   const LIST_ITEM_HEIGHT_XS = 90;
-  const LIST_ITEM_HEIGHT = 60;
+  const LIST_ITEM_HEIGHT = 66;
 
   function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers,
                                              SaleOrderHelper, saMedia, localStorageService, Sockets) {
