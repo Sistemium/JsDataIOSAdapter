@@ -5,6 +5,7 @@
   angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth, $rootScope) {
 
     let caches = {};
+    let minExpires = new Date();
 
     const wDict = {
       w1: 'позиция',
@@ -161,10 +162,15 @@
     function cachedValue(name) {
 
       return function () {
-        if (!caches[this.id]) {
-          setCaches(this);
+
+        let cached = caches[this.id];
+
+        if (!cached || cached.ts < minExpires) {
+          cached = setCaches(this);
         }
-        return caches[this.id][name];
+
+        return cached[name];
+
       }
     }
 
@@ -174,17 +180,21 @@
 
       const {SaleOrderPosition} = Schema.models();
 
-      caches[saleOrder.id] = {};
+      const cached = caches[saleOrder.id] = caches[saleOrder.id] || {};
+
+      cached.ts = new Date();
 
       SaleOrderPosition.findAll({saleOrderId: id}, {cacheResponse: false})
         .then(positions => {
-          _.assign(caches[saleOrder.id], {
+          _.assign(cached, {
             //positions,
             positionsCount: positions.length || null,
             totalCost: Schema.aggregate('cost').sum(positions) || null,
             totalBoxes: Schema.aggregate('boxVolume').sumFn(positions) || null
           })
         });
+
+      return cached;
 
     }
 
@@ -195,7 +205,7 @@
     $rootScope.$watch(ifPositionsChanged, clearCaches);
 
     function clearCaches() {
-      caches = {};
+      minExpires = new Date();
     }
 
     function ifPositionsChanged() {
