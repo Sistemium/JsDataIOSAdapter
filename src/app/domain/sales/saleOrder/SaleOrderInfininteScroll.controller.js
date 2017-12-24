@@ -2,7 +2,8 @@
 
 (function () {
 
-  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService, Sockets) {
+  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers,
+                                             SaleOrderHelper, saMedia, localStorageService, Sockets) {
 
     const {ScrollHelper, saControllerHelper} = Helpers;
     let {SaleOrder} = Schema.models();
@@ -190,8 +191,6 @@
     }
 
     function getData() {
-
-      console.log('fired');
 
       if (!vm.currentWorkflow) {
         vm.currentWorkflow = localStorageService.get('currentWorkflow');
