@@ -1,3 +1,5 @@
+@import "variables";
+
 li.active {
   .gray {
     color: white;
@@ -14,6 +16,18 @@ li.active {
   .list-group-item:last-of-type {
     border-bottom-right-radius: $border-radius;
     border-bottom-left-radius: $border-radius;
+  }
+
+}
+
+.list-item a {
+
+  display: block;
+  padding: 3px;
+
+  &:hover {
+    text-decoration: none;
+    background: $position-hover-color;
   }
 
 }
