@@ -88,7 +88,14 @@
 
       console.warn(resource, data);
 
-      mergeViewData(data);
+      let saleOrder = SaleOrder.get(data.id);
+
+      if (!saleOrder) {
+        saleOrder = SaleOrder.inject(data);
+      }
+
+      saleOrder.DSLoadRelations(['Outlet'])
+        .then(mergeViewData);
 
     }
 
@@ -158,7 +165,13 @@
 
     function mergeViewData(withData) {
 
+      withData = _.isArray(withData) ? withData : [withData];
+
       saleOrders.push(...withData);
+
+      if (vm.currentWorkflow) {
+        saleOrders = _.filter(saleOrders, {processing: vm.currentWorkflow});
+      }
 
       let saleOrdersWithDates = [];
       let dates = _.groupBy(saleOrders, 'date');
