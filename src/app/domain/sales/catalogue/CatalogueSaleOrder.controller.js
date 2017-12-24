@@ -21,7 +21,8 @@
       clearSearchOutletClick,
       saleOrderSaveDraftClick,
       minusButtonClick,
-      lastPlus: {}
+      lastPlus: {},
+      outletClick
 
     });
 
@@ -99,15 +100,24 @@
      Handlers
      */
 
+    function outletClick() {
+
+      vm.isSaleOrderPopoverOpen = !vm.isSaleOrderPopoverOpen;
+
+      if (vm.isSaleOrderPopoverOpen && !vm.outlets) {
+
+        let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
+
+        vm.outletBusy = Outlet.findAll(filter)
+          .then(data => {
+            vm.outlets = _.orderBy(data, 'name');
+          });
+
+      }
+
+    }
 
     function onSalesmanChange(salesman) {
-
-      let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
-
-      Outlet.findAll(filter, {bypassCache: true})
-        .then(data => {
-          vm.outlets = _.orderBy(data, 'name');
-        });
 
       if (!vm.saleOrder) return;
 
