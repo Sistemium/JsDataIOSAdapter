@@ -23,177 +23,64 @@
   .popover-content {
     padding: 0;
   }
+
   .workflow-popover {
 
     .workflows {
 
-      display: flex;
-      flex-flow: column nowrap;
-      user-select: none;
-
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-
-      //@include responsive-only(lt-sm) {
-      //  margin-bottom: 0;
-      //  border-bottom: 1px solid silver;
-      //}
-      //
-      //@include responsive-only(xxs) {
-      //  justify-content: space-between;
-      //}
-
       > .workflow {
 
         outline: none;
-        cursor: pointer;
 
-        &:not(:last-of-type) {
-          border-bottom: 1px solid $border-gray;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 7px 10px;
+
+        text-decoration: none;
+        color: $black;
+
+        &.active {
+          background-color: $primary-color;
+          color: $white;
         }
 
-        &.blue > * {
+        &:hover {
+          background-color: $gray-background-color;
+        }
+
+        & + * {
+          border-top: 1px solid $border-gray;
+        }
+
+        &.blue .badge {
           @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
         }
 
-        &.green > * {
+        &.green .badge {
           @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
         }
 
-        &.orange > * {
+        &.orange .badge {
           @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
         }
 
-        &.red > * {
+        &.red .badge {
           @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
         }
 
-        a {
-          border-left: 10px solid transparent;
-          padding: 7px 10px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-
-          text-decoration: none;
-
-          .name {
-            height: 20px;
-          }
-          .caret {
-            align-self: center;
-          }
-
+        .caret {
+          align-self: center;
         }
 
-        span.name {
+        .name {
           padding-right: 10px;
         }
 
       }
 
     }
-  }
-
-  .dropdown {
-    margin-bottom: 15px;
-
-    & .dropdown-button {
-
-      border-radius: 10px;
-      background-color: $gray-background-color;
-      border: none;
-      min-width: 150px;
-      display: inline-block;
-      padding: 7px 10px;
-      cursor: pointer;
-      user-select: none;
-
-      &:focus {
-        background-color: $gray-background-color;
-        border: 1px solid #000;
-      }
-
-      @include responsive-only(xxs) {
-        width: 100%;
-      }
-
-      a {
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        text-decoration: none;
-
-        .name {
-          height: 20px;
-        }
-        .caret {
-          align-self: center;
-        }
-
-      }
-
-    }
-
-    & ul {
-
-      border-color: silver;
-
-      @include responsive-only(xxs) {
-        width: 100%;
-      }
-    }
-
-    ul.dropdown-menu {
-
-      > * {
-        cursor: pointer;
-      }
-
-      li {
-        min-width: 250px;
-        min-height: 25px;
-
-        &.current-workflow a {
-          background-color: darken($gray-background-color, 10%);
-          color: black;
-        }
-
-        a {
-          border-left: 10px solid transparent;
-          padding: 3px 10px;
-          display: flex;
-          justify-content: space-between;
-        }
-
-        &:hover a {
-          background-color: darken($gray-background-color, 10%);
-          color: black;
-        }
-
-        &.blue > * {
-          @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
-        }
-
-        &.green > * {
-          @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
-        }
-
-        &.orange > * {
-          @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
-        }
-
-        &.red > * {
-          @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
-        }
-
-      }
-    }
-
   }
 
 }

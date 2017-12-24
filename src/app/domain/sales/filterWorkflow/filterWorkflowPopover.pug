@@ -7,11 +7,11 @@
   resize
   resize-offset-top='25'
   )
-    .workflow(
+    a.workflow(
+    href
     ng-repeat='workflow in vm.workflowDictionary track by workflow.processing'
     ng-click='vm.onWorkflowClick(workflow.processing)'
-    ng-class='[{"current-workflow": workflow.processing === vm.currentWorkflow}, workflow.cls]'
+    ng-class='[{active: workflow.processing === vm.currentWorkflow}, workflow.cls]'
     )
-      a
-        span {{ workflow.label || workflow.processing }}
-        span {{ workflow.cnt }}
+      span {{ workflow.label || workflow.processing }}
+      span.badge {{ workflow.cnt }}
