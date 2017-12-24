@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, $q) {
 
     const Stock = Schema.register({
 
@@ -70,9 +70,13 @@
 
     function cachedFindAll(filter, options) {
 
+      if (Stock.meta.data) {
+        return $q.resolve(Stock.meta.data);
+      }
+
       const {Article} = Schema.models();
 
-      return Stock.findAll(filter, _.assign(options, {afterFindAll, cacheResponse: false}));
+      return Stock.findAll(filter, _.assign({afterFindAll, cacheResponse: false}, options));
 
       function afterFindAll(options, data) {
 

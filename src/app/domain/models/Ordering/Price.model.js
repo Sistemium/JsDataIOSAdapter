@@ -38,10 +38,10 @@
         let data = Price.meta.data[priceTypeId];
 
         if (data) {
-          return data;
+          return $q.resolve(data);
         }
 
-        return Price.findAll(filter, _.assign(options, {afterFindAll, cacheResponse: false}));
+        return Price.findAll(filter, _.assign({afterFindAll, cacheResponse: false}, options));
 
         function afterFindAll(options, data) {
           Price.meta.data[priceTypeId] = data;
