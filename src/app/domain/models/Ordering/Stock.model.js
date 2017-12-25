@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, $q) {
+  angular.module('Models').run(function (Schema, $q, IOS) {
 
     const meta = {
 
@@ -19,6 +19,8 @@
       findAllUpdates
 
     };
+
+    const isIos = IOS.isIos();
 
     const Stock = Schema.register({
 
@@ -112,9 +114,12 @@
         afterFindAll,
         cacheResponse: false,
         bypassCache: true,
-        limit: 10000,
-        offset: meta.lastOffset
+        limit: 10000
       }, options);
+
+      if (!isIos) {
+        cacheOptions.offset = meta.lastOffset;
+      }
 
       let result = [];
 
@@ -124,11 +129,12 @@
       function afterFindAll(options, data) {
 
         const {Article} = Schema.models();
-        let maxTs = _.maxBy(data, 'ts');
 
-        meta.lastOffset = `1-${moment(maxTs.ts).format('YYYYMMDDHHmmssSSS')}-0`;
-
-        console.warn('maxTs', maxTs, meta.lastOffset);
+        if (!isIos) {
+          let maxTs = _.maxBy(data, 'ts');
+          meta.lastOffset = `1-${moment(maxTs.ts).format('YYYYMMDDHHmmssSSS')}-0`;
+          console.warn('maxTs', maxTs, meta.lastOffset);
+        }
 
         let {indexByArticleId} = meta;
 

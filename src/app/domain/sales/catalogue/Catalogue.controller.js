@@ -585,7 +585,6 @@
           }
         })
         .then(() => Stock.meta.cachedFindAll({
-          volumeNotZero: true,
           where: volumeNotZero
         }, options))
         .then(() => Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options)))
