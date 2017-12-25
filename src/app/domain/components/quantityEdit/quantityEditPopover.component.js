@@ -88,13 +88,13 @@
     }
 
     function deleteClick() {
-      // if (position.id && !vm.deleteConfirmation) {
-      //   return vm.deleteConfirmation = true;
-      // }
-      // if (position.id) {
+
       changeVolume(-position.volume);
-      // }
+      position.updateCost();
+      saleOrder.updateTotalCost();
+
       if (vm.popoverOpen) vm.popoverOpen = false;
+
     }
 
     function onQtyChange(newValues, oldValues) {
