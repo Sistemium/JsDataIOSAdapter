@@ -4,6 +4,22 @@
 
   angular.module('Models').run(function (Schema, $q) {
 
+    const meta = {
+
+      data: null,
+      indexByArticleId: {},
+
+      lastOffset: '*',
+
+      cachedFindAll,
+      getAll,
+      getByArticleId,
+      loadArticle,
+      inject,
+      findAllUpdates
+
+    };
+
     const Stock = Schema.register({
 
       name: 'Stock',
@@ -23,31 +39,45 @@
       instanceEvents: false,
       notify: false,
 
-      meta: {
-        data: null,
-        indexByArticleId: {},
-        cachedFindAll,
-        getAll,
-        getByArticleId,
-        loadArticle
-      }
+      meta
 
     });
 
+    function inject(item) {
+
+      const {Article} = Schema.models();
+      let {articleId} = item;
+
+      meta.indexByArticleId[articleId] = item;
+
+      let index = _.findIndex(meta.data, {articleId});
+
+      if (index >= 0) {
+        meta.data[index] = item;
+      } else {
+        meta.data.push(item);
+      }
+
+      item.article = item.article || Article.get(articleId);
+
+      return item;
+
+    }
+
     function getByArticleId(articleId) {
-      return Stock.meta.indexByArticleId[articleId]
+      return meta.indexByArticleId[articleId]
     }
 
     function getAll() {
-      return Stock.meta.data;
+      return meta.data;
     }
 
     function loadArticle(article) {
 
       const articleId = article.id;
 
-      if (Stock.meta.indexByArticleId[articleId]) {
-        return Stock.meta.indexByArticleId[articleId];
+      if (meta.indexByArticleId[articleId]) {
+        return meta.indexByArticleId[articleId];
       }
 
       return Stock.findAll({articleId}, {afterFindAll, cacheResponse: false});
@@ -56,40 +86,71 @@
 
         let item = _.first(data) || {};
 
-        let {indexByArticleId} = Stock.meta;
+        let {indexByArticleId} = meta;
 
         indexByArticleId[articleId] = item;
         item.article = article;
 
-        Stock.meta.data.push(item);
+        meta.data.push(item);
 
         return null;
 
       }
     }
 
-    function cachedFindAll(filter, options) {
+    function findAllUpdates() {
+      return cachedFindAll({}, {mergeUpdates: true});
+    }
 
-      if (Stock.meta.data) {
-        return $q.resolve(Stock.meta.data);
+    function cachedFindAll(filter, options = {}) {
+
+      if (meta.data && !options.mergeUpdates) {
+        return $q.resolve(meta.data);
       }
 
-      const {Article} = Schema.models();
+      let cacheOptions = _.assign({
+        afterFindAll,
+        cacheResponse: false,
+        bypassCache: true,
+        limit: 10000,
+        offset: meta.lastOffset
+      }, options);
 
-      return Stock.findAll(filter, _.assign({afterFindAll, cacheResponse: false}, options));
+      let result = [];
+
+      return Stock.findAll(filter, cacheOptions)
+        .then(() => result);
 
       function afterFindAll(options, data) {
 
-        let indexByArticleId = {};
+        const {Article} = Schema.models();
+        let maxTs = _.maxBy(data, 'ts');
 
-        _.each(data, item => {
-          let {articleId} = item;
-          indexByArticleId[articleId] = item;
-          item.article = Article.get(articleId);
-        });
+        meta.lastOffset = `1-${moment(maxTs.ts).format('YYYYMMDDHHmmssSSS')}-0`;
 
-        Stock.meta.data = data;
-        Stock.meta.indexByArticleId = indexByArticleId;
+        console.warn('maxTs', maxTs, meta.lastOffset);
+
+        let {indexByArticleId} = meta;
+
+        if (options.mergeUpdates && meta.data) {
+
+          _.each(data, inject);
+
+        } else {
+
+          _.each(data, item => {
+
+            let {articleId} = item;
+            indexByArticleId[articleId] = item;
+            item.article = Article.get(articleId);
+
+          });
+
+          meta.data = data;
+
+        }
+
+        result = data;
 
         return [];
 

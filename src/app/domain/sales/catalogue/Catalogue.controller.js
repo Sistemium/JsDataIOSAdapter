@@ -184,14 +184,14 @@
       if (e.resource !== 'Stock') return;
 
       DEBUG('jsData:updateCollection', e);
+      //
+      // let options = {
+      //   limit: 10000,
+      //   bypassCache: true,
+      //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+      // };
 
-      let options = {
-        limit: 10000,
-        bypassCache: true,
-        offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-      };
-
-      Stock.cachedFindAll({}, options)
+      Stock.meta.findAllUpdates()
         .then(res => {
 
           let index = {};
@@ -308,7 +308,7 @@
     function onJSData(event) {
       if (event.resource === 'Stock') {
         if (_.get(event, 'data.articleId')) {
-          Stock.inject(event.data);
+          Stock.meta.inject(event.data);
         }
       }
     }
