@@ -205,7 +205,7 @@
         if (unbindToChanges) unbindToChanges();
 
         vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', _.debounce(() => {
-          if (!vm.saleOrder) return;
+          if (!vm.saleOrder || !vm.saleOrder.id) return;
           if (SaleOrder.hasChanges(vm.saleOrder.id)) onSaleOrderChange();
         }, 700));
 
