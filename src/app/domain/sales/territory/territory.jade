@@ -29,10 +29,11 @@ ng-hide='vm.hideHashes'
 
 hr(ng-hide='vm.hideHashes')
 
-.territory.ui-view(resize='territory' cg-busy='vm.cgBusy')
+.territory.ui-view(resize='territory')
 
   section#scroll-main(
-  style='height: {{territory.windowHeight - territory.offsetTop - 5}}px;'
+  cg-busy='vm.cgBusy'
+  resize resize-offset-top='5'
   )
     .vr-parent(vs-repeat vs-size-fn='vm.rowHeight' vs-scroll-parent="#scroll-main" vs-excess='7')
 
