@@ -185,6 +185,9 @@
                 return getWorkflow('SaleOrder.v2', 'workflowSaleOrderSupervisor');
               }
 
+            })
+            .then(() => {
+              _.each(SaleOrder.getAll(), saleOrder => SaleOrder.compute(saleOrder));
             });
 
 
