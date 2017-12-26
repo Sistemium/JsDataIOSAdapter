@@ -25,7 +25,7 @@
       computed: {
         tinyName: ['name', function (name) {
           let m = name.match(/^[^ ]+[ ]+./);
-          return m ? (m[0] + '.') : null;
+          return m ? (m[0] + '.') : name;
         }],
 
         mobileNumber: ['phone', function (phone) {
