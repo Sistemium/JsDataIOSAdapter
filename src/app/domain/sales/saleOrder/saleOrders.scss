@@ -237,12 +237,14 @@
 
         .totals {
 
+          display: flex;
+          justify-content: space-between;
           .cost {
-            float: right;
+            order: 2;
           }
 
           .position {
-            float: left;
+            order: 1;
           }
 
         }
