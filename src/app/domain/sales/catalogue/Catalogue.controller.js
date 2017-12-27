@@ -46,7 +46,7 @@
       search: $state.params.q || '',
       saleOrderId: $state.params.saleOrderId,
       saleOrderPositions: false,
-      isOpenOutletPopover: false,
+      isOutletPopoverOpen: false,
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
       hideBoxes: localStorageService.get('hideBoxes') || false,

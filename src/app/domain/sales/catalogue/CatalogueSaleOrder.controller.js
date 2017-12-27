@@ -102,9 +102,9 @@
 
     function outletClick() {
 
-      vm.isSaleOrderPopoverOpen = !vm.isSaleOrderPopoverOpen;
+      // vm.isSaleOrderPopoverOpen = !vm.isSaleOrderPopoverOpen;
 
-      if (vm.isSaleOrderPopoverOpen && !vm.outlets) {
+      if (!vm.outlets) {
 
         let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
 
@@ -188,7 +188,7 @@
 
     function searchOutletClick(outlet) {
       vm.saleOrder.outlet = outlet;
-      vm.isOpenOutletPopover = false;
+      vm.isOutletPopoverOpen = false;
     }
 
     /*
