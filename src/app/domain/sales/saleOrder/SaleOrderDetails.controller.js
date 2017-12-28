@@ -93,6 +93,10 @@
 
 
     function safeSave() {
+      if (vm.saleOrder && !vm.saleOrder.safeSave) {
+        console.warn(vm.saleOrder);
+        return;
+      }
       return vm.saleOrder && vm.saleOrder.safeSave();
     }
 

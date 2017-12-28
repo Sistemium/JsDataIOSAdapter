@@ -46,7 +46,7 @@
       search: $state.params.q || '',
       saleOrderId: $state.params.saleOrderId,
       saleOrderPositions: false,
-      isOpenOutletPopover: false,
+      isOutletPopoverOpen: false,
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
       hideBoxes: localStorageService.get('hideBoxes') || false,
@@ -71,6 +71,7 @@
       toggleShowImagesClick,
       toggleShowFirstLevelClick,
       toggleHideBoxesClick,
+      onSaleOrderClick,
 
       compDiscountClick,
       bPlusButtonClick,
@@ -158,10 +159,12 @@
     }));
 
     SalesmanAuth.watchCurrent($scope, salesman => {
+
       let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
       vm.currentSalesman = salesman;
       vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
-      SaleOrder.findAllWithRelations(filter)('Outlet');
+
     });
 
     vm.watchScope(
@@ -181,14 +184,14 @@
       if (e.resource !== 'Stock') return;
 
       DEBUG('jsData:updateCollection', e);
+      //
+      // let options = {
+      //   limit: 10000,
+      //   bypassCache: true,
+      //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+      // };
 
-      let options = {
-        limit: 10000,
-        bypassCache: true,
-        offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-      };
-
-      Stock.cachedFindAll({}, options)
+      Stock.meta.findAllUpdates()
         .then(res => {
 
           let index = {};
@@ -231,6 +234,18 @@
     /*
      Handlers
      */
+
+    function onSaleOrderClick() {
+
+      if (vm.isSaleOrderPopoverOpen) {
+        return;
+      }
+
+      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+      vm.saleOrderBusy = SaleOrder.findAllWithRelations(filter)('Outlet');
+
+    }
 
     function onSearchEnter() {
       setCurrentArticleGroup();
@@ -293,7 +308,7 @@
     function onJSData(event) {
       if (event.resource === 'Stock') {
         if (_.get(event, 'data.articleId')) {
-          Stock.inject(event.data);
+          Stock.meta.inject(event.data);
         }
       }
     }
@@ -347,9 +362,9 @@
       }
 
       vm.setBusy(_.map(
-        _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.filter({articleId: pos.articleId}).length),
+        _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.meta.getByArticleId(pos.articleId)),
         pos => Article.find(pos.articleId)
-          .then(article => Article.loadRelations(article, 'Stock'))
+          .then(Stock.meta.loadArticle)
       ))
         .then(reloadVisible)
         .catch(error => console.error(error));
@@ -569,8 +584,7 @@
             ArticlePicture.findAll({}, options);
           }
         })
-        .then(() => Stock.cachedFindAll({
-          volumeNotZero: true,
+        .then(() => Stock.meta.cachedFindAll({
           where: volumeNotZero
         }, options))
         .then(() => Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options)))
@@ -601,7 +615,7 @@
       if (!vm.currentPriceType) return;
 
       let stockCache = _.orderBy(_.map(
-        Stock.getAll(),
+        Stock.meta.getAll(),
         stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
       ), item => item.article && item.article.name);
 

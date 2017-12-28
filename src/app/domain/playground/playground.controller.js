@@ -5,15 +5,25 @@
     .module('webPage')
     .controller('PlayGroundController', PlayGroundController);
 
-  function PlayGroundController(Schema) {
+  function PlayGroundController(Schema, DEBUG, moment) {
 
     const vm = this;
-    const {Commentary} = Schema.models();
+    const {Price} = Schema.models();
 
-    Commentary
-      .groupBy({}, ['owner1Xid'])
-      .then(data => vm.data = data)
+    vm.started = moment();
+
+    DEBUG('PlayGroundController started', vm.started);
+
+    Price
+      .findAll({}, {afterFindAll, bypassCache: true})
+      .then(() => vm.finished = moment().diff(vm.started))
       .catch(err => vm.err = err);
+
+    function afterFindAll(options, data) {
+      DEBUG('PlayGroundController afterFindAll', options, data);
+      return [];
+      // return data;
+    }
 
   }
 

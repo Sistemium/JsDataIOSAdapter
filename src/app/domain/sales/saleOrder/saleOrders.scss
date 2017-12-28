@@ -1,7 +1,6 @@
 @import "../../../styles/variables";
 @import "../../../styles/flags";
 
-
 .sale-orders {
 
   $width-processing: 0.1;
@@ -9,7 +8,7 @@
   $width-outlet: 0.9;
   $width-totals: 0.13;
 
-  $processing-xs-max-width: 65px;
+  $processing-xs-max-width: 90px;
 
   $headers: (
       ($width-processing, 'processing'),
@@ -90,7 +89,6 @@
 
   }
 
-
   #scroll-main {
 
     margin-top: 10px;
@@ -102,17 +100,18 @@
 
   }
 
-  #scroll-main > .clickable {
+  #scroll-main .list-item {
 
     position: relative;
+    border-bottom: 1px solid $gray-border-color;
 
-    > * {
-      border-bottom: 1px solid $gray-border-color;
+    .outlet {
+      color: $black;
     }
 
     @include responsive-only(lt-sm) {
 
-      .sale-order {
+      a.sale-order {
         padding: 5px 0;
       }
 
@@ -120,13 +119,13 @@
 
     .date {
 
-      height: 61px;
+      height: 66px;
       padding-top: 25px;
       cursor: default;
 
       @include responsive-only(lt-sm) {
         padding-top: 50px;
-        height: 91px;
+        height: 90px;
       }
 
       .title {
@@ -135,45 +134,52 @@
 
     }
 
-    .sale-order {
+    //.sale-order {
+    //
+    //  &:hover {
+    //    background-color: $position-hover-color;
+    //  }
+    //
+    //  @include responsive-only(lt-sm) {
+    //  }
+    //
+    //}
 
-      &:hover {
-        background-color: $position-hover-color;
-      }
-
-      @include responsive-only(lt-sm) {
-      }
-
-    }
-
-    .row-data {
+    .list-item-body {
 
       @include responsive-only(gt-xs) {
-        flex-flow: row nowrap;
         display: flex;
+        flex-flow: row nowrap;
         align-items: center;
       }
 
       .processing {
 
+        text-align: center;
+
         @include responsive-only(gt-xs) {
-          padding-right: 10px;
+          padding-right: 6px;
         }
 
-        &.orange {
-          color: $state-warning-text;
+        .badge {
+          font-weight: normal;
+          padding: 4px 6px;
         }
 
-        &.green {
-          color: $state-success-text;
+        &.blue .badge {
+          @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
         }
 
-        &.blue {
-          color: $state-info-text;
+        &.green .badge {
+          @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
         }
 
-        &.red {
-          color: $state-danger-text;
+        &.orange .badge {
+          @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
+        }
+
+        &.red .badge {
+          @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
         }
 
       }
@@ -230,12 +236,21 @@
         }
 
         .totals {
+
           display: flex;
-          flex-flow: row nowrap;
           justify-content: space-between;
+          .cost {
+            order: 2;
+          }
+
+          .position {
+            order: 1;
+          }
+
         }
 
         .outlet {
+
           flex-flow: column nowrap;
           align-items: flex-start;
           order: -1;
@@ -281,7 +296,7 @@
 
     }
 
-    .processing-message {
+    .list-item-footer {
 
       height: 20px;
       font-style: italic;
@@ -310,8 +325,6 @@
   }
 
 }
-
-
 
 .sale-order.alert {
   .processingMessage {
@@ -345,7 +358,6 @@
     border-radius: $border-radius/2;
     border: solid 1px darken($gray-background-color, 10%);
     padding: 4px 8px;
-
 
     &.blue, &.info {
       @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);

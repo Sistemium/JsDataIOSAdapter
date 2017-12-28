@@ -3,6 +3,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
   popovers
     a.popover-trigger(
     href
+    ng-click='vm.outletClick()'
     uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
     popover-is-open='vm.isSaleOrderPopoverOpen'
     ng-disabled='saleOrderExpanded'
@@ -36,6 +37,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
       a(
       href
       ng-if='!vm.saleOrder.outletId || saleOrderExpanded && vm.saleOrder.workflowStep.editable || !vm.saleOrder.id'
+      ng-click='vm.outletClick()'
       popover-is-open='vm.isOutletPopoverOpen'
       uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
       )

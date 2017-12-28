@@ -155,6 +155,8 @@
 
       const {Workflow, SaleOrder, Outlet, NewsMessage} = Schema.models();
 
+      $rootScope.$on('menu-show', setBadges);
+
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
 
@@ -163,15 +165,14 @@
           }
 
           Sockets.onJsData('jsData:update', onJSData);
+          Sockets.onJsData('jsData:destroy', onJSDataDestroy);
 
           if (salesmanAuth.getCurrentUser() || salesmanAuth.hasOptions) {
             DEBUG('Sales module will jsDataSubscribe:', SUBSCRIPTIONS);
             Sockets.jsDataSubscribe(SUBSCRIPTIONS);
           }
 
-          $rootScope.$on('menu-show', setBadges);
-
-          setBadges();
+          // setBadges();
 
           Responsibility.meta.initData(DomainOption);
 
@@ -184,30 +185,11 @@
                 return getWorkflow('SaleOrder.v2', 'workflowSaleOrderSupervisor');
               }
 
+            })
+            .then(() => {
+              _.each(SaleOrder.getAll(), saleOrder => SaleOrder.compute(saleOrder));
             });
 
-          function setBadges() {
-
-            let filter = SalesmanAuth.makeFilter({processing: 'draft'});
-
-            if (!DomainOption.visitsDisabled()) {
-              Schema.model('Visit')
-                .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
-            }
-
-            SaleOrder.groupBy(filter)
-              .then(data => {
-                Menu.setItemData('sales.saleOrders', {badge: data.length});
-              });
-
-            let actualFilter = NewsMessage.meta.filterActual();
-
-            NewsMessage.findAllWithRelations(actualFilter, {bypassCache: true})('UserNewsMessage')
-              .then(actual => {
-                let unRated = _.filter(actual, message => message.isUnrated());
-                Menu.setItemData('newsFeed', {badge: unRated.length});
-              });
-          }
 
         });
 
@@ -241,6 +223,45 @@
           console.warn('onJSData error:', e);
         }
 
+      }
+
+      function onJSDataDestroy(event) {
+
+        DEBUG('onJSDataDestroy', event);
+
+        let id = _.get(event, 'data.id');
+
+        if (!id) return;
+
+        let model = Schema.model(event.resource);
+
+        if (!model) return;
+
+        model.eject(id);
+
+      }
+
+      function setBadges() {
+
+        let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+        if (!DomainOption.visitsDisabled()) {
+          Schema.model('Visit')
+            .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
+        }
+
+        SaleOrder.groupBy(filter)
+          .then(data => {
+            Menu.setItemData('sales.saleOrders', {badge: data.length});
+          });
+
+        let actualFilter = NewsMessage.meta.filterActual();
+
+        NewsMessage.findAllWithRelations(actualFilter, {bypassCache: true})('UserNewsMessage')
+          .then(actual => {
+            let unRated = _.filter(actual, message => message.isUnrated());
+            Menu.setItemData('newsFeed', {badge: unRated.length});
+          });
       }
 
     }

@@ -5,6 +5,7 @@
   angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth, $rootScope) {
 
     let caches = {};
+    let minExpires = new Date();
 
     const wDict = {
       w1: 'позиция',
@@ -77,9 +78,6 @@
         totalCostCached: cachedValue('totalCost'),
         totalPositionsCached: cachedValue('positionsCount'),
         totalBoxesCached: cachedValue('totalBoxes'),
-        outletAddress: cachedValue('outletAddress'),
-        outletName: cachedValue('outletName'),
-        salesmanTinyName: cachedValue('salesmanTinyName'),
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
@@ -164,34 +162,39 @@
     function cachedValue(name) {
 
       return function () {
-        if (!caches[this.id]) {
-          setCaches(this);
+
+        let cached = caches[this.id];
+
+        if (!cached || cached.ts < minExpires) {
+          cached = setCaches(this);
         }
-        return caches[this.id][name];
+
+        return cached[name];
+
       }
     }
 
     function setCaches(saleOrder) {
 
-      let {id, outlet, salesman} = saleOrder;
+      let {id} = saleOrder;
 
       const {SaleOrderPosition} = Schema.models();
 
-      caches[saleOrder.id] = {
-        outletAddress: outlet.address,
-        outletName: outlet.name,
-        salesmanTinyName: salesman.tinyName
-      };
+      const cached = caches[saleOrder.id] = caches[saleOrder.id] || {};
+
+      cached.ts = new Date();
 
       SaleOrderPosition.findAll({saleOrderId: id}, {cacheResponse: false})
         .then(positions => {
-          _.assign(caches[saleOrder.id], {
+          _.assign(cached, {
             //positions,
             positionsCount: positions.length || null,
             totalCost: Schema.aggregate('cost').sum(positions) || null,
             totalBoxes: Schema.aggregate('boxVolume').sumFn(positions) || null
           })
         });
+
+      return cached;
 
     }
 
@@ -202,7 +205,7 @@
     $rootScope.$watch(ifPositionsChanged, clearCaches);
 
     function clearCaches() {
-      caches = {};
+      minExpires = new Date();
     }
 
     function ifPositionsChanged() {

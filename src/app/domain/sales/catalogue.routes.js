@@ -7,9 +7,10 @@
 
       stateHelperProvider
         .state({
+
           url: '/catalogue/{articleGroupId}?q',
           name: 'sales.catalogue',
-          templateUrl: 'app/domain/sales/views/catalogue.html',
+          templateUrl: 'app/domain/sales/catalogue/catalogue.html',
           controller: 'CatalogueController',
           controllerAs: 'vm',
 
@@ -23,7 +24,7 @@
             {
               name: 'saleOrder',
               url: '/saleOrder/{saleOrderId}?ordered',
-              templateUrl: 'app/domain/sales/views/catalogue/catalogueSaleOrder.html',
+              templateUrl: 'app/domain/sales/catalogue/catalogueSaleOrder.html',
               controller: 'CatalogueSaleOrderController',
               controllerAs: 'vm'
             }

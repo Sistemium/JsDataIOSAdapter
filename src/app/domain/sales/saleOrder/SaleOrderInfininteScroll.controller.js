@@ -2,7 +2,11 @@
 
 (function () {
 
-  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers, SaleOrderHelper, saMedia, localStorageService) {
+  const LIST_ITEM_HEIGHT_XS = 90;
+  const LIST_ITEM_HEIGHT = 66;
+
+  function SaleOrderInfiniteScrollController(Schema, $scope, SalesmanAuth, $state, $q, Helpers,
+                                             SaleOrderHelper, saMedia, localStorageService, Sockets) {
 
     const {ScrollHelper, saControllerHelper} = Helpers;
     let {SaleOrder} = Schema.models();
@@ -16,6 +20,7 @@
 
     let gotAllData = false;
     let busyGettingData;
+    let saleOrders = [];
 
     vm.use({
 
@@ -26,8 +31,7 @@
       itemClick,
       newItemClick,
       getData,
-      rowHeight,
-      onWorkflowChange
+      rowHeight
 
     })
       .use(ScrollHelper);
@@ -35,6 +39,8 @@
     /*
      Listeners
      */
+
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJsData));
 
     $scope.$on('rootClick', () => {
 
@@ -52,9 +58,50 @@
 
     SalesmanAuth.watchCurrent($scope, onSalesmanChange);
 
+    const JSD_DESTROY = 'DS.afterEject'; //'DS.afterDestroy';
+
+    SaleOrder.on(JSD_DESTROY, onDestroySaleOrder);
+
     /*
      Handlers
      */
+
+    function onDestroySaleOrder(model, saleOrder) {
+
+      console.warn('onDestroySaleOrder', saleOrder);
+
+      let {date, id} = saleOrder;
+
+      let groupedByDate = _.get(_.groupBy(vm.data, {date: date}), true);
+
+      if (_.size(groupedByDate) <= 2) {
+        _.remove(vm.data, {id: date});
+      }
+
+      _.remove(vm.data, {id: id});
+
+    }
+
+    function onJsData(event) {
+
+      let {data, resource} = event;
+
+      if (resource !== 'SaleOrder') {
+        return;
+      }
+
+      console.warn(resource, data);
+
+      let saleOrder = SaleOrder.get(data.id);
+
+      if (!saleOrder) {
+        saleOrder = SaleOrder.inject(data);
+      }
+
+      saleOrder.DSLoadRelations(['Outlet'])
+        .then(mergeViewData);
+
+    }
 
     /*
      Functions
@@ -67,22 +114,16 @@
 
     }
 
-    function getWorkflows(salesmanId) {
+    function getWorkflows() {
 
-      vm.currentWorkflows = {};
-
-      let filter;
-
-      if (salesmanId) {
-        filter = {salesmanId: salesmanId}
-      }
+      let filter = SalesmanAuth.makeFilter();
 
       vm.workflowPromise = SaleOrder.groupBy(filter, ['processing']);
 
     }
 
     function rowHeight() {
-      return isWideScreen() ? 61 : 91;
+      return isWideScreen() ? LIST_ITEM_HEIGHT : LIST_ITEM_HEIGHT_XS;
     }
 
     function isWideScreen() {
@@ -92,6 +133,8 @@
     function resetVariables() {
 
       vm.data = [];
+
+      saleOrders = [];
       gotAllData = false;
       startPage = 1;
       localStorageService.remove(vm.rootState + '.scroll');
@@ -111,14 +154,43 @@
     }
 
     function cleanup() {
+
+      SaleOrder.off(JSD_DESTROY, onDestroySaleOrder);
+
       let where = {
         processing: {
           '!=': 'draft'
         }
       };
+
       SaleOrder.ejectAll({where});
-      // SaleOrderPosition.ejectAll();
-      // Outlet.ejectAll();
+
+    }
+
+    function mergeViewData(withData) {
+
+      withData = _.isArray(withData) ? withData : [withData];
+
+      saleOrders.push(...withData);
+
+      if (vm.currentWorkflow) {
+        saleOrders = _.filter(saleOrders, {processing: vm.currentWorkflow});
+      }
+
+      let saleOrdersWithDates = [];
+      let dates = _.groupBy(saleOrders, 'date');
+
+      dates = _.map(dates, (val, date) => {
+        return {date, id: date};
+      });
+
+      saleOrdersWithDates.push(...dates);
+      saleOrdersWithDates.push(...saleOrders);
+
+      saleOrdersWithDates = _.uniqBy(saleOrdersWithDates, 'id');
+
+      vm.data = _.orderBy(saleOrdersWithDates, ['date'], ['desc']);
+
     }
 
     function getData() {
@@ -146,8 +218,8 @@
       }
 
       let options = {
-        pageSize: pageSize,
-        startPage: startPage,
+        pageSize,
+        startPage,
         bypassCache: true
       };
 
@@ -158,29 +230,13 @@
             gotAllData = true;
           }
 
-          let saleOrdersWithDates = [];
-
-          let dates = _.groupBy(res, 'date');
-
-          dates = _.map(dates, (val, date) => {
-            return {date, id: date};
-          });
-
-          saleOrdersWithDates.push(...dates);
-          saleOrdersWithDates.push(...res);
-
-          if (vm.data.length) {
-            saleOrdersWithDates.push(...vm.data);
-          }
-
-          saleOrdersWithDates = _.uniqBy(saleOrdersWithDates, 'id');
 
           let promises = _.map(res, saleOrder => saleOrder.DSLoadRelations(['Outlet']));
 
           return $q.all(promises)
             .then(() => {
-              vm.data = _.orderBy(saleOrdersWithDates, ['date'], ['desc']);
               startPage++;
+              mergeViewData(res);
             });
 
         });

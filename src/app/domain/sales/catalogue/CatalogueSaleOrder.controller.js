@@ -21,7 +21,8 @@
       clearSearchOutletClick,
       saleOrderSaveDraftClick,
       minusButtonClick,
-      lastPlus: {}
+      lastPlus: {},
+      outletClick
 
     });
 
@@ -99,15 +100,24 @@
      Handlers
      */
 
+    function outletClick() {
+
+      // vm.isSaleOrderPopoverOpen = !vm.isSaleOrderPopoverOpen;
+
+      if (!vm.outlets) {
+
+        let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
+
+        vm.outletBusy = Outlet.findAll(filter)
+          .then(data => {
+            vm.outlets = _.orderBy(data, 'name');
+          });
+
+      }
+
+    }
 
     function onSalesmanChange(salesman) {
-
-      let filter = Outlet.meta.salesmanFilter(SalesmanAuth.makeFilter());
-
-      Outlet.findAll(filter, {bypassCache: true})
-        .then(data => {
-          vm.outlets = _.orderBy(data, 'name');
-        });
 
       if (!vm.saleOrder) return;
 
@@ -178,7 +188,7 @@
 
     function searchOutletClick(outlet) {
       vm.saleOrder.outlet = outlet;
-      vm.isOpenOutletPopover = false;
+      vm.isOutletPopoverOpen = false;
     }
 
     /*
@@ -195,7 +205,7 @@
         if (unbindToChanges) unbindToChanges();
 
         vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', _.debounce(() => {
-          if (!vm.saleOrder) return;
+          if (!vm.saleOrder || !vm.saleOrder.id) return;
           if (SaleOrder.hasChanges(vm.saleOrder.id)) onSaleOrderChange();
         }, 700));
 

@@ -8,14 +8,14 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
   ol.breadcrumb(
   ng-hide='!vm.isWideScreen && vm.saleOrder'
   )
-    include catalogue/catalogueBreadcrumb
+    include catalogueBreadcrumb
 
   section.animate-show#catalogue-main(
   ng-show='!saleOrderExpanded'
   )
 
     #article-groups
-      include catalogue/catalogueArticleGroups
+      include catalogueArticleGroups
 
     font-size-edit#scroll-articles.animate-show(
     ng-show='vm.isWideScreen || !vm.isArticleGroupsExpanded'
@@ -27,4 +27,4 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
       #scroll-articles-parent.scroll-y(
       resize resize-offset-top='5' resize-property='height'
       )
-        include catalogue/catalogueArticle
+        include catalogueArticle
