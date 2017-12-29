@@ -1,8 +1,10 @@
-a(
-href
-popover-is-open=''
-popover-placement='auto bottom'
-uib-popover-template='"app/domain/components/driverPopover/driverPopover.template.html"'
-)
-  ng-transclude
-  span.caret
+.driver-popover
+
+  a(
+  href
+  popover-is-open='vm.popoverOpen'
+  popover-placement='bottom auto'
+  uib-popover-template='"app/domain/components/driverPopover/driverPopover.template.html"'
+  )
+    span.name {{ vm.driver.tinyName }}
+    span.caret
