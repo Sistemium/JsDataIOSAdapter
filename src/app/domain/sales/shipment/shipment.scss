@@ -1,6 +1,18 @@
 @import "../../../styles/variables";
 @import "../../../styles/alerts";
 
+$width-driver: 110px;
+$width-ndoc: 100px;
+$width-egais: 60px;
+$width-egais-inner: 30px;
+$width-salesman: 110px;
+$width-outlet: 330px;
+$width-cost: 100px;
+$width-positions: 100px;
+
+$font-weight-bold: 600;
+$font-weight-normal: 400;
+
 .shipmentDetails {
 
   .alert {
@@ -27,251 +39,14 @@
 
 .shipment-list {
 
-  $font-size-sm: 14px;
-  $table-padding-left: 5;
-
-  $width-driver: 110px;
-  $width-ndoc: 120px;
-  $width-egais: 60px;
-  $width-egais-inner: 30px;
-  $width-salesman: 110px;
-  $width-outlet: 330px;
-  $width-cost: 100px;
-  $width-positions: 100px;
-
-
-  $font-weight-bold: 600;
-  $font-weight-normal: 400;
-
-  $line-height-basic: 20px;
-
-  padding: 0 5px;
-  min-height: 150px;
-
-  @include responsive-only(lt-sm) {
-    padding: 0;
-  }
-
-  .repeated-item {
-
-    @include responsive-only(gt-xs) {
-      height: 40px;
-    }
-
-    @include responsive-only(lt-sm) {
-      height: 130px;
-    }
-
-  }
-
-  .date {
-
-    padding: 6px 0 5px;
-
-    .title {
-      font-size: 150%;
-    }
-
-  }
-
-  .date.footer {
-
-    text-align: right;
-
-    currency-value {
-      strong {
-        font-weight: $font-weight-bold;
-      }
-    }
-
-    .spacing {
-      display: inline;
-      padding-left: $width-cost - 4;
-    }
-
-    @include responsive-only(lt-sm) {
-
-      currency-value:before {
-        content: 'Итого: '
-
-      }
-      border: 1px solid $gray-border-color;
-      border-radius: $border-radius;
-      background: $gray-background-color;
-      padding-right: 7px;
-    }
-
-  }
-
-  .shipment {
-    @include responsive-only(lt-sm) {
-      position: relative;
-    }
-  }
-
-  .headers, .scroll-y {
-
-    .ndoc {
-      min-width: $width-ndoc;
-
-      @include responsive-only(lt-sm) {
-        min-width: $width-ndoc / 2;
-        font-weight: $font-weight-bold;
-      }
-
-    }
-
-    .driver {
-
-      min-width: $width-driver;
-      cursor: pointer;
-
-      @include responsive-only(gt-xs) {
-        max-width: $width-driver;
-      }
-
-      @include responsive-only(lt-sm) {
-        padding: 0;
-      }
-
-    }
-
-    .egais {
-
-      min-width: $width-egais;
-
-      @include responsive-only(lt-sm) {
-        min-width: $width-egais / 2 !important;
-        position: absolute;
-        right: 5px;
-        top: 10px;
-      }
-
-      egais-popover > a > ng-transclude {
-        min-width: $width-egais-inner;
-        text-align: center;
-        display: inline-block;
-      }
-
-    }
-
-    .salesman {
-      min-width: $width-salesman;
-    }
-
-    currency-value {
-      strong {
-        font-weight: $font-weight-normal;
-      }
-    }
-
-    .outlet {
-      line-height: $line-height-basic;
-      min-width: $width-outlet;
-      flex: 1;
-
-      @include responsive-only(gt-xs) {
-        min-width: $width-outlet - 200;
-      }
-
-      @include responsive-only(lt-sm) {
-        height: 33px;
-        order: -1;
-        border-bottom: 1px solid $gray-border-color;
-      }
-
-      .outlet-address {
-
-        @include responsive-only(lt-sm) {
-          flex-flow: column nowrap;
-          display: flex;
-          line-height: 15px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          margin-right: 40px;
-        }
-
-      }
-
-      .address {
-        color: gray;
-        display: block;
-        @extend .ellipsis;
-
-      }
-
-    }
-
-    .cost {
-
-      line-height: $line-height-basic;
-      min-width: $width-cost;
-      text-align: right;
-
-      .cost-diff-price {
-
-        @include responsive-only(lt-sm) {
-          display: flex;
-          flex-flow: row nowrap;
-        }
-
-      }
-
-      .diff {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-end;
-
-        @include responsive-only(lt-sm) {
-
-          > span {
-            line-height: 15px;
-          }
-
-          padding-left: 5px;
-          &:before {
-            content: ' (';
-          }
-
-          &:after {
-            content: ')';
-          }
-
-        }
-
-        > * {
-          font-weight: $font-weight-normal;
-          color: gray;
-        }
-
-      }
-
-      label {
-        @include responsive-only(lt-sm) {
-          flex: 0;
-        }
-      }
-
-      @include responsive-only(lt-sm) {
-        order: 1;
-      }
-
-    }
-
-    .positions {
-      min-width: $width-positions;
-      text-align: right;
-    }
-  }
-
   .headers {
+
     border-bottom: 2px solid $gray-border-color;
     display: flex;
     flex: 1;
     padding-bottom: 8px;
 
-    > * {
+    > div {
       font-weight: $font-weight-bold;
     }
 
@@ -281,101 +56,55 @@
 
   }
 
-  @include responsive-only(lt-md) {
-    .positions {
-      display: none;
+  .repeated-item {
 
+    height: 40px;
+
+    @include responsive-only(lt-sm) {
+      height: 137px;
     }
 
-    .date.footer {
-      .spacing {
-        padding: 0;
+    .date {
+      padding: 5px 0;
+      .title {
+        font-size: 150%;
       }
-    }
-  }
-
-  .scroll-y {
-
-    * {
-      outline: none;
     }
 
     .shipment {
+
+      border-bottom: 1px solid $gray-border-color;
+      display: flex;
+      height: inherit;
+
+      @include responsive-only(lt-sm) {
+        position: relative;
+        display: flex;
+        flex-flow: column nowrap;
+      }
 
       &:hover {
         background-color: $position-hover-color;
       }
 
-      border-bottom: 1px solid $gray-border-color;
-      line-height: $line-height-basic * 2;
-      display: flex;
-      height: 40px;
-
-      driver-popover {
-
-        position: relative;
-        @include responsive-only(lt-sm) {
-          height: 17px;
-        }
-
-        & > a {
-          display: inline-flex;
-          height: 40px;
-          @include responsive-only(lt-sm) {
-            height: 15px;
-          }
-        }
-
-        & > a:hover {
-          text-decoration: none;
-        }
-
-        ng-transclude {
-          span {
-
-            @extend .ellipsis;
-            width: 85px;
-            display: inline-block;
-
-            @include responsive-only(lt-sm) {
-              width: 100%;
-            }
-
-          }
-        }
-
-      }
-
-      @include responsive-only(lt-sm) {
-        line-height: $font-size-sm;
-        flex-flow: column nowrap;
-        height: auto;
-        border: 1px solid $gray-border-color;
-        background-color: $gray-background-color;
-        padding: 5px;
-        border-radius: $border-radius;
-      }
-
-      .ndoc, .driver, .salesman, .outlet, .cost, .positions, .egais {
+      > div {
 
         @include responsive-only(lt-sm) {
           display: flex;
           justify-content: space-between;
-          flex-flow: row nowrap;
           align-items: center;
-          min-width: 50px;
-          font-size: $font-size-sm;
-          line-height: 15px;
 
-          span {
+          > span {
             font-weight: $font-weight-bold;
           }
 
         }
 
-        label {
-          margin: 0;
+        > label {
+
           font-weight: normal;
+          height: 100%;
+          margin: 0;
 
           @include responsive-only(gt-xs) {
             display: none;
@@ -385,7 +114,171 @@
 
       }
 
+      .ndoc, .salesman {
+        display: flex;
+        align-items: center;
+      }
+
+      .egais {
+        @include responsive-only(lt-sm) {
+          position: absolute;
+          right: 0;
+          top: 10px;
+          min-width: 0;
+        }
+      }
+
+      .driver {
+
+        padding-right: 10px;
+
+        @include responsive-only(lt-sm) {
+          width: 100%;
+          padding: 0;
+        }
+
+      }
+
+      .outlet {
+
+        @include responsive-only(lt-sm) {
+          order: -1;
+          min-height: 40px;
+          width: calc(100% - 50px);
+          font-weight: $font-weight-bold;
+        }
+
+        .outlet-address {
+
+          .address {
+            color: gray;
+            display: block;
+            @extend .ellipsis;
+          }
+
+          @include responsive-only(lt-sm) {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+
+      }
+
+      .cost {
+
+        .cost-diff-price {
+
+          @include responsive-only(lt-sm) {
+            display: flex;
+            flex-flow: row nowrap;
+            order: 1;
+            height: 19px;
+          }
+
+          currency-value {
+            strong {
+              font-weight: $font-weight-normal;
+            }
+          }
+
+          .diff {
+
+            > * {
+              font-weight: $font-weight-normal;
+              color: gray;
+            }
+
+            span.parenthese {
+
+              &:not(:last-of-type) {
+                letter-spacing: -3px;
+              }
+
+              @include responsive-only(gt-xs) {
+                display: none;
+              }
+
+            }
+
+            @include responsive-only(lt-sm) {
+              padding-left: 5px;
+            }
+
+          }
+
+        }
+
+      }
+
     }
+
+    .footer {
+
+      text-align: right;
+
+      .totals {
+        margin-right: 5px;
+        @include responsive-only(gt-xs) {
+          display: none;
+        }
+      }
+
+      .spacing {
+        display: inline;
+        padding-left: $width-cost - 4;
+
+        @include responsive-only(lt-md) {
+          padding: 0;
+        }
+      }
+    }
+
+  }
+
+  @include responsive-only(lt-md) {
+
+    .positions {
+      display: none;
+    }
+
+  }
+
+  // init widths
+
+  .headers, .scroll-y {
+
+    .ndoc {
+      min-width: $width-ndoc;
+    }
+
+    .driver {
+      width: $width-driver;
+    }
+
+    .egais {
+      min-width: $width-egais;
+    }
+
+    .salesman {
+      min-width: $width-salesman;
+    }
+
+    .outlet {
+      flex: 1;
+      min-width: $width-outlet - 200;
+    }
+
+    .cost {
+      min-width: $width-cost;
+      text-align: right;
+    }
+
+    .positions {
+      min-width: $width-positions;
+      text-align: right;
+    }
+
   }
 
 }

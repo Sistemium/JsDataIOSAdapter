@@ -1,6 +1,6 @@
 (function (module) {
 
-  function ShipmentListController(Schema, $q, Helpers, $scope, SalesmanAuth, $state, saMedia) {
+  function ShipmentListController(Schema, Helpers, $scope, SalesmanAuth, $state, saMedia) {
 
     const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
     const {saControllerHelper, ScrollHelper} = Helpers;
@@ -43,7 +43,7 @@
      */
 
     function rowHeight() {
-      return isWideScreen() ? 40 : 130;
+      return isWideScreen() ? 40 : 137;
     }
 
     function onSalesmanChange(salesman) {
@@ -79,6 +79,8 @@
       let grouped = _.groupBy(data, 'date');
 
       _.each(grouped, (dateItems, date) => {
+
+        //console.log(dateItems, date);
 
         let footer = {
           date,
@@ -152,7 +154,15 @@
           let dates = _.groupBy(res, 'date');
 
           dates = _.map(dates, (val, date) => {
-            return {date, id: date};
+
+            return {
+              date,
+              id: date,
+              totalCost: () => _.sumBy(val, shipment => {
+                return shipment.totalCost && !shipment.isFooter && shipment.totalCost() || 0;
+              })
+            };
+
           });
 
           dates.push(...res);
