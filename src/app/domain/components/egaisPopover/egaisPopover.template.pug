@@ -1,11 +1,16 @@
-.status
-  i.glyphicon(ng-class='vm.egais.egaisTtnCls')
-  span {{ vm.egais.egaisTtnStatusTs | amUtc | amLocal | amCalendar:null:vm.format }}
-.status
-  span {{ vm.egais.egaisTtnStatus }}
-  span {{ vm.egais.egaisTtnNdoc }}
-.status(ng-if='vm.egais.egaisActCls')
-  i.glyphicon(ng-class='vm.egais.egaisActCls')
-  span {{ vm.egais.egaisActTs | amUtc | amLocal | amCalendar:null:vm.format }}
-.status(ng-if='vm.egais.egaisActStatus')
-  span {{ vm.egais.egaisActStatus }}
+.egais-popover-template
+
+  .status
+    i.glyphicon(ng-class='vm.egais.egaisTtnCls')
+    span {{ vm.egais.egaisTtnStatusTs | amUtc | amLocal | amCalendar:null:vm.format }}
+
+  .status-message
+    span {{ vm.egais.egaisTtnStatus }} &nbsp;
+    span {{ vm.egais.egaisTtnNdoc }}
+
+  .status(ng-if='vm.egais.egaisActCls')
+    i.glyphicon(ng-class='vm.egais.egaisActCls')
+    span {{ vm.egais.egaisActTs | amUtc | amLocal | amCalendar:null:vm.format }}
+
+  .status-message(ng-if='vm.egais.egaisActStatus')
+    span {{ vm.egais.egaisActStatus }}
