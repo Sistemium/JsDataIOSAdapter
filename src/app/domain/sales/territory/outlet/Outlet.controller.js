@@ -16,6 +16,8 @@
 
     vm.use({
 
+      currentState: null,
+
       outlet: undefined,
       isUpdateLocationEnabled: true,
       collapsePhotosSection: true,
@@ -47,8 +49,16 @@
 
       if (!vm.outlet) return;
 
-      Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner'])
+      Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner', 'saleOrders', 'Debt'])
         .then(outlet => {
+
+          console.log(outlet);
+
+          vm.normalData = outlet.saleOrders;
+
+          vm.outletDebts = outlet.debts;
+
+          vm.outletVisits = outlet.visits;
 
           if (outlet.location) {
             initMap(outlet.location);
@@ -150,7 +160,6 @@
       if (!vm.avatar) {
         return takePhoto();
       }
-
 
       vm.commentText = `${vm.outlet.partner.shortName} (${vm.outlet.address})`;
       $scope.imagesAll = vm.photos;

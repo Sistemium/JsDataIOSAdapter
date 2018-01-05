@@ -126,9 +126,13 @@
       return Outlet.findAll(Outlet.meta.salesmanFilter(filter))
         .then(outlets => {
 
+          console.log(outlets);
+
           let outletById = _.groupBy(outlets, 'id');
 
           let where = Responsibility.meta.jsdFilter();
+
+          console.log(where);
 
           if (!where) return [];
 

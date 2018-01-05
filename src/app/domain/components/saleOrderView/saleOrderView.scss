@@ -1,0 +1,339 @@
+@import "../../../styles/variables";
+@import "../../../styles/flags";
+
+.sale-order-view {
+
+  $width-processing: 0.1;
+  $width-salesman: 0.135;
+  $width-outlet: 0.9;
+  $width-totals: 0.13;
+
+  $processing-xs-max-width: 90px;
+
+  $headers: (
+      ($width-processing, 'processing'),
+      ($width-salesman, 'salesman'),
+      ($width-outlet, 'outlet'),
+      ($width-totals, 'totals')
+  );
+
+  @mixin initHeadersWidth {
+
+    @each $var, $class in $headers {
+
+      $flex-basis: 100px * $var * 10;
+
+      @include responsive-only(gt-xs) {
+        .#{$class} {
+          flex: $var;
+          flex-basis: $flex-basis;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+    }
+
+    .outlet {
+      @include responsive-only(md) {
+        flex-basis: 850px;
+      }
+
+      @include responsive-only(sm) {
+        flex-basis: 600px;
+      }
+
+    }
+
+  }
+
+  > .buttons {
+
+    display: flex;
+    justify-content: space-between;
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+    }
+
+    > * + * {
+      margin-top: 6px;
+    }
+
+  }
+
+  .headers {
+
+    margin-top: $navbar-padding-vertical;
+
+    > :last-of-type {
+      text-align: right;
+    }
+
+    @include responsive-only(lt-sm) {
+      display: none;
+    }
+
+    @include responsive-only(gt-xs) {
+      display: flex;
+      border-bottom: 2px solid $gray-border-color;
+      padding-bottom: 8px;
+
+      > div {
+        font-weight: bold;
+      }
+    }
+
+    @include initHeadersWidth;
+
+  }
+
+  #scroll-main {
+
+    margin-top: 10px;
+    min-height: 50px;
+
+    & + .alert {
+      margin-top: 20px;
+    }
+
+  }
+
+  #scroll-main .list-item {
+
+    position: relative;
+    border-bottom: 1px solid $gray-border-color;
+
+    .outlet {
+      color: $black;
+    }
+
+    @include responsive-only(lt-sm) {
+
+      a.sale-order {
+        padding: 5px 0;
+      }
+
+    }
+
+    .date {
+
+      height: 66px;
+      padding-top: 25px;
+      cursor: default;
+
+      @include responsive-only(lt-sm) {
+        padding-top: 50px;
+        height: 90px;
+      }
+
+      .title {
+        font-size: 150%;
+      }
+
+    }
+
+    .list-item-body {
+
+      @include responsive-only(gt-xs) {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+      }
+
+      .processing {
+
+        text-align: center;
+
+        @include responsive-only(gt-xs) {
+          padding-right: 6px;
+        }
+
+        .badge {
+          font-weight: normal;
+          padding: 4px 6px;
+        }
+
+        &.blue .badge {
+          @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
+        }
+
+        &.green .badge {
+          @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
+        }
+
+        &.orange .badge {
+          @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
+        }
+
+        &.red .badge {
+          @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
+        }
+
+      }
+
+      .outlet .address {
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+
+        .gray {
+          min-width: 0;
+          @extend .ellipsis;
+          flex: 1;
+        }
+
+        .salesman {
+          margin-left: 6px;
+          flex: .3;
+          text-align: right;
+        }
+
+        @include responsive-only(gt-xs) {
+          .salesman {
+            display: none;
+          }
+        }
+      }
+
+      @include initHeadersWidth;
+
+      @include responsive-only(lt-sm) {
+
+        flex-flow: column nowrap;
+        height: 60px;
+        position: relative;
+
+        .processing {
+          max-width: $processing-xs-max-width;
+          position: absolute;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          right: 0;
+          top: 1px;
+        }
+
+        > .salesman {
+          display: none;
+        }
+
+        div {
+          align-items: center;
+        }
+
+        .totals {
+
+          display: flex;
+          justify-content: space-between;
+          .cost {
+            order: 2;
+          }
+
+          .position {
+            order: 1;
+          }
+
+        }
+
+        .outlet {
+
+          flex-flow: column nowrap;
+          align-items: flex-start;
+          order: -1;
+
+          .name {
+            font-weight: 600;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: calc(100% - #{$processing-xs-max-width});
+            display: block;
+          }
+
+          .address {
+            width: 100%;
+          }
+
+        }
+
+      }
+
+      > .outlet {
+
+        > div {
+          height: 20px;
+          @extend .ellipsis;
+        }
+
+      }
+
+      .totals {
+
+        text-align: right;
+
+        .position {
+          span {
+            color: $gray;
+            margin-left: 5px;
+          }
+        }
+
+      }
+
+    }
+
+    .list-item-footer {
+
+      height: 20px;
+      font-style: italic;
+      text-align: right;
+      color: $gray;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .comment-text {
+        @extend .ellipsis;
+        display: block;
+        padding-left: 5px;
+        //max-width: calc(100% - 25px);
+      }
+
+      .icon {
+        min-width: 20px;
+        .glyphicon {
+          right: 2px;
+        }
+      }
+
+    }
+
+  }
+
+  .alert {
+    .processingMessage {
+
+      margin-bottom: $margin-bottom-xs;
+
+      strong + span {
+        margin-left: 1em;
+      }
+
+      padding-right: 15px;
+
+      @include responsive-only(lt-sm) {
+        padding-right: 10px;
+      }
+
+      button {
+        right: 0;
+      }
+
+    }
+  }
+
+}
+

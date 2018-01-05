@@ -1,0 +1,173 @@
+@import "../../../../styles/variables";
+
+.outlet-view {
+
+  $padding: 5px;
+
+  .header {
+
+    padding: 10px 15px;
+    margin: 10px 0;
+
+    background-color: $gray-background-color;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: row;
+
+    @include responsive-only(xxs) {
+      padding: 5px 7px;
+      flex-direction: column;
+    }
+
+    .outlet {
+
+      padding-right: 15px;
+      flex: 1;
+      @extend .ellipsis;
+
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: space-between;
+
+      @include responsive-only(xxs) {
+        padding: 0;
+      }
+
+      .outlet-address {
+
+        .address {
+          height: 20px;
+          @extend .ellipsis;
+        }
+
+        .partner-name {
+          min-width: 0;
+          display: flex;
+
+          @extend .ellipsis;
+
+          @include responsive-only(xxs) {
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .name {
+            padding-right: 5px;
+            font-size: 150%;
+            @extend .ellipsis;
+
+            @include responsive-only(xxs) {
+              font-size: 130%;
+            }
+          }
+
+          .outlet-buttons {
+
+            @include responsive-only(xxs) {
+              > a {
+                padding: 5px;
+              }
+            }
+
+          }
+
+        }
+
+      }
+
+      .outlet-additional-fields {
+        @extend .ellipsis;
+
+        > div {
+          height: 20px;
+        }
+
+        label {
+          color: $gray;
+          font-weight: normal;
+          margin: 0;
+          margin-right: 5px;
+        }
+
+        .license-info {
+          @extend .ellipsis;
+        }
+
+        .comment-text {
+          strong {
+            color: $state-danger-text;
+          }
+        }
+
+      }
+    }
+    .outlet-avatar {
+
+      display: flex;
+
+      .thumb {
+
+        @include responsive-only(xxs) {
+          width: 100%;
+        }
+
+        display: inline-block;
+
+        border-radius: 5px;
+        padding: 5px;
+        border: solid 1px $state-info-border;
+
+        img {
+
+          object-fit: contain;
+
+          width: 100px;
+          height: 100px;
+
+          @include responsive-only(xxs) {
+            width: 100%;
+          }
+        }
+
+      }
+    }
+  }
+
+  .navigation {
+
+  }
+
+  .outlet-salesman-contracts > * {
+
+    display: flex;
+
+    &.headers {
+      color: $gray;
+    }
+
+    & + * {
+      border-top: solid 1px $border-gray;
+    }
+
+    > * {
+      padding: $padding 0;
+      flex: 1;
+      min-width: 80px;
+
+      & + * {
+        margin-left: $padding;
+      }
+    }
+
+    > .salesman {
+      flex: 2;
+    }
+
+    > .contract {
+      flex: 3;
+    }
+
+  }
+
+}

@@ -1,0 +1,113 @@
+// TODO: show avatarPhoto or take photo button
+
+pre {{vm.currentState}}
+
+.outlet-view
+
+  .header(cg-busy='vm.busy')
+
+    .outlet
+
+      .outlet-address
+
+        .partner-name
+          a.inherit-colors.name(
+          href ui-sref='^.partner({id: vm.outlet.partner.id})'
+          ng-class='vm.partnerNavClass'
+          ) {{ vm.outlet.partner.name }}
+
+
+          .outlet-buttons
+            a.btn.btn-link(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState && vm.isEditable')
+              i.glyphicon.glyphicon-edit
+
+            a.btn.btn-link(
+            popover-placement="bottom-left auto"
+            popover-trigger='"outsideClick"'
+            uib-popover-template="'app/domain/sales/views/location.html'"
+            popover-is-open='vm.mapPopoverIsOpen'
+            type='button'
+            ng-class='{green: vm.map}'
+            ng-disabled='!vm.map'
+            )
+              i.glyphicon.glyphicon-map-marker
+
+        .address
+          a.inherit-colors(
+          href ng-click='vm.outletClick()'
+          ng-class='vm.outletNavClass'
+          ) {{ vm.outlet.address }}
+
+
+      .outlet-additional-fields
+
+        .license-info(ng-if='vm.outlet.licenseInfo')
+          label Лицензия:
+          span {{ vm.outlet.licenseInfo }}
+
+        .egais-code(ng-if='vm.outlet.egaisCode')
+          label ЕГАИС ИД:
+          span {{ vm.outlet.egaisCode }}
+
+        .comment-text(ng-if='vm.outlet.commentText')
+          label Комментарий:
+          strong {{ vm.outlet.commentText }}
+
+
+    .outlet-avatar(ng-if='vm.isRootState')
+
+      a.thumb(href ng-click='vm.thumbClick()' ng-class='{disabled: !vm.avatar}')
+        img(
+        ng-src='{{vm.avatarSrc}}'
+        ng-class='!vm.avatarSrc && "placeholder"'
+        )
+
+
+  .navigation
+    button.btn.btn-default(
+    ng-click='vm.currentState = "saleOrder"'
+    ) Заказы
+
+    button.btn.btn-default(
+    ng-click='vm.currentState = "debts"'
+    ) Долги
+
+    button.btn.btn-default(
+    ng-click='vm.currentState = "contract"'
+    ) Договор
+
+    button.btn.btn-default(
+    ng-click='vm.currentState = "visit"'
+    ) Визиты
+
+  .ui-view
+
+    .outlet-saleOrder(ng-if='vm.currentState == "saleOrder"')
+      sale-order-view(give-data='vm.normalData')
+
+    .outlet-debts(ng-if='vm.currentState == "debts"')
+      pre {{vm.outletDebts | json}}
+
+    .outlet-visit(ng-if='vm.currentState == "visit"')
+
+      .headers
+        .contract Время
+        .credit-limit До точки
+        .credit-remains Фото
+
+
+      pre {{vm.outletVisits | json}}
+
+    .outlet-salesman-contracts(ng-if='vm.currentState == "contract"')
+
+      .headers
+        .salesman ТП
+        .contract Договор
+        .credit-limit Лимит
+        .credit-remains Остаток
+
+      .outlet-salesman-contract(ng-repeat='osc in vm.outletSalesmanContracts track by osc.id')
+        .salesman {{ ::osc.salesman.shortName }}
+        .contract {{ ::osc.contract.name }}
+        .credit-limit {{ ::osc.contract.creditLimit | number:2 }}
+        .credit-remains {{ ::osc.contract.creditRemains | number:2 }}
