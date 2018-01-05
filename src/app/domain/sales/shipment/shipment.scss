@@ -8,10 +8,13 @@ $width-egais-inner: 30px;
 $width-salesman: 110px;
 $width-outlet: 330px;
 $width-cost: 100px;
-$width-positions: 100px;
+$width-positions: 80px;
 
 $font-weight-bold: 600;
 $font-weight-normal: 400;
+
+$xs-height: 40px;
+$gt-xs-height: 79px;
 
 .shipmentDetails {
 
@@ -54,21 +57,34 @@ $font-weight-normal: 400;
       display: none;
     }
 
+    .positions{
+      @include responsive-only(sm) {
+        display: none;
+      }
+    }
+
   }
 
   .repeated-item {
 
-    height: 40px;
+    height: $xs-height;
 
     @include responsive-only(lt-sm) {
-      height: 137px;
+      height: $gt-xs-height;
     }
 
     .date {
       padding: 5px 0;
+
+      @include responsive-only(lt-sm) {
+        padding: 45px 0 4px 0;
+        border-bottom: 1px solid $gray-border-color;
+      }
+
       .title {
         font-size: 150%;
       }
+
     }
 
     .shipment {
@@ -119,18 +135,39 @@ $font-weight-normal: 400;
         align-items: center;
       }
 
+      > .ndoc {
+        @include responsive-only(lt-sm) {
+          display: none;
+        }
+      }
+
+      .salesman {
+        @include responsive-only(lt-sm) {
+          display: none;
+        }
+      }
+
       .egais {
         @include responsive-only(lt-sm) {
           position: absolute;
           right: 0;
-          top: 10px;
+          top: 2px;
           min-width: 0;
+          font-size: 80%;
         }
       }
 
       .driver {
 
         padding-right: 10px;
+
+        > .ndoc {
+
+          @include responsive-only(gt-xs) {
+            display: none;
+          }
+
+        }
 
         @include responsive-only(lt-sm) {
           width: 100%;
@@ -143,17 +180,55 @@ $font-weight-normal: 400;
 
         @include responsive-only(lt-sm) {
           order: -1;
-          min-height: 40px;
-          width: calc(100% - 50px);
+          height: 40px;
           font-weight: $font-weight-bold;
         }
 
         .outlet-address {
 
-          .address {
-            color: gray;
-            display: block;
+          height: 40px;
+
+          .outlet-name {
+
             @extend .ellipsis;
+            display: block;
+
+            @include responsive-only(lt-sm) {
+              width: calc(100% - 35px);
+            }
+
+          }
+
+          @include responsive-only(lt-sm) {
+            width: 100%;
+          }
+
+          .address-salesman {
+
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+
+            .address {
+              color: gray;
+              display: block;
+              @extend .ellipsis;
+            }
+
+            .salesman {
+
+              padding-left: 10px;
+              text-align: right;
+              display: inline-block;
+              min-width: inherit;
+
+              @include responsive-only(gt-xs) {
+                display: none;
+
+              }
+
+            }
+
           }
 
           @include responsive-only(lt-sm) {
@@ -165,48 +240,77 @@ $font-weight-normal: 400;
 
       }
 
-      .cost {
+      .aggregated-data {
 
-        .cost-diff-price {
+        display: flex;
+
+        > div {
+          label {
+            @include responsive-only(gt-xs) {
+              display: none;
+            }
+          }
+        }
+
+        .cost {
 
           @include responsive-only(lt-sm) {
-            display: flex;
-            flex-flow: row nowrap;
             order: 1;
-            height: 19px;
           }
 
-          currency-value {
-            strong {
-              font-weight: $font-weight-normal;
-            }
-          }
-
-          .diff {
-
-            > * {
-              font-weight: $font-weight-normal;
-              color: gray;
-            }
-
-            span.parenthese {
-
-              &:not(:last-of-type) {
-                letter-spacing: -3px;
-              }
-
-              @include responsive-only(gt-xs) {
-                display: none;
-              }
-
-            }
+          .cost-diff-price {
 
             @include responsive-only(lt-sm) {
-              padding-left: 5px;
+              display: flex;
+              flex-flow: row nowrap;
+              height: 19px;
+            }
+
+            currency-value {
+              strong {
+                font-weight: $font-weight-normal;
+              }
+            }
+
+            .diff {
+
+              > * {
+                font-weight: $font-weight-normal;
+                color: gray;
+              }
+
+              span.parenthese {
+
+                @include responsive-only(gt-xs) {
+                  display: none;
+                }
+
+              }
+
+              @include responsive-only(lt-sm) {
+                padding-left: 5px;
+              }
+
             }
 
           }
 
+        }
+
+        .positions {
+          line-height: 40px;
+          @include responsive-only(sm) {
+            display: none;
+          }
+        }
+
+        .positions, .cost {
+
+          @include responsive-only(lt-sm) {
+            height: 19px;
+            line-height: normal;
+            min-width: 0;
+          }
         }
 
       }
@@ -226,20 +330,12 @@ $font-weight-normal: 400;
 
       .spacing {
         display: inline;
-        padding-left: $width-cost - 4;
+        padding-left: $width-positions - 4;
 
         @include responsive-only(lt-md) {
           padding: 0;
         }
       }
-    }
-
-  }
-
-  @include responsive-only(lt-md) {
-
-    .positions {
-      display: none;
     }
 
   }

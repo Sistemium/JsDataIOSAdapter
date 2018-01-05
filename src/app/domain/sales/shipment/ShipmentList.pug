@@ -33,7 +33,6 @@ cg-busy='vm.cgBusy'
       .shipment(ng-if='shipment.ndoc' ng-click='vm.itemClick(shipment, $event)')
 
         .ndoc
-          label №
           span {{shipment.ndoc}}
 
         .egais
@@ -42,7 +41,7 @@ cg-busy='vm.cgBusy'
             i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
 
         .driver
-          label Водитель
+          .ndoc {{shipment.ndoc}}
 
           driver-popover(driver='shipment.driver' ng-if='shipment.driver' popover-open='false')
 
@@ -52,22 +51,26 @@ cg-busy='vm.cgBusy'
 
         .outlet
           .outlet-address
-            span {{shipment.outlet.name}}
-            span.address {{shipment.outlet.address}}
+            span.outlet-name {{shipment.outlet.name}}
+            .address-salesman
+              span.address {{shipment.outlet.address}}
+              .salesman(ng-if='!vm.currentSalesman') {{shipment.salesman.tinyName}}
 
-        .cost
-          label Стоимость
-          .cost-diff-price
-            currency-value(value='shipment.totalCost()')
-            .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
-              span +
-              span.parenthese (
-              currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
-              span.parenthese )
 
-        .positions
-          label Позиций
-          span {{ shipment.totalPositions() }}
+        .aggregated-data
+
+          .cost
+            .cost-diff-price
+              currency-value(value='shipment.totalCost()')
+              .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
+                span.parenthese (
+                span +
+                currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
+                span.parenthese )
+
+          .positions
+            span {{ shipment.totalPositions() }}
+            label П
 
       .footer(ng-if='shipment.isFooter')
         span.totals Итого:
