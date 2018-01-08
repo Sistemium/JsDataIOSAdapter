@@ -57,10 +57,12 @@ $gt-xs-height: 79px;
       display: none;
     }
 
-    .positions{
+    .positions {
+
       @include responsive-only(sm) {
         display: none;
       }
+
     }
 
   }
@@ -210,6 +212,7 @@ $gt-xs-height: 79px;
             justify-content: space-between;
 
             .address {
+              font-weight: normal;
               color: gray;
               display: block;
               @extend .ellipsis;
@@ -266,12 +269,6 @@ $gt-xs-height: 79px;
               height: 19px;
             }
 
-            currency-value {
-              strong {
-                font-weight: $font-weight-normal;
-              }
-            }
-
             .diff {
 
               > * {
@@ -298,10 +295,26 @@ $gt-xs-height: 79px;
         }
 
         .positions {
+
           line-height: 40px;
+
           @include responsive-only(sm) {
             display: none;
           }
+
+          @include responsive-only(lt-sm) {
+
+            label {
+              margin-bottom: 0;
+              font-weight: normal;
+            }
+
+            span{
+              font-weight: bold;
+            }
+
+          }
+
         }
 
         .positions, .cost {
