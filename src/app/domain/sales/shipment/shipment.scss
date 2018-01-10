@@ -42,6 +42,9 @@ $gt-xs-height: 79px;
 
 .shipment-list {
 
+  // to show cg-busy
+  min-height: 50px;
+
   .headers {
 
     border-bottom: 2px solid $gray-border-color;
