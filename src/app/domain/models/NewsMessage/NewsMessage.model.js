@@ -54,10 +54,10 @@
       let {body} = this;
 
       body = body.replace(/(\()([^\n)]+)(\)=)([a-z]+)/g, '<span class="$4">$2</span>');
-      body = body.replace(/(!)([^ \n][^\n]+)(!)/g, '<em>$2</em>');
-      body = body.replace(/(\|)([^ \n][^\n]+)(\|)/g, '<mark>$2</mark>');
-      body = body.replace(/(\*)([^ \n][^\n]+)(\*)/g, '<b>$2</b>');
-      body = body.replace(/(_)([^ \n][^\n]+)(_)/g, '<ins>$2</ins>');
+      body = body.replace(/(!)([^ \n!][^\n!]+)(!)/g, '<em>$2</em>');
+      body = body.replace(/(\|)([^ \n|][^\n|]+)(\|)/g, '<mark>$2</mark>');
+      body = body.replace(/(\*)([^ \n*][^*\n]+)(\*)/g, '<b>$2</b>');
+      body = body.replace(/(_)([^ \n_][^\n_]+)(_)/g, '<ins>$2</ins>');
 
       return body;
 
