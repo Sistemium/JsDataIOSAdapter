@@ -41,7 +41,8 @@
           return $q.resolve(data);
         }
 
-        return Price.findAll(filter, _.assign({afterFindAll, cacheResponse: false}, options));
+        return Price.findAll(filter, _.assign({afterFindAll, cacheResponse: false}, options))
+          .then(() => Price.meta.data[priceTypeId]);
 
         function afterFindAll(options, data) {
           Price.meta.data[priceTypeId] = data;
