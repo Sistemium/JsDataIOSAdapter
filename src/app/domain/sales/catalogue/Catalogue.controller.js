@@ -90,148 +90,156 @@
 
     });
 
-    vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
+    let busy = $timeout(SHORT_TIMEOUT)
+      .then(findAll)
+      .then(() => {
+
+        vm.watchScope('vm.fontSize', fontSize => {
+          if (fontSize) {
+            localStorageService.set(FONT_SIZE_KEY, fontSize);
+          }
+        });
+
+        vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
+          vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
+        });
+
+        vm.onScope(
+          'rootClick',
+          () => $state.go('sales.catalogue')
+            .then(() => setCurrentArticleGroup(null))
+        );
+
+        vm.watchScope('vm.search', (newValue, oldValue) => {
+          if (newValue != oldValue) {
+            vm.firstLevelGroups = null;
+            setCurrentArticleGroup(vm.currentArticleGroup);
+          }
+        });
+
+        $scope.$watchCollection('vm.filters', (o, n) => {
+          if (o && n && (o.length || n.length)) {
+            vm.firstLevelGroups = null;
+            setCurrentArticleGroup(vm.currentArticleGroup);
+          }
+        });
+
+        $scope.$on('setSaleOrder', (event, saleOrder) => {
+          vm.saleOrder = saleOrder;
+          vm.saleOrderId = saleOrder && saleOrder.id;
+        });
+
+        vm.watchScope('vm.saleOrder.id', newValue => {
+
+          let afterChangeOrder = true;
+
+          DEBUG('on vm.saleOrder.id', _.get(vm.saleOrder, 'priceTypeId'), _.get(vm.saleOrder, 'priceType'));
+
+          if (vm.saleOrder && vm.saleOrder.priceTypeId !== _.get(vm, 'currentPriceType.id')) {
+            setPriceType(vm.saleOrder.priceType);
+          }
+
+          vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
+
+            cacheSaleOrderPositions();
+
+            if (afterChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
+              saleOrderTotalsClick(true);
+              afterChangeOrder = false;
+            }
+
+          });
+
+        });
+
+        vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
+          vm.discounts = {};
+          vm.discountsBy = {};
+          filterStock();
+          setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
+          setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
+        }));
+
+        SalesmanAuth.watchCurrent($scope, salesman => {
+
+          let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+          vm.currentSalesman = salesman;
+          vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
+
+        });
+
+        vm.watchScope(
+          isWideScreen,
+          (newValue, oldValue) => {
+            if (newValue !== oldValue) {
+              $scope.$broadcast('vsRepeatTrigger');
+            }
+            vm.isWideScreen = newValue;
+            vm.articleRowHeight = articleRowHeight();
+          }
+        );
+
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
+
+          if (e.resource !== 'Stock') return;
+
+          DEBUG('jsData:updateCollection', e);
+          //
+          // let options = {
+          //   limit: 10000,
+          //   bypassCache: true,
+          //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+          // };
+
+          Stock.meta.findAllUpdates()
+            .then(res => {
+
+              let index = {};
+
+              _.each(res, item => index[item.id] = item);
+
+              onJSDataFinished({
+                model: Stock,
+                index: index,
+                data: res
+              });
+
+            });
+
+        }));
+
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
+
+        vm.watchScope('vm.saleOrder.outletId', (outletId, oldOutletId) => {
+
+          if (!outletId || outletId === oldOutletId) return vm.articleStats = {};
+
+          OutletArticles.groupByArticleId(outletId)
+            .then(data => {
+              vm.articleStats = {};
+              _.each(data, item => vm.articleStats[item.articleId] = item);
+
+              if (vm.showOnlyShipped) setCurrentArticleGroup(vm.currentArticleGroup);
+
+            })
+            .then(() => {
+              return vm.saleOrder.outlet.DSLoadRelations('Partner', {bypassCache: true})
+                ;
+            });
+
+        });
+
+      });
+
+    vm.setBusy(busy);
 
     // onStateChange($state.name, $state.params);
 
     /*
      Listeners
      */
-
-    vm.watchScope('vm.fontSize', fontSize => {
-      if (fontSize) {
-        localStorageService.set(FONT_SIZE_KEY, fontSize);
-      }
-    });
-
-    vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
-      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
-    });
-
-    vm.onScope(
-      'rootClick',
-      () => $state.go('sales.catalogue')
-        .then(() => setCurrentArticleGroup(null))
-    );
-
-    vm.watchScope('vm.search', (newValue, oldValue) => {
-      if (newValue != oldValue) {
-        vm.firstLevelGroups = null;
-        setCurrentArticleGroup(vm.currentArticleGroup);
-      }
-    });
-
-    $scope.$watchCollection('vm.filters', (o, n) => {
-      if (o && n && (o.length || n.length)) {
-        vm.firstLevelGroups = null;
-        setCurrentArticleGroup(vm.currentArticleGroup);
-      }
-    });
-
-    $scope.$on('setSaleOrder', (event, saleOrder) => {
-      vm.saleOrder = saleOrder;
-      vm.saleOrderId = saleOrder && saleOrder.id;
-    });
-
-    vm.watchScope('vm.saleOrder.id', newValue => {
-
-      let afterChangeOrder = true;
-
-      if (vm.saleOrder && vm.saleOrder.priceTypeId !== _.get(vm, 'currentPriceType.id')) {
-        setPriceType(vm.saleOrder.priceType);
-      }
-
-      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
-
-        cacheSaleOrderPositions();
-
-        if (afterChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
-          saleOrderTotalsClick(true);
-          afterChangeOrder = false;
-        }
-
-      });
-
-    });
-
-    vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
-      vm.discounts = {};
-      vm.discountsBy = {};
-      filterStock();
-      setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
-      setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
-    }));
-
-    SalesmanAuth.watchCurrent($scope, salesman => {
-
-      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
-
-      vm.currentSalesman = salesman;
-      vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
-
-    });
-
-    vm.watchScope(
-      isWideScreen,
-      (newValue, oldValue) => {
-        if (newValue !== oldValue) {
-          $scope.$broadcast('vsRepeatTrigger');
-        }
-        vm.isWideScreen = newValue;
-        vm.articleRowHeight = articleRowHeight();
-      }
-    );
-
-    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
-    $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
-
-      if (e.resource !== 'Stock') return;
-
-      DEBUG('jsData:updateCollection', e);
-      //
-      // let options = {
-      //   limit: 10000,
-      //   bypassCache: true,
-      //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-      // };
-
-      Stock.meta.findAllUpdates()
-        .then(res => {
-
-          let index = {};
-
-          _.each(res, item => index[item.id] = item);
-
-          onJSDataFinished({
-            model: Stock,
-            index: index,
-            data: res
-          });
-
-        });
-
-    }));
-
-    $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
-
-    vm.watchScope('vm.saleOrder.outletId', (outletId, oldOutletId) => {
-
-      if (!outletId || outletId === oldOutletId) return vm.articleStats = {};
-
-      OutletArticles.groupByArticleId(outletId)
-        .then(data => {
-          vm.articleStats = {};
-          _.each(data, item => vm.articleStats[item.articleId] = item);
-
-          if (vm.showOnlyShipped) setCurrentArticleGroup(vm.currentArticleGroup);
-
-        })
-        .then(() => {
-          return vm.saleOrder.outlet.DSLoadRelations('Partner', {bypassCache: true})
-            ;
-        });
-
-    });
 
     /*
      Handlers
@@ -382,9 +390,14 @@
     }
 
     function setPriceType(priceType) {
+
+      DEBUG('setPriceType', priceType);
+
       vm.currentPriceType = priceType;
-      filterStock();
-      setCurrentArticleGroup(vm.currentArticleGroup);
+      $q.when(filterStock())
+        .then(() => {
+          setCurrentArticleGroup(vm.currentArticleGroup);
+        });
     }
 
     function onStateChange(to, params) {
@@ -453,11 +466,24 @@
       vm.discountsBy.contractId = contractId;
       vm.discountsBy.partnerId = partnerId;
 
+      const contractFilter = {
+        contractId: {'==': contractId}
+      };
+
+      const partnerFilter = {
+        partnerId: {'==': partnerId}
+      };
+
+      if (!IOS.isIos()) {
+        contractFilter.discount = {'!=': 0};
+        partnerFilter.discount = {'!=': 0};
+      }
+
       $q.all([
-        ContractArticle.findAll({contractId}, {cacheResponse: false}),
-        ContractPriceGroup.findAll({contractId}, {cacheResponse: false}),
-        PartnerArticle.findAll({partnerId}, {cacheResponse: false}),
-        PartnerPriceGroup.findAll({partnerId}, {cacheResponse: false})
+        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false}),
+        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false}),
+        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false}),
+        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false})
       ])
         .then(allData => {
 
@@ -516,10 +542,10 @@
         let discount = _.get(_.first(byArticleId[articleId]), 'discount') ||
           _.get(_.first(byPriceGroup[_.get(article, 'priceGroupId')]), 'discount');
 
-        if (!discount) return;
-
-        vm.discounts[articleId] = discount;
-        vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
+        if (discount) {
+          vm.discounts[articleId] = discount;
+          vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
+        }
 
       });
 
@@ -611,6 +637,13 @@
 
       DEBUG('filterStock', 'start');
 
+      if (vm.busyFilteringStock) {
+        DEBUG('filterStock', 'busy');
+        return vm.busyFilteringStock;
+      }
+
+      vm.busyFilteringStock = true;
+
       let discount = 1;
       let priceType = vm.currentPriceType;
 
@@ -629,9 +662,10 @@
       }
 
       if (!priceType.prices()) {
-        DEBUG('filterStock', 'cachedFindAll Price');
+        DEBUG('filterStock', 'cachedFindAll Price', priceType.id);
         return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000})
           .then(prices => {
+            vm.busyFilteringStock = false;
             return _.isEmpty(prices) ? prices : filterStock();
           });
       }
@@ -643,9 +677,10 @@
       _.each(priceType.prices(), price => {
 
         let priceOrigin = _.round(price.price * discount, 2);
+        let discountSpecial = vm.discounts[price.articleId] || 0;
 
         vm.prices[price.articleId] = {
-          price: _.round(priceOrigin * (1 - (vm.discounts[price.articleId] || 0) / 100.0), 2),
+          price: _.round(priceOrigin * (1 - discountSpecial / 100.0), 2),
           priceOrigin
         };
 
@@ -658,6 +693,8 @@
       DEBUG('filterStock', 'end');
 
       setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'));
+
+      vm.busyFilteringStock = false;
 
     }
 
