@@ -34,7 +34,7 @@ cg-busy='vm.cgBusy'
       .shipment(ng-switch-default ng-click='vm.itemClick(shipment, $event)')
 
         .ndoc
-          span {{shipment.ndoc}}
+          span {{ shipment.ndoc | ndoc }}
 
         .egais
           egais-popover(shipment='shipment' ng-if='shipment.egaisCached()')
@@ -42,7 +42,7 @@ cg-busy='vm.cgBusy'
             i.glyphicon(ng-class='shipment.egaisCached().egaisActCls')
 
         .driver
-          .ndoc {{shipment.ndoc}}
+          .ndoc {{ shipment.ndoc | ndoc }}
 
           driver-popover(driver='shipment.driver' ng-if='shipment.driver' popover-open='false')
 
