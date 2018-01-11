@@ -1,20 +1,6 @@
 @import "../../../styles/variables";
 @import "../../../styles/alerts";
 
-$width-driver: 110px;
-$width-ndoc: 100px;
-$width-egais: 60px;
-$width-egais-inner: 30px;
-$width-salesman: 110px;
-$width-outlet: 330px;
-$width-cost: 100px;
-$width-positions: 80px;
-
-$font-weight-bold: 600;
-$font-weight-normal: 400;
-
-$xs-height: 40px;
-$gt-xs-height: 79px;
 
 .shipmentDetails {
 
@@ -41,6 +27,21 @@ $gt-xs-height: 79px;
 }
 
 .shipment-list {
+
+  $width-driver: 110px;
+  $width-ndoc: 100px;
+  $width-egais: 60px;
+  $width-egais-inner: 30px;
+  $width-salesman: 110px;
+  $width-outlet: 330px;
+  $width-cost: 100px;
+  $width-positions: 80px;
+
+  $font-weight-bold: 500;
+  $font-weight-normal: normal;
+
+  $xs-height: 40px;
+  $gt-xs-height: 79px;
 
   // to show cg-busy
   min-height: 50px;
@@ -336,6 +337,7 @@ $gt-xs-height: 79px;
     .footer {
 
       text-align: right;
+      min-height: 40px;
 
       .totals {
         margin-right: 5px;
