@@ -104,6 +104,10 @@
       }
     });
 
+    vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
+      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
+    });
+
     vm.onScope(
       'rootClick',
       () => $state.go('sales.catalogue')
@@ -223,10 +227,8 @@
 
         })
         .then(() => {
-          return vm.saleOrder.outlet.DSLoadRelations('Partner')
-            .then(outlet => {
-              vm.noFactor = _.get(outlet, 'partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
-            });
+          return vm.saleOrder.outlet.DSLoadRelations('Partner', {bypassCache: true})
+            ;
         });
 
     });

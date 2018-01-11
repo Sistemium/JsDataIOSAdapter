@@ -150,10 +150,10 @@
     function salesModuleRun() {
 
       let SUBSCRIPTIONS = [
-        'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'Visit'
+        'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'Visit', 'Partner'
       ];
 
-      const {Workflow, SaleOrder, Outlet, NewsMessage} = Schema.models();
+      const {Workflow, SaleOrder, NewsMessage} = Schema.models();
 
       $rootScope.$on('menu-show', setBadges);
 
@@ -205,20 +205,21 @@
 
       function onJSData(event) {
 
-        if (event.resource === 'Outlet') {
+        if (event.resource.match(/Partner|Outlet/)) {
+          let model = Schema.model(event.resource);
           if (event.data.name) {
-            Outlet.inject(event.data);
+            model.inject(event.data);
           } else {
-            Outlet.find(event.data.id, {bypassCache: true});
+            model.find(event.data.id, {bypassCache: true});
           }
         }
 
         if (event.resource !== 'RecordStatus') return;
 
         try {
-          Schema
-            .model(event.data.name)
-            .eject(event.data.objectXid);
+          let {name, objectXid} = event.data;
+          Schema.model(name)
+            .eject(objectXid);
         } catch (e) {
           console.warn('onJSData error:', e);
         }
