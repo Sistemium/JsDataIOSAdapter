@@ -25,12 +25,13 @@ cg-busy='vm.cgBusy'
     .repeated-item(
     ng-repeat='shipment in vm.data track by shipment.id'
     ng-class='{footer: shipment.isFooter}'
+    ng-switch='shipment.cls'
     )
 
-      .date(ng-if='!shipment.ndoc && !shipment.isFooter')
+      .date(ng-switch-when='date')
         .title {{ ::shipment.date }}
 
-      .shipment(ng-if='shipment.ndoc' ng-click='vm.itemClick(shipment, $event)')
+      .shipment(ng-switch-default ng-click='vm.itemClick(shipment, $event)')
 
         .ndoc
           span {{shipment.ndoc}}
@@ -72,7 +73,7 @@ cg-busy='vm.cgBusy'
             span {{ shipment.totalPositions() }}
             label П
 
-      .footer(ng-if='shipment.isFooter')
+      .footer(ng-switch-when='footer')
         span.totals Итого:
         currency-value(value='shipment.totalCost()')
         .spacing
