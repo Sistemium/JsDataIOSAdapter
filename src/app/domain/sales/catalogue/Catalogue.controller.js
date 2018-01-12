@@ -81,6 +81,7 @@
       articleTagClick,
       removeFilterClick,
       thumbClick,
+      onScrolledToBeginning,
 
       onSearchEnter,
       onStateChange,
@@ -244,6 +245,23 @@
     /*
      Handlers
      */
+
+    function onScrolledToBeginning() {
+
+      $timeout(100)
+        .then(() => {
+
+          let parent = saEtc.getElementById('scroll-articles-parent');
+
+          let {children} = parent.children[0];
+
+          _.each(children, node => {
+             node.style.left = '0';
+          });
+
+        });
+
+    }
 
     function onSaleOrderClick() {
 

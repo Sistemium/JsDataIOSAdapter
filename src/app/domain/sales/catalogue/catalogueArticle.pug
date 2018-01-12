@@ -1,6 +1,7 @@
 ul.list-group.round-corners-by-type.vr-parent(
 vs-repeat='{{ vm.articleRowHeight }}'
 vs-scroll-parent="#scroll-articles-parent"
+vs-scrolled-to-beginning='vm.onScrolledToBeginning()'
 before-tag-name='li'
 )
 
@@ -28,6 +29,7 @@ before-tag-name='li'
         strong.name-first(
         uib-tooltip-template='vm.articleTooltipTpl'
         ) {{::stock.article.firstName}}
+
         .article-info(
         ng-class='::{gray: stock.article.firstName.length}'
         )
@@ -54,8 +56,8 @@ before-tag-name='li'
         position='vm.saleOrderPositionByArticle[stock.articleId]'
         )
 
-      .article-name-second(
-      )
+      .article-name-second
+
         small {{::stock.article.preName}}
 
         small.tag(
@@ -71,12 +73,7 @@ before-tag-name='li'
 
         small {{::stock.article.extraLabel}}
 
-      .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
-        i.red.glyphicon.glyphicon-ban-circle
-        small.red "{{ vm.restrictedArticles[stock.articleId].name }}"
-        small.gray {{ vm.prices[stock.articleId].price | number:2 }} ₽
-
-      .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
+      .article-name-third
 
         small.flagged(ng-if='stock.article.hasAction') A
 
@@ -84,6 +81,10 @@ before-tag-name='li'
         ng-if='vm.articleStats[stock.articleId]'
         uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"
         )
+
+        small.article-restricted(ng-if='vm.restrictedArticles[stock.articleId]')
+          i.red.glyphicon.glyphicon-ban-circle
+          span.red "{{ vm.restrictedArticles[stock.articleId].name }}"
 
         i.red.glyphicon.glyphicon-warning-sign(
         ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'

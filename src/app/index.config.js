@@ -19,7 +19,7 @@
       $compileProvider.preAssignBindingsEnabled(true);
     })
     .config($animateProvider => {
-      $animateProvider.classNameFilter(/animate-show/);
+      $animateProvider.classNameFilter(/^animate/);
     })
   ;
 
