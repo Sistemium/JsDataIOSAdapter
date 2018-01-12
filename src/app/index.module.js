@@ -7,7 +7,6 @@
       'ngTouch',
       'ngSanitize',
       'ngMessages',
-      'ngAria',
       'ui.router',
       'ui.router.stateHelper',
       'LocalStorageModule',
