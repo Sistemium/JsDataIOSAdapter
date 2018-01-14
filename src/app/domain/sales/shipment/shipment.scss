@@ -98,9 +98,9 @@
       border-bottom: 1px solid $gray-border-color;
       display: flex;
       height: inherit;
+      position: relative;
 
       @include responsive-only(lt-sm) {
-        position: relative;
         display: flex;
         flex-flow: column nowrap;
       }
