@@ -953,8 +953,6 @@
             groupIds[article.articleGroupId] = articleIds[article.id] = 1;
           }
 
-          return res;
-
         });
 
       }
