@@ -869,7 +869,8 @@
 
       if (articleGroup) {
         let ids = _.union([articleGroup.id], _.map(articleGroup.descendants(), 'id'));
-        articles = _.filter(articles, article => ids.indexOf(article.articleGroupId) > -1);
+        let hash = _.groupBy(ids, _.identity);
+        articles = _.filter(articles, article => hash[article.articleGroupId]);
       }
 
       if (vm.search || vm.filters.length) {
