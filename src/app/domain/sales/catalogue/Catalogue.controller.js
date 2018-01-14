@@ -256,7 +256,7 @@
           let {children} = parent.children[0];
 
           _.each(children, node => {
-             node.style.left = '0';
+            node.style.left = '0';
           });
 
         });
@@ -862,15 +862,46 @@
 
       let articles = Article.getAll();
 
+      let groupIds = false;
+      let articleIds = false;
+
       if (vm.showOnlyOrdered) {
+
         let ids = _.map(vm.saleOrder.positions, 'articleId');
-        articles = _.filter(articles, article => ids.indexOf(article.id) > -1);
+
+        articleIds = groupIds = {};
+
+        articles = _.filter(articles, article => {
+          if (ids.indexOf(article.id) > -1) {
+            groupIds[article.articleGroupId] = articleIds[article.id] = 1;
+            return true;
+          }
+        });
+
       }
 
       if (articleGroup) {
-        let ids = _.union([articleGroup.id], _.map(articleGroup.descendants(), 'id'));
-        let hash = _.groupBy(ids, _.identity);
-        articles = _.filter(articles, article => hash[article.articleGroupId]);
+
+        let hash = {};
+
+        hash[articleGroup.id] = true;
+
+        DEBUG('getStockByArticlesOfGroup', 'has articleGroup');
+
+        _.each(articleGroup.descendantsCache, id => hash[id] = true);
+
+        DEBUG('getStockByArticlesOfGroup', 'did hashing');
+
+        articleIds = groupIds = {};
+
+        articles = _.filter(articles, article => {
+
+          if (hash[article.articleGroupId]) {
+            groupIds[article.articleGroupId] = articleIds[article.id] = 1;
+            return true;
+          }
+        });
+
       }
 
       if (vm.search || vm.filters.length) {
@@ -894,7 +925,9 @@
 
         let tags = _.filter(vm.filters, 'tag');
 
-        articles = _.filter(articles, article => {
+        articleIds = groupIds = {};
+
+        _.each(articles, article => {
 
           let res = !reg ||
             reg.test(article.name) ||
@@ -916,20 +949,31 @@
             });
           }
 
+          if (res) {
+            groupIds[article.articleGroupId] = articleIds[article.id] = 1;
+          }
+
           return res;
 
         });
 
       }
 
-      let articleIds = _.groupBy(articles, 'id');
+      DEBUG('getStockByArticlesOfGroup', 'end');
 
-      return _.filter(sortedStock, stock => articleIds[stock.articleId]);
+      let result = !articleIds ? sortedStock : _.filter(sortedStock, stock => {
+        if (articleIds[stock.articleId]) {
+          return ++ groupIds[stock.article.articleGroupId];
+        }
+      });
 
+      result.articleGroupIds = groupIds;
+
+      return result;
     }
 
     function articleGroupIds(stock) {
-      return _.groupBy(stock, item => {
+      return stock.articleGroupIds || _.groupBy(stock, item => {
         return _.get(item, 'article.articleGroupId');
       });
     }

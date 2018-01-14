@@ -1,8 +1,7 @@
 .list-group.round-corners-by-type.vr-parent(
 vs-repeat='{{vm.articleRowHeight}}'
 vs-scroll-parent="#scroll-articles-parent"
-vs-scrolled-to-beginning='vm.onScrolledToBeginning()'
-vs-excess='4'
+vs-excess='3'
 before-tag-name='li'
 )
 
@@ -21,7 +20,7 @@ before-tag-name='li'
       ng-class='::!stock.article.avatar.srcThumbnail && "placeholder"'
       )
 
-    .article-wrapper(
+    .article-name(
     ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
     ng-disabled='vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )
