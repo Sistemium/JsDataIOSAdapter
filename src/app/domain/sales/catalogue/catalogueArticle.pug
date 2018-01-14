@@ -1,7 +1,8 @@
-ul.list-group.round-corners-by-type.vr-parent(
-vs-repeat='{{ vm.articleRowHeight }}'
+.list-group.round-corners-by-type.vr-parent(
+vs-repeat='{{vm.articleRowHeight}}'
 vs-scroll-parent="#scroll-articles-parent"
 vs-scrolled-to-beginning='vm.onScrolledToBeginning()'
+vs-excess='4'
 before-tag-name='li'
 )
 
@@ -114,7 +115,7 @@ before-tag-name='li'
         discount='vm.discounts[stock.articleId]'
         )
 
-    fieldset.right(
+    .right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
     ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )

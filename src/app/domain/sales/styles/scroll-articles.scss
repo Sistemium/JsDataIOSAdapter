@@ -66,19 +66,31 @@
     transition: all ease-in 0.5s;
   }
 
+  .list-group {
+    margin-bottom: 0;
+  }
+
   .list-group-item {
 
     min-height: 80px;
-    padding: 0 10px;
+    max-height: 80px;
+    padding: 1px 10px 0;
+    margin-bottom: 0;
+
+    & + .list-group-item {
+      border-top: none;
+    }
+
     //width: 99.8%;
 
     @extend %flex-row;
     @extend .spaced;
 
-    align-items: center;
+    align-items: stretch;
 
     @media (max-width: $screen-xs-max) {
       min-height: 74px;
+      max-height: 74px;
     }
 
     @include responsive-only(xxs) {
@@ -115,9 +127,12 @@
   .right {
 
     margin-left: 10px;
-    text-align: right;
-    //margin-right: 2px;
+    text-align: center;
     min-width: 35px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 
     .plus-box {
       font-weight: bold;
@@ -132,22 +147,21 @@
       border-radius: 3px;
       display: block;
       color: #777777;
-      position: relative;
 
       &:first-child {
-        top: -2px;
+        //top: 8px;
         font-size: inherit;
       }
 
       &:last-child {
-        bottom: -2px;
+        //bottom: 8px;
         font-size: inherit;
       }
 
     }
 
     button + button {
-      margin-top: 4px;
+      //margin-top: 4px;
     }
 
   }
@@ -155,7 +169,7 @@
   .article-name-third {
 
     width: 100%;
-    min-height: 20px;
+    //min-height: 20px;
     text-align: right;
     //overflow: scroll;
 
@@ -183,15 +197,28 @@
   }
 
   .article-wrapper {
+
     flex: 1;
     min-width: 0;
+
+    > * {
+      @include responsive-only(xxs) {
+        min-height: 24px;
+        .article-name-second {
+          margin-top: 1px;
+        }
+      }
+      min-height: 25px;
+      align-items: flex-end;
+    }
+
   }
 
   .article-name-first {
 
     display: flex;
     width: 100%;
-    min-height: 20px;
+    //min-height: 20px;
 
     .name-first {
       @extend .ellipsis;
@@ -240,7 +267,7 @@
     width: 100%;
     color: gray;
     display: block;
-    min-height: 20px;
+    //min-height: 20px;
 
     @extend .ellipsis;
 
