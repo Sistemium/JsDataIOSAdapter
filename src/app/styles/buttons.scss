@@ -56,7 +56,7 @@ a.disabled, .disabled a {
   -webkit-filter: grayscale(100%);
 }
 
-.disabled, [disabled] button {
+.disabled button, [disabled] button {
   pointer-events: none;
   cursor: wait;
   opacity: 0.5;
