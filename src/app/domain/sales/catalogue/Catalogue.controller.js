@@ -156,7 +156,7 @@
         vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
           vm.discounts = {};
           vm.discountsBy = {};
-          filterStock();
+          // filterStock();
           setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
           setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
         }));
@@ -667,10 +667,13 @@
 
       if (!vm.currentPriceType) return;
 
-      let stockCache = _.orderBy(_.map(
+      let stockCache = _.orderBy(
+        // _.map(
         Stock.meta.getAll(),
-        stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
-      ), item => item.article && item.article.name);
+        // stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
+      // ),
+        item => item.article && item.article.name
+      );
 
       DEBUG('filterStock', 'orderBy');
 
