@@ -66,6 +66,7 @@
 
   .list-group {
     margin-bottom: 0;
+    @extend .round-corners-by-type;
   }
 
   .list-group-item {
