@@ -18,7 +18,7 @@
   /* Styles for ng-gallery thumbnail*/
 
   a.thumb {
-    margin: 1px 10px 1px 1px;
+    margin: 5px 10px 0 0;
     display: block;
   }
 
@@ -44,8 +44,6 @@
 
   img {
 
-    margin: -1px !important;
-
     outline: 0;
     width: 70px;
     height: 68px;
@@ -57,8 +55,8 @@
     }
 
   }
-  img.no-image {
-    pointer-events: none;
+
+  [disabled] > img {
     filter: brightness(2);
   }
 
@@ -81,8 +79,6 @@
       border-top: none;
     }
 
-    //width: 99.8%;
-
     @extend %flex-row;
     @extend .spaced;
 
@@ -101,19 +97,22 @@
       border-radius: 0;
 
       a.thumb {
+
         position: absolute;
         top: 5px;
         left: 0;
+
         img {
           max-width: 40px;
           max-height: 40px;
         }
 
+        & + .article-name {
+          margin-left: 45px
+        }
+
       }
 
-      a.thumb + .article-name {
-        margin-left: 40px
-      }
 
     }
 
