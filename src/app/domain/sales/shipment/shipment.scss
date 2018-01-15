@@ -251,6 +251,10 @@
 
         display: flex;
 
+        strong {
+          font-weight: normal;
+        }
+
         > div {
           label {
             @include responsive-only(gt-xs) {
@@ -311,10 +315,6 @@
             label {
               margin-bottom: 0;
               font-weight: normal;
-            }
-
-            span{
-              font-weight: bold;
             }
 
           }

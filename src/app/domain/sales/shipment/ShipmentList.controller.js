@@ -99,7 +99,7 @@
           cls: 'footer',
           totalCost: () => _.sumBy(dateItems, shipment => {
 
-            return shipment.totalCost && !shipment.isFooter && shipment.totalCost() || 0;
+            return !shipment.cls && shipment.totalCost && shipment.totalCost() || 0;
 
           })
         };
