@@ -213,9 +213,9 @@
 
         $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
 
-        vm.watchScope('vm.saleOrder.outletId', (outletId, oldOutletId) => {
+        vm.watchScope('vm.saleOrder.outletId', (outletId) => {
 
-          if (!outletId || outletId === oldOutletId) return vm.articleStats = {};
+          if (!outletId) return vm.articleStats = {};
 
           OutletArticles.groupByArticleId(outletId)
             .then(data => {
@@ -226,8 +226,7 @@
 
             })
             .then(() => {
-              return vm.saleOrder.outlet.DSLoadRelations('Partner', {bypassCache: true})
-                ;
+              return vm.saleOrder.outlet.DSLoadRelations('Partner', {bypassCache: true});
             });
 
         });
@@ -938,7 +937,7 @@
             reg.test(article.lastName) ||
             article.ArticleGroup && reg.test(article.ArticleGroup.name);
 
-          if (res && vm.showOnlyShipped) {
+          if (res && vm.showOnlyShipped && vm.articleStats) {
             res = vm.articleStats[article.id];
           }
 
