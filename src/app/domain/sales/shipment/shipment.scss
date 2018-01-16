@@ -154,13 +154,16 @@
       }
 
       .egais {
+
+        top: 2px;
+
         @include responsive-only(lt-sm) {
           position: absolute;
           right: 0;
-          top: 2px;
           min-width: 0;
           font-size: 80%;
         }
+
       }
 
       .driver {

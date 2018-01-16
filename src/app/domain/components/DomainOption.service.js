@@ -17,8 +17,15 @@
       saleOrdersDisabled,
       visitsDisabled,
       showNewsCarousel,
-      hasArticleFactors
+      hasArticleFactors,
+      saleOrderMaxPositions
     };
+
+    function saleOrderMaxPositions() {
+      if (customerCode() === 'r50' && site() === 1) {
+        return 50;
+      }
+    }
 
     function showNewsCarousel() {
       return customerCode().match(/r50?/) && Auth.isAuthorized(['salesman', 'newsMaker', 'supervisor']);

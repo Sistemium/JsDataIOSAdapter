@@ -91,7 +91,9 @@
 
     });
 
-    let busy = $timeout(SHORT_TIMEOUT)
+    const maxPositions = DomainOption.saleOrderMaxPositions();
+
+      let busy = $timeout(SHORT_TIMEOUT)
       .then(findAll)
       .then(() => {
 
@@ -568,6 +570,8 @@
 
     }
 
+    let maxPositionsAlertShown = false;
+
     function cacheSaleOrderPositions() {
 
       vm.saleOrderPositionByArticle = {};
@@ -575,6 +579,18 @@
       let grouped = _.groupBy(vm.saleOrderPositions, 'articleId');
 
       _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
+
+      if (maxPositions && vm.saleOrderPositions.length > maxPositions && !maxPositionsAlertShown) {
+
+        maxPositionsAlertShown = true;
+
+        toastr.error('В заказе больше чем 50 позиций', 'Внимание!', {onHidden});
+
+      }
+
+      function onHidden() {
+        maxPositionsAlertShown = false
+      }
 
     }
 
