@@ -1,6 +1,20 @@
 'use strict';
 
-(function () {
+(function (module) {
+
+  module.component('visitView', {
+
+    bindings: {
+      disableElements: '<',
+      customFilter: '<'
+    },
+
+    templateUrl: 'app/domain/components/visitView/visitView.html',
+
+    controller: VisitsController,
+    controllerAs: 'vm'
+
+  });
 
   function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper, $filter, geolib, Sockets) {
 
@@ -23,6 +37,7 @@
       initDate: today,
       maxDate: today,
       minDate: today,
+      busy: null,
 
       getDayClass,
 
@@ -95,8 +110,11 @@
       }
     }
 
-
     function setDate(newValue) {
+
+      if (vm.disableElements) {
+        return;
+      }
 
       if (!newValue) {
         vm.selectedDate = vm.initDate;
@@ -133,18 +151,24 @@
 
     function filterVisitsBySelectedDate() {
 
+      vm.busy = true;
+
       const visitRelations = ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto'];
 
       let dateFilter = {date: dateFormatted(vm.selectedDate)};
-      let filter = salesmanFilter(dateFilter);
+
+      let filter;
+
+      vm.customFilter ? filter = vm.customFilter : filter = salesmanFilter(dateFilter);
 
       let q = Visit.findAllWithRelations(filter, {bypassCache: true})(visitRelations)
         .then(() => {
           vm.rebindAll(Visit, filter, 'vm.selectedDayVisits', loadOutletLocations);
+          vm.busy = false;
         })
         .catch(e => console.warn(e));
 
-      vm.setBusy(q, 'Загрузка данных дня');
+      vm.setBusy(q, vm.disableElements ? 'Загрузка данных' : 'Загрузка данных дня');
 
     }
 
@@ -190,7 +214,4 @@
 
   }
 
-  angular.module('webPage')
-    .controller('VisitsController', VisitsController);
-
-})();
+})(angular.module('Sales'));

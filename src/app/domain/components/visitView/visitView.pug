@@ -1,6 +1,6 @@
-section.visits.ui-view(cg-busy='vm.cgBusy')
+.visit-view(cg-busy='vm.cgBusy')
 
-  .row.datepicker-with-buttons
+  .row.datepicker-with-buttons(ng-if='!vm.disableElements')
 
     sab-date-picker.col-sm-4.col-lg-3(
     value='vm.selectedDate'
@@ -20,14 +20,14 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
           i.glyphicon.glyphicon-plus
           span Новый визит
 
-  hr.clear-both
+  hr.clear-both(ng-if='!vm.disableElements')
 
   #scroll-main(
   resize
   resize-offset-top='5'
   ng-if='vm.selectedDayVisits.length'
   )
-    table.table.table-striped.clear-both.table-hover
+    table.table.clear-both.table-hover
       thead
         tr
           th(ng-if='!vm.selectedSalesmanId') ТП
@@ -53,4 +53,6 @@ section.visits.ui-view(cg-busy='vm.cgBusy')
           td.number.hidden-xs {{ visit.photos.length | number: 0 }}
           //td.number.hidden-xs {{ visit.answers.length | number: 0 }}
 
-  .alert.alert-info.centered(ng-hide='vm.selectedDayVisits.length') Нет визитов на указанную дату
+  .alert.alert-info.centered(ng-if='!vm.selectedDayVisits.length && !vm.busy')
+    span Нет визитов
+    span(ng-if='!vm.disableElements') &nbsp;на указанную дату
