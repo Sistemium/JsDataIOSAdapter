@@ -26,7 +26,7 @@
             controllerAs: 'vm'
           }]
 
-        });
+        })
 
     });
 
