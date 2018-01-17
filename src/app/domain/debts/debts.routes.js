@@ -39,7 +39,6 @@
           url: '/debt/byOutlet',
 
           templateUrl: 'app/domain/debts/DebtByOutlet.html',
-          controller: 'DebtByOutletController as vm',
 
           data: {
             title: 'Долги по точкам',

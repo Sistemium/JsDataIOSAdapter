@@ -154,8 +154,6 @@
         url: '/visits?date',
 
         templateUrl: 'app/domain/sales/visits/visits.html',
-        controller: 'VisitsController',
-        controllerAs: 'vm',
 
         data: {
           title: 'Визиты'
