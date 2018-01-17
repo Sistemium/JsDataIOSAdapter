@@ -65,7 +65,7 @@
 
   .headers {
 
-    margin-top: $navbar-padding-vertical;
+    margin-top: 8px;
 
     > :last-of-type {
       text-align: right;
@@ -89,15 +89,8 @@
 
   }
 
-  #scroll-main {
-
+  .alert {
     margin-top: 10px;
-    min-height: 50px;
-
-    & + .alert {
-      margin-top: 20px;
-    }
-
   }
 
   #scroll-main .list-item {
@@ -144,7 +137,7 @@
 
       .processing {
 
-        text-align: center;
+        text-align: left;
 
         @include responsive-only(gt-xs) {
           padding-right: 6px;

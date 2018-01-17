@@ -1,19 +1,37 @@
-.sale-order-view
+.sale-order-view(cg-busy='vm.cgBusy')
 
-  .headers
+  .buttons
+
+    filter-workflow(
+    current-workflow='vm.currentWorkflow'
+    workflows-in-promise='vm.workflowPromise'
+    )
+
+    button.btn.btn-primary(ng-click='vm.newItemClick($event)' ng-if ='!vm.disableElements')
+      i.glyphicon.glyphicon-plus
+      span Добавить заказ
+
+  .headers(ng-if='vm.data.length')
     .processing Статус
     .salesman(ng-if='!vm.currentSalesman') ТП
     .outlet Точка
     .totals Итоги
 
+  .alert.alert-info.centered(ng-if='!vm.data.length && vm.isReady') Нет заказов
+
   #scroll-main.scroll-y(
-  cg-busy='vm.cgBusy'
+  elem-ready='vm.restoreScrollPosition()'
   resize
   resize-offset-top='5'
+  resize-property='height'
   vs-repeat='{{vm.rowHeight()}}'
+  vs-scrolled-to-end='vm.getData()'
+  vs-scrolled-to-end-offset='15'
+  vs-excess='10'
   )
+
     .list-item(
-    ng-repeat='item in vm.giveData track by item.id'
+    ng-repeat='item in vm.data track by item.id'
     )
       .list-group-header.date(
       ng-if='!item.outletId'
@@ -23,7 +41,7 @@
       a.sale-order(
       href
       ng-if='item.outletId'
-      ng-click='vm.itemClick(item)'
+      ng-click='vm.saleOrderItemClick(item)'
       )
         .list-item-body
 
@@ -55,5 +73,3 @@
           ng-class='item.workflowStep.messageCls'
           )
             i.glyphicon.glyphicon-warning-sign
-
-  .alert.alert-info.centered(ng-if='!vm.data.length && vm.isReady') Нет заказов
