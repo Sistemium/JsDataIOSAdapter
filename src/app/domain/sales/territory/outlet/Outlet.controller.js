@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers, $timeout, GalleryHelper) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers, $timeout, GalleryHelper, $filter, geolib) {
 
     // TODO: allow to add/change location for an existing outlet
 
@@ -14,9 +14,9 @@
     let rootState = _.first($state.current.name.match(/sales\.[^.]+\.[^.]+/)) || 'sales.territory.outlet';
     let stateFilter = $state.params.id;
 
-    vm.use({
+    const numberFilter = $filter('number');
 
-      currentState: null,
+    vm.use({
 
       outlet: undefined,
       isUpdateLocationEnabled: true,
@@ -37,7 +37,9 @@
       confirmLocationYesClick,
       confirmLocationNoClick,
       updateLocationClick,
-      onStateChange
+      onStateChange,
+      outletDistance,
+      $onInit
 
     });
 
@@ -52,13 +54,12 @@
       Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner', 'saleOrders', 'Debt'])
         .then(outlet => {
 
-          console.log(outlet);
+          let outletId = outlet.id;
+          let filterByOutletId = {outletId: outletId};
 
-          vm.normalData = outlet.saleOrders;
-
-          vm.outletDebts = outlet.debts;
-
-          vm.outletVisits = outlet.visits;
+          vm.saleOrderFilter = _.assign({'x-order-by:': '-date'}, filterByOutletId);
+          vm.debtFilter = outletId;
+          vm.visitFilter = filterByOutletId;
 
           if (outlet.location) {
             initMap(outlet.location);
@@ -83,11 +84,24 @@
      Functions
      */
 
+    function $onInit() {
+      $timeout(100).then(() => {
+        vm.currentState = 'saleOrder';
+      })
+    }
+
     function loadContracts(outlet) {
 
       return OutletSalesmanContract.findAllWithRelations({outletId: outlet.id}, {bypassCache: true})('Contract')
         .then(data => vm.outletSalesmanContracts = data);
+    }
 
+    function outletDistance(visit) {
+      let outletLocation = _.get(visit, 'outlet.location');
+      if (outletLocation) {
+        let res = geolib.getDistance(outletLocation, visit.checkInLocation);
+        return `${numberFilter(res, 0)}м.`
+      }
     }
 
     function onStateChange(to) {
