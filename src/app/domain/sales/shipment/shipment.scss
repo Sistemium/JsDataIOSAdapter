@@ -80,7 +80,11 @@
     }
 
     .date {
+
       padding: 5px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
 
       @include responsive-only(lt-sm) {
         padding: 45px 0 4px 0;
@@ -89,6 +93,12 @@
 
       .title {
         font-size: 150%;
+      }
+
+      .total-cost {
+        @include responsive-only(gt-xs) {
+          display: none;
+        }
       }
 
     }

@@ -30,6 +30,7 @@ cg-busy='vm.cgBusy'
 
       .date(ng-switch-when='date')
         .title {{ ::shipment.date }}
+        currency-value.total-cost(value='shipment.totalCost()')
 
       .shipment(ng-switch-default ng-click='vm.itemClick(shipment, $event)')
 
