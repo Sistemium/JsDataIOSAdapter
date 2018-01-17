@@ -38,6 +38,12 @@
 
     $scope.$on('$destroy', cleanup);
 
+    vm.watchScope(isWideScreen, () => {
+      let filteredData = _.filter(vm.data, item => !item.isFooter);
+      vm.data = calcTotals(filteredData);
+      $scope.$broadcast('vsRepeatTrigger');
+    });
+
     /*
      Functions
      */
@@ -77,6 +83,10 @@
     function calcTotals(data) {
 
       let grouped = _.groupBy(data, 'date');
+
+      if (!isWideScreen()) {
+        return data;
+      }
 
       _.each(grouped, (dateItems, date) => {
 
