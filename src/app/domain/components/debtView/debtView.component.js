@@ -1,8 +1,21 @@
 'use strict';
 
-(function () {
+(function (module) {
 
-  function DebtByOutletController(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth, localStorageService, saEtc, IOS) {
+  module.component('debtView', {
+
+    bindings: {
+      customFilter: '<'
+    },
+
+    templateUrl: 'app/domain/components/debtView/debtView.html',
+
+    controller: debtView,
+    controllerAs: 'vm'
+
+  });
+
+  function debtView(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth, localStorageService, saEtc, IOS) {
 
     const {Debt, Outlet, Cashing, Partner, Responsibility} = Schema.models();
 
@@ -123,16 +136,16 @@
 
     function getData(filter) {
 
-      return Outlet.findAll(Outlet.meta.salesmanFilter(filter))
-        .then(outlets => {
+      let outletFilter;
 
-          console.log(outlets);
+      vm.customFilter ? outletFilter = {id: vm.customFilter} : outletFilter = Outlet.meta.salesmanFilter(filter);
+
+      return Outlet.findAll(outletFilter)
+        .then(outlets => {
 
           let outletById = _.groupBy(outlets, 'id');
 
           let where = Responsibility.meta.jsdFilter();
-
-          console.log(where);
 
           if (!where) return [];
 
@@ -202,7 +215,7 @@
           items: _.orderBy(items, 'outlet.name'),
           'sum(cashed)': totalCashed(items),
           'sum(summ)': totalSumm(items),
-          'sum(summDoc)': totalSummDoc(items) ,
+          'sum(summDoc)': totalSummDoc(items),
           overdue: totalOverdue(items)
         }
 
@@ -286,7 +299,4 @@
 
   }
 
-  angular.module('webPage')
-    .controller('DebtByOutletController', DebtByOutletController);
-
-})();
+})(angular.module('Sales'));
