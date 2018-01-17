@@ -1,7 +1,5 @@
 // TODO: show avatarPhoto or take photo button
 
-pre {{vm.currentState}}
-
 .outlet-view
 
   .header(cg-busy='vm.busy')
@@ -22,7 +20,7 @@ pre {{vm.currentState}}
               i.glyphicon.glyphicon-edit
 
             a.btn.btn-link(
-            popover-placement="bottom-left auto"
+            popover-placement="auto auto"
             popover-trigger='"outsideClick"'
             uib-popover-template="'app/domain/sales/views/location.html'"
             popover-is-open='vm.mapPopoverIsOpen'
@@ -62,52 +60,58 @@ pre {{vm.currentState}}
         ng-class='!vm.avatarSrc && "placeholder"'
         )
 
+  //uib-tabset(active='1' justified='true')
+    //  uib-tab(index='0' heading='Заказы')
+    //    sale-order-view(
+    //    give-data='vm.outletSaleOrders'
+    //    custom-filter='vm.outletFilter'
+    //    ng-if='vm.outletDebtId'
+    //    style='display: block; height: 100vh'
+    //    )
+    //  uib-tab(index='1' heading='Долги')
+    //    debt-view(give-data='vm.outletDebts' debt-id='vm.outletDebtId' ng-if='vm.outletDebtId')
+    //  uib-tab(index='2' heading='Договор')
+    //    | Long Labeled Justified content
+    //  uib-tab(index='3' heading='Визиты')
+    //    | Long Labeled Justified content
+
+
 
   .navigation
-    button.btn.btn-default(
+
+    a(
     ng-click='vm.currentState = "saleOrder"'
+    ng-class='{"active-state": vm.currentState === "saleOrder"}'
     ) Заказы
 
-    button.btn.btn-default(
+    a(
     ng-click='vm.currentState = "debts"'
+    ng-class='{"active-state": vm.currentState === "debts"}'
     ) Долги
 
-    button.btn.btn-default(
+    a(
     ng-click='vm.currentState = "contract"'
+    ng-class='{"active-state": vm.currentState === "contract"}'
     ) Договор
 
-    button.btn.btn-default(
+    a(
     ng-click='vm.currentState = "visit"'
+    ng-class='{"active-state": vm.currentState === "visit"}'
     ) Визиты
+
 
   .ui-view
 
     .outlet-saleOrder(ng-if='vm.currentState == "saleOrder"')
-      sale-order-view(give-data='vm.normalData')
+      sale-order-view(custom-filter='vm.saleOrderFilter' disable-elements='true' ng-if='vm.saleOrderFilter')
 
     .outlet-debts(ng-if='vm.currentState == "debts"')
-      pre {{vm.outletDebts | json}}
-
-    .outlet-visit(ng-if='vm.currentState == "visit"')
-
-      .headers
-        .contract Время
-        .credit-limit До точки
-        .credit-remains Фото
-
-
-      pre {{vm.outletVisits | json}}
+      debt-view(custom-filter='vm.debtFilter' ng-if='vm.debtFilter')
 
     .outlet-salesman-contracts(ng-if='vm.currentState == "contract"')
 
-      .headers
-        .salesman ТП
-        .contract Договор
-        .credit-limit Лимит
-        .credit-remains Остаток
+      contract-view(contracts='vm.outletSalesmanContracts')
 
-      .outlet-salesman-contract(ng-repeat='osc in vm.outletSalesmanContracts track by osc.id')
-        .salesman {{ ::osc.salesman.shortName }}
-        .contract {{ ::osc.contract.name }}
-        .credit-limit {{ ::osc.contract.creditLimit | number:2 }}
-        .credit-remains {{ ::osc.contract.creditRemains | number:2 }}
+    .outlet-visit(ng-if='vm.currentState == "visit"')
+
+      visit-view(custom-filter='vm.visitFilter' disable-elements='true' ng-if='vm.visitFilter')

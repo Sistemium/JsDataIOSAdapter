@@ -64,6 +64,10 @@
 
           .outlet-buttons {
 
+            .popover {
+              max-width: 500px;
+            }
+
             @include responsive-only(xxs) {
               > a {
                 padding: 5px;
@@ -116,7 +120,7 @@
 
         border-radius: 5px;
         padding: 5px;
-        border: solid 1px $state-info-border;
+        border: solid 1px $gray-border-color;
 
         img {
 
@@ -136,36 +140,79 @@
 
   .navigation {
 
+    display: flex;
+    margin: 10px 0;
+    border: 1px solid $gray-border-color;
+    border-radius: 5px;
+    overflow: hidden;
+
+    @include responsive-only(xxs) {
+      flex-flow: column nowrap;
+    }
+
+    .active-state {
+      background-color: $gray-background-color;
+    }
+
+    > a {
+
+      flex: 1;
+      border-radius: 0;
+      padding: 5px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+
+      &:not(:last-child) {
+
+        border-right: 1px solid $gray-border-color;
+
+        @include responsive-only(xxs) {
+          border-right: none;
+          border-bottom: 1px solid $gray-border-color;
+        }
+      }
+
+      &:hover, &:active {
+        background-color: $gray-background-color;
+      }
+
+    }
+
   }
 
-  .outlet-salesman-contracts > * {
+  .ui-view {
 
-    display: flex;
-
-    &.headers {
-      color: $gray;
+    @include responsive-only(gt-xxs) {
+      min-height: 240px;
     }
 
-    & + * {
-      border-top: solid 1px $border-gray;
-    }
+  }
 
-    > * {
-      padding: $padding 0;
-      flex: 1;
-      min-width: 80px;
+  // tabs
 
-      & + * {
-        margin-left: $padding;
+  .outlet-visit {
+
+    $width-photos: 100px;
+    $width-outlet-distance: 200px;
+    $width-check-in-location: 300px;
+
+    .headers {
+
+      display: flex;
+
+      .outlet-distance {
+        min-width: $width-outlet-distance;
       }
-    }
 
-    > .salesman {
-      flex: 2;
-    }
+      .check-in-location {
+        width: $width-check-in-location;
+      }
 
-    > .contract {
-      flex: 3;
+      .photos {
+        min-width: $width-photos;
+      }
+
     }
 
   }
