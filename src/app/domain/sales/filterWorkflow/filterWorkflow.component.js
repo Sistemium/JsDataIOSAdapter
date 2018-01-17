@@ -96,6 +96,9 @@
           loadSupplementaryWorkflowData();
 
         })
+        .catch((err) => {
+          console.error(err);
+        })
 
     }
 
