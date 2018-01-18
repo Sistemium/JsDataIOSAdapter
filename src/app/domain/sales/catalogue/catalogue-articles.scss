@@ -83,6 +83,7 @@
     @extend %flex-row;
     @extend .spaced;
 
+    // to space .right
     align-items: stretch;
 
     @media (max-width: $screen-xs-max) {
@@ -95,12 +96,12 @@
       padding: 0;
       border-right: none;
       border-left: none;
-      border-radius: 0;
+      border-radius: 0 !important;
 
       a.thumb {
 
         position: absolute;
-        top: 5px;
+        top: 0;
         left: 0;
 
         img {
@@ -109,7 +110,9 @@
         }
 
         & + .article-name {
-          margin-left: 45px
+          .article-name-first, .article-name-second {
+            margin-left: 45px
+          }
         }
 
       }
@@ -168,14 +171,13 @@
 
   .article-name-third {
 
-    width: 100%;
-    //min-height: 20px;
     text-align: right;
-    //overflow: scroll;
 
     > * + i {
       margin-left: 4px;
     }
+
+    white-space: nowrap;
 
     > div {
 
@@ -217,8 +219,6 @@
   .article-name-first {
 
     display: flex;
-    width: 100%;
-    //min-height: 20px;
 
     .name-first {
       @extend .ellipsis;
@@ -232,12 +232,6 @@
       flex-shrink: 0;
       flex-grow: 1;
       padding-right: 6px;
-
-      //@include responsive-only(xxs) {
-      //  small {
-      //    display: none;
-      //  }
-      //}
 
     }
 
@@ -264,10 +258,8 @@
 
   .article-name-second {
 
-    width: 100%;
     color: gray;
     display: block;
-    //min-height: 20px;
 
     @extend .ellipsis;
 
