@@ -818,7 +818,10 @@
 
     function setFirstLevelGroups(currentArticleGroup) {
 
+      DEBUG('setFirstLevelGroups', 'start');
+
       if (!currentArticleGroup || !vm.showFirstLevel) {
+        DEBUG('setFirstLevelGroups', 'exit');
         vm.precedingGroups = [];
         vm.followingGroups = [];
         return;
@@ -841,6 +844,8 @@
 
       vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.name < currentFirstLevelGroup.name);
       vm.followingGroups = _.filter(vm.firstLevelGroups, group => group.name > currentFirstLevelGroup.name);
+
+      DEBUG('setFirstLevelGroups', 'end');
 
     }
 
@@ -975,7 +980,7 @@
 
       }
 
-      DEBUG('getStockByArticlesOfGroup', 'end');
+      DEBUG('getStockByArticlesOfGroup', 'articleIds');
 
       let result = !articleIds ? sortedStock : _.filter(sortedStock, stock => {
         if (articleIds[stock.articleId]) {
@@ -985,13 +990,27 @@
 
       result.articleGroupIds = groupIds;
 
+      DEBUG('getStockByArticlesOfGroup', 'end');
+
       return result;
     }
 
     function articleGroupIds(stock) {
-      return stock.articleGroupIds || _.groupBy(stock, item => {
-        return _.get(item, 'article.articleGroupId');
+
+      if (stock.articleGroupIds) {
+        return stock.articleGroupIds;
+      }
+
+      let res = {};
+
+      _.each(stock, item => {
+        let id = _.get(item, 'article.articleGroupId');
+        let count = res[id] || 0;
+        res[id] = ++ count;
       });
+
+      return res;
+
     }
 
     function alertCheck(stock) {
