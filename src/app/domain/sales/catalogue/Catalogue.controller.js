@@ -55,6 +55,7 @@
       stockWithPicIndex: [],
       discountsBy: {},
       discounts: {},
+      restrictionsBy: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
@@ -93,7 +94,7 @@
 
     const maxPositions = DomainOption.saleOrderMaxPositions();
 
-      let busy = $timeout(SHORT_TIMEOUT)
+    let busy = $timeout(SHORT_TIMEOUT)
       .then(findAll)
       .then(() => {
 
@@ -156,8 +157,8 @@
         });
 
         vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
-          vm.discounts = {};
-          vm.discountsBy = {};
+          // vm.discounts = {};
+          // vm.discountsBy = {};
           // filterStock();
           setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
           setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
@@ -475,15 +476,18 @@
       if (!contractId || !partnerId || !vm.prices) {
         vm.discounts = {};
         vm.discountsBy = {};
+        console.warn('setDiscounts exit 1');
         return $q.resolve();
       }
 
-      if (vm.discountsBy.partnerId === partnerId && vm.discountsBy.contractId === contractId) {
+      let priceTypeId = vm.currentPriceType.id;
+
+      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId})) {
+        console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
-      vm.discountsBy.contractId = contractId;
-      vm.discountsBy.partnerId = partnerId;
+      vm.discountsBy = {contractId, partnerId, priceTypeId};
 
       const contractFilter = {
         contractId: {'==': contractId}
@@ -508,10 +512,21 @@
 
           vm.discounts = {};
 
-          // maybe noticeable faster to do one pass
+          let discountModel = {
+            article: {
+              contract: _.filter(allData[0], 'discount'),
+              partner: _.filter(allData[2], 'discount')
+            },
+            priceGroup: {
+              contract: _.filter(allData[1], 'discount'),
+              partner: _.filter(allData[3], 'discount')
+            }
+          };
 
-          setDiscountsWithModelData(allData[0], allData[1]);
-          setDiscountsWithModelData(allData[2], allData[3]);
+          console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
+
+          setDiscountsWithModelData(discountModel.article.contract, discountModel.priceGroup.contract);
+          setDiscountsWithModelData(discountModel.article.partner, discountModel.priceGroup.partner);
 
           DEBUG('setDiscounts end', contractId);
 
@@ -627,8 +642,10 @@
               vm.priceTypes = PriceType.filter({isVisible: true});
 
               if (!vm.currentPriceType) {
-                vm.currentPriceType = PriceType.meta.getDefault();
+                vm.currentPriceType = _.get(vm.saleOrder, 'priceType') || PriceType.meta.getDefault();
               }
+
+              console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
 
             });
 
@@ -683,10 +700,18 @@
       if (!vm.currentPriceType) return;
 
       let stockCache = _.orderBy(
-        // _.map(
-        Stock.meta.getAll(),
-        // stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
-      // ),
+        _.map(
+          Stock.meta.getAll(),
+          stock => {
+            return {
+              id: stock.id,
+              volume: stock.volume,
+              displayVolume: stock.displayVolume,
+              article: stock.article,
+              articleId: stock.articleId
+            };
+          }
+        ),
         item => item.article && item.article.name
       );
 
@@ -984,7 +1009,7 @@
 
       let result = !articleIds ? sortedStock : _.filter(sortedStock, stock => {
         if (articleIds[stock.articleId]) {
-          return ++ groupIds[stock.article.articleGroupId];
+          return ++groupIds[stock.article.articleGroupId];
         }
       });
 
@@ -1006,7 +1031,7 @@
       _.each(stock, item => {
         let id = _.get(item, 'article.articleGroupId');
         let count = res[id] || 0;
-        res[id] = ++ count;
+        res[id] = ++count;
       });
 
       return res;
@@ -1040,6 +1065,12 @@
       vm.restrictedArticles = {};
 
       if (!salesmanId || !outletId) return;
+
+      if (_.isEqual(vm.restrictionsBy, {salesmanId, outletId})) {
+        return;
+      }
+
+      vm.restrictionsBy = {salesmanId, outletId};
 
       $q.all([
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
