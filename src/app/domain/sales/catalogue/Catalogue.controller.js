@@ -477,6 +477,7 @@
         vm.discounts = {};
         vm.discountsBy = {};
         console.warn('setDiscounts exit 1');
+        setDiscountsWithModelData();
         return $q.resolve();
       }
 
@@ -513,20 +514,13 @@
           vm.discounts = {};
 
           let discountModel = {
-            article: {
-              contract: _.filter(allData[0], 'discount'),
-              partner: _.filter(allData[2], 'discount')
-            },
-            priceGroup: {
-              contract: _.filter(allData[1], 'discount'),
-              partner: _.filter(allData[3], 'discount')
-            }
+            article: _.keyBy([..._.filter(allData[0], 'discount'), ..._.filter(allData[2], 'discount')], 'articleId'),
+            priceGroup: _.keyBy([..._.filter(allData[1], 'discount'), ..._.filter(allData[3], 'discount')], 'priceGroupId')
           };
 
           console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
-          setDiscountsWithModelData(discountModel.article.contract, discountModel.priceGroup.contract);
-          setDiscountsWithModelData(discountModel.article.partner, discountModel.priceGroup.partner);
+          setDiscountsWithModelData(discountModel.article, discountModel.priceGroup);
 
           DEBUG('setDiscounts end', contractId);
 
@@ -559,27 +553,27 @@
 
     }
 
-    function setDiscountsWithModelData(articleData, priceGroupData) {
-
-      let byArticleId = _.groupBy(articleData, 'articleId');
-      let byPriceGroup = _.groupBy(priceGroupData, 'priceGroupId');
+    function setDiscountsWithModelData(byArticleId = {}, byPriceGroup = {}) {
 
       _.each(vm.prices, (price, articleId) => {
 
-        let article = Article.get(articleId);
+        let discount = _.get(byArticleId[articleId], 'discount');
 
-        if (!article) {
-          // TODO: sync with Article.loadRelations
-          return;
+        if (!discount) {
+
+          let priceGroupId = _.get(Article.get(articleId), 'priceGroupId');
+
+          if (!priceGroupId) {
+            // TODO: sync with Article.loadRelations
+            return;
+          }
+
+          discount = _.get(byPriceGroup[priceGroupId], 'discount') || 0;
+
         }
 
-        let discount = _.get(_.first(byArticleId[articleId]), 'discount') ||
-          _.get(_.first(byPriceGroup[_.get(article, 'priceGroupId')]), 'discount');
-
-        if (discount) {
-          vm.discounts[articleId] = discount;
-          vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
-        }
+        vm.discounts[articleId] = discount;
+        vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
 
       });
 
