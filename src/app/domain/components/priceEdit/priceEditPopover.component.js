@@ -7,7 +7,8 @@
     bindings: {
       priceObject: '<',
       popoverOpen: '=',
-      position: '<'
+      position: '<',
+      discount: '='
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEditPopover.html',
@@ -25,6 +26,8 @@
     _.assign(vm, {
 
       ksButtonClick,
+      decrementPercentClick,
+      incrementPercentClick,
       $onInit
 
     });
@@ -33,30 +36,77 @@
      Init
      */
 
+    function incrementPercentClick() {
+
+      vm.discount = vm.discount || 0;
+      vm.discount++;
+
+      vm.priceObject = vm.priceObject || {};
+
+      normalizeDiscount();
+
+    }
+
+    function decrementPercentClick() {
+
+      vm.discount = vm.discount || 0;
+      vm.discount--;
+
+      normalizeDiscount();
+
+    }
+
+    function normalizeDiscount() {
+
+      if (vm.discount > 30) {
+        vm.discount = 30;
+      } else if (vm.discount < 0) {
+        vm.discount = 0;
+      }
+
+      vm.discount = _.round(vm.discount, 2);
+
+    }
+
     function $onInit() {
       _.assign(vm, _.pick(vm.position || vm.priceObject, ['price', 'priceOrigin', 'priceDoc']));
       vm.ksOption = vm.position && DomainOption.hasSaleOrderKS();
+      vm.editable = DomainOption.allowDiscounts();
     }
 
     /*
      Listeners
      */
 
+    $scope.$watch('vm.discount', onDiscountChange);
     $scope.$watch('vm.price', onPriceChange);
 
     /*
      Functions
      */
 
+    function onDiscountChange() {
+
+      let discount = vm.discount || 0;
+
+      vm.price = _.round(vm.priceObject.priceOrigin * (1.0 - discount/100.0), 2);
+
+    }
+
     function onPriceChange(newPrice) {
 
-      if (!newPrice || !vm.position) {
+      let price = _.round(parseFloat(newPrice), 2);
+
+      if (!price) {
+        vm.price = vm.priceObject.price;
         return;
       }
 
-      let price = parseFloat(newPrice);
+      vm.priceObject.price = price;
 
-      if (!price || _.round(Math.abs(price - vm.position.price), 2) < 0.01) return;
+      // TODO: carefully update vm.discount not to trigger recursion
+
+      if (!vm.position || _.round(Math.abs(price - vm.position.price), 2) < 0.01) return;
 
       vm.position.price = price;
       vm.position.updateCost();

@@ -528,17 +528,20 @@
 
             let price = vm.prices[pos.articleId];
 
+            let discountPercent = _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2);
+
             if (!price) {
-              vm.prices[pos.articleId] = _.pick(pos, ['price', 'priceOrigin']);
+              price = vm.prices[pos.articleId] = _.pick(pos, ['price', 'priceOrigin']);
               console.warn(`setting prices from position ${pos.id}`);
-              return;
             }
 
             if (!pos.priceOrigin || pos.priceOrigin !== price.priceOrigin) {
-              pos.price = price.price;
               pos.priceOrigin = price.priceOrigin;
+              pos.price = price.price * (1.0 - discountPercent/100.0);
               pos.updateCost();
             }
+
+            vm.discounts[pos.articleId] = discountPercent;
 
           });
 

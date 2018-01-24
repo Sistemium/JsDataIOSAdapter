@@ -41,9 +41,7 @@
 
     function discountPercent() {
 
-      if (!vm.position) return -vm.discount;
-
-      return _.round(vm.position.price / vm.position.priceOrigin * 100 - 100, 1);
+      return -vm.discount;
 
     }
 

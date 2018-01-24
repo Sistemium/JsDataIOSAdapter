@@ -2,22 +2,37 @@ fieldset.price-edit-popover
 
   .inputs
 
-    .price
+    .discount
 
-      a.btn.btn-link(ng-click='vm.incrementPrice()') +%
+
+      .form-group
+        label % cкидки:
+
+        .input-group
+
+          a.btn.input-group-addon(ng-click='vm.decrementPercentClick()')
+            i.glyphicon.glyphicon-minus
+
+          input.form-control#price-edit-discount(
+          track-focused
+          type='number'
+          min='0'
+          max='30'
+          step='0.01'
+          ng-model='vm.discount'
+          ng-model-options='{debounce: 1000}'
+          ng-readonly='!vm.editable'
+          )
+
+          a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
+            i.glyphicon.glyphicon-plus
+
+
+    .price
 
       .form-group
         label Со скидкой:
-        input.form-control#price-edit-price(
-        select-on-focus
-        ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-        track-focused
-        ng-model='vm.price'
-        ng-model-options='{debounce: 1000}'
-        ng-readonly='!vm.editable'
-        )
-
-      a.btn.btn-link(ng-click='vm.decrementPrice()') -%
+        span.form-control#price-edit-price {{ vm.price | number:2 }}
 
     .priceOrigin
 
