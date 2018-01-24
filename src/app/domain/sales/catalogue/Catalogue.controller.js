@@ -583,11 +583,7 @@
 
     function cacheSaleOrderPositions() {
 
-      vm.saleOrderPositionByArticle = {};
-
-      let grouped = _.groupBy(vm.saleOrderPositions, 'articleId');
-
-      _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
+      vm.saleOrderPositionByArticle = _.keyBy(vm.saleOrderPositions, 'articleId');
 
       if (maxPositions && vm.saleOrderPositions.length > maxPositions && !maxPositionsAlertShown) {
 
