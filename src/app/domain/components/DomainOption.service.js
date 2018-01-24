@@ -18,8 +18,13 @@
       visitsDisabled,
       showNewsCarousel,
       hasArticleFactors,
-      saleOrderMaxPositions
+      saleOrderMaxPositions,
+      allowDiscounts
     };
+
+    function allowDiscounts() {
+      return /r50p|bs/.test(customerCode()) || _.get(Auth.getAccount(), 'org') === 'dr50';
+    }
 
     function saleOrderMaxPositions() {
       if (customerCode() === 'r50' && site() === 1) {
