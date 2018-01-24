@@ -2,7 +2,7 @@
 
 (function () {
 
-  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers, $timeout, GalleryHelper, $filter, geolib) {
+  function OutletController(Schema, $q, $state, $scope, SalesmanAuth, mapsHelper, Helpers, $timeout, GalleryHelper) {
 
     // TODO: allow to add/change location for an existing outlet
 
@@ -13,8 +13,6 @@
 
     let rootState = _.first($state.current.name.match(/sales\.[^.]+\.[^.]+/)) || 'sales.territory.outlet';
     let stateFilter = $state.params.id;
-
-    const numberFilter = $filter('number');
 
     vm.use({
 
@@ -38,7 +36,6 @@
       confirmLocationNoClick,
       updateLocationClick,
       onStateChange,
-      outletDistance,
       $onInit
 
     });
@@ -86,7 +83,7 @@
 
     function $onInit() {
       $timeout(100).then(() => {
-        vm.currentState = 'saleOrder';
+        vm.currentState = 'miscellaneous';
       })
     }
 
@@ -94,14 +91,6 @@
 
       return OutletSalesmanContract.findAllWithRelations({outletId: outlet.id}, {bypassCache: true})('Contract')
         .then(data => vm.outletSalesmanContracts = data);
-    }
-
-    function outletDistance(visit) {
-      let outletLocation = _.get(visit, 'outlet.location');
-      if (outletLocation) {
-        let res = geolib.getDistance(outletLocation, visit.checkInLocation);
-        return `${numberFilter(res, 0)}м.`
-      }
     }
 
     function onStateChange(to) {
