@@ -37,21 +37,6 @@
           ) {{ vm.outlet.address }}
 
 
-      .outlet-additional-fields
-
-        .license-info(ng-if='vm.outlet.licenseInfo')
-          label Лицензия:
-          span {{ vm.outlet.licenseInfo }}
-
-        .egais-code(ng-if='vm.outlet.egaisCode')
-          label ЕГАИС ИД:
-          span {{ vm.outlet.egaisCode }}
-
-        .comment-text(ng-if='vm.outlet.commentText')
-          label Комментарий:
-          strong {{ vm.outlet.commentText }}
-
-
     .outlet-avatar(ng-if='vm.isRootState')
 
       a.thumb(href ng-click='vm.thumbClick()' ng-class='{disabled: !vm.avatar}')
@@ -59,23 +44,6 @@
         ng-src='{{vm.avatarSrc}}'
         ng-class='!vm.avatarSrc && "placeholder"'
         )
-
-  //uib-tabset(active='1' justified='true')
-    //  uib-tab(index='0' heading='Заказы')
-    //    sale-order-view(
-    //    give-data='vm.outletSaleOrders'
-    //    custom-filter='vm.outletFilter'
-    //    ng-if='vm.outletDebtId'
-    //    style='display: block; height: 100vh'
-    //    )
-    //  uib-tab(index='1' heading='Долги')
-    //    debt-view(give-data='vm.outletDebts' debt-id='vm.outletDebtId' ng-if='vm.outletDebtId')
-    //  uib-tab(index='2' heading='Договор')
-    //    | Long Labeled Justified content
-    //  uib-tab(index='3' heading='Визиты')
-    //    | Long Labeled Justified content
-
-
 
   .navigation
 
@@ -90,15 +58,14 @@
     ) Долги
 
     a(
-    ng-click='vm.currentState = "contract"'
-    ng-class='{"active-state": vm.currentState === "contract"}'
-    ) Договор
-
-    a(
     ng-click='vm.currentState = "visit"'
     ng-class='{"active-state": vm.currentState === "visit"}'
     ) Визиты
 
+    a(
+    ng-click='vm.currentState = "miscellaneous"'
+    ng-class='{"active-state": vm.currentState === "miscellaneous"}'
+    ) Прочее
 
   .ui-view
 
@@ -106,12 +73,50 @@
       sale-order-view(custom-filter='vm.saleOrderFilter' disable-elements='true' ng-if='vm.saleOrderFilter')
 
     .outlet-debts(ng-if='vm.currentState == "debts"')
-      debt-view(custom-filter='vm.debtFilter' ng-if='vm.debtFilter')
-
-    .outlet-salesman-contracts(ng-if='vm.currentState == "contract"')
-
-      contract-view(contracts='vm.outletSalesmanContracts')
+      debt-view-by-outlet(custom-filter='vm.debtFilter' disable-elements='true' ng-if='vm.debtFilter')
 
     .outlet-visit(ng-if='vm.currentState == "visit"')
-
       visit-view(custom-filter='vm.visitFilter' disable-elements='true' ng-if='vm.visitFilter')
+
+    .outlet-salesman-contracts(ng-if='vm.currentState == "miscellaneous"')
+      contract-view(contracts='vm.outletSalesmanContracts')
+
+        .outlet-partner-table
+
+          .headers
+            .allow-any-total allow-any-total
+            .allow-low-total allow-low-total
+            .allow-any-volume allow-any-volume
+            .allow-no-charges allow-no-charges
+            .allow-no-doc-discounts allow-no-doc-discounts
+
+          .table-item
+            .allow-any-total
+              label allow-any-total
+              span {{ vm.outlet.partner.allowAnyTotal ? 'Да' : 'Нет' }}
+            .allow-low-total
+              label allow-low-total
+              span {{ vm.outlet.partner.allowLowTotal ? 'Да' : 'Нет' }}
+            .allow-any-volume
+              label allow-any-volume
+              span {{ vm.outlet.partner.allowAnyVolume ? 'Да' : 'Нет' }}
+            .allow-no-charges
+              label allow-no-charges
+              span {{ vm.outlet.partner.allowNoCharges ? 'Да' : 'Нет' }}
+            .allow-no-doc-discounts
+              label allow-no-doc-discounts
+              span {{ vm.outlet.partner.allowNoDocDiscounts ? 'Да' : 'Нет' }}
+
+        .outlet-additional-fields
+
+          .license-info(ng-if='vm.outlet.licenseInfo')
+            label Лицензия
+            span {{ vm.outlet.licenseInfo }}
+
+          .egais-code(ng-if='vm.outlet.egaisCode')
+            label ЕГАИС ИД
+            span {{ vm.outlet.egaisCode }}
+
+          .comment-text(ng-if='vm.outlet.commentText')
+            label Комментарий
+            strong {{ vm.outlet.commentText }}

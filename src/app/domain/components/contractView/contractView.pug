@@ -1,37 +1,45 @@
 .contract-view
 
-  .contract-table(ng-if='vm.contracts.length')
+  #scroll-main.scroll-y(
+  resize
+  resize-offset-top='5'
+  )
 
-    .headers
-      .salesman ТП
-      .contract Договор
-      .credit-limit Лимит
-      .credit-remains Остаток
+    .alert.alert-info.centered(ng-if='!vm.contracts.length && vm.contracts') Нет договоров
 
-    #scroll-main.scroll-y(
-    resize
-    resize-offset-top='5'
-    )
-      .list-item(
-      ng-repeat='osc in vm.contracts track by osc.id'
+    .contract-table(ng-if='vm.contracts.length')
+
+      .headers
+        .salesman ТП
+        .contract Договор
+        .credit-limit Лимит
+        .credit-remains Остаток
+
+      .contracts(
+      resize
+      resize-offset-top='5'
       )
+        .contract(
+        ng-repeat='osc in vm.contracts track by osc.id'
+        )
 
-        a.list-item-body
+          .contract-body
 
-          .salesman
-            label ТП
-            span {{ ::osc.salesman.shortName }}
+            .salesman
+              label ТП
+              span {{ ::osc.salesman.shortName }}
 
-          .contract
-            label Договор
-            span {{ ::osc.contract.name }}
+            .contract
+              label Договор
+              span {{ ::osc.contract.name }}
 
-          .credit-limit
-            label Лимит
-            currency-value(value='osc.contract.creditLimit || 0')
+            .credit-limit
+              label Лимит
+              currency-value(value='osc.contract.creditLimit || 0')
 
-          .credit-remains
-            label Остаток
-            currency-value(value='osc.contract.creditRemains || 0')
+            .credit-remains
+              label Остаток
+              currency-value(value='osc.contract.creditRemains || 0')
 
-  .alert.alert-info.centered(ng-if='!vm.contracts.length') Нет договоров
+
+    .ng-transclude
