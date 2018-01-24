@@ -4,14 +4,20 @@
 
   > a {
 
-    display: inline-block;
-    padding: 10px 10px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
 
+    padding: 8px 10px;
     background: $border-gray;
     border-radius: $border-radius;
 
-    @include responsive-only(lt-sm) {
-      display: block;
+    text-decoration: none;
+
+    .name {
+      display: inline-block;
+      min-width: 70px;
+      @extend .ellipsis;
     }
 
   }
@@ -26,9 +32,23 @@
 
   .workflow-popover {
 
+    .cancel-button + .workflows > .workflow:first-of-type {
+      border-radius: 0;
+    }
+
     .workflows {
 
       > .workflow {
+
+        &:first-of-type {
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
+        }
+
+        &:last-of-type {
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+        }
 
         outline: none;
 
@@ -68,14 +88,6 @@
 
         &.red .badge {
           @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
-        }
-
-        .caret {
-          align-self: center;
-        }
-
-        .name {
-          padding-right: 10px;
         }
 
       }
