@@ -52,13 +52,23 @@
 
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
-    @include responsive-only(xxs) {
-      flex-direction: column;
+    filter-workflow {
+      @extend .ellipsis;
     }
 
-    > * + * {
-      margin-top: 6px;
+    .add-sale-order {
+      @include responsive-only(xxs) {
+        margin-left: 10px;
+        span {
+          display: none;
+        }
+      }
+    }
+
+    @include responsive-only(lt-sm) {
+      margin-bottom: 10px;
     }
 
   }
@@ -140,12 +150,15 @@
         text-align: left;
 
         @include responsive-only(gt-xs) {
-          padding-right: 6px;
+          margin-right: 5px;
         }
 
         .badge {
           font-weight: normal;
           padding: 4px 6px;
+          max-width: 85px;
+          overflow: hidden;
+          @extend .ellipsis;
         }
 
         &.blue .badge {

@@ -1,13 +1,12 @@
 .sale-order-view(cg-busy='vm.cgBusy')
 
   .buttons
-
     filter-workflow(
     current-workflow='vm.currentWorkflow'
     workflows-in-promise='vm.workflowPromise'
     )
 
-    button.btn.btn-primary(ng-click='vm.newItemClick($event)' ng-if ='!vm.disableElements')
+    button.btn.btn-primary.add-sale-order(ng-click='vm.newItemClick($event)')
       i.glyphicon.glyphicon-plus
       span Добавить заказ
 
