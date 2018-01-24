@@ -4,7 +4,7 @@
 
   $padding: 5px;
 
-  .header {
+  > .header {
 
     padding: 10px 15px;
     margin: 10px 0;
@@ -14,10 +14,12 @@
 
     display: flex;
     flex-direction: row;
+    align-items: center;
 
     @include responsive-only(xxs) {
       padding: 5px 7px;
-      flex-direction: column;
+      //flex-direction: column;
+      align-items: flex-start;
     }
 
     .outlet {
@@ -80,61 +82,19 @@
 
       }
 
-      .outlet-additional-fields {
-        @extend .ellipsis;
-
-        > div {
-          height: 20px;
-        }
-
-        label {
-          color: $gray;
-          font-weight: normal;
-          margin: 0;
-          margin-right: 5px;
-        }
-
-        .license-info {
-          @extend .ellipsis;
-        }
-
-        .comment-text {
-          strong {
-            color: $state-danger-text;
-          }
-        }
-
-      }
     }
     .outlet-avatar {
 
       display: flex;
 
-      .thumb {
+      img {
 
-        @include responsive-only(xxs) {
-          width: 100%;
-        }
-
-        display: inline-block;
-
-        border-radius: 5px;
-        padding: 5px;
-        border: solid 1px $gray-border-color;
-
-        img {
-
-          object-fit: contain;
-
-          width: 100px;
-          height: 100px;
-
-          @include responsive-only(xxs) {
-            width: 100%;
-          }
-        }
+        object-fit: contain;
+        width: 55px;
+        height: 55px;
 
       }
+
     }
   }
 
@@ -144,18 +104,10 @@
     margin: 10px 0;
     border: 1px solid $gray-border-color;
     border-radius: 5px;
-    overflow: hidden;
-
-    @include responsive-only(xxs) {
-      flex-flow: column nowrap;
-    }
-
-    .active-state {
-      background-color: $gray-background-color;
-    }
+    overflow-y: scroll;
 
     > a {
-
+      min-width: 100px;
       flex: 1;
       border-radius: 0;
       padding: 5px;
@@ -164,13 +116,7 @@
       text-decoration: none;
 
       &:not(:last-child) {
-
         border-right: 1px solid $gray-border-color;
-
-        @include responsive-only(xxs) {
-          border-right: none;
-          border-bottom: 1px solid $gray-border-color;
-        }
       }
 
       &:hover, &:active {
@@ -179,12 +125,140 @@
 
     }
 
+    .active-state {
+      background-color: $gray-background-color;
+    }
+
   }
 
   .ui-view {
 
     @include responsive-only(gt-xxs) {
       min-height: 240px;
+    }
+
+    .outlet-salesman-contracts {
+
+      .outlet-partner-table {
+
+        margin: 20px 0;
+
+        @include responsive-only(lt-sm) {
+          margin: 0;
+        }
+
+        .headers {
+          display: flex;
+
+          div {
+            @extend .ellipsis;
+            flex: 20;
+          }
+
+        }
+
+        .table-item {
+          display: flex;
+          padding: 3px 0;
+          border-bottom: 1px solid $gray-border-color;
+
+          @include responsive-only(lt-sm) {
+            flex-flow: column nowrap;
+            border-bottom: 1px solid $gray-border-color;
+          }
+
+          div {
+            flex: 20;
+
+            @include responsive-only(lt-sm) {
+
+              label {
+                margin: 0;
+                font-weight: normal;
+                margin-right: 20px;
+
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                text-align: left;
+
+              }
+
+              span {
+                font-weight: bold;
+              }
+
+              display: flex;
+              justify-content: space-between;
+
+            }
+
+          }
+
+          div:last-of-type {
+            text-align: right;
+          }
+
+        }
+
+        @include responsive-only(gt-xs) {
+
+          label {
+            display: none;
+          }
+        }
+
+        @include responsive-only(lt-sm) {
+
+          .headers {
+            display: none;
+          }
+        }
+
+      }
+
+      .outlet-additional-fields {
+
+        padding: 3px 0;
+
+        > div {
+          display: flex;
+          justify-content: space-between;
+          padding: 2px 0;
+
+          label {
+            font-weight: normal;
+            padding-right: 20px;
+            white-space: nowrap;
+            margin: 0;
+            color: $gray;
+          }
+
+          strong {
+            color: $state-danger-text;
+          }
+
+          strong, span {
+            @extend .ellipsis;
+          }
+
+          @include responsive-only(lt-sm) {
+            padding: 0;
+          }
+
+        }
+
+        > div:first-of-type {
+          border-bottom: 1px solid $gray-border-color;
+
+          @include responsive-only(lt-sm) {
+            border-bottom: none;
+          }
+
+        }
+
+      }
+
     }
 
   }
