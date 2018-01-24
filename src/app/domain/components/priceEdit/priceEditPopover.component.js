@@ -5,7 +5,7 @@
   const priceEditPopover = {
 
     bindings: {
-      prices: '<',
+      priceObject: '<',
       popoverOpen: '=',
       position: '<'
     },
@@ -18,7 +18,7 @@
   };
 
   /** @ngInject */
-  function priceEditController($scope) {
+  function priceEditController($scope, DomainOption) {
 
     let vm = this;
 
@@ -34,7 +34,8 @@
      */
 
     function $onInit() {
-      _.assign(vm, _.pick(vm.position, ['price', 'priceOrigin', 'priceDoc']));
+      _.assign(vm, _.pick(vm.position || vm.priceObject, ['price', 'priceOrigin', 'priceDoc']));
+      vm.ksOption = vm.position && DomainOption.hasSaleOrderKS();
     }
 
     /*
@@ -49,7 +50,9 @@
 
     function onPriceChange(newPrice) {
 
-      if (!newPrice) return;
+      if (!newPrice || !vm.position) {
+        return;
+      }
 
       let price = parseFloat(newPrice);
 

@@ -5,7 +5,7 @@
   const priceEdit = {
 
     bindings: {
-      prices: '<',
+      price: '<',
       position: '<',
       discount: '='
     },

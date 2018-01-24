@@ -26,7 +26,7 @@ fieldset.price-edit-popover
         = ' '
         span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
 
-  .extras
+  //.extras(ng-if='vm.ksOption')
 
     button.btn(
     ng-class='vm.position.isCompDiscount ? "btn-primary" : "btn-default"'

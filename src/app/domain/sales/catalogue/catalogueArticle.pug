@@ -108,7 +108,8 @@ before-tag-name='li'
             | x
 
         price-edit(
-        prices='vm.prices[stock.articleId]'
+        ng-disabled='!vm.saleOrder'
+        price='vm.prices[stock.articleId]'
         position='vm.saleOrderPositionByArticle[stock.articleId]'
         discount='vm.discounts[stock.articleId]'
         )
