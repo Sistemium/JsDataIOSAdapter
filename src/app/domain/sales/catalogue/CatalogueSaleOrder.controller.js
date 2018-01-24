@@ -22,7 +22,8 @@
       saleOrderSaveDraftClick,
       minusButtonClick,
       lastPlus: {},
-      outletClick
+      outletClick,
+      saleOrderClick
 
     });
 
@@ -99,6 +100,17 @@
     /*
      Handlers
      */
+
+    function saleOrderClick() {
+      if (vm.isSaleOrderPopoverOpen) {
+        return;
+      }
+
+      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+      vm.saleOrderBusy = SaleOrder.findAllWithRelations(filter)('Outlet');
+
+    }
 
     function outletClick() {
 
