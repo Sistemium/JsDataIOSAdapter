@@ -8,6 +8,8 @@
       contracts: '<'
     },
 
+    transclude: true,
+
     templateUrl: 'app/domain/components/contractView/contractView.html',
 
     controller: contractViewController,
@@ -16,7 +18,6 @@
   });
 
   function contractViewController() {
-
   }
 
 })(angular.module('Sales'));
