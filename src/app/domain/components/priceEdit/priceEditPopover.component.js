@@ -43,10 +43,10 @@
         discountPercent: vm.stock.discountPercent(),
         price: vm.stock.discountPrice(),
         priceOrigin: vm.stock.priceOrigin(),
-        priceGroup: PriceGroup.get(priceGroupId)
+        priceGroup: priceGroupId && PriceGroup.get(priceGroupId)
       });
 
-      if (!vm.priceGroup) {
+      if (priceGroupId && !vm.priceGroup) {
         PriceGroup.find(priceGroupId)
           .then(res => vm.priceGroup = res);
       }
