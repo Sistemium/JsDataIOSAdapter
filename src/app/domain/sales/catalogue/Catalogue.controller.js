@@ -557,42 +557,6 @@
     function setDiscountsWithModelData(byArticleId = {}, byPriceGroup = {}) {
 
       vm.discounts = {priceGroup: byPriceGroup, saleOrder: {}, article: byArticleId};
-      //
-      // _.each(vm.prices, (price, articleId) => {
-      //
-      //   let discount = byArticleId[articleId];
-      //
-      //   let discountScope;
-      //
-      //   if (!discount) {
-      //
-      //     let priceGroupId = _.get(Article.get(articleId), 'priceGroupId');
-      //
-      //     if (!priceGroupId) {
-      //       return;
-      //     }
-      //
-      //     discount = byPriceGroup[priceGroupId];
-      //
-      //     discountScope = discount && 'priceGroup';
-      //
-      //     vm.discounts.priceGroup[priceGroupId] = discount;
-      //
-      //   } else {
-      //     discountScope = 'article';
-      //   }
-      //
-      //   let discountPercent = _.get(discount, 'discount') || 0;
-      //
-      //   if (discount) {
-      //     vm.discounts[articleId] = _.assign(discount, {
-      //       scope: discountScope
-      //     });
-      //   }
-      //
-      //   price.price = _.round(price.priceOrigin * (1 - discountPercent / 100.0), 2);
-      //
-      // });
 
     }
 
