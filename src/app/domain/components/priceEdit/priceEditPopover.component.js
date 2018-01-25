@@ -65,9 +65,12 @@
      Functions
      */
 
-    function onDiscountScopeChange(newDiscountScope) {
+    function onDiscountScopeChange(newDiscountScope, oldDiscountScope) {
 
-      vm.stock.setDiscountScope(newDiscountScope, vm.discountPercent);
+      if (newDiscountScope === oldDiscountScope) return;
+
+      vm.stock.setDiscountScope(newDiscountScope);
+      vm.discountPercent = vm.stock.discountPercent(newDiscountScope);
 
     }
 
@@ -76,18 +79,12 @@
       vm.discountPercent = vm.discountPercent || 0;
       vm.discountPercent++;
 
-      vm.priceObject = vm.priceObject || {};
-
-      normalizeDiscount();
-
     }
 
     function decrementPercentClick() {
 
       vm.discountPercent = vm.discountPercent || 0;
       vm.discountPercent--;
-
-      normalizeDiscount();
 
     }
 
@@ -99,20 +96,26 @@
         vm.discountPercent = 0;
       }
 
-      vm.discountPercent = _.round(vm.discountPercent, 2);
+      vm.discountPercent = _.round(vm.discountPercent, 2) || 0;
 
     }
 
-    function onDiscountChange() {
+    function onDiscountChange(newDiscount, oldDiscount) {
 
-      let discountPercent = vm.discountPercent || 0;
+      if (newDiscount === oldDiscount) return;
+
+      normalizeDiscount();
+
+      let {discountPercent} = vm;
 
       vm.stock.setDiscountScope(vm.discountScope, discountPercent);
       vm.price = vm.stock.discountPrice();
 
     }
 
-    function onPriceChange(newPrice) {
+    function onPriceChange(newPrice, oldPrice) {
+
+      if (newPrice === oldPrice) return;
 
       let price = _.round(parseFloat(newPrice), 2);
 

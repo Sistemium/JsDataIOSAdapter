@@ -731,15 +731,27 @@
 
       vm.busyFilteringStock = false;
 
-      function discountPercent() {
+      function discountPercent(discountScope) {
+
         let {discounts} = vm;
-        return _.get(discounts.article[this.articleId] ||
-          discounts.priceGroup[this.article.priceGroupId] ||
-          discounts.saleOrder, 'discount') || 0;
+
+        switch (discountScope) {
+          case 'article':
+            return _.get(discounts.article[this.articleId], 'discount');
+          case 'priceGroup':
+            return _.get(discounts.priceGroup[this.article.priceGroupId], 'discount');
+          case 'saleOrder':
+            return discounts.saleOrder.discount;
+          default:
+            return _.get(discounts.article[this.articleId] ||
+              discounts.priceGroup[this.article.priceGroupId] ||
+              discounts.saleOrder, 'discount');
+        }
+
       }
 
       function discountPrice() {
-        return _.round(vm.prices[this.articleId].price * (1.0 - this.discountPercent() / 100.0), 2);
+        return _.round(vm.prices[this.articleId].price * (1.0 - (this.discountPercent() || 0) / 100.0), 2);
       }
 
       function priceOrigin() {
@@ -752,7 +764,7 @@
           'saleOrder';
       }
 
-      function setDiscountScope(discountScope, discountPercent) {
+      function setDiscountScope(discountScope, discountPercent = this.discountPercent(discountScope)) {
 
         let path = 'saleOrder';
 
@@ -765,6 +777,7 @@
           if (discountScope === 'priceGroup') {
             path = `priceGroup.${this.article.priceGroupId}`;
           } else if (discountScope === 'saleOrder') {
+            delete vm.discounts.priceGroup[this.article.priceGroupId];
             path = 'saleOrder';
           }
 
