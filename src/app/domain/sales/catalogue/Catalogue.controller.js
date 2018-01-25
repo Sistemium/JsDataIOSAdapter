@@ -54,7 +54,7 @@
       showFirstLevel: localStorageService.get('showFirstLevel') || false,
       stockWithPicIndex: [],
       discountsBy: {},
-      discounts: {},
+      discounts: {article: {}, priceGroup: {}, saleOrder: {}},
       restrictionsBy: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
@@ -299,11 +299,11 @@
     }
 
     function kPlusButtonClick(stock) {
-      $scope.$broadcast('kPlusButtonClick', stock.article, vm.prices[stock.articleId]);
+      $scope.$broadcast('kPlusButtonClick', stock.article, stock);
     }
 
     function bPlusButtonClick(stock) {
-      $scope.$broadcast('bPlusButtonClick', stock.article, vm.prices[stock.articleId]);
+      $scope.$broadcast('bPlusButtonClick', stock.article, stock);
     }
 
     function toggleShowFirstLevelClick() {
@@ -522,23 +522,23 @@
 
             let price = vm.prices[pos.articleId];
 
-            let discountPercent = _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2);
+            let posDiscount = pos.priceOrigin ? _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
 
             if (!price) {
-              price = vm.prices[pos.articleId] = _.pick(pos, ['price', 'priceOrigin']);
+              price = vm.prices[pos.articleId] = {price: pos.priceOrigin};
               console.warn(`setting prices from position ${pos.id}`);
             }
 
-            if (!pos.priceOrigin || pos.priceOrigin !== price.priceOrigin) {
-              pos.priceOrigin = price.priceOrigin;
-              pos.price = price.price * (1.0 - discountPercent/100.0);
+            if (!pos.priceOrigin || pos.priceOrigin !== price.price) {
+              pos.priceOrigin = price.price;
+              pos.price = price.price * (1.0 - posDiscount / 100.0);
               pos.updateCost();
             }
 
-            let discount = vm.discounts[pos.articleId];
+            let discount = vm.discounts.article[pos.articleId];
 
-            if (!discount || Math.abs(discount.discount - discountPercent) > 0.01) {
-              vm.discounts[pos.articleId] = {discount: discountPercent, scope: 'article'};
+            if (!discount || Math.abs(discount.discount - posDiscount) > 0.01) {
+              vm.discounts.article[pos.articleId] = {discount: posDiscount};
             }
 
           });
@@ -556,42 +556,43 @@
 
     function setDiscountsWithModelData(byArticleId = {}, byPriceGroup = {}) {
 
-      vm.discounts = {};
-
-      _.each(vm.prices, (price, articleId) => {
-
-        let discount = byArticleId[articleId];
-
-        let discountScope;
-
-        if (!discount) {
-
-          let priceGroupId = _.get(Article.get(articleId), 'priceGroupId');
-
-          if (!priceGroupId) {
-            // TODO: sync with Article.loadRelations
-            return;
-          }
-
-          discount = byPriceGroup[priceGroupId];
-
-          discountScope = discount && 'priceGroup';
-
-        } else {
-          discountScope = 'article';
-        }
-
-        let discountPercent = _.get(discount, 'discount') || 0;
-
-        if (discount) {
-          vm.discounts[articleId] = _.assign(discount, {
-            scope: discountScope
-          });
-        }
-
-        vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discountPercent / 100.0), 2);
-
-      });
+      vm.discounts = {priceGroup: byPriceGroup, saleOrder: {}, article: byArticleId};
+      //
+      // _.each(vm.prices, (price, articleId) => {
+      //
+      //   let discount = byArticleId[articleId];
+      //
+      //   let discountScope;
+      //
+      //   if (!discount) {
+      //
+      //     let priceGroupId = _.get(Article.get(articleId), 'priceGroupId');
+      //
+      //     if (!priceGroupId) {
+      //       return;
+      //     }
+      //
+      //     discount = byPriceGroup[priceGroupId];
+      //
+      //     discountScope = discount && 'priceGroup';
+      //
+      //     vm.discounts.priceGroup[priceGroupId] = discount;
+      //
+      //   } else {
+      //     discountScope = 'article';
+      //   }
+      //
+      //   let discountPercent = _.get(discount, 'discount') || 0;
+      //
+      //   if (discount) {
+      //     vm.discounts[articleId] = _.assign(discount, {
+      //       scope: discountScope
+      //     });
+      //   }
+      //
+      //   price.price = _.round(price.priceOrigin * (1 - discountPercent / 100.0), 2);
+      //
+      // });
 
     }
 
@@ -700,7 +701,7 @@
 
       vm.busyFilteringStock = true;
 
-      let discount = 1;
+      let parentMultiplier = 1;
       let priceType = vm.currentPriceType;
 
       if (!vm.currentPriceType) return;
@@ -714,7 +715,12 @@
               volume: stock.volume,
               displayVolume: stock.displayVolume,
               article: stock.article,
-              articleId: stock.articleId
+              articleId: stock.articleId,
+              discountPercent,
+              discountPrice,
+              priceOrigin,
+              discountScope,
+              setDiscountScope
             };
           }
         ),
@@ -725,7 +731,7 @@
 
       if (vm.currentPriceType.parent) {
         priceType = vm.currentPriceType.parent;
-        discount += vm.currentPriceType.discountPercent / 100;
+        parentMultiplier += vm.currentPriceType.discountPercent / 100;
       }
 
       if (!priceType.prices()) {
@@ -743,12 +749,10 @@
 
       _.each(priceType.prices(), price => {
 
-        let priceOrigin = _.round(price.price * discount, 2);
-        let discountSpecial = _.get(vm.discounts[price.articleId], 'discount') || 0;
+        let priceOrigin = _.round(price.price * parentMultiplier, 2);
 
         vm.prices[price.articleId] = {
-          price: _.round(priceOrigin * (1 - discountSpecial / 100.0), 2),
-          priceOrigin
+          price: priceOrigin
         };
 
       });
@@ -762,6 +766,49 @@
       setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'));
 
       vm.busyFilteringStock = false;
+
+      function discountPercent() {
+        let {discounts} = vm;
+        return _.get(discounts.article[this.articleId] ||
+          discounts.priceGroup[this.article.priceGroupId] ||
+          discounts.saleOrder, 'discount') || 0;
+      }
+
+      function discountPrice() {
+        return _.round(vm.prices[this.articleId].price * (1.0 - this.discountPercent() / 100.0), 2);
+      }
+
+      function priceOrigin() {
+        return vm.prices[this.articleId].price;
+      }
+
+      function discountScope() {
+        return vm.discounts.article[this.articleId] && 'article' ||
+          vm.discounts.priceGroup[this.article.priceGroupId] && 'priceGroup' ||
+          'saleOrder';
+      }
+
+      function setDiscountScope(discountScope, discountPercent) {
+
+        let path = 'saleOrder';
+
+        if (discountScope === 'article') {
+          path = `article.${this.articleId}`;
+        } else {
+
+          delete vm.discounts.article[this.articleId];
+
+          if (discountScope === 'priceGroup') {
+            path = `priceGroup.${this.article.priceGroupId}`;
+          } else if (discountScope === 'saleOrder') {
+            path = 'saleOrder';
+          }
+
+        }
+
+        _.set(vm.discounts, `${path}.discount`, discountPercent);
+
+      }
 
     }
 

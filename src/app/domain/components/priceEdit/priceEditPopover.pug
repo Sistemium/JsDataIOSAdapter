@@ -27,23 +27,26 @@ fieldset.price-edit-popover
           a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
             i.glyphicon.glyphicon-plus
 
-    .btn-group-vertical.discount-scope
+    .list-group.discount-scope
 
-      button.btn.btn-default(
+      a.list-group-item(
+      href
       ng-model='vm.discountScope'
       uib-btn-radio="'article'" uib-uncheckable='false'
       ) На товар
 
-      button.btn.btn-default(
+      a.list-group-item(
+      href
       ng-model='vm.discountScope'
       uib-btn-radio="'priceGroup'" uib-uncheckable='false'
       )
         .name На категорию
         .gray {{ vm.priceGroup.name }}
 
-      button.btn.btn-default(
+      a.list-group-item(
+      href
       ng-model='vm.discountScope'
-      uib-btn-radio="'all'" uib-uncheckable='false'
+      uib-btn-radio="'saleOrder'" uib-uncheckable='false'
       ) На весь заказ
 
     .price

@@ -5,10 +5,8 @@
   const priceEdit = {
 
     bindings: {
-      price: '<',
-      position: '<',
-      discount: '=',
-      article: '='
+      stock: '<',
+      positions: '<'
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEdit.html',
@@ -24,27 +22,22 @@
 
     _.assign(vm, {
 
-      discountPercent
+      discountPercent,
+      discountPrice
 
     });
-
-    /*
-     Init
-     */
-
-    /*
-     Listeners
-     */
 
     /*
      Functions
      */
 
+    function discountPrice() {
+      return vm.stock.discountPrice();
+    }
+
     function discountPercent() {
 
-      let percent = _.get(vm.discount, 'discount') || 0;
-
-      return - percent;
+      return - vm.stock.discountPercent();
 
     }
 

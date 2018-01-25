@@ -13,10 +13,14 @@
       width: 100%;
       margin-top: 6px;
 
-      .btn.active {
-        font-weight: 500;
-        background: $gray-background-color;
+      > a {
+        margin-left: 0 !important;
+        padding: 6px;
+        text-align: center;
 
+        &.active .gray {
+          color: $gray-border-color;
+        }
       }
 
       .gray {

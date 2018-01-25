@@ -64,12 +64,12 @@
     transition: all ease-in 0.5s;
   }
 
-  .list-group {
+  .list-group.vr-parent {
     margin-bottom: 0;
     @extend .round-corners-by-type;
   }
 
-  .list-group-item {
+  .list-group-item.catalogue-article {
 
     min-height: 80px;
     max-height: 80px;
