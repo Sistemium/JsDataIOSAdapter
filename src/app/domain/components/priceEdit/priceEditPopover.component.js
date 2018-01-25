@@ -51,6 +51,10 @@
           .then(res => vm.priceGroup = res);
       }
 
+      if (!vm.discountPercent && vm.discountScope === 'saleOrder') {
+        vm.discountScope = 'article';
+      }
+
       /*
        Listeners
        */

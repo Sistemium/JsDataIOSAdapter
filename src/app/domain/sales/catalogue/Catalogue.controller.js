@@ -535,7 +535,7 @@
               pos.updateCost();
             }
 
-            let discount = vm.discounts.article[pos.articleId];
+            let discount = vm.discounts.article[pos.articleId] || vm.discounts.priceGroup[pos.article.priceGroupId];
 
             if (!discount || Math.abs(discount.discount - posDiscount) > 0.01) {
               vm.discounts.article[pos.articleId] = {discount: posDiscount};
