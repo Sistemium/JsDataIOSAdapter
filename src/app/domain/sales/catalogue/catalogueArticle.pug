@@ -49,6 +49,7 @@ before-tag-name='li'
         quantity-edit(
         ng-disabled='vm.restrictedArticles[stock.articleId]'
         ng-if='vm.saleOrder'
+        stock='stock'
         article='stock.article'
         sale-order='vm.saleOrder'
         price='vm.prices[stock.articleId]'

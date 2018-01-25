@@ -8,7 +8,8 @@
       article: '<',
       saleOrder: '<',
       price: '<',
-      position: '<'
+      position: '<',
+      stock: '<'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEdit.html',
