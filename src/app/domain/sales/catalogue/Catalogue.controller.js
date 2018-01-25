@@ -213,7 +213,7 @@
 
         $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
 
-        vm.watchScope('vm.saleOrder.outletId', (outletId) => {
+        vm.watchScope('vm.saleOrder.outlet.id', (outletId) => {
 
           if (!outletId) return vm.articleStats = {};
 
