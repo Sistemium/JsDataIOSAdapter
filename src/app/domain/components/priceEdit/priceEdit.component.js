@@ -7,7 +7,8 @@
     bindings: {
       price: '<',
       position: '<',
-      discount: '='
+      discount: '=',
+      article: '='
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEdit.html',
@@ -41,7 +42,9 @@
 
     function discountPercent() {
 
-      return -vm.discount;
+      let percent = _.get(vm.discount, 'discount') || 0;
+
+      return - percent;
 
     }
 

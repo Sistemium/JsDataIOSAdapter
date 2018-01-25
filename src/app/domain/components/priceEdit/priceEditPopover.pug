@@ -19,7 +19,7 @@ fieldset.price-edit-popover
           min='0'
           max='30'
           step='0.01'
-          ng-model='vm.discount'
+          ng-model='vm.discountPercent'
           ng-model-options='{debounce: 1000}'
           ng-readonly='!vm.editable'
           )
@@ -27,6 +27,24 @@ fieldset.price-edit-popover
           a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
             i.glyphicon.glyphicon-plus
 
+    .btn-group-vertical.discount-scope
+
+      button.btn.btn-default(
+      ng-model='vm.discountScope'
+      uib-btn-radio="'article'" uib-uncheckable='false'
+      ) На товар
+
+      button.btn.btn-default(
+      ng-model='vm.discountScope'
+      uib-btn-radio="'priceGroup'" uib-uncheckable='false'
+      )
+        .name На категорию
+        .gray {{ vm.priceGroup.name }}
+
+      button.btn.btn-default(
+      ng-model='vm.discountScope'
+      uib-btn-radio="'all'" uib-uncheckable='false'
+      ) На весь заказ
 
     .price
 

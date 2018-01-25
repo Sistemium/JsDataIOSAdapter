@@ -157,9 +157,6 @@
         });
 
         vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
-          // vm.discounts = {};
-          // vm.discountsBy = {};
-          // filterStock();
           setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
           setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
         }));
@@ -474,7 +471,6 @@
     function setDiscounts(contractId, partnerId) {
 
       if (!contractId || !partnerId || !vm.prices) {
-        vm.discounts = {};
         vm.discountsBy = {};
         console.warn('setDiscounts exit 1');
         setDiscountsWithModelData();
@@ -511,8 +507,6 @@
       ])
         .then(allData => {
 
-          vm.discounts = {};
-
           let discountModel = {
             article: _.keyBy([..._.filter(allData[0], 'discount'), ..._.filter(allData[2], 'discount')], 'articleId'),
             priceGroup: _.keyBy([..._.filter(allData[1], 'discount'), ..._.filter(allData[3], 'discount')], 'priceGroupId')
@@ -541,7 +535,11 @@
               pos.updateCost();
             }
 
-            vm.discounts[pos.articleId] = discountPercent;
+            let discount = vm.discounts[pos.articleId];
+
+            if (!discount || Math.abs(discount.discount - discountPercent) > 0.01) {
+              vm.discounts[pos.articleId] = {discount: discountPercent, scope: 'article'};
+            }
 
           });
 
@@ -558,9 +556,13 @@
 
     function setDiscountsWithModelData(byArticleId = {}, byPriceGroup = {}) {
 
+      vm.discounts = {};
+
       _.each(vm.prices, (price, articleId) => {
 
-        let discount = _.get(byArticleId[articleId], 'discount');
+        let discount = byArticleId[articleId];
+
+        let discountScope;
 
         if (!discount) {
 
@@ -571,12 +573,23 @@
             return;
           }
 
-          discount = _.get(byPriceGroup[priceGroupId], 'discount') || 0;
+          discount = byPriceGroup[priceGroupId];
 
+          discountScope = discount && 'priceGroup';
+
+        } else {
+          discountScope = 'article';
         }
 
-        vm.discounts[articleId] = discount;
-        vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
+        let discountPercent = _.get(discount, 'discount') || 0;
+
+        if (discount) {
+          vm.discounts[articleId] = _.assign(discount, {
+            scope: discountScope
+          });
+        }
+
+        vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discountPercent / 100.0), 2);
 
       });
 
@@ -731,7 +744,7 @@
       _.each(priceType.prices(), price => {
 
         let priceOrigin = _.round(price.price * discount, 2);
-        let discountSpecial = vm.discounts[price.articleId] || 0;
+        let discountSpecial = _.get(vm.discounts[price.articleId], 'discount') || 0;
 
         vm.prices[price.articleId] = {
           price: _.round(priceOrigin * (1 - discountSpecial / 100.0), 2),

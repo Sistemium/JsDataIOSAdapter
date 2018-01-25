@@ -8,7 +8,8 @@
       priceObject: '<',
       popoverOpen: '=',
       position: '<',
-      discount: '='
+      discount: '=',
+      article: '='
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEditPopover.html',
@@ -19,11 +20,9 @@
   };
 
   /** @ngInject */
-  function priceEditController($scope, DomainOption) {
+  function priceEditController($scope, DomainOption, Schema) {
 
-    let vm = this;
-
-    _.assign(vm, {
+    const vm = _.assign(this, {
 
       ksButtonClick,
       decrementPercentClick,
@@ -32,14 +31,49 @@
 
     });
 
+    const {PriceGroup} = Schema.models();
+
     /*
      Init
      */
 
+    function $onInit() {
+
+      let {priceGroupId} = vm.article;
+
+      _.assign(vm, _.pick(vm.position || vm.priceObject, ['price', 'priceOrigin', 'priceDoc']));
+
+      _.assign(vm, {
+        ksOption: vm.position && DomainOption.hasSaleOrderKS(),
+        editable: DomainOption.allowDiscounts(),
+        discountScope: _.get(vm.discount, 'scope') || 'article',
+        discountPercent: _.get(vm.discount, 'discount'),
+        priceGroup: PriceGroup.get(priceGroupId)
+      });
+
+      if (!vm.priceGroup) {
+        PriceGroup.find(priceGroupId)
+          .then(res => vm.priceGroup = res);
+      }
+
+    }
+
+    /*
+     Listeners
+     */
+
+    $scope.$watch('vm.discountPercent', onDiscountChange);
+    $scope.$watch('vm.price', onPriceChange);
+
+    /*
+     Functions
+     */
+
+
     function incrementPercentClick() {
 
-      vm.discount = vm.discount || 0;
-      vm.discount++;
+      vm.discountPercent = vm.discountPercent || 0;
+      vm.discountPercent++;
 
       vm.priceObject = vm.priceObject || {};
 
@@ -49,8 +83,8 @@
 
     function decrementPercentClick() {
 
-      vm.discount = vm.discount || 0;
-      vm.discount--;
+      vm.discountPercent = vm.discountPercent || 0;
+      vm.discountPercent--;
 
       normalizeDiscount();
 
@@ -58,38 +92,31 @@
 
     function normalizeDiscount() {
 
-      if (vm.discount > 30) {
-        vm.discount = 30;
-      } else if (vm.discount < 0) {
-        vm.discount = 0;
+      if (vm.discountPercent > 30) {
+        vm.discountPercent = 30;
+      } else if (vm.discountPercent < 0) {
+        vm.discountPercent = 0;
       }
 
-      vm.discount = _.round(vm.discount, 2);
+      vm.discountPercent = _.round(vm.discountPercent, 2);
 
     }
-
-    function $onInit() {
-      _.assign(vm, _.pick(vm.position || vm.priceObject, ['price', 'priceOrigin', 'priceDoc']));
-      vm.ksOption = vm.position && DomainOption.hasSaleOrderKS();
-      vm.editable = DomainOption.allowDiscounts();
-    }
-
-    /*
-     Listeners
-     */
-
-    $scope.$watch('vm.discount', onDiscountChange);
-    $scope.$watch('vm.price', onPriceChange);
-
-    /*
-     Functions
-     */
 
     function onDiscountChange() {
 
-      let discount = vm.discount || 0;
+      let discountPercent = vm.discountPercent || 0;
 
-      vm.price = _.round(vm.priceObject.priceOrigin * (1.0 - discount/100.0), 2);
+      vm.price = _.round(vm.priceObject.priceOrigin * (1.0 - discountPercent/100.0), 2);
+
+      if (discountPercent && !vm.discount) {
+        vm.discount = {
+          scope: vm.discountScope
+        }
+      }
+
+      if (vm.discount) {
+        vm.discount.discount = discountPercent;
+      }
 
     }
 

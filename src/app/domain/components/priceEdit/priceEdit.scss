@@ -8,6 +8,43 @@
 
   .inputs {
 
+    .discount-scope {
+
+      width: 100%;
+      margin-top: 6px;
+
+      .btn.active {
+        font-weight: 500;
+        background: $gray-background-color;
+
+      }
+
+      .gray {
+        font-size: 80%;
+      }
+
+    }
+
+    //.discount-scope {
+    //
+    //  margin-top: 3px;
+    //  display: flex;
+    //  flex-direction: column;
+    //  align-items: flex-start;
+    //
+    //  a {
+    //
+    //    display: block;
+    //    margin-left: 6px;
+    //
+    //    &.active {
+    //      font-weight: bold;
+    //    }
+    //
+    //  }
+    //}
+
+
     .form-group {
 
       display: flex;
