@@ -6,7 +6,8 @@
 
     const customerAlias = {
       dr50: 'r50',
-      dev: 'bs'
+      dev: 'bs',
+      dr50p: 'r50p'
     };
 
     return {
@@ -19,8 +20,15 @@
       showNewsCarousel,
       hasArticleFactors,
       saleOrderMaxPositions,
-      allowDiscounts
+      allowDiscounts,
+      usePriceGroups
     };
+
+    function usePriceGroups() {
+      return customerCode() === 'r50';
+        //_.get(Auth.getAccount(), 'org') === 'r50';
+
+    }
 
     function allowDiscounts() {
       return /r50p|bs/.test(customerCode()) || _.get(Auth.getAccount(), 'org') === 'dr50';

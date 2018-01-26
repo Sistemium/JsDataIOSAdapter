@@ -36,6 +36,7 @@
     function $onInit() {
 
       let {priceGroupId} = vm.stock.article;
+      let hasPriceGroup = DomainOption.usePriceGroups() && priceGroupId;
 
       _.assign(vm, {
         editable: DomainOption.allowDiscounts(),
@@ -43,10 +44,10 @@
         discountPercent: vm.stock.discountPercent(),
         price: vm.stock.discountPrice(),
         priceOrigin: vm.stock.priceOrigin(),
-        priceGroup: priceGroupId && PriceGroup.get(priceGroupId)
+        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId)
       });
 
-      if (priceGroupId && !vm.priceGroup) {
+      if (hasPriceGroup && !vm.priceGroup) {
         PriceGroup.find(priceGroupId)
           .then(res => vm.priceGroup = res);
       }
