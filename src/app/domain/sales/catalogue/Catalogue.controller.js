@@ -731,6 +731,10 @@
 
       vm.busyFilteringStock = false;
 
+      /*
+      Stock functions
+       */
+
       function discountPercent(discountScope) {
 
         let {discounts} = vm;
@@ -767,15 +771,22 @@
       function setDiscountScope(discountScope, discountPercent = this.discountPercent(discountScope)) {
 
         let path = 'saleOrder';
+        let filter = {};
 
         if (discountScope === 'article') {
+
           path = `article.${this.articleId}`;
+
+          filter.articleId = this.articleId;
+          filter.stock = this;
+
         } else {
 
           delete vm.discounts.article[this.articleId];
 
           if (discountScope === 'priceGroup') {
             path = `priceGroup.${this.article.priceGroupId}`;
+            filter.priceGroupId = this.article.priceGroupId;
           } else if (discountScope === 'saleOrder') {
             delete vm.discounts.priceGroup[this.article.priceGroupId];
             path = 'saleOrder';
@@ -784,6 +795,65 @@
         }
 
         _.set(vm.discounts, `${path}.discount`, discountPercent);
+
+        updatePrices(discountScope, filter);
+
+      }
+
+      function updatePrices(discountScope, filter) {
+
+        let stockByPosition = false;
+
+        switch (discountScope) {
+          case 'article': {
+            stockByPosition = position => {
+              return position.articleId === filter.articleId && filter.stock;
+            };
+            break;
+          }
+          case 'saleOrder': {
+            stockByPosition = position => _.find(sortedStock, stock => {
+              return stock.articleId === position.articleId && stock.discountScope() === 'saleOrder';
+            });
+            break;
+          }
+          case 'priceGroup': {
+            stockByPosition = position => _.find(sortedStock, stock => {
+              return stock.articleId === position.articleId &&
+                stock.discountScope() === 'priceGroup' &&
+                stock.article.priceGroupId === filter.priceGroupId;
+            });
+            break;
+          }
+          default: {
+            console.error('unknown discountScope', discountScope, filter);
+            return;
+          }
+        }
+
+        let saleOrder = false;
+
+        _.each(vm.saleOrderPositionByArticle, position => {
+
+          let stock = stockByPosition(position);
+
+          if (!stock) {
+            return;
+          }
+
+          let newPrice = stock.discountPrice();
+
+          if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) return;
+
+          position.price = newPrice;
+          position.updateCost();
+          saleOrder = position.saleOrder;
+
+        });
+
+        if (saleOrder) {
+          saleOrder.updateTotalCost();
+        }
 
       }
 

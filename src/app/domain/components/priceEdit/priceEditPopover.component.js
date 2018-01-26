@@ -126,18 +126,7 @@
 
       if (!price) {
         vm.price = vm.stock.discountPrice();
-        return;
       }
-
-      // TODO: carefully update vm.discount not to trigger recursion
-
-      let position = vm.positions[vm.stock.articleId];
-
-      if (!position || _.round(Math.abs(price - position.price), 2) < 0.01) return;
-
-      position.price = price;
-      position.updateCost();
-      position.saleOrder.updateTotalCost();
 
     }
 
