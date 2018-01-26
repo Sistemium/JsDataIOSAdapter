@@ -35,8 +35,7 @@
       confirmLocationYesClick,
       confirmLocationNoClick,
       updateLocationClick,
-      onStateChange,
-      $onInit
+      onStateChange
 
     });
 
@@ -80,12 +79,6 @@
     /*
      Functions
      */
-
-    function $onInit() {
-      $timeout(100).then(() => {
-        vm.currentState = 'miscellaneous';
-      })
-    }
 
     function loadContracts(outlet) {
 

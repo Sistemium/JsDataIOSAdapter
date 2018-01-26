@@ -45,40 +45,20 @@
         ng-class='!vm.avatarSrc && "placeholder"'
         )
 
-  .navigation
-
-    a(
-    ng-click='vm.currentState = "saleOrder"'
-    ng-class='{"active-state": vm.currentState === "saleOrder"}'
-    ) Заказы
-
-    a(
-    ng-click='vm.currentState = "debts"'
-    ng-class='{"active-state": vm.currentState === "debts"}'
-    ) Долги
-
-    a(
-    ng-click='vm.currentState = "visit"'
-    ng-class='{"active-state": vm.currentState === "visit"}'
-    ) Визиты
-
-    a(
-    ng-click='vm.currentState = "miscellaneous"'
-    ng-class='{"active-state": vm.currentState === "miscellaneous"}'
-    ) Прочее
+  outlet-navigation-bar(current-tab='vm.currentTab')
 
   .ui-view
 
-    .outlet-saleOrder(ng-if='vm.currentState == "saleOrder"')
+    .outlet-saleOrder(ng-if='vm.currentTab == "saleOrder"')
       sale-order-view(custom-filter='vm.saleOrderFilter' disable-elements='true' ng-if='vm.saleOrderFilter')
 
-    .outlet-debts(ng-if='vm.currentState == "debts"')
+    .outlet-debts(ng-if='vm.currentTab == "debt"')
       debt-view-by-outlet(custom-filter='vm.debtFilter' disable-elements='true' ng-if='vm.debtFilter')
 
-    .outlet-visit(ng-if='vm.currentState == "visit"')
+    .outlet-visit(ng-if='vm.currentTab == "visit"')
       visit-view(custom-filter='vm.visitFilter' disable-elements='true' ng-if='vm.visitFilter')
 
-    .outlet-salesman-contracts(ng-if='vm.currentState == "miscellaneous"')
+    .outlet-salesman-contracts(ng-if='vm.currentTab == "miscellaneous"')
       contract-view(contracts='vm.outletSalesmanContracts')
 
         .outlet-partner-table
