@@ -22,6 +22,15 @@ sale-order-alert {
   .alert {
     margin-bottom: 11px;
     @extend %rounded-borders;
+
+    @include responsive-only(lt-sm) {
+      &.alert-dismissible {
+        button.close {
+          right: 0;
+        }
+      }
+    }
+
   }
 
 }
@@ -32,10 +41,15 @@ sale-order-alert {
     background-color: $active-color;
     color: #fff;
     padding: 3px 6px;
-    margin: -3px 0;
+    margin-top: -3px;
+    margin-bottom: -3px;
     border-radius: 3px;
     display: inline-block;
     text-align: center;
+
+    .over-limit {
+      color: lighten($red, 25);
+    }
   }
 
 }
@@ -204,13 +218,21 @@ sale-order-alert {
 
   .totals {
 
+    > * {
+      display: block;
+    }
+
+    .over-limit {
+      color: $red;
+    }
+
     min-height: 18px;
-    margin-right: 15px;
     text-align: right;
     flex: 1;
+    margin-right: 15px;
 
-    totals > * + *, .no-positions > * + a {
-      display: none !important;
+    a.choose-outlet {
+      display: inline-block;
     }
 
     .no-positions > span {
@@ -220,8 +242,10 @@ sale-order-alert {
   }
 
   totals {
+
     display: block;
     width: 100%;
+
   }
 
   popovers {
