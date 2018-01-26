@@ -150,7 +150,7 @@
     function salesModuleRun() {
 
       let SUBSCRIPTIONS = [
-        'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'Visit', 'Partner'
+        'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'Visit', 'Partner', 'Contract'
       ];
 
       const {Workflow, SaleOrder, NewsMessage} = Schema.models();
@@ -205,13 +205,16 @@
 
       function onJSData(event) {
 
-        if (event.resource.match(/Partner|Outlet/)) {
+        if (event.resource.match(/Partner|Outlet|Contract/)) {
+
           let model = Schema.model(event.resource);
+
           if (event.data.name) {
             model.inject(event.data);
           } else {
             model.find(event.data.id, {bypassCache: true});
           }
+
         }
 
         if (event.resource !== 'RecordStatus') return;
