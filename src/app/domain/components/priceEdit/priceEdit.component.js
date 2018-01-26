@@ -5,8 +5,7 @@
   const priceEdit = {
 
     bindings: {
-      stock: '<',
-      positions: '<'
+      stock: '<'
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEdit.html',

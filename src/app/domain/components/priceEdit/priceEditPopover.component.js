@@ -5,7 +5,6 @@
   const priceEditPopover = {
 
     bindings: {
-      positions: '<',
       stock: '<'
     },
 
