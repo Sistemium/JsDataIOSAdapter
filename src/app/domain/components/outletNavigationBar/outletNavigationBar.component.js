@@ -54,17 +54,9 @@
         return;
       }
 
-      if (scrollLeftTabBar >= 20) {
-        vm.showLeft = true;
-      } else {
-        vm.showLeft = false;
-      }
+      vm.showLeft = scrollLeftTabBar >= 20;
 
-      if (tabOffset - scrollLeftTabBar >= 20) {
-        vm.showRight = true;
-      } else {
-        vm.showRight = false;
-      }
+      vm.showRight = tabOffset - scrollLeftTabBar >= 20;
 
       $timeout(() => {
         $scope.$apply();
