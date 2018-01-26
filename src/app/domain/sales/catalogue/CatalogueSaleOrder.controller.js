@@ -36,7 +36,6 @@
           .then(() => SaleOrder.loadRelations(saleOrderId, ['Outlet', 'Contract']))
           .then(() => SaleOrder.loadRelations(saleOrderId, 'SaleOrderPosition', {bypassCache: true}))
           .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
-          .then(checkLimit)
           .catch(error => {
             console.error(error);
             if (error.error === 404) {
@@ -97,8 +96,6 @@
       vm.saleOrder.commentText = commentText;
 
     });
-
-    $scope.$watchGroup(['vm.saleOrder.totalCost', 'vm.saleOrder.contract.creditRemains'], checkLimit);
 
     /*
      Handlers
@@ -231,33 +228,6 @@
 
     function getPosition(articleId) {
       return _.find(vm.saleOrder.positions, {articleId: articleId});
-    }
-
-    function checkLimit() {
-
-      vm.overLimit = 0;
-
-      if (!vm.saleOrder) {
-        return;
-      }
-
-      let {contract = {}, totalCost} = vm.saleOrder;
-
-      let {creditLimit, creditRemains} = contract;
-
-      if (!creditLimit) {
-        return;
-      }
-
-      let overLimit = totalCost - creditRemains;
-
-      if (overLimit > 0) {
-        // let msg = `<div>Лимит: <b>${numberFilter(creditLimit, 2)}</b></div>` +
-        //   `<div>Сумма превышения: <b>${numberFilter(overLimit, 2)}</b></div>`;
-        // toastr.error(msg, 'Превышен лимит по договору', {preventDuplicates: true});
-        vm.overLimit = overLimit;
-      }
-
     }
 
     function addPositionVolume(articleId, volume, price) {

@@ -160,6 +160,34 @@
 
       }
 
+      function checkLimit() {
+
+        vm.overLimit = 0;
+
+        if (!vm.saleOrder) {
+          return;
+        }
+
+        let {contract = {}, totalCost} = vm.saleOrder;
+
+        let {creditLimit, creditRemains} = contract;
+
+        if (!creditLimit) {
+          return;
+        }
+
+        let overLimit = totalCost - creditRemains;
+
+        if (overLimit > 0) {
+          // let msg = `<div>Лимит: <b>${numberFilter(creditLimit, 2)}</b></div>` +
+          //   `<div>Сумма превышения: <b>${numberFilter(overLimit, 2)}</b></div>`;
+          // toastr.error(msg, 'Превышен лимит по договору', {preventDuplicates: true});
+          vm.overLimit = overLimit;
+        }
+
+      }
+
+      $scope.$watchGroup(['vm.saleOrder.totalCost', 'vm.saleOrder.contract.creditRemains'], checkLimit);
 
       $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
       $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
