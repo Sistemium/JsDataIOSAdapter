@@ -37,8 +37,7 @@
       defineChevron();
     }, 100));
 
-    angular.element($window).bind('resize', _.debounce((a) => {
-      console.log(a);
+    angular.element($window).bind('resize', _.debounce(() => {
       defineChevron();
     }, 100));
 
