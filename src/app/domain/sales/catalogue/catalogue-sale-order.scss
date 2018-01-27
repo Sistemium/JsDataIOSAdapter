@@ -50,6 +50,11 @@ sale-order-alert {
     .over-limit {
       color: lighten($red, 25);
     }
+
+    .currency {
+      color: lighten($gray, 25);
+    }
+
   }
 
 }
@@ -204,7 +209,7 @@ sale-order-alert {
 
     .outlet > .info {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       min-width: 0;
     }
 
@@ -224,6 +229,7 @@ sale-order-alert {
 
     .over-limit {
       color: $red;
+      white-space: nowrap;
     }
 
     min-height: 18px;

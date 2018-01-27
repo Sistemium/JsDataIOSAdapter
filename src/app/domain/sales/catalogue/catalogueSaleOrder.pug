@@ -28,10 +28,11 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
     a.has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded' href stm-click='saleOrderTotals')
       .info
         strong {{ vm.saleOrder.positions.length | number:0 }}
-        span {{ vm.saleOrder.positionsCountRu() }}
+        span(ng-if='!vm.overLimit') {{ vm.saleOrder.positionsCountRu() }}
+        span.currency(ng-if='vm.overLimit') П
         span на сумму
         strong {{ vm.saleOrder.totalCost | number:2 }}
-        span ₽
+        span.currency ₽
       .over-limit(ng-if='vm.overLimit') Превышение лимита: {{ vm.overLimit | number:2 }}
 
     span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')

@@ -3,6 +3,14 @@
 
 .sale-order-details {
 
+  @include responsive-only(lt-sm) {
+    .alert-dismissible {
+      button.close {
+        right: 0;
+      }
+    }
+  }
+
   td .spaced {
     display: block;
     text-align: right;
