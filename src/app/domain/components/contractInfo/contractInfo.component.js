@@ -18,7 +18,15 @@
 
   function contractInfoController() {
 
-    // const vm = _.assign(this, {});
+    // const vm =
+    _.assign(this, {
+      $onInit
+    });
+
+
+    function $onInit() {
+      // let {creditLimit, creditRemains} = contract;
+    }
 
   }
 

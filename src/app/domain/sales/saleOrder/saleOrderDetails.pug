@@ -37,7 +37,11 @@
           span на сумму
           strong {{ vm.saleOrder.totalCost | number:2 }}
           span.currency ₽
-        .over-limit(ng-if='vm.overLimit') Превышение лимита: {{ vm.overLimit | number:2 }}
+
+        contract-info.over-limit(
+        ng-if='vm.overLimit'
+        contract='vm.saleOrder.contract'
+        ) Превышение лимита: {{ vm.overLimit | number:2 }}
 
       .no-positions(ng-if='saleOrderExpanded')
         span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций

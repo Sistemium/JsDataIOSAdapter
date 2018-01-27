@@ -36,7 +36,10 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
         strong {{ vm.saleOrder.totalCost | number:2 }}
         span.currency ₽
 
-      contract-info.over-limit(ng-if='vm.overLimit') Превышение лимита: {{ vm.overLimit | number:2 }}
+      contract-info.over-limit(
+      ng-if='vm.overLimit'
+      contract='vm.saleOrder.contract'
+      ) Превышение лимита: {{ vm.overLimit | number:2 }}
 
     span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
       span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
