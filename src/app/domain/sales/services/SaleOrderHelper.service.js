@@ -164,7 +164,7 @@
 
         vm.overLimit = 0;
 
-        if (!vm.saleOrder) {
+        if (!vm.saleOrder || !_.get(vm.saleOrder, 'workflowStep.editable')) {
           return;
         }
 
