@@ -37,19 +37,18 @@ sale-order-alert {
 
 .showOnlyOrdered .alert.sale-order:not(.sale-order-expanded) .totals {
 
-  a {
+  margin-top: -3px;
+  margin-bottom: -3px;
+
+  a.info {
+
     background-color: $active-color;
     color: #fff;
     padding: 3px 6px;
-    margin-top: -3px;
-    margin-bottom: -3px;
     border-radius: 3px;
     display: inline-block;
     text-align: center;
-
-    .over-limit {
-      color: lighten($red, 25);
-    }
+    margin-bottom: 3px;
 
     .currency {
       color: lighten($gray, 25);
@@ -223,11 +222,12 @@ sale-order-alert {
 
   .totals {
 
-    > * {
+    > *, .has-positions > * {
       display: block;
     }
 
-    .over-limit {
+    .over-limit a {
+      margin-left: 0;
       color: $red;
       white-space: nowrap;
     }
