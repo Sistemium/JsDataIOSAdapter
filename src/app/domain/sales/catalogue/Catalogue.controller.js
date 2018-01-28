@@ -537,8 +537,12 @@
 
             let discount = vm.discounts.article[pos.articleId] || vm.discounts.priceGroup[pos.article.priceGroupId];
 
-            if (!discount || Math.abs(discount.discount - posDiscount) > 0.01) {
-              vm.discounts.article[pos.articleId] = {discount: posDiscount};
+            // if (discount && !posDiscount) {
+            //   pos.price = _.round(pos.priceOrigin * (1.0 - discount.discount / 100.0), 2);
+            //   pos.updateCost();
+            // } else
+            if (!discount && posDiscount || discount && Math.abs(discount.discount - posDiscount) > 0.01) {
+              vm.discounts.article[pos.articleId] = _.assign(discount || {}, {discount: posDiscount});
             }
 
           });
