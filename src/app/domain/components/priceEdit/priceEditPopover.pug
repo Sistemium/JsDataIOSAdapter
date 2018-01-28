@@ -2,40 +2,6 @@ fieldset.price-edit-popover
 
   .inputs
 
-    .discount
-
-
-      .form-group
-        label % cкидки:
-
-        .input-group
-
-          a.btn.input-group-addon(ng-click='vm.decrementPercentClick()')
-            i.glyphicon.glyphicon-minus
-
-          input.form-control#price-edit-discount(
-          track-focused
-          type='number'
-          min='0'
-          max='30'
-          step='0.01'
-          ng-model='vm.discountPercent'
-          ng-model-options='{debounce: 1000}'
-          ng-readonly='!vm.editable'
-          )
-
-          a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
-            i.glyphicon.glyphicon-plus
-            span 1
-
-          a.btn.input-group-addon(ng-click='vm.incrementPercentClick(5)')
-            i.glyphicon.glyphicon-plus
-            span 5
-
-          a.btn.input-group-addon(ng-click='vm.incrementPercentClick(10)')
-            i.glyphicon.glyphicon-plus
-            span 10
-
     .list-group.discount-scope
 
       a.list-group-item(
@@ -58,6 +24,40 @@ fieldset.price-edit-popover
       ng-model='vm.discountScope'
       uib-btn-radio="'saleOrder'" uib-uncheckable='false'
       ) На весь заказ
+
+    .discount.form-group
+
+      label % cкидки:
+
+      .input-group
+
+        a.btn.input-group-addon(ng-click='vm.decrementPercentClick()')
+          i.glyphicon.glyphicon-minus
+
+        a.form-control#price-edit-discount(
+        href
+        ng-click='vm.showNumPad = !vm.showNumPad'
+        ) {{ vm.discountPercent | number }}
+
+        a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
+          i.glyphicon.glyphicon-plus
+          span 1
+
+        a.btn.input-group-addon(ng-click='vm.incrementPercentClick(5)')
+          i.glyphicon.glyphicon-plus
+          span 5
+
+        a.btn.input-group-addon(ng-click='vm.incrementPercentClick(10)')
+          i.glyphicon.glyphicon-plus
+          span 10
+
+    .volume-pad(
+    ng-if='vm.showNumPad'
+    model='vm.discountPercent'
+    model-max='30'
+    datatype='price'
+    box-rel='"."'
+    )
 
     .price
 

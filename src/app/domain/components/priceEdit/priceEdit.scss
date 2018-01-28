@@ -6,12 +6,26 @@
     background: none;
   }
 
+  .volume-pad {
+
+    .num-pad-button .btn {
+      font-size: 100%;
+      padding: 10px;
+    }
+
+  }
+
   .inputs {
+
+    .volume-pad {
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
 
     .discount-scope {
 
       width: 100%;
-      margin-top: 6px;
+      margin-top: 0;
 
       > a {
         margin-left: 0 !important;
@@ -41,7 +55,7 @@
         text-align: left;
       }
 
-      input#price-edit-discount  {
+      #price-edit-discount {
         max-width: 51px;
         text-align: center;
         margin: 0;
@@ -62,6 +76,10 @@
         display: flex;
         justify-content: flex-end;
         //align-items: center;
+
+        a {
+          margin: 0;
+        }
 
         .input-group-addon {
 
@@ -138,7 +156,6 @@
 
 }
 
-
 // FIXME: copy-pasted from quantity-edit
 
 .price-edit {
@@ -148,7 +165,7 @@
   &.modal {
 
     // to show saleOrder header
-    top: 150px;
+    top: 50px;
 
     .price-edit-popover {
       .form-group > label {
@@ -178,7 +195,6 @@
     }
 
   }
-
 
   .popover-content {
 

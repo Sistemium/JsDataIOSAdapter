@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -18,19 +18,35 @@
 
   var formatters = {
 
+    price: {
+      disableButton: function (button, data) {
+        if (button.label === '.') {
+          return /\./.test(data);
+        }
+        return button.label && /\.\d{2}/.test(data);
+      },
+      formatSymbols: function (str) {
+        return parseFloat(str);
+      },
+      importModel: function (number) {
+        let res = (number || 0).toFixed(2);
+        return res.replace(/\.00|(\.[^0]?)0*$/, '$1');
+      }
+    },
+
     date: {
       formatSymbols: function (str) {
         var re = /(\d{2})(\d{0,2})(\d{0,4})/;
 
-        return (str || '').replace(re,function (match, dd, mm, yy){
+        return (str || '').replace(re, function (match, dd, mm, yy) {
           return dd + (dd ? '/' + mm : '') + (mm.length == 2 ? '/' + yy : '');
         });
       },
-      importModel: function  (str) {
+      importModel: function (str) {
         var re = /(\d{2})\/(\d{2})\/(\d{2,4})/;
         str = str || '';
 
-        return re.test(str) ? str.replace(re,function (match, dd, mm, yy){
+        return re.test(str) ? str.replace(re, function (match, dd, mm, yy) {
           return dd + mm + yy;
         }) : '';
       },
@@ -46,7 +62,7 @@
 
         var re = dateRes [data.length];
 
-        return ! re.test ((data||'') + button.label);
+        return !re.test((data || '') + button.label);
 
       }
     },
@@ -55,27 +71,27 @@
       formatSymbols: function (str) {
         var re = /(\d*)(К|^)(\d*)/;
 
-        return (str || '').replace(re,function (match, box, k, pcs){
-          return (box ? box + ' к': '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
+        return (str || '').replace(re, function (match, box, k, pcs) {
+          return (box ? box + ' к' : '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
         });
       },
       importModel: function (str) {
         var re = /(\d*)( к[ ]{0,1}|^)(\d*)($| б)/;
 
-        return re.test(str) ? str.replace(re,function (match, box, b, pcs){
-          return (box ? box+'К' : '') +pcs;
+        return re.test(str) ? str.replace(re, function (match, box, b, pcs) {
+          return (box ? box + 'К' : '') + pcs;
         }) : '';
       },
-      exportSymbols: function (str,boxRel) {
+      exportSymbols: function (str, boxRel) {
         var re = /(\d*)(К|^)(\d*)/;
         var m = (str || '').match(re);
-        return parseInt (m[1] || '0') * boxRel + parseInt (m[3] || '0');
+        return parseInt(m[1] || '0') * boxRel + parseInt(m[3] || '0');
       },
       disableButton: function (button, data) {
 
         if (button.label === 'К') {
           // TODO: maybe need no g
-          if (/К/g.test (data)) {
+          if (/К/g.test(data)) {
             return true;
           }
         }
@@ -87,16 +103,16 @@
       formatSymbols: function (str) {
         var re = /^(\d{3})(\d{0,9})/;
 
-        return (str || '').replace(re,function (match, prefix, body){
+        return (str || '').replace(re, function (match, prefix, body) {
           return prefix + (prefix ? '-' + body : '');
         });
       },
-      importModel: function  (str) {
+      importModel: function (str) {
         var re = /^(\d{3})-(\d{8,9})/;
 
         str = str || '';
 
-        return re.test(str) ? str.replace(re,function (match, prefix, body){
+        return re.test(str) ? str.replace(re, function (match, prefix, body) {
           return prefix + body;
         }) : '';
       },
@@ -124,10 +140,8 @@
   };
 
 
-
-
   /** @ngInject */
-  function volumePad () {
+  function volumePad() {
     return {
 
       restrict: 'AC',
@@ -136,49 +150,51 @@
         model: '=',
         boxRel: '=',
         datatype: '@',
-        exportModel: '='
+        exportModel: '=',
+        modelMax: '='
       },
 
       link: function (scope) {
 
         var clicked;
 
-        var importFn = scope.datatype && formatters [scope.datatype] .importModel;
-        var formatFn = scope.datatype && formatters [scope.datatype] .formatSymbols;
-        var disableFn = scope.datatype && formatters [scope.datatype] .disableButton;
-        var exportFn = scope.datatype && formatters [scope.datatype] .exportSymbols;
+        var importFn = scope.datatype && formatters [scope.datatype].importModel;
+        var formatFn = scope.datatype && formatters [scope.datatype].formatSymbols;
+        var disableFn = scope.datatype && formatters [scope.datatype].disableButton;
+        var exportFn = scope.datatype && formatters [scope.datatype].exportSymbols;
 
-        scope.symbols = angular.isFunction (importFn) ? importFn(scope.model) : scope.model;
+        onModelChange(scope.model);
+        scope.$watch('model', onModelChange);
 
         scope.buttons = [
           [
             {
               label: '1'
-            },{
-              label: '2'
-            },{
-              label: '3'
-            },{
-              label: '4'
-            }
-          ],[
+            }, {
+            label: '2'
+          }, {
+            label: '3'
+          }, {
+            label: '4'
+          }
+          ], [
             {
               label: '5'
-            },{
+            }, {
               label: '6'
-            },{
+            }, {
               label: '7'
-            },{
+            }, {
               label: '8'
             }
-          ],[
+          ], [
             {
               label: '9'
-            },{
+            }, {
               label: '0'
-            },{
-              label: scope.boxRel ? 'К' : ''
-            },{
+            }, {
+              label: _.isNumber(scope.boxRel) ? 'К' : (scope.boxRel || '')
+            }, {
               i: 'glyphicon glyphicon-remove',
               remove: true
             }
@@ -190,7 +206,7 @@
           if (b.remove) {
             if (scope.symbols) {
               var str = scope.symbols.toString();
-              scope.symbols = str.slice (0,str.length - 1);
+              scope.symbols = str.slice(0, str.length - 1);
             }
           } else {
             scope.symbols = (scope.symbols && clicked) ? scope.symbols + b.label : b.label;
@@ -198,17 +214,36 @@
 
           clicked = true;
 
-          scope.model = angular.isFunction (formatFn) ? formatFn (scope.symbols) : scope.symbols;
+          scope.model = angular.isFunction(formatFn) ? formatFn(scope.symbols) : scope.symbols;
+
+          if (scope.model > scope.modelMax) {
+            scope.model = scope.modelMax;
+            scope.symbols = _.isFunction(importFn) ? importFn(scope.model) : scope.model;
+          }
 
           if (exportFn) {
-            scope.exportModel = exportFn (scope.symbols, scope.boxRel);
+            scope.exportModel = exportFn(scope.symbols, scope.boxRel);
           }
 
         };
 
         scope.isDisabled = function (b) {
-          return angular.isFunction (disableFn) ? disableFn (b,scope.symbols) : false;
+          return angular.isFunction(disableFn) ? disableFn(b, scope.symbols) : false;
         };
+
+        /*
+        Functions
+         */
+
+        function onModelChange(newValue, oldValue) {
+
+          if (newValue === oldValue) {
+            return;
+          }
+
+          scope.symbols = angular.isFunction(importFn) ? importFn(scope.model) : scope.model;
+
+        }
 
       }
 
