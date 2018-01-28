@@ -61,6 +61,27 @@
         margin: 4px 0 2px 6px;
         display: flex;
         justify-content: flex-end;
+        //align-items: center;
+
+        .input-group-addon {
+
+          font-size: 80%;
+          padding-top: 9px;
+
+          span {
+            margin-left: 2px;
+            color: $gray;
+          }
+
+        }
+
+        * + .input-group-addon {
+
+          margin-left: 0 !important;
+          border-left: none;
+
+        }
+
       }
 
       span.form-control {
@@ -128,6 +149,12 @@
 
     // to show saleOrder header
     top: 150px;
+
+    .price-edit-popover {
+      .form-group > label {
+        //text-align: right;
+      }
+    }
 
     .modal-header {
 

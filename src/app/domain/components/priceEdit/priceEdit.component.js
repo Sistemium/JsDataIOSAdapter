@@ -15,6 +15,7 @@
 
   };
 
+  /** @ngInject */
   function priceEditController(saMedia, $uibModal, $scope) {
 
     let vm = this;

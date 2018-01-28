@@ -78,10 +78,10 @@
 
     }
 
-    function incrementPercentClick() {
+    function incrementPercentClick(increment = 1) {
 
       vm.discountPercent = vm.discountPercent || 0;
-      vm.discountPercent++;
+      vm.discountPercent += increment;
 
     }
 
