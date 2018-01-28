@@ -27,7 +27,7 @@ fieldset.price-edit-popover
 
     .discount.form-group
 
-      label % cкидки:
+      label Cкидка:
 
       .input-group
 
@@ -37,7 +37,9 @@ fieldset.price-edit-popover
         a.form-control#price-edit-discount(
         href
         ng-click='vm.showNumPad = !vm.showNumPad'
-        ) {{ vm.discountPercent | number }}
+        )
+          strong {{ vm.discountPercent || 0 | number }}
+          span.currency %
 
         a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
           i.glyphicon.glyphicon-plus

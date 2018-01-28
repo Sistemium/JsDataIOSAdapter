@@ -1,5 +1,9 @@
 @import "../../../styles/variables";
 
+.popover .price-edit-popover {
+  padding-top: 6px;
+}
+
 .price-edit-popover {
 
   .btn-default {
@@ -7,6 +11,9 @@
   }
 
   .volume-pad {
+
+    margin-top: 10px;
+    margin-bottom: 0;
 
     .num-pad-button .btn {
       font-size: 100%;
@@ -17,17 +24,13 @@
 
   .inputs {
 
-    .volume-pad {
-      margin-top: 10px;
-      margin-bottom: 0;
-    }
-
     .discount-scope {
 
       width: 100%;
-      margin-top: 0;
+      margin: 0 0 6px;
 
       > a {
+
         margin-left: 0 !important;
         padding: 6px;
         text-align: center;
@@ -35,6 +38,7 @@
         &.active .gray {
           color: $gray-border-color;
         }
+
       }
 
       .gray {
@@ -56,15 +60,21 @@
       }
 
       #price-edit-discount {
-        padding-top: 7px;
-        max-width: 51px;
+
+        padding-top: 6px;
+        max-width: 63px;
         text-align: center;
         margin: 0;
+
+        span {
+          margin-left: 2px;
+        }
+
       }
 
       a.btn {
         width: auto;
-        padding: 6px 8px;
+        padding: 6px;
         color: $primary-color;
         i {
           top: 2px
@@ -117,10 +127,6 @@
       margin: 0;
     }
 
-  }
-
-  a {
-    display: block;
   }
 
   .form-control {
