@@ -29,26 +29,6 @@
 
     }
 
-    //.discount-scope {
-    //
-    //  margin-top: 3px;
-    //  display: flex;
-    //  flex-direction: column;
-    //  align-items: flex-start;
-    //
-    //  a {
-    //
-    //    display: block;
-    //    margin-left: 6px;
-    //
-    //    &.active {
-    //      font-weight: bold;
-    //    }
-    //
-    //  }
-    //}
-
-
     .form-group {
 
       display: flex;
@@ -56,7 +36,7 @@
 
       label {
         flex: 1;
-        //margin-right: 5px;
+        margin-bottom: 0;
         color: inherit;
         text-align: left;
       }
@@ -143,6 +123,35 @@
 .price-edit {
 
   display: inline-block;
+
+  &.modal {
+
+    // to show saleOrder header
+    top: 150px;
+
+    .modal-header {
+
+      text-align: left;
+
+      .name {
+        font-size: 85%;
+        color: $gray;
+        flex: 1;
+        margin: 6px;
+      }
+
+      button .glyphicon {
+        top: 3px;
+      }
+
+      padding: 3px;
+      display: flex;
+      align-items: center;
+
+    }
+
+  }
+
 
   .popover-content {
 
