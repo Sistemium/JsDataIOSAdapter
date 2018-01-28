@@ -5,7 +5,7 @@
     .module('webPage')
     .directive('volumePad', volumePad);
 
-  var dateRes = [
+  let dateRes = [
     /[0123]/,
     /3[01]|[12]\d|[0][1-9]/,
     /\d{2}[01]/,
@@ -16,7 +16,7 @@
     /\d{4}0[89]|\d{4}1[0-8]/
   ];
 
-  var formatters = {
+  let formatters = {
 
     price: {
       disableButton: function (button, data) {
@@ -36,14 +36,14 @@
 
     date: {
       formatSymbols: function (str) {
-        var re = /(\d{2})(\d{0,2})(\d{0,4})/;
+        let re = /(\d{2})(\d{0,2})(\d{0,4})/;
 
         return (str || '').replace(re, function (match, dd, mm, yy) {
           return dd + (dd ? '/' + mm : '') + (mm.length == 2 ? '/' + yy : '');
         });
       },
       importModel: function (str) {
-        var re = /(\d{2})\/(\d{2})\/(\d{2,4})/;
+        let re = /(\d{2})\/(\d{2})\/(\d{2,4})/;
         str = str || '';
 
         return re.test(str) ? str.replace(re, function (match, dd, mm, yy) {
@@ -60,7 +60,7 @@
           return true;
         }
 
-        var re = dateRes [data.length];
+        let re = dateRes [data.length];
 
         return !re.test((data || '') + button.label);
 
@@ -69,22 +69,22 @@
 
     boxPcs: {
       formatSymbols: function (str) {
-        var re = /(\d*)(К|^)(\d*)/;
+        let re = /(\d*)(К|^)(\d*)/;
 
         return (str || '').replace(re, function (match, box, k, pcs) {
           return (box ? box + ' к' : '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
         });
       },
       importModel: function (str) {
-        var re = /(\d*)( к[ ]{0,1}|^)(\d*)($| б)/;
+        let re = /(\d*)( к[ ]{0,1}|^)(\d*)($| б)/;
 
         return re.test(str) ? str.replace(re, function (match, box, b, pcs) {
           return (box ? box + 'К' : '') + pcs;
         }) : '';
       },
       exportSymbols: function (str, boxRel) {
-        var re = /(\d*)(К|^)(\d*)/;
-        var m = (str || '').match(re);
+        let re = /(\d*)(К|^)(\d*)/;
+        let m = (str || '').match(re);
         return parseInt(m[1] || '0') * boxRel + parseInt(m[3] || '0');
       },
       disableButton: function (button, data) {
@@ -101,14 +101,14 @@
 
     exciseStamp: {
       formatSymbols: function (str) {
-        var re = /^(\d{3})(\d{0,9})/;
+        let re = /^(\d{3})(\d{0,9})/;
 
         return (str || '').replace(re, function (match, prefix, body) {
           return prefix + (prefix ? '-' + body : '');
         });
       },
       importModel: function (str) {
-        var re = /^(\d{3})-(\d{8,9})/;
+        let re = /^(\d{3})-(\d{8,9})/;
 
         str = str || '';
 
@@ -156,12 +156,12 @@
 
       link: function (scope) {
 
-        var clicked;
+        let clicked;
 
-        var importFn = scope.datatype && formatters [scope.datatype].importModel;
-        var formatFn = scope.datatype && formatters [scope.datatype].formatSymbols;
-        var disableFn = scope.datatype && formatters [scope.datatype].disableButton;
-        var exportFn = scope.datatype && formatters [scope.datatype].exportSymbols;
+        const importFn = scope.datatype && formatters [scope.datatype].importModel;
+        const formatFn = scope.datatype && formatters [scope.datatype].formatSymbols;
+        const disableFn = scope.datatype && formatters [scope.datatype].disableButton;
+        const exportFn = scope.datatype && formatters [scope.datatype].exportSymbols;
 
         onModelChange(scope.model);
         scope.$watch('model', onModelChange);
@@ -205,7 +205,7 @@
 
           if (b.remove) {
             if (scope.symbols) {
-              var str = scope.symbols.toString();
+              let str = scope.symbols.toString();
               scope.symbols = str.slice(0, str.length - 1);
             }
           } else {
