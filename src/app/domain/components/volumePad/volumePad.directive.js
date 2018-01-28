@@ -216,7 +216,7 @@
 
           scope.model = angular.isFunction(formatFn) ? formatFn(scope.symbols) : scope.symbols;
 
-          if (scope.model > scope.modelMax) {
+          if (scope.modelMax && scope.model > scope.modelMax) {
             scope.model = scope.modelMax;
             scope.symbols = _.isFunction(importFn) ? importFn(scope.model) : scope.model;
           }
@@ -241,7 +241,14 @@
             return;
           }
 
-          scope.symbols = angular.isFunction(importFn) ? importFn(scope.model) : scope.model;
+
+          if (formatFn(scope.symbols) === scope.model) {
+            return;
+          }
+
+          let symbols = angular.isFunction(importFn) ? importFn(scope.model) : scope.model;
+
+          scope.symbols = symbols;
 
         }
 
