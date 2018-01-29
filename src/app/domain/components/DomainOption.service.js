@@ -35,9 +35,19 @@
     }
 
     function saleOrderMaxPositions() {
-      if (customerCode() === 'r50' && site() === 1) {
-        return 50;
+
+      switch (customerCode()) {
+        case 'r50': {
+          return 50;
+        }
+        case 'r50p': {
+          return 40;
+        }
+        default: {
+          return false;
+        }
       }
+
     }
 
     function showNewsCarousel() {
