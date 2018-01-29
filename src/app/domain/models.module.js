@@ -219,6 +219,9 @@
       });
     }
 
+    let lsAdapter = new $window.DSLocalStorageAdapter({basePath: 'stg'});
+    DS.registerAdapter('localStorage', lsAdapter);
+
     $window.saDS = DS;
 
   }
