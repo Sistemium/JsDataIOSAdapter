@@ -59,7 +59,7 @@
        Listeners
        */
 
-      $scope.$watch('vm.discountPercent', onDiscountChange);
+      $scope.$watch('vm.discountPercent', _.debounce(onDiscountChange, 700));
       $scope.$watch('vm.price', onPriceChange);
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
 
