@@ -97,7 +97,7 @@ font-size-edit(append-to='articleGroups')
         )
           .name {{::elem.displayName }}
           .badge(ng-if='::vm.articleGroupIds[elem.id]')
-            span {{::vm.articleGroupIds[elem.id].length}}
+            span {{::vm.articleGroupIds[elem.id]}}
             span(ng-if='::elem.children.length') +
 
         a.chevron(

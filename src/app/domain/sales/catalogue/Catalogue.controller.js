@@ -54,7 +54,8 @@
       showFirstLevel: localStorageService.get('showFirstLevel') || false,
       stockWithPicIndex: [],
       discountsBy: {},
-      discounts: {},
+      discounts: {article: {}, priceGroup: {}, saleOrder: {}},
+      restrictionsBy: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
@@ -81,6 +82,7 @@
       articleTagClick,
       removeFilterClick,
       thumbClick,
+      onScrolledToBeginning,
 
       onSearchEnter,
       onStateChange,
@@ -90,7 +92,148 @@
 
     });
 
-    vm.setBusy($timeout(SHORT_TIMEOUT).then(findAll));
+    const maxPositions = DomainOption.saleOrderMaxPositions();
+
+    let busy = $timeout(SHORT_TIMEOUT)
+      .then(findAll)
+      .then(() => {
+
+        vm.watchScope('vm.fontSize', fontSize => {
+          if (fontSize) {
+            localStorageService.set(FONT_SIZE_KEY, fontSize);
+          }
+        });
+
+        vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
+          vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
+        });
+
+        vm.onScope(
+          'rootClick',
+          () => $state.go('sales.catalogue')
+            .then(() => setCurrentArticleGroup(null))
+        );
+
+        vm.watchScope('vm.search', (newValue, oldValue) => {
+          if (newValue != oldValue) {
+            vm.firstLevelGroups = null;
+            setCurrentArticleGroup(vm.currentArticleGroup);
+          }
+        });
+
+        $scope.$watchCollection('vm.filters', (o, n) => {
+          if (o && n && (o.length || n.length)) {
+            vm.firstLevelGroups = null;
+            setCurrentArticleGroup(vm.currentArticleGroup);
+          }
+        });
+
+        $scope.$on('setSaleOrder', (event, saleOrder) => {
+          vm.saleOrder = saleOrder;
+          vm.saleOrderId = saleOrder && saleOrder.id;
+        });
+
+        vm.watchScope('vm.saleOrder.id', newValue => {
+
+          let afterChangeOrder = true;
+
+          DEBUG('on vm.saleOrder.id', _.get(vm.saleOrder, 'priceTypeId'), _.get(vm.saleOrder, 'priceType'));
+
+          if (vm.saleOrder && vm.saleOrder.priceTypeId !== _.get(vm, 'currentPriceType.id')) {
+            setPriceType(vm.saleOrder.priceType);
+          }
+
+          vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
+
+            cacheSaleOrderPositions();
+
+            if (afterChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
+              saleOrderTotalsClick(true);
+              afterChangeOrder = false;
+            }
+
+          });
+
+        });
+
+        vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
+          setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
+          setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
+        }));
+
+        SalesmanAuth.watchCurrent($scope, salesman => {
+
+          let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+          vm.currentSalesman = salesman;
+          vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
+
+        });
+
+        vm.watchScope(
+          isWideScreen,
+          (newValue, oldValue) => {
+            if (newValue !== oldValue) {
+              $scope.$broadcast('vsRepeatTrigger');
+            }
+            vm.isWideScreen = newValue;
+            vm.articleRowHeight = articleRowHeight();
+          }
+        );
+
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
+
+          if (e.resource !== 'Stock') return;
+
+          DEBUG('jsData:updateCollection', e);
+          //
+          // let options = {
+          //   limit: 10000,
+          //   bypassCache: true,
+          //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+          // };
+
+          Stock.meta.findAllUpdates()
+            .then(res => {
+
+              let index = {};
+
+              _.each(res, item => index[item.id] = item);
+
+              onJSDataFinished({
+                model: Stock,
+                index: index,
+                data: res
+              });
+
+            });
+
+        }));
+
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
+
+        vm.watchScope('vm.saleOrder.outlet.id', (outletId) => {
+
+          if (!outletId) return vm.articleStats = {};
+
+          OutletArticles.groupByArticleId(outletId)
+            .then(data => {
+              vm.articleStats = {};
+              _.each(data, item => vm.articleStats[item.articleId] = item);
+
+              if (vm.showOnlyShipped) setCurrentArticleGroup(vm.currentArticleGroup);
+
+            })
+            .then(() => {
+              return vm.saleOrder.outlet.DSLoadRelations('Partner', {bypassCache: true});
+            });
+
+        });
+
+      });
+
+    vm.setBusy(busy);
 
     // onStateChange($state.name, $state.params);
 
@@ -98,142 +241,26 @@
      Listeners
      */
 
-    vm.watchScope('vm.fontSize', fontSize => {
-      if (fontSize) {
-        localStorageService.set(FONT_SIZE_KEY, fontSize);
-      }
-    });
+    /*
+     Handlers
+     */
 
-    vm.onScope(
-      'rootClick',
-      () => $state.go('sales.catalogue')
-        .then(() => setCurrentArticleGroup(null))
-    );
+    function onScrolledToBeginning() {
 
-    vm.watchScope('vm.search', (newValue, oldValue) => {
-      if (newValue != oldValue) {
-        vm.firstLevelGroups = null;
-        setCurrentArticleGroup(vm.currentArticleGroup);
-      }
-    });
+      $timeout(100)
+        .then(() => {
 
-    $scope.$watchCollection('vm.filters', (o, n) => {
-      if (o && n && (o.length || n.length)) {
-        vm.firstLevelGroups = null;
-        setCurrentArticleGroup(vm.currentArticleGroup);
-      }
-    });
+          let parent = saEtc.getElementById('scroll-articles-parent');
 
-    $scope.$on('setSaleOrder', (event, saleOrder) => {
-      vm.saleOrder = saleOrder;
-      vm.saleOrderId = saleOrder && saleOrder.id;
-    });
+          let {children} = parent.children[0];
 
-    vm.watchScope('vm.saleOrder.id', newValue => {
-
-      let afterChangeOrder = true;
-
-      if (vm.saleOrder && vm.saleOrder.priceTypeId !== _.get(vm, 'currentPriceType.id')) {
-        setPriceType(vm.saleOrder.priceType);
-      }
-
-      vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
-
-        cacheSaleOrderPositions();
-
-        if (afterChangeOrder && newPositions && newPositions.length && vm.showOnlyOrdered) {
-          saleOrderTotalsClick(true);
-          afterChangeOrder = false;
-        }
-
-      });
-
-    });
-
-    vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
-      vm.discounts = {};
-      vm.discountsBy = {};
-      filterStock();
-      setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
-      setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
-    }));
-
-    SalesmanAuth.watchCurrent($scope, salesman => {
-
-      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
-
-      vm.currentSalesman = salesman;
-      vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
-
-    });
-
-    vm.watchScope(
-      isWideScreen,
-      (newValue, oldValue) => {
-        if (newValue !== oldValue) {
-          $scope.$broadcast('vsRepeatTrigger');
-        }
-        vm.isWideScreen = newValue;
-        vm.articleRowHeight = articleRowHeight();
-      }
-    );
-
-    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
-    $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
-
-      if (e.resource !== 'Stock') return;
-
-      DEBUG('jsData:updateCollection', e);
-      //
-      // let options = {
-      //   limit: 10000,
-      //   bypassCache: true,
-      //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-      // };
-
-      Stock.meta.findAllUpdates()
-        .then(res => {
-
-          let index = {};
-
-          _.each(res, item => index[item.id] = item);
-
-          onJSDataFinished({
-            model: Stock,
-            index: index,
-            data: res
+          _.each(children, node => {
+            node.style.left = '0';
           });
 
         });
 
-    }));
-
-    $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
-
-    vm.watchScope('vm.saleOrder.outletId', (outletId, oldOutletId) => {
-
-      if (!outletId || outletId === oldOutletId) return vm.articleStats = {};
-
-      OutletArticles.groupByArticleId(outletId)
-        .then(data => {
-          vm.articleStats = {};
-          _.each(data, item => vm.articleStats[item.articleId] = item);
-
-          if (vm.showOnlyShipped) setCurrentArticleGroup(vm.currentArticleGroup);
-
-        })
-        .then(() => {
-          return vm.saleOrder.outlet.DSLoadRelations('Partner')
-            .then(outlet => {
-              vm.noFactor = _.get(outlet, 'partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
-            });
-        });
-
-    });
-
-    /*
-     Handlers
-     */
+    }
 
     function onSaleOrderClick() {
 
@@ -272,11 +299,11 @@
     }
 
     function kPlusButtonClick(stock) {
-      $scope.$broadcast('kPlusButtonClick', stock.article, vm.prices[stock.articleId]);
+      $scope.$broadcast('kPlusButtonClick', stock.article, stock);
     }
 
     function bPlusButtonClick(stock) {
-      $scope.$broadcast('bPlusButtonClick', stock.article, vm.prices[stock.articleId]);
+      $scope.$broadcast('bPlusButtonClick', stock.article, stock);
     }
 
     function toggleShowFirstLevelClick() {
@@ -380,9 +407,14 @@
     }
 
     function setPriceType(priceType) {
+
+      DEBUG('setPriceType', priceType);
+
       vm.currentPriceType = priceType;
-      filterStock();
-      setCurrentArticleGroup(vm.currentArticleGroup);
+      $q.when(filterStock())
+        .then(() => {
+          setCurrentArticleGroup(vm.currentArticleGroup);
+        });
     }
 
     function onStateChange(to, params) {
@@ -439,32 +471,50 @@
     function setDiscounts(contractId, partnerId) {
 
       if (!contractId || !partnerId || !vm.prices) {
-        vm.discounts = {};
         vm.discountsBy = {};
+        console.warn('setDiscounts exit 1');
+        setDiscountsWithModelData();
         return $q.resolve();
       }
 
-      if (vm.discountsBy.partnerId === partnerId && vm.discountsBy.contractId === contractId) {
+      let priceTypeId = vm.currentPriceType.id;
+
+      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId})) {
+        console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
-      vm.discountsBy.contractId = contractId;
-      vm.discountsBy.partnerId = partnerId;
+      vm.discountsBy = {contractId, partnerId, priceTypeId};
+
+      const contractFilter = {
+        contractId: {'==': contractId}
+      };
+
+      const partnerFilter = {
+        partnerId: {'==': partnerId}
+      };
+
+      if (!IOS.isIos()) {
+        contractFilter.discount = {'!=': 0};
+        partnerFilter.discount = {'!=': 0};
+      }
 
       $q.all([
-        ContractArticle.findAll({contractId}, {cacheResponse: false}),
-        ContractPriceGroup.findAll({contractId}, {cacheResponse: false}),
-        PartnerArticle.findAll({partnerId}, {cacheResponse: false}),
-        PartnerPriceGroup.findAll({partnerId}, {cacheResponse: false})
+        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false}),
+        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false}),
+        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false}),
+        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false})
       ])
         .then(allData => {
 
-          vm.discounts = {};
+          let discountModel = {
+            article: _.keyBy([..._.filter(allData[0], 'discount'), ..._.filter(allData[2], 'discount')], 'articleId'),
+            priceGroup: _.keyBy([..._.filter(allData[1], 'discount'), ..._.filter(allData[3], 'discount')], 'priceGroupId')
+          };
 
-          // maybe noticeable faster to do one pass
+          console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
-          setDiscountsWithModelData(allData[0], allData[1]);
-          setDiscountsWithModelData(allData[2], allData[3]);
+          setDiscountsWithModelData(discountModel.article, discountModel.priceGroup);
 
           DEBUG('setDiscounts end', contractId);
 
@@ -472,16 +522,27 @@
 
             let price = vm.prices[pos.articleId];
 
+            let posDiscount = pos.priceOrigin ? _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
+
             if (!price) {
-              vm.prices[pos.articleId] = _.pick(pos, ['price', 'priceOrigin']);
+              price = vm.prices[pos.articleId] = {price: pos.priceOrigin};
               console.warn(`setting prices from position ${pos.id}`);
-              return;
             }
 
-            if (!pos.priceOrigin || pos.priceOrigin !== price.priceOrigin) {
-              pos.price = price.price;
-              pos.priceOrigin = price.priceOrigin;
+            if (!pos.priceOrigin || pos.priceOrigin !== price.price) {
+              pos.priceOrigin = price.price;
+              pos.price = price.price * (1.0 - posDiscount / 100.0);
               pos.updateCost();
+            }
+
+            let discount = vm.discounts.article[pos.articleId] || vm.discounts.priceGroup[pos.article.priceGroupId];
+
+            // if (discount && !posDiscount) {
+            //   pos.price = _.round(pos.priceOrigin * (1.0 - discount.discount / 100.0), 2);
+            //   pos.updateCost();
+            // } else
+            if (!discount && posDiscount || discount && Math.abs(discount.discount - posDiscount) > 0.01) {
+              vm.discounts.article[pos.articleId] = _.assign(discount || {}, {discount: posDiscount});
             }
 
           });
@@ -497,39 +558,29 @@
 
     }
 
-    function setDiscountsWithModelData(articleData, priceGroupData) {
+    function setDiscountsWithModelData(byArticleId = {}, byPriceGroup = {}) {
 
-      let byArticleId = _.groupBy(articleData, 'articleId');
-      let byPriceGroup = _.groupBy(priceGroupData, 'priceGroupId');
-
-      _.each(vm.prices, (price, articleId) => {
-
-        let article = Article.get(articleId);
-
-        if (!article) {
-          // TODO: sync with Article.loadRelations
-          return;
-        }
-
-        let discount = _.get(_.first(byArticleId[articleId]), 'discount') ||
-          _.get(_.first(byPriceGroup[_.get(article, 'priceGroupId')]), 'discount');
-
-        if (!discount) return;
-
-        vm.discounts[articleId] = discount;
-        vm.prices[articleId].price = _.round(price.priceOrigin * (1 - discount / 100.0), 2);
-
-      });
+      vm.discounts = {priceGroup: byPriceGroup, saleOrder: {}, article: byArticleId};
 
     }
 
+    let maxPositionsAlertShown = false;
+
     function cacheSaleOrderPositions() {
 
-      vm.saleOrderPositionByArticle = {};
+      vm.saleOrderPositionByArticle = _.keyBy(vm.saleOrderPositions, 'articleId');
 
-      let grouped = _.groupBy(vm.saleOrderPositions, 'articleId');
+      if (maxPositions && vm.saleOrderPositions.length > maxPositions && !maxPositionsAlertShown) {
 
-      _.each(grouped, (val, key) => vm.saleOrderPositionByArticle[key] = val[0]);
+        maxPositionsAlertShown = true;
+
+        toastr.error('В заказе больше чем 50 позиций', 'Внимание!', {onHidden});
+
+      }
+
+      function onHidden() {
+        maxPositionsAlertShown = false
+      }
 
     }
 
@@ -566,8 +617,10 @@
               vm.priceTypes = PriceType.filter({isVisible: true});
 
               if (!vm.currentPriceType) {
-                vm.currentPriceType = PriceType.meta.getDefault();
+                vm.currentPriceType = _.get(vm.saleOrder, 'priceType') || PriceType.meta.getDefault();
               }
+
+              console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
 
             });
 
@@ -609,27 +662,51 @@
 
       DEBUG('filterStock', 'start');
 
-      let discount = 1;
+      if (vm.busyFilteringStock) {
+        DEBUG('filterStock', 'busy');
+        return vm.busyFilteringStock;
+      }
+
+      vm.busyFilteringStock = true;
+
+      let parentMultiplier = 1;
       let priceType = vm.currentPriceType;
 
       if (!vm.currentPriceType) return;
 
-      let stockCache = _.orderBy(_.map(
-        Stock.meta.getAll(),
-        stock => _.pick(stock, ['id', 'volume', 'displayVolume', 'article', 'articleId'])
-      ), item => item.article && item.article.name);
+      let stockCache = _.orderBy(
+        _.map(
+          Stock.meta.getAll(),
+          stock => {
+            return {
+              id: stock.id,
+              volume: stock.volume,
+              displayVolume: stock.displayVolume,
+              article: stock.article,
+              articleId: stock.articleId,
+              discountPercent,
+              discountPrice,
+              priceOrigin,
+              discountScope,
+              setDiscountScope
+            };
+          }
+        ),
+        item => item.article && item.article.name
+      );
 
       DEBUG('filterStock', 'orderBy');
 
       if (vm.currentPriceType.parent) {
         priceType = vm.currentPriceType.parent;
-        discount += vm.currentPriceType.discountPercent / 100;
+        parentMultiplier += vm.currentPriceType.discountPercent / 100;
       }
 
       if (!priceType.prices()) {
-        DEBUG('filterStock', 'cachedFindAll Price');
+        DEBUG('filterStock', 'cachedFindAll Price', priceType.id);
         return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000})
           .then(prices => {
+            vm.busyFilteringStock = false;
             return _.isEmpty(prices) ? prices : filterStock();
           });
       }
@@ -640,11 +717,10 @@
 
       _.each(priceType.prices(), price => {
 
-        let priceOrigin = _.round(price.price * discount, 2);
+        let priceOrigin = _.round(price.price * parentMultiplier, 2);
 
         vm.prices[price.articleId] = {
-          price: _.round(priceOrigin * (1 - (vm.discounts[price.articleId] || 0) / 100.0), 2),
-          priceOrigin
+          price: priceOrigin
         };
 
       });
@@ -656,6 +732,134 @@
       DEBUG('filterStock', 'end');
 
       setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'));
+
+      vm.busyFilteringStock = false;
+
+      /*
+      Stock functions
+       */
+
+      function discountPercent(discountScope) {
+
+        let {discounts} = vm;
+
+        switch (discountScope) {
+          case 'article':
+            return _.get(discounts.article[this.articleId], 'discount');
+          case 'priceGroup':
+            return _.get(discounts.priceGroup[this.article.priceGroupId], 'discount');
+          case 'saleOrder':
+            return discounts.saleOrder.discount;
+          default:
+            return _.get(discounts.article[this.articleId] ||
+              discounts.priceGroup[this.article.priceGroupId] ||
+              discounts.saleOrder, 'discount');
+        }
+
+      }
+
+      function discountPrice() {
+        return _.round(vm.prices[this.articleId].price * (1.0 - (this.discountPercent() || 0) / 100.0), 2);
+      }
+
+      function priceOrigin() {
+        return vm.prices[this.articleId].price;
+      }
+
+      function discountScope() {
+        return vm.discounts.article[this.articleId] && 'article' ||
+          vm.discounts.priceGroup[this.article.priceGroupId] && 'priceGroup' ||
+          'saleOrder';
+      }
+
+      function setDiscountScope(discountScope, discountPercent = this.discountPercent(discountScope)) {
+
+        let path = 'saleOrder';
+        let filter = {};
+
+        if (discountScope === 'article') {
+
+          path = `article.${this.articleId}`;
+
+          filter.articleId = this.articleId;
+          filter.stock = this;
+
+        } else {
+
+          delete vm.discounts.article[this.articleId];
+
+          if (discountScope === 'priceGroup') {
+            path = `priceGroup.${this.article.priceGroupId}`;
+            filter.priceGroupId = this.article.priceGroupId;
+          } else if (discountScope === 'saleOrder') {
+            delete vm.discounts.priceGroup[this.article.priceGroupId];
+            path = 'saleOrder';
+          }
+
+        }
+
+        _.set(vm.discounts, `${path}.discount`, discountPercent);
+
+        updatePrices(discountScope, filter);
+
+      }
+
+      function updatePrices(discountScope, filter) {
+
+        let stockByPosition = false;
+
+        switch (discountScope) {
+          case 'article': {
+            stockByPosition = position => {
+              return position.articleId === filter.articleId && filter.stock;
+            };
+            break;
+          }
+          case 'saleOrder': {
+            stockByPosition = position => _.find(sortedStock, stock => {
+              return stock.articleId === position.articleId && stock.discountScope() === 'saleOrder';
+            });
+            break;
+          }
+          case 'priceGroup': {
+            stockByPosition = position => _.find(sortedStock, stock => {
+              return stock.articleId === position.articleId &&
+                stock.discountScope() === 'priceGroup' &&
+                stock.article.priceGroupId === filter.priceGroupId;
+            });
+            break;
+          }
+          default: {
+            console.error('unknown discountScope', discountScope, filter);
+            return;
+          }
+        }
+
+        let saleOrder = false;
+
+        _.each(vm.saleOrderPositionByArticle, position => {
+
+          let stock = stockByPosition(position);
+
+          if (!stock) {
+            return;
+          }
+
+          let newPrice = stock.discountPrice();
+
+          if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) return;
+
+          position.price = newPrice;
+          position.updateCost();
+          saleOrder = position.saleOrder;
+
+        });
+
+        if (saleOrder) {
+          saleOrder.updateTotalCost();
+        }
+
+      }
 
     }
 
@@ -743,7 +947,10 @@
 
     function setFirstLevelGroups(currentArticleGroup) {
 
+      DEBUG('setFirstLevelGroups', 'start');
+
       if (!currentArticleGroup || !vm.showFirstLevel) {
+        DEBUG('setFirstLevelGroups', 'exit');
         vm.precedingGroups = [];
         vm.followingGroups = [];
         return;
@@ -766,6 +973,8 @@
 
       vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.name < currentFirstLevelGroup.name);
       vm.followingGroups = _.filter(vm.firstLevelGroups, group => group.name > currentFirstLevelGroup.name);
+
+      DEBUG('setFirstLevelGroups', 'end');
 
     }
 
@@ -805,14 +1014,46 @@
 
       let articles = Article.getAll();
 
+      let groupIds = false;
+      let articleIds = false;
+
       if (vm.showOnlyOrdered) {
+
         let ids = _.map(vm.saleOrder.positions, 'articleId');
-        articles = _.filter(articles, article => ids.indexOf(article.id) > -1);
+
+        articleIds = groupIds = {};
+
+        articles = _.filter(articles, article => {
+          if (ids.indexOf(article.id) > -1) {
+            groupIds[article.articleGroupId] = articleIds[article.id] = 1;
+            return true;
+          }
+        });
+
       }
 
       if (articleGroup) {
-        let ids = _.union([articleGroup.id], _.map(articleGroup.descendants(), 'id'));
-        articles = _.filter(articles, article => ids.indexOf(article.articleGroupId) > -1);
+
+        let hash = {};
+
+        hash[articleGroup.id] = true;
+
+        DEBUG('getStockByArticlesOfGroup', 'has articleGroup');
+
+        _.each(articleGroup.descendantsCache, id => hash[id] = true);
+
+        DEBUG('getStockByArticlesOfGroup', 'did hashing');
+
+        articleIds = groupIds = {};
+
+        articles = _.filter(articles, article => {
+
+          if (hash[article.articleGroupId]) {
+            groupIds[article.articleGroupId] = articleIds[article.id] = 1;
+            return true;
+          }
+        });
+
       }
 
       if (vm.search || vm.filters.length) {
@@ -836,7 +1077,9 @@
 
         let tags = _.filter(vm.filters, 'tag');
 
-        articles = _.filter(articles, article => {
+        articleIds = groupIds = {};
+
+        _.each(articles, article => {
 
           let res = !reg ||
             reg.test(article.name) ||
@@ -844,7 +1087,7 @@
             reg.test(article.lastName) ||
             article.ArticleGroup && reg.test(article.ArticleGroup.name);
 
-          if (res && vm.showOnlyShipped) {
+          if (res && vm.showOnlyShipped && vm.articleStats) {
             res = vm.articleStats[article.id];
           }
 
@@ -858,22 +1101,45 @@
             });
           }
 
-          return res;
+          if (res) {
+            groupIds[article.articleGroupId] = articleIds[article.id] = 1;
+          }
 
         });
 
       }
 
-      let articleIds = _.groupBy(articles, 'id');
+      DEBUG('getStockByArticlesOfGroup', 'articleIds');
 
-      return _.filter(sortedStock, stock => articleIds[stock.articleId]);
+      let result = !articleIds ? sortedStock : _.filter(sortedStock, stock => {
+        if (articleIds[stock.articleId]) {
+          return ++groupIds[stock.article.articleGroupId];
+        }
+      });
 
+      result.articleGroupIds = groupIds;
+
+      DEBUG('getStockByArticlesOfGroup', 'end');
+
+      return result;
     }
 
     function articleGroupIds(stock) {
-      return _.groupBy(stock, item => {
-        return _.get(item, 'article.articleGroupId');
+
+      if (stock.articleGroupIds) {
+        return stock.articleGroupIds;
+      }
+
+      let res = {};
+
+      _.each(stock, item => {
+        let id = _.get(item, 'article.articleGroupId');
+        let count = res[id] || 0;
+        res[id] = ++count;
       });
+
+      return res;
+
     }
 
     function alertCheck(stock) {
@@ -903,6 +1169,12 @@
       vm.restrictedArticles = {};
 
       if (!salesmanId || !outletId) return;
+
+      if (_.isEqual(vm.restrictionsBy, {salesmanId, outletId})) {
+        return;
+      }
+
+      vm.restrictionsBy = {salesmanId, outletId};
 
       $q.all([
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),

@@ -1,6 +1,7 @@
-ul.list-group.round-corners-by-type.vr-parent(
-vs-repeat='{{ vm.articleRowHeight }}'
+.list-group.vr-parent(
+vs-repeat='{{vm.articleRowHeight}}'
 vs-scroll-parent="#scroll-articles-parent"
+vs-excess='3'
 before-tag-name='li'
 )
 
@@ -15,11 +16,10 @@ before-tag-name='li'
     ng-click='vm.thumbClick(stock)'
     )
       img(
-      ng-src='{{ ::stock.article.avatar.srcThumbnail }}'
-      ng-class='::!stock.article.avatar.srcThumbnail && "placeholder"'
+      ng-src='{{ stock.article.avatar.srcThumbnail || "images/placeholder.png"}}'
       )
 
-    .article-wrapper(
+    .article-name(
     ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
     ng-disabled='vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )
@@ -28,6 +28,7 @@ before-tag-name='li'
         strong.name-first(
         uib-tooltip-template='vm.articleTooltipTpl'
         ) {{::stock.article.firstName}}
+
         .article-info(
         ng-class='::{gray: stock.article.firstName.length}'
         )
@@ -48,14 +49,15 @@ before-tag-name='li'
         quantity-edit(
         ng-disabled='vm.restrictedArticles[stock.articleId]'
         ng-if='vm.saleOrder'
+        stock='stock'
         article='stock.article'
         sale-order='vm.saleOrder'
         price='vm.prices[stock.articleId]'
         position='vm.saleOrderPositionByArticle[stock.articleId]'
         )
 
-      .article-name-second(
-      )
+      .article-name-second
+
         small {{::stock.article.preName}}
 
         small.tag(
@@ -71,12 +73,7 @@ before-tag-name='li'
 
         small {{::stock.article.extraLabel}}
 
-      .article-name-third(ng-if='vm.restrictedArticles[stock.articleId]')
-        i.red.glyphicon.glyphicon-ban-circle
-        small.red "{{ vm.restrictedArticles[stock.articleId].name }}"
-        small.gray {{ vm.prices[stock.articleId].price | number:2 }} ₽
-
-      .article-name-third(ng-if='!vm.restrictedArticles[stock.articleId]')
+      .article-name-third
 
         small.flagged(ng-if='stock.article.hasAction') A
 
@@ -84,6 +81,10 @@ before-tag-name='li'
         ng-if='vm.articleStats[stock.articleId]'
         uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"
         )
+
+        small.article-restricted(ng-if='vm.restrictedArticles[stock.articleId]')
+          i.red.glyphicon.glyphicon-ban-circle
+          span.red "{{ vm.restrictedArticles[stock.articleId].name }}"
 
         i.red.glyphicon.glyphicon-warning-sign(
         ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'
@@ -108,12 +109,12 @@ before-tag-name='li'
             | x
 
         price-edit(
-        prices='vm.prices[stock.articleId]'
-        position='vm.saleOrderPositionByArticle[stock.articleId]'
-        discount='vm.discounts[stock.articleId]'
+        ng-disabled='!vm.saleOrder.workflowStep.editable'
+        stock='stock'
+        positions='vm.saleOrderPositionByArticle'
         )
 
-    fieldset.right(
+    .right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
     ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )

@@ -49,7 +49,7 @@
      */
 
     function rowHeight() {
-      return isWideScreen() ? 40 : 137;
+      return isWideScreen() ? 40 : 79;
     }
 
     function onSalesmanChange(salesman) {
@@ -96,9 +96,10 @@
           date,
           id: `${date}-footer`,
           isFooter: true,
+          cls: 'footer',
           totalCost: () => _.sumBy(dateItems, shipment => {
 
-            return shipment.totalCost && !shipment.isFooter && shipment.totalCost() || 0;
+            return !shipment.cls && shipment.totalCost && shipment.totalCost() || 0;
 
           })
         };
@@ -144,16 +145,6 @@
         bypassCache: true
       };
 
-      // let positionsFilter = _.clone(filter);
-      //
-      // if (IOS.isIos()) {
-      //   positionsFilter = {where: {}};
-      //
-      //   if (filter.salesmanId) {
-      //     positionsFilter.where['shipment.salesmanId'] = {'==': filter.salesmanId};
-      //   }
-      // }
-
       busyGettingData = Shipment.findAllWithRelations(filter, options)(['Outlet', 'Driver'])
         .then(res => {
 
@@ -168,6 +159,7 @@
             return {
               date,
               id: date,
+              cls: 'date',
               totalCost: () => _.sumBy(val, shipment => {
                 return shipment.totalCost && !shipment.isFooter && shipment.totalCost() || 0;
               })

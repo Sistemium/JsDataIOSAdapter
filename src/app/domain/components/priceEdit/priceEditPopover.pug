@@ -2,22 +2,71 @@ fieldset.price-edit-popover
 
   .inputs
 
-    .price
+    .list-group.discount-scope
 
-      a.btn.btn-link(ng-click='vm.incrementPrice()') +%
+      a.list-group-item(
+      href
+      ng-model='vm.discountScope'
+      uib-btn-radio="'article'" uib-uncheckable='false'
+      ) На товар
+
+      a.list-group-item(
+      href
+      ng-if='vm.priceGroup'
+      ng-model='vm.discountScope'
+      uib-btn-radio="'priceGroup'" uib-uncheckable='false'
+      )
+        .name На категорию
+        .gray {{ vm.priceGroup.name }}
+
+      a.list-group-item(
+      href
+      ng-model='vm.discountScope'
+      uib-btn-radio="'saleOrder'" uib-uncheckable='false'
+      ) На весь заказ
+
+    .discount.form-group
+
+      label Cкидка:
+
+      .input-group
+
+        a.btn.input-group-addon(ng-click='vm.decrementPercentClick()')
+          i.glyphicon.glyphicon-minus
+
+        a.form-control#price-edit-discount(
+        href
+        ng-click='vm.showNumPad = !vm.showNumPad'
+        )
+          strong {{ vm.discountPercentView }}
+          span.currency %
+
+        a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
+          i.glyphicon.glyphicon-plus
+          span 1
+
+        a.btn.input-group-addon(ng-click='vm.incrementPercentClick(5)')
+          i.glyphicon.glyphicon-plus
+          span 5
+
+        a.btn.input-group-addon(ng-click='vm.incrementPercentClick(10)')
+          i.glyphicon.glyphicon-plus
+          span 10
+
+    .volume-pad(
+    ng-show='vm.showNumPad'
+    model='vm.discountPercentView'
+    export-model='vm.discountPercent'
+    model-max='30'
+    datatype='price'
+    box-rel='","'
+    )
+
+    .price
 
       .form-group
         label Со скидкой:
-        input.form-control#price-edit-price(
-        select-on-focus
-        ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-        track-focused
-        ng-model='vm.price'
-        ng-model-options='{debounce: 1000}'
-        ng-readonly='!vm.editable'
-        )
-
-      a.btn.btn-link(ng-click='vm.decrementPrice()') -%
+        span.form-control#price-edit-price {{ vm.price | number:2 }}
 
     .priceOrigin
 
@@ -26,7 +75,7 @@ fieldset.price-edit-popover
         = ' '
         span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
 
-  .extras
+  //.extras(ng-if='vm.ksOption')
 
     button.btn(
     ng-class='vm.position.isCompDiscount ? "btn-primary" : "btn-default"'

@@ -22,7 +22,8 @@
       saleOrderSaveDraftClick,
       minusButtonClick,
       lastPlus: {},
-      outletClick
+      outletClick,
+      saleOrderClick
 
     });
 
@@ -99,6 +100,17 @@
     /*
      Handlers
      */
+
+    function saleOrderClick() {
+      if (vm.isSaleOrderPopoverOpen) {
+        return;
+      }
+
+      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+
+      vm.saleOrderBusy = SaleOrder.findAllWithRelations(filter)('Outlet');
+
+    }
 
     function outletClick() {
 
@@ -231,9 +243,9 @@
         position = SaleOrderPosition.createInstance({
           saleOrderId: vm.saleOrder.id,
           volume: 0,
-          price: price.price,
-          priceDoc: price.price,
-          priceOrigin: price.priceOrigin,
+          price: price.discountPrice(),
+          priceDoc: price.priceOrigin(),
+          priceOrigin: price.priceOrigin(),
           articleId: articleId
         });
         SaleOrderPosition.inject(position);

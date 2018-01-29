@@ -32,18 +32,16 @@
 
         .info
           strong {{ vm.saleOrder.positions.length | number:0 }}
-          span {{ vm.saleOrder.positionsCountRu() }}
+          span.currency(ng-if='vm.overLimit') П
+          span(ng-if='!vm.overLimit') {{ vm.saleOrder.positionsCountRu() }}
           span на сумму
           strong {{ vm.saleOrder.totalCost | number:2 }}
-          span ₽
+          span.currency ₽
 
-        | &nbsp;
-
-        a.toggle-edit(
-        href ng-click='vm.toggleEditClick()'
-        ng-if='vm.saleOrder && vm.saleOrder.workflowStep.editable'
-        )
-          i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+        contract-info.over-limit(
+        ng-if='vm.overLimit'
+        contract='vm.saleOrder.contract'
+        ) Превышение лимита: {{ vm.overLimit | number:2 }}
 
       .no-positions(ng-if='saleOrderExpanded')
         span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
@@ -55,6 +53,13 @@
         )
           //span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
           //span.caret
+
+      a.toggle-edit(
+      href ng-click='vm.toggleEditClick()'
+      ng-if='vm.saleOrder && vm.saleOrder.workflowStep.editable'
+      )
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+
 
     buttons
 

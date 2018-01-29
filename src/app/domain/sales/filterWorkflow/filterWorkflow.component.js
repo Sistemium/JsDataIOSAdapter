@@ -9,7 +9,8 @@
 
       bindings: {
         currentWorkflow: '=',
-        workflowsInPromise: '<'
+        workflowsInPromise: '<',
+        workflow: '=?'
       },
 
       controller: filterWorkflowController,
@@ -25,7 +26,7 @@
     vm.use({
 
       stats: {},
-      workflowDictionary: {},
+      workflowStats: [],
 
       onWorkflowClick,
       $onInit
@@ -33,10 +34,16 @@
     });
 
     $scope.$watch('vm.workflowsInPromise', refresh);
+    $scope.$watch('vm.currentWorkflow', onWorkflowChange);
+
 
     /*
     Functions
      */
+
+    function onWorkflowChange(currentWorkflow) {
+      vm.workflow = currentWorkflow && vm.workflowDictionary ? vm.workflowDictionary[currentWorkflow] : null;
+    }
 
     function $onInit() {
 
@@ -60,9 +67,9 @@
       Workflow.findAll({code: 'SaleOrder.v2'})
         .then(res => {
 
-          vm.workflow = _.get(res[0], 'workflow');
+          let workflow = vm.workflowDictionary = _.get(res[0], 'workflow');
 
-          let items = _.map(vm.workflow, (workflow, processing) => {
+          let items = _.map(workflow, (workflow, processing) => {
 
             let item = _.pick(workflow, ['label', 'cls']);
 
@@ -73,7 +80,8 @@
 
           });
 
-          vm.workflowDictionary = _.orderBy(items, ['cnt', 'cls'], ['desc', 'asc']);
+          vm.workflowStats = _.orderBy(items, ['cnt', 'cls'], ['desc', 'asc']);
+          onWorkflowChange(vm.currentWorkflow);
 
         })
 
@@ -82,7 +90,7 @@
     function refresh() {
 
       vm.stats = {};
-      vm.workflowDictionary = [];
+      vm.workflowStats = [];
 
       vm.workflowsInPromise
         .then(res => {

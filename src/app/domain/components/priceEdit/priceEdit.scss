@@ -1,19 +1,136 @@
 @import "../../../styles/variables";
 
+.popover .price-edit-popover {
+  padding-top: 6px;
+}
+
 .price-edit-popover {
 
   .btn-default {
     background: none;
   }
 
-  .inputs {
-    a.btn.btn-link {
-      display: none;
+  .volume-pad {
+
+    margin-top: 10px;
+    margin-bottom: 0;
+
+    .num-pad-button .btn {
+      font-size: 100%;
+      padding: 10px;
     }
+
   }
 
-  a {
-    display: block;
+  .inputs {
+
+    .discount-scope {
+
+      width: 100%;
+      margin: 0 0 6px;
+
+      > a {
+
+        margin-left: 0 !important;
+        padding: 6px;
+        text-align: center;
+
+        &.active .gray {
+          color: $gray-border-color;
+        }
+
+      }
+
+      .gray {
+        font-size: 80%;
+      }
+
+    }
+
+    .form-group {
+
+      display: flex;
+      align-items: center;
+
+      label {
+        flex: 1;
+        margin-bottom: 0;
+        color: inherit;
+        text-align: left;
+      }
+
+      #price-edit-discount {
+
+        padding-top: 6px;
+        max-width: 63px;
+        text-align: center;
+        margin: 0;
+
+        > * {
+          margin-left: 0;
+        }
+
+        span {
+          margin-left: 2px;
+        }
+
+      }
+
+      a.btn {
+        width: auto;
+        padding: 6px;
+        color: $primary-color;
+        i {
+          top: 2px
+        }
+        background: none;
+      }
+
+      .input-group {
+        margin: 4px 0 2px 6px;
+        display: flex;
+        justify-content: flex-end;
+        //align-items: center;
+
+        a {
+          margin: 0;
+        }
+
+        .input-group-addon {
+
+          font-size: 80%;
+          padding-top: 9px;
+
+          span {
+            margin-left: 2px;
+            color: $gray;
+          }
+
+        }
+
+        * + .input-group-addon {
+
+          margin-left: 0 !important;
+          border-left: none;
+
+        }
+
+      }
+
+      span.form-control {
+        height: auto;
+      }
+
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
+    }
+
   }
 
   .form-control {
@@ -50,12 +167,45 @@
 
 }
 
-
 // FIXME: copy-pasted from quantity-edit
 
 .price-edit {
 
   display: inline-block;
+
+  &.modal {
+
+    // to show saleOrder header
+    top: 50px;
+
+    .price-edit-popover {
+      .form-group > label {
+        //text-align: right;
+      }
+    }
+
+    .modal-header {
+
+      text-align: left;
+
+      .name {
+        font-size: 85%;
+        color: $gray;
+        flex: 1;
+        margin: 6px;
+      }
+
+      button .glyphicon {
+        top: 3px;
+      }
+
+      padding: 3px;
+      display: flex;
+      align-items: center;
+
+    }
+
+  }
 
   .popover-content {
 

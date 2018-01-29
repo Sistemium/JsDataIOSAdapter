@@ -18,6 +18,9 @@
     .config($compileProvider => {
       $compileProvider.preAssignBindingsEnabled(true);
     })
+    .config($animateProvider => {
+      $animateProvider.classNameFilter(/animate/);
+    })
   ;
 
   function debugService(saDebug) {
