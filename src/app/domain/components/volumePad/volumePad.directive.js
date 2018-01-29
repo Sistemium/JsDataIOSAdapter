@@ -19,11 +19,26 @@
   let formatters = {
 
     price: {
-      disableButton: function (button, data) {
-        if (button.label === '.') {
-          return /\./.test(data);
+      disableButton: function (button, data, modelMax, clicked) {
+
+        if (button.remove) {
+          return !data;
         }
-        return button.label && /\.\d{2}/.test(data);
+
+        if (modelMax) {
+
+          if (formatters.price.exportSymbols(`${clicked ? data : ''}${button.label}`) > modelMax) {
+            return true;
+          }
+
+        }
+
+        if (button.label === ',') {
+          return /,/.test(data);
+        }
+
+        return button.label && /,\d{2}/.test(data);
+
       },
       formatSymbols: function (str) {
         return str;
@@ -229,7 +244,7 @@
         };
 
         scope.isDisabled = function (b) {
-          return angular.isFunction(disableFn) ? disableFn(b, scope.symbols) : false;
+          return angular.isFunction(disableFn) ? disableFn(b, scope.symbols, scope.modelMax, clicked) : false;
         };
 
         /*
