@@ -20,7 +20,9 @@
               i.glyphicon.glyphicon-edit
 
             a.btn.btn-link(
-            popover-placement="auto auto"
+            popover-class='map-popover'
+            popover-placement='bottom auto'
+            popover-append-to-body='true'
             popover-trigger='"outsideClick"'
             uib-popover-template="'app/domain/sales/views/location.html'"
             popover-is-open='vm.mapPopoverIsOpen'
