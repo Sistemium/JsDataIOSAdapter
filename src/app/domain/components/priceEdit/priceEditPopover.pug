@@ -53,12 +53,12 @@ fieldset.price-edit-popover
           i.glyphicon.glyphicon-plus
           span 10
 
-    .volume-pad(
+    sa-keyboard(
+    datatype='price'
     ng-show='vm.showNumPad'
     model='vm.discountPercentView'
     export-model='vm.discountPercent'
     model-max='30'
-    datatype='price'
     box-rel='","'
     )
 
