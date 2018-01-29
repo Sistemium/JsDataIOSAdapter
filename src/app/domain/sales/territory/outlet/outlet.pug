@@ -61,33 +61,8 @@
       visit-view(custom-filter='vm.visitFilter' disable-elements='true' ng-if='vm.visitFilter')
 
     .outlet-salesman-contracts(ng-if='vm.currentTab == "miscellaneous"')
+
       contract-view(contracts='vm.outletSalesmanContracts')
-
-        .outlet-partner-table
-
-          .headers
-            .allow-any-total allow-any-total
-            .allow-low-total allow-low-total
-            .allow-any-volume allow-any-volume
-            .allow-no-charges allow-no-charges
-            .allow-no-doc-discounts allow-no-doc-discounts
-
-          .table-item
-            .allow-any-total
-              label allow-any-total
-              span {{ vm.outlet.partner.allowAnyTotal ? 'Да' : 'Нет' }}
-            .allow-low-total
-              label allow-low-total
-              span {{ vm.outlet.partner.allowLowTotal ? 'Да' : 'Нет' }}
-            .allow-any-volume
-              label allow-any-volume
-              span {{ vm.outlet.partner.allowAnyVolume ? 'Да' : 'Нет' }}
-            .allow-no-charges
-              label allow-no-charges
-              span {{ vm.outlet.partner.allowNoCharges ? 'Да' : 'Нет' }}
-            .allow-no-doc-discounts
-              label allow-no-doc-discounts
-              span {{ vm.outlet.partner.allowNoDocDiscounts ? 'Да' : 'Нет' }}
 
         .outlet-additional-fields
 
@@ -102,3 +77,29 @@
           .comment-text(ng-if='vm.outlet.commentText')
             label Комментарий
             strong {{ vm.outlet.commentText }}
+
+        .outlet-partner-limitation
+
+          label Разрешения
+
+          .limitations
+            ul
+              li.allow-any-total
+                span(ng-if='vm.outlet.partner.allowAnyTotal') Не&nbsp;
+                span проверять минимальную сумму заказа
+
+              li.allow-low-total
+                span(ng-if='!vm.outlet.partner.allowLowTotal') Не&nbsp;
+                span пониженная минимальная сумма заказа
+
+              li.allow-any-volume
+                span(ng-if='vm.outlet.partner.allowAnyVolume') Не&nbsp;
+                span применять кратность
+
+              li.allow-no-charges
+                span(ng-if='vm.outlet.partner.allowNoCharges') Не&nbsp;
+                span требуется нагрузка
+
+              li.allow-no-doc-discounts
+                span(ng-if='vm.outlet.partner.allowNoDocDiscounts') Не&nbsp;
+                span разрешены скидки в откат

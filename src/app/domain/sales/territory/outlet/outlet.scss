@@ -139,99 +139,42 @@
 
     .outlet-salesman-contracts {
 
-      .outlet-partner-table {
-
-        margin: 20px 0;
-
-        @include responsive-only(lt-sm) {
-          margin: 0;
-        }
-
-        .headers {
-          display: flex;
-
-          div {
-            @extend .ellipsis;
-            flex: 20;
-          }
-
-        }
-
-        .table-item {
-          display: flex;
-          padding: 3px 0;
-          border-bottom: 1px solid $gray-border-color;
-
-          @include responsive-only(lt-sm) {
-            flex-flow: column nowrap;
-            border-bottom: 1px solid $gray-border-color;
-          }
-
-          div {
-            flex: 20;
-
-            @include responsive-only(lt-sm) {
-
-              label {
-                margin: 0;
-                font-weight: normal;
-                margin-right: 20px;
-
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                text-align: left;
-
-              }
-
-              span {
-                font-weight: bold;
-              }
-
-              display: flex;
-              justify-content: space-between;
-
-            }
-
-          }
-
-          div:last-of-type {
-            text-align: right;
-          }
-
-        }
-
-        @include responsive-only(gt-xs) {
-
-          label {
-            display: none;
-          }
-        }
-
-        @include responsive-only(lt-sm) {
-
-          .headers {
-            display: none;
-          }
-        }
-
-      }
-
       .outlet-additional-fields {
 
         padding: 3px 0;
 
+        @include responsive-only(lt-sm) {
+          border-bottom: 1px solid $gray-border-color;
+        }
+
+        @include responsive-only(gt-xs) {
+          margin: 20px 0;
+        }
+
         > div {
+
           display: flex;
           justify-content: space-between;
           padding: 2px 0;
 
+          &:last-of-type {
+
+            label {
+              margin: 0;
+            }
+
+          }
+
           label {
+
+            @include responsive-only(gt-xs) {
+              margin: 0;
+            }
+
             font-weight: normal;
             padding-right: 20px;
             white-space: nowrap;
-            margin: 0;
-            color: $gray;
+
           }
 
           strong {
@@ -259,11 +202,32 @@
 
       }
 
+      .outlet-partner-limitation {
+
+        margin-top: 5px;
+
+        .limitations {
+          ul {
+
+            margin-bottom: 0;
+
+            li {
+              text-align: justify;
+              &:first-letter {
+                text-transform: capitalize;
+              }
+            }
+
+            @include responsive-only(lt-sm) {
+              padding-left: 15px;
+            }
+          }
+        }
+      }
+
     }
 
   }
-
-  // tabs
 
   .outlet-visit {
 
