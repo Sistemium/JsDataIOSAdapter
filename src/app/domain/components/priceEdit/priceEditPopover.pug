@@ -38,7 +38,7 @@ fieldset.price-edit-popover
         href
         ng-click='vm.showNumPad = !vm.showNumPad'
         )
-          strong {{ vm.discountPercent || 0 | number }}
+          strong {{ vm.discountPercentView }}
           span.currency %
 
         a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
@@ -54,11 +54,12 @@ fieldset.price-edit-popover
           span 10
 
     .volume-pad(
-    ng-if='vm.showNumPad'
-    model='vm.discountPercent'
+    ng-show='vm.showNumPad'
+    model='vm.discountPercentView'
+    export-model='vm.discountPercent'
     model-max='30'
     datatype='price'
-    box-rel='"."'
+    box-rel='","'
     )
 
     .price

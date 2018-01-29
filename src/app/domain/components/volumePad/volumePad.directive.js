@@ -26,11 +26,14 @@
         return button.label && /\.\d{2}/.test(data);
       },
       formatSymbols: function (str) {
-        return parseFloat(str);
+        return str;
       },
       importModel: function (number) {
-        let res = (number || 0).toFixed(2);
-        return res.replace(/\.00|(\.[^0]?)0*$/, '$1');
+        let res = (number || 0).toFixed(2).replace(/\./, ',');
+        return res.replace(/,00|(,[^0]?)0*$/, '$1');
+      },
+      exportSymbols: function (str) {
+        return parseFloat((str||'0').replace(/,/, '.'));
       }
     },
 
@@ -150,7 +153,7 @@
         model: '=',
         boxRel: '=',
         datatype: '@',
-        exportModel: '=',
+        exportModel: '=?',
         modelMax: '='
       },
 
@@ -158,13 +161,13 @@
 
         let clicked;
 
-        const importFn = scope.datatype && formatters [scope.datatype].importModel;
-        const formatFn = scope.datatype && formatters [scope.datatype].formatSymbols;
+        const importFn = scope.datatype && formatters [scope.datatype].importModel || _.identity;
+        const formatFn = scope.datatype && formatters [scope.datatype].formatSymbols || _.identity;
         const disableFn = scope.datatype && formatters [scope.datatype].disableButton;
-        const exportFn = scope.datatype && formatters [scope.datatype].exportSymbols;
+        const exportFn = scope.datatype && formatters [scope.datatype].exportSymbols || _.identity;
 
-        onModelChange(scope.model);
-        scope.$watch('model', onModelChange);
+        onModelChange(scope.exportModel);
+        scope.$watch('exportModel', onModelChange);
 
         scope.buttons = [
           [
@@ -214,15 +217,13 @@
 
           clicked = true;
 
-          scope.model = angular.isFunction(formatFn) ? formatFn(scope.symbols) : scope.symbols;
+          scope.model = formatFn(scope.symbols);
 
-          if (scope.modelMax && scope.model > scope.modelMax) {
-            scope.model = scope.modelMax;
-            scope.symbols = _.isFunction(importFn) ? importFn(scope.model) : scope.model;
-          }
+          scope.exportModel = exportFn(scope.symbols, scope.boxRel);
 
-          if (exportFn) {
-            scope.exportModel = exportFn(scope.symbols, scope.boxRel);
+          if (scope.modelMax && scope.exportModel > scope.modelMax) {
+            scope.exportModel = scope.modelMax;
+            scope.model = scope.symbols = importFn(scope.exportModel);
           }
 
         };
@@ -241,14 +242,11 @@
             return;
           }
 
-
-          if (formatFn(scope.symbols) === scope.model) {
+          if (exportFn(scope.symbols, scope.boxRel) === scope.exportModel) {
             return;
           }
 
-          let symbols = angular.isFunction(importFn) ? importFn(scope.model) : scope.model;
-
-          scope.symbols = symbols;
+          scope.model = scope.symbols = importFn(scope.exportModel);
 
         }
 
