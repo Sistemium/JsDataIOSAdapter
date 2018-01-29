@@ -11,7 +11,10 @@
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr, DomainOption} = Helpers;
     const {
-      Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
+      Article, Stock, ArticleGroup, PriceType, SaleOrder,
+      SaleOrderPosition,
+      SaleOrderDiscount,
+      Price,
       CatalogueAlert,
       ArticlePicture,
       ContractPriceGroup,
@@ -503,18 +506,33 @@
         ContractArticle.findAll({where: contractFilter}, {cacheResponse: false}),
         ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false}),
         PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false}),
-        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false})
+        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false}),
+        vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
+          .catch(() => {
+            vm.saleOrderDiscountsDisabled = true;
+          })
       ])
         .then(allData => {
 
+          let {discounts} = vm.saleOrder;
+
           let discountModel = {
-            article: _.keyBy([..._.filter(allData[0], 'discount'), ..._.filter(allData[2], 'discount')], 'articleId'),
-            priceGroup: _.keyBy([..._.filter(allData[1], 'discount'), ..._.filter(allData[3], 'discount')], 'priceGroupId')
+            article: _.keyBy([
+              ..._.filter(discounts, 'articleId'),
+              ..._.filter(allData[0], 'discount'),
+              ..._.filter(allData[2], 'discount')
+            ], 'articleId'),
+            priceGroup: _.keyBy([
+              ..._.filter(discounts, 'priceGroupId'),
+              ..._.filter(allData[1], 'discount'),
+              ..._.filter(allData[3], 'discount')
+            ], 'priceGroupId'),
+            saleOrder: _.find(discounts, {discountScope: 'saleOrder'}) || {}
           };
 
           console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
-          setDiscountsWithModelData(discountModel.article, discountModel.priceGroup);
+          setDiscountsWithModelData(discountModel.article, discountModel.priceGroup, discountModel.saleOrder);
 
           DEBUG('setDiscounts end', contractId);
 
@@ -535,14 +553,16 @@
               pos.updateCost();
             }
 
-            let discount = vm.discounts.article[pos.articleId] || vm.discounts.priceGroup[pos.article.priceGroupId];
+            let articleDiscount = vm.discounts.article[pos.articleId];
+
+            let discount = articleDiscount || vm.discounts.priceGroup[pos.article.priceGroupId];
 
             // if (discount && !posDiscount) {
             //   pos.price = _.round(pos.priceOrigin * (1.0 - discount.discount / 100.0), 2);
             //   pos.updateCost();
             // } else
             if (!discount && posDiscount || discount && Math.abs(discount.discount - posDiscount) > 0.01) {
-              vm.discounts.article[pos.articleId] = _.assign(discount || {}, {discount: posDiscount});
+              vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
             }
 
           });
@@ -558,9 +578,9 @@
 
     }
 
-    function setDiscountsWithModelData(byArticleId = {}, byPriceGroup = {}) {
+    function setDiscountsWithModelData(article = {}, priceGroup = {}, saleOrder = {}) {
 
-      vm.discounts = {priceGroup: byPriceGroup, saleOrder: {}, article: byArticleId};
+      vm.discounts = {priceGroup, saleOrder, article};
 
     }
 
@@ -801,6 +821,10 @@
         _.set(vm.discounts, `${path}.discount`, discountPercent);
 
         updatePrices(discountScope, filter);
+
+        if (!vm.saleOrderDiscountsDisabled) {
+          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent);
+        }
 
       }
 
