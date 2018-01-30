@@ -3,6 +3,14 @@
 
 .sale-order-details {
 
+  @include responsive-only(lt-sm) {
+    .alert-dismissible {
+      button.close {
+        right: 0;
+      }
+    }
+  }
+
   td .spaced {
     display: block;
     text-align: right;
@@ -12,24 +20,34 @@
     white-space: nowrap;
   }
 
-  sale-order-alert .totals {
+  sale-order-alert {
 
-    .toggle-edit {
-      margin-left: 6px;
-    }
+    .totals {
 
-    .has-positions {
-
-      white-space: nowrap;
-
-      .info {
-        display: inline;
-        white-space: normal;
+      totals {
+        display: flex !important;
+        @include responsive-only(gt-xs) {
+          justify-content: flex-end;
+        }
+        align-items: center;
       }
 
-    }
+      .toggle-edit {
+        margin-left: 15px;
+      }
 
-  }
+      .has-positions {
+
+        white-space: nowrap;
+
+        .info {
+          display: inline-block;
+          white-space: normal;
+        }
+
+      }
+
+    }}
 
   #scroll-main {
     padding-bottom: 15px;

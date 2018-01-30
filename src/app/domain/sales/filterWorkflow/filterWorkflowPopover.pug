@@ -9,7 +9,7 @@
   )
     a.workflow(
     href
-    ng-repeat='workflow in vm.workflowDictionary track by workflow.processing'
+    ng-repeat='workflow in vm.workflowStats track by workflow.processing'
     ng-click='vm.onWorkflowClick(workflow.processing)'
     ng-class='[{active: workflow.processing === vm.currentWorkflow}, workflow.cls]'
     )

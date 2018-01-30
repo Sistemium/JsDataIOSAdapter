@@ -4,3 +4,9 @@
   }
   padding: 10px;
 }
+
+body.modal-open {
+  > .container {
+    pointer-events: none;
+  }
+}

@@ -3,7 +3,9 @@ section
   h2 Playground
 
   p Started at: {{ vm.started }}
-  p Finished "Price" in {{ vm.finished || '?' }} ms.
+  p Finished "Price" in {{ vm.finished['Price'] || '?' }} ms.
+  p Finished "Article" in {{ vm.finished['Article'] || '?' }} ms.
+  p Finished "ArticleGroup" in {{ vm.finished['ArticleGroup'] || '?' }} ms.
 
   .data(ng-if='vm.data')
     h4 Data

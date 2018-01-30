@@ -1,49 +1,46 @@
 @import "../../../styles/variables";
 
 egais-popover {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  @extend %flaggable;
-  background-color: $state-info-bg;
-  padding-top: 4px;
+  .egais-popover {
+    border-radius: 3px;
+    background-color: $state-info-bg;
 
-  @media(max-width: 767px) {
-    padding-top: 0;
-  }
-
-  position: relative;
-  display: inline;
-
-  ng-transclude {
-    > * + * {
-      margin-left: 2px;
-    }
-  }
-
-  .popover-inner {
-
-    color: $black;
-
-    min-width: 250px;
-
-    span {
-      font-size: 75%;
+    a {
+      padding: 2px 4px;
+      display: block;
     }
 
-    .status {
-
-      @extend %flex-row;
-      align-items: center;
-
+    ng-transclude {
       > * + * {
-        margin-left: 5px;
+        margin-left: 2px;
+      }
+    }
+
+    .popover-inner {
+
+      min-width: 250px;
+
+      span {
+        font-size: 75%;
       }
 
-      & + .status {
-        margin-top: 10px;
+      .status {
+        display: flex;
+        .glyphicon {
+          top: 0;
+          margin-right: 5px;
+        }
       }
 
-      > * {
-        display: block;
+      .status-message {
+        &:not(:last-of-type) {
+          margin-bottom: 5px;
+        }
       }
 
     }

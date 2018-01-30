@@ -5,9 +5,7 @@
   const priceEditPopover = {
 
     bindings: {
-      prices: '<',
-      popoverOpen: '=',
-      position: '<'
+      stock: '<'
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEditPopover.html',
@@ -18,53 +16,117 @@
   };
 
   /** @ngInject */
-  function priceEditController($scope) {
+  function priceEditController($scope, DomainOption, Schema) {
 
-    let vm = this;
+    const vm = _.assign(this, {
 
-    _.assign(vm, {
-
-      ksButtonClick,
+      decrementPercentClick,
+      incrementPercentClick,
       $onInit
 
     });
+
+    const {PriceGroup} = Schema.models();
 
     /*
      Init
      */
 
     function $onInit() {
-      _.assign(vm, _.pick(vm.position, ['price', 'priceOrigin', 'priceDoc']));
+
+      let {priceGroupId} = vm.stock.article;
+      let hasPriceGroup = DomainOption.usePriceGroups() && priceGroupId || vm.stock.discountScope() === 'priceGroup';
+
+      _.assign(vm, {
+        editable: DomainOption.allowDiscounts(),
+        discountScope: vm.stock.discountScope(),
+        discountPercent: vm.stock.discountPercent(),
+        price: vm.stock.discountPrice(),
+        priceOrigin: vm.stock.priceOrigin(),
+        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId)
+      });
+
+      if (hasPriceGroup && !vm.priceGroup) {
+        PriceGroup.find(priceGroupId)
+          .then(res => vm.priceGroup = res);
+      }
+
+      if (!vm.discountPercent && vm.discountScope === 'saleOrder') {
+        vm.discountScope = 'article';
+      }
+
+      /*
+       Listeners
+       */
+
+      $scope.$watch('vm.discountPercent', _.debounce(onDiscountChange, 700));
+      $scope.$watch('vm.price', onPriceChange);
+      $scope.$watch('vm.discountScope', onDiscountScopeChange);
+
     }
-
-    /*
-     Listeners
-     */
-
-    $scope.$watch('vm.price', onPriceChange);
 
     /*
      Functions
      */
 
-    function onPriceChange(newPrice) {
+    function onDiscountScopeChange(newDiscountScope, oldDiscountScope) {
 
-      if (!newPrice) return;
+      if (newDiscountScope === oldDiscountScope) return;
 
-      let price = parseFloat(newPrice);
-
-      if (!price || _.round(Math.abs(price - vm.position.price), 2) < 0.01) return;
-
-      vm.position.price = price;
-      vm.position.updateCost();
-      vm.position.saleOrder.updateTotalCost();
+      vm.stock.setDiscountScope(newDiscountScope);
+      vm.discountPercent = vm.stock.discountPercent(newDiscountScope);
 
     }
 
-    function ksButtonClick() {
-      vm.position.isCompDiscount = !vm.position.isCompDiscount;
-      vm.position.DSCreate()
-        .then(() => vm.popoverOpen = false);
+    function incrementPercentClick(increment = 1) {
+
+      vm.discountPercent = vm.discountPercent || 0;
+      vm.discountPercent += increment;
+
+    }
+
+    function decrementPercentClick() {
+
+      vm.discountPercent = vm.discountPercent || 0;
+      vm.discountPercent--;
+
+    }
+
+    function normalizeDiscount() {
+
+      if (vm.discountPercent > 30) {
+        vm.discountPercent = 30;
+      } else if (vm.discountPercent < 0) {
+        vm.discountPercent = 0;
+      }
+
+      vm.discountPercent = _.round(vm.discountPercent, 2) || 0;
+
+    }
+
+    function onDiscountChange(newDiscount, oldDiscount) {
+
+      if (newDiscount === oldDiscount) return;
+
+      normalizeDiscount();
+
+      let {discountPercent} = vm;
+
+      vm.stock.setDiscountScope(vm.discountScope, discountPercent);
+      vm.price = vm.stock.discountPrice();
+
+    }
+
+    function onPriceChange(newPrice, oldPrice) {
+
+      if (newPrice === oldPrice) return;
+
+      let price = _.round(parseFloat(newPrice), 2);
+
+      if (!price) {
+        vm.price = vm.stock.discountPrice();
+      }
+
     }
 
 

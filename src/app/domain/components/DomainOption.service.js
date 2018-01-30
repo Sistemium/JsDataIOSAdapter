@@ -6,7 +6,8 @@
 
     const customerAlias = {
       dr50: 'r50',
-      dev: 'bs'
+      dev: 'bs',
+      dr50p: 'r50p'
     };
 
     return {
@@ -17,8 +18,36 @@
       saleOrdersDisabled,
       visitsDisabled,
       showNewsCarousel,
-      hasArticleFactors
+      hasArticleFactors,
+      saleOrderMaxPositions,
+      allowDiscounts,
+      usePriceGroups
     };
+
+    function usePriceGroups() {
+      return /r50p?$/.test(customerCode());
+
+    }
+
+    function allowDiscounts() {
+      return /r50p|bs/.test(customerCode()) || _.get(Auth.getAccount(), 'org') === 'dr50';
+    }
+
+    function saleOrderMaxPositions() {
+
+      switch (customerCode()) {
+        case 'r50': {
+          return 50;
+        }
+        case 'r50p': {
+          return 40;
+        }
+        default: {
+          return false;
+        }
+      }
+
+    }
 
     function showNewsCarousel() {
       return customerCode().match(/r50?/) && Auth.isAuthorized(['salesman', 'newsMaker', 'supervisor']);
@@ -60,7 +89,7 @@
     }
 
     function saleOrdersDisabled() {
-      return customerCode() === 'bs';
+      return customerCode() === 'bs' === _.get(Auth.getAccount(), 'org');
     }
 
     function visitsDisabled() {

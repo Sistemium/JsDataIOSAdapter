@@ -9,7 +9,8 @@
       saleOrder: '<',
       price: '<',
       popoverOpen: '=',
-      position: '<'
+      position: '<',
+      stock: '<'
     },
 
     templateUrl: 'app/domain/components/quantityEdit/quantityEditPopover.html',
@@ -29,7 +30,6 @@
     let saleOrder = vm.saleOrder || _.get(vm.position, 'saleOrder');
     let article = vm.article || _.get(vm.position, 'article');
     let position = vm.position || _.find(_.get(saleOrder, 'positions'), {articleId: article.id});
-    let price = vm.price || _.pick(vm.position, ['price', 'priceOrigin', 'priceDoc']);
 
     _.assign(vm, {
 
@@ -70,12 +70,14 @@
 
     function createPosition() {
 
+      let {stock} = vm;
+
       position = SaleOrderPosition.createInstance({
         saleOrderId: saleOrder.id,
         articleId: article.id,
-        price: price.price,
-        priceDoc: price.price,
-        priceOrigin: price.priceOrigin,
+        price: stock.discountPrice(),
+        priceDoc: stock.priceOrigin(),
+        priceOrigin: stock.priceOrigin(),
         volume: 0
       });
 

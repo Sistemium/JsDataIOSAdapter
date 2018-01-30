@@ -18,7 +18,7 @@
   /* Styles for ng-gallery thumbnail*/
 
   a.thumb {
-    margin: 1px 10px 1px 1px;
+    margin: 5px 10px 0 0;
     display: block;
   }
 
@@ -44,8 +44,6 @@
 
   img {
 
-    margin: -1px !important;
-
     outline: 0;
     width: 70px;
     height: 68px;
@@ -57,8 +55,8 @@
     }
 
   }
-  img.no-image {
-    pointer-events: none;
+
+  [disabled] > img {
     filter: brightness(2);
   }
 
@@ -66,19 +64,31 @@
     transition: all ease-in 0.5s;
   }
 
-  .list-group-item {
+  .list-group.vr-parent {
+    margin-bottom: 0;
+    @extend .round-corners-by-type;
+  }
+
+  .list-group-item.catalogue-article {
 
     min-height: 80px;
-    padding: 0 10px;
-    //width: 99.8%;
+    max-height: 80px;
+    padding: 1px 10px 0;
+    margin-bottom: 0;
+
+    & + .list-group-item {
+      border-top: none;
+    }
 
     @extend %flex-row;
     @extend .spaced;
 
-    align-items: center;
+    // to space .right
+    align-items: stretch;
 
     @media (max-width: $screen-xs-max) {
       min-height: 74px;
+      max-height: 74px;
     }
 
     @include responsive-only(xxs) {
@@ -86,22 +96,27 @@
       padding: 0;
       border-right: none;
       border-left: none;
-      border-radius: 0;
+      border-radius: 0 !important;
 
       a.thumb {
+
         position: absolute;
-        top: 5px;
+        top: 0;
         left: 0;
+
         img {
           max-width: 40px;
           max-height: 40px;
         }
 
+        & + .article-name {
+          .article-name-first, .article-name-second {
+            margin-left: 45px
+          }
+        }
+
       }
 
-      a.thumb + .article-wrapper {
-        margin-left: 40px
-      }
 
     }
 
@@ -115,9 +130,12 @@
   .right {
 
     margin-left: 10px;
-    text-align: right;
-    //margin-right: 2px;
+    text-align: center;
     min-width: 35px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 
     .plus-box {
       font-weight: bold;
@@ -132,36 +150,34 @@
       border-radius: 3px;
       display: block;
       color: #777777;
-      position: relative;
 
       &:first-child {
-        top: -2px;
+        //top: 8px;
         font-size: inherit;
       }
 
       &:last-child {
-        bottom: -2px;
+        //bottom: 8px;
         font-size: inherit;
       }
 
     }
 
     button + button {
-      margin-top: 4px;
+      //margin-top: 4px;
     }
 
   }
 
   .article-name-third {
 
-    width: 100%;
-    min-height: 20px;
     text-align: right;
-    //overflow: scroll;
 
     > * + i {
       margin-left: 4px;
     }
+
+    white-space: nowrap;
 
     > div {
 
@@ -182,16 +198,27 @@
 
   }
 
-  .article-wrapper {
+  .article-name {
+
     flex: 1;
     min-width: 0;
+
+    > * {
+      @include responsive-only(xxs) {
+        min-height: 24px;
+        .article-name-second {
+          margin-top: 1px;
+        }
+      }
+      min-height: 25px;
+      align-items: flex-end;
+    }
+
   }
 
   .article-name-first {
 
     display: flex;
-    width: 100%;
-    min-height: 20px;
 
     .name-first {
       @extend .ellipsis;
@@ -205,12 +232,6 @@
       flex-shrink: 0;
       flex-grow: 1;
       padding-right: 6px;
-
-      //@include responsive-only(xxs) {
-      //  small {
-      //    display: none;
-      //  }
-      //}
 
     }
 
@@ -237,10 +258,8 @@
 
   .article-name-second {
 
-    width: 100%;
     color: gray;
     display: block;
-    min-height: 20px;
 
     @extend .ellipsis;
 
@@ -259,7 +278,6 @@
   }
 
   price-edit {
-    margin-left: 4px;
     display: inline;
     font-size: 85%;
   }

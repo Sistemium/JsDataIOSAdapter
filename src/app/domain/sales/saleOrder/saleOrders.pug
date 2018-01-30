@@ -5,6 +5,7 @@
     filter-workflow(
     current-workflow='vm.currentWorkflow'
     workflows-in-promise='vm.workflowPromise'
+    workflow='vm.filterWorkflow'
     )
 
     button.btn.btn-primary(ng-click='vm.newItemClick($event)')
@@ -71,4 +72,4 @@
           )
             i.glyphicon.glyphicon-warning-sign
 
-  .alert.alert-info.centered(ng-if='!vm.data.length && vm.isReady') Нет заказов
+  .alert.alert-info.centered(ng-if='!vm.data.length && vm.isReady') Нет заказов в статусе "{{ vm.filterWorkflow.label }}"

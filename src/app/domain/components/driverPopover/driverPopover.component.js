@@ -7,8 +7,6 @@
       popoverOpen: '='
     },
 
-    transclude: true,
-
     templateUrl: 'app/domain/components/driverPopover/driverPopover.html',
     controllerAs: 'vm'
 

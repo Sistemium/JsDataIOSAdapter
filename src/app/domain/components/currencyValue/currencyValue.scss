@@ -8,12 +8,6 @@ currency-value {
     display: inline-block;
   }
 
-  .currency {
-    font-weight: normal;
-    color: $gray;
-    margin-left: 6px;
-  }
-
   label {
     font-weight: normal;
     margin-bottom: 0;
@@ -23,4 +17,10 @@ currency-value {
     margin-left: 4px;
   }
 
+}
+
+.currency {
+  font-weight: normal;
+  color: $gray;
+  margin-left: 6px;
 }
