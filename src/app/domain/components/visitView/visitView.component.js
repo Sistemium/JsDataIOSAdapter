@@ -205,7 +205,7 @@
 
       let creating = visit.date === moment().format() && visit.finished === false;
 
-      $state.go(`.outlet.visit${creating ? 'Create' : ''}`, {visitId: visit.id, id: visit.outlet.id});
+      $state.go(`.visit${creating ? 'Create' : ''}`, {visitId: visit.id, id: visit.outlet.id});
     }
 
     function newVisitClick() {

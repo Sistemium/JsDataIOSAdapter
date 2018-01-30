@@ -47,7 +47,7 @@
         ng-class='!vm.avatarSrc && "placeholder"'
         )
 
-  outlet-navigation-bar(current-tab='vm.currentTab')
+  outlet-navigation-bar(ng-if='vm.isRootState' current-tab='vm.currentTab')
 
   .ui-view
 
