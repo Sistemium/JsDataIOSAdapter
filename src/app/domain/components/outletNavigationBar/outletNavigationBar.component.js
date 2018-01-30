@@ -33,13 +33,15 @@
       angular.element($window).unbind('resize');
     });
 
-    angular.element(tabBar).bind('scroll', _.debounce(() => {
-      defineChevron();
-    }, 100));
+    const debouncedDefineChevron = _.debounce(defineChevron, 100);
 
-    angular.element($window).bind('resize', _.debounce(() => {
-      defineChevron();
-    }, 100));
+    angular.element(tabBar).on('scroll', debouncedDefineChevron);
+
+    angular.element($window).on('resize', debouncedDefineChevron);
+
+    $scope.$on('$destroy', () => {
+      angular.element($window).off('resize', debouncedDefineChevron)
+    });
 
     function defineChevron() {
       let tab = angular.element(document.getElementsByClassName('tab'))[0];
