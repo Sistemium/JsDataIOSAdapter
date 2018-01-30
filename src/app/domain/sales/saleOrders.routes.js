@@ -10,7 +10,6 @@
           url: '/saleOrders',
           name: 'sales.saleOrders',
           templateUrl: 'app/domain/sales/saleOrder/saleOrders.html',
-          controller: 'SaleOrderInfiniteScrollController',
           controllerAs: 'vm',
 
           data: {
