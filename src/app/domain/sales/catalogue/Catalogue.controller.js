@@ -557,7 +557,7 @@
             let discount = articleDiscount ||
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
-            
+
             if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount/100.0) - pos.price) > 0.01) {
               vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
             }
