@@ -42,9 +42,7 @@
       }
 
       let {discounts} = saleOrder;
-      let paths = scopePath.split('.');
-      let discountScope = _.first(paths);
-      let id = paths[1] || saleOrder.id;
+      let [discountScope, id = saleOrder.id] = scopePath.split('.');
 
       let filter = _.set({discountScope}, `${discountScope}Id`, id);
 
