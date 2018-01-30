@@ -157,8 +157,6 @@
           font-weight: normal;
           padding: 4px 6px;
           max-width: 85px;
-          overflow: hidden;
-          @extend .ellipsis;
         }
 
         &.blue .badge {
