@@ -12,7 +12,7 @@
       .use(ClickHelper)
       .use(SaleOrderHelper);
 
-    let saleOrderId = $state.params.saleOrderId;
+    let {saleOrderId, outletId, salesmanId} = $state.params;
 
     vm.use({
 
@@ -48,7 +48,8 @@
     } else {
 
       vm.saleOrder = SaleOrder.createInstance({
-        salesmanId: _.get(SalesmanAuth.getCurrentUser(), 'id'),
+        outletId,
+        salesmanId: salesmanId || _.get(SalesmanAuth.getCurrentUser(), 'id'),
         date: moment().add(1, 'days').format(),
         processing: 'draft'
       });

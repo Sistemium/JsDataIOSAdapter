@@ -288,7 +288,12 @@
     }
 
     function newItemClick() {
-      $state.go('sales.catalogue.saleOrder');
+      let params = {};
+      let {outletId} = vm.customFilter || {};
+      if (outletId) {
+        params.outletId = outletId;
+      }
+      $state.go('sales.catalogue.saleOrder', params);
     }
 
   }
