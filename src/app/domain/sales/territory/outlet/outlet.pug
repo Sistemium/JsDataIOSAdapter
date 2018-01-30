@@ -78,28 +78,23 @@
             label Комментарий
             strong {{ vm.outlet.commentText }}
 
-        .outlet-partner-limitation
+        .outlet-partner-limitation(ng-if='vm.outlet.partner.hasExclusions()')
 
-          label Разрешения
+          label Исключения из правил:
 
           .limitations
             ul
-              li.allow-any-total
-                span(ng-if='vm.outlet.partner.allowAnyTotal') Не&nbsp;
-                span проверять минимальную сумму заказа
+              li.allow-any-total(ng-if='vm.outlet.partner.allowLowTotal || vm.outlet.partner.allowAnyTotal')
+                span(ng-if='vm.outlet.partner.allowAnyTotal')
+                  | Нет минимальной суммы заказа
+                span(ng-if='vm.outlet.partner.allowLowTotal || !vm.outlet.partner.allowAnyTotal')
+                  | Пониженная минимальная сумма заказа
 
-              li.allow-low-total
-                span(ng-if='!vm.outlet.partner.allowLowTotal') Не&nbsp;
-                span пониженная минимальная сумма заказа
+              li.allow-any-volume(ng-if='vm.outlet.partner.allowAnyVolume')
+                span Не применять кратность
 
-              li.allow-any-volume
-                span(ng-if='vm.outlet.partner.allowAnyVolume') Не&nbsp;
-                span применять кратность
+              li.allow-no-charges(ng-if='vm.outlet.partner.allowNoCharges')
+                span Не требуется нагрузка
 
-              li.allow-no-charges
-                span(ng-if='vm.outlet.partner.allowNoCharges') Не&nbsp;
-                span требуется нагрузка
-
-              li.allow-no-doc-discounts
-                span(ng-if='vm.outlet.partner.allowNoDocDiscounts') Не&nbsp;
-                span разрешены скидки в откат
+              li.allow-no-doc-discounts(ng-if='vm.outlet.partner.allowNoDocDiscounts')
+                span Разрешены скидки в откат
