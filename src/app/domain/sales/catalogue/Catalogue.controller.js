@@ -515,6 +515,7 @@
         .then(allData => {
 
           let {discounts} = vm.saleOrder;
+          let saleOrderScopeDiscount = _.find(discounts, {discountScope: 'saleOrder'});
 
           let discountModel = {
             article: _.keyBy([
@@ -527,14 +528,12 @@
               ..._.filter(allData[1], 'discount'),
               ..._.filter(allData[3], 'discount')
             ], 'priceGroupId'),
-            saleOrder: _.find(discounts, {discountScope: 'saleOrder'}) || {}
+            saleOrder: saleOrderScopeDiscount || {}
           };
 
           console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
           setDiscountsWithModelData(discountModel.article, discountModel.priceGroup, discountModel.saleOrder);
-
-          DEBUG('setDiscounts end', contractId);
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
 
@@ -555,17 +554,17 @@
 
             let articleDiscount = vm.discounts.article[pos.articleId];
 
-            let discount = articleDiscount || vm.discounts.priceGroup[pos.article.priceGroupId];
-
-            // if (discount && !posDiscount) {
-            //   pos.price = _.round(pos.priceOrigin * (1.0 - discount.discount / 100.0), 2);
-            //   pos.updateCost();
-            // } else
-            if (!discount && posDiscount || discount && Math.abs(discount.discount - posDiscount) > 0.01) {
+            let discount = articleDiscount ||
+              vm.discounts.priceGroup[pos.article.priceGroupId] ||
+              saleOrderScopeDiscount;
+            
+            if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount/100.0) - pos.price) > 0.01) {
               vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
             }
 
           });
+
+          DEBUG('setDiscounts end', vm.discounts);
 
           if (_.get(vm.saleOrder, 'positions.length')) {
             vm.saleOrder.updateTotalCost();
@@ -796,29 +795,49 @@
 
         let path = 'saleOrder';
         let filter = {};
+        let {articleId} = this;
 
         if (discountScope === 'article') {
 
-          path = `article.${this.articleId}`;
+          path = `article.${articleId}`;
 
-          filter.articleId = this.articleId;
+          filter.articleId = articleId;
           filter.stock = this;
 
         } else {
 
-          delete vm.discounts.article[this.articleId];
+          let saleOrderDiscount = vm.discounts.article[articleId];
+
+          if (saleOrderDiscount) {
+            delete vm.discounts.article[articleId];
+            if (saleOrderDiscount.constructor.name === 'SaleOrderDiscount') {
+              saleOrderDiscount.id && saleOrderDiscount.DSDestroy();
+            }
+          }
 
           if (discountScope === 'priceGroup') {
             path = `priceGroup.${this.article.priceGroupId}`;
             filter.priceGroupId = this.article.priceGroupId;
           } else if (discountScope === 'saleOrder') {
-            delete vm.discounts.priceGroup[this.article.priceGroupId];
+
+            let saleOrderDiscount = vm.discounts.priceGroup[this.article.priceGroupId];
+
+            if (saleOrderDiscount) {
+              delete vm.discounts.priceGroup[this.article.priceGroupId];
+              if (saleOrderDiscount.constructor.name === 'SaleOrderDiscount') {
+                saleOrderDiscount.DSDestroy();
+              }
+            }
+
             path = 'saleOrder';
+
           }
 
         }
 
         _.set(vm.discounts, `${path}.discount`, discountPercent);
+
+        filter.path = path;
 
         updatePrices(discountScope, filter);
 
@@ -871,11 +890,17 @@
 
           let newPrice = stock.discountPrice();
 
-          if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) return;
+          if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) {
+            return;
+          }
 
           position.price = newPrice;
           position.updateCost();
           saleOrder = position.saleOrder;
+
+          if (!vm.saleOrderDiscountsDisabled) {
+            SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, filter.path, stock.discountPercent());
+          }
 
         });
 

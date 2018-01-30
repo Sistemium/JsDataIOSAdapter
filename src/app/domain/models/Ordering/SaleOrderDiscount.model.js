@@ -36,6 +36,11 @@
 
     function updateSaleOrder(saleOrder, scopePath, discount) {
 
+      if (_.isUndefined(discount)) {
+        console.warn('undefined discount', scopePath);
+        return;
+      }
+
       let {discounts} = saleOrder;
       let paths = scopePath.split('.');
       let discountScope = _.first(paths);
@@ -48,16 +53,18 @@
       if (!existing) {
         let data = _.assign({
           saleOrderId: saleOrder.id,
-          processing: 'draft'
+          processing: 'draft',
+          discount
         }, filter);
-        existing = SaleOrderDiscount.createInstance(data);
-      }
-
-      if (existing.discount === discount) {
-        return;
+        return SaleOrderDiscount.create(data);
       }
 
       existing.discount = discount;
+
+      if (!existing.DSHasChanges()) {
+        console.info('ignoring path', scopePath, discount);
+        return;
+      }
 
       existing.DSCreate();
 
