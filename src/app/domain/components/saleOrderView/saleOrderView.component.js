@@ -87,13 +87,17 @@
 
       let {date, id} = saleOrder;
 
+      if (!_.find(vm.data, {id})) {
+        return;
+      }
+
       let groupedByDate = _.get(_.groupBy(vm.data, {date: date}), true);
 
       if (_.size(groupedByDate) <= 2) {
         _.remove(vm.data, {id: date});
       }
 
-      _.remove(vm.data, {id: id});
+      _.remove(vm.data, {id});
 
     }
 
@@ -106,6 +110,13 @@
       }
 
       let saleOrder = SaleOrder.get(data.id);
+
+      if (!_.matches(SalesmanAuth.makeFilter())(data)) {
+        console.info('ignore saleOrder', data);
+        return;
+      } else if (vm.currentWorkflow && vm.currentWorkflow !== data.processing) {
+        return onDestroySaleOrder({}, data);
+      }
 
       if (!saleOrder) {
         saleOrder = SaleOrder.inject(data);
@@ -122,8 +133,6 @@
 
     function onWorkflowChange() {
 
-      vm.customFilter = _.omit(vm.customFilter, 'where');
-
       resetVariables();
       getData();
 
@@ -131,11 +140,7 @@
 
     function getWorkflows() {
 
-      let workflowFilter;
-
-      vm.customFilter ?
-        workflowFilter = vm.customFilter :
-        workflowFilter = SalesmanAuth.makeFilter({'x-order-by:': '-date'});
+      let workflowFilter = SalesmanAuth.makeFilter(_.assign({orderBy: ['date', 'DESC']}, vm.customFilter));
 
       vm.workflowPromise = SaleOrder.groupBy(workflowFilter, ['processing']);
 
@@ -218,7 +223,9 @@
 
         let lsCurrentWorkflow = localStorageService.get('currentWorkflow');
 
-        lsCurrentWorkflow ? vm.currentWorkflow = lsCurrentWorkflow : '';
+        if (lsCurrentWorkflow) {
+          vm.currentWorkflow = lsCurrentWorkflow;
+        }
 
       }
 
@@ -228,9 +235,7 @@
 
       vm.isReady = false;
 
-      let filter;
-
-      vm.customFilter ? filter = vm.customFilter : filter = SalesmanAuth.makeFilter({'x-order-by:': '-date'});
+      let filter = SalesmanAuth.makeFilter(_.assign({orderBy: ['date', 'DESC']}, vm.customFilter));
 
       if (vm.currentWorkflow) {
 
@@ -239,7 +244,6 @@
             '==': vm.currentWorkflow
           }
         };
-
       }
 
       let options = {
