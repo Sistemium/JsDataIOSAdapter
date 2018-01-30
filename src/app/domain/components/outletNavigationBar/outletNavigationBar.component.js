@@ -15,7 +15,7 @@
 
   });
 
-  function outletNavigationBar($timeout, $scope, $window) {
+  function outletNavigationBar($timeout, $scope, $window, saEtc) {
 
     const vm = _.assign(this, {
       tabs: {miscellaneous: 'О точке', saleOrder: 'Заказы', debt: 'Долги', visit: 'Визиты'},
@@ -26,12 +26,7 @@
     });
 
     const tabCount = Object.keys(vm.tabs).length;
-    const tabBar = angular.element(document.getElementsByClassName('tab-bar'))[0];
-
-    $scope.$on('$destroy', () => {
-      angular.element(tabBar).unbind('scroll');
-      angular.element($window).unbind('resize');
-    });
+    const tabBar = angular.element(saEtc.getElementById('outlet-navigation-tabbar'))[0];
 
     const debouncedDefineChevron = _.debounce(defineChevron, 100);
 
