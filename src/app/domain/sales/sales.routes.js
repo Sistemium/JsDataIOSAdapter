@@ -148,7 +148,9 @@
 
       }, territory);
 
-      const visitsVisit = _.set(_.cloneDeep(visit), 'data.rootState', 'sales.visits');
+      const visitsOutlet = _.set(_.cloneDeep(outlet), 'data.rootState', 'sales.visits');
+
+      visitsOutlet.children[0].data.rootState = 'sales.visits';
 
       const visits = {
 
@@ -161,7 +163,7 @@
           title: 'Визиты'
         },
 
-        children: [territory, _.cloneDeep(outlet), visitsVisit, _.cloneDeep(visitCreate)]
+        children: [territory, visitsOutlet, _.cloneDeep(visitCreate)]
 
       };
 
