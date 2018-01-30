@@ -18,7 +18,7 @@
   function outletNavigationBar($timeout, $scope, $window) {
 
     const vm = _.assign(this, {
-      tabs: {saleOrder: 'Заказы', debt: 'Долги', visit: 'Визиты', miscellaneous: 'Прочее'},
+      tabs: {miscellaneous: 'О точке', saleOrder: 'Заказы', debt: 'Долги', visit: 'Визиты'},
       $onInit,
       moveTo,
       showLeft: null,
