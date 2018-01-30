@@ -1,0 +1,51 @@
+@import "../../../styles/variables";
+@import "../../../styles/flags";
+
+.sale-order.alert {
+  .processingMessage {
+
+    margin-bottom: $margin-bottom-xs;
+
+    strong + span {
+      margin-left: 1em;
+    }
+
+    padding-right: 15px;
+
+    @include responsive-only(lt-sm) {
+      padding-right: 10px;
+    }
+
+    button {
+      right: 0;
+    }
+
+  }
+}
+
+.popovers {
+
+  .processing {
+
+    display: inline-block;
+    color: $gray;
+    background-color: $gray-background-color;
+    border-radius: $border-radius/2;
+    border: solid 1px darken($gray-background-color, 10%);
+    padding: 4px 8px;
+
+    &.blue, &.info {
+      @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
+    }
+
+    &.green, &.success {
+      @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
+    }
+
+    i + span {
+      margin-left: $margin-bottom-xs/2;
+    }
+
+  }
+
+}
