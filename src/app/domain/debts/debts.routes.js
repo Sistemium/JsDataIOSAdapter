@@ -39,7 +39,6 @@
           url: '/debt/byOutlet',
 
           templateUrl: 'app/domain/debts/DebtByOutlet.html',
-          controller: 'DebtByOutletController as vm',
 
           data: {
             title: 'Долги по точкам',
@@ -51,8 +50,7 @@
 
               name: 'outletDebt',
               url: '/:outletId',
-              templateUrl: 'app/domain/debts/OutletDebt.html',
-              controller: 'OutletDebtController as vm',
+              template: '<debt-view-by-outlet disable-elements="false"></debt-view-by-outlet>',
 
               data: {
                 title: 'Долги в точке',

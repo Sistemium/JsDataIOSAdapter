@@ -1,8 +1,8 @@
-@import "../../styles/variables";
-@import "../../styles/alerts";
-@import "../../styles/flags";
+@import "../../../styles/variables";
+@import "../../../styles/alerts";
+@import "../../../styles/flags";
 
-.debt-by-outlet {
+.debt-view-by-outlet {
 
   $margin: 6px;
   $field-width: 100px;
@@ -140,7 +140,7 @@
 
   .header {
 
-    border-bottom: $headers-border;
+    border-bottom: 2px solid $border-gray;
     justify-content: space-between;
 
     @include responsive-only(xxs) {
@@ -149,7 +149,7 @@
 
     label {
       color: $black;
-      font-weight: 500;
+      font-weight: 600;
     }
 
   }
@@ -394,12 +394,6 @@
         min-width: $field-width;
       }
     }
-
-  }
-
-  .alert {
-
-    @extend %header-alert;
 
   }
 

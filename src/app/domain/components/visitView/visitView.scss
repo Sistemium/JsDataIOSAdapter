@@ -1,11 +1,40 @@
 @import "../../../styles/variables";
 
-.visits {
+.visit-view {
 
   .visit {
     .not-finished {
       color: $red;
     }
+  }
+
+  table {
+
+    thead > tr {
+
+      th {
+        padding-top: 0;
+
+        &:last-of-type, &:first-of-type {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+      }
+    }
+
+    tbody {
+
+      border-bottom: 1px solid $gray-border-color;
+
+      tr {
+        td:first-of-type, td:last-of-type {
+          padding: 8px 0;
+        }
+      }
+
+    }
+
   }
 
   .questionSets {

@@ -1,0 +1,46 @@
+.contract-view
+
+  #scroll-main.scroll-y(
+  resize
+  resize-offset-top='5'
+  )
+
+    .alert.alert-info.centered(ng-if='!vm.contracts.length && vm.contracts') Нет договоров
+
+    .contract-table(ng-if='vm.contracts.length')
+
+      .headers
+        .salesman ТП
+        .contract Договор
+        .credit-limit Лимит
+        .credit-remains Остаток
+
+      .contracts(
+      resize
+      resize-offset-top='5'
+      )
+        .contract(
+        ng-repeat='osc in vm.contracts track by osc.id'
+        )
+
+          .contract-body
+
+            .salesman
+              label ТП
+              span {{ ::osc.salesman.shortName }}
+
+            .contract
+              label Договор
+              span {{ ::osc.contract.name }}
+
+            .credit-limit
+              label Лимит
+              currency-value(value='osc.contract.creditLimit || 0')
+
+            .credit-remains
+              label Остаток
+              currency-value(value='osc.contract.creditRemains || 0')
+
+
+
+    .ng-transclude

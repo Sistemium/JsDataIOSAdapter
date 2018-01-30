@@ -1,8 +1,21 @@
 'use strict';
 
-(function () {
+(function (module) {
 
-  function OutletDebtController(Schema, $scope, saControllerHelper, $state, $timeout, $filter) {
+  module.component('debtViewByOutlet', {
+
+    bindings: {
+      customFilter: '<',
+      disableElements: '<'
+    },
+
+    templateUrl: 'app/domain/components/debtViewByOutlet/debtViewByOutlet.html',
+    controller: debtViewByOutletController,
+    controllerAs: 'vm'
+
+  });
+
+  function debtViewByOutletController(Schema, $scope, saControllerHelper, $state, $timeout, $filter) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
@@ -11,6 +24,9 @@
 
         toSummCashingInProgress: false,
         copyingInProgress: false,
+        busy: true,
+        currentState: 'outletDebt',
+
         inCheckingProgress,
 
         confirmation: {},
@@ -23,10 +39,8 @@
 
       });
 
-    const {outletId} = $state.params;
-
+    const outletId = _.get($state.params, 'outletId') || vm.customFilter;
     const dateFilter = $filter('date');
-
     const numberFilter = $filter('number');
 
     vm.setBusy(getData(outletId));
@@ -104,6 +118,9 @@
 
         })
         .then(() => {
+
+          vm.busy = false;
+
           vm.totals = {
             totalSumm: totalSumm(),
             totalSummDoc: totalSummDoc(),
@@ -162,7 +179,4 @@
 
   }
 
-  angular.module('webPage')
-    .controller('OutletDebtController', OutletDebtController);
-
-})();
+})(angular.module('Sales'));

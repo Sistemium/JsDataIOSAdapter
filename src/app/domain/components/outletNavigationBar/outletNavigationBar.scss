@@ -1,0 +1,85 @@
+@import "../../../styles/variables";
+
+.outlet-navigation-bar {
+
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 0 auto;
+  margin-bottom: 10px;
+
+  @include responsive-only(lt-sm) {
+    width: calc(100% - 20px);
+  }
+
+  span.show-chevron {
+
+    transition: all .4s;
+    opacity: 1;
+    visibility: visible;
+    width: 20px;
+
+    i {
+      line-height: 30px;
+      display: block;
+    }
+
+  }
+
+  .chevron {
+    transition: all .3s;
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+
+    i {
+      line-height: 30px;
+      padding: 0 3px;
+      color: darken($gray-border-color, 20%);
+      display: block;
+    }
+
+    i.glyphicon-chevron-left {
+      direction: rtl;
+    }
+
+    i.glyphicon-chevron-right {
+      direction: ltr;
+    }
+
+  }
+
+  .tab-bar {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    border: 1px solid $gray-border-color;
+    border-radius: 5px;
+    overflow-y: scroll;
+
+    > a {
+      min-width: 100px;
+      flex: 1;
+      border-radius: 0;
+      padding: 5px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      overflow: hidden;
+
+      &:not(:last-of-type) {
+        border-right: 1px solid $gray-border-color;
+      }
+
+      &:hover, &:active {
+        background-color: $primary-color;
+        color: $white;
+      }
+
+    }
+
+    .active-tab {
+      background-color: $primary-color;
+      color: $white;
+    }
+  }
+}

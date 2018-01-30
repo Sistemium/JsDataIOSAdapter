@@ -1,0 +1,74 @@
+.sale-order-view(cg-busy='vm.cgBusy')
+
+  .buttons
+    filter-workflow(
+    current-workflow='vm.currentWorkflow'
+    workflows-in-promise='vm.workflowPromise'
+    )
+
+    button.btn.btn-primary.add-sale-order(ng-click='vm.newItemClick($event)')
+      i.glyphicon.glyphicon-plus
+      span Добавить заказ
+
+  .headers(ng-if='vm.data.length')
+    .processing Статус
+    .salesman(ng-if='!vm.currentSalesman') ТП
+    .outlet Точка
+    .totals Итоги
+
+  .alert.alert-info.centered(ng-if='!vm.data.length && vm.isReady') Нет заказов в текущем статусе
+
+  #scroll-main.scroll-y(
+  elem-ready='vm.restoreScrollPosition()'
+  resize
+  resize-offset-top='5'
+  resize-property='height'
+  vs-repeat='{{vm.rowHeight()}}'
+  vs-scrolled-to-end='vm.getData()'
+  vs-scrolled-to-end-offset='15'
+  vs-excess='10'
+  )
+
+    .list-item(
+    ng-repeat='item in vm.data track by item.id'
+    )
+      .list-group-header.date(
+      ng-if='!item.outletId'
+      )
+        .title {{ ::item.date | amDateFormat:'DD.MM.YYYY' }}
+
+      a.sale-order(
+      href
+      ng-if='item.outletId'
+      ng-click='vm.saleOrderItemClick(item)'
+      )
+        .list-item-body
+
+          .processing(ng-class='item.workflowStep.cls')
+            span.badge {{ item.workflowStep.label }}
+
+          .salesman(ng-if='!vm.currentSalesman')
+            span.name {{ item.salesman.tinyName }}
+
+          .outlet(ng-class='{blocked: item.outlet.isActive === false}')
+            span.name {{ item.outlet.name }}
+            .address
+              .gray {{ item.outlet.address }}
+              .salesman(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
+
+          .totals
+            .cost
+              currency-value(value='item.totalCostCached() || 0')
+            .position
+              strong {{ item.totalPositionsCached() || 0 }}
+              span П
+
+        .list-item-footer
+
+          span.comment-text {{ item.commentText }}
+
+          span.icon(
+          ng-if='item.processingMessage'
+          ng-class='item.workflowStep.messageCls'
+          )
+            i.glyphicon.glyphicon-warning-sign

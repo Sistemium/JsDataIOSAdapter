@@ -47,8 +47,15 @@
 
       if (!vm.outlet) return;
 
-      Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner'])
+      Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner', 'saleOrders', 'Debt'])
         .then(outlet => {
+
+          let outletId = outlet.id;
+          let filterByOutletId = {outletId: outletId};
+
+          vm.saleOrderFilter = _.assign({'x-order-by:': '-date'}, filterByOutletId);
+          vm.debtFilter = outletId;
+          vm.visitFilter = filterByOutletId;
 
           if (outlet.location) {
             initMap(outlet.location);
@@ -77,7 +84,6 @@
 
       return OutletSalesmanContract.findAllWithRelations({outletId: outlet.id}, {bypassCache: true})('Contract')
         .then(data => vm.outletSalesmanContracts = data);
-
     }
 
     function onStateChange(to) {
@@ -150,7 +156,6 @@
       if (!vm.avatar) {
         return takePhoto();
       }
-
 
       vm.commentText = `${vm.outlet.partner.shortName} (${vm.outlet.address})`;
       $scope.imagesAll = vm.photos;
