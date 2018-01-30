@@ -89,7 +89,7 @@
     }
 
     function saleOrdersDisabled() {
-      return customerCode() === 'bs';
+      return customerCode() === 'bs' === _.get(Auth.getAccount(), 'org');
     }
 
     function visitsDisabled() {
