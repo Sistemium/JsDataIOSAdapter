@@ -9,7 +9,7 @@
       disableElements: '<'
     },
 
-    templateUrl: 'app/domain/components/saleOrderView/saleOrderView.html',
+    templateUrl: 'app/domain/sales/saleOrder/saleOrderView/saleOrderView.html',
 
     controller: SaleOrderInfiniteScrollController,
     controllerAs: 'vm'

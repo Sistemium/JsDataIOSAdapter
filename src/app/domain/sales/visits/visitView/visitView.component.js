@@ -9,7 +9,7 @@
       customFilter: '<'
     },
 
-    templateUrl: 'app/domain/components/visitView/visitView.html',
+    templateUrl: 'app/domain/sales/visits/visitView/visitView.html',
 
     controller: VisitsController,
     controllerAs: 'vm'

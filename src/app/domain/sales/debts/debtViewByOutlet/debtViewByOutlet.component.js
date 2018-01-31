@@ -9,7 +9,7 @@
       disableElements: '<'
     },
 
-    templateUrl: 'app/domain/components/debtViewByOutlet/debtViewByOutlet.html',
+    templateUrl: 'app/domain/sales/debts/debtViewByOutlet/debtViewByOutlet.html',
     controller: debtViewByOutletController,
     controllerAs: 'vm'
 

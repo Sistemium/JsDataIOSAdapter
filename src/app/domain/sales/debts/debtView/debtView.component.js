@@ -8,7 +8,7 @@
       customFilter: '<'
     },
 
-    templateUrl: 'app/domain/components/debtView/debtView.html',
+    templateUrl: 'app/domain/sales/debts/debtView/debtView.html',
 
     controller: debtView,
     controllerAs: 'vm'

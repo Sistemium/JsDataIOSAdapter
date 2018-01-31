@@ -14,7 +14,7 @@
 
     transclude: true,
 
-    templateUrl: 'app/domain/components/outletCashingPopover/outletCashingPopover.html',
+    templateUrl: 'app/domain/sales/debts/outletCashingPopover/outletCashingPopover.html',
 
     controller: outletCashingPopoverController,
     controllerAs: 'vm'
