@@ -12,7 +12,7 @@
           name: 'sales.cashing',
           url: '/cashing',
 
-          templateUrl: 'app/domain/debts/Cashing.html',
+          templateUrl: 'app/domain/sales/debts/Cashing.html',
           controller: 'CashingController',
           controllerAs: 'vm',
 
@@ -38,7 +38,7 @@
           name: 'sales.debtByOutlet',
           url: '/debt/byOutlet',
 
-          templateUrl: 'app/domain/debts/DebtByOutlet.html',
+          templateUrl: 'app/domain/sales/debts/DebtByOutlet.html',
 
           data: {
             title: 'Долги по точкам',
@@ -62,7 +62,7 @@
 
                   name: 'cashing',
                   url: '/cashing',
-                  templateUrl: 'app/domain/debts/OutletCashing.html',
+                  templateUrl: 'app/domain/sales/debts/OutletCashing.html',
                   controller: 'OutletCashingController as vm',
 
                   data: {

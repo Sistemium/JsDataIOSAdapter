@@ -10,7 +10,7 @@
 
     transclude: true,
 
-    templateUrl: 'app/domain/components/contractView/contractView.html',
+    templateUrl: 'app/domain/sales/territory/contractView/contractView.html',
 
     controller: contractViewController,
     controllerAs: 'vm'

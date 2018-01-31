@@ -11,7 +11,7 @@
     transclude: true,
 
     controller: contractInfoController,
-    templateUrl: 'app/domain/components/contractInfo/contractInfo.html',
+    templateUrl: 'app/domain/sales/territory/contractInfo/contractInfo.html',
     controllerAs: 'vm'
 
   };
