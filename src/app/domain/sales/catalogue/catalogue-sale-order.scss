@@ -173,9 +173,12 @@ sale-order-alert {
     flex-direction: row;
     align-items: center;
 
-    .sale-order-discount-info i {
-      font-size: 85%;
-      top: -1px;
+    .sale-order-discount-info > i {
+      font-size: 110%;
+      position: relative;
+      top: -2px;
+      font-weight: bold;
+      font-style: normal;
     }
 
     @include responsive-only(gt-xs) {
@@ -194,6 +197,9 @@ sale-order-alert {
       sale-order-discount-info {
         order: 2;
         font-size: 90%;
+        .sale-order-discount-info > i {
+          top: 0;
+        }
       }
 
       .expander {
