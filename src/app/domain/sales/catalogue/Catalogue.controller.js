@@ -105,41 +105,6 @@
           vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
         });
 
-<<<<<<< HEAD
-        vm.onScope(
-          'rootClick',
-          () => $state.go('sales.catalogue')
-            .then(() => setCurrentArticleGroup(null))
-        );
-
-        vm.watchScope('vm.search', (newValue, oldValue) => {
-          if (newValue != oldValue) {
-            vm.firstLevelGroups = null;
-            setCurrentArticleGroup(vm.currentArticleGroup);
-          }
-        });
-
-        $scope.$watchCollection('vm.filters', (o, n) => {
-          if (o && n && (o.length || n.length)) {
-            vm.firstLevelGroups = null;
-            setCurrentArticleGroup(vm.currentArticleGroup);
-          }
-        });
-
-        $scope.$on('setSaleOrder', (event, saleOrder) => {
-          vm.saleOrder = saleOrder;
-          vm.saleOrderId = saleOrder && saleOrder.id;
-        });
-
-        $scope.$watch('vm.searchEnterPress', () => {
-          if (vm.searchEnterPress) {
-            setCurrentArticleGroup();
-            vm.searchEnterPress = !vm.searchEnterPress;
-          }
-        });
-
-=======
->>>>>>> groupDiscounts
         vm.watchScope('vm.saleOrder.id', newValue => {
 
           let afterChangeOrder = true;
@@ -210,6 +175,13 @@
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
     $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
+    
+    $scope.$watch('vm.searchEnterPress', () => {
+      if (vm.searchEnterPress) {
+        setCurrentArticleGroup();
+        vm.searchEnterPress = !vm.searchEnterPress;
+      }
+    });
 
     vm.watchScope('vm.fontSize', fontSize => {
       if (fontSize) {
@@ -510,8 +482,6 @@
       } else {
         vm.filters.push(filter);
       }
-
-      //TODO: simplify
 
     }
 
