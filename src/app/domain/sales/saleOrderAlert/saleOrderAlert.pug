@@ -6,7 +6,7 @@
       .totals(ng-transclude='totals')
     .menu
 
-      sale-order-discount-info(sale-order='vm.saleOrder' ng-if='!vm.saleOrderExpanded')
+      sale-order-discount-info(sale-order='vm.saleOrder' ng-if='!vm.saleOrderExpanded' discounts='vm.discounts')
 
       a.expander(href ng-click='vm.saleOrderExpanded = !vm.saleOrderExpanded')
         i.scalable.glyphicon.glyphicon-menu-hamburger(ng-class='{"scale-y-50": vm.saleOrderExpanded}')

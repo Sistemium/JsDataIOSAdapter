@@ -1,4 +1,6 @@
-.sale-order-discount-popover
+.sale-order-discount-popover.scroll-y(
+resize resize-offset-top='40'
+)
 
   .no-data(ng-if='!vm.discounts.length')
     | {{ vm.busy ? 'Загрузка ...' : 'Скидки в заказе не предоставлены' }}
@@ -7,8 +9,8 @@
   ng-repeat='discount in vm.discounts track by discount.id'
   ng-switch='discount.discountScope'
   )
-    .discount-scope(ng-switch-when='priceGroup') {{ discount.priceGroup.name }}
-    .discount-scope(ng-switch-when='article') {{ discount.article.name }}
+    .discount-scope(ng-switch-when='priceGroup') {{ discount.priceGroup.name || discount.priceGroupId}}
+    .discount-scope(ng-switch-when='article') {{ discount.article.name || discount.articleId }}
     .discount-scope(ng-switch-when='saleOrder') На весь заказ
 
     .discount

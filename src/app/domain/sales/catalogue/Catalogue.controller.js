@@ -128,8 +128,8 @@
 
         });
 
-        vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
-          setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
+        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'], contractId => $timeout(10).then(() => {
+          setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
           setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
         }));
 
@@ -480,7 +480,7 @@
 
     // TODO: move to a separate helper
 
-    function setDiscounts(contractId, partnerId) {
+    function setDiscounts(contractId, partnerId, saleOrderId) {
 
       if (!contractId || !partnerId || !vm.prices) {
         vm.discountsBy = {};
@@ -491,12 +491,12 @@
 
       let priceTypeId = vm.currentPriceType.id;
 
-      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId})) {
+      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId, saleOrderId})) {
         console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
-      vm.discountsBy = {contractId, partnerId, priceTypeId};
+      vm.discountsBy = {contractId, partnerId, priceTypeId, saleOrderId};
 
       const contractFilter = {
         contractId: {'==': contractId}
@@ -546,12 +546,13 @@
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
 
-            let price = vm.prices[pos.articleId];
+            let {articleId} = pos;
+            let price = vm.prices[articleId];
 
             let posDiscount = pos.priceOrigin ? _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
 
             if (!price) {
-              price = vm.prices[pos.articleId] = {price: pos.priceOrigin};
+              price = vm.prices[articleId] = {price: pos.priceOrigin};
               console.warn(`setting prices from position ${pos.id}`);
             }
 
@@ -561,14 +562,18 @@
               pos.updateCost();
             }
 
-            let articleDiscount = vm.discounts.article[pos.articleId];
+            let articleDiscount = vm.discounts.article[articleId];
 
             let discount = articleDiscount ||
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
 
             if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01) {
-              vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
+              let customDiscount = _.assign(articleDiscount || {}, {
+                discount: posDiscount,
+                articleId
+              });
+              vm.discounts.article[articleId] = customDiscount;
             }
 
           });
@@ -759,7 +764,7 @@
 
       DEBUG('filterStock', 'end');
 
-      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'));
+      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
 
       vm.busyFilteringStock = false;
 
