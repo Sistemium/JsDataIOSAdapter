@@ -1,0 +1,36 @@
+@import "variables";
+
+sale-order-discount-info {
+
+  display: inline-block;
+  //margin-left: 15px;
+
+  .sale-order-discount-info {
+    display: inline-block;
+    width: 100%;
+  }
+
+  .popover {
+    max-width: 350px;
+    .popover-inner {
+      min-width: 250px;
+    }
+  }
+
+  .sale-order-discount {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+
+    .discount {
+      margin-left: 10px;
+      min-width: 50px;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+  }
+
+}

@@ -5,7 +5,10 @@
       h4.popovers(ng-transclude='popovers')
       .totals(ng-transclude='totals')
     .menu
-      a(href ng-click='vm.saleOrderExpanded = !vm.saleOrderExpanded')
+
+      sale-order-discount-info(sale-order='vm.saleOrder' ng-if='!vm.saleOrderExpanded')
+
+      a.expander(href ng-click='vm.saleOrderExpanded = !vm.saleOrderExpanded')
         i.scalable.glyphicon.glyphicon-menu-hamburger(ng-class='{"scale-y-50": vm.saleOrderExpanded}')
 
   .sale-order-collapsible(uib-collapse='!vm.saleOrderExpanded')
