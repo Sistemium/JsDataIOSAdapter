@@ -133,6 +133,13 @@
           vm.saleOrderId = saleOrder && saleOrder.id;
         });
 
+        $scope.$watch('vm.searchEnterPress', () => {
+          if (vm.searchEnterPress) {
+            setCurrentArticleGroup();
+            vm.searchEnterPress = !vm.searchEnterPress;
+          }
+        });
+
         vm.watchScope('vm.saleOrder.id', newValue => {
 
           let afterChangeOrder = true;
@@ -463,6 +470,8 @@
       } else {
         vm.filters.push(filter);
       }
+
+      //TODO: simplify
 
     }
 
@@ -944,7 +953,6 @@
 
     }
 
-
     function setFirstLevelGroups(currentArticleGroup) {
 
       DEBUG('setFirstLevelGroups', 'start');
@@ -977,7 +985,6 @@
       DEBUG('setFirstLevelGroups', 'end');
 
     }
-
 
     function hasArticlesOrGroupsInStock(groupIds) {
       return articleGroup => {
