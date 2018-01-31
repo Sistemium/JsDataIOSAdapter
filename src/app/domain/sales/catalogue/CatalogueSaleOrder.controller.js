@@ -80,7 +80,13 @@
       vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
     });
 
-    vm.watchScope('vm.saleOrder.outletId', () => {
+    vm.watchScope('vm.saleOrder.outletId', onOutletChange);
+
+    /*
+     Handlers
+     */
+
+    function onOutletChange() {
 
       if (!vm.saleOrder) {
         vm.lastSaleOrderId = false;
@@ -96,11 +102,7 @@
 
       vm.saleOrder.commentText = commentText;
 
-    });
-
-    /*
-     Handlers
-     */
+    }
 
     function saleOrderClick() {
       if (vm.isSaleOrderPopoverOpen) {
@@ -154,7 +156,7 @@
             $state.go('.', {saleOrderId: saleOrder.id}, {notify: false});
             saleOrderId = saleOrder.id;
             bindToChanges();
-            $scope.$emit('setSaleOrder', saleOrder);
+            $scope.$emit('setSaleOrderId', saleOrder.id);
           }
         });
 

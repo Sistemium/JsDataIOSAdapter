@@ -101,39 +101,8 @@
       .then(findAll)
       .then(() => {
 
-        vm.watchScope('vm.fontSize', fontSize => {
-          if (fontSize) {
-            localStorageService.set(FONT_SIZE_KEY, fontSize);
-          }
-        });
-
         vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
           vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
-        });
-
-        vm.onScope(
-          'rootClick',
-          () => $state.go('sales.catalogue')
-            .then(() => setCurrentArticleGroup(null))
-        );
-
-        vm.watchScope('vm.search', (newValue, oldValue) => {
-          if (newValue != oldValue) {
-            vm.firstLevelGroups = null;
-            setCurrentArticleGroup(vm.currentArticleGroup);
-          }
-        });
-
-        $scope.$watchCollection('vm.filters', (o, n) => {
-          if (o && n && (o.length || n.length)) {
-            vm.firstLevelGroups = null;
-            setCurrentArticleGroup(vm.currentArticleGroup);
-          }
-        });
-
-        $scope.$on('setSaleOrder', (event, saleOrder) => {
-          vm.saleOrder = saleOrder;
-          vm.saleOrderId = saleOrder && saleOrder.id;
         });
 
         vm.watchScope('vm.saleOrder.id', newValue => {
@@ -173,49 +142,6 @@
 
         });
 
-        vm.watchScope(
-          isWideScreen,
-          (newValue, oldValue) => {
-            if (newValue !== oldValue) {
-              $scope.$broadcast('vsRepeatTrigger');
-            }
-            vm.isWideScreen = newValue;
-            vm.articleRowHeight = articleRowHeight();
-          }
-        );
-
-        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
-        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
-
-          if (e.resource !== 'Stock') return;
-
-          DEBUG('jsData:updateCollection', e);
-          //
-          // let options = {
-          //   limit: 10000,
-          //   bypassCache: true,
-          //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-          // };
-
-          Stock.meta.findAllUpdates()
-            .then(res => {
-
-              let index = {};
-
-              _.each(res, item => index[item.id] = item);
-
-              onJSDataFinished({
-                model: Stock,
-                index: index,
-                data: res
-              });
-
-            });
-
-        }));
-
-        $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
-
         vm.watchScope('vm.saleOrder.outlet.id', (outletId) => {
 
           if (!outletId) return vm.articleStats = {};
@@ -244,9 +170,91 @@
      Listeners
      */
 
+    $scope.$on('setSaleOrderId', setSaleOrderId);
+
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
+
+    vm.watchScope('vm.fontSize', fontSize => {
+      if (fontSize) {
+        localStorageService.set(FONT_SIZE_KEY, fontSize);
+      }
+    });
+
+    vm.onScope(
+      'rootClick',
+      () => $state.go('sales.catalogue')
+        .then(() => setCurrentArticleGroup(null))
+    );
+
+    vm.watchScope('vm.search', (newValue, oldValue) => {
+      if (newValue != oldValue) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
+    });
+
+    $scope.$watchCollection('vm.filters', (o, n) => {
+      if (o && n && (o.length || n.length)) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
+    });
+
+    vm.watchScope(
+      isWideScreen,
+      (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+          $scope.$broadcast('vsRepeatTrigger');
+        }
+        vm.isWideScreen = newValue;
+        vm.articleRowHeight = articleRowHeight();
+      }
+    );
+
     /*
      Handlers
      */
+
+    function onJSDataCollection(e) {
+
+      if (e.resource !== 'Stock') return;
+
+      DEBUG('jsData:updateCollection', e);
+      //
+      // let options = {
+      //   limit: 10000,
+      //   bypassCache: true,
+      //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+      // };
+
+      Stock.meta.findAllUpdates()
+        .then(res => {
+
+          let index = {};
+
+          _.each(res, item => index[item.id] = item);
+
+          onJSDataFinished({
+            model: Stock,
+            index: index,
+            data: res
+          });
+
+        });
+
+    }
+
+    function setSaleOrderId(event, saleOrderId) {
+
+      console.warn('setSaleOrderId', saleOrderId);
+
+      vm.saleOrderId = saleOrderId;
+
+      vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder');
+
+    }
 
     function onScrolledToBeginning() {
 
@@ -422,8 +430,9 @@
 
     function onStateChange(to, params) {
 
-      vm.saleOrderId = params.saleOrderId;
-      vm.rebindOne(SaleOrder, vm.saleOrderId, 'vm.saleOrder');
+      console.warn('onStateChange', params);
+
+      setSaleOrderId({}, params.saleOrderId);
 
       currentArticleGroupId = params.articleGroupId;
 
@@ -558,7 +567,7 @@
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
 
-            if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount/100.0) - pos.price) > 0.01) {
+            if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01) {
               vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
             }
 
