@@ -10,7 +10,7 @@
       cgBusy: '=busy'
     },
 
-    templateUrl: 'app/domain/components/uncashPopover/uncashPopover.html',
+    templateUrl: 'app/domain/sales/debts/uncashPopover/uncashPopover.html',
 
     controllerAs: 'vm'
 
