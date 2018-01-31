@@ -856,7 +856,9 @@
         updatePrices(discountScope, filter);
 
         if (!vm.saleOrderDiscountsDisabled) {
-          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent);
+          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent)
+            .then(res => _.set(vm.discounts, path, res))
+            .catch(_.identity);
         }
 
       }
