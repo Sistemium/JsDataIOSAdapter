@@ -11,7 +11,10 @@
 
     const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr, DomainOption} = Helpers;
     const {
-      Article, Stock, ArticleGroup, PriceType, SaleOrder, SaleOrderPosition, Price,
+      Article, Stock, ArticleGroup, PriceType, SaleOrder,
+      SaleOrderPosition,
+      SaleOrderDiscount,
+      Price,
       CatalogueAlert,
       ArticlePicture,
       ContractPriceGroup,
@@ -98,16 +101,11 @@
       .then(findAll)
       .then(() => {
 
-        vm.watchScope('vm.fontSize', fontSize => {
-          if (fontSize) {
-            localStorageService.set(FONT_SIZE_KEY, fontSize);
-          }
-        });
-
         vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
           vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
         });
 
+<<<<<<< HEAD
         vm.onScope(
           'rootClick',
           () => $state.go('sales.catalogue')
@@ -140,6 +138,8 @@
           }
         });
 
+=======
+>>>>>>> groupDiscounts
         vm.watchScope('vm.saleOrder.id', newValue => {
 
           let afterChangeOrder = true;
@@ -177,49 +177,6 @@
 
         });
 
-        vm.watchScope(
-          isWideScreen,
-          (newValue, oldValue) => {
-            if (newValue !== oldValue) {
-              $scope.$broadcast('vsRepeatTrigger');
-            }
-            vm.isWideScreen = newValue;
-            vm.articleRowHeight = articleRowHeight();
-          }
-        );
-
-        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
-        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
-
-          if (e.resource !== 'Stock') return;
-
-          DEBUG('jsData:updateCollection', e);
-          //
-          // let options = {
-          //   limit: 10000,
-          //   bypassCache: true,
-          //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-          // };
-
-          Stock.meta.findAllUpdates()
-            .then(res => {
-
-              let index = {};
-
-              _.each(res, item => index[item.id] = item);
-
-              onJSDataFinished({
-                model: Stock,
-                index: index,
-                data: res
-              });
-
-            });
-
-        }));
-
-        $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
-
         vm.watchScope('vm.saleOrder.outlet.id', (outletId) => {
 
           if (!outletId) return vm.articleStats = {};
@@ -248,9 +205,91 @@
      Listeners
      */
 
+    $scope.$on('setSaleOrderId', setSaleOrderId);
+
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
+
+    vm.watchScope('vm.fontSize', fontSize => {
+      if (fontSize) {
+        localStorageService.set(FONT_SIZE_KEY, fontSize);
+      }
+    });
+
+    vm.onScope(
+      'rootClick',
+      () => $state.go('sales.catalogue')
+        .then(() => setCurrentArticleGroup(null))
+    );
+
+    vm.watchScope('vm.search', (newValue, oldValue) => {
+      if (newValue != oldValue) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
+    });
+
+    $scope.$watchCollection('vm.filters', (o, n) => {
+      if (o && n && (o.length || n.length)) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
+    });
+
+    vm.watchScope(
+      isWideScreen,
+      (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+          $scope.$broadcast('vsRepeatTrigger');
+        }
+        vm.isWideScreen = newValue;
+        vm.articleRowHeight = articleRowHeight();
+      }
+    );
+
     /*
      Handlers
      */
+
+    function onJSDataCollection(e) {
+
+      if (e.resource !== 'Stock') return;
+
+      DEBUG('jsData:updateCollection', e);
+      //
+      // let options = {
+      //   limit: 10000,
+      //   bypassCache: true,
+      //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+      // };
+
+      Stock.meta.findAllUpdates()
+        .then(res => {
+
+          let index = {};
+
+          _.each(res, item => index[item.id] = item);
+
+          onJSDataFinished({
+            model: Stock,
+            index: index,
+            data: res
+          });
+
+        });
+
+    }
+
+    function setSaleOrderId(event, saleOrderId) {
+
+      console.warn('setSaleOrderId', saleOrderId);
+
+      vm.saleOrderId = saleOrderId;
+
+      vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder');
+
+    }
 
     function onScrolledToBeginning() {
 
@@ -426,8 +465,9 @@
 
     function onStateChange(to, params) {
 
-      vm.saleOrderId = params.saleOrderId;
-      vm.rebindOne(SaleOrder, vm.saleOrderId, 'vm.saleOrder');
+      console.warn('onStateChange', params);
+
+      setSaleOrderId({}, params.saleOrderId);
 
       currentArticleGroupId = params.articleGroupId;
 
@@ -512,20 +552,34 @@
         ContractArticle.findAll({where: contractFilter}, {cacheResponse: false}),
         ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false}),
         PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false}),
-        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false})
+        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false}),
+        vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
+          .catch(() => {
+            vm.saleOrderDiscountsDisabled = true;
+          })
       ])
         .then(allData => {
 
+          let {discounts} = vm.saleOrder;
+          let saleOrderScopeDiscount = _.find(discounts, {discountScope: 'saleOrder'});
+
           let discountModel = {
-            article: _.keyBy([..._.filter(allData[0], 'discount'), ..._.filter(allData[2], 'discount')], 'articleId'),
-            priceGroup: _.keyBy([..._.filter(allData[1], 'discount'), ..._.filter(allData[3], 'discount')], 'priceGroupId')
+            article: _.keyBy([
+              ..._.filter(discounts, 'articleId'),
+              ..._.filter(allData[0], 'discount'),
+              ..._.filter(allData[2], 'discount')
+            ], 'articleId'),
+            priceGroup: _.keyBy([
+              ..._.filter(discounts, 'priceGroupId'),
+              ..._.filter(allData[1], 'discount'),
+              ..._.filter(allData[3], 'discount')
+            ], 'priceGroupId'),
+            saleOrder: saleOrderScopeDiscount || {}
           };
 
           console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
-          setDiscountsWithModelData(discountModel.article, discountModel.priceGroup);
-
-          DEBUG('setDiscounts end', contractId);
+          setDiscountsWithModelData(discountModel.article, discountModel.priceGroup, discountModel.saleOrder);
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
 
@@ -544,17 +598,19 @@
               pos.updateCost();
             }
 
-            let discount = vm.discounts.article[pos.articleId] || vm.discounts.priceGroup[pos.article.priceGroupId];
+            let articleDiscount = vm.discounts.article[pos.articleId];
 
-            // if (discount && !posDiscount) {
-            //   pos.price = _.round(pos.priceOrigin * (1.0 - discount.discount / 100.0), 2);
-            //   pos.updateCost();
-            // } else
-            if (!discount && posDiscount || discount && Math.abs(discount.discount - posDiscount) > 0.01) {
-              vm.discounts.article[pos.articleId] = _.assign(discount || {}, {discount: posDiscount});
+            let discount = articleDiscount ||
+              vm.discounts.priceGroup[pos.article.priceGroupId] ||
+              saleOrderScopeDiscount;
+
+            if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01) {
+              vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
             }
 
           });
+
+          DEBUG('setDiscounts end', vm.discounts);
 
           if (_.get(vm.saleOrder, 'positions.length')) {
             vm.saleOrder.updateTotalCost();
@@ -567,9 +623,9 @@
 
     }
 
-    function setDiscountsWithModelData(byArticleId = {}, byPriceGroup = {}) {
+    function setDiscountsWithModelData(article = {}, priceGroup = {}, saleOrder = {}) {
 
-      vm.discounts = {priceGroup: byPriceGroup, saleOrder: {}, article: byArticleId};
+      vm.discounts = {priceGroup, saleOrder, article};
 
     }
 
@@ -785,31 +841,55 @@
 
         let path = 'saleOrder';
         let filter = {};
+        let {articleId} = this;
 
         if (discountScope === 'article') {
 
-          path = `article.${this.articleId}`;
+          path = `article.${articleId}`;
 
-          filter.articleId = this.articleId;
+          filter.articleId = articleId;
           filter.stock = this;
 
         } else {
 
-          delete vm.discounts.article[this.articleId];
+          let saleOrderDiscount = vm.discounts.article[articleId];
+
+          if (saleOrderDiscount) {
+            delete vm.discounts.article[articleId];
+            if (saleOrderDiscount.constructor.name === 'SaleOrderDiscount') {
+              saleOrderDiscount.id && saleOrderDiscount.DSDestroy();
+            }
+          }
 
           if (discountScope === 'priceGroup') {
             path = `priceGroup.${this.article.priceGroupId}`;
             filter.priceGroupId = this.article.priceGroupId;
           } else if (discountScope === 'saleOrder') {
-            delete vm.discounts.priceGroup[this.article.priceGroupId];
+
+            let saleOrderDiscount = vm.discounts.priceGroup[this.article.priceGroupId];
+
+            if (saleOrderDiscount) {
+              delete vm.discounts.priceGroup[this.article.priceGroupId];
+              if (saleOrderDiscount.constructor.name === 'SaleOrderDiscount') {
+                saleOrderDiscount.DSDestroy();
+              }
+            }
+
             path = 'saleOrder';
+
           }
 
         }
 
         _.set(vm.discounts, `${path}.discount`, discountPercent);
 
+        filter.path = path;
+
         updatePrices(discountScope, filter);
+
+        if (!vm.saleOrderDiscountsDisabled) {
+          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent);
+        }
 
       }
 
@@ -856,11 +936,17 @@
 
           let newPrice = stock.discountPrice();
 
-          if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) return;
+          if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) {
+            return;
+          }
 
           position.price = newPrice;
           position.updateCost();
           saleOrder = position.saleOrder;
+
+          if (!vm.saleOrderDiscountsDisabled) {
+            SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, filter.path, stock.discountPercent());
+          }
 
         });
 

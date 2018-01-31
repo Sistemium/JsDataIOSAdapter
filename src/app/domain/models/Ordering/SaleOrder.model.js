@@ -40,6 +40,10 @@
           SaleOrderPosition: {
             localField: 'positions',
             foreignKey: 'saleOrderId'
+          },
+          SaleOrderDiscount: {
+            localField: 'discounts',
+            foreignKey: 'saleOrderId'
           }
         }
       },

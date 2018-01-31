@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 .cog-button {
   width: 125px;
@@ -106,6 +106,7 @@ salesman-menu {
     }
 
     .option {
+      display: block;
       outline: 0;
       padding: 0 10px;
       span {

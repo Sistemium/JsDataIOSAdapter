@@ -25,8 +25,7 @@
     };
 
     function usePriceGroups() {
-      return customerCode() === 'r50';
-        //_.get(Auth.getAccount(), 'org') === 'r50';
+      return /r50p?$/.test(customerCode());
 
     }
 
@@ -90,7 +89,7 @@
     }
 
     function saleOrdersDisabled() {
-      return customerCode() === 'bs';
+      return customerCode() === 'bs' === _.get(Auth.getAccount(), 'org');
     }
 
     function visitsDisabled() {

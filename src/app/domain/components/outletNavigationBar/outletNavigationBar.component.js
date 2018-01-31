@@ -15,10 +15,10 @@
 
   });
 
-  function outletNavigationBar($timeout, $scope, $window) {
+  function outletNavigationBar($timeout, $scope, $window, saEtc) {
 
     const vm = _.assign(this, {
-      tabs: {saleOrder: 'Заказы', debt: 'Долги', visit: 'Визиты', miscellaneous: 'Прочее'},
+      tabs: {miscellaneous: 'О точке', saleOrder: 'Заказы', debt: 'Долги', visit: 'Визиты'},
       $onInit,
       moveTo,
       showLeft: null,
@@ -26,20 +26,17 @@
     });
 
     const tabCount = Object.keys(vm.tabs).length;
-    const tabBar = angular.element(document.getElementsByClassName('tab-bar'))[0];
+    const tabBar = angular.element(saEtc.getElementById('outlet-navigation-tabbar'))[0];
+
+    const debouncedDefineChevron = _.debounce(defineChevron, 100);
+
+    angular.element(tabBar).on('scroll', debouncedDefineChevron);
+
+    angular.element($window).on('resize', debouncedDefineChevron);
 
     $scope.$on('$destroy', () => {
-      angular.element(tabBar).unbind('scroll');
-      angular.element($window).unbind('resize');
+      angular.element($window).off('resize', debouncedDefineChevron)
     });
-
-    angular.element(tabBar).bind('scroll', _.debounce(() => {
-      defineChevron();
-    }, 100));
-
-    angular.element($window).bind('resize', _.debounce(() => {
-      defineChevron();
-    }, 100));
 
     function defineChevron() {
       let tab = angular.element(document.getElementsByClassName('tab'))[0];

@@ -1,5 +1,5 @@
-@import "../../../styles/variables";
-@import "../../../styles/flags";
+@import "variables";
+@import "flags";
 
 .sale-order-details {
 
@@ -33,7 +33,7 @@
       }
 
       .toggle-edit {
-        margin-left: 15px;
+        margin-left: 20px;
       }
 
       .has-positions {

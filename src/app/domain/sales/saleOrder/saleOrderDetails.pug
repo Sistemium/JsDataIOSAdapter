@@ -42,6 +42,7 @@
         ng-if='vm.overLimit'
         contract='vm.saleOrder.contract'
         ) Превышение лимита: {{ vm.overLimit | number:2 }}
+          span.currency ₽
 
       .no-positions(ng-if='saleOrderExpanded')
         span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций

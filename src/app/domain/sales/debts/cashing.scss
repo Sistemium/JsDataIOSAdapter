@@ -1,0 +1,186 @@
+@import "variables";
+
+.uncashed {
+
+  $field-width: 110px;
+  $margin: $margin-bottom-xs;
+  $headers-border: solid 1px $border-gray;
+
+  .alert {
+
+    @extend %flex-row;
+    @extend %rounded-borders;
+
+    align-items: center;
+
+    @include responsive-only(xxs) {
+      display: block;
+    }
+
+    .popovers {
+
+      flex: 1;
+      font-size: 110%;
+      padding: 6px 0;
+
+      label {
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+    }
+
+    .buttons {
+
+      @extend %flex-row;
+      @include responsive-only(xxs) {
+        uncash-popover {
+          flex: 1;
+        }
+      }
+      align-items: center;
+      text-align: right;
+
+    }
+
+  }
+
+  .uncashing-popover {
+
+    min-width: 200px;
+
+    .option {
+      .summ {
+        display: block;
+        text-align: right;
+      }
+    }
+
+    .divider {
+      font-size: 75%;
+      color: lighten($black, 10%);
+      padding: 3px 0 3px 3px;
+      background: $border-gray;
+    }
+
+  }
+
+  .outlet {
+
+    padding: 5px 0;
+    border-bottom: $headers-border;
+
+    .title {
+
+      text-align: left;
+
+      .name {
+        font-size: 18px;
+      }
+      .address {
+        color: $gray;
+      }
+
+    }
+
+    .cashings {
+
+      text-align: right;
+
+      .cashing {
+
+        padding: 3px 0;
+
+        @extend %flex-row;
+        justify-content: flex-end;
+
+        .commentText {
+          flex: 1;
+          width: auto;
+        }
+
+        > * + * {
+          margin-left: 10px;
+        }
+
+        > * {
+          width: $field-width;
+          display: inline-block;
+        }
+
+        .cash-this {
+          width: 20px;
+        }
+
+        .ndoc {
+          text-align: left;
+          @include responsive-only(gt-xxs) {
+            width: $field-width * 1.85;
+          }
+          .detete-btn {
+            margin-left: 5px;
+            color: $red;
+          }
+        }
+
+        strong {
+          font-weight: normal;
+        }
+
+        &:last-child strong {
+          font-weight: bold;
+        }
+
+        &.total {
+          padding-right: 30px;
+        }
+
+      }
+
+    }
+
+  }
+
+  .buttons {
+    > * + * {
+      margin-left: 6px;
+    }
+  }
+
+  .footer {
+
+    min-height: 45px;
+    border-top: $headers-border;
+    color: $gray;
+    text-align: right;
+
+    @extend %flex-row;
+    justify-content: space-between;
+    align-items: center;
+
+    strong {
+      color: $black;
+    }
+
+    .totals {
+
+      > * {
+        min-width: $field-width;
+        display: inline-block;
+      }
+
+      @include responsive-only(xxs) {
+        label {
+          display: none;
+        }
+      }
+
+    }
+
+  }
+
+  .empty {
+    @extend %center-vertical;
+  }
+
+}

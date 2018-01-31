@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 sale-order-alert {
 
@@ -163,7 +163,7 @@ sale-order-alert {
   min-width: 0;
 
   & + .menu {
-    margin-left: 15px;
+    margin-left: 10px;
     font-size: 22px;
     margin-top: 4px;
   }

@@ -41,9 +41,22 @@
           let match = name.match(/"([^"]*[^ ])"/) || name.match(/"([^"]*[^ "]*)"/);
           return match ? match[1] : name;
         }]
+      },
+
+      methods: {
+        hasExclusions
       }
 
     });
+
+    function hasExclusions() {
+      return this.allowAnyVolume ||
+        this.allowLowTotal ||
+        this.allowAnyTotal ||
+        this.allowNoCharges ||
+        this.allowNoDocDiscounts;
+    }
+
 
   });
 

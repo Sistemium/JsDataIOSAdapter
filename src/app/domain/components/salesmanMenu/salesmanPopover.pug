@@ -6,7 +6,8 @@ resize
 resize-offset-top='25'
 )
 
-  .option(
+  a.option(
+  href
   ng-repeat='salesman in vm.salesmen track by salesman.id'
   ng-class='{current: vm.selectedSalesman.id == salesman.id}'
   ng-click='vm.salesmanClick(salesman)'

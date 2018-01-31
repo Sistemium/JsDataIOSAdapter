@@ -4,12 +4,12 @@ ng-class='{disabled: vm.isDisabled(), "no-options": !vm.hasOptions}'
 )
 
   a(
-    href
-    uib-popover-template="'app/domain/components/salesmanMenu/salesmanPopover.html'"
-    popover-placement='bottom-right'
-    popover-trigger='outsideClick'
-    popover-is-open='vm.isOpen'
-    )
-      span(ng-if='vm.toggleLabel()') {{ vm.toggleLabel() }}
-      span.glyphicon.glyphicon-user(ng-if='!vm.toggleLabel()')
-      span.caret
+  href
+  uib-popover-template="'app/domain/components/salesmanMenu/salesmanPopover.html'"
+  popover-placement='bottom-right'
+  popover-trigger='outsideClick'
+  popover-is-open='vm.isOpen'
+  )
+    span(ng-if='vm.toggleLabel()') {{ vm.toggleLabel() }}
+    span.glyphicon.glyphicon-user(ng-if='!vm.toggleLabel()')
+    span.caret
