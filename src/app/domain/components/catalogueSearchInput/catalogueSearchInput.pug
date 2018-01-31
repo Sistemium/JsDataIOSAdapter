@@ -1,0 +1,33 @@
+.stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
+
+  label(for="search-input")
+    i.glyphicon.glyphicon-search
+
+  input#search-input.form-control(
+  type='search'
+  placeholder='Поиск'
+  select-on-focus
+  track-focused
+  aria-describedby='search-input'
+  ng-model='vm.search'
+  ng-model-options='{debounce: vm.debounce}'
+  on-enter='vm.onSearchEnter()'
+
+  popover-placement='bottom auto'
+  popover-trigger='"outsideClick"'
+  uib-popover-template="'app/domain/components/catalogueSearchInput/searchInputPopover.html'"
+  popover-is-open='vm.searchInput'
+  )
+
+  span.form-control-feedback(ng-hide='!vm.search')
+    a(ng-click='vm.clearSearchClick()' href)
+      i.glyphicon.glyphicon-remove
+
+  .filters
+    a.filter(
+    href
+    ng-click='vm.removeFilterClick(filter)'
+    ng-repeat='filter in vm.filters track by $index'
+    )
+      i.glyphicon.glyphicon-remove
+      span {{ filter.label }}

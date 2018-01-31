@@ -1,0 +1,12 @@
+.search-input-popover {
+
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+
+  a {
+    padding: 0 20px;
+    border: 1px solid #000;
+    margin: 5px;
+  }
+}
