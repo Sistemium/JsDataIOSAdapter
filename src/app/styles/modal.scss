@@ -1,3 +1,5 @@
+@import "variables";
+
 .modal-footer {
   .btn {
     margin: 5px;
@@ -9,4 +11,32 @@ body.modal-open {
   > .container {
     pointer-events: none;
   }
+}
+
+.modal.modal-info {
+
+  // to show saleOrder header
+  top: 50px;
+
+  .modal-header {
+
+    text-align: left;
+    background: $gray-background-color;
+
+    .name {
+      color: $dark-blue;
+      flex: 1;
+      margin: 6px;
+    }
+
+    button .glyphicon {
+      top: 3px;
+    }
+
+    padding: 3px;
+    display: flex;
+    align-items: center;
+
+  }
+
 }
