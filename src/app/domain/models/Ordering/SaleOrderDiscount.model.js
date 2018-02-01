@@ -29,7 +29,8 @@
       },
 
       meta: {
-        updateSaleOrder
+        updateSaleOrder,
+        updateDiscountsWithSaleOrder
       }
 
     });
@@ -65,6 +66,39 @@
       }
 
       return existing.DSCreate();
+
+    }
+
+    function updateDiscountsWithSaleOrder(discounts, saleOrderPositions) {
+
+      let saleOrderScopeDiscount = _.find(discounts, {discountScope: 'saleOrder'});
+
+      _.each(saleOrderPositions, pos => {
+
+        let {articleId, priceOrigin, price} = pos;
+        let posDiscount = priceOrigin ? _.round((priceOrigin - price) / priceOrigin * 100.0, 2) : 0;
+
+        let articleDiscount = _.find(discounts, {articleId});
+
+        let discount = articleDiscount ||
+          _.find(discounts, {priceGroupId: pos.article.priceGroupId}) ||
+          saleOrderScopeDiscount;
+
+        if (!discount && posDiscount || discount && Math.abs(priceOrigin * (1.0 - discount.discount / 100.0) - price) > 0.01) {
+          let customDiscount = _.assign(articleDiscount || SaleOrderDiscount.createInstance({id: articleId}), {
+            discount: posDiscount,
+            articleId,
+            discountScope: 'article'
+          });
+          if (!articleDiscount) {
+            discounts.push(customDiscount);
+          }
+        }
+
+
+      });
+
+      return discounts;
 
     }
 

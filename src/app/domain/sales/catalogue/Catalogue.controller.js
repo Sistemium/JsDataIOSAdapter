@@ -569,10 +569,11 @@
               saleOrderScopeDiscount;
 
             if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01) {
-              let customDiscount = _.assign(articleDiscount || {}, {
-                discount: posDiscount,
-                articleId
-              });
+              let customDiscount = _.assign(
+                articleDiscount || SaleOrderDiscount.createInstance({discountScope: 'article'}), {
+                  discount: posDiscount,
+                  articleId
+                });
               vm.discounts.article[articleId] = customDiscount;
             }
 

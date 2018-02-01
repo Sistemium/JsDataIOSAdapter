@@ -28,27 +28,33 @@
 
     function $onInit() {
 
-      if (vm.catalogueDiscounts) {
-        return onCatalogueDiscounts();
+      let {catalogueDiscounts} = vm;
+
+      if (catalogueDiscounts) {
+        return onCatalogueDiscounts(catalogueDiscounts);
       }
 
       let saleOrderId = vm.saleOrder.id;
       let orderBy = [['discountScope', 'DESC']];
 
-      SaleOrderDiscount.bindAll({saleOrderId, orderBy}, $scope, 'vm.discounts');
+      SaleOrderDiscount.bindAll({saleOrderId, orderBy}, $scope, 'vm.saleOrderDiscounts', onSaleOrderDiscounts);
       vm.busy = SaleOrderDiscount.findAllWithRelations({saleOrderId}, {bypassCache: true})(['PriceGroup', 'Article'])
         .finally(() => vm.busy = false);
 
     }
 
-    function onCatalogueDiscounts() {
+    function onSaleOrderDiscounts() {
+      setDiscounts(SaleOrderDiscount.meta.updateDiscountsWithSaleOrder(vm.saleOrderDiscounts, vm.saleOrder.positions));
+    }
 
-      vm.discounts = [];
+    function onCatalogueDiscounts(catalogueDiscounts) {
 
-      _.each(vm.catalogueDiscounts, (discounts, discountScope) => {
+      let discountsArray = [];
+
+      _.each(catalogueDiscounts, (discounts, discountScope) => {
 
         if (discounts.discount) {
-          vm.discounts.push(discounts);
+          discountsArray.push(discounts);
           return;
         }
 
@@ -85,16 +91,20 @@
 
         mapped = _.filter(mapped);
 
-        vm.discounts.push(...mapped);
+        discountsArray.push(...mapped);
 
       });
 
+      setDiscounts(discountsArray);
+
+    }
+
+    function setDiscounts(discountsArray) {
       vm.discounts = _.orderBy(
-        vm.discounts,
+        discountsArray,
         ['discountScope', 'article.name', 'priceGroup.name'],
         ['desc', 'asc', 'asc']
       );
-
     }
 
   }
