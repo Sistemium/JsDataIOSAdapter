@@ -104,7 +104,7 @@
 
       return SaleOrder.find($state.params.id)
         .then(saleOrder => saleOrder.DSLoadRelations('SaleOrderPosition', {bypassCache: true}))
-        .then(saleOrder => SaleOrder.loadRelations(saleOrder))
+        .then(saleOrder => SaleOrder.loadRelations(saleOrder,['Outlet', 'Contract', 'Salesman']))
         .then(saleOrder => {
 
           Contract.find(saleOrder.contractId);
