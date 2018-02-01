@@ -14,7 +14,7 @@
     controller: saKeyboardController
 
   };
-
+  /** @ngInject */
   function saKeyboardController($scope, $injector) {
 
     const vm = _.assign(this, {
