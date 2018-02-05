@@ -91,7 +91,7 @@
     }
 
     function setLast() {
-      vm.lastReadCommentaries = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+      vm.lastReadCommentaries = moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
     }
 
     function pictureRemoveClick(picture) {
@@ -162,7 +162,7 @@
     }
 
     function onCommentarySubmit() {
-      vm.commentary.timestamp = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+      vm.commentary.timestamp = moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
       vm.commentary.DSCreate()
         .then(initCommentary)
         .then(() => $timeout(100))
