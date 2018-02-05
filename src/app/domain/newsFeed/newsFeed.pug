@@ -59,15 +59,22 @@
           news-message-ratings-popover(news-message='newsMessage' ng-if='vm.discloseRatings')
             span ({{ newsMessage.ratingsCount }})
 
+        .commentary-stats(
+        ng-if='vm.commentaryStats[newsMessage.id]'
+        ng-class='{red: newsMessage.hasUnreadComments(vm.commentaryStats)}'
+        )
+          label Комментарии:
+          strong {{ vm.commentaryStats[newsMessage.id]['count()'] }}
+
         .rating(ng-if='!newsMessage.isAuthor()')
 
-          label {{ vm.ratings[newsMessage.id] ? 'Ваша оценка:' : 'Оцените:' }}
+          label {{ vm.ratings[newsMessage.id].rating ? 'Ваша оценка:' : 'Оцените:' }}
 
           span(
           uib-rating
           enable-reset='false'
           titles='vm.ratingTitles'
-          ng-model='vm.ratings[newsMessage.id]'
+          ng-model='vm.ratings[newsMessage.id].rating'
           max='5'
           ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'
           )

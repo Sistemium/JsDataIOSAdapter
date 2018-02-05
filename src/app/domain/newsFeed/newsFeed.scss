@@ -182,20 +182,38 @@
       align-items: center;
       margin-top: $padding * 2;
 
-      color: $gray;
+      @include responsive-only(xxs) {
+        .common-rating {
+          display: none;
+        }
+      }
+
+      > * + * {
+        margin-left: $margin;
+      }
+
+      > * label {
+        font-weight: normal;
+        color: $gray;
+        margin-right: $padding;
+      }
+
+      > .red {
+        label {
+          color: $red;
+        }
+        strong, label {
+          font-weight: bold;
+        }
+      }
 
       @include responsive-only(xxs) {
         flex-direction: column;
         align-items: flex-end;
       }
 
-      .common-rating {
-        > * {
-          font-weight: normal;
-        }
-        > label {
-          margin-right: $padding;
-        }
+      strong {
+        font-weight: normal;
       }
 
       > .rating {
@@ -208,16 +226,13 @@
         justify-content: flex-end;
         align-items: center;
 
-        label {
-          font-weight: normal;
-          color: $gray;
+        > label {
           margin-right: 0;
         }
 
       }
 
     }
-
 
   }
 

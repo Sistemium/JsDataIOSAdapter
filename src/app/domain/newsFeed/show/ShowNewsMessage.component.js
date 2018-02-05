@@ -17,10 +17,8 @@
     });
 
 
-  function ShowNewsMessageController(
-    $state, $scope, Schema, saControllerHelper, Auth, toastr, saEtc, moment, $timeout,
-    GalleryHelper
-  ) {
+  function ShowNewsMessageController($state, $scope, Schema, saControllerHelper, Auth, toastr, saEtc, moment, $timeout,
+                                     GalleryHelper) {
 
     const {NewsMessage, UserNewsMessage, Commentary, NewsMessagePicture} = Schema.models();
 
@@ -56,33 +54,45 @@
 
       let newsMessageId = vm.newsMessageId;
 
-      let filter = {newsMessageId};
-
-      vm.rebindOne(NewsMessage, newsMessageId, 'vm.newsMessage');
-      vm.rebindAll(UserNewsMessage, filter, 'vm.userNewsMessages', setRating);
-      vm.rebindAll(NewsMessagePicture, filter, 'vm.newsMessagePictures');
-
-      let where = {ownerXid: {'==': newsMessageId}};
-      let orderBy = [['timestamp', 'DESC']];
-
-      vm.rebindAll(Commentary, {where, orderBy}, 'vm.commentaries');
-
+      vm.rebindOne(NewsMessage, newsMessageId, 'vm.newsMessage', loadChildren);
       vm.watchScope('vm.busySavingPicture', onBusySavingPicture);
 
-      Commentary.findAll({where})
-        .catch(() => vm.disableCommentaries = true);
-
       NewsMessage.find(newsMessageId);
-      NewsMessagePicture.findAll(filter);
-
-      initCommentary();
-      createNewsMessagePicture();
 
     }
 
     /*
     Functions
      */
+
+    function loadChildren() {
+
+      let newsMessageId = vm.newsMessageId;
+      let where = {ownerXid: {'==': newsMessageId}};
+      let orderBy = [['timestamp', 'DESC']];
+      let filter = {newsMessageId};
+
+      Commentary.findAll({where})
+        .catch(() => vm.disableCommentaries = true)
+        .then(() => {
+          UserNewsMessage.findAll(filter)
+        })
+        .then(() => {
+          vm.rebindAll(Commentary, {where, orderBy}, 'vm.commentaries', setLast);
+          vm.rebindAll(UserNewsMessage, filter, 'vm.userNewsMessages', setRating);
+        });
+
+      NewsMessagePicture.findAll(filter);
+      vm.rebindAll(NewsMessagePicture, {newsMessageId}, 'vm.newsMessagePictures');
+
+      createNewsMessagePicture();
+      initCommentary();
+
+    }
+
+    function setLast() {
+      vm.lastReadCommentaries = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+    }
 
     function pictureRemoveClick(picture) {
 
@@ -170,6 +180,14 @@
 
       vm.userNewsMessage = _.first(vm.userNewsMessages) ||
         UserNewsMessage.createInstance({newsMessageId, authId});
+
+      vm.userNewsMessage.lastReadCommentaries = vm.lastReadCommentaries;
+
+      let createFirst = vm.newsMessage.isAuthor() && !vm.userNewsMessage.id;
+
+      if (createFirst || vm.userNewsMessage.id && vm.userNewsMessage.DSHasChanges()) {
+        vm.userNewsMessage.DSCreate();
+      }
 
     }
 

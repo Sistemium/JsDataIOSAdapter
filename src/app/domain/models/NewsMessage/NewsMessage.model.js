@@ -37,7 +37,8 @@
       methods: {
         isAuthor,
         isUnrated,
-        htmlView
+        htmlView,
+        hasUnreadComments
       },
 
       meta: {
@@ -48,6 +49,10 @@
       }
 
     });
+
+    function hasUnreadComments(stats = {}) {
+      return _.get(stats[this.id], 'max(timestamp)') > (_.get(this.userNewsMessage, 'lastReadCommentaries') || '');
+    }
 
     function htmlView() {
 
