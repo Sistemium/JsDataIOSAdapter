@@ -151,6 +151,7 @@
     function newsRatingClick(newsMessage) {
 
       let newsMessageId = newsMessage.id;
+      let rating = _.get(vm.ratings[newsMessageId], 'rating');
 
       UserNewsMessage.findAll({newsMessageId}, {bypassCache: true})
         .then(userNewsMessages => {
@@ -162,7 +163,7 @@
             userNewsMessage = UserNewsMessage.createInstance({newsMessageId, authId});
           }
 
-          userNewsMessage.rating = _.get(vm.ratings[newsMessageId], 'rating');
+          userNewsMessage.rating = rating;
 
           if (!userNewsMessage.rating) {
             return;
