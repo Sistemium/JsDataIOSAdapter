@@ -9,7 +9,7 @@ resize resize-offset-top='40'
   ng-repeat='discount in vm.discounts | orderBy: ["-discountScope","priceGroup.name","article.name"] track by discount.id'
   ng-switch='discount.discountScope'
   )
-    .discount-scope(ng-switch-when='priceGroup') {{ discount.priceGroup.name }}
+    .discount-scope(ng-switch-when='priceGroup') Группа «{{ discount.priceGroup.name }}»
     .discount-scope(ng-switch-when='article') {{ discount.article.name }}
     .discount-scope(ng-switch-when='saleOrder') На весь заказ
 
