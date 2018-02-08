@@ -2,13 +2,15 @@
 
   angular.module('webPage').service('DomainOption', DomainOption);
 
-  function DomainOption(Auth) {
+  function DomainOption(Auth, $window) {
 
     const customerAlias = {
       dr50: 'r50',
       dev: 'bs',
       dr50p: 'r50p'
     };
+
+    const siteInstance = $window.location.hostname.replace(/\..*/, '');
 
     return {
       hasMVZ,
@@ -30,7 +32,9 @@
     }
 
     function allowDiscounts() {
-      return /r50p|bs/.test(customerCode()) || _.get(Auth.getAccount(), 'org') === 'dr50';
+      return customerCode() === 'bs' ||
+        _.get(Auth.getAccount(), 'org') === 'dr50' ||
+        (customerCode() === 'r50p' && siteInstance === 'isd');
     }
 
     function saleOrderMaxPositions() {
