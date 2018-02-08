@@ -34,7 +34,7 @@
     function allowDiscounts() {
       return customerCode() === 'bs' ||
         _.get(Auth.getAccount(), 'org') === 'dr50' ||
-        (customerCode() === 'r50p' && siteInstance === 'isd');
+        (customerCode() === 'r50p' && /isd|localhost/.test(siteInstance));
     }
 
     function saleOrderMaxPositions() {

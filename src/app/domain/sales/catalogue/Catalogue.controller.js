@@ -248,7 +248,7 @@
 
     function setSaleOrderId(event, saleOrderId) {
 
-      console.warn('setSaleOrderId', saleOrderId);
+      // console.warn('setSaleOrderId', saleOrderId);
 
       vm.saleOrderId = saleOrderId;
 
@@ -430,7 +430,7 @@
 
     function onStateChange(to, params) {
 
-      console.warn('onStateChange', params);
+      // console.warn('onStateChange', params);
 
       setSaleOrderId({}, params.saleOrderId);
 
@@ -484,7 +484,7 @@
 
       if (!contractId || !partnerId || !vm.prices) {
         vm.discountsBy = {};
-        console.warn('setDiscounts exit 1');
+        // console.warn('setDiscounts exit 1');
         setDiscountsWithModelData();
         return $q.resolve();
       }
@@ -492,7 +492,7 @@
       let priceTypeId = vm.currentPriceType.id;
 
       if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId, saleOrderId})) {
-        console.warn('setDiscounts exit 2');
+        // console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
@@ -540,7 +540,7 @@
             saleOrder: saleOrderScopeDiscount || {}
           };
 
-          console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
+          // console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
           setDiscountsWithModelData(discountModel.article, discountModel.priceGroup, discountModel.saleOrder);
 
@@ -553,7 +553,7 @@
 
             if (!price) {
               price = vm.prices[articleId] = {price: pos.priceOrigin};
-              console.warn(`setting prices from position ${pos.id}`);
+              // console.warn(`setting prices from position ${pos.id}`);
             }
 
             if (!pos.priceOrigin || pos.priceOrigin !== price.price) {
@@ -654,7 +654,7 @@
                 vm.currentPriceType = _.get(vm.saleOrder, 'priceType') || PriceType.meta.getDefault();
               }
 
-              console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
+              // console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
 
             });
 
