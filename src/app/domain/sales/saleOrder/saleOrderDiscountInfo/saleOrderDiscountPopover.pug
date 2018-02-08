@@ -1,18 +1,26 @@
-.sale-order-discount-popover.scroll-y(
-resize resize-offset-top='40'
-)
+.sale-order-discount-popover
 
   .no-data(ng-if='!vm.discounts.length')
     | {{ vm.busy ? 'Загрузка ...' : 'Скидки в заказе не предоставлены' }}
 
-  .sale-order-discount.list-item(
-  ng-repeat='discount in vm.discounts | orderBy: ["-discountScope","priceGroup.name","article.name"] track by discount.id'
-  ng-switch='discount.discountScope'
+  .scroll-y(
+  resize resize-offset-top='90'
   )
-    .discount-scope(ng-switch-when='priceGroup') Группа «{{ discount.priceGroup.name }}»
-    .discount-scope(ng-switch-when='article') {{ discount.article.name }}
-    .discount-scope(ng-switch-when='saleOrder') На весь заказ
 
-    .discount
-      strong {{ discount.discount | number }}
-      span.currency %
+    .sale-order-discount.list-item(
+    ng-repeat='discount in vm.discounts | orderBy: ["-discountScope","priceGroup.name","article.name"] track by discount.id'
+    ng-switch='discount.discountScope'
+    )
+      .discount-scope(ng-switch-when='priceGroup') Группа «{{ discount.priceGroup.name }}»
+      .discount-scope(ng-switch-when='article') {{ discount.article.name }}
+      .discount-scope(ng-switch-when='saleOrder') На весь заказ
+
+      .discount
+        strong {{ discount.discount | number }}
+        span.currency %
+
+  .totals
+
+    currency-value.discount-total(label='Итого скидка:' value='vm.saleOrder.totalCost - vm.totalCostNoDiscount')
+    currency-value.total-cost-no-discount(label='Итого без скидки:' value='vm.totalCostNoDiscount')
+

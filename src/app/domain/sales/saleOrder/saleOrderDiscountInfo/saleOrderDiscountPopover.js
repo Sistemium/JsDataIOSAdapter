@@ -28,8 +28,12 @@
 
     function $onInit() {
 
-      let {catalogueDiscounts} = vm;
+      let {catalogueDiscounts, saleOrder} = vm;
 
+      vm.totalCostNoDiscount = _.sumBy(saleOrder.positions, position => {
+        return position.priceOrigin * position.volume;
+      });
+      
       if (catalogueDiscounts) {
         return onCatalogueDiscounts(catalogueDiscounts);
       }
