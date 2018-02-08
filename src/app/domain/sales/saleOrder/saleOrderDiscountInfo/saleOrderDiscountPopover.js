@@ -33,7 +33,7 @@
       vm.totalCostNoDiscount = _.sumBy(saleOrder.positions, position => {
         return position.priceOrigin * position.volume;
       });
-      
+
       if (catalogueDiscounts) {
         return onCatalogueDiscounts(catalogueDiscounts);
       }
