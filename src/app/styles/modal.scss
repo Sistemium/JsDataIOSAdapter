@@ -1,5 +1,9 @@
 @import "variables";
 
+.modal-content {
+  border-radius: $border-radius;
+}
+
 .modal-footer {
   .btn {
     margin: 5px;
