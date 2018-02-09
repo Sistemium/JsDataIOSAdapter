@@ -353,6 +353,7 @@
 
         SearchTag.create(instance)
           .then(res => {
+            res.isActive = 'true';
             vm.searchTags.push(res);
           });
 

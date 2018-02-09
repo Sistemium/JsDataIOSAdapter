@@ -29,19 +29,7 @@
 
     const runDebounce = _.debounce(delayedSave, 1000);
 
-    $scope.$watch('vm.search', nv => {
-
-      const savedQuery = _.find(vm.searchQueries, {query: nv});
-
-      if (savedQuery) {
-        vm.currentSearchQuery = savedQuery.query;
-      } else {
-        vm.currentSearchQuery = null;
-      }
-
-      runDebounce(nv);
-
-    });
+    let ingoreWatch = false;
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -57,6 +45,25 @@
 
       search: $state.params.q || '',
       currentSearchQuery: null
+
+    });
+
+    $scope.$watch('vm.search', nv => {
+
+      if (ingoreWatch) {
+        ingoreWatch = !ingoreWatch;
+        return;
+      }
+
+      const savedQuery = _.find(vm.searchQueries, {query: nv});
+
+      if (savedQuery) {
+        vm.currentSearchQuery = savedQuery.query;
+      } else {
+        vm.currentSearchQuery = null;
+      }
+
+      runDebounce(nv);
 
     });
 
@@ -77,9 +84,8 @@
 
         vm.searchQueries.push(instance);
 
-        SearchQuery.create(instance).then((res) => {
-          vm.currentSearchQuery = res;
-        });
+        SearchQuery.create(instance)
+          .then(res => vm.currentSearchQuery = res.query);
 
       } else {
 
@@ -88,6 +94,7 @@
         SearchQuery.create(searchQuery);
 
       }
+
     }
 
     function delayedSave(nv) {
@@ -100,10 +107,14 @@
 
     function queryClick(query) {
 
-      if (vm.currentSearchQuery === query.query) {
+      let queryStr = _.get(query, 'query');
+
+      if (vm.currentSearchQuery === queryStr) {
         vm.search = vm.currentSearchQuery = null;
       } else {
-        vm.search = vm.currentSearchQuery = query.query;
+        saveQuery(queryStr);
+        ingoreWatch = true;
+        vm.search = vm.currentSearchQuery = queryStr;
       }
 
     }
