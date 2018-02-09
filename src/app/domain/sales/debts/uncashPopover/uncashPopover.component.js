@@ -23,7 +23,7 @@
       isPopoverOpen: '='
     },
 
-    templateUrl: 'app/domain/components/uncashPopover/uncashingForm.html',
+    templateUrl: 'app/domain/sales/debts/uncashPopover/uncashingForm.html',
 
     controller: uncashingFormController,
     controllerAs: 'vm'

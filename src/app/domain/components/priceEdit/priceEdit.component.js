@@ -54,7 +54,7 @@
         templateUrl: 'app/domain/components/priceEdit/priceEdit.modal.html',
 
         size: 'sm',
-        windowClass: 'price-edit',
+        windowClass: 'price-edit modal-info',
         scope: $scope,
         bindToController: false
 

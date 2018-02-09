@@ -174,39 +174,6 @@
 
   display: inline-block;
 
-  &.modal {
-
-    // to show saleOrder header
-    top: 50px;
-
-    .price-edit-popover {
-      .form-group > label {
-        //text-align: right;
-      }
-    }
-
-    .modal-header {
-
-      text-align: left;
-
-      .name {
-        font-size: 85%;
-        color: $gray;
-        flex: 1;
-        margin: 6px;
-      }
-
-      button .glyphicon {
-        top: 3px;
-      }
-
-      padding: 3px;
-      display: flex;
-      align-items: center;
-
-    }
-
-  }
 
   .popover-content {
 

@@ -136,6 +136,21 @@
         }
       });
 
+      if (params.orderBy && params.orderBy.length) {
+
+        if (!_.isArray(params.orderBy)) {
+          params.orderBy = [[params.orderBy]];
+        } else if (!_.isArray(params.orderBy[0])) {
+          params.orderBy = [params.orderBy];
+        }
+
+        params[STAPI_OPTION_ORDER_BY] = _.map(params.orderBy, order => {
+          let [col, dir = ''] = order;
+          return `${dir.match(/desc/i) ? '-' : ''}${col}`;
+        }).join(',');
+
+      }
+
       if (params.limit) {
         parsed.pageSize = params.limit;
       }
@@ -162,6 +177,7 @@
       delete params.limit;
       delete params.offset;
       delete params._;
+      delete params.orderBy;
 
       return parsed;
 

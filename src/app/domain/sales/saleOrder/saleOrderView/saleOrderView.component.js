@@ -140,7 +140,7 @@
 
     function getWorkflows() {
 
-      let workflowFilter = SalesmanAuth.makeFilter(_.assign({orderBy: ['date', 'DESC']}, vm.customFilter));
+      let workflowFilter = SalesmanAuth.makeFilter(_.assign({orderBy: [['date', 'DESC']]}, vm.customFilter));
 
       vm.workflowPromise = SaleOrder.groupBy(workflowFilter, ['processing']);
 

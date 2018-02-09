@@ -35,7 +35,7 @@
           span.currency(ng-if='vm.overLimit') П
           span(ng-if='!vm.overLimit') {{ vm.saleOrder.positionsCountRu() }}
           span на сумму
-          strong {{ vm.saleOrder.totalCost | number:2 }}
+          strong {{ vm.saleOrder.totalCost || 0 | number:2 }}
           span.currency ₽
 
         contract-info.over-limit(
@@ -55,12 +55,12 @@
           //span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
           //span.caret
 
-      a.toggle-edit(
+      a.toggle-edit.animate-show(
       href ng-click='vm.toggleEditClick()'
       ng-if='vm.saleOrder && vm.saleOrder.workflowStep.editable'
+      ng-hide='saleOrderExpanded'
       )
         i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
-
 
     buttons
 

@@ -31,7 +31,7 @@
       thead
         tr
           th(ng-if='!vm.selectedSalesmanId') ТП
-          th Точка
+          th {{ vm.customFilter ? 'Дата' : 'Точка' }}
           th Время
           th.hidden-xs До точки
           th.number.hidden-xs Фото
@@ -42,7 +42,8 @@
         ng-click='vm.visitClick(visit)'
         )
           td(ng-if='!vm.selectedSalesmanId') {{ ::visit.salesman.shortName }}
-          td
+          td(ng-if='vm.customFilter') {{ ::visit.date }}
+          td(ng-if='!vm.customFilter')
             div {{ ::visit.outlet.name }}
             .gray {{ ::visit.outlet.address }}
           td

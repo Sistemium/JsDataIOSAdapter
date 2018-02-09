@@ -187,7 +187,11 @@
 
       }
 
-      $scope.$watchGroup(['vm.saleOrder.totalCost', 'vm.saleOrder.contract.creditRemains'], checkLimit);
+      $scope.$watchGroup([
+        'vm.saleOrder.totalCost',
+        'vm.saleOrder.contract.creditRemains',
+        'vm.saleOrder.workflowStep.editable'
+      ], checkLimit);
 
       $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
       $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));

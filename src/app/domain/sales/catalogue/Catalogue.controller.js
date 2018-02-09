@@ -135,10 +135,7 @@
 
         });
 
-        vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
-          setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
-          setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
-        }));
+        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'], () => $timeout(10).then(onContractChange));
 
         SalesmanAuth.watchCurrent($scope, salesman => {
 
@@ -231,6 +228,11 @@
      Handlers
      */
 
+    function onContractChange() {
+      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
+      setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
+    }
+
     function onJSDataCollection(e) {
 
       if (e.resource !== 'Stock') return;
@@ -262,7 +264,7 @@
 
     function setSaleOrderId(event, saleOrderId) {
 
-      console.warn('setSaleOrderId', saleOrderId);
+      // console.warn('setSaleOrderId', saleOrderId);
 
       vm.saleOrderId = saleOrderId;
 
@@ -471,7 +473,7 @@
 
     function onStateChange(to, params) {
 
-      console.warn('onStateChange', params);
+      // console.warn('onStateChange', params);
 
       setSaleOrderId({}, params.saleOrderId);
 
@@ -535,23 +537,23 @@
 
     // TODO: move to a separate helper
 
-    function setDiscounts(contractId, partnerId) {
+    function setDiscounts(contractId, partnerId, saleOrderId) {
 
       if (!contractId || !partnerId || !vm.prices) {
         vm.discountsBy = {};
-        console.warn('setDiscounts exit 1');
+        // console.warn('setDiscounts exit 1');
         setDiscountsWithModelData();
         return $q.resolve();
       }
 
       let priceTypeId = vm.currentPriceType.id;
 
-      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId})) {
-        console.warn('setDiscounts exit 2');
+      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId, saleOrderId})) {
+        // console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
-      vm.discountsBy = {contractId, partnerId, priceTypeId};
+      vm.discountsBy = {contractId, partnerId, priceTypeId, saleOrderId};
 
       const contractFilter = {
         contractId: {'==': contractId}
@@ -567,10 +569,10 @@
       }
 
       $q.all([
-        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false}),
-        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false}),
-        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false}),
-        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false}),
+        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
+        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
+        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
+        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
           .catch(() => {
             vm.saleOrderDiscountsDisabled = true;
@@ -595,19 +597,20 @@
             saleOrder: saleOrderScopeDiscount || {}
           };
 
-          console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
+          // console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
           setDiscountsWithModelData(discountModel.article, discountModel.priceGroup, discountModel.saleOrder);
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
 
-            let price = vm.prices[pos.articleId];
+            let {articleId} = pos;
+            let price = vm.prices[articleId];
 
             let posDiscount = pos.priceOrigin ? _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
 
             if (!price) {
-              price = vm.prices[pos.articleId] = {price: pos.priceOrigin};
-              console.warn(`setting prices from position ${pos.id}`);
+              price = vm.prices[articleId] = {price: pos.priceOrigin};
+              // console.warn(`setting prices from position ${pos.id}`);
             }
 
             if (!pos.priceOrigin || pos.priceOrigin !== price.price) {
@@ -616,14 +619,19 @@
               pos.updateCost();
             }
 
-            let articleDiscount = vm.discounts.article[pos.articleId];
+            let articleDiscount = vm.discounts.article[articleId];
 
             let discount = articleDiscount ||
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
 
             if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01) {
-              vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
+              let customDiscount = _.assign(
+                articleDiscount || SaleOrderDiscount.createInstance({discountScope: 'article'}), {
+                  discount: posDiscount,
+                  articleId
+                });
+              vm.discounts.article[articleId] = customDiscount;
             }
 
           });
@@ -703,7 +711,7 @@
                 vm.currentPriceType = _.get(vm.saleOrder, 'priceType') || PriceType.meta.getDefault();
               }
 
-              console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
+              // console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
 
             });
 
@@ -814,7 +822,7 @@
 
       DEBUG('filterStock', 'end');
 
-      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'));
+      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
 
       vm.busyFilteringStock = false;
 
@@ -906,7 +914,9 @@
         updatePrices(discountScope, filter);
 
         if (!vm.saleOrderDiscountsDisabled) {
-          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent);
+          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent)
+            .then(res => _.set(vm.discounts, path, res))
+            .catch(_.identity);
         }
 
       }

@@ -20,16 +20,23 @@ li.active {
 
 }
 
-.list-item a {
+.list-item {
 
-  display: block;
-  padding: 3px;
-
-  &:hover {
-    text-decoration: none;
-    background: $position-hover-color;
+  & + .list-item {
+    border-top: 1px solid $gray-border-color;
   }
 
+  a {
+
+    display: block;
+    padding: 3px;
+
+    &:hover {
+      text-decoration: none;
+      background: $position-hover-color;
+    }
+
+  }
 }
 
 .list-group {

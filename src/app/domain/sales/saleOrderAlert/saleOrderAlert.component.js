@@ -12,7 +12,8 @@
 
       bindings: {
         saleOrderExpanded: '=expanded',
-        saleOrder: '='
+        saleOrder: '=',
+        discounts: '='
       },
 
       controller: saleOrderAlertController,

@@ -86,7 +86,10 @@
 
       vm.setBusy([
         Account.findAll({}, options),
-        NewsMessage.findAllWithRelations(filter, options)(relations, false, false, options)
+        NewsMessage.findAllWithRelations(filter, options)(relations, false, false, options),
+        Commentary.groupBy({source: 'NewsMessage'}, ['ownerXid'])
+          .then(res => vm.commentaryStats = _.keyBy(res, 'ownerXid'))
+          .catch(() => vm.disableCommentaries = true)
       ]);
 
     }
@@ -96,7 +99,7 @@
       // vm.ratings = {};
 
       _.forEach(vm.userNewsMessages, userNewsMessage => {
-        vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
+        vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage;
       })
 
     }
@@ -129,7 +132,12 @@
     }
 
     function onJSDCommentary(data) {
+      let {ownerXid} = data;
       Commentary.inject(data);
+      Commentary.groupBy({source: 'NewsMessage', ownerXid}, ['ownerXid'])
+        .then(res => {
+          vm.commentaryStats[ownerXid] = _.first(res);
+        });
     }
 
     function onJSDNewsMessage(data) {
@@ -143,6 +151,7 @@
     function newsRatingClick(newsMessage) {
 
       let newsMessageId = newsMessage.id;
+      let rating = _.get(vm.ratings[newsMessageId], 'rating');
 
       UserNewsMessage.findAll({newsMessageId}, {bypassCache: true})
         .then(userNewsMessages => {
@@ -154,7 +163,11 @@
             userNewsMessage = UserNewsMessage.createInstance({newsMessageId, authId});
           }
 
-          userNewsMessage.rating = vm.ratings[newsMessageId];
+          userNewsMessage.rating = rating;
+
+          if (!userNewsMessage.rating) {
+            return;
+          }
 
           UserNewsMessage.create(userNewsMessage)
             .then(() => {
