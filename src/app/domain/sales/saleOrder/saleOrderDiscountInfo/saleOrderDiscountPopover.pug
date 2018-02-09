@@ -19,7 +19,7 @@
         strong {{ discount.discount | number }}
         span.currency %
 
-  .totals(ng-if='vm.discounts.length')
+  .discount-totals(ng-if='vm.discounts.length')
 
     currency-value.discount-total(label='Итого скидка:' value='vm.saleOrder.totalCost - vm.totalCostNoDiscount')
     currency-value.total-cost-no-discount(label='Итого без скидки:' value='vm.totalCostNoDiscount')
