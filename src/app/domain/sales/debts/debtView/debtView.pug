@@ -1,6 +1,6 @@
 .debt-view(cg-busy='vm.cgBusy')
 
-  .debt-view-table(ng-if='vm.data.length')
+  .debt-view-table
 
     .table-header
       .responsibility-filter
@@ -10,7 +10,7 @@
         ng-class='{flagged: item.flagged}'
         ng-repeat='item in vm.responsibilities track by item.id'
         ) {{ ::item.name }}
-      .totals
+      .totals(ng-if='vm.data.length')
         label.total(ng-if='vm.totals.totalSummDocPlus') Бух+
         label.total.overdue(ng-if='vm.totals.totalOverdue') Просрочено
         label.total.cashed(ng-if='vm.totals.totalCashed') На руках
@@ -51,7 +51,7 @@
           .total
             currency-value(value='group["sum(summ)"]')
 
-    .footer
+    .footer(ng-if='vm.data.length')
       .totals.animate-show(ng-hide='vm.busy')
 
         label Итого:
