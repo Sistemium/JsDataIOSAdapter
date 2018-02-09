@@ -512,10 +512,10 @@
       }
 
       $q.all([
-        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false}),
-        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false}),
-        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false}),
-        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false}),
+        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
+        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
+        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
+        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
           .catch(() => {
             vm.saleOrderDiscountsDisabled = true;
