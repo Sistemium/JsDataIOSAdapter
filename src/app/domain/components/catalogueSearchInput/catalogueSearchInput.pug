@@ -10,7 +10,6 @@
   track-focused
   aria-describedby='search-input'
   ng-model='vm.search'
-  ng-model-options='{debounce: vm.debounce}'
   on-enter='vm.onSearchEnter()'
 
   popover-placement='bottom auto'
@@ -26,7 +25,7 @@
   .filters
     a.filter(
     href
-    ng-click='vm.removeFilterClick(filter)'
+    ng-click='vm.removeTagClick(filter)'
     ng-repeat='filter in vm.filters track by $index'
     )
       i.glyphicon.glyphicon-remove
