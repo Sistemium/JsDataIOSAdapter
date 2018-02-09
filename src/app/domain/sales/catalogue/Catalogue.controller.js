@@ -5,6 +5,7 @@
   const SHORT_TIMEOUT = 0;
   const LOW_STOCK_THRESHOLD = 24;
   const FONT_SIZE_KEY = 'catalogue.fontSize';
+  const LIMIT_TO = 20;
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout,
                                DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper) {
@@ -25,7 +26,8 @@
       OutletRestriction,
       Restriction,
       RestrictionArticle,
-      OutletSalesmanContract
+      OutletSalesmanContract,
+      SearchTag
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -47,6 +49,7 @@
       ancestors: [],
       articleGroupIds: {},
       search: $state.params.q || '',
+      //currentSearchTags: [],
       saleOrderId: $state.params.saleOrderId,
       saleOrderPositions: false,
       isOutletPopoverOpen: false,
@@ -76,6 +79,8 @@
       toggleShowFirstLevelClick,
       toggleHideBoxesClick,
       onSaleOrderClick,
+      saveTag,
+      toggleFilter,
 
       compDiscountClick,
       bPlusButtonClick,
@@ -83,7 +88,6 @@
 
       pieceVolumeClick,
       articleTagClick,
-      removeFilterClick,
       thumbClick,
       onScrolledToBeginning,
 
@@ -100,6 +104,9 @@
     let busy = $timeout(SHORT_TIMEOUT)
       .then(findAll)
       .then(() => {
+
+        SearchTag.findAll()
+          .then(res => vm.searchTags = _.take(_.orderBy(res, 'cnt', 'desc'), LIMIT_TO));
 
         vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
           vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
@@ -175,7 +182,7 @@
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
     $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
-    
+
     $scope.$watch('vm.searchEnterPress', () => {
       if (vm.searchEnterPress) {
         setCurrentArticleGroup();
@@ -329,6 +336,33 @@
       setCurrentArticleGroup(vm.currentArticleGroup);
     }
 
+    function saveTag(tag) {
+
+      let searchTag = _.find(vm.searchTags, {label: tag.label});
+
+      if (!searchTag) {
+
+        let instance = SearchTag.createInstance({
+          code: tag.code || tag.pieceVolume,
+          label: tag.label,
+          lastUsed: moment(),
+          cnt: 1
+        });
+
+        SearchTag.create(instance)
+          .then(res => {
+            vm.searchTags.push(res);
+          });
+
+      } else {
+        searchTag.cnt++;
+        searchTag.lastUsed = moment().toDate();
+        searchTag = _.omit(searchTag, 'isActive');
+        SearchTag.create(searchTag);
+      }
+
+    }
+
     function toggleShowImagesClick() {
 
       vm.showImages = !vm.showImages;
@@ -451,23 +485,33 @@
 
     }
 
-    function removeFilterClick(filter) {
-      addFilter(filter);
-    }
+    function articleTagClick(articleTagObj) {
 
-    function articleTagClick(tag) {
-      addFilter({tag: tag.code, label: tag.label});
-    }
+      if (!_.find(vm.filters, articleTagObj)) {
 
-    function pieceVolumeClick(pieceVolume) {
-
-      let existing = _.find(vm.filters, 'pieceVolume');
-
-      if (existing) _.remove(vm.filters, existing);
-
-      if (_.get(existing, 'pieceVolume') !== pieceVolume) {
-        addFilter({pieceVolume, label: pieceVolume + 'л'});
+        saveTag(articleTagObj);
       }
+
+      toggleFilter(articleTagObj);
+
+    }
+
+    function pieceVolumeClick(pieceVolumeInt) {
+
+      let volumeFilter = {pieceVolume: pieceVolumeInt, label: pieceVolumeInt + 'л'};
+
+      if (!_.find(vm.filters, {label: volumeFilter.label})) {
+
+        let existingVolumeFilter = _.find(vm.filters, el => /^\d?\.?\d+л$/.test(el.label));
+
+        if (existingVolumeFilter) {
+          toggleFilter(existingVolumeFilter);
+        }
+
+        saveTag(volumeFilter);
+      }
+
+      toggleFilter(volumeFilter);
 
     }
 
@@ -475,11 +519,15 @@
      Functions
      */
 
-    function addFilter(filter) {
+    function toggleFilter(filter) {
+
+      let idx = vm.searchTags.indexOf(_.find(vm.searchTags, {label: filter.label}));
 
       if (_.find(vm.filters, filter)) {
+        vm.searchTags[idx] = _.omit(vm.searchTags[idx], 'isActive');
         _.remove(vm.filters, filter);
       } else {
+        vm.searchTags[idx] = _.assign({'isActive': true}, vm.searchTags[idx]);
         vm.filters.push(filter);
       }
 
@@ -930,6 +978,8 @@
 
     function setCurrentArticleGroup(articleGroupOrId) {
 
+      console.log('setCurrentArticleGroup', articleGroupOrId);
+
       let articleGroup = articleGroupOrId;
 
       if (_.get(articleGroupOrId, 'showAll')) {
@@ -1132,13 +1182,13 @@
 
         let pieceVolume;
 
-        _.each(vm.filters, filter => {
-          if (filter.pieceVolume) {
-            pieceVolume = parseFloat(filter.pieceVolume);
-          }
-        });
+        let filteredPieceVolume = _.find(vm.filters, 'pieceVolume');
 
-        let tags = _.filter(vm.filters, 'tag');
+        if (filteredPieceVolume) {
+          pieceVolume = parseFloat(filteredPieceVolume.pieceVolume);
+        }
+
+        let tags = _.filter(vm.filters, 'code');
 
         articleIds = groupIds = {};
 
@@ -1160,7 +1210,7 @@
 
           if (res && tags.length) {
             _.each(tags, tag => {
-              res = res && _.find(article.tags, {code: tag.tag});
+              res = res && _.find(article.tags, {code: tag.code});
             });
           }
 
