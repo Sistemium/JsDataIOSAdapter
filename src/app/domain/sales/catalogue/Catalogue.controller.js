@@ -128,10 +128,7 @@
 
         });
 
-        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'], contractId => $timeout(10).then(() => {
-          setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
-          setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
-        }));
+        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'], () => $timeout(10).then(onContractChange));
 
         SalesmanAuth.watchCurrent($scope, salesman => {
 
@@ -216,6 +213,11 @@
     /*
      Handlers
      */
+
+    function onContractChange() {
+      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
+      setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
+    }
 
     function onJSDataCollection(e) {
 
