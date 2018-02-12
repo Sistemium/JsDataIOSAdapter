@@ -28,8 +28,10 @@ close='vm.saleOrder.processingMessage = null'
   .col-md-9.col-sm-8
     input#commentText.form-control(
     track-focused
+    autocomplete='off'
+    sa-enter-key='$element.blur()'
     ng-model='vm.saleOrder.commentText'
-    ng-model-options='{debounce: 2000}'
+    ng-model-options='{updateOn: "blur"}'
     )
 
 .form-group.form-group-switch(ng-if='vm.docDiscountsOption')
