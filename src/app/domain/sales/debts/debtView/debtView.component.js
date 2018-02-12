@@ -10,12 +10,13 @@
 
     templateUrl: 'app/domain/sales/debts/debtView/debtView.html',
 
-    controller: debtView,
+    controller: debtViewController,
     controllerAs: 'vm'
 
   });
 
-  function debtView(Schema, $scope, saControllerHelper, $state, $q, SalesmanAuth, localStorageService, saEtc, IOS) {
+  function debtViewController(Schema, $scope, saControllerHelper, $state, $q,
+                              SalesmanAuth, localStorageService, saEtc, IOS) {
 
     const {Debt, Outlet, Cashing, Partner, Responsibility} = Schema.models();
 
