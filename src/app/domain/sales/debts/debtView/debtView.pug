@@ -1,6 +1,6 @@
-.debt-view(cg-busy='vm.cgBusy')
+.debt-view.ui-view()
 
-  .debt-view-table
+  .debt-view-table(cg-busy='vm.cgBusy')
 
     .table-header
       .responsibility-filter
@@ -20,6 +20,7 @@
     resize
     resize-offset-top='40'
     resize-offset-top-xs='32'
+    elem-ready='vm.restoreScrollPosition()'
     )
 
       .partner-debt-total(ng-repeat='group in vm.data track by $index')
