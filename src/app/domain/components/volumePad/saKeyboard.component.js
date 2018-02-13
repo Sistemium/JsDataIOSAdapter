@@ -78,7 +78,7 @@
 
       if (vm.modelMax && vm.exportModel > vm.modelMax) {
         vm.exportModel = vm.modelMax;
-        vm.model = vm.symbols = importFn(vm.exportModel);
+        vm.model = vm.symbols = importFn(vm.exportModel, vm.boxRel);
       }
 
     }
@@ -97,7 +97,8 @@
         return;
       }
 
-      vm.model = vm.symbols = importFn(vm.exportModel);
+      vm.symbols = importFn(vm.exportModel, vm.boxRel);
+      vm.model = formatFn(vm.symbols);
 
     }
 
