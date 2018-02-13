@@ -5,7 +5,8 @@
     bindings: {
       hideEmpty: '<',
       value: '<',
-      label: '@'
+      label: '@',
+      currency: '@'
     },
 
     controller: currencyValueController,
@@ -22,6 +23,8 @@
     if (!vm.weight) {
       vm.weight = 600
     }
+
+    vm.currency = vm.currency || '₽';
 
   }
 
