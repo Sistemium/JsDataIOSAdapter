@@ -249,6 +249,7 @@
           price: price.discountPrice(),
           priceDoc: price.priceOrigin(),
           priceOrigin: price.priceOrigin(),
+          priceAgent: price.priceAgent,
           articleId: articleId
         });
         SaleOrderPosition.inject(position);

@@ -720,6 +720,7 @@
               displayVolume: stock.displayVolume,
               article: stock.article,
               articleId: stock.articleId,
+              priceAgent: stock.priceAgent,
               discountPercent,
               discountPrice,
               priceOrigin,

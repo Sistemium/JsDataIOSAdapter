@@ -78,6 +78,7 @@
         price: stock.discountPrice(),
         priceDoc: stock.priceOrigin(),
         priceOrigin: stock.priceOrigin(),
+        priceAgent: stock.priceAgent,
         volume: 0
       });
 

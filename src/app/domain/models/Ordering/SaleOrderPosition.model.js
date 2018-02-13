@@ -21,16 +21,11 @@
         }
       },
 
-      // fieldTypes: {
-      // price: 'decimal',
-      // priceDoc: 'decimal',
-      // priceOrigin: 'decimal',
-      // cost: 'decimal',
-      // volume: 'int',
-      // backVolume: 'int'
-      // },
+      computed: {
+        selfCost: ['volume', 'priceAgent', selfCost]
+      },
 
-      aggregables: ['cost', 'volume'],
+      aggregables: ['cost', 'volume', 'selfCost'],
 
       methods: {
 
@@ -79,6 +74,10 @@
       }
 
     });
+
+    function selfCost(volume = 0, priceAgent = 0) {
+      return parseFloat((volume * priceAgent).toFixed(2));
+    }
 
   });
 
