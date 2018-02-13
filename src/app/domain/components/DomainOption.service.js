@@ -23,8 +23,13 @@
       hasArticleFactors,
       saleOrderMaxPositions,
       allowDiscounts,
-      usePriceGroups
+      usePriceGroups,
+      hasPriceAgent
     };
+
+    function hasPriceAgent() {
+      return customerCode() === 'bs';
+    }
 
     function usePriceGroups() {
       return /r50p?$/.test(customerCode());
