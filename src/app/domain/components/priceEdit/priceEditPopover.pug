@@ -75,6 +75,21 @@ fieldset.price-edit-popover
         = ' '
         span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
 
+    .priceAgent(ng-if='vm.priceAgent')
+
+      .form-group
+        label Цена агента:
+        = ' '
+        span.form-control#price-edit-priceAgent {{ vm.priceAgent | number:2 }}
+
+    .profit(ng-if='vm.priceAgent')
+
+      .form-group
+        label Профит:
+        = ' '
+        span.form-control#price-edit-profit {{ vm.profit() | number:2 }} %
+
+
   //.extras(ng-if='vm.ksOption')
 
     button.btn(

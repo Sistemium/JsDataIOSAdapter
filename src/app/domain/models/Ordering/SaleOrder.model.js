@@ -97,6 +97,10 @@
           return _.map(this.processingMessage.split('|'), msg => _.trim(msg));
         },
 
+        profit: function () {
+          return this.totalSelfCost ? (this.totalCost - this.totalSelfCost) / this.totalSelfCost * 100.0 : null;
+        },
+
         isValid: function () {
           return this.date &&
             this.outletId &&

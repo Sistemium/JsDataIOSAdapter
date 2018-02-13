@@ -14,12 +14,13 @@
 
   });
 
-  function saleOrderDiscountPopoverController(Schema, $scope) {
+  function saleOrderDiscountPopoverController(Schema, $scope, DomainOption) {
 
     const {SaleOrderDiscount, Article, PriceGroup} = Schema.models();
 
     const vm = _.assign(this, {
-      $onInit
+      $onInit,
+      hasPriceAgent: DomainOption.hasPriceAgent()
     });
 
     /*

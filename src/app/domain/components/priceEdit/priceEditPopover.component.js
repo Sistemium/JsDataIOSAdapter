@@ -22,7 +22,8 @@
 
       decrementPercentClick,
       incrementPercentClick,
-      $onInit
+      $onInit,
+      profit
 
     });
 
@@ -43,7 +44,8 @@
         discountPercent: vm.stock.discountPercent(),
         price: vm.stock.discountPrice(),
         priceOrigin: vm.stock.priceOrigin(),
-        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId)
+        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
+        priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent
       });
 
       if (hasPriceGroup && !vm.priceGroup) {
@@ -68,6 +70,10 @@
     /*
      Functions
      */
+
+    function profit() {
+      return (vm.price - vm.priceAgent) / vm.priceAgent * 100.0;
+    }
 
     function onDiscountScopeChange(newDiscountScope, oldDiscountScope) {
 

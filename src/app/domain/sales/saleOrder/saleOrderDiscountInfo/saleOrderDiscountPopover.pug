@@ -23,4 +23,5 @@
 
     currency-value.discount-total(label='Итого скидка:' value='vm.saleOrder.totalCost - vm.totalCostNoDiscount')
     currency-value.total-cost-no-discount(label='Итого без скидки:' value='vm.totalCostNoDiscount')
+    currency-value.discount-total(ng-if='vm.hasPriceAgent' label='Профит:' value='vm.saleOrder.profit()' currency='%')
 
