@@ -9,6 +9,8 @@
       popover-placement='auto bottom-left'
       ng-class='{disabled: !!vm.uncashing || !vm.uncashings.length}'
       uib-popover-template='"app/domain/sales/debts/uncashingPopover.template.html"'
+      popover-append-to-body="true"
+      popover-class='uncashing-popover'
       )
         span.title
           currency-value(
@@ -57,9 +59,8 @@
 
   .scroll-y(
   ng-class='{disabled: vm.uncashing}'
-  resize resize-property='min-height'
+  resize resize-property='height'
   resize-offset-top='5'
-  cg-busy='vm.cgBusy'
   )
     .outlet(ng-repeat='item in vm.uncashedByOutlet track by item.key')
 
