@@ -58,13 +58,27 @@
     }
 
     function saleOrderOptions() {
-      if (customerCode() === 'r50') {
-        return {
-          docDiscountsOption: true
-        };
-      }
 
-      return {};
+      switch (customerCode()) {
+
+        case 'r50': {
+          return {
+            docDiscountsOption: true
+          };
+        }
+
+        case 'bs': {
+          return {
+            commentExpeditorOption: true,
+            cashOnShipmentOption: false
+          };
+        }
+
+        default: {
+          return {};
+        }
+
+      }
 
     }
 

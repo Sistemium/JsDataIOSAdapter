@@ -34,6 +34,17 @@ close='vm.saleOrder.processingMessage = null'
     ng-model-options='{updateOn: "blur"}'
     )
 
+.form-group(ng-if='vm.commentExpeditorOption')
+  label.control-label.col-md-3.col-sm-4(for='commentExpeditor') Комментарий водителю
+  .col-md-9.col-sm-8
+    input#commentExpeditor.form-control(
+    track-focused
+    autocomplete='off'
+    sa-enter-key='$element.blur()'
+    ng-model='vm.saleOrder.commentExpeditor'
+    ng-model-options='{updateOn: "blur"}'
+    )
+
 .form-group.form-group-switch(ng-if='vm.docDiscountsOption')
   label.control-label.col-md-9.col-sm-8 Скидки в накладную?
   .col-md-3.col-sm-4
@@ -43,7 +54,7 @@ close='vm.saleOrder.processingMessage = null'
     off-label='Нет'
     )
 
-.form-group.form-group-switch
+.form-group.form-group-switch(ng-if='vm.cashOnShipmentOption !== false')
   label.control-label.col-md-9.col-sm-8 Оплата по факту?
   .col-md-3.col-sm-4
     toggle-switch(
@@ -60,8 +71,3 @@ close='vm.saleOrder.processingMessage = null'
     on-label='Да'
     off-label='Нет'
     )
-
-//.form-group
-  label.control-label.col-md-3.col-sm-4(for='commentExpeditor') Комментарий водителю
-  .col-md-9.col-sm-8
-    input#commentExpeditor.form-control(ng-model='vm.saleOrder.commentExpeditor')
