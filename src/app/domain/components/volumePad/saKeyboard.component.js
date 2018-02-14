@@ -7,7 +7,7 @@
       datatype: '@',
       exportModel: '=?',
       modelMax: '=',
-      touched: '='
+      touched: '=?'
     },
 
     templateUrl: 'app/domain/components/volumePad/saKeyboard.html',
