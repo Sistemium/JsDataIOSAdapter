@@ -3,6 +3,7 @@ fieldset.quantity-edit-popover-template
   .form-control#display(
   ng-class='[vm.touched ? "ng-touched" : "ng-untouched", {"ng-invalid": vm.invalidFactor}]'
   )
+    .red(ng-if='vm.invalidFactor') Не кратно {{ ::vm.articleFactor() }}
     strong {{ vm.volumeView }}
 
   sa-keyboard(

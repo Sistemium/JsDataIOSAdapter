@@ -22,8 +22,20 @@
   #display {
 
     margin: 7px;
-    text-align: right;
     width: auto;
+
+    padding-left: 6px;
+    padding-right: 6px;
+    min-width: 160px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    strong {
+      text-align: right;
+      flex: 1;
+    }
 
     &.ng-untouched > * {
       background: $state-info-bg;

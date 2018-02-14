@@ -43,7 +43,8 @@
       decrementBoxes: () => changeVolume(-article.packageRel),
       decrementBottles: () => changeVolume(-1),
       deleteClick,
-      incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel / 2))
+      incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel / 2)),
+      articleFactor
 
     });
 
@@ -108,7 +109,7 @@
         return;
       }
 
-      let factor = articleFactor(position);
+      let factor = articleFactor();
       let notFactored = volume % factor;
 
       if (notFactored) {
@@ -124,8 +125,8 @@
 
     }
 
-    function articleFactor(position) {
-      return !vm.noFactor && _.get(position, 'article.factor') || 1;
+    function articleFactor() {
+      return !vm.noFactor && _.get(vm, 'article.factor') || 1;
     }
 
     function changeVolume(addVolume) {
