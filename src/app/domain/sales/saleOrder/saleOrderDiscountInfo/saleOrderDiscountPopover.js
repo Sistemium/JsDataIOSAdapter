@@ -58,6 +58,10 @@
 
       _.each(catalogueDiscounts, (discounts, discountScope) => {
 
+        if (discounts.discount === 0) {
+          return;
+        }
+
         if (discounts.discount) {
           discountsArray.push(discounts);
           return;
