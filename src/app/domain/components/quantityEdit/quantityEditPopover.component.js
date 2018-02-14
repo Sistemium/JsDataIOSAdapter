@@ -51,17 +51,17 @@
      Init
      */
 
-    setQty();
-
     if (!position) {
       createPosition();
     }
+
+    setQty();
 
     /*
      Listeners
      */
 
-    $scope.$watchGroup(['vm.boxes', 'vm.bottles'], _.debounce(onQtyChange, 750));
+    $scope.$watch('vm.volume', _.debounce(onVolumeChange, 750));
     $scope.$watch('vm.position.id', onPositionChange);
 
     /*
@@ -100,14 +100,15 @@
 
     }
 
-    function onQtyChange(newValues, oldValues) {
+    function onVolumeChange() {
 
-      if (newValues[1] === oldValues[1] && newValues[0] === oldValues[0]) {
+      let {volume} = vm;
+
+      console.warn('onVolumeChange:', volume, position.volume);
+
+      if (volume === position.volume) {
         return;
       }
-
-      let volume = parseInt(newValues[0] * position.article.packageRel || 0)
-        + parseInt(newValues[1] || 0);
 
       let factor = articleFactor(position);
       let notFactored = volume % factor;
@@ -118,13 +119,7 @@
 
       position.volume = _.max([0, volume]);
 
-      if (notFactored) {
-        setQty();
-      }
-
       injectPosition();
-      position.updateCost();
-      saleOrder.updateTotalCost();
 
     }
 
@@ -144,23 +139,29 @@
         position.volume = position.volume - notFactored + (addVolume > 0 ? factor : 0);
       }
 
-      setQty();
       injectPosition();
 
     }
 
     function setQty() {
-      let boxPcs = position ? position.article.boxPcs(position.volume, false) : {};
-      _.assign(vm, {
-        boxes: boxPcs.box,
-        bottles: boxPcs.pcs
-      });
+      vm.volume = position.volume;
     }
 
     function injectPosition() {
-      if (!position.id) {
-        SaleOrderPosition.inject(position);
-      }
+
+      setQty();
+
+      $scope.$applyAsync(() => {
+
+        position.updateCost();
+
+        if (!position.id) {
+          SaleOrderPosition.inject(position);
+        }
+
+        saleOrder.updateTotalCost();
+
+      });
     }
 
   }

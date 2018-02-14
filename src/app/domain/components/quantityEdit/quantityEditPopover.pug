@@ -1,6 +1,17 @@
 fieldset.quantity-edit-popover
 
-  .inputs
+  .form-control#display(
+  )
+    strong {{ vm.volumeView }}
+
+  sa-keyboard(
+  datatype='boxPcs'
+  model='vm.volumeView'
+  export-model='vm.volume'
+  box-rel='vm.article.packageRel'
+  )
+
+  //.inputs
 
     .boxes(ng-if='vm.showBottles')
 

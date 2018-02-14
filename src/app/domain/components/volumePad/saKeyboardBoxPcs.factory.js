@@ -39,7 +39,7 @@
       let box = Math.floor(1.0 * num / boxRel);
       let pcs = num % boxRel;
 
-      return (box ? box + 'К' : '') + pcs;
+      return (box ? box + 'К' : '') + (pcs || '');
 
     }
 
