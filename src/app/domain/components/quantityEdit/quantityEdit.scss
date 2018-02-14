@@ -2,10 +2,33 @@
 
 .quantity-edit-popover {
 
+  .popover-content {
+
+    padding: 0;
+
+    .inputs {
+      padding: 4px 10px;
+    }
+    .extras {
+      padding: 0 10px;
+    }
+
+  }
+
+  div.popover {
+    min-width: 0;
+  }
+
   #display {
+
     margin: 7px;
     text-align: right;
     width: auto;
+
+    &.ng-untouched > * {
+      background: $state-info-bg;
+    }
+
   }
 
   sa-keyboard {
@@ -14,7 +37,7 @@
 
     .num-pad-button .btn {
       font-size: 100%;
-      padding: 7px 10px;
+      padding: 5px 10px;
       color: $black;
       min-width: 35px;
     }
@@ -35,25 +58,9 @@
 .quantity-edit {
 
   a.trigger {
-    min-width: 20px;
+    min-width: 25px;
     text-align: right;
     display: inline-block;
-  }
-
-  .popover-content {
-
-    padding: 0;
-
-    .inputs {
-      padding: 4px 10px;
-    }
-    .extras {
-      padding: 0 10px;
-    }
-
-  }
-  div.popover {
-    min-width: 0;
   }
 
 }

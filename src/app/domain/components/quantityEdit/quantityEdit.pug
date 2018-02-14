@@ -4,7 +4,9 @@ strong.quantity-edit
   uib-popover-template="'app/domain/components/quantityEdit/quantityEditPopover.trigger.html'"
   popover-is-open='vm.popoverOpen'
   popover-trigger='outsideClick'
-  popover-placement='auto bottom-right'
+  popover-placement='bottom-right auto'
+  popover-append-to-body='true'
+  popover-class='quantity-edit-popover'
   )
     span {{ vm.boxPcs() }}
     span.caret

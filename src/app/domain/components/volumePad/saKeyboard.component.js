@@ -6,7 +6,8 @@
       boxRel: '=',
       datatype: '@',
       exportModel: '=?',
-      modelMax: '='
+      modelMax: '=',
+      touched: '='
     },
 
     templateUrl: 'app/domain/components/volumePad/saKeyboard.html',
@@ -24,8 +25,6 @@
       $onInit
 
     });
-
-    let clicked;
 
     const formatterName = `saKeyboard${_.upperFirst(vm.datatype)}`;
 
@@ -67,10 +66,10 @@
           vm.symbols = str.slice(0, str.length - 1);
         }
       } else {
-        vm.symbols = (vm.symbols && clicked) ? vm.symbols + b.label : b.label;
+        vm.symbols = (vm.symbols && vm.touched) ? vm.symbols + b.label : b.label;
       }
 
-      clicked = true;
+      vm.touched = true;
 
       vm.model = formatFn(vm.symbols);
 
@@ -84,7 +83,7 @@
     }
 
     function isDisabled(b) {
-      return angular.isFunction(disableFn) ? disableFn(b, vm.symbols, vm.modelMax, clicked) : false;
+      return angular.isFunction(disableFn) ? disableFn(b, vm.symbols, vm.modelMax, vm.touched) : false;
     }
 
     function onModelChange(newValue, oldValue) {
