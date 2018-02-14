@@ -104,8 +104,6 @@
 
       let {volume} = vm;
 
-      console.warn('onVolumeChange:', volume, position.volume);
-
       if (volume === position.volume) {
         return;
       }
