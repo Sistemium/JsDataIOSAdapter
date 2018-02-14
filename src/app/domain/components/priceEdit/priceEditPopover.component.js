@@ -16,7 +16,7 @@
   };
 
   /** @ngInject */
-  function priceEditController($scope, DomainOption, Schema) {
+  function priceEditController($scope, DomainOption, Schema, saEtc) {
 
     const vm = _.assign(this, {
 
@@ -61,7 +61,7 @@
        Listeners
        */
 
-      $scope.$watch('vm.discountPercent', _.debounce(onDiscountChange, 700));
+      $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
       $scope.$watch('vm.price', onPriceChange);
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
 

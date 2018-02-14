@@ -21,7 +21,7 @@
   };
 
   /** @ngInject */
-  function quantityEditController($scope, IOS, Schema, DomainOption) {
+  function quantityEditController($scope, IOS, Schema, DomainOption, saEtc) {
 
     const {SaleOrderPosition} = Schema.models();
 
@@ -61,7 +61,7 @@
      Listeners
      */
 
-    $scope.$watch('vm.volume', _.debounce(onVolumeChange, 750));
+    $scope.$watch('vm.volume', saEtc.debounce(onVolumeChange, 750, $scope));
     $scope.$watch('vm.position.id', onPositionChange);
 
     /*
@@ -112,8 +112,11 @@
       let notFactored = volume % factor;
 
       if (notFactored) {
-        volume = volume - notFactored + factor;
+        vm.invalidFactor = true;
+        return;
       }
+
+      vm.invalidFactor = false;
 
       position.volume = _.max([0, volume]);
 
@@ -127,17 +130,7 @@
 
     function changeVolume(addVolume) {
 
-      position.volume += addVolume;
-      position.volume = _.max([0, position.volume]);
-
-      let factor = articleFactor(position);
-      let notFactored = position.volume % factor;
-
-      if (notFactored) {
-        position.volume = position.volume - notFactored + (addVolume > 0 ? factor : 0);
-      }
-
-      injectPosition();
+      vm.volume = _.max([(vm.volume || 0) + addVolume, 0]);
 
     }
 
@@ -149,17 +142,14 @@
 
       setQty();
 
-      $scope.$applyAsync(() => {
+      position.updateCost();
 
-        position.updateCost();
+      if (!position.id) {
+        SaleOrderPosition.inject(position);
+      }
 
-        if (!position.id) {
-          SaleOrderPosition.inject(position);
-        }
+      saleOrder.updateTotalCost();
 
-        saleOrder.updateTotalCost();
-
-      });
     }
 
   }

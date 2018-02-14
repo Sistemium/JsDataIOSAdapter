@@ -219,10 +219,10 @@
 
         if (unbindToChanges) unbindToChanges();
 
-        vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', _.debounce(() => {
+        vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', saEtc.debounce(() => {
           if (!vm.saleOrder || !vm.saleOrder.id) return;
           if (SaleOrder.hasChanges(vm.saleOrder.id)) onSaleOrderChange();
-        }, 700));
+        }, 700, $scope));
 
       } else {
         unbindToChanges = $scope.$watch(() => _.pick(vm.saleOrder, requiredColumns), onSaleOrderChange, true);
