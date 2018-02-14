@@ -1,6 +1,8 @@
 fieldset.quantity-edit-popover-template
 
-  .form-control#display(ng-class='vm.touched ? "ng-touched" : "ng-untouched"')
+  .form-control#display(
+  ng-class='[vm.touched ? "ng-touched" : "ng-untouched", {"ng-invalid": vm.invalidFactor}]'
+  )
     strong {{ vm.volumeView }}
 
   sa-keyboard(
