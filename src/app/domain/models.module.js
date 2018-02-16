@@ -68,6 +68,22 @@
 
     }
 
+    function uncachedFindAll(filter, options) {
+
+      options = _.defaults({afterFindAll, cacheResponse: false}, options);
+
+      let res = [];
+
+      return this.findAll(filter, options)
+        .then(() => res);
+
+      function afterFindAll(options, data) {
+        res = data;
+        return [];
+      }
+
+    }
+
     function cachedFindAll(resource, filter, options) {
 
       let store = DS.store[resource.name];
@@ -154,6 +170,7 @@
       getCount,
       groupBy,
       copyInstance,
+      uncachedFindAll,
 
       loadPaged: function (filter, options) {
         return loadPaged(this, filter, options)
