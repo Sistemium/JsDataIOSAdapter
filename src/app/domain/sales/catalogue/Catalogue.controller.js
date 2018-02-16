@@ -501,23 +501,20 @@
       vm.discountsBy = {contractId, partnerId, priceTypeId, saleOrderId};
 
       const contractFilter = {
-        contractId: {'==': contractId}
+        contractId: {'==': contractId},
+        discount: {'!=': 0}
       };
 
       const partnerFilter = {
-        partnerId: {'==': partnerId}
+        partnerId: {'==': partnerId},
+        discount: {'!=': 0}
       };
 
-      if (!IOS.isIos()) {
-        contractFilter.discount = {'!=': 0};
-        partnerFilter.discount = {'!=': 0};
-      }
-
       $q.all([
-        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
-        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
-        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
-        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
+        ContractArticle.uncachedFindAll({where: contractFilter}, {limit: 10000}),
+        ContractPriceGroup.uncachedFindAll({where: contractFilter}, {limit: 10000}),
+        PartnerArticle.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
+        PartnerPriceGroup.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
           .catch(() => {
             vm.saleOrderDiscountsDisabled = true;
@@ -1237,7 +1234,10 @@
 
       vm.restrictedArticles = {};
 
-      if (!salesmanId || !outletId) return;
+      if (!salesmanId || !outletId) {
+        vm.restrictionsBy = {};
+        return;
+      }
 
       if (_.isEqual(vm.restrictionsBy, {salesmanId, outletId})) {
         return;
@@ -1249,7 +1249,7 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.findAll({}, {limit: 10000})
+        RestrictionArticle.uncachedFindAll({}, {limit: 10000})
       ])
         .then(res => {
 
