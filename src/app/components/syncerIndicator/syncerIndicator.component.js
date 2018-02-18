@@ -13,7 +13,7 @@
 
   });
 
-  function syncerIndicatorController($scope, SyncerInfo, toastr, $window) {
+  function syncerIndicatorController($scope, SyncerInfo, toastr, $window, saEtc) {
 
     const vm = _.assign(this, {
       $onInit,
@@ -21,7 +21,7 @@
     });
 
     function $onInit() {
-      SyncerInfo.watch($scope, _.debounce(info => _.assign(vm, info), 1000));
+      SyncerInfo.watch($scope, saEtc.debounce(info => _.assign(vm, info), 1000));
     }
 
     function syncerInfoClick() {

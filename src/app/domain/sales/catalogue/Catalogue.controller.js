@@ -101,39 +101,8 @@
       .then(findAll)
       .then(() => {
 
-        vm.watchScope('vm.fontSize', fontSize => {
-          if (fontSize) {
-            localStorageService.set(FONT_SIZE_KEY, fontSize);
-          }
-        });
-
         vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
           vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
-        });
-
-        vm.onScope(
-          'rootClick',
-          () => $state.go('sales.catalogue')
-            .then(() => setCurrentArticleGroup(null))
-        );
-
-        vm.watchScope('vm.search', (newValue, oldValue) => {
-          if (newValue != oldValue) {
-            vm.firstLevelGroups = null;
-            setCurrentArticleGroup(vm.currentArticleGroup);
-          }
-        });
-
-        $scope.$watchCollection('vm.filters', (o, n) => {
-          if (o && n && (o.length || n.length)) {
-            vm.firstLevelGroups = null;
-            setCurrentArticleGroup(vm.currentArticleGroup);
-          }
-        });
-
-        $scope.$on('setSaleOrder', (event, saleOrder) => {
-          vm.saleOrder = saleOrder;
-          vm.saleOrderId = saleOrder && saleOrder.id;
         });
 
         vm.watchScope('vm.saleOrder.id', newValue => {
@@ -159,10 +128,7 @@
 
         });
 
-        vm.watchScope('vm.saleOrder.contractId', contractId => $timeout(10).then(() => {
-          setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'));
-          setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
-        }));
+        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'], () => $timeout(10).then(onContractChange));
 
         SalesmanAuth.watchCurrent($scope, salesman => {
 
@@ -172,49 +138,6 @@
           vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
 
         });
-
-        vm.watchScope(
-          isWideScreen,
-          (newValue, oldValue) => {
-            if (newValue !== oldValue) {
-              $scope.$broadcast('vsRepeatTrigger');
-            }
-            vm.isWideScreen = newValue;
-            vm.articleRowHeight = articleRowHeight();
-          }
-        );
-
-        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
-        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', e => {
-
-          if (e.resource !== 'Stock') return;
-
-          DEBUG('jsData:updateCollection', e);
-          //
-          // let options = {
-          //   limit: 10000,
-          //   bypassCache: true,
-          //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
-          // };
-
-          Stock.meta.findAllUpdates()
-            .then(res => {
-
-              let index = {};
-
-              _.each(res, item => index[item.id] = item);
-
-              onJSDataFinished({
-                model: Stock,
-                index: index,
-                data: res
-              });
-
-            });
-
-        }));
-
-        $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
 
         vm.watchScope('vm.saleOrder.outlet.id', (outletId) => {
 
@@ -234,6 +157,10 @@
 
         });
 
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
+
       });
 
     vm.setBusy(busy);
@@ -244,9 +171,92 @@
      Listeners
      */
 
+    $scope.$on('setSaleOrderId', setSaleOrderId);
+
+    vm.watchScope('vm.fontSize', fontSize => {
+      if (fontSize) {
+        localStorageService.set(FONT_SIZE_KEY, fontSize);
+      }
+    });
+
+    vm.onScope(
+      'rootClick',
+      () => $state.go('sales.catalogue')
+        .then(() => setCurrentArticleGroup(null))
+    );
+
+    vm.watchScope('vm.search', (newValue, oldValue) => {
+      if (newValue != oldValue) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
+    });
+
+    $scope.$watchCollection('vm.filters', (o, n) => {
+      if (o && n && (o.length || n.length)) {
+        vm.firstLevelGroups = null;
+        setCurrentArticleGroup(vm.currentArticleGroup);
+      }
+    });
+
+    vm.watchScope(
+      isWideScreen,
+      (newValue, oldValue) => {
+        if (newValue !== oldValue) {
+          $scope.$broadcast('vsRepeatTrigger');
+        }
+        vm.isWideScreen = newValue;
+        vm.articleRowHeight = articleRowHeight();
+      }
+    );
+
     /*
      Handlers
      */
+
+    function onContractChange() {
+      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
+      setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
+    }
+
+    function onJSDataCollection(e) {
+
+      if (e.resource !== 'Stock') return;
+
+      DEBUG('jsData:updateCollection', e);
+      //
+      // let options = {
+      //   limit: 10000,
+      //   bypassCache: true,
+      //   offset: `1-${moment(e.data.ts).format('YYYYMMDDHHmm')}00000-0`
+      // };
+
+      Stock.meta.findAllUpdates()
+        .then(res => {
+
+          let index = {};
+
+          _.each(res, item => index[item.id] = item);
+
+          onJSDataFinished({
+            model: Stock,
+            index: index,
+            data: res
+          });
+
+        });
+
+    }
+
+    function setSaleOrderId(event, saleOrderId) {
+
+      // console.warn('setSaleOrderId', saleOrderId);
+
+      vm.saleOrderId = saleOrderId;
+
+      vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder');
+
+    }
 
     function onScrolledToBeginning() {
 
@@ -422,8 +432,9 @@
 
     function onStateChange(to, params) {
 
-      vm.saleOrderId = params.saleOrderId;
-      vm.rebindOne(SaleOrder, vm.saleOrderId, 'vm.saleOrder');
+      // console.warn('onStateChange', params);
+
+      setSaleOrderId({}, params.saleOrderId);
 
       currentArticleGroupId = params.articleGroupId;
 
@@ -471,42 +482,39 @@
 
     // TODO: move to a separate helper
 
-    function setDiscounts(contractId, partnerId) {
+    function setDiscounts(contractId, partnerId, saleOrderId) {
 
       if (!contractId || !partnerId || !vm.prices) {
         vm.discountsBy = {};
-        console.warn('setDiscounts exit 1');
+        // console.warn('setDiscounts exit 1');
         setDiscountsWithModelData();
         return $q.resolve();
       }
 
       let priceTypeId = vm.currentPriceType.id;
 
-      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId})) {
-        console.warn('setDiscounts exit 2');
+      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId, saleOrderId})) {
+        // console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
-      vm.discountsBy = {contractId, partnerId, priceTypeId};
+      vm.discountsBy = {contractId, partnerId, priceTypeId, saleOrderId};
 
       const contractFilter = {
-        contractId: {'==': contractId}
+        contractId: {'==': contractId},
+        discount: {'!=': 0}
       };
 
       const partnerFilter = {
-        partnerId: {'==': partnerId}
+        partnerId: {'==': partnerId},
+        discount: {'!=': 0}
       };
 
-      if (!IOS.isIos()) {
-        contractFilter.discount = {'!=': 0};
-        partnerFilter.discount = {'!=': 0};
-      }
-
       $q.all([
-        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false}),
-        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false}),
-        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false}),
-        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false}),
+        ContractArticle.uncachedFindAll({where: contractFilter}, {limit: 10000}),
+        ContractPriceGroup.uncachedFindAll({where: contractFilter}, {limit: 10000}),
+        PartnerArticle.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
+        PartnerPriceGroup.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
           .catch(() => {
             vm.saleOrderDiscountsDisabled = true;
@@ -531,19 +539,20 @@
             saleOrder: saleOrderScopeDiscount || {}
           };
 
-          console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
+          // console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
           setDiscountsWithModelData(discountModel.article, discountModel.priceGroup, discountModel.saleOrder);
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
 
-            let price = vm.prices[pos.articleId];
+            let {articleId} = pos;
+            let price = vm.prices[articleId];
 
             let posDiscount = pos.priceOrigin ? _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
 
             if (!price) {
-              price = vm.prices[pos.articleId] = {price: pos.priceOrigin};
-              console.warn(`setting prices from position ${pos.id}`);
+              price = vm.prices[articleId] = {price: pos.priceOrigin};
+              // console.warn(`setting prices from position ${pos.id}`);
             }
 
             if (!pos.priceOrigin || pos.priceOrigin !== price.price) {
@@ -552,14 +561,19 @@
               pos.updateCost();
             }
 
-            let articleDiscount = vm.discounts.article[pos.articleId];
+            let articleDiscount = vm.discounts.article[articleId];
 
             let discount = articleDiscount ||
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
 
-            if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount/100.0) - pos.price) > 0.01) {
-              vm.discounts.article[pos.articleId] = _.assign(articleDiscount || {}, {discount: posDiscount});
+            if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01) {
+              let customDiscount = _.assign(
+                articleDiscount || SaleOrderDiscount.createInstance({discountScope: 'article'}), {
+                  discount: posDiscount,
+                  articleId
+                });
+              vm.discounts.article[articleId] = customDiscount;
             }
 
           });
@@ -639,7 +653,7 @@
                 vm.currentPriceType = _.get(vm.saleOrder, 'priceType') || PriceType.meta.getDefault();
               }
 
-              console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
+              // console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
 
             });
 
@@ -703,6 +717,7 @@
               displayVolume: stock.displayVolume,
               article: stock.article,
               articleId: stock.articleId,
+              priceAgent: stock.priceAgent,
               discountPercent,
               discountPrice,
               priceOrigin,
@@ -750,7 +765,7 @@
 
       DEBUG('filterStock', 'end');
 
-      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'));
+      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
 
       vm.busyFilteringStock = false;
 
@@ -842,7 +857,9 @@
         updatePrices(discountScope, filter);
 
         if (!vm.saleOrderDiscountsDisabled) {
-          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent);
+          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent)
+            .then(res => _.set(vm.discounts, path, res))
+            .catch(_.identity);
         }
 
       }
@@ -1217,7 +1234,10 @@
 
       vm.restrictedArticles = {};
 
-      if (!salesmanId || !outletId) return;
+      if (!salesmanId || !outletId) {
+        vm.restrictionsBy = {};
+        return;
+      }
 
       if (_.isEqual(vm.restrictionsBy, {salesmanId, outletId})) {
         return;
@@ -1229,7 +1249,7 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.findAll({}, {limit: 10000})
+        RestrictionArticle.uncachedFindAll({}, {limit: 10000})
       ])
         .then(res => {
 

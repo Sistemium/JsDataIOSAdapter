@@ -18,7 +18,7 @@
         )
           i.glyphicon.glyphicon-camera
 
-    .pictures
+    .pictures(ng-if='vm.newsMessagePictures.length')
 
       .picture(
       ng-repeat='picture in vm.newsMessagePictures | orderBy:"deviceCts" track by picture.id'
@@ -42,7 +42,7 @@
 
       .commentaries
         .commentary(ng-repeat='commentary in vm.commentaries track by commentary.id')
-          .author {{ commentary.timestamp | amUtc | amLocal | amCalendar }} {{ commentary.authorAccount.name }}:
+          .author {{ ::commentary.timestamp | amUtc | amLocal | amCalendar }} {{ commentary.authorAccount.name }}:
           .body {{ commentary.body }}
 
     .footer.spaced

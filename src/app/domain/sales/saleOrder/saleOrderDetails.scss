@@ -1,5 +1,5 @@
-@import "../../../styles/variables";
-@import "../../../styles/flags";
+@import "variables";
+@import "flags";
 
 .sale-order-details {
 
@@ -30,10 +30,11 @@
           justify-content: flex-end;
         }
         align-items: center;
+        //justify-content: space-between;
       }
 
       .toggle-edit {
-        margin-left: 15px;
+        margin-left: 20px;
       }
 
       .has-positions {

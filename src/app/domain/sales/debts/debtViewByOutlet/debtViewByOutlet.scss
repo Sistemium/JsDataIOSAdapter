@@ -1,0 +1,400 @@
+@import "variables";
+@import "alerts";
+@import "flags";
+
+.debt-view-by-outlet {
+
+  $margin: 6px;
+  $field-width: 100px;
+  $headers-border: solid 1px $border-gray;
+
+  label {
+    font-weight: normal;
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .summDocPlus {
+    color: $gray;
+  }
+
+  *.overdue {
+    color: $state-warning-text;
+  }
+
+  @include responsive-only(xxs) {
+    .overdue {
+      display: none;
+    }
+  }
+
+  .in-progress {
+    .date .ndoc > span {
+      color: $primary-color;
+    }
+    div.debt *:hover {
+      cursor: pointer;
+    }
+  }
+
+  .date > .title {
+    font-size: 16px;
+    @include responsive-only(lt-sm) {
+
+      font-size: inherit;
+      padding: 4px 8px;
+      background: $border-gray;
+      color: $black;
+      margin-bottom: 4px;
+    }
+  }
+
+  .alert {
+
+    @include responsive-only(lt-sm) {
+      margin-bottom: 0;
+    }
+
+    .totals {
+
+      display: flex;
+      justify-items: flex-end;
+      align-items: center;
+
+      span.hidden-xs {
+        margin-left: 4px;
+      }
+
+      to-summ-cashing {
+
+        @include responsive-only(xxs) {
+
+          flex: 1;
+
+          button {
+
+            width: 100%;
+            display: block;
+
+            & + button {
+              margin-top: $margin;
+              margin-left: 0;
+            }
+
+          }
+
+        }
+
+        @include responsive-only(gt-xxs) {
+          button + button {
+            margin-left: $margin;
+          }
+        }
+
+      }
+    }
+
+  }
+
+  .header, .footer {
+
+    min-height: 35px;
+
+    @extend %flex-row;
+    justify-content: flex-end;
+    align-items: center;
+
+    @include responsive-only(lt-sm) {
+      min-height: 30px;
+
+    }
+
+    @include responsive-only(xxs) {
+
+      .totals {
+        padding: 5px;
+      }
+
+    }
+
+  }
+
+  .flag {
+
+    display: inline-block;
+    @extend %flaggable;
+
+    &.flagged {
+      @extend %flagged;
+    }
+
+    & + .flag {
+      margin-left: $margin;
+    }
+
+    &.responsible {
+      margin-right: $margin;
+    }
+
+  }
+
+  .header {
+
+    border-bottom: 2px solid $border-gray;
+    justify-content: space-between;
+
+    @include responsive-only(xxs) {
+      display: block;
+    }
+
+    label {
+      color: $black;
+      font-weight: 600;
+    }
+
+  }
+
+  .totals.buttons {
+
+    > * {
+      min-width: 0;
+      color: $primary-color;
+    }
+
+    //flex: 1;
+    display: flex;
+    text-align: left;
+    justify-content: flex-end;
+    align-items: center;
+
+    i + span {
+      margin-left: $margin;
+    }
+
+    .btn {
+      padding: 5px;
+    }
+
+    //@include responsive-only(lt-sm) {
+    //  .btn {
+    //    padding-left: 0;
+    //  }
+    //}
+
+  }
+
+  .footer {
+
+    border-top: $headers-border;
+
+    @include responsive-only(xxs) {
+      label {
+        display: none;
+      }
+
+      outlet-cashing-popover {
+        i + span {
+          display: none;
+        }
+      }
+    }
+
+  }
+
+  .partner-debt-total {
+
+    border-bottom: solid 1px $border-gray;
+    padding: $margin 0;
+
+    > .name {
+      margin-bottom: 0;
+      margin-top: $margin/2;
+      @include responsive-only(lt-sm) {
+        margin-bottom: $margin/2;
+      }
+    }
+
+    .totals {
+
+      margin: 5px 0;
+
+      @include responsive-only(xxs) {
+
+        padding: 5px;
+        background-color: $gray-background-color;
+
+        &.sub {
+          background-color: transparent;
+        }
+      }
+
+    }
+
+  }
+
+  .outlet-debt-total {
+
+    @extend %flex-row;
+
+    @include responsive-only(lt-sm) {
+      display: block;
+    }
+
+    .outlet {
+
+      flex: 1;
+      margin: 5px 0;
+
+      font-weight: bold;
+      color: $black;
+
+      .address {
+        font-size: smaller;
+        color: silver;
+        font-weight: normal;
+      }
+
+    }
+
+  }
+
+  .date, .cashing-undebted {
+    border-bottom: solid 1px $border-gray;
+    @include responsive-only(gt-xs) {
+      padding: 4px 0 4px 15px;
+    }
+  }
+
+  .cashing-undebted {
+
+    .title .btn i {
+      color: $primary-color;
+    }
+
+    .cashings {
+      @extend %table-row;
+      text-align: right;
+      .buttons {
+        text-align: left;
+        font-size: 75%;
+        a.confirmation {
+          color: $red;
+        }
+      }
+    }
+  }
+
+  .cashed.unsaved {
+    color: $gray;
+  }
+
+  .cash-this {
+    min-width: 40px !important;
+  }
+
+  %table-row {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: baseline;
+    padding: $margin/2 0;
+
+    > * + * {
+      margin-top: $margin/2;
+      margin-left: $margin;
+      min-width: $field-width;
+      display: inline-block;
+    }
+
+    @include responsive-only(lt-sm) {
+      display: block;
+      .ndoc {
+        display: block;
+      }
+    }
+
+  }
+
+  .debts {
+
+    text-align: right;
+
+    .debt {
+      @extend %table-row;
+      & *:focus {
+        outline: none;
+      }
+    }
+
+    .cashed {
+    }
+
+    .summ-origin {
+      strong {
+        font-weight: normal;
+      }
+      text-align: right;
+      @include responsive-only(gt-xxs) {
+        min-width: 120px;
+      }
+    }
+
+    .ndoc {
+
+      font-weight: normal;
+      text-align: left;
+
+      .tip {
+        position: relative;
+        top: -1px;
+        margin-right: $margin;
+        color: $state-info-text;
+        @include responsive-only(lt-sm) {
+          display: inline-block;
+          min-width: 120px;
+        }
+      }
+
+      > .ndoc {
+        margin-left: $margin;
+      }
+
+    }
+
+    .tip.overdue {
+      color: $state-warning-text;
+    }
+
+  }
+
+  .totals {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    currency-value {
+
+      label {
+        margin: 0 $margin 0;
+      }
+
+      .currency {
+        margin-left: $margin;
+      }
+
+    }
+
+    > * + * {
+      margin-left: $margin;
+      min-width: $field-width;
+      text-align: right;
+      @include responsive-only(xxs) {
+        min-width: $field-width;
+      }
+    }
+
+  }
+
+}

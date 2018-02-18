@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 .popover .price-edit-popover {
   padding-top: 6px;
@@ -17,7 +17,7 @@
 
     .num-pad-button .btn {
       font-size: 100%;
-      padding: 10px;
+      padding: 5px;
       color: $black;
     }
 
@@ -66,6 +66,7 @@
         max-width: 63px;
         text-align: center;
         margin: 0;
+        color: $primary-color;
 
         > * {
           margin-left: 0;
@@ -135,10 +136,11 @@
   }
 
   .form-control {
+
     display: inline-block;
     text-align: right;
     width: 80px;
-    margin: 4px 0 4px 4px;
+    margin: 2px 0 2px 4px;
     padding: 5px;
 
     &.ng-invalid {
@@ -174,39 +176,6 @@
 
   display: inline-block;
 
-  &.modal {
-
-    // to show saleOrder header
-    top: 50px;
-
-    .price-edit-popover {
-      .form-group > label {
-        //text-align: right;
-      }
-    }
-
-    .modal-header {
-
-      text-align: left;
-
-      .name {
-        font-size: 85%;
-        color: $gray;
-        flex: 1;
-        margin: 6px;
-      }
-
-      button .glyphicon {
-        top: 3px;
-      }
-
-      padding: 3px;
-      display: flex;
-      align-items: center;
-
-    }
-
-  }
 
   .popover-content {
 

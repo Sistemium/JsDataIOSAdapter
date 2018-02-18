@@ -30,7 +30,7 @@
 
       UserNewsMessage.findAll(filter, {cacheResponse: false})
         .then(data => {
-          vm.userNewsMessages = _.orderBy(data, ['ts'], ['desc']);
+          vm.userNewsMessages = _.orderBy(_.filter(data, 'rating'), ['ts'], ['desc']);
         });
 
     }

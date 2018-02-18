@@ -83,8 +83,9 @@
           return;
         }
 
-        if (!IOS.isIos() && !InitService.localDevMode) {
-          appcache.checkUpdate();
+        if (!IOS.isIos()) {
+          appcache.checkUpdate()
+            .catch(() => 'no update');
         }
 
         Sockets.emit('authorization', {accessToken: accessToken}, ack => {

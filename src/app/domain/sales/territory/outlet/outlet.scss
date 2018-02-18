@@ -1,0 +1,257 @@
+@import "variables";
+
+.outlet-view {
+
+  $padding: 5px;
+
+  > .header {
+
+    padding: 10px 15px;
+    margin: 10px 0;
+
+    background-color: $gray-background-color;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    @include responsive-only(xxs) {
+      padding: 5px 7px;
+      align-items: flex-start;
+    }
+
+    .outlet {
+
+      padding-right: 15px;
+      flex: 1;
+      @extend .ellipsis;
+
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: space-between;
+
+      @include responsive-only(xxs) {
+        padding: 0;
+      }
+
+      .outlet-address {
+
+        .address {
+          height: 20px;
+          @extend .ellipsis;
+        }
+
+        .partner-name {
+          min-width: 0;
+          display: flex;
+
+          @extend .ellipsis;
+
+          @include responsive-only(xxs) {
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .name {
+            padding-right: 5px;
+            font-size: 150%;
+            @extend .ellipsis;
+
+            @include responsive-only(xxs) {
+              font-size: 130%;
+            }
+          }
+
+          .outlet-buttons {
+
+            .popover {
+              max-width: 500px;
+            }
+
+            @include responsive-only(xxs) {
+              > a {
+                padding: 5px;
+              }
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+    .outlet-avatar {
+
+      display: flex;
+
+      img {
+
+        object-fit: contain;
+        width: 55px;
+        height: 55px;
+
+      }
+
+    }
+  }
+
+  .navigation {
+
+    display: flex;
+    margin: 10px 0;
+    border: 1px solid $gray-border-color;
+    border-radius: 5px;
+    overflow-y: scroll;
+
+    > a {
+      min-width: 100px;
+      flex: 1;
+      border-radius: 0;
+      padding: 5px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+
+      &:not(:last-child) {
+        border-right: 1px solid $gray-border-color;
+      }
+
+      &:hover, &:active {
+        background-color: $gray-background-color;
+      }
+
+    }
+
+    .active-state {
+      background-color: $gray-background-color;
+    }
+
+  }
+
+  .ui-view {
+
+    @include responsive-only(gt-xxs) {
+      min-height: 240px;
+    }
+
+    .outlet-salesman-contracts {
+
+      .outlet-additional-fields {
+
+        padding: 3px 0;
+
+        @include responsive-only(lt-sm) {
+          border-bottom: 1px solid $gray-border-color;
+        }
+
+        @include responsive-only(gt-xs) {
+          margin: 20px 0;
+        }
+
+        > div {
+
+          display: flex;
+          justify-content: space-between;
+          padding: 2px 0;
+
+          &:last-of-type {
+
+            label {
+              margin: 0;
+            }
+
+          }
+
+          label {
+
+            @include responsive-only(gt-xs) {
+              margin: 0;
+            }
+
+            font-weight: normal;
+            padding-right: 20px;
+            white-space: nowrap;
+
+          }
+
+          strong {
+            color: $state-danger-text;
+          }
+
+          strong, span {
+            @extend .ellipsis;
+          }
+
+          @include responsive-only(lt-sm) {
+            padding: 0;
+          }
+
+        }
+
+        > div:first-of-type {
+          border-bottom: 1px solid $gray-border-color;
+
+          @include responsive-only(lt-sm) {
+            border-bottom: none;
+          }
+
+        }
+
+      }
+
+      .outlet-partner-limitation {
+
+        margin-top: 5px;
+
+        .limitations {
+          ul {
+
+            margin-bottom: 0;
+
+            li {
+              text-align: justify;
+              &:first-letter {
+                text-transform: capitalize;
+              }
+            }
+
+            @include responsive-only(lt-sm) {
+              padding-left: 15px;
+            }
+          }
+        }
+      }
+
+    }
+
+  }
+
+  .outlet-visit {
+
+    $width-photos: 100px;
+    $width-outlet-distance: 200px;
+    $width-check-in-location: 300px;
+
+    .headers {
+
+      display: flex;
+
+      .outlet-distance {
+        min-width: $width-outlet-distance;
+      }
+
+      .check-in-location {
+        width: $width-check-in-location;
+      }
+
+      .photos {
+        min-width: $width-photos;
+      }
+
+    }
+
+  }
+
+}

@@ -2,13 +2,15 @@
 
   angular.module('webPage').service('DomainOption', DomainOption);
 
-  function DomainOption(Auth) {
+  function DomainOption(Auth, $window) {
 
     const customerAlias = {
       dr50: 'r50',
       dev: 'bs',
       dr50p: 'r50p'
     };
+
+    const siteInstance = $window.location.hostname.replace(/\..*/, '');
 
     return {
       hasMVZ,
@@ -21,8 +23,13 @@
       hasArticleFactors,
       saleOrderMaxPositions,
       allowDiscounts,
-      usePriceGroups
+      usePriceGroups,
+      hasPriceAgent
     };
+
+    function hasPriceAgent() {
+      return customerCode() === 'bs';
+    }
 
     function usePriceGroups() {
       return /r50p?$/.test(customerCode());
@@ -30,7 +37,9 @@
     }
 
     function allowDiscounts() {
-      return /r50p|bs/.test(customerCode()) || _.get(Auth.getAccount(), 'org') === 'dr50';
+      return customerCode() === 'bs' ||
+        _.get(Auth.getAccount(), 'org') === 'dr50' ||
+        (customerCode() === 'r50p' && /isd|localhost/.test(siteInstance));
     }
 
     function saleOrderMaxPositions() {
@@ -54,13 +63,27 @@
     }
 
     function saleOrderOptions() {
-      if (customerCode() === 'r50') {
-        return {
-          docDiscountsOption: true
-        };
-      }
 
-      return {};
+      switch (customerCode()) {
+
+        case 'r50': {
+          return {
+            docDiscountsOption: true
+          };
+        }
+
+        case 'bs': {
+          return {
+            commentExpeditorOption: true,
+            cashOnShipmentOption: false
+          };
+        }
+
+        default: {
+          return {};
+        }
+
+      }
 
     }
 
@@ -89,7 +112,7 @@
     }
 
     function saleOrdersDisabled() {
-      return customerCode() === 'bs' === _.get(Auth.getAccount(), 'org');
+      return 'bs' === _.get(Auth.getAccount(), 'org');
     }
 
     function visitsDisabled() {

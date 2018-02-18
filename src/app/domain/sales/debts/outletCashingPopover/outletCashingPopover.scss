@@ -1,0 +1,35 @@
+@import "variables";
+
+outlet-cashing-popover {
+
+  $margin: 13px;
+  display: inline-block;
+
+  > a {
+    padding: 8px;
+  }
+
+  .popover-inner {
+    width: 270px;
+  }
+
+  form {
+    > * + * {
+      margin-top: $margin;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+  }
+
+  #outlet-cashing-comment {
+    min-width: 240px;
+  }
+
+}

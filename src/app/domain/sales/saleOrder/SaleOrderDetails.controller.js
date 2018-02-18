@@ -4,7 +4,7 @@
 
   function SaleOrderDetailsController(Schema, $scope, $state, $q, SaleOrderHelper, $timeout, Helpers) {
 
-    const {saControllerHelper, ClickHelper, toastr} = Helpers;
+    const {saControllerHelper, ClickHelper, toastr, saEtc} = Helpers;
 
     const vm = saControllerHelper
       .setup(this, $scope)
@@ -37,7 +37,7 @@
       vm.rebindAll(SaleOrder, {date: newValue}, 'draftSaleOrders');
     });
 
-    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', _.debounce(safeSave, 700));
+    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', saEtc.debounce(safeSave, 700, $scope));
 
     /*
      Functions
@@ -104,7 +104,7 @@
 
       return SaleOrder.find($state.params.id)
         .then(saleOrder => saleOrder.DSLoadRelations('SaleOrderPosition', {bypassCache: true}))
-        .then(saleOrder => SaleOrder.loadRelations(saleOrder))
+        .then(saleOrder => SaleOrder.loadRelations(saleOrder,['Outlet', 'Contract', 'Salesman']))
         .then(saleOrder => {
 
           Contract.find(saleOrder.contractId);

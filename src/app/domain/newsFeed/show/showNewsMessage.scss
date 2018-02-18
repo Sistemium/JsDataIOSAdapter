@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 .show-news-message {
 
@@ -75,8 +75,18 @@
         max-height: $picture-width;
       }
 
-      .picture + .picture {
-        margin-left: $padding * 2;
+      @include responsive-only(gt-xs) {
+        .picture + .picture {
+          margin-left: $padding * 2;
+        }
+      }
+
+      @include responsive-only(lt-sm) {
+        justify-content: space-between;
+        margin-top: 0;
+        .picture {
+          margin-top: $padding;
+        }
       }
 
     }

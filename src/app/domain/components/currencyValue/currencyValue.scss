@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 currency-value {
 
@@ -22,5 +22,5 @@ currency-value {
 .currency {
   font-weight: normal;
   color: $gray;
-  margin-left: 6px;
+  margin-left: 3px;
 }

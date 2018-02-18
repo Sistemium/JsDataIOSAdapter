@@ -1,0 +1,49 @@
+@import "variables";
+
+.outlet-cashing {
+
+  .header {
+    font-weight: 500;
+    color: $gray;
+  }
+
+  .cashing, .header {
+
+    margin-top: 5px;
+    padding: 5px 0;
+
+    display: flex;
+    justify-content: flex-start;
+
+    > * + * {
+      margin-left: 20px;
+    }
+
+    .summ, .device-cts {
+      width: 110px;
+    }
+
+    .ndoc {
+      width: 250px;
+      text-align: right;
+    }
+
+    .summ {
+      text-align: right;
+    }
+
+    .comment-text {
+      flex:1;
+    }
+
+    .editing {
+      width: 30px;
+      text-align: right;
+      &.confirmation {
+        color: $red;
+      }
+    }
+
+  }
+
+}

@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, $q) {
 
     const SaleOrderDiscount = Schema.register({
 
@@ -29,7 +29,8 @@
       },
 
       meta: {
-        updateSaleOrder
+        updateSaleOrder,
+        updateDiscountsWithSaleOrder
       }
 
     });
@@ -38,13 +39,11 @@
 
       if (_.isUndefined(discount)) {
         console.warn('undefined discount', scopePath);
-        return;
+        return $q.reject();
       }
 
       let {discounts} = saleOrder;
-      let paths = scopePath.split('.');
-      let discountScope = _.first(paths);
-      let id = paths[1] || saleOrder.id;
+      let [discountScope, id = saleOrder.id] = scopePath.split('.');
 
       let filter = _.set({discountScope}, `${discountScope}Id`, id);
 
@@ -63,10 +62,43 @@
 
       if (!existing.DSHasChanges()) {
         console.info('ignoring path', scopePath, discount);
-        return;
+        return $q.resolve(existing);
       }
 
-      existing.DSCreate();
+      return existing.DSCreate();
+
+    }
+
+    function updateDiscountsWithSaleOrder(discounts, saleOrderPositions) {
+
+      let saleOrderScopeDiscount = _.find(discounts, {discountScope: 'saleOrder'});
+
+      _.each(saleOrderPositions, pos => {
+
+        let {articleId, priceOrigin, price} = pos;
+        let posDiscount = priceOrigin ? _.round((priceOrigin - price) / priceOrigin * 100.0, 2) : 0;
+
+        let articleDiscount = _.find(discounts, {articleId});
+
+        let discount = articleDiscount ||
+          _.find(discounts, {priceGroupId: pos.article.priceGroupId}) ||
+          saleOrderScopeDiscount;
+
+        if (!discount && posDiscount || discount && Math.abs(priceOrigin * (1.0 - discount.discount / 100.0) - price) > 0.01) {
+          let customDiscount = _.assign(articleDiscount || SaleOrderDiscount.createInstance({id: articleId}), {
+            discount: posDiscount,
+            articleId,
+            discountScope: 'article'
+          });
+          if (!articleDiscount) {
+            discounts.push(customDiscount);
+          }
+        }
+
+
+      });
+
+      return discounts;
 
     }
 

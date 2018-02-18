@@ -1,4 +1,4 @@
-sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
+sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder' discounts='$parent.vm.discounts')
 
   popovers
     a.popover-trigger(
@@ -40,6 +40,7 @@ sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder')
       ng-if='vm.overLimit'
       contract='vm.saleOrder.contract'
       ) Превышение лимита: {{ vm.overLimit | number:2 }}
+        span.currency ₽
 
     span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
       span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций

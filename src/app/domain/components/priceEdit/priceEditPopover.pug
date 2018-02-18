@@ -1,6 +1,6 @@
 fieldset.price-edit-popover
 
-  .inputs
+  .inputs(ng-class='{disabled: !vm.editable}')
 
     .list-group.discount-scope
 
@@ -16,8 +16,8 @@ fieldset.price-edit-popover
       ng-model='vm.discountScope'
       uib-btn-radio="'priceGroup'" uib-uncheckable='false'
       )
-        .name На категорию
-        .gray {{ vm.priceGroup.name }}
+        .name На группу
+        .gray «{{ vm.priceGroup.name }}»
 
       a.list-group-item(
       href
@@ -38,7 +38,7 @@ fieldset.price-edit-popover
         href
         ng-click='vm.showNumPad = !vm.showNumPad'
         )
-          strong {{ vm.discountPercentView }}
+          strong {{ vm.discountPercentView || 0 }}
           span.currency %
 
         a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
@@ -62,18 +62,35 @@ fieldset.price-edit-popover
     box-rel='","'
     )
 
-    .price
+    .fields
 
-      .form-group
-        label Со скидкой:
-        span.form-control#price-edit-price {{ vm.price | number:2 }}
+      .price
 
-    .priceOrigin
+        .form-group
+          label Со скидкой:
+          span.form-control#price-edit-price {{ vm.price | number:2 }}
 
-      .form-group
-        label Без скидки:
-        = ' '
-        span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
+      .priceOrigin
+
+        .form-group
+          label Без скидки:
+          = ' '
+          span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
+
+      .priceAgent(ng-if='vm.priceAgent')
+
+        .form-group
+          label Цена агента:
+          = ' '
+          span.form-control#price-edit-priceAgent {{ vm.priceAgent | number:2 }}
+
+      .profit(ng-if='vm.priceAgent')
+
+        .form-group
+          label Профит:
+          = ' '
+          span.form-control#price-edit-profit {{ vm.profit() | number:2 }} %
+
 
   //.extras(ng-if='vm.ksOption')
 

@@ -16,13 +16,14 @@
   };
 
   /** @ngInject */
-  function priceEditController($scope, DomainOption, Schema) {
+  function priceEditController($scope, DomainOption, Schema, saEtc) {
 
     const vm = _.assign(this, {
 
       decrementPercentClick,
       incrementPercentClick,
-      $onInit
+      $onInit,
+      profit
 
     });
 
@@ -43,7 +44,8 @@
         discountPercent: vm.stock.discountPercent(),
         price: vm.stock.discountPrice(),
         priceOrigin: vm.stock.priceOrigin(),
-        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId)
+        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
+        priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent
       });
 
       if (hasPriceGroup && !vm.priceGroup) {
@@ -59,7 +61,7 @@
        Listeners
        */
 
-      $scope.$watch('vm.discountPercent', _.debounce(onDiscountChange, 700));
+      $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
       $scope.$watch('vm.price', onPriceChange);
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
 
@@ -68,6 +70,10 @@
     /*
      Functions
      */
+
+    function profit() {
+      return (vm.price - vm.priceAgent) / vm.priceAgent * 100.0;
+    }
 
     function onDiscountScopeChange(newDiscountScope, oldDiscountScope) {
 
