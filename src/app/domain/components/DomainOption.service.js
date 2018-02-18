@@ -75,7 +75,8 @@
         case 'bs': {
           return {
             commentExpeditorOption: true,
-            cashOnShipmentOption: false
+            cashOnShipmentOption: false,
+            schemaOption: true
           };
         }
 

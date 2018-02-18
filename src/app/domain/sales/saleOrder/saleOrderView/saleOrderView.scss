@@ -177,6 +177,14 @@
 
       }
 
+      .sales-schema {
+        @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
+        display: inline-block;
+        margin-left: 6px;
+        border-radius: 6px;
+        padding: 0px 6px;
+      }
+
       .outlet .address {
 
         display: flex;

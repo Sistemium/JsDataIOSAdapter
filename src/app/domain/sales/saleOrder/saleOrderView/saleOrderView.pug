@@ -53,6 +53,7 @@
 
           .outlet(ng-class='{blocked: item.outlet.isActive === false}')
             span.name {{ item.outlet.name }}
+              span.sales-schema(ng-if='item.salesSchema > 1') Схема {{ item.salesSchema }}
             .address
               .gray {{ item.outlet.address }}
               .salesman(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}

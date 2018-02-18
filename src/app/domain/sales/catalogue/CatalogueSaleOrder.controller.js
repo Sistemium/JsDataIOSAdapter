@@ -213,6 +213,11 @@
     let unbindToChanges;
     const requiredColumns = ['outletId', 'salesmanId', 'date', 'contractId', 'priceTypeId'];
 
+    if (_.get(DomainOption.saleOrderOptions(), 'schemaOption')) {
+      requiredColumns.push('salesSchema');
+      // vm.saleOrder.salesSchema = vm.saleOrder.salesSchema || 1;
+    }
+
     function bindToChanges() {
 
       if (saleOrderId) {
