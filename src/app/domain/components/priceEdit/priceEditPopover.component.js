@@ -41,7 +41,8 @@
       _.assign(vm, {
         editable: DomainOption.allowDiscounts(),
         discountScope: vm.stock.discountScope(),
-        discountPercent: vm.stock.discountPercent(),
+        discountPercent: Math.abs(vm.stock.discountPercent()),
+        mode: (vm.stock.discountPercent() || 0) >= 0 ? 'discount' : 'markup',
         price: vm.stock.discountPrice(),
         priceOrigin: vm.stock.priceOrigin(),
         priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
@@ -64,6 +65,7 @@
       $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
       $scope.$watch('vm.price', onPriceChange);
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
+      $scope.$watch('vm.mode', onDiscountChange);
 
     }
 
@@ -98,6 +100,18 @@
 
     }
 
+    // function onModeChange(newMode, oldMode) {
+    //
+    //   if (oldMode === newMode) {
+    //     return;
+    //   }
+    //
+    //   if (oldMode && newMode) {
+    //     vm.discountPercent
+    //   }
+    //
+    // }
+
     function normalizeDiscount() {
 
       if (vm.discountPercent > 30) {
@@ -116,11 +130,16 @@
 
       normalizeDiscount();
 
-      let {discountPercent} = vm;
+      // let {discountPercent} = vm;
 
-      vm.stock.setDiscountScope(vm.discountScope, discountPercent);
+      vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent());
       vm.price = vm.stock.discountPrice();
+      // vm.mode = vm.discountPercent >= 0 ? 'discount' : 'markup';
 
+    }
+
+    function signedDiscountPercent() {
+      return vm.mode === 'discount' ? vm.discountPercent : - vm.discountPercent;
     }
 
     function onPriceChange(newPrice, oldPrice) {

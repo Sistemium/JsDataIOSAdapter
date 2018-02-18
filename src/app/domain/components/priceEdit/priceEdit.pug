@@ -7,6 +7,8 @@
   popover-trigger='::vm.popoverTrigger'
   popover-is-open='vm.popoverOpen'
   popover-placement='bottom-right auto'
+  popover-append-to-body='true'
+  popover-class='price-edit-popover'
   )
     span.value {{ vm.discountPrice() | number:2 }}
     span.currency ₽

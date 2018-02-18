@@ -25,14 +25,19 @@ fieldset.price-edit-popover
       uib-btn-radio="'saleOrder'" uib-uncheckable='false'
       ) На весь заказ
 
-    .discount.form-group
 
-      label Cкидка:
+    .btn-group.mode
+
+      button.btn.btn-default(ng-model='vm.mode' uib-btn-radio="'discount'" uib-uncheckable='false') Скидка
+      button.btn.btn-default(ng-model='vm.mode' uib-btn-radio="'markup'" uib-uncheckable='false') Наценка
+
+    .discount.form-group
 
       .input-group
 
         a.btn.input-group-addon(ng-click='vm.decrementPercentClick()')
           i.glyphicon.glyphicon-minus
+          span 1
 
         a.form-control#price-edit-discount(
         href
