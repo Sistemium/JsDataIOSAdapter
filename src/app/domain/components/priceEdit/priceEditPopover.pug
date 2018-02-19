@@ -31,32 +31,30 @@ fieldset.price-edit-popover
       button.btn.btn-default(ng-model='vm.mode' uib-btn-radio="'discount'" uib-uncheckable='false') Скидка
       button.btn.btn-default(ng-model='vm.mode' uib-btn-radio="'markup'" uib-uncheckable='false') Наценка
 
-    .discount.form-group
+    .discount.input-group
 
-      .input-group
+      a.btn.input-group-addon(ng-click='vm.decrementPercentClick()')
+        i.glyphicon.glyphicon-minus
+        span 1
 
-        a.btn.input-group-addon(ng-click='vm.decrementPercentClick()')
-          i.glyphicon.glyphicon-minus
-          span 1
+      a.form-control#price-edit-discount(
+      href
+      ng-click='vm.showNumPad = !vm.showNumPad'
+      )
+        strong {{ vm.discountPercentView || 0 }}
+        span.currency %
 
-        a.form-control#price-edit-discount(
-        href
-        ng-click='vm.showNumPad = !vm.showNumPad'
-        )
-          strong {{ vm.discountPercentView || 0 }}
-          span.currency %
+      a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
+        i.glyphicon.glyphicon-plus
+        span 1
 
-        a.btn.input-group-addon(ng-click='vm.incrementPercentClick()')
-          i.glyphicon.glyphicon-plus
-          span 1
+      a.btn.input-group-addon(ng-click='vm.incrementPercentClick(5)')
+        i.glyphicon.glyphicon-plus
+        span 5
 
-        a.btn.input-group-addon(ng-click='vm.incrementPercentClick(5)')
-          i.glyphicon.glyphicon-plus
-          span 5
-
-        a.btn.input-group-addon(ng-click='vm.incrementPercentClick(10)')
-          i.glyphicon.glyphicon-plus
-          span 10
+      a.btn.input-group-addon(ng-click='vm.incrementPercentClick(10)')
+        i.glyphicon.glyphicon-plus
+        span 10
 
     sa-keyboard(
     datatype='price'
