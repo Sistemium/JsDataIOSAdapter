@@ -4,6 +4,8 @@
 
   angular.module('Models').run(function (Schema, $q) {
 
+    const destroyedCache = {};
+
     const SaleOrderPosition = Schema.register({
 
       name: 'SaleOrderPosition',
@@ -34,9 +36,9 @@
         },
 
         updateCost: function () {
+          this.updateTs();
           this.priceDoc = this.price;
           this.cost = parseFloat((this.price * this.volume).toFixed(2));
-          this.updateTs();
         },
 
         safeSave: function () {
@@ -48,7 +50,10 @@
               afterUpdate: (options, attrs) => {
                 // FIXME: copy-pasted from SaleOrder.model
                 let nowModified = this.deviceTs;
-                if (nowModified > lastModified) {
+                if (isDeleted(this.id)) {
+                  options.cacheResponse = false;
+                  console.warn('Ignore destroyed SaleOrderPosition', this.id, nowModified, lastModified);
+                } else if (nowModified > lastModified) {
                   options.cacheResponse = false;
                   console.warn('Ignore server response SaleOrderPosition', nowModified, lastModified);
                 } else {
@@ -58,7 +63,10 @@
               }
             });
           } else {
-            return SaleOrderPosition.destroy(this);
+            return SaleOrderPosition.destroy(this)
+              .then(() => {
+                destroyedCache[this.id] = lastModified;
+              });
           }
 
         },
@@ -71,9 +79,17 @@
           return this.article && this.article.boxVolume(this.volume) || 0;
         }
 
+      },
+
+      meta: {
+        isDeleted
       }
 
     });
+
+    function isDeleted(id) {
+      return destroyedCache[id];
+    }
 
     function selfCost(volume = 0, priceAgent = 0) {
       return parseFloat((volume * priceAgent).toFixed(2));

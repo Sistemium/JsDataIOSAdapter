@@ -25,7 +25,6 @@
           }
 
           if (data.deviceCts) {
-            // IOS
 
             if (SaleOrder.hasChanges(id)) {
               return DEBUG('CatalogueSaleOrder:onJSData:ios', 'ignore saleOrder with changes');
@@ -58,6 +57,9 @@
               if (data.deviceTs < position.deviceTs) {
                 return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrderPosition with old deviceTs');
               }
+            } else if (SaleOrderPosition.meta.isDeleted(data.id)) {
+              console.warn('SaleOrderHelper ignore deleted position', data.id);
+              return;
             }
 
             DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
