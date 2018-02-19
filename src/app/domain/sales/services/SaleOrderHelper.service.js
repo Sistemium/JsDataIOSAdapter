@@ -42,41 +42,11 @@
               SaleOrderPosition.findAllWithRelations({saleOrderId: data.id}, {bypassCache: true})('Article');
             }
 
-          } else {
-            // Not IOS
-
-            if (saleOrderId === data.id && data.ts <= _.get(vm, 'saleOrder.ts')) {
-              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts');
-            }
-
-            SaleOrder.find(id, {bypassCache: true, cacheResponse: false})
-              .then(saleOrder => {
-
-                if (SaleOrder.hasChanges(id)) return;
-
-                if (saleOrder.ts <= _.get(vm, 'saleOrder.ts')) {
-                  return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts after find');
-                }
-
-                SaleOrder.inject(saleOrder);
-
-                if (vm.date === saleOrder.date || saleOrderId === saleOrder.id) {
-                  SaleOrderPosition.findAllWithRelations({saleOrderId: saleOrder.id}, {bypassCache: true})('Article');
-                }
-
-              })
-              .catch(err => {
-                if (err.error === 404) {
-                  SaleOrder.eject(id)
-                }
-              });
-
           }
 
         } else if (resource === 'SaleOrderPosition' && saleOrderId) {
 
           if (data.saleOrderId === saleOrderId) {
-            // IOS
 
             let position = getPosition(data.articleId);
 
@@ -96,20 +66,6 @@
 
             SaleOrderPosition.loadRelations(position);
 
-          } else if (!data.saleOrderId) {
-            // not IOS
-            return SaleOrderPosition.find(id, {bypassCache: true, cacheResponse: false})
-              .then(updated => {
-                if (updated.saleOrderId === saleOrderId) {
-                  let existing = getPosition(updated.articleId);
-                  if (existing && (SaleOrderPosition.hasChanges(existing) || updated.ts <= existing.ts)) {
-                    DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
-                  } else {
-                    SaleOrderPosition.inject(updated);
-                    SaleOrderPosition.loadRelations(updated);
-                  }
-                }
-              });
           }
 
         }
