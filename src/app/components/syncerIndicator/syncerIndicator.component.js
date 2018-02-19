@@ -21,7 +21,9 @@
     });
 
     function $onInit() {
-      SyncerInfo.watch($scope, saEtc.debounce(info => _.assign(vm, info), 1000));
+      SyncerInfo.watch($scope, saEtc.debounce(info => {
+        _.assign(vm, info);
+      }, 1000));
     }
 
     function syncerInfoClick() {
