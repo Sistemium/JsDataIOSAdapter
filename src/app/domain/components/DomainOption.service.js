@@ -113,7 +113,7 @@
     }
 
     function saleOrdersDisabled() {
-      return 'bs' === _.get(Auth.getAccount(), 'org');
+      return 'bs' === _.get(Auth.getAccount(), 'org') && !/jt|localhost/.test(siteInstance);
     }
 
     function visitsDisabled() {
