@@ -39,7 +39,7 @@
 
       if (_.isUndefined(discount)) {
         console.warn('undefined discount', scopePath);
-        return $q.reject();
+        return $q.reject('undefined discount');
       }
 
       let {discounts} = saleOrder;
@@ -61,7 +61,6 @@
       existing.discount = discount;
 
       if (!existing.DSHasChanges()) {
-        console.info('ignoring path', scopePath, discount);
         return $q.resolve(existing);
       }
 
