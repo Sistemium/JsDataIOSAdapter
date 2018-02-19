@@ -65,7 +65,7 @@
       $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
       $scope.$watch('vm.price', onPriceChange);
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
-      $scope.$watch('vm.mode', onDiscountChange);
+      $scope.$watch('vm.mode', () => onDiscountChange(vm.discountPercent, 0));
 
     }
 
@@ -81,7 +81,10 @@
 
       if (newDiscountScope === oldDiscountScope) return;
 
-      vm.stock.setDiscountScope(newDiscountScope);
+      if (oldDiscountScope) {
+        vm.stock.setDiscountScope(newDiscountScope);
+      }
+
       vm.discountPercent = vm.stock.discountPercent(newDiscountScope);
 
     }
@@ -100,18 +103,6 @@
 
     }
 
-    // function onModeChange(newMode, oldMode) {
-    //
-    //   if (oldMode === newMode) {
-    //     return;
-    //   }
-    //
-    //   if (oldMode && newMode) {
-    //     vm.discountPercent
-    //   }
-    //
-    // }
-
     function normalizeDiscount() {
 
       if (vm.discountPercent > 30) {
@@ -127,6 +118,8 @@
     function onDiscountChange(newDiscount, oldDiscount) {
 
       if (newDiscount === oldDiscount) return;
+
+      if (!newDiscount && !oldDiscount) return;
 
       normalizeDiscount();
 

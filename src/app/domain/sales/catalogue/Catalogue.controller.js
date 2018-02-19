@@ -916,7 +916,8 @@
           saleOrder = position.saleOrder;
 
           if (!vm.saleOrderDiscountsDisabled) {
-            SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, filter.path, stock.discountPercent());
+            SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, filter.path, stock.discountPercent())
+              .catch(_.identity);
           }
 
         });
