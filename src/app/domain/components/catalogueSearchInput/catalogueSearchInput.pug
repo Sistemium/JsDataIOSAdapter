@@ -1,6 +1,6 @@
 .stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
 
-  label(for="search-input")
+  label(ng-click='vm.onLabelClick($event)')
     i.glyphicon.glyphicon-search
 
   input#search-input.form-control(
@@ -11,11 +11,6 @@
   aria-describedby='search-input'
   ng-model='vm.search'
   on-enter='vm.onSearchEnter()'
-
-  popover-placement='bottom auto'
-  popover-trigger='"outsideClick"'
-  uib-popover-template="'app/domain/components/catalogueSearchInput/searchInputPopover.html'"
-  popover-is-open='vm.searchInput'
   )
 
   span.form-control-feedback(ng-hide='!vm.search')
