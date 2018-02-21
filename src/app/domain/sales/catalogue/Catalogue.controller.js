@@ -5,7 +5,6 @@
   const SHORT_TIMEOUT = 0;
   const LOW_STOCK_THRESHOLD = 24;
   const FONT_SIZE_KEY = 'catalogue.fontSize';
-  const LIMIT_TO = 20;
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout,
                                DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper) {
@@ -27,7 +26,7 @@
       Restriction,
       RestrictionArticle,
       OutletSalesmanContract,
-      SearchTag
+      ArticleTag
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -44,12 +43,12 @@
       showOnlyOrdered: $state.params.ordered === 'true',
       lowStockThreshold: LOW_STOCK_THRESHOLD,
 
+      activeTags: {},
       hasKS: DomainOption.hasSaleOrderKS(),
       currentArticleGroup: null,
       ancestors: [],
       articleGroupIds: {},
       search: $state.params.q || '',
-      //currentSearchTags: [],
       saleOrderId: $state.params.saleOrderId,
       saleOrderPositions: false,
       isOutletPopoverOpen: false,
@@ -79,8 +78,6 @@
       toggleShowFirstLevelClick,
       toggleHideBoxesClick,
       onSaleOrderClick,
-      saveTag,
-      toggleFilter,
 
       compDiscountClick,
       bPlusButtonClick,
@@ -105,8 +102,9 @@
       .then(findAll)
       .then(() => {
 
-        SearchTag.findAll()
-          .then(res => vm.searchTags = _.take(_.orderBy(res, 'cnt', 'desc'), LIMIT_TO));
+        vm.tags = _.groupBy(ArticleTag.meta.tags, item => {
+          return item[3];
+        });
 
         vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
           vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
@@ -338,34 +336,6 @@
       setCurrentArticleGroup(vm.currentArticleGroup);
     }
 
-    function saveTag(tag) {
-
-      let searchTag = _.find(vm.searchTags, {label: tag.label});
-
-      if (!searchTag) {
-
-        let instance = SearchTag.createInstance({
-          code: tag.code || tag.pieceVolume,
-          label: tag.label,
-          lastUsed: moment(),
-          cnt: 1
-        });
-
-        SearchTag.create(instance)
-          .then(res => {
-            res.isActive = 'true';
-            vm.searchTags.push(res);
-          });
-
-      } else {
-        searchTag.cnt++;
-        searchTag.lastUsed = moment().toDate();
-        searchTag = _.omit(searchTag, 'isActive');
-        SearchTag.create(searchTag);
-      }
-
-    }
-
     function toggleShowImagesClick() {
 
       vm.showImages = !vm.showImages;
@@ -490,12 +460,40 @@
 
     function articleTagClick(articleTagObj) {
 
-      if (!_.find(vm.filters, articleTagObj)) {
+      let {code} = articleTagObj;
 
-        saveTag(articleTagObj);
+      if (!_.find(vm.filters, {code: code})) {
+
+        let currentTagInfo = _.compact(_.flatten(_.map(vm.tags, tag => {
+
+          return _.find(tag, v => {
+
+            if (v[0] === code) {
+              return v;
+            }
+
+          });
+
+        })));
+
+        let key = currentTagInfo[3] || currentTagInfo[0];
+
+        vm.activeTags[key] = currentTagInfo[1];
+
+        vm.filters.push(articleTagObj);
+
+      } else {
+        let {label} = articleTagObj;
+
+        _.each(vm.activeTags, (val, key) => {
+          if (val === label) {
+            vm.activeTags = _.omit(vm.activeTags, key);
+            return false;
+          }
+        });
+
+        _.remove(vm.filters, _.find(vm.filters, {label: label}));
       }
-
-      toggleFilter(articleTagObj);
 
     }
 
@@ -503,38 +501,27 @@
 
       let volumeFilter = {pieceVolume: pieceVolumeInt, label: pieceVolumeInt + 'л'};
 
-      if (!_.find(vm.filters, {label: volumeFilter.label})) {
+      if (!_.find(vm.filters, 'pieceVolume')) {
+        vm.filters.push(volumeFilter);
+      } else {
+
+        // get pieceVolume from vm filters instead of using regexp
 
         let existingVolumeFilter = _.find(vm.filters, el => /^\d?\.?\d+л$/.test(el.label));
 
-        if (existingVolumeFilter) {
-          toggleFilter(existingVolumeFilter);
+        _.remove(vm.filters, existingVolumeFilter);
+
+        if (pieceVolumeInt !== _.get(existingVolumeFilter, 'pieceVolume')) {
+          vm.filters.push(volumeFilter);
         }
 
-        saveTag(volumeFilter);
       }
-
-      toggleFilter(volumeFilter);
 
     }
 
     /*
      Functions
      */
-
-    function toggleFilter(filter) {
-
-      let idx = vm.searchTags.indexOf(_.find(vm.searchTags, {label: filter.label}));
-
-      if (_.find(vm.filters, filter)) {
-        vm.searchTags[idx] = _.omit(vm.searchTags[idx], 'isActive');
-        _.remove(vm.filters, filter);
-      } else {
-        vm.searchTags[idx] = _.assign({'isActive': true}, vm.searchTags[idx]);
-        vm.filters.push(filter);
-      }
-
-    }
 
     // TODO: move to a separate helper
 
