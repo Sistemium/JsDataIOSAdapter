@@ -1,12 +1,12 @@
 catalogue-search-input(
+on-label-click='vm.showAdvancedFilter = !vm.showAdvancedFilter'
 search='vm.search'
 filters='vm.filters'
 stock-length='vm.stock.length'
 search-enter-press='vm.searchEnterPress'
 search-tags='vm.searchTags'
-current-search-tags='vm.currentSearchTags',
-save-tag-fn='vm.saveTag'
-toggle-filter-fn='vm.toggleFilter'
+current-search-tags='vm.currentSearchTags'
+active-tags='vm.activeTags'
 )
 
 .alert.alert-default.collapser
@@ -18,6 +18,13 @@ toggle-filter-fn='vm.toggleFilter'
     span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
 
 font-size-edit(append-to='articleGroups')
+
+  advanced-filter(
+  ng-if='vm.showAdvancedFilter'
+  search='vm.search'
+  filters='vm.filters'
+  active-tags='vm.activeTags'
+  )
 
   .block-to-collapse.scroll-y.article-groups(
   uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
