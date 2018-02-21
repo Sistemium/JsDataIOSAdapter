@@ -1,0 +1,30 @@
+.advanced-filter
+
+  .query
+
+    p Запросы
+
+    .scroll-y(
+    resize
+    )
+      a.badge(
+      ng-repeat='query in vm.searchQueries track by query.id'
+      ng-click='vm.queryClick(query)'
+      ng-class='{active : vm.currentSearchQuery === query.query}'
+      ) {{query.query}}
+
+  .tag
+
+    p Теги
+
+    .scroll-y(
+    resize
+    )
+      .tag-line(
+      ng-repeat='tag in vm.newTags track by $index'
+      )
+        a.badge(
+        ng-repeat='key in tag track by $index'
+        ng-click='vm.tagClick(key)'
+        ng-class='{active : (vm.activeTags[key[3]] || vm.activeTags[key[0]]) === key[1]}'
+        ) {{key[1]}}
