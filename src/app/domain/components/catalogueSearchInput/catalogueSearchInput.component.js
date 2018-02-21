@@ -9,11 +9,12 @@
     bindings: {
       search: '=',
       filters: '=',
-      stockLength: '<',
       searchEnterPress: '=',
-      saveTagFn: '&',
-      toggleFilterFn: '&',
-      searchTags: '<'
+      activeTags: '=',
+
+      stockLength: '<',
+
+      onLabelClick: '&'
     },
 
     templateUrl: 'app/domain/components/catalogueSearchInput/catalogueSearchInput.html',
@@ -29,49 +30,39 @@
 
     const runDebounce = _.debounce(delayedSave, 1000);
 
-    let ingoreWatch = false;
-
     const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
+
       $onInit,
 
       clearSearchClick,
-      removeTagClick,
-      queryClick,
-      tagClick,
-
       onSearchEnter,
+      removeTagClick,
 
-      search: $state.params.q || '',
-      currentSearchQuery: null
+      search: $state.params.q || ''
 
     });
 
     $scope.$watch('vm.search', nv => {
-
-      if (ingoreWatch) {
-        ingoreWatch = !ingoreWatch;
-        return;
-      }
-
-      const savedQuery = _.find(vm.searchQueries, {query: nv});
-
-      if (savedQuery) {
-        vm.currentSearchQuery = savedQuery.query;
-      } else {
-        vm.currentSearchQuery = null;
-      }
 
       runDebounce(nv);
 
     });
 
     function $onInit() {
-      SearchQuery.findAll().then(res => vm.searchQueries = _.take(_.orderBy(res, 'cnt', 'desc'), LIMIT_TO));
+
+      SearchQuery.findAll();
+
+      SearchQuery.bindAll({
+        orderBy: 'query',
+        limit: LIMIT_TO
+      }, $scope, 'vm.searchQueries');
+
     }
 
     function saveQuery(val) {
+
       let searchQuery = _.find(vm.searchQueries, {query: val});
 
       if (!searchQuery) {
@@ -82,10 +73,7 @@
           cnt: 1
         });
 
-        vm.searchQueries.push(instance);
-
-        SearchQuery.create(instance)
-          .then(res => vm.currentSearchQuery = res.query);
+        SearchQuery.create(instance);
 
       } else {
 
@@ -105,51 +93,8 @@
 
     }
 
-    function queryClick(query) {
-
-      let queryStr = _.get(query, 'query');
-
-      if (vm.currentSearchQuery === queryStr) {
-        vm.search = vm.currentSearchQuery = null;
-      } else {
-        saveQuery(queryStr);
-        ingoreWatch = true;
-        vm.search = vm.currentSearchQuery = queryStr;
-      }
-
-    }
-
-    function tagClick(tag) {
-
-      let tagInArray = _.find(vm.filters, {label: tag.label});
-
-      if (!tagInArray) {
-
-        let volumeRegExp = /^\d?\.?\d+л$/;
-
-        let codeName = volumeRegExp.test(tag.label) ? 'pieceVolume' : 'code';
-
-        if (codeName === 'pieceVolume') {
-          let existingVolumeFilter = _.find(vm.filters, el => volumeRegExp.test(el.label));
-
-          if (existingVolumeFilter) {
-            vm.toggleFilterFn()(existingVolumeFilter);
-          }
-        }
-
-        vm.toggleFilterFn()({[codeName]: tag.code, 'label': tag.label});
-
-        vm.saveTagFn()(tag);
-
-      } else {
-        vm.toggleFilterFn()(tagInArray);
-      }
-
-    }
-
     function clearSearchClick() {
       vm.search = null;
-      vm.currentSearchQuery = null;
     }
 
     function onSearchEnter() {
@@ -157,7 +102,18 @@
     }
 
     function removeTagClick(tag) {
-      vm.toggleFilterFn()(tag);
+
+      let {label} = tag;
+
+      _.each(vm.activeTags, (val, key) => {
+        if (val === label) {
+          vm.activeTags = _.omit(vm.activeTags, key);
+          return false;
+        }
+      });
+
+      _.remove(vm.filters, _.find(vm.filters, {label: label}));
+
     }
 
   }
