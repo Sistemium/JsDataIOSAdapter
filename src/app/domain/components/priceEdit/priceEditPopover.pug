@@ -40,7 +40,10 @@ fieldset.price-edit-popover
         label(ng-switch-when='markup') Наценка:
         label(ng-switch-when='price') Цена со скидкой:
 
-        .form-control#price-edit-price-display(ng-switch-when='price')
+        .form-control#price-edit-price-display(
+        ng-switch-when='price'
+        ng-class='{"ng-invalid": vm.invalidPrice}'
+        )
 
           strong {{ vm.priceView || 0 }}
           span.currency ₽
@@ -63,6 +66,7 @@ fieldset.price-edit-popover
     ng-if='vm.mode === "price"'
     model='vm.priceView'
     export-model='vm.price'
+    model-max='vm.maxPrice'
     box-rel='","'
     )
 

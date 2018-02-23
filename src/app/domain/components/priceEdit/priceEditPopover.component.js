@@ -47,7 +47,9 @@
         price: vm.stock.discountPrice(),
         priceOrigin: vm.stock.priceOrigin(),
         priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
-        priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent
+        priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent,
+        maxPrice: vm.stock.priceOrigin() * 1.3,
+        minPrice: vm.stock.priceOrigin() * 0.7
       });
 
       if (hasPriceGroup && !vm.priceGroup) {
@@ -171,6 +173,13 @@
       if (!price) {
         vm.price = vm.stock.discountPrice();
       }
+
+      if (vm.price > vm.maxPrice || vm.price < vm.minPrice) {
+        vm.invalidPrice = true;
+        return;
+      }
+
+      vm.invalidPrice = false;
 
       if (vm.mode === 'price') {
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent());
