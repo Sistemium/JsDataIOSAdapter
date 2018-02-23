@@ -23,7 +23,8 @@
       decrementPercentClick,
       incrementPercentClick,
       $onInit,
-      profit
+      profit,
+      signedDiscountPercent
 
     });
 
@@ -42,7 +43,7 @@
         editable: DomainOption.allowDiscounts(),
         discountScope: vm.stock.discountScope(),
         discountPercent: Math.abs(vm.stock.discountPercent()),
-        mode: (vm.stock.discountPercent() || 0) >= 0 ? 'discount' : 'markup',
+        mode: detectMode(),
         price: vm.stock.discountPrice(),
         priceOrigin: vm.stock.priceOrigin(),
         priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
@@ -63,15 +64,26 @@
        */
 
       $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
-      $scope.$watch('vm.price', onPriceChange);
+      $scope.$watch('vm.price', saEtc.debounce(onPriceChange, 1500, $scope));
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
-      $scope.$watch('vm.mode', () => onDiscountChange(vm.discountPercent, 0));
+      $scope.$watch('vm.mode', () => onDiscountChange(signedDiscountPercent(), 0));
 
     }
 
     /*
      Functions
      */
+
+    function detectMode() {
+
+      let percent = vm.stock.discountPercent() || 0;
+
+      if (Math.abs(percent - _.round(percent, 2)) > 0) {
+        return 'price';
+      }
+
+      return percent >= 0 ? 'discount' : 'markup';
+    }
 
     function profit() {
       return (vm.price - vm.priceAgent) / vm.priceAgent * 100.0;
@@ -111,7 +123,9 @@
         vm.discountPercent = 0;
       }
 
-      vm.discountPercent = _.round(vm.discountPercent, 2) || 0;
+      if (vm.mode !== 'price') {
+        vm.discountPercent = _.round(vm.discountPercent, 2) || 0;
+      }
 
     }
 
@@ -120,6 +134,10 @@
       if (newDiscount === oldDiscount) return;
 
       if (!newDiscount && !oldDiscount) return;
+
+      if (vm.mode === 'price') {
+        return;
+      }
 
       normalizeDiscount();
 
@@ -132,7 +150,16 @@
     }
 
     function signedDiscountPercent() {
-      return vm.mode === 'discount' ? vm.discountPercent : - vm.discountPercent;
+
+      switch (vm.mode) {
+        case 'discount':
+          return vm.discountPercent;
+        case 'markup':
+          return -vm.discountPercent;
+        case 'price':
+          return (vm.priceOrigin - vm.price) / vm.priceOrigin * 100.0;
+      }
+
     }
 
     function onPriceChange(newPrice, oldPrice) {
@@ -143,6 +170,10 @@
 
       if (!price) {
         vm.price = vm.stock.discountPrice();
+      }
+
+      if (vm.mode === 'price') {
+        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent());
       }
 
     }
