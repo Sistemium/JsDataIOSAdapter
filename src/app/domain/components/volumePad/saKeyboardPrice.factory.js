@@ -14,7 +14,9 @@
       };
     };
 
-    function disableButton(button, data, modelMax, clicked) {
+    function disableButton(button, data, modelMax, touched) {
+
+      if (!touched) return false;
 
       if (button.remove) {
         return !data;
@@ -22,7 +24,7 @@
 
       if (modelMax) {
 
-        if (exportSymbols(`${clicked ? data : ''}${button.label}`) > modelMax) {
+        if (exportSymbols(`${touched ? data : ''}${button.label}`) > modelMax) {
           return true;
         }
 
