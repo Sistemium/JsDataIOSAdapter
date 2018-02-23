@@ -1,31 +1,39 @@
-.stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
+.filters
 
-  label(for="search-input")
-    i.glyphicon.glyphicon-search
+  .stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
 
-  input#search-input.form-control(
-  type='search'
-  placeholder='Поиск'
-  select-on-focus
-  track-focused
-  aria-describedby='search-input'
-  ng-model='vm.search'
-  ng-model-options='{debounce: vm.debounce}'
-  on-enter='vm.onSearchEnter()'
-  )
+    label(for='search-input')
+      i.glyphicon.glyphicon-search
 
-  span.form-control-feedback(ng-hide='!vm.search')
-    a(ng-click='vm.clearSearchClick()' href)
-      i.glyphicon.glyphicon-remove
-
-  .filters
-    a.filter(
-    href
-    ng-click='vm.removeFilterClick(filter)'
-    ng-repeat='filter in vm.filters track by $index'
+    input#search-input.form-control(
+    type='search'
+    placeholder='Поиск'
+    select-on-focus
+    track-focused
+    aria-describedby='search-input'
+    ng-model='vm.search'
+    ng-model-options='{debounce: vm.debounce}'
+    on-enter='vm.onSearchEnter()'
     )
-      i.glyphicon.glyphicon-remove
-      span {{ filter.label }}
+
+    span.form-control-feedback(ng-hide='!vm.search')
+      a(ng-click='vm.clearSearchClick()' href)
+        i.glyphicon.glyphicon-remove
+
+    .filters
+      a.filter(
+      href
+      ng-click='vm.removeFilterClick(filter)'
+      ng-repeat='filter in vm.filters track by $index'
+      )
+        i.glyphicon.glyphicon-remove
+        span {{ filter.label }}
+
+  button.btn.btn-default#only-shipped-filter(
+  ng-click='vm.onlyShippedClick()'
+  ng-class='{active: vm.showOnlyShipped}'
+  )
+    i.glyphicon.glyphicon-star-empty
 
 .alert.alert-default.collapser
   a(

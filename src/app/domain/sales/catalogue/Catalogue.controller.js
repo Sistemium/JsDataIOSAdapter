@@ -86,6 +86,7 @@
       removeFilterClick,
       thumbClick,
       onScrolledToBeginning,
+      onlyShippedClick,
 
       onSearchEnter,
       onStateChange,
@@ -213,6 +214,11 @@
     /*
      Handlers
      */
+
+    function onlyShippedClick() {
+      vm.showOnlyShipped = !vm.showOnlyShipped;
+      setCurrentArticleGroup(vm.currentArticleGroup);
+    }
 
     function onContractChange() {
       setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
@@ -1123,16 +1129,16 @@
 
       }
 
-      if (vm.search || vm.filters.length) {
+      if (vm.search || vm.filters.length || vm.showOnlyShipped) {
 
         let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
 
-        if (vm.search === '**' && vm.saleOrder) {
-          reg = false;
-          vm.showOnlyShipped = true;
-        } else {
-          vm.showOnlyShipped = false;
-        }
+        // if (vm.search === '**' && vm.saleOrder) {
+        //   reg = false;
+        //   vm.showOnlyShipped = true;
+        // } else {
+        //   vm.showOnlyShipped = false;
+        // }
 
         let pieceVolume;
 
