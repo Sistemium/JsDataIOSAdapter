@@ -14,6 +14,8 @@
 
     let {saleOrderId, outletId, salesmanId} = $state.params;
 
+    const domainOptions = DomainOption.saleOrderOptions();
+
     vm.use({
 
       noFactor: !DomainOption.hasArticleFactors(),
@@ -47,12 +49,18 @@
 
     } else {
 
-      vm.saleOrder = SaleOrder.createInstance({
+      let saleOrderDefaults = {
         outletId,
         salesmanId: salesmanId || _.get(SalesmanAuth.getCurrentUser(), 'id'),
         date: moment().add(1, 'days').format(),
         processing: 'draft'
-      });
+      };
+
+      if (domainOptions.schemaOption) {
+        saleOrderDefaults.salesSchema = 1;
+      }
+
+      vm.saleOrder = SaleOrder.createInstance(saleOrderDefaults);
 
     }
 
@@ -213,7 +221,7 @@
     let unbindToChanges;
     const requiredColumns = ['outletId', 'salesmanId', 'date', 'contractId', 'priceTypeId'];
 
-    if (_.get(DomainOption.saleOrderOptions(), 'schemaOption')) {
+    if (domainOptions.schemaOption) {
       requiredColumns.push('salesSchema');
       // vm.saleOrder.salesSchema = vm.saleOrder.salesSchema || 1;
     }
