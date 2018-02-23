@@ -2,7 +2,7 @@
 
 (function () {
 
-  function PartnerController(Schema, $state, $scope, ConfirmModal, saControllerHelper, SalesmanAuth) {
+  function PartnerController(Schema, $state, $scope, ConfirmModal, saControllerHelper, SalesmanAuth, DomainOption) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -44,7 +44,9 @@
 
           filter = Outlet.meta.salesmanFilter(filter);
 
-          return Outlet.findAllWithRelations(filter, {bypassCache: true})('Visit')
+          const relations = DomainOption.visitsDisabled() ? ['Partner'] : ['Visit'];
+
+          return Outlet.findAllWithRelations(filter, {bypassCache: true})(relations)
             .then(outlets => {
 
               vm.outlets = outlets;
