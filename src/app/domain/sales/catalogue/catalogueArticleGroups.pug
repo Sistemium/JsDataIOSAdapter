@@ -30,6 +30,7 @@
         span {{ filter.label }}
 
   button.btn.btn-default#only-shipped-filter(
+  ng-if='vm.saleOrder'
   ng-click='vm.onlyShippedClick()'
   ng-class='{active: vm.showOnlyShipped}'
   )
