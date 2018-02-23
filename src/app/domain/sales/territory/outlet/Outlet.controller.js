@@ -104,12 +104,6 @@
 
     }
 
-    function currentFilter() {
-      return SalesmanAuth.makeFilter({
-        outletId: stateFilter
-      });
-    }
-
     function refresh(salesman) {
 
       vm.currentSalesman = salesman;
