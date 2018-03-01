@@ -732,7 +732,8 @@
             };
           }
         ),
-        item => item.article && item.article.name
+        // item => item.article && item.article.name
+        ['article.firstName', 'article.pieceVolume', 'article.name']
       );
 
       DEBUG('filterStock', 'orderBy');
