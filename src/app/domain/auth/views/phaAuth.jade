@@ -17,7 +17,7 @@ section.row-fluid
           ng-required="true"
           ng-model="vm.mobileNumber"
           autocomplete="off"
-          auto-focus="{{vm.state==='mobileNumber'}}"
+          sa-auto-focus="{{vm.state==='mobileNumber'}}"
         )
     .form-group(ng-if="vm.state==='code'")
       label.col-sm-3.control-label(for="inputCode") Пароль из СМС
@@ -29,7 +29,7 @@ section.row-fluid
           placeholder="4-6 цифр"
           ng-model="vm.code"
           autocomplete="off"
-          auto-focus="true"
+          sa-auto-focus="true"
         )
     hr
 

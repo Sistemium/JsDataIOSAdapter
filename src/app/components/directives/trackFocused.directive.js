@@ -20,6 +20,7 @@
         });
 
         element.on('blur', function () {
+          // console.warn(arguments);
           inFocus = false;
           $timeout(500).then(() => {
             $rootScope.hasInputInFocus = inFocus;
