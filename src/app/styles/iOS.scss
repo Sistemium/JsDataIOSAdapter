@@ -85,7 +85,7 @@
   }
 
   a.list-group-item:hover:not(.active), .list-group-item:not(.active) a:hover {
-    background-color: white;
+    background: none !important;
     color: #555;
   }
 
