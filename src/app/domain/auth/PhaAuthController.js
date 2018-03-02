@@ -5,32 +5,13 @@
   angular.module('core.services')
     .controller('PhaAuthController', PhaAuthController);
 
-  function PhaAuthController (phaService,$state,toastr) {
-    var vm = this;
+  function PhaAuthController(phaService, $state, toastr) {
 
-    function submit () {
-      if (vm.state === 'mobileNumber') {
-        vm.busy = phaService.auth('8'+vm.mobileNumber)
-          .then(function (){
-            vm.state = 'code';
-          })
-          .catch(function(){
-            toastr.error('Неправильный номер');
-          })
-        ;
-      } else if (vm.state === 'code') {
-        vm.busy = phaService.confirm(vm.code)
-          .then(function (){
-            $state.go('home');
-          })
-          .catch(function(){
-            toastr.error('Неправильный код');
-          })
-        ;
-      }
-    }
+    const vm = this;
 
-    angular.extend (vm,{
+    let accessToken = $state.params['access-token'];
+
+    _.assign(vm, {
 
       state: 'mobileNumber',
       mobileNumber: '',
@@ -40,6 +21,43 @@
       submit: submit
 
     });
+
+    if (accessToken) {
+      vm.busy = phaService.getRoles(accessToken)
+        .then(() => {
+          $state.go('home');
+        })
+        .catch(err => console.warn(err));
+    }
+
+    /*
+    Functions
+     */
+
+    function submit() {
+
+      if (vm.state === 'mobileNumber') {
+
+        vm.busy = phaService.auth('8' + vm.mobileNumber)
+          .then(() => {
+            vm.state = 'code';
+          })
+          .catch(() => {
+            toastr.error('Неправильный номер');
+          });
+
+      } else if (vm.state === 'code') {
+
+        vm.busy = phaService.confirm(vm.code)
+          .then(() => {
+            $state.go('home');
+          })
+          .catch(() => {
+            toastr.error('Неправильный код');
+          });
+      }
+
+    }
 
   }
 

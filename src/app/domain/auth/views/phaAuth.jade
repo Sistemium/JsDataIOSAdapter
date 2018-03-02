@@ -4,7 +4,8 @@ h3
 
 hr
 
-section.row-fluid
+section.row-fluid(cg-busy='vm.busy')
+
   form.form-horizontal(ng-submit="vm.submit()" name="loginForm")
     .form-group
       label.col-sm-3.control-label(for="inputMobileNumber") Сотовый номер
