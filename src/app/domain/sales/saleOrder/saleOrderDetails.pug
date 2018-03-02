@@ -124,7 +124,7 @@
           td.number.price
             .flags
               span.flag(ng-if='item.isCompDiscount') КС
-              span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ ::item.discountPercent() }}%)
+              span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ item.discountPercent() }}%)
               currency-value(value='item.price')
           td.number.cost
             currency-value(value='item.cost')
