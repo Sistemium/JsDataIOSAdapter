@@ -48,9 +48,17 @@ fieldset.price-edit-popover
           strong {{ vm.priceView || 0 }}
           span.currency ₽
 
-        .form-control#price-edit-discount(ng-switch-when='markup|discount' ng-switch-when-separator="|")
-          strong {{ vm.discountPercentView || 0 }}
-          span.currency %
+        .input-group(ng-switch-when='markup|discount' ng-switch-when-separator="|")
+
+          a.btn.input-group-addon(href ng-click='vm.decrementPercentClick()')
+            i.glyphicon.glyphicon-minus
+
+          .form-control#price-edit-discount
+            strong {{ vm.discountPercentView || 0 }}
+            span.currency %
+
+          a.btn.input-group-addon(href ng-click='vm.incrementPercentClick()')
+            i.glyphicon.glyphicon-plus
 
     sa-keyboard(
     datatype='price'

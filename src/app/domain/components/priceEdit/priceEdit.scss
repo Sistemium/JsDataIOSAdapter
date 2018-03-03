@@ -64,19 +64,20 @@
       .form-control {
         height: auto;
       }
-      > span {
-        //padding-top: 0;
-        //padding-bottom: 0;
+    }
+
+    .display > {
+      .form-group {
+        display: flex;
+        align-items: baseline;
+        justify-content: flex-end;
       }
     }
 
     .input-group {
 
-      //margin-bottom: 2px;
+      margin-left: 10px;
       display: flex;
-      //justify-content: flex-end;
-      flex: 1;
-      //align-items: center;
 
       #price-edit-discount {
 
@@ -99,7 +100,7 @@
 
       a.btn.input-group-addon {
 
-        width: auto;
+        width: 30px;
         padding: 9px 6px 6px;
         color: $primary-color;
 
