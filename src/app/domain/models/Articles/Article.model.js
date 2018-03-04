@@ -211,6 +211,8 @@
 
       let res = _.last(m);
 
+      res = _.replace(res, /" | "/, '"');
+
       if (!res) {
         let words = _.words(name, wordsRe);
         let stop = false;
