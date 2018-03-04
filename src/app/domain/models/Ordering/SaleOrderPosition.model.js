@@ -40,6 +40,7 @@
           this.updateTs();
           // this.priceDoc = this.price;
           this.cost = parseFloat((this.price * this.volume).toFixed(2));
+          SaleOrderPosition.compute(this);
         },
 
         safeSave: function () {
