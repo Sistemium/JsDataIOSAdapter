@@ -30,12 +30,51 @@
 
       meta: {
         updateSaleOrder,
-        updateDiscountsWithSaleOrder
+        updateDiscountsWithSaleOrder,
+        ensureUnique
       }
 
     });
 
-    function updateSaleOrder(saleOrder, scopePath, discount) {
+    function ensureUnique(saleOrder) {
+
+      let scopes = _.groupBy(saleOrder.discounts, 'discountScope');
+
+      let articleScope = _.groupBy(scopes.article, 'articleId');
+      let priceGroupScope = _.groupBy(scopes.priceGroup, 'priceGroupId');
+      let saleOrderScope = scopes.saleOrder;
+
+      let res = [
+        ...destroyToEnsureUniqueScope(articleScope),
+        ...destroyToEnsureUniqueScope(priceGroupScope),
+        ...destroyToEnsureUniqueScope(saleOrderScope)
+      ];
+
+      return $q.all(_.map(res, item => SaleOrderDiscount.destroy(item.id)))
+        .then(res => {
+          console.warn('ensureUnique destroyed', res);
+        })
+        .catch(err => {
+          console.warn('ensureUnique destroyed fail', err);
+        });
+
+    }
+
+    function destroyToEnsureUniqueScope(groupedScopeData) {
+
+      let res = _.map(groupedScopeData, (records) => {
+
+        if (records.length < 2) return;
+
+        return records.slice(1);
+
+      });
+
+      return _.flatten(_.filter(res));
+
+    }
+
+    function updateSaleOrder(saleOrder, scopePath, discount, discountDoc = discount) {
 
       if (_.isUndefined(discount)) {
         console.warn('undefined discount', scopePath);
@@ -53,12 +92,14 @@
         let data = _.assign({
           saleOrderId: saleOrder.id,
           processing: 'draft',
-          discount
+          discount,
+          discountDoc
         }, filter);
         return SaleOrderDiscount.create(data);
       }
 
       existing.discount = discount;
+      existing.discountDoc = discountDoc;
 
       if (!existing.DSHasChanges()) {
         return $q.resolve(existing);

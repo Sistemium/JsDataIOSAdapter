@@ -24,10 +24,11 @@
       },
 
       computed: {
-        selfCost: ['volume', 'priceAgent', selfCost]
+        selfCost: ['volume', 'priceAgent', selfCost],
+        costDoc: ['volume', 'priceDoc', costDoc]
       },
 
-      aggregables: ['cost', 'volume', 'selfCost'],
+      aggregables: ['cost', 'volume', 'selfCost', 'costDoc'],
 
       methods: {
 
@@ -37,7 +38,7 @@
 
         updateCost: function () {
           this.updateTs();
-          this.priceDoc = this.price;
+          // this.priceDoc = this.price;
           this.cost = parseFloat((this.price * this.volume).toFixed(2));
         },
 
@@ -93,6 +94,10 @@
 
     function selfCost(volume = 0, priceAgent = 0) {
       return parseFloat((volume * priceAgent).toFixed(2));
+    }
+
+    function costDoc(volume = 0, priceDoc = 0) {
+      return parseFloat((volume * priceDoc).toFixed(2));
     }
 
   });

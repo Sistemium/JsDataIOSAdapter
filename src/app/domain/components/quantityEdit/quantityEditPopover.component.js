@@ -77,7 +77,7 @@
         saleOrderId: saleOrder.id,
         articleId: article.id,
         price: stock.discountPrice(),
-        priceDoc: stock.priceOrigin(),
+        priceDoc: stock.discountPriceDoc(),
         priceOrigin: stock.priceOrigin(),
         priceAgent: stock.priceAgent,
         volume: 0

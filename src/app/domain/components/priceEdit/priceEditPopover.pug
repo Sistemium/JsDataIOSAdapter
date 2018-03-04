@@ -36,9 +36,10 @@ fieldset.price-edit-popover
 
       .form-group(ng-switch='vm.mode')
 
-        label(ng-switch-when='discount') Скидка:
-        label(ng-switch-when='markup') Наценка:
-        label(ng-switch-when='price') Цена со скидкой:
+        .btn-group.target
+
+          button.btn.btn-default.taget-man(ng-model='vm.target' uib-btn-radio="''" uib-uncheckable='false') Упр
+          button.btn.btn-default.target-doc(ng-model='vm.target' uib-btn-radio="'Doc'" uib-uncheckable='false') Бух
 
         .form-control#price-edit-price-display(
         ng-switch-when='price'
@@ -73,7 +74,7 @@ fieldset.price-edit-popover
     datatype='price'
     ng-if='vm.mode === "price"'
     model='vm.priceView'
-    export-model='vm.price'
+    export-model='vm.priceEdit'
     model-max='vm.maxPrice'
     box-rel='","'
     )
@@ -83,11 +84,18 @@ fieldset.price-edit-popover
       .price(ng-if='vm.mode !== "price"')
 
         .form-group
-          label {{ vm.mode === 'markup' ? 'Со наценкой' : 'Со скидкой'}}:
-          span.form-control {{ vm.price | number:2 }}
+          label {{ vm.mode === 'markup' ? 'С наценкой' : 'Со скидкой'}}:
+          span.form-control
+            span {{ vm.price | number:2 }}
             span.currency ₽
 
-      .price(ng-if='vm.mode === "price"')
+        .form-group.price-doc(ng-if='vm.priceDoc !== vm.price')
+          label Бух:
+          span.form-control
+            span {{ vm.priceDoc | number:2 }}
+            span.currency ₽
+
+      .discount(ng-if='vm.mode === "price"')
 
         .form-group
           label {{ vm.mode === 'markup' ? 'Наценка' : 'Скидка' }}:
@@ -98,7 +106,7 @@ fieldset.price-edit-popover
 
         .form-group
           label Без скидки:
-          span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
+          span.form-control {{ vm.priceOrigin | number:2 }}
             span.currency ₽
 
       //.priceAgent(ng-if='vm.priceAgent')

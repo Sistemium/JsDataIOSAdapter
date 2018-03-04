@@ -86,7 +86,7 @@
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
           this.totalSelfCost = parseFloat(Schema.aggregate('selfCost').sum(this.positions).toFixed(2));
-          this.totalCostDoc = this.totalCost;
+          this.totalCostDoc = parseFloat(Schema.aggregate('costDoc').sum(this.positions).toFixed(2));
           this.deviceTs = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
         },
 

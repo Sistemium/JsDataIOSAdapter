@@ -17,4 +17,7 @@
     ng-if='vm.discountPercent()'
     ) ({{vm.discountPercent() > 0 ? '+' : '' }}{{ vm.discountPercent() | number }}%)
 
+    span.price-doc(ng-if='vm.discountPrice() !== vm.discountPrice("Doc")')
+      span.value [{{ vm.discountPrice('Doc') | number:2 }}]
+
     span.caret

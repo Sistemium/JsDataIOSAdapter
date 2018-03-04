@@ -24,7 +24,8 @@
       incrementPercentClick,
       $onInit,
       profit,
-      signedDiscountPercent
+      signedDiscountPercent,
+      target: ''
 
     });
 
@@ -45,6 +46,7 @@
         discountPercent: Math.abs(vm.stock.discountPercent()),
         mode: detectMode(),
         price: vm.stock.discountPrice(),
+        priceDoc: vm.stock.discountPrice('Doc'),
         priceOrigin: vm.stock.priceOrigin(),
         priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
         priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent,
@@ -61,14 +63,17 @@
         vm.discountScope = 'article';
       }
 
+      setPriceEdit();
+
       /*
        Listeners
        */
 
       $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
-      $scope.$watch('vm.price', saEtc.debounce(onPriceChange, 1500, $scope));
+      $scope.$watch('vm.priceEdit', saEtc.debounce(onPriceChange, 1500, $scope));
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
       $scope.$watch('vm.mode', () => onDiscountChange(signedDiscountPercent(), 0));
+      $scope.$watch('vm.target', onTargetChange);
 
     }
 
@@ -76,9 +81,9 @@
      Functions
      */
 
-    function detectMode() {
+    function detectMode(percent = vm.stock.discountPercent() || 0) {
 
-      let percent = vm.stock.discountPercent() || 0;
+      if (vm.mode === 'price') return 'price';
 
       if (Math.abs(percent - _.round(percent, 2)) > 0) {
         return 'price';
@@ -131,6 +136,27 @@
 
     }
 
+    function setPriceEdit() {
+      let priceField = `price${vm.target}`;
+      vm.priceEdit  = vm[priceField];
+    }
+
+    function onTargetChange(newTarget, oldTarget) {
+
+      if (newTarget === oldTarget) {
+        return;
+      }
+
+      let targetDiscount = vm.stock.discountPercent(vm.discountScope, vm.target);
+
+      vm.mode = detectMode(targetDiscount);
+
+      vm.discountPercent = Math.abs(targetDiscount);
+
+      setPriceEdit();
+
+    }
+
     function onDiscountChange(newDiscount, oldDiscount) {
 
       if (newDiscount === oldDiscount) return;
@@ -145,9 +171,11 @@
 
       // let {discountPercent} = vm;
 
-      vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent());
-      vm.price = vm.stock.discountPrice();
-      // vm.mode = vm.discountPercent >= 0 ? 'discount' : 'markup';
+      let priceField = `price${vm.target}`;
+
+      vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), vm.target);
+      vm[priceField] = vm.stock.discountPrice(vm.target);
+      setPriceEdit();
 
     }
 
@@ -159,7 +187,7 @@
         case 'markup':
           return -vm.discountPercent;
         case 'price':
-          return (vm.priceOrigin - vm.price) / vm.priceOrigin * 100.0;
+          return (vm.priceOrigin - vm.priceEdit) / vm.priceOrigin * 100.0;
       }
 
     }
@@ -168,13 +196,15 @@
 
       if (newPrice === oldPrice) return;
 
+      let priceField = `priceEdit`;
+
       let price = _.round(parseFloat(newPrice), 2);
 
       if (!price) {
-        vm.price = vm.stock.discountPrice();
+        price = vm[priceField] = vm.stock.discountPrice(vm.target);
       }
 
-      if (vm.price > vm.maxPrice || vm.price < vm.minPrice) {
+      if (price > vm.maxPrice || price < vm.minPrice) {
         vm.invalidPrice = true;
         return;
       }
@@ -182,7 +212,7 @@
       vm.invalidPrice = false;
 
       if (vm.mode === 'price') {
-        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent());
+        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), vm.target);
       }
 
     }

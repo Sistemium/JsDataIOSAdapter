@@ -260,7 +260,7 @@
           saleOrderId: vm.saleOrder.id,
           volume: 0,
           price: price.discountPrice(),
-          priceDoc: price.priceOrigin(),
+          priceDoc: price.discountPriceDoc(),
           priceOrigin: price.priceOrigin(),
           priceAgent: price.priceAgent,
           articleId: articleId
