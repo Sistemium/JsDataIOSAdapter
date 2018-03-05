@@ -13,8 +13,7 @@
   $headers: (
       ($width-processing, 'processing'),
       ($width-salesman, 'salesman'),
-      ($width-outlet, 'outlet'),
-      ($width-totals, 'totals')
+      ($width-outlet, 'outlet')
   );
 
   @mixin initHeadersWidth {
@@ -96,6 +95,10 @@
     }
 
     @include initHeadersWidth;
+
+    .totals {
+      //max-width: 60px;
+    }
 
   }
 
@@ -211,6 +214,23 @@
       }
 
       @include initHeadersWidth;
+
+      .totals {
+        //max-width: 170px;
+        .cost {
+          white-space: nowrap;
+        }
+        .cost-doc {
+          color: $green;
+          &:before {
+            content: '+[';
+          }
+          &:after {
+            margin-left: 2px;
+            content: ']';
+          }
+        }
+      }
 
       @include responsive-only(lt-sm) {
 

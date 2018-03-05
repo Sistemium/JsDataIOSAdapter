@@ -60,10 +60,13 @@
 
           .totals
             .cost
-              currency-value(value='item.totalCostCached() || 0')
+              currency-value.cost-doc(
+              value='item.totalCostDoc - item.totalCost'
+              ng-if='item.totalCostDoc !== item.totalCost'
+              )
+              currency-value(value='item.totalCost || 0')
             .position
-              strong {{ item.totalPositionsCached() || 0 }}
-              span П
+              currency-value(value='item.totalPositionsCached() || 0' currency='П' decimals='0')
 
         .list-item-footer
 
