@@ -88,6 +88,10 @@
 
       let existing = _.find(discounts, filter);
 
+      if (!discount && !discountDoc || discountDoc === discount) {
+        discountDoc = null;
+      }
+
       if (!existing) {
         let data = _.assign({
           saleOrderId: saleOrder.id,

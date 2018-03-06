@@ -137,8 +137,15 @@
     }
 
     function setPriceEdit() {
+
       let priceField = `price${vm.target}`;
-      vm.priceEdit  = vm[priceField];
+
+      _.assign(vm, {
+        priceEdit: vm[priceField],
+        price: vm.stock.discountPrice(),
+        priceDoc: vm.stock.discountPrice('Doc')
+      });
+
     }
 
     function onTargetChange(newTarget, oldTarget) {
@@ -176,6 +183,12 @@
       vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), vm.target);
       vm[priceField] = vm.stock.discountPrice(vm.target);
       setPriceEdit();
+
+      if (vm.priceDoc < vm.price) {
+        let otherTarget = (vm.target === 'Doc') ? '' : 'Doc';
+        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), otherTarget);
+        setPriceEdit();
+      }
 
     }
 
