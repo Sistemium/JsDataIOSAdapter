@@ -1,12 +1,11 @@
 catalogue-search-input(
-on-label-click='vm.showAdvancedFilter = !vm.showAdvancedFilter'
 search='vm.search'
 filters='vm.filters'
-stock-length='vm.stock.length'
 search-enter-press='vm.searchEnterPress'
-search-tags='vm.searchTags'
-current-search-tags='vm.currentSearchTags'
 active-tags='vm.activeTags'
+active-group='vm.activeGroup'
+stock-length='vm.stock.length'
+on-label-click='vm.showAdvancedFilter = !vm.showAdvancedFilter'
 )
 
 .alert.alert-default.collapser
@@ -17,19 +16,19 @@ active-tags='vm.activeTags'
     span {{ vm.currentArticleGroup.displayName || vm.showOnlyOrdered && 'Товары заказа' || '  Все товары' }}
     span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
 
-font-size-edit(append-to='articleGroups')
+font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
 
   advanced-filter(
-  ng-if='vm.showAdvancedFilter'
+  sng-if='vm.showAdvancedFilter'
   search='vm.search'
   filters='vm.filters'
   active-tags='vm.activeTags'
+  active-group='vm.activeGroup'
   )
 
   .block-to-collapse.scroll-y.article-groups(
   uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
   collapsed='vm.isArticleGroupsCollapsingDone=true'
-  resize resize-offset-top='5'
   )
 
     ul.preceding-groups(ng-if='vm.showFirstLevel && vm.precedingGroups.length')
