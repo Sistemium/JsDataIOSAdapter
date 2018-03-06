@@ -11,6 +11,7 @@
       filters: '=',
       searchEnterPress: '=',
       activeTags: '=',
+      activeGroup: '=',
 
       stockLength: '<',
 
@@ -107,8 +108,24 @@
 
       _.each(vm.activeTags, (val, key) => {
         if (val === label) {
+
+          let activeGroupKey = key;
+
+          //TODO: hardcoded other group's values
+
+          if (activeGroupKey === 'gift' || activeGroupKey === 'sparkling') {
+            activeGroupKey = 'other'
+          }
+
+          _.pull(vm.activeGroup[activeGroupKey].selected, label);
+
+          if (!vm.activeGroup[activeGroupKey].selected.length) {
+            vm.activeGroup[activeGroupKey].cnt = false;
+          }
+
           vm.activeTags = _.omit(vm.activeTags, key);
           return false;
+
         }
       });
 
