@@ -1,30 +1,61 @@
-.advanced-filter
+.advanced-filter.scroll-y
 
-  .query
+  uib-accordion(close-others='true')
 
-    p Запросы
-
-    .scroll-y(
-    resize
+    .query(
+    uib-accordion-group
+    class='panel-default'
+    is-disabled='!vm.searchQueries.length'
     )
-      a.badge(
-      ng-repeat='query in vm.searchQueries track by query.id'
-      ng-click='vm.queryClick(query)'
-      ng-class='{active : vm.currentSearchQuery === query.query}'
-      ) {{query.query}}
+      uib-accordion-heading
+        a.group-name Запросы
+        a.no-queries(ng-if='!vm.searchQueries.length') нет данных
 
-  .tag
+      .accordion-body
 
-    p Теги
+        .single-query(
+        ng-repeat='query in vm.searchQueries track by query.id'
+        ng-class='{active : vm.currentSearchQuery === query.query}'
+        )
+          a.query-name(
+          ng-click='vm.queryClick(query)'
+          ) {{query.query}}
 
-    .scroll-y(
-    resize
+          .query-buttons
+            a(
+            href
+            ng-click='vm.favouriteQueryClick(query)'
+            )
+              i.glyphicon.glyphicon-heart-empty(ng-if='!query.favourited')
+              i.glyphicon.glyphicon-heart(ng-if='query.favourited')
+
+            a(
+            href
+            ng-click='vm.removeQueryClick(query)'
+            )
+              i.glyphicon.glyphicon-remove
+
+    .tag(
+    ng-repeat='tagGroup in vm.articleTagGroups track by tagGroup.id'
+    uib-accordion-group
+    class='panel-default'
+    is-open='vm.activeGroup[tagGroup.id].cnt'
+    ng-click='vm.initActiveGroupPropsClick(tagGroup.id)'
     )
-      .tag-line(
-      ng-repeat='tag in vm.newTags track by $index'
-      )
-        a.badge(
-        ng-repeat='key in tag track by $index'
-        ng-click='vm.tagClick(key)'
-        ng-class='{active : (vm.activeTags[key[3]] || vm.activeTags[key[0]]) === key[1]}'
-        ) {{key[1]}}
+      uib-accordion-heading {{tagGroup.name}}
+
+        .dummy-tags
+          a(
+          href
+          ng-repeat='tag in vm.activeGroup[tagGroup.id].selected track by $index'
+          ng-if='vm.activeGroup[tagGroup.id].cnt === false && vm.activeGroup[tagGroup.id].selected.length'
+          ) {{ tag }}
+
+      .accordion-body.tag-line
+
+        a.list-group-item(
+        href
+        ng-repeat='tag in tagGroup.tags track by $index'
+        ng-click='vm.tagClick(tag, tagGroup.allowMultiple)'
+        ng-class='{active : (vm.activeTags[tag.groupId] || vm.activeTags[tag.id]) === tag.label}'
+        ) {{tag.label}}

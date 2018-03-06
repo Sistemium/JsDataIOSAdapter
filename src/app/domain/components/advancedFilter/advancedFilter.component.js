@@ -10,7 +10,8 @@
 
       search: '=',
       filters: '=',
-      activeTags: '='
+      activeTags: '=',
+      activeGroup: '='
 
     },
 
@@ -23,7 +24,7 @@
 
   function advancedFilterController($scope, Schema, saControllerHelper, $state) {
 
-    const {SearchQuery, ArticleTag} = Schema.models();
+    const {SearchQuery, ArticleTagGroup} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -32,9 +33,13 @@
 
       queryClick,
       tagClick,
+      initActiveGroupPropsClick,
+
+      favouriteQueryClick,
+      removeQueryClick,
 
       search: $state.params.q || '',
-      currentSearchQuery: null,
+      currentSearchQuery: null
 
     });
 
@@ -67,9 +72,7 @@
 
       SearchQuery.findAll();
 
-      vm.newTags = _.groupBy(ArticleTag.meta.tags, item => {
-        return item[3];
-      });
+      vm.articleTagGroups = ArticleTagGroup.getAll();
 
       SearchQuery.bindAll({
         orderBy: 'query',
@@ -78,22 +81,77 @@
 
     }
 
-    function tagClick(arg) {
+    function favouriteQueryClick(query) {
 
-      let key = arg[3] ? arg[3] : arg[0];
+      query.favourited = _.get(query, 'favourited') !== true;
+      SearchQuery.save(query);
 
-      if (vm.activeTags[key] === arg[1]) {
-        vm.activeTags = _.omit(vm.activeTags, key);
-        _.remove(vm.filters, {code: arg[0]});
-      } else {
+    }
 
-        if (key === arg[3]) {
-          _.remove(vm.filters, {label: vm.activeTags[key]});
+    function removeQueryClick(searchQuery) {
+
+      let {query} = searchQuery;
+
+      if (query === vm.currentSearchQuery) {
+        vm.currentSearchQuery = null;
+
+        if (vm.search === query) {
+          vm.search = null;
         }
 
-        vm.filters.push({code: arg[0], label: arg[1]});
+      }
 
-        vm.activeTags[key] = arg[1];
+      SearchQuery.destroy(searchQuery);
+
+    }
+
+    function initActiveGroupPropsClick(groupId) {
+
+      if (!_.get(vm.activeGroup, groupId)) {
+        vm.activeGroup[groupId] = {};
+      }
+
+      if (!_.get(vm.activeGroup[groupId], 'selected')) {
+        vm.activeGroup[groupId].selected = [];
+      }
+
+    }
+
+    function tagClick(arg, allowMultiple) {
+
+      let {groupId, label, id} = arg;
+
+      let normalGroupId = groupId;
+
+      if (allowMultiple) {
+        groupId = id;
+      }
+
+      if (vm.activeTags[groupId] === label) {
+
+        vm.activeTags = _.omit(vm.activeTags, groupId);
+        _.remove(vm.filters, {code: id});
+
+        _.pull(vm.activeGroup[normalGroupId].selected, label);
+
+        if (!vm.activeGroup[normalGroupId].selected.length) {
+          vm.activeGroup[normalGroupId].cnt = false;
+        }
+
+      } else {
+
+        if (allowMultiple) {
+          vm.activeGroup[normalGroupId].selected.push(label);
+        } else {
+          vm.activeGroup[normalGroupId].selected = [label];
+        }
+
+        if (!allowMultiple) {
+          _.remove(vm.filters, {label: vm.activeTags[groupId]});
+        }
+
+        vm.filters.push({code: id, label: label});
+        vm.activeTags[groupId] = label;
 
       }
 

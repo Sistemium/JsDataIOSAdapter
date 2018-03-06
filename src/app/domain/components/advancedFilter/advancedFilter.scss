@@ -1,59 +1,252 @@
 advanced-filter {
 
+  $border-radius: 10px;
   display: block;
-  margin: 10px 0;
 
   .advanced-filter {
 
-    @include responsive-only(sm){
+    @include responsive-only(sm) {
       width: 238px;
     }
 
-    border-radius: 10px;
-    border: 1px solid $gray-border-color;
-    padding: 10px;
+    uib-accordion {
 
-    .query, .tag {
+      .panel-group {
 
-      p {
-        font-weight: bold;
-        margin-bottom: 3px;
-        border-bottom: 1px solid darken($border-gray, 10%);
+        margin: 0;
+
+        .panel {
+          box-shadow: none;
+          border: 1px solid $gray-border-color;
+        }
+
+        .panel-default, .panel-tag {
+
+          margin-bottom: 10px;
+          border-radius: $border-radius;
+
+          .panel-heading {
+            padding: 10px;
+            background-color: transparent;
+
+            h4 {
+              font-size: 13px;
+              text-transform: uppercase;
+
+              a {
+
+                .group-name {
+                  color: black;
+                }
+
+                .no-queries {
+                  text-transform: lowercase;
+                  color: red;
+                }
+
+              }
+
+              span[uib-accordion-header] {
+
+                display: flex;
+                justify-content: space-between;
+
+                .dummy-tags {
+
+                  display: flex;
+                  justify-content: flex-end;
+
+                  a {
+                    text-transform: lowercase;
+                    margin: 0 5px;
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+
+          .panel-collapse {
+            border-bottom-right-radius: $border-radius;
+            border-bottom-left-radius: $border-radius;
+          }
+
+          .panel-body {
+            padding: 0;
+            border: 0;
+          }
+        }
       }
 
-      &:not(.query) {
-        .tag-line {
+    }
+
+    .tag {
+
+      cursor: pointer;
+
+      .tag-line {
+
+        a.list-group-item {
+
+          border-right: none;
+          border-left: none;
+          border-radius: 0;
+
+          &:last-of-type {
+            border-bottom: none;
+            border-bottom-left-radius: $border-radius - 1;
+            border-bottom-right-radius: $border-radius - 1;
+          }
+
+        }
+
+        h4 {
+          font-size: 15px;
+          text-transform: none;
+        }
+
+        .panel-body {
+
+          border-top: none;
           overflow: scroll;
+
+          a {
+
+            background-color: darken($gray-border-color, 20%);
+            padding: 5px 10px;
+            margin: 3px;
+            user-select: none;
+            display: table;
+
+            &:hover {
+              background-color: darken($gray-border-color, 10%);
+              color: $white;
+            }
+
+          }
+
+          .active {
+
+            background-color: $primary-color;
+            color: $white;
+
+            &:hover {
+              background-color: lighten($primary-color, 20%);
+            }
+
+          }
+
+        }
+
+        width: 100%;
+
+      }
+
+    }
+
+    .query {
+
+      cursor: pointer;
+
+      .single-query {
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid $gray-border-color;
+
+        .query-name {
+
+          padding: 10px 15px;
+          color: $article-nav-menu-text-color;
+          flex: 1;
+          text-transform: uppercase;
+          text-decoration: none;
+
+        }
+
+        .query-buttons {
+
+          align-self: stretch;
+          padding: 10px 5px;
+
           display: flex;
-        }
-      }
+          justify-content: space-between;
 
-      &:not(.tag) {
-        .scroll-y {
-          max-height: 300px !important;
-        }
-      }
+          width: 45px;
 
-      a {
-        background-color: darken($gray-border-color, 20%);
-        padding: 5px 10px;
-        margin: 3px;
-        user-select: none;
-        display: table;
+          a {
+            color: darken($gray-background-color, 20%);
+
+            .glyphicon-heart {
+              color: red;
+
+              &:hover {
+                color: lighten(red, 25%);
+              }
+
+            }
+
+          }
+
+        }
+
+        &:last-of-type {
+          border-bottom-right-radius: $border-radius - 1;
+          border-bottom-left-radius: $border-radius - 1;
+        }
 
         &:hover {
-          background-color: darken($gray-border-color, 10%);
+
+          background-color: $gray-background-color;
+
+          & .query-buttons {
+
+            a {
+
+              color: darken($gray-background-color, 80%);
+
+              &:first-of-type:hover {
+                color: red;
+              }
+
+              &:last-of-type:hover {
+                color: $primary-color;
+              }
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+    // active
+
+    .panel-body, .query {
+      .active {
+
+        background-color: $primary-color;
+
+        .query-buttons a, .query-name {
           color: $white;
         }
 
-      }
-
-      .active {
-        background-color: $primary-color;
-        color: $white;
-
         &:hover {
+
           background-color: lighten($primary-color, 20%);
+
+          .query-buttons a {
+            color: $white;
+          }
+
         }
 
       }
