@@ -63,6 +63,7 @@
       restrictionsBy: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
+      activeGroup: {},
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
 
       saleOrdersDisabled: DomainOption.saleOrdersDisabled(),
@@ -102,9 +103,7 @@
       .then(findAll)
       .then(() => {
 
-        vm.tags = _.groupBy(ArticleTag.meta.tags, item => {
-          return item[3];
-        });
+        vm.tags = ArticleTag.getAll();
 
         vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
           vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
@@ -460,34 +459,50 @@
 
     function articleTagClick(articleTagObj) {
 
-      let {code} = articleTagObj;
+      let {code, label} = articleTagObj;
+
+      let tagInfo = _.find(vm.tags, tag => {
+        return tag.id === code
+      });
+
+      let normalGroupId = _.get(tagInfo, 'groupId');
 
       if (!_.find(vm.filters, {code: code})) {
 
-        let currentTagInfo = _.compact(_.flatten(_.map(vm.tags, tag => {
+        let allowMultiple = _.get(tagInfo, 'group.allowMultiple');
 
-          return _.find(tag, v => {
+        if (!_.get(vm.activeGroup, normalGroupId)) {
+          vm.activeGroup[normalGroupId] = {cnt: true, selected: [label]};
+        } else {
 
-            if (v[0] === code) {
-              return v;
-            }
+          if (!_.get(vm.activeGroup[normalGroupId], 'selected')) {
+            vm.activeGroup[normalGroupId].selected = [];
+          }
 
-          });
+          vm.activeGroup[normalGroupId].cnt = true;
 
-        })));
+          vm.activeGroup[normalGroupId].selected.push(label);
+        }
 
-        let key = currentTagInfo[3] || currentTagInfo[0];
+        if (allowMultiple) {
+          normalGroupId = _.get(tagInfo, 'id');
+        }
 
-        vm.activeTags[key] = currentTagInfo[1];
-
+        vm.activeTags[normalGroupId] = label;
         vm.filters.push(articleTagObj);
 
       } else {
-        let {label} = articleTagObj;
 
         _.each(vm.activeTags, (val, key) => {
           if (val === label) {
+
+            _.pull(vm.activeGroup[normalGroupId].selected, label);
             vm.activeTags = _.omit(vm.activeTags, key);
+
+            if (!vm.activeGroup[normalGroupId].selected.length) {
+              vm.activeGroup[normalGroupId].cnt = false;
+            }
+
             return false;
           }
         });
@@ -504,8 +519,6 @@
       if (!_.find(vm.filters, 'pieceVolume')) {
         vm.filters.push(volumeFilter);
       } else {
-
-        // get pieceVolume from vm filters instead of using regexp
 
         let existingVolumeFilter = _.find(vm.filters, el => /^\d?\.?\d+л$/.test(el.label));
 
