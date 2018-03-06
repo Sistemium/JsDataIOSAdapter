@@ -181,7 +181,9 @@
       saEtc.focusElementById(id);
     }
 
-    function minusButtonClick(article) {
+    function minusButtonClick(stock) {
+
+      let {article} = stock;
 
       let minus = vm.lastPlus[article.id];
 
@@ -195,7 +197,7 @@
         vm.lastPlus[id] = minus;
       }
 
-      addPositionVolume(article.id, -minus);
+      addPositionVolume(article.id, -minus, stock);
 
     }
 
