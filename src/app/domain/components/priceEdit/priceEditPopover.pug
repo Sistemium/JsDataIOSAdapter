@@ -1,7 +1,6 @@
-fieldset.price-edit-popover
+.price-edit-popover(ng-class='{disabled: !vm.editable}')
 
-  .inputs(ng-class='{disabled: !vm.editable}')
-
+  .controls
     .list-group.discount-scope
 
       a.list-group-item(
@@ -25,6 +24,9 @@ fieldset.price-edit-popover
       uib-btn-radio="'saleOrder'" uib-uncheckable='false'
       ) На весь заказ
 
+
+
+  .buttons
 
     .btn-group.mode
 
@@ -79,48 +81,49 @@ fieldset.price-edit-popover
     box-rel='","'
     )
 
-    .fields
 
-      .price(ng-if='vm.mode !== "price"')
+  .fields
 
-        .form-group
-          label {{ vm.mode === 'markup' ? 'С наценкой' : 'Со скидкой'}}:
-          span.form-control
-            span {{ vm.price | number:2 }}
-            span.currency ₽
+    .price(ng-if='vm.mode !== "price"')
 
-        .form-group.price-doc(ng-if='vm.priceDoc !== vm.price')
-          label Бух:
-          span.form-control
-            span {{ vm.priceDoc | number:2 }}
-            span.currency ₽
+      .form-group
+        label {{ vm.mode === 'markup' ? 'С наценкой' : 'Со скидкой'}}:
+        span.form-control
+          span {{ vm.price | number:2 }}
+          span.currency ₽
 
-      .discount(ng-if='vm.mode === "price"')
+      .form-group.price-doc(ng-if='vm.priceDoc !== vm.price')
+        label Бух:
+        span.form-control
+          span {{ vm.priceDoc | number:2 }}
+          span.currency ₽
 
-        .form-group
-          label {{ vm.mode === 'markup' ? 'Наценка' : 'Скидка' }}:
-          span.form-control {{ vm.signedDiscountPercent() | number }}
-            span.currency %
+    .discount(ng-if='vm.mode === "price"')
 
-      .priceOrigin
+      .form-group
+        label {{ vm.mode === 'markup' ? 'Наценка' : 'Скидка' }}:
+        span.form-control {{ vm.signedDiscountPercent() | number }}
+          span.currency %
 
-        .form-group
-          label Без скидки:
-          span.form-control {{ vm.priceOrigin | number:2 }}
-            span.currency ₽
+    .priceOrigin
 
-      //.priceAgent(ng-if='vm.priceAgent')
+      .form-group
+        label Без скидки:
+        span.form-control {{ vm.priceOrigin | number:2 }}
+          span.currency ₽
 
-        .form-group
-          label Цена агента:
-          span.form-control#price-edit-priceAgent {{ vm.priceAgent | number:2 }}
+    //.priceAgent(ng-if='vm.priceAgent')
 
-      .profit(ng-if='vm.priceAgent')
+      .form-group
+        label Цена агента:
+        span.form-control#price-edit-priceAgent {{ vm.priceAgent | number:2 }}
 
-        .form-group
-          label Профит:
-          span.form-control#price-edit-profit {{ vm.profit() | number:2 }}
-            span.currency %
+    .profit(ng-if='vm.priceAgent')
+
+      .form-group
+        label Профит:
+        span.form-control#price-edit-profit {{ vm.profit() | number:2 }}
+          span.currency %
 
 
   //.extras(ng-if='vm.ksOption')

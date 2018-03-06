@@ -1,11 +1,29 @@
 @import "variables";
 
 .popover .price-edit-popover {
-  padding-top: 6px;
+  padding-top: 2px;
   min-width: 240px;
 }
 
 .price-edit-popover {
+
+  //display: flex;
+  //flex-flow: row wrap;
+
+  @include responsive-only(gt-xxs) {
+
+    .controls {
+      float: left;
+      min-width: 170px;
+    }
+
+    .buttons {
+      float: right;
+      margin-left: 6px;
+      margin-bottom: 6px;
+    }
+    
+  }
 
   .btn-default {
     background: none;
@@ -28,117 +46,113 @@
 
   }
 
-  .inputs {
+  .discount-scope {
 
-    .discount-scope {
+    width: 100%;
+    margin: 0 0 6px;
 
-      width: 100%;
-      margin: 0 0 6px;
+    > a {
 
-      > a {
+      margin-left: 0 !important;
+      padding: 6px;
+      text-align: center;
 
-        margin-left: 0 !important;
-        padding: 6px;
-        text-align: center;
-
-        &.active .gray {
-          color: $gray-border-color;
-        }
-
-      }
-
-      .gray {
-        font-size: 80%;
+      &.active .gray {
+        color: $gray-border-color;
       }
 
     }
 
-    > .btn-group {
-
-      display: flex;
-      margin: 8px 0;
-
-      .btn {
-        flex: 1;
-      }
-
+    .gray {
+      font-size: 80%;
     }
 
+  }
+
+  .btn-group.mode {
+
+    display: flex;
+    margin-bottom: 8px;
+
+    .btn {
+      flex: 1;
+    }
+
+  }
+
+  .form-group {
+    .form-control {
+      height: auto;
+    }
+  }
+
+  .display > {
     .form-group {
-      .form-control {
-        height: auto;
-      }
-    }
-
-    .display > {
-      .form-group {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-    }
-
-    .input-group {
-
-      margin-left: 6px;
       display: flex;
-
-      #price-edit-discount {
-
-        padding-top: 6px;
-        max-width: 63px;
-        text-align: center;
-        margin: 0;
-        color: $primary-color;
-        flex: 1;
-
-        > * {
-          margin-left: 0;
-        }
-
-        span {
-          margin-left: 2px;
-        }
-
-      }
-
-      a.btn.input-group-addon {
-
-        width: 25px;
-        padding: 9px 6px 6px;
-        color: $primary-color;
-
-        i {
-          top: 2px
-        }
-
-        background: none;
-        font-size: 80%;
-
-        span {
-          margin-left: 2px;
-          color: $gray;
-        }
-
-      }
-
-      * + .input-group-addon {
-
-        margin-left: 0 !important;
-        border-left: none;
-
-      }
-
+      align-items: center;
+      justify-content: space-between;
     }
+  }
 
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
+  .input-group {
+
+    margin-left: 6px;
+    display: flex;
+
+    #price-edit-discount {
+
+      padding-top: 6px;
+      max-width: 63px;
+      text-align: center;
       margin: 0;
+      color: $primary-color;
+      flex: 1;
+
+      > * {
+        margin-left: 0;
+      }
+
+      span {
+        margin-left: 2px;
+      }
+
     }
 
+    a.btn.input-group-addon {
+
+      width: 25px;
+      padding: 9px 6px 6px;
+      color: $primary-color;
+
+      i {
+        top: 2px
+      }
+
+      background: none;
+      font-size: 80%;
+
+      span {
+        margin-left: 2px;
+        color: $gray;
+      }
+
+    }
+
+    * + .input-group-addon {
+
+      margin-left: 0 !important;
+      border-left: none;
+
+    }
+
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
   }
 
   .form-control {
@@ -200,20 +214,15 @@
 .price-edit-popover.popover {
 
   .popover-content {
-
-    padding: 0;
-
-    .inputs {
-      padding: 4px 10px;
-    }
-    .extras {
-      padding: 4px 10px;
-    }
-
+    padding: 4px 6px;
   }
 
   div.popover {
     min-width: 200px;
+  }
+
+  & {
+    max-width: 470px;
   }
 
 }
