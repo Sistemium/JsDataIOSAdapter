@@ -250,7 +250,13 @@
 
       let position = getPosition(articleId);
 
-      if (!position && volume <= 0) {
+      if (!price || !position && volume <= 0) {
+        return;
+      }
+
+      let priceOrigin = price.priceOrigin();
+
+      if (!priceOrigin && volume > 0) {
         return;
       }
 
@@ -261,7 +267,7 @@
           volume: 0,
           price: price.discountPrice(),
           priceDoc: price.discountPriceDoc(),
-          priceOrigin: price.priceOrigin(),
+          priceOrigin,
           priceAgent: price.priceAgent,
           articleId: articleId
         });

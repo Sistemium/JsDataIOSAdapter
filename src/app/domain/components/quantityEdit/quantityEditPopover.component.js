@@ -73,12 +73,18 @@
 
       let {stock} = vm;
 
+      let priceOrigin = stock.priceOrigin();
+
+      if (!priceOrigin) {
+        return;
+      }
+
       position = SaleOrderPosition.createInstance({
         saleOrderId: saleOrder.id,
         articleId: article.id,
         price: stock.discountPrice(),
         priceDoc: stock.discountPriceDoc(),
-        priceOrigin: stock.priceOrigin(),
+        priceOrigin: priceOrigin,
         priceAgent: stock.priceAgent,
         volume: 0
       });
@@ -104,6 +110,10 @@
     function onVolumeChange() {
 
       let {volume} = vm;
+
+      if (!position) {
+        return;
+      }
 
       if (volume === position.volume) {
         return;
@@ -140,6 +150,10 @@
     }
 
     function injectPosition() {
+
+      if (!position) {
+        return;
+      }
 
       setQty();
 
