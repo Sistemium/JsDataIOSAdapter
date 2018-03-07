@@ -18,11 +18,12 @@
     }
 
     .buttons {
+      min-width: 230px;
       float: right;
       margin-left: 6px;
       margin-bottom: 6px;
     }
-    
+
   }
 
   .btn-default {
@@ -120,7 +121,7 @@
 
     a.btn.input-group-addon {
 
-      width: 25px;
+      width: 30px;
       padding: 9px 6px 6px;
       color: $primary-color;
 
