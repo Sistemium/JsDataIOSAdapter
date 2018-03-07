@@ -23,8 +23,13 @@
       hasArticleFactors,
       saleOrderMaxPositions,
       allowDiscounts,
-      usePriceGroups
+      usePriceGroups,
+      hasPriceAgent
     };
+
+    function hasPriceAgent() {
+      return customerCode() === 'bs';
+    }
 
     function usePriceGroups() {
       return /r50p?$/.test(customerCode());
@@ -58,13 +63,28 @@
     }
 
     function saleOrderOptions() {
-      if (customerCode() === 'r50') {
-        return {
-          docDiscountsOption: true
-        };
-      }
 
-      return {};
+      switch (customerCode()) {
+
+        case 'r50': {
+          return {
+            docDiscountsOption: true
+          };
+        }
+
+        case 'bs': {
+          return {
+            commentExpeditorOption: true,
+            cashOnShipmentOption: false,
+            schemaOption: true
+          };
+        }
+
+        default: {
+          return {};
+        }
+
+      }
 
     }
 
@@ -93,7 +113,8 @@
     }
 
     function saleOrdersDisabled() {
-      return 'bs' === _.get(Auth.getAccount(), 'org');
+      // return 'bs' === _.get(Auth.getAccount(), 'org') && !/jt|localhost/.test(siteInstance);
+      return false;
     }
 
     function visitsDisabled() {

@@ -38,7 +38,7 @@
           name: 'sales.debtByOutlet',
           url: '/debt/byOutlet',
 
-          templateUrl: 'app/domain/sales/debts/DebtByOutlet.html',
+          template: '<debt-view class="debt-by-outlet"></debt-view>',
 
           data: {
             title: 'Долги по точкам',

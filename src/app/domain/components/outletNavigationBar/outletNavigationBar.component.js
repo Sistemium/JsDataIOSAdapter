@@ -15,7 +15,7 @@
 
   });
 
-  function outletNavigationBar($timeout, $scope, $window, saEtc) {
+  function outletNavigationBar($timeout, $scope, $window, saEtc, DomainOption) {
 
     const vm = _.assign(this, {
       tabs: {miscellaneous: 'О точке', saleOrder: 'Заказы', debt: 'Долги', visit: 'Визиты'},
@@ -24,6 +24,10 @@
       showLeft: null,
       showRight: null
     });
+
+    if (DomainOption.visitsDisabled()) {
+      delete vm.tabs.visit;
+    }
 
     const tabCount = Object.keys(vm.tabs).length;
     const tabBar = angular.element(saEtc.getElementById('outlet-navigation-tabbar'))[0];

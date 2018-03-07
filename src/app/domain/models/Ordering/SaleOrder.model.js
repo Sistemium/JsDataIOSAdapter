@@ -85,7 +85,8 @@
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
-          this.totalCostDoc = this.totalCost;
+          this.totalSelfCost = parseFloat(Schema.aggregate('selfCost').sum(this.positions).toFixed(2));
+          this.totalCostDoc = parseFloat(Schema.aggregate('costDoc').sum(this.positions).toFixed(2));
           this.deviceTs = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
         },
 
@@ -94,6 +95,10 @@
         processingMessages: function () {
           if (!this.processingMessage) return null;
           return _.map(this.processingMessage.split('|'), msg => _.trim(msg));
+        },
+
+        profit: function () {
+          return this.totalSelfCost ? (this.totalCost - this.totalSelfCost) / this.totalSelfCost * 100.0 : null;
         },
 
         isValid: function () {

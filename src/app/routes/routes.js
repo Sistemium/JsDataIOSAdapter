@@ -36,7 +36,7 @@
 
         .state({
           name: 'auth',
-          url: '/auth',
+          url: '/auth?access-token',
           templateUrl: 'app/domain/auth/views/phaAuth.html',
           controller: 'PhaAuthController',
           controllerAs: 'vm'

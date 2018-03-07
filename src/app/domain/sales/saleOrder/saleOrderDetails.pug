@@ -122,9 +122,12 @@
             //quantity-edit(position='item')
             | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
           td.number.price
-            .flags
-              span.flag(ng-if='item.isCompDiscount') КС
-              span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ ::item.discountPercent() }}%)
-              currency-value(value='item.price')
+            .wrapper
+              .flags
+                span.flag(ng-if='item.isCompDiscount') КС
+                span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ item.discountPercent() }}%)
+              .prices
+                currency-value(value='item.price')
+                currency-value.price-doc(value='item.priceDoc' ng-if='item.priceDoc !== item.price')
           td.number.cost
             currency-value(value='item.cost')

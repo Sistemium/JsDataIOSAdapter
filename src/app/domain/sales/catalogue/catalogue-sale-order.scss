@@ -105,6 +105,23 @@ sale-order-alert {
       padding: $margin-bottom-xs/2 $margin-bottom-xs;
     }
 
+    .btn-group {
+
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+
+      @include responsive-only(xxs) {
+
+        margin-bottom: 3px;
+
+        .btn {
+          flex: 1;
+        }
+
+      }
+    }
+
   }
 
   .sale-order-main-buttons {
@@ -272,6 +289,7 @@ sale-order-alert {
 
     a.choose-outlet {
       display: inline-block;
+      white-space: nowrap;
     }
 
     .no-positions > span {

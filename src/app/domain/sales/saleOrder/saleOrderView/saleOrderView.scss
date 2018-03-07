@@ -13,8 +13,7 @@
   $headers: (
       ($width-processing, 'processing'),
       ($width-salesman, 'salesman'),
-      ($width-outlet, 'outlet'),
-      ($width-totals, 'totals')
+      ($width-outlet, 'outlet')
   );
 
   @mixin initHeadersWidth {
@@ -97,6 +96,10 @@
 
     @include initHeadersWidth;
 
+    .totals {
+      //max-width: 60px;
+    }
+
   }
 
   .alert {
@@ -177,6 +180,14 @@
 
       }
 
+      .sales-schema {
+        @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
+        display: inline-block;
+        margin-left: 6px;
+        border-radius: 6px;
+        padding: 0px 6px;
+      }
+
       .outlet .address {
 
         display: flex;
@@ -203,6 +214,23 @@
       }
 
       @include initHeadersWidth;
+
+      .totals {
+        //max-width: 170px;
+        .cost {
+          white-space: nowrap;
+        }
+        .cost-doc {
+          color: $green;
+          &:before {
+            content: '+[';
+          }
+          &:after {
+            margin-left: 2px;
+            content: ']';
+          }
+        }
+      }
 
       @include responsive-only(lt-sm) {
 

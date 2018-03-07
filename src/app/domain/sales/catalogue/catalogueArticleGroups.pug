@@ -1,20 +1,21 @@
-catalogue-search-input(
-search='vm.search'
-filters='vm.filters'
-search-enter-press='vm.searchEnterPress'
-active-tags='vm.activeTags'
-active-group='vm.activeGroup'
-stock-length='vm.stock.length'
-on-label-click='vm.showAdvancedFilter = !vm.showAdvancedFilter'
-)
+.filters
 
-//.alert.alert-default.collapser
-  a(
-  href
-  ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
+  catalogue-search-input(
+  search='vm.search'
+  filters='vm.filters'
+  search-enter-press='vm.searchEnterPress'
+  active-tags='vm.activeTags'
+  active-group='vm.activeGroup'
+  stock-length='vm.stock.length'
+  on-label-click='vm.showAdvancedFilter = !vm.showAdvancedFilter'
   )
-    span {{ vm.currentArticleGroup.displayName || vm.showOnlyOrdered && 'Товары заказа' || '  Все товары' }}
-    span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
+
+  button.btn.btn-default#only-shipped-filter(
+  ng-if='vm.saleOrder'
+  ng-click='vm.onlyShippedClick()'
+  ng-class='{active: vm.showOnlyShipped}'
+  )
+    i.glyphicon.glyphicon-star-empty
 
 font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
 

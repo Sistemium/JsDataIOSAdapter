@@ -45,26 +45,6 @@
 
   }
 
-  .uncashing-popover {
-
-    min-width: 200px;
-
-    .option {
-      .summ {
-        display: block;
-        text-align: right;
-      }
-    }
-
-    .divider {
-      font-size: 75%;
-      color: lighten($black, 10%);
-      padding: 3px 0 3px 3px;
-      background: $border-gray;
-    }
-
-  }
-
   .outlet {
 
     padding: 5px 0;
@@ -181,6 +161,26 @@
 
   .empty {
     @extend %center-vertical;
+  }
+
+}
+
+.uncashing-popover.popover {
+
+  min-width: 200px;
+
+  .option {
+    .summ {
+      display: block;
+      text-align: right;
+    }
+  }
+
+  .divider {
+    font-size: 75%;
+    color: lighten($black, 10%);
+    padding: 3px 0 3px 3px;
+    background: $border-gray;
   }
 
 }

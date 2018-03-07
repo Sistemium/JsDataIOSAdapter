@@ -88,6 +88,7 @@
       articleTagClick,
       thumbClick,
       onScrolledToBeginning,
+      onlyShippedClick,
 
       onSearchEnter,
       onStateChange,
@@ -161,6 +162,10 @@
 
         });
 
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
+
       });
 
     vm.setBusy(busy);
@@ -224,6 +229,11 @@
     /*
      Handlers
      */
+
+    function onlyShippedClick() {
+      vm.showOnlyShipped = !vm.showOnlyShipped;
+      setCurrentArticleGroup(vm.currentArticleGroup);
+    }
 
     function onContractChange() {
       setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
@@ -557,24 +567,22 @@
       vm.discountsBy = {contractId, partnerId, priceTypeId, saleOrderId};
 
       const contractFilter = {
-        contractId: {'==': contractId}
+        contractId: {'==': contractId},
+        discount: {'!=': 0}
       };
 
       const partnerFilter = {
-        partnerId: {'==': partnerId}
+        partnerId: {'==': partnerId},
+        discount: {'!=': 0}
       };
 
-      if (!IOS.isIos()) {
-        contractFilter.discount = {'!=': 0};
-        partnerFilter.discount = {'!=': 0};
-      }
-
       $q.all([
-        ContractArticle.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
-        ContractPriceGroup.findAll({where: contractFilter}, {cacheResponse: false, limit: 10000}),
-        PartnerArticle.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
-        PartnerPriceGroup.findAll({where: partnerFilter}, {cacheResponse: false, limit: 10000}),
+        ContractArticle.uncachedFindAll({where: contractFilter}, {limit: 10000}),
+        ContractPriceGroup.uncachedFindAll({where: contractFilter}, {limit: 10000}),
+        PartnerArticle.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
+        PartnerPriceGroup.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
+          .then(SaleOrderDiscount.meta.ensureUnique)
           .catch(() => {
             vm.saleOrderDiscountsDisabled = true;
           })
@@ -586,14 +594,14 @@
 
           let discountModel = {
             article: _.keyBy([
-              ..._.filter(discounts, 'articleId'),
+              ..._.filter(allData[2], 'discount'),
               ..._.filter(allData[0], 'discount'),
-              ..._.filter(allData[2], 'discount')
+              ..._.filter(discounts, 'articleId')
             ], 'articleId'),
             priceGroup: _.keyBy([
-              ..._.filter(discounts, 'priceGroupId'),
+              ..._.filter(allData[3], 'discount'),
               ..._.filter(allData[1], 'discount'),
-              ..._.filter(allData[3], 'discount')
+              ..._.filter(discounts, 'priceGroupId')
             ], 'priceGroupId'),
             saleOrder: saleOrderScopeDiscount || {}
           };
@@ -608,6 +616,7 @@
             let price = vm.prices[articleId];
 
             let posDiscount = pos.priceOrigin ? _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
+            let posDiscountDoc = pos.priceOrigin ? _.round((pos.priceOrigin - pos.priceDoc) / pos.priceOrigin * 100.0, 2) : 0;
 
             if (!price) {
               price = vm.prices[articleId] = {price: pos.priceOrigin};
@@ -616,7 +625,8 @@
 
             if (!pos.priceOrigin || pos.priceOrigin !== price.price) {
               pos.priceOrigin = price.price;
-              pos.price = price.price * (1.0 - posDiscount / 100.0);
+              pos.price = _.round(price.priceOrigin * (1.0 - posDiscount / 100.0), 2);
+              pos.priceDoc = _.round(price.priceOrigin * (1.0 - posDiscountDoc / 100.0), 2);
               pos.updateCost();
             }
 
@@ -626,13 +636,22 @@
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
 
-            if (!discount && posDiscount || discount && Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01) {
-              let customDiscount = _.assign(
-                articleDiscount || SaleOrderDiscount.createInstance({discountScope: 'article'}), {
+            if (!discount && (posDiscount || posDiscountDoc) ||
+              discount && (
+                Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01 ||
+                Math.abs(pos.priceOrigin * (1.0 - discount.discountDoc / 100.0) - pos.priceDoc) > 0.01
+              )
+            ) {
+
+              vm.discounts.article[articleId] = _.assign(
+                articleDiscount || SaleOrderDiscount.createInstance({discountScope: 'article'}),
+                {
                   discount: posDiscount,
+                  discountDoc: posDiscountDoc,
                   articleId
-                });
-              vm.discounts.article[articleId] = customDiscount;
+                }
+              );
+
             }
 
           });
@@ -776,15 +795,19 @@
               displayVolume: stock.displayVolume,
               article: stock.article,
               articleId: stock.articleId,
+              priceAgent: stock.priceAgent,
               discountPercent,
+              targetDiscountPercent,
               discountPrice,
+              discountPriceDoc,
               priceOrigin,
               discountScope,
               setDiscountScope
             };
           }
         ),
-        item => item.article && item.article.name
+        // item => item.article && item.article.name
+        ['article.firstName', 'article.pieceVolume', 'article.name']
       );
 
       DEBUG('filterStock', 'orderBy');
@@ -831,27 +854,45 @@
       Stock functions
        */
 
-      function discountPercent(discountScope) {
+      function discountPercent(discountScope, target = '') {
+
+        let res = targetDiscountPercent.call(this, discountScope, target);
+
+        if (target !== '' && !_.isNumber(res)) {
+          return targetDiscountPercent.call(this, discountScope, '');
+        }
+
+        return res;
+
+      }
+
+      function targetDiscountPercent(discountScope, target) {
 
         let {discounts} = vm;
+        let targetField = `discount${target}`;
 
         switch (discountScope) {
           case 'article':
-            return _.get(discounts.article[this.articleId], 'discount');
+            return _.get(discounts.article[this.articleId], targetField);
           case 'priceGroup':
-            return _.get(discounts.priceGroup[this.article.priceGroupId], 'discount');
+            return _.get(discounts.priceGroup[this.article.priceGroupId], targetField);
           case 'saleOrder':
-            return discounts.saleOrder.discount;
+            return discounts.saleOrder[targetField];
           default:
             return _.get(discounts.article[this.articleId] ||
               discounts.priceGroup[this.article.priceGroupId] ||
-              discounts.saleOrder, 'discount');
+              discounts.saleOrder, targetField);
         }
 
       }
 
-      function discountPrice() {
-        return _.round(vm.prices[this.articleId].price * (1.0 - (this.discountPercent() || 0) / 100.0), 2);
+      function discountPrice(target = '') {
+        let discountPercentValue = this.discountPercent(null, target) || 0;
+        return _.round(vm.prices[this.articleId].price * (1.0 - discountPercentValue / 100.0), 2);
+      }
+
+      function discountPriceDoc() {
+        return discountPrice.call(this, 'Doc');
       }
 
       function priceOrigin() {
@@ -864,7 +905,7 @@
           'saleOrder';
       }
 
-      function setDiscountScope(discountScope, discountPercent = this.discountPercent(discountScope)) {
+      function setDiscountScope(discountScope, discountPercent = this.discountPercent(discountScope), target = '') {
 
         let path = 'saleOrder';
         let filter = {};
@@ -908,14 +949,18 @@
 
         }
 
-        _.set(vm.discounts, `${path}.discount`, discountPercent);
+        _.set(vm.discounts, `${path}.discount${target === 'Doc' ? target : ''}`, discountPercent);
 
         filter.path = path;
 
         updatePrices(discountScope, filter);
 
         if (!vm.saleOrderDiscountsDisabled) {
-          SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, path, discountPercent)
+          SaleOrderDiscount.meta.updateSaleOrder(
+            vm.saleOrder, path,
+            this.discountPercent(),
+            this.targetDiscountPercent(null, 'Doc')
+          )
             .then(res => _.set(vm.discounts, path, res))
             .catch(_.identity);
         }
@@ -964,17 +1009,27 @@
           }
 
           let newPrice = stock.discountPrice();
+          let newPriceDoc = stock.discountPriceDoc();
 
           if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) {
-            return;
+            if (_.round(Math.abs(newPriceDoc - position.priceDoc), 2) < 0.01) {
+              return;
+            }
           }
 
           position.price = newPrice;
+          position.priceDoc = newPriceDoc;
           position.updateCost();
           saleOrder = position.saleOrder;
 
           if (!vm.saleOrderDiscountsDisabled) {
-            SaleOrderDiscount.meta.updateSaleOrder(vm.saleOrder, filter.path, stock.discountPercent());
+            SaleOrderDiscount.meta.updateSaleOrder(
+              vm.saleOrder,
+              filter.path,
+              stock.discountPercent(),
+              stock.targetDiscountPercent(null, 'Doc')
+            )
+              .catch(_.identity);
           }
 
         });
@@ -1180,16 +1235,16 @@
 
       }
 
-      if (vm.search || vm.filters.length) {
+      if (vm.search || vm.filters.length || vm.showOnlyShipped) {
 
         let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
 
-        if (vm.search === '**' && vm.saleOrder) {
-          reg = false;
-          vm.showOnlyShipped = true;
-        } else {
-          vm.showOnlyShipped = false;
-        }
+        // if (vm.search === '**' && vm.saleOrder) {
+        //   reg = false;
+        //   vm.showOnlyShipped = true;
+        // } else {
+        //   vm.showOnlyShipped = false;
+        // }
 
         let pieceVolume;
 
@@ -1292,7 +1347,10 @@
 
       vm.restrictedArticles = {};
 
-      if (!salesmanId || !outletId) return;
+      if (!salesmanId || !outletId) {
+        vm.restrictionsBy = {};
+        return;
+      }
 
       if (_.isEqual(vm.restrictionsBy, {salesmanId, outletId})) {
         return;
@@ -1304,7 +1362,7 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.findAll({}, {limit: 10000})
+        RestrictionArticle.uncachedFindAll({}, {limit: 10000})
       ])
         .then(res => {
 

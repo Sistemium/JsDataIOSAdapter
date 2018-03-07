@@ -14,6 +14,8 @@
 
     let {saleOrderId, outletId, salesmanId} = $state.params;
 
+    const domainOptions = DomainOption.saleOrderOptions();
+
     vm.use({
 
       noFactor: !DomainOption.hasArticleFactors(),
@@ -47,12 +49,18 @@
 
     } else {
 
-      vm.saleOrder = SaleOrder.createInstance({
+      let saleOrderDefaults = {
         outletId,
         salesmanId: salesmanId || _.get(SalesmanAuth.getCurrentUser(), 'id'),
         date: moment().add(1, 'days').format(),
         processing: 'draft'
-      });
+      };
+
+      if (domainOptions.schemaOption) {
+        saleOrderDefaults.salesSchema = 1;
+      }
+
+      vm.saleOrder = SaleOrder.createInstance(saleOrderDefaults);
 
     }
 
@@ -173,7 +181,9 @@
       saEtc.focusElementById(id);
     }
 
-    function minusButtonClick(article) {
+    function minusButtonClick(stock) {
+
+      let {article} = stock;
 
       let minus = vm.lastPlus[article.id];
 
@@ -187,7 +197,7 @@
         vm.lastPlus[id] = minus;
       }
 
-      addPositionVolume(article.id, -minus);
+      addPositionVolume(article.id, -minus, stock);
 
     }
 
@@ -213,16 +223,21 @@
     let unbindToChanges;
     const requiredColumns = ['outletId', 'salesmanId', 'date', 'contractId', 'priceTypeId'];
 
+    if (domainOptions.schemaOption) {
+      requiredColumns.push('salesSchema');
+      // vm.saleOrder.salesSchema = vm.saleOrder.salesSchema || 1;
+    }
+
     function bindToChanges() {
 
       if (saleOrderId) {
 
         if (unbindToChanges) unbindToChanges();
 
-        vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', _.debounce(() => {
+        vm.rebindOne(SaleOrder, saleOrderId, 'vm.saleOrder', saEtc.debounce(() => {
           if (!vm.saleOrder || !vm.saleOrder.id) return;
           if (SaleOrder.hasChanges(vm.saleOrder.id)) onSaleOrderChange();
-        }, 700));
+        }, 700, $scope));
 
       } else {
         unbindToChanges = $scope.$watch(() => _.pick(vm.saleOrder, requiredColumns), onSaleOrderChange, true);
@@ -237,7 +252,13 @@
 
       let position = getPosition(articleId);
 
-      if (!position && volume <= 0) {
+      if (!price || !position && volume <= 0) {
+        return;
+      }
+
+      let priceOrigin = price.priceOrigin();
+
+      if (!priceOrigin && volume > 0) {
         return;
       }
 
@@ -247,8 +268,9 @@
           saleOrderId: vm.saleOrder.id,
           volume: 0,
           price: price.discountPrice(),
-          priceDoc: price.priceOrigin(),
-          priceOrigin: price.priceOrigin(),
+          priceDoc: price.discountPriceDoc(),
+          priceOrigin,
+          priceAgent: price.priceAgent,
           articleId: articleId
         });
         SaleOrderPosition.inject(position);

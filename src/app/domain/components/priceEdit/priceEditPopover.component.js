@@ -16,13 +16,16 @@
   };
 
   /** @ngInject */
-  function priceEditController($scope, DomainOption, Schema) {
+  function priceEditController($scope, DomainOption, Schema, saEtc) {
 
     const vm = _.assign(this, {
 
       decrementPercentClick,
       incrementPercentClick,
-      $onInit
+      $onInit,
+      profit,
+      signedDiscountPercent,
+      target: ''
 
     });
 
@@ -40,10 +43,15 @@
       _.assign(vm, {
         editable: DomainOption.allowDiscounts(),
         discountScope: vm.stock.discountScope(),
-        discountPercent: vm.stock.discountPercent(),
+        discountPercent: Math.abs(vm.stock.discountPercent()),
+        mode: detectMode(),
         price: vm.stock.discountPrice(),
+        priceDoc: vm.stock.discountPrice('Doc'),
         priceOrigin: vm.stock.priceOrigin(),
-        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId)
+        priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
+        priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent,
+        maxPrice: vm.stock.priceOrigin() * 1.3,
+        minPrice: vm.stock.priceOrigin() * 0.7
       });
 
       if (hasPriceGroup && !vm.priceGroup) {
@@ -55,13 +63,17 @@
         vm.discountScope = 'article';
       }
 
+      setPriceEdit();
+
       /*
        Listeners
        */
 
-      $scope.$watch('vm.discountPercent', _.debounce(onDiscountChange, 700));
-      $scope.$watch('vm.price', onPriceChange);
+      $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
+      $scope.$watch('vm.priceEdit', saEtc.debounce(onPriceChange, 1500, $scope));
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
+      $scope.$watch('vm.mode', () => onDiscountChange(signedDiscountPercent(), 0));
+      $scope.$watch('vm.target', onTargetChange);
 
     }
 
@@ -69,11 +81,29 @@
      Functions
      */
 
+    function detectMode(percent = vm.stock.discountPercent() || 0) {
+
+      if (vm.mode === 'price') return 'price';
+
+      if (Math.abs(percent - _.round(percent, 2)) > 0) {
+        return 'price';
+      }
+
+      return percent >= 0 ? 'discount' : 'markup';
+    }
+
+    function profit() {
+      return (vm.price - vm.priceAgent) / vm.priceAgent * 100.0;
+    }
+
     function onDiscountScopeChange(newDiscountScope, oldDiscountScope) {
 
       if (newDiscountScope === oldDiscountScope) return;
 
-      vm.stock.setDiscountScope(newDiscountScope);
+      if (oldDiscountScope) {
+        vm.stock.setDiscountScope(newDiscountScope);
+      }
+
       vm.discountPercent = vm.stock.discountPercent(newDiscountScope);
 
     }
@@ -100,7 +130,37 @@
         vm.discountPercent = 0;
       }
 
-      vm.discountPercent = _.round(vm.discountPercent, 2) || 0;
+      if (vm.mode !== 'price') {
+        vm.discountPercent = _.round(vm.discountPercent, 2) || 0;
+      }
+
+    }
+
+    function setPriceEdit() {
+
+      let priceField = `price${vm.target}`;
+
+      _.assign(vm, {
+        priceEdit: vm[priceField],
+        price: vm.stock.discountPrice(),
+        priceDoc: vm.stock.discountPrice('Doc')
+      });
+
+    }
+
+    function onTargetChange(newTarget, oldTarget) {
+
+      if (newTarget === oldTarget) {
+        return;
+      }
+
+      let targetDiscount = vm.stock.discountPercent(vm.discountScope, vm.target);
+
+      vm.mode = detectMode(targetDiscount);
+
+      vm.discountPercent = Math.abs(targetDiscount);
+
+      setPriceEdit();
 
     }
 
@@ -108,12 +168,40 @@
 
       if (newDiscount === oldDiscount) return;
 
+      if (!newDiscount && !oldDiscount) return;
+
+      if (vm.mode === 'price') {
+        return;
+      }
+
       normalizeDiscount();
 
-      let {discountPercent} = vm;
+      // let {discountPercent} = vm;
 
-      vm.stock.setDiscountScope(vm.discountScope, discountPercent);
-      vm.price = vm.stock.discountPrice();
+      let priceField = `price${vm.target}`;
+
+      vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), vm.target);
+      vm[priceField] = vm.stock.discountPrice(vm.target);
+      setPriceEdit();
+
+      if (vm.priceDoc < vm.price) {
+        let otherTarget = (vm.target === 'Doc') ? '' : 'Doc';
+        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), otherTarget);
+        setPriceEdit();
+      }
+
+    }
+
+    function signedDiscountPercent() {
+
+      switch (vm.mode) {
+        case 'discount':
+          return vm.discountPercent;
+        case 'markup':
+          return -vm.discountPercent;
+        case 'price':
+          return (vm.priceOrigin - vm.priceEdit) / vm.priceOrigin * 100.0;
+      }
 
     }
 
@@ -121,10 +209,23 @@
 
       if (newPrice === oldPrice) return;
 
+      let priceField = `priceEdit`;
+
       let price = _.round(parseFloat(newPrice), 2);
 
       if (!price) {
-        vm.price = vm.stock.discountPrice();
+        price = vm[priceField] = vm.stock.discountPrice(vm.target);
+      }
+
+      if (price > vm.maxPrice || price < vm.minPrice) {
+        vm.invalidPrice = true;
+        return;
+      }
+
+      vm.invalidPrice = false;
+
+      if (vm.mode === 'price') {
+        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), vm.target);
       }
 
     }

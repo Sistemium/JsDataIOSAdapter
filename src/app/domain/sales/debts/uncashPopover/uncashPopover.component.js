@@ -45,7 +45,7 @@
 
     });
 
-    const {Uncashing, UncashingPicture} = Schema.models();
+    const {Uncashing, UncashingPicture, UncashingPlace} = Schema.models();
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
@@ -99,11 +99,14 @@
         return toastr.error('Ошибка сохранения выручки', 'Отсутсвует фотография чека');
       }
 
+      let {authId} = Auth.getAccount();
+
       _.assign(uncashing, {
         date: moment().format(),
         summ: totalSumm(),
         summOrigin: _.sumBy(uncashed, 'summ'),
-        processing: 'upload'
+        processing: 'upload',
+        authId
       });
 
       vm.cgBusy = Uncashing.create(uncashing)
@@ -145,17 +148,31 @@
 
           let draft = _.first(uncashings);
 
-          if (draft) return draft;
+          return UncashingPlace.findAll()
+            .then(() => {
 
-          draft = Uncashing.createInstance({
-            authId,
-            processing: 'draft',
-            type: 'cashdesk'
-          });
+              draft = draft || Uncashing.createInstance({
+                authId,
+                processing: 'draft',
+                type: 'cashdesk'
+              });
 
-          _.assign(draft, localStorageService.get('uncashing.defaults'));
+              _.assign(draft, localStorageService.get('uncashing.defaults'));
 
-          return Uncashing.create(draft);
+              let {uncashingPlaceId} = draft;
+
+              if (uncashingPlaceId && !UncashingPlace.get(uncashingPlaceId)) {
+                draft.uncashingPlaceId = null;
+              }
+
+              if (!draft.id || draft.DSHasChanges()) {
+                return Uncashing.create(draft);
+              }
+
+              return draft;
+
+            });
+
 
         })
         .then(uncashing => uncashing.DSLoadRelations('UncashingPicture'))
@@ -165,8 +182,10 @@
 
           _.assign(vm, {uncashingPicture, uncashing});
 
-          $scope.$on('$destroy', $scope.$watch('vm.uncashing.type', () => {
-            Uncashing.save(vm.uncashing);
+          $scope.$on('$destroy', $scope.$watch('vm.uncashing.type', (oldType, newType) => {
+            if (oldType !== newType) {
+              Uncashing.save(vm.uncashing);
+            }
           }));
 
         });
