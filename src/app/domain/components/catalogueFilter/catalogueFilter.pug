@@ -2,6 +2,101 @@
 
   uib-accordion(close-others='true')
 
+    .block-to-collapse.scroll-y.article-groups(
+    no-uib-collapse='!vm.cvm.isArticleGroupsExpanded && !vm.cvm.isWideScreen'
+    no-collapsed='vm.cvm.isArticleGroupsCollapsingDone=true'
+    class='panel-default'
+    uib-accordion-group
+    is-open='true'
+    )
+
+      uib-accordion-heading Категории
+
+      .accordion-body
+
+        ul.preceding-groups(ng-if='vm.cvm.showFirstLevel && vm.cvm.precedingGroups.length')
+
+          .list-group-item(
+          ng-repeat='elem in vm.cvm.precedingGroups | orderBy:"name" track by elem.id'
+          )
+            a.articleGroup(
+            href
+            stm-click='articleGroupAndCollapse' click-payload='elem'
+            )
+              .name {{::elem.displayName }}
+
+            a.chevron(
+            href
+            stm-click='articleGroup' click-payload='elem'
+            )
+              i.glyphicon.glyphicon-menu-right
+
+        ul.list-group.xs-ancestors(
+        ng-if='vm.cvm.ancestors.length'
+        )
+
+          .list-group-item(
+          ng-repeat='ancestor in vm.cvm.ancestors | limitTo: (!vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered ? 1 : false) track by ancestor.id'
+          )
+
+            a.chevron(
+            stm-click='articleGroup' click-payload='ancestor'
+            )
+              i.glyphicon.glyphicon-menu-left
+
+            a.articleGroup(
+            href
+            stm-click='articleGroupAndCollapse' click-payload='ancestor'
+            ) {{::ancestor.displayName}}
+
+        ul.list-group.expanded
+
+          a.list-group-item.active(
+          href
+          ng-if='!vm.cvm.noMoreChildren && vm.cvm.currentArticleGroup.displayName || !vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered'
+          ng-click='vm.cvm.isArticleGroupsExpanded=false'
+          )
+            span {{ vm.cvm.currentArticleGroup.displayName || 'Товары заказа' }}
+
+          .list-group-item(
+          ng-repeat='elem in vm.cvm.articleGroups | orderBy:"name" track by elem.id'
+          ng-class='{active: vm.cvm.currentArticleGroup.id === elem.id}'
+          )
+            a.articleGroup(
+            href
+            stm-click='articleGroupAndCollapse' click-payload='elem'
+            )
+              .name {{::elem.displayName }}
+              .badge(ng-if='::vm.cvm.articleGroupIds[elem.id]')
+                span {{::vm.cvm.articleGroupIds[elem.id]}}
+                span(ng-if='::elem.children.length') +
+
+            a.chevron(
+            href
+            stm-click='articleGroup' click-payload='elem'
+            ng-if='::elem.children.length && !vm.cvm.articleGroupIds[elem.id]'
+            )
+              i.glyphicon.glyphicon-menu-right
+
+        ul.following-groups(ng-if='vm.cvm.showFirstLevel && vm.cvm.followingGroups.length')
+
+        .list-group-item(
+        ng-repeat='elem in vm.cvm.followingGroups | orderBy:"name" track by elem.id'
+        )
+          a.articleGroup(
+          href
+          stm-click='articleGroupAndCollapse' click-payload='elem'
+          )
+            .name {{::elem.displayName }}
+
+          a.chevron(
+          href
+          stm-click='articleGroup' click-payload='elem'
+          )
+            i.glyphicon.glyphicon-menu-right
+
+
+
     .query(
     uib-accordion-group
     class='panel-default'

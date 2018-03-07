@@ -11,7 +11,8 @@
       search: '=',
       filters: '=',
       activeTags: '=',
-      activeGroup: '='
+      activeGroup: '=',
+      cvm: '=catalogueVm'
 
     },
 

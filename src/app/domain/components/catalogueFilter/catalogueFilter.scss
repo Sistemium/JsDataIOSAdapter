@@ -1,3 +1,5 @@
+@import "variables";
+
 catalogue-filter {
 
   $border-radius: 10px;
@@ -78,6 +80,19 @@ catalogue-filter {
             padding: 0;
             border: 0;
           }
+        }
+      }
+
+      .list-group {
+        margin-bottom: 0 !important;
+      }
+
+      .list-group-item {
+        border-radius: 0 !important;
+        border-left: none;
+        border-right: none;
+        &:last-of-type {
+          border-bottom: none;
         }
       }
 
