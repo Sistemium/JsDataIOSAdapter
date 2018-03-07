@@ -4,7 +4,7 @@
 
   const LIMIT_TO = 20;
 
-  angular.module('webPage').component('advancedFilter', {
+  angular.module('webPage').component('catalogueFilter', {
 
     bindings: {
 
@@ -15,14 +15,14 @@
 
     },
 
-    templateUrl: 'app/domain/components/advancedFilter/advancedFilter.html',
+    templateUrl: 'app/domain/components/catalogueFilter/catalogueFilter.html',
 
-    controller: advancedFilterController,
+    controller: catalogueFilterController,
     controllerAs: 'vm'
 
   });
 
-  function advancedFilterController($scope, Schema, saControllerHelper, $state) {
+  function catalogueFilterController($scope, Schema, saControllerHelper, $state) {
 
     const {SearchQuery, ArticleTagGroup} = Schema.models();
 

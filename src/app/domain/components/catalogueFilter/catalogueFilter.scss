@@ -1,9 +1,9 @@
-advanced-filter {
+catalogue-filter {
 
   $border-radius: 10px;
   display: block;
 
-  .advanced-filter {
+  .catalogue-filter {
 
     @include responsive-only(sm) {
       width: 238px;
