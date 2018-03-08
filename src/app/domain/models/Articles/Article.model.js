@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run((Schema, RelationLoader) => {
 
     const znmpRe = new RegExp([
       'защ[^ .]*[ .]*наи[^ .]*[ .]+мест[^ .]*[ .]+проис[^ ]*',
@@ -32,6 +32,8 @@
       ['brut', 'брют', /брют/i],
       ['gift', 'п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
     ];
+
+    let barCodeLoader = new RelationLoader('barCodes');
 
     Schema.register({
 
@@ -64,6 +66,10 @@
           },
           SaleOrderPosition: {
             localField: 'saleOrders',
+            foreignKey: 'articleId'
+          },
+          ArticleBarCode: {
+            localField: 'barCodes',
             foreignKey: 'articleId'
           }
         }
@@ -126,6 +132,10 @@
             + (pcs && !half ? `${pcs} ${this.pcsLabel}` : '')
           }
 
+        },
+
+        barCodesLazy: function () {
+          return barCodeLoader.lazyItems(this);
         }
 
       }
