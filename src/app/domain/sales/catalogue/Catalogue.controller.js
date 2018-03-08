@@ -62,6 +62,7 @@
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
+      barCodesTooltipTpl: 'app/domain/sales/catalogue/barCodesTooltipTpl.html',
 
       saleOrdersDisabled: DomainOption.saleOrdersDisabled(),
       noFactor: !DomainOption.hasArticleFactors(),
