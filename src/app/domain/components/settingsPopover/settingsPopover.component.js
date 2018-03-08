@@ -13,7 +13,7 @@
 
   function settingsPopoverController($scope, $rootScope, localStorageService) {
 
-    const items = ['showFirstLevel', 'showImages', 'hideBoxes'];
+    const items = ['showFirstLevel', 'showImages', 'hideBoxes', 'showBarCodes'];
 
     const vm = _.assign(this, {
       $onInit
@@ -25,7 +25,7 @@
 
     function $onInit() {
       _.each(items, item => {
-        $rootScope[name] = vm[item] = localStorageService.get(item) || false;
+        $rootScope[item] = vm[item] = localStorageService.get(item) || false;
         vm[`${item}Click`] = () => toggleItemClick(item);
       });
     }

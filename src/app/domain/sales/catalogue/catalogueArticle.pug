@@ -75,7 +75,10 @@ before-tag-name='li'
 
       .article-name-third
 
-        span.bar-codes(ng-if='stock.article.barCodesLazy().length' uib-tooltip-template='vm.barCodesTooltipTpl')
+        span.bar-codes(
+        ng-if='showBarCodes && stock.article.barCodesLazy().length'
+        uib-tooltip-template='vm.barCodesTooltipTpl'
+        )
           i.glyphicon.glyphicon-barcode
 
         small.flagged(ng-if='stock.article.hasAction') A
