@@ -1,96 +1,109 @@
-h3.buttons.pull-right.with-map
+.visit-create
 
-  button.btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
-    i.glyphicon.glyphicon-camera
+  h3.buttons.pull-right.with-map
 
-  button.btn.btn-default(
-  ng-disabled='!vm.visit.checkInLocation'
-  popover-placement="bottom-left auto"
-  popover-trigger='outsideClick'
-  uib-popover-template="'app/domain/sales/views/location.html'"
-  popover-is-open='vm.visitMapPopoverOpen'
-  type='button'
-  ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
-  )
-    i.glyphicon.glyphicon-map-marker
+    button.btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
+      i.glyphicon.glyphicon-camera
 
-  button.btn(
-  type='button'
-  ng-class='b.class || "btn-default"'
-  ng-disabled='b.isDisabled()'
-  ng-repeat='b in vm.buttons track by b.label'
-  ng-click='vm[b.clickFn]()'
-  )
-    i(ng-if='b.fa' ng-class='b.fa')
-    span(ng-if='b.label') {{ b.label }}
-
-h4.clear-left.pull-left.visit
-
-  span(ng-class='vm.creatingMode ? "text-danger" : "gray"') {{ vm.creatingMode ? 'Новый визит' : 'Визит' }}
-  span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
-  small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ({{ vm.visit.salesman.tinyName }})
-  small
-    a(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
-      i.glyphicon.glyphicon-trash
-
-//.buttons.pull-right.clear-right(ng-if='vm.buttons.length')
-
-.clear-both
-
-.fow-fluid.visitPhotos(ng-if='vm.visit.photos.length')
-  .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
-    a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
-      img(ng-src='{{vm.thumbnails[pic.id]}}')
-
-section.clear-both.scroll-y(
-cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}'
-ng-class='{mt: !vm.visit.photos.length}'
-resize resize-offset-top='5' resize-property='height'
-ng-style='{"max-height": (tabset.windowHeight - tabset.offsetTop - 5) + "px"}'
-)
-
-  uib-tabset.nav-tabs-right.questionSets(active="active")
-    uib-tab(
-    index="$index + 1"
-    ng-repeat="qs in vm.questionSets | orderBy:['ord','name'] track by qs.id"
-    heading="{{qs.name}}"
-    disable="qs.isInvalid"
+    button.btn.btn-default(
+    ng-disabled='!vm.visit.checkInLocation'
+    popover-placement="bottom-left auto"
+    popover-trigger='outsideClick'
+    uib-popover-template="'app/domain/sales/views/location.html'"
+    popover-is-open='vm.visitMapPopoverOpen'
+    type='button'
+    ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
     )
-      .questionGroup(ng-repeat='grp in qs.questionGroups | orderBy:"name" track by grp.id' ng-if='vm.answers')
-        h3
-          .lead {{ grp.name }}
-        .form-horizontal
-          .form-group(ng-repeat='qst in grp.questions | orderBy:"name" track by qst.id')
-            label.control-label.col-xs-6.col-sm-9.col-md-10 {{ qst.name }}
-            .col-xs-6.col-sm-3.col-md-2(ng-switch="qst.dataType.code")
-              sa-number-spinner(
-              ng-switch-when="number"
-              initval='{{vm.answers[qst.id]}}'
-              ng-model='vm.answers[qst.id]'
-              ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
-              )
-              toggle-switch.w100(
-              ng-switch-when="boolean"
-              ng-model="vm.answers[qst.id]"
-              ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
-              on-label="Да"
-              off-label="Нет"
-              )
-              input.form-control.clickable(
-              ng-switch-when='date'
-              type='text'
-              uib-datepicker-popup=''
-              ng-model="vm.answers[qst.id]"
-              ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
-              is-open='vm.isDatepickerOpen'
-              ng-click='vm.isDatepickerOpen=true'
-              ng-required='true'
-              autocomplete='off'
-              show-button-bar='false'
-              readonly=''
-              )
-              input.form-control(
-              ng-switch-default type="text"
-              ng-model="vm.answers[qst.id]"
-              ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
-              )
+      i.glyphicon.glyphicon-map-marker
+
+    button.btn(
+    type='button'
+    ng-class='b.class || "btn-default"'
+    ng-disabled='b.isDisabled()'
+    ng-repeat='b in vm.buttons track by b.label'
+    ng-click='vm[b.clickFn]()'
+    )
+      i(ng-if='b.fa' ng-class='b.fa')
+      span(ng-if='b.label') {{ b.label }}
+
+  h4.clear-left.pull-left.visit
+
+    span(ng-class='vm.creatingMode ? "text-danger" : "gray"') {{ vm.creatingMode ? 'Новый визит' : 'Визит' }}
+    span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+    small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ({{ vm.visit.salesman.tinyName }})
+    small
+      a(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
+        i.glyphicon.glyphicon-trash
+
+  //.buttons.pull-right.clear-right(ng-if='vm.buttons.length')
+
+  .clear-both
+
+  .fow-fluid.visitPhotos(ng-if='vm.visit.photos.length')
+    .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
+      a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
+        img(ng-src='{{vm.thumbnails[pic.id]}}')
+
+  section.clear-both.scroll-y(
+  cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}'
+  ng-class='{mt: !vm.visit.photos.length}'
+  resize resize-offset-top='5' resize-property='height'
+  )
+
+    uib-tabset.nav-tabs-right.questionSets(active="active")
+
+      uib-tab(
+      index="$index + 2"
+      ng-repeat="qs in vm.questionSets | orderBy:['ord','name'] track by qs.id"
+      heading="{{qs.name}}"
+      disable="qs.isInvalid"
+      )
+        .questionGroup(ng-repeat='grp in qs.questionGroups | orderBy:"name" track by grp.id' ng-if='vm.answers')
+          h3
+            .lead {{ grp.name }}
+          .form-horizontal
+            .form-group(ng-repeat='qst in grp.questions | orderBy:"name" track by qst.id')
+              label.control-label.col-xs-6.col-sm-9.col-md-10 {{ qst.name }}
+              .col-xs-6.col-sm-3.col-md-2(ng-switch="qst.dataType.code")
+                sa-number-spinner(
+                ng-switch-when="number"
+                initval='{{vm.answers[qst.id]}}'
+                ng-model='vm.answers[qst.id]'
+                ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
+                )
+                toggle-switch.w100(
+                ng-switch-when="boolean"
+                ng-model="vm.answers[qst.id]"
+                ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
+                on-label="Да"
+                off-label="Нет"
+                )
+                input.form-control.clickable(
+                ng-switch-when='date'
+                type='text'
+                uib-datepicker-popup=''
+                ng-model="vm.answers[qst.id]"
+                ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
+                is-open='vm.isDatepickerOpen'
+                ng-click='vm.isDatepickerOpen=true'
+                ng-required='true'
+                autocomplete='off'
+                show-button-bar='false'
+                readonly=''
+                )
+                input.form-control(
+                ng-switch-default type="text"
+                ng-model="vm.answers[qst.id]"
+                ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
+                )
+
+      uib-tab(
+      index="1"
+      heading="Заказы"
+      ng-if='vm.creatingMode'
+      )
+        //button.btn.btn-primary(ng-click='vm.addSaleOrderClick()') Добавить заказ
+        sale-order-view(
+        custom-filter='vm.saleOrderFilter'
+        disable-elements='true'
+        )
