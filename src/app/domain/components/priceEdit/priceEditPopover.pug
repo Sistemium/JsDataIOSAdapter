@@ -68,8 +68,9 @@
     ng-if='vm.mode !== "price"'
     model='vm.discountPercentView'
     export-model='vm.discountPercent'
-    model-max='30'
+    model-max='vm.maxDiscount'
     box-rel='","'
+    touched='vm.keyBoardTouched'
     )
 
     sa-keyboard(
@@ -79,6 +80,7 @@
     export-model='vm.priceEdit'
     model-max='vm.maxPrice'
     box-rel='","'
+    touched='vm.keyBoardTouched'
     )
 
 

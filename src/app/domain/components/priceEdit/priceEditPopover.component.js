@@ -50,8 +50,9 @@
         priceOrigin: vm.stock.priceOrigin(),
         priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
         priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent,
-        maxPrice: vm.stock.priceOrigin() * 1.3,
-        minPrice: vm.stock.priceOrigin() * 0.7
+        maxDiscount: 50,
+        maxPrice: vm.stock.priceOrigin() * 1.5,
+        minPrice: vm.stock.priceOrigin() * 0.5
       });
 
       if (hasPriceGroup && !vm.priceGroup) {
@@ -72,7 +73,7 @@
       $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
       $scope.$watch('vm.priceEdit', saEtc.debounce(onPriceChange, 1500, $scope));
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
-      $scope.$watch('vm.mode', () => onDiscountChange(signedDiscountPercent(), 0));
+      $scope.$watch('vm.mode', onModeChange);
       $scope.$watch('vm.target', onTargetChange);
 
     }
@@ -161,6 +162,15 @@
       vm.discountPercent = Math.abs(targetDiscount);
 
       setPriceEdit();
+
+      vm.keyBoardTouched = false;
+
+    }
+
+    function onModeChange() {
+
+      onDiscountChange(signedDiscountPercent(), 0);
+      vm.keyBoardTouched = false;
 
     }
 
