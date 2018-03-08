@@ -3,49 +3,13 @@
 
 .sale-order-view {
 
-  $width-processing: 0.1;
-  $width-salesman: 0.135;
+  $width-processing: 85px;
+  $width-salesman: 90px;
   $width-outlet: 0.9;
   $width-totals: 0.13;
 
   $processing-xs-max-width: 90px;
 
-  $headers: (
-      ($width-processing, 'processing'),
-      ($width-salesman, 'salesman'),
-      ($width-outlet, 'outlet')
-  );
-
-  @mixin initHeadersWidth {
-
-    @each $var, $class in $headers {
-
-      $flex-basis: 100px * $var * 10;
-
-      @include responsive-only(gt-xs) {
-        .#{$class} {
-          flex: $var;
-          flex-basis: $flex-basis;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-      }
-
-    }
-
-    .outlet {
-      @include responsive-only(md) {
-        flex-basis: 850px;
-      }
-
-      @include responsive-only(sm) {
-        flex-basis: 600px;
-      }
-
-    }
-
-  }
 
   > .buttons {
 
@@ -94,10 +58,18 @@
       }
     }
 
-    @include initHeadersWidth;
+    .processing {
+      max-width: $width-processing;
+      min-width: $width-processing;
+    }
 
-    .totals {
-      //max-width: 60px;
+    .salesman {
+      min-width: $width-salesman;
+      max-width: $width-salesman;
+    }
+
+    .outlet {
+      flex: 1;
     }
 
   }
@@ -154,6 +126,8 @@
 
         @include responsive-only(gt-xs) {
           margin-right: 5px;
+          max-width: $width-processing;
+          min-width: $width-processing;
         }
 
         .badge {
@@ -188,6 +162,10 @@
         padding: 0px 6px;
       }
 
+      .outlet {
+        flex: 1;
+      }
+
       .outlet .address {
 
         display: flex;
@@ -213,13 +191,17 @@
         }
       }
 
-      @include initHeadersWidth;
+      .salesman {
+        min-width: $width-salesman;
+        max-width: $width-salesman;
+      }
 
       .totals {
-        //max-width: 170px;
+
         .cost {
           white-space: nowrap;
         }
+
         .cost-doc {
           color: $green;
           &:before {
@@ -230,6 +212,7 @@
             content: ']';
           }
         }
+
       }
 
       @include responsive-only(lt-sm) {
