@@ -4,7 +4,7 @@
     | {{ vm.busy ? 'Загрузка ...' : 'Скидки в заказе не предоставлены' }}
 
   .scroll-y(
-  resize resize-offset-top='110'
+  resize resize-offset-top='140'
   )
 
     .sale-order-discount.list-item(
@@ -50,6 +50,14 @@
     ng-if='vm.hasPriceAgent'
     label='Профит:'
     value='vm.saleOrder.profit()'
+    decimals='1'
+    currency='%'
+    )
+
+    currency-value.stm-ratio(
+    label='Доля стоимости СТМ:'
+    value='vm.saleOrder.stmRatioCached()'
+    decimals='1'
     currency='%'
     )
 

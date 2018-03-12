@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, $filter) {
+  angular.module('Models').run(function (Schema, $filter, DomainOption) {
 
     const cleanName = $filter('cleanName');
 
@@ -36,6 +36,7 @@
       notify: false,
 
       meta: {
+        stmRoot
       },
 
       computed: {
@@ -49,6 +50,7 @@
         firstLevelAncestor,
         ancestors,
         descendants,
+        filterDescendantArticles,
 
         hasDescendants: function (ids) {
           return _.find(this.descendantsCache, item => ids[item]);
@@ -60,6 +62,11 @@
 
     let cacheA = {};
     let cacheD = {};
+
+    function stmRoot() {
+      let id = DomainOption.stmArticleGroupId();
+      return id && ArticleGroup.get(id);
+    }
 
     function firstLevelAncestor() {
       let id = _.find(this.ancestors(), {articleGroupId: null});
@@ -110,6 +117,22 @@
     function setDCache(id) {
       return setCache(cacheD, id);
     }
+
+    function filterDescendantArticles(positions) {
+
+      let hash = {};
+
+      hash[this.id] = true;
+
+      _.each(this.descendantsCache, id => hash[id] = true);
+
+      return _.filter(positions, position => {
+        let {article = position} = position;
+        return article && hash[article.articleGroupId];
+      });
+
+    }
+
 
   });
 

@@ -187,7 +187,7 @@
 
       let {id} = saleOrder;
 
-      const {SaleOrderPosition} = Schema.models();
+      const {SaleOrderPosition, ArticleGroup} = Schema.models();
 
       const cached = caches[saleOrder.id] = caches[saleOrder.id] || {};
 
@@ -200,7 +200,15 @@
             positionsCount: positions.length || null,
             totalCost: Schema.aggregate('cost').sum(positions) || null,
             totalBoxes: Schema.aggregate('boxVolume').sumFn(positions) || null
-          })
+          });
+
+          let stmRoot = ArticleGroup.meta.stmRoot();
+
+          if (stmRoot) {
+            let stmPositions = stmRoot.filterDescendantArticles(positions);
+            cached.stmRatio = _.round(100.0 * Schema.aggregate('cost').sum(stmPositions) / cached.totalCost, 1);
+          }
+
         });
 
       return cached;
