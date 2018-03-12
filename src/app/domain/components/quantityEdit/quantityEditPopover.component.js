@@ -44,7 +44,10 @@
       decrementBottles: () => changeVolume(-1),
       deleteClick,
       incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel / 2)),
-      articleFactor
+      articleFactor,
+
+      // $onInit,
+      $onDestroy
 
     });
 
@@ -68,6 +71,10 @@
     /*
      Functions
      */
+
+    function $onDestroy() {
+
+    }
 
     function createPosition() {
 
@@ -112,6 +119,7 @@
       let {volume} = vm;
 
       if (!position) {
+        console.error('no position');
         return;
       }
 
@@ -152,6 +160,7 @@
     function injectPosition() {
 
       if (!position) {
+        console.error('no position');
         return;
       }
 

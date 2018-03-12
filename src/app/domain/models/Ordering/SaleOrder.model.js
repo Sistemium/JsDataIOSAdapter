@@ -82,6 +82,7 @@
         totalCostCached: cachedValue('totalCost'),
         totalPositionsCached: cachedValue('positionsCount'),
         totalBoxesCached: cachedValue('totalBoxes'),
+        stmRatioCached: cachedValue('stmRatio'),
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
@@ -113,13 +114,13 @@
 
           const {SaleOrderPosition} = Schema.models();
 
-          if (!this.isValid()) return $q.reject();
+          if (!this.isValid()) return $q.reject('Not valid');
 
           if (!this.id) {
             return SaleOrder.create(this);
           }
 
-          let positions = _.filter(this.positions, SaleOrderPosition.hasChanges);
+          let positions = _.filter(this.positions, position => position.DSHasChanges() || !position.DSLastSaved());
 
           let lastModified = this.deviceTs;
 
