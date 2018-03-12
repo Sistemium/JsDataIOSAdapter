@@ -304,11 +304,15 @@
 
       height: 20px;
       font-style: italic;
-      text-align: right;
+      //text-align: right;
       color: $gray;
       display: flex;
-      justify-content: flex-end;
+      //justify-content: flex-end;
       align-items: center;
+
+      @include responsive-only(gt-xs) {
+        margin-left: $width-processing;
+      }
 
       .comment-text {
         @extend .ellipsis;
