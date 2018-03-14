@@ -78,7 +78,10 @@
 
     $scope.$on('$destroy', () => {
       // SaleOrder.watchChanges = false;
-      SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
+      onSaleOrderChange()
+        .then(() => {
+          SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
+        });
     });
 
     vm.onScope('kPlusButtonClick', kPlusButtonClick);
@@ -156,7 +159,7 @@
 
     function onSaleOrderChange() {
 
-      if (!vm.saleOrder || !vm.saleOrder.isValid()) return;
+      if (!vm.saleOrder || !vm.saleOrder.isValid()) return $q.resolve();
 
       let busy = vm.saleOrder.safeSave()
         .then(saleOrder => {
