@@ -38,6 +38,12 @@ catalogue-filter {
 
         .panel-default, .panel-tag {
 
+          &.panel-open {
+            .dummy-tags {
+              opacity: 0;
+            }
+          }
+
           @include responsive-only(lt-sm) {
             border-radius: 0;
           }
@@ -78,11 +84,14 @@ catalogue-filter {
 
                 .dummy-tags {
 
+                  transition: all .3s;
+
                   display: flex;
                   justify-content: flex-end;
 
                   a {
 
+                    opacity: 1;
                     text-transform: lowercase;
                     margin: 0 5px;
                     padding: 0;
