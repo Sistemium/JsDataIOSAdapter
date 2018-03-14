@@ -1,6 +1,5 @@
 (function (module) {
 
-
   module.component('saleOrderDiscountInfo', {
 
     bindings: {
@@ -48,6 +47,9 @@
         bindToController: false
 
       });
+
+      vm.modal.result
+        .then(_.noop, _.noop);
 
     }
 

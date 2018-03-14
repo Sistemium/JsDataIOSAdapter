@@ -60,6 +60,9 @@
 
       });
 
+      vm.modal.result
+        .then(_.noop, _.noop);
+
     }
 
     function discountPrice(target = '') {
@@ -68,7 +71,7 @@
 
     function discountPercent() {
 
-      return - vm.stock.discountPercent();
+      return -vm.stock.discountPercent();
 
     }
 
