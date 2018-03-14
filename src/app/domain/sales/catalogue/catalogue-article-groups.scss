@@ -27,13 +27,10 @@
     align-items: flex-start;
     margin-bottom: 10px;
 
-<<<<<<< HEAD
     catalogue-search-input {
       flex: 1;
     }
 
-=======
->>>>>>> salesSchema
     #only-shipped-filter {
 
       border-radius: $border-radius;
@@ -49,13 +46,10 @@
         box-shadow: none;
       }
 
-<<<<<<< HEAD
       i {
         left: 1px;
       }
 
-=======
->>>>>>> salesSchema
     }
 
     .stm-searcher {
@@ -65,7 +59,6 @@
 
   }
 
-<<<<<<< HEAD
   font-size-edit {
     catalogue-filter {
       @include responsive-only(lt-sm) {
@@ -74,8 +67,6 @@
     }
   }
 
-=======
->>>>>>> salesSchema
   .preceding-groups, .following-groups {
     padding-left: 0;
     .list-group-item {

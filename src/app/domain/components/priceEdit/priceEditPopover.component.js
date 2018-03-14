@@ -50,14 +50,11 @@
         priceOrigin: vm.stock.priceOrigin(),
         priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
         priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent,
-<<<<<<< HEAD
-        maxPrice: vm.stock.priceOrigin() * 1.3,
-        minPrice: vm.stock.priceOrigin() * 0.7
-=======
+
         maxDiscount: 50,
         maxPrice: vm.stock.priceOrigin() * 1.5,
         minPrice: vm.stock.priceOrigin() * 0.5
->>>>>>> salesSchema
+
       });
 
       if (hasPriceGroup && !vm.priceGroup) {
@@ -78,11 +75,8 @@
       $scope.$watch('vm.discountPercent', saEtc.debounce(onDiscountChange, 700, $scope));
       $scope.$watch('vm.priceEdit', saEtc.debounce(onPriceChange, 1500, $scope));
       $scope.$watch('vm.discountScope', onDiscountScopeChange);
-<<<<<<< HEAD
-      $scope.$watch('vm.mode', () => onDiscountChange(signedDiscountPercent(), 0));
-=======
       $scope.$watch('vm.mode', onModeChange);
->>>>>>> salesSchema
+
       $scope.$watch('vm.target', onTargetChange);
 
     }
@@ -171,8 +165,6 @@
       vm.discountPercent = Math.abs(targetDiscount);
 
       setPriceEdit();
-<<<<<<< HEAD
-=======
 
       vm.keyBoardTouched = false;
 
@@ -182,7 +174,6 @@
 
       onDiscountChange(signedDiscountPercent(), 0);
       vm.keyBoardTouched = false;
->>>>>>> salesSchema
 
     }
 
@@ -199,15 +190,9 @@
       normalizeDiscount();
 
       // let {discountPercent} = vm;
-<<<<<<< HEAD
 
       let priceField = `price${vm.target}`;
 
-=======
-
-      let priceField = `price${vm.target}`;
-
->>>>>>> salesSchema
       vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), vm.target);
       vm[priceField] = vm.stock.discountPrice(vm.target);
       setPriceEdit();
@@ -257,7 +242,6 @@
       }
 
     }
-
 
   }
 

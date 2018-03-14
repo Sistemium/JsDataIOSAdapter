@@ -24,11 +24,6 @@
       saleOrderMaxPositions,
       allowDiscounts,
       usePriceGroups,
-<<<<<<< HEAD
-      hasPriceAgent
-    };
-
-=======
       hasPriceAgent,
       stmArticleGroupId
     };
@@ -45,7 +40,6 @@
       }
     }
 
->>>>>>> salesSchema
     function hasPriceAgent() {
       return customerCode() === 'bs';
     }

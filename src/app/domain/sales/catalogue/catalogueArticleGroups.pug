@@ -1,6 +1,5 @@
 .filters
 
-<<<<<<< HEAD
   catalogue-search-input(
   search='vm.search'
   filters='vm.filters'
@@ -12,53 +11,13 @@
   remove-tag-click='vm.removeTagClick'
   )
 
-=======
-  .stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
-
-    label(for='search-input')
-      i.glyphicon.glyphicon-search
-
-    input#search-input.form-control(
-    type='search'
-    placeholder='Поиск'
-    select-on-focus
-    track-focused
-    aria-describedby='search-input'
-    ng-model='vm.search'
-    ng-model-options='{debounce: vm.debounce}'
-    on-enter='vm.onSearchEnter()'
-    )
-
-    span.form-control-feedback(ng-hide='!vm.search')
-      a(ng-click='vm.clearSearchClick()' href)
-        i.glyphicon.glyphicon-remove
-
-    .filters
-      a.filter(
-      href
-      ng-click='vm.removeFilterClick(filter)'
-      ng-repeat='filter in vm.filters track by $index'
-      )
-        i.glyphicon.glyphicon-remove
-        span {{ filter.label }}
-
->>>>>>> salesSchema
   button.btn.btn-default#only-shipped-filter(
   ng-if='vm.saleOrder'
   ng-click='vm.onlyShippedClick()'
   ng-class='{active: vm.showOnlyShipped}'
-<<<<<<< HEAD
-=======
   )
     i.glyphicon.glyphicon-star-empty
 
-.alert.alert-default.collapser
-  a(
-  href
-  ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
->>>>>>> salesSchema
-  )
-    i.glyphicon.glyphicon-star-empty
 
 font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
 
