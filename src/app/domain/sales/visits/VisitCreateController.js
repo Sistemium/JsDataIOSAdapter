@@ -52,6 +52,9 @@
 
     let answersByQuestion = {};
 
+    let filterByOutletId = {outletId: outletId};
+
+    vm.saleOrderFilter = _.assign({'x-order-by:': '-date'}, filterByOutletId);
 
     /*
      Init

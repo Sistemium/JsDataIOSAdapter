@@ -44,7 +44,14 @@
       decrementBottles: () => changeVolume(-1),
       deleteClick,
       incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel / 2)),
+<<<<<<< HEAD
       articleFactor
+=======
+      articleFactor,
+
+      // $onInit,
+      $onDestroy
+>>>>>>> salesSchema
 
     });
 
@@ -68,6 +75,10 @@
     /*
      Functions
      */
+
+    function $onDestroy() {
+
+    }
 
     function createPosition() {
 
@@ -108,10 +119,18 @@
     }
 
     function onVolumeChange() {
+<<<<<<< HEAD
 
       let {volume} = vm;
 
       if (!position) {
+=======
+
+      let {volume} = vm;
+
+      if (!position) {
+        console.error('no position');
+>>>>>>> salesSchema
         return;
       }
 
@@ -152,6 +171,10 @@
     function injectPosition() {
 
       if (!position) {
+<<<<<<< HEAD
+=======
+        console.error('no position');
+>>>>>>> salesSchema
         return;
       }
 

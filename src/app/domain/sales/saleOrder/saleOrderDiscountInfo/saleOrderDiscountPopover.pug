@@ -4,7 +4,11 @@
     | {{ vm.busy ? 'Загрузка ...' : 'Скидки в заказе не предоставлены' }}
 
   .scroll-y(
+<<<<<<< HEAD
   resize resize-offset-top='110'
+=======
+  resize resize-offset-top='140'
+>>>>>>> salesSchema
   )
 
     .sale-order-discount.list-item(
@@ -34,6 +38,7 @@
     label='Итого без скидки:'
     value='vm.totalCostNoDiscount'
     )
+<<<<<<< HEAD
 
     currency-value.discount-total(
     ng-switch-when='false'
@@ -50,6 +55,32 @@
     ng-if='vm.hasPriceAgent'
     label='Профит:'
     value='vm.saleOrder.profit()'
+=======
+
+    currency-value.discount-total(
+    ng-switch-when='false'
+    label='Итого бух - упр:'
+    value='vm.saleOrder.totalCostDoc - vm.saleOrder.totalCost'
+    )
+    currency-value.total-cost-no-discount(
+    ng-switch-when='false'
+    label='Итого по накладной:'
+    value='vm.saleOrder.totalCostDoc'
+    )
+
+    currency-value.discount-total(
+    ng-if='vm.hasPriceAgent'
+    label='Профит:'
+    value='vm.saleOrder.profit()'
+    decimals='1'
+    currency='%'
+    )
+
+    currency-value.stm-ratio(
+    label='Доля стоимости СТМ:'
+    value='vm.saleOrder.stmRatioCached()'
+    decimals='1'
+>>>>>>> salesSchema
     currency='%'
     )
 

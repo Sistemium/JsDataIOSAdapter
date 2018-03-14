@@ -24,9 +24,28 @@
       saleOrderMaxPositions,
       allowDiscounts,
       usePriceGroups,
+<<<<<<< HEAD
       hasPriceAgent
     };
 
+=======
+      hasPriceAgent,
+      stmArticleGroupId
+    };
+
+    function stmArticleGroupId() {
+      switch (customerCode()) {
+        case 'r50':
+        case 'r50p': {
+          return '774c20a5-0364-11e0-bcb9-00237deee66e';
+        }
+        case 'bs': {
+          return 'd10865b8-1595-11e3-8000-dd62b1c1ad0b';
+        }
+      }
+    }
+
+>>>>>>> salesSchema
     function hasPriceAgent() {
       return customerCode() === 'bs';
     }

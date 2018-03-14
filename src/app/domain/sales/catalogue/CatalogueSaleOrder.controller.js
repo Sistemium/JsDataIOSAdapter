@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q,
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, localStorageService,
                                         SalesmanAuth, SaleOrderHelper, $timeout, DomainOption) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
@@ -78,7 +78,10 @@
 
     $scope.$on('$destroy', () => {
       // SaleOrder.watchChanges = false;
-      SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
+      onSaleOrderChange()
+        .then(() => {
+          SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
+        });
     });
 
     vm.onScope('kPlusButtonClick', kPlusButtonClick);
@@ -156,12 +159,16 @@
 
     function onSaleOrderChange() {
 
-      if (!vm.saleOrder || !vm.saleOrder.isValid()) return;
+      if (!vm.saleOrder || !vm.saleOrder.isValid()) return $q.resolve();
 
       let busy = vm.saleOrder.safeSave()
         .then(saleOrder => {
           if (!saleOrderId) {
-            $state.go('.', {saleOrderId: saleOrder.id}, {notify: false});
+            let stateParams = {saleOrderId: saleOrder.id};
+            $state.go('.', stateParams, {notify: false})
+              .then(() => {
+                localStorageService.set('lastState', {name: $state.current.name, stateParams});
+              });
             saleOrderId = saleOrder.id;
             bindToChanges();
             $scope.$emit('setSaleOrderId', saleOrder.id);

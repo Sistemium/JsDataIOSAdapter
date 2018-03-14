@@ -15,3 +15,9 @@ stm-click='toggleHideBoxes'
 ng-click='vm.hideBoxesClick()'
 )
   | {{ vm.hideBoxes ? 'Показать коробки' : 'Убрать коробки'}}
+
+button.btn.btn-default(
+stm-click='toggleBarCodes'
+ng-click='vm.showBarCodesClick()'
+)
+  | {{ vm.showBarCodes ? 'Убрать штрих-коды' : 'Показать штрих-коды'}}

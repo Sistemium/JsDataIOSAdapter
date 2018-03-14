@@ -65,6 +65,7 @@
       filters: [],
       activeGroup: {},
       articleTooltipTpl: 'app/domain/sales/views/article.tooltip.html',
+      barCodesTooltipTpl: 'app/domain/sales/catalogue/barCodesTooltipTpl.html',
 
       saleOrdersDisabled: DomainOption.saleOrdersDisabled(),
       noFactor: !DomainOption.hasArticleFactors(),
@@ -178,6 +179,7 @@
 
     $scope.$on('setSaleOrderId', setSaleOrderId);
 
+<<<<<<< HEAD
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
     $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
@@ -189,6 +191,8 @@
       }
     });
 
+=======
+>>>>>>> salesSchema
     vm.watchScope('vm.fontSize', fontSize => {
       if (fontSize) {
         localStorageService.set(FONT_SIZE_KEY, fontSize);
