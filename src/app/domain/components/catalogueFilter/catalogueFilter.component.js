@@ -2,7 +2,7 @@
 
 (function () {
 
-  const LIMIT_TO = 20;
+  const LIMIT_TO = 10;
 
   angular.module('webPage').component('catalogueFilter', {
 
@@ -12,7 +12,9 @@
       filters: '=',
       activeTags: '=',
       activeGroup: '=',
-      cvm: '=catalogueVm'
+      cvm: '=catalogueVm',
+
+      removeTagClick: '='
 
     },
 
@@ -38,6 +40,7 @@
 
       favouriteQueryClick,
       removeQueryClick,
+      dummyTagClick,
 
       search: $state.params.q || '',
       currentSearchQuery: null
@@ -59,6 +62,24 @@
 
     $scope.$watch('vm.search', nv => {
 
+      if (_.isEmpty(vm.searchQueries)) {
+        return;
+      }
+
+      onSearchChange(nv);
+
+    });
+
+    function dummyTagClick(ev, tag) {
+
+      ev.stopPropagation();
+
+      vm.removeTagClick(tag);
+
+    }
+
+    function onSearchChange(nv) {
+
       const savedQuery = _.find(vm.searchQueries, {query: nv});
 
       if (savedQuery) {
@@ -66,19 +87,24 @@
       } else {
         vm.currentSearchQuery = null;
       }
-
-    });
+    }
 
     function $onInit() {
 
-      SearchQuery.findAll();
+      SearchQuery.findAll()
+        .then((res) => {
+
+          res = _.orderBy(res, 'query', 'desc');
+
+          let groups = _.groupBy(res, (item) => {
+            return _.get(item, 'favourited') === true;
+          });
+
+          vm.searchQueries = _.slice(_.concat([], ...groups[true], ...groups[false]), 0, LIMIT_TO);
+
+        });
 
       vm.articleTagGroups = ArticleTagGroup.getAll();
-
-      SearchQuery.bindAll({
-        orderBy: 'query',
-        limit: LIMIT_TO
-      }, $scope, 'vm.searchQueries');
 
     }
 

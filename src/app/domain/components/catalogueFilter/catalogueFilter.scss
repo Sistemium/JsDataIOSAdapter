@@ -17,25 +17,48 @@ catalogue-filter {
 
         margin: 0;
 
+        @include responsive-only(lt-sm) {
+          &:first-of-type {
+            margin-top: 10px;
+          }
+        }
+
         .panel {
           box-shadow: none;
           border: 1px solid $gray-border-color;
+
+          @include responsive-only(lt-sm) {
+
+            border-left: none;
+            border-right: none;
+
+          }
+
         }
 
         .panel-default, .panel-tag {
+
+          @include responsive-only(lt-sm) {
+            border-radius: 0;
+          }
 
           margin-bottom: 10px;
           border-radius: $border-radius;
 
           .panel-heading {
-            padding: 10px;
+
             background-color: transparent;
+            padding: 0;
 
             h4 {
+
               font-size: 13px;
               text-transform: uppercase;
 
-              a {
+              > a {
+
+                padding: 10px;
+                display: block;
 
                 .group-name {
                   color: black;
@@ -59,8 +82,14 @@ catalogue-filter {
                   justify-content: flex-end;
 
                   a {
+
                     text-transform: lowercase;
                     margin: 0 5px;
+                    padding: 0;
+
+                    &:last-of-type {
+                      margin-right: 0;
+                    }
                   }
 
                 }
@@ -74,25 +103,17 @@ catalogue-filter {
           .panel-collapse {
             border-bottom-right-radius: $border-radius;
             border-bottom-left-radius: $border-radius;
+
+            @include responsive-only(lt-sm) {
+              border-radius: 0;
+            }
+
           }
 
           .panel-body {
             padding: 0;
             border: 0;
           }
-        }
-      }
-
-      .list-group {
-        margin-bottom: 0 !important;
-      }
-
-      .list-group-item {
-        border-radius: 0 !important;
-        border-left: none;
-        border-right: none;
-        &:last-of-type {
-          border-bottom: none;
         }
       }
 
@@ -114,34 +135,19 @@ catalogue-filter {
             border-bottom: none;
             border-bottom-left-radius: $border-radius - 1;
             border-bottom-right-radius: $border-radius - 1;
+
+            @include responsive-only(lt-sm) {
+              border-radius: 0;
+            }
+
           }
 
-        }
-
-        h4 {
-          font-size: 15px;
-          text-transform: none;
         }
 
         .panel-body {
 
           border-top: none;
           overflow: scroll;
-
-          a {
-
-            background-color: darken($gray-border-color, 20%);
-            padding: 5px 10px;
-            margin: 3px;
-            user-select: none;
-            display: table;
-
-            &:hover {
-              background-color: darken($gray-border-color, 10%);
-              color: $white;
-            }
-
-          }
 
           .active {
 
@@ -157,6 +163,26 @@ catalogue-filter {
         }
 
         width: 100%;
+
+      }
+
+    }
+
+    .block-to-collapse {
+
+      .list-group {
+        margin-bottom: 0 !important;
+      }
+
+      .list-group-item {
+
+        border-radius: 0 !important;
+        border-left: none;
+        border-right: none;
+
+        &:last-of-type {
+          border-bottom: none;
+        }
 
       }
 
@@ -213,6 +239,11 @@ catalogue-filter {
         &:last-of-type {
           border-bottom-right-radius: $border-radius - 1;
           border-bottom-left-radius: $border-radius - 1;
+
+          @include responsive-only(lt-sm) {
+            border-radius: 0 !important;
+          }
+
         }
 
         &:hover {

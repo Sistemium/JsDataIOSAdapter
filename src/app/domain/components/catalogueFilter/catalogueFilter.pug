@@ -95,8 +95,6 @@
           )
             i.glyphicon.glyphicon-menu-right
 
-
-
     .query(
     uib-accordion-group
     class='panel-default'
@@ -144,6 +142,7 @@
           href
           ng-repeat='tag in vm.activeGroup[tagGroup.id].selected track by $index'
           ng-if='vm.activeGroup[tagGroup.id].cnt === false && vm.activeGroup[tagGroup.id].selected.length'
+          ng-click='vm.dummyTagClick($event, {label: tag})'
           ) {{ tag }}
 
       .accordion-body.tag-line
