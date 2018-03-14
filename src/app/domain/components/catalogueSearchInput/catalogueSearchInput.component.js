@@ -2,8 +2,6 @@
 
 (function () {
 
-  const LIMIT_TO = 20;
-
   angular.module('webPage').component('catalogueSearchInput', {
 
     bindings: {
@@ -12,10 +10,11 @@
       searchEnterPress: '=',
       activeTags: '=',
       activeGroup: '=',
+      cvm: '=catalogueVm',
 
-      stockLength: '<',
+      removeTagClick: '=',
 
-      onLabelClick: '&'
+      stockLength: '<'
     },
 
     templateUrl: 'app/domain/components/catalogueSearchInput/catalogueSearchInput.html',
@@ -25,7 +24,7 @@
 
   });
 
-  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state) {
+  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state, saMedia, $uibModal) {
 
     const {SearchQuery} = Schema.models();
 
@@ -40,6 +39,8 @@
       clearSearchClick,
       onSearchEnter,
       removeTagClick,
+      searchClick,
+      popoverTrigger: popoverTrigger(),
 
       search: $state.params.q || ''
 
@@ -56,9 +57,35 @@
       SearchQuery.findAll();
 
       SearchQuery.bindAll({
-        orderBy: 'query',
-        limit: LIMIT_TO
+        orderBy: 'query'
       }, $scope, 'vm.searchQueries');
+
+    }
+
+    function popoverTrigger() {
+      return (saMedia.xsWidth || saMedia.xxsWidth) ? 'none' : 'outsideClick';
+    }
+
+    function searchClick() {
+
+      if (vm.popoverTrigger !== 'none') {
+        return;
+      }
+
+      vm.modal = $uibModal.open({
+
+        animation: false,
+        templateUrl: 'app/domain/components/catalogueFilter/catalogueFilterModal.html',
+
+        size: 'lg',
+        windowClass: 'catalogue-filter-modal',
+        scope: $scope,
+        bindToController: false
+
+      });
+
+      vm.modal.result
+        .then(_.noop, _.noop);
 
     }
 
@@ -136,4 +163,3 @@
   }
 
 }());
-
