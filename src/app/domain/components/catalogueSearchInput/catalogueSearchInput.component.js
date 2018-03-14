@@ -11,7 +11,6 @@
       activeTags: '=',
       activeGroup: '=',
       cvm: '=catalogueVm',
-
       removeTagClick: '=',
 
       stockLength: '<'
