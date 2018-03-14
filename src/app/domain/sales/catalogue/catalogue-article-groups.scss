@@ -16,7 +16,7 @@
 
 }
 
-#article-groups {
+#article-groups, .catalogue-filter-modal {
 
   flex: 1;
   margin-bottom: 0;
@@ -26,6 +26,10 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: 10px;
+
+    catalogue-search-input {
+      flex: 1;
+    }
 
     #only-shipped-filter {
 
@@ -42,6 +46,10 @@
         box-shadow: none;
       }
 
+      i {
+        left: 1px;
+      }
+
     }
 
     .stm-searcher {
@@ -49,6 +57,14 @@
       margin: 0;
     }
 
+  }
+
+  font-size-edit {
+    catalogue-filter {
+      @include responsive-only(lt-sm) {
+        display: none;
+      }
+    }
   }
 
   .preceding-groups, .following-groups {
@@ -80,7 +96,7 @@
   .block-to-collapse {
 
     @include responsive-only(lt-sm) {
-      position: absolute;
+      //position: absolute;
       z-index: 2;
       width: 100%;
     }
