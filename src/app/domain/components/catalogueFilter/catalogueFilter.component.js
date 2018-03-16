@@ -94,13 +94,13 @@
       SearchQuery.findAll()
         .then((res) => {
 
-          res = _.orderBy(res, 'query', 'desc');
+          res = _.orderBy(res, ['isFavourite', 'query'], ['desc', 'desc']);
 
-          let groups = _.groupBy(res, (item) => {
-            return _.get(item, 'favourited') === true;
-          });
+          // let groups = _.groupBy(res, (item) => {
+          //   return _.get(item, 'isFavourite') === true;
+          // });
 
-          vm.searchQueries = _.slice(_.concat([], ...groups[true], ...groups[false]), 0, LIMIT_TO);
+          vm.searchQueries = _.take(res, LIMIT_TO);
 
         });
 
@@ -110,7 +110,7 @@
 
     function favouriteQueryClick(query) {
 
-      query.favourited = _.get(query, 'favourited') !== true;
+      query.isFavourite = _.get(query, 'isFavourite') !== true;
       SearchQuery.save(query);
 
     }

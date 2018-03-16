@@ -119,8 +119,8 @@
             href
             ng-click='vm.favouriteQueryClick(query)'
             )
-              i.glyphicon.glyphicon-heart-empty(ng-if='!query.favourited')
-              i.glyphicon.glyphicon-heart(ng-if='query.favourited')
+              i.glyphicon.glyphicon-heart-empty(ng-if='!query.isFavourite')
+              i.glyphicon.glyphicon-heart(ng-if='query.isFavourite')
 
             a(
             href
