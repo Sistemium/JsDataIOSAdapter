@@ -94,29 +94,39 @@
 
         let {saleOrder} = vm;
 
-        if (_.get(saleOrder, 'workflowStep.editable')) {
-          saleOrder.updateTotalCost();
+        if (!_.get(saleOrder, 'workflowStep.editable')) {
+          return saveUpdateSaleOrderProcessing();
         }
 
-        saleOrder.processing = processing;
+        return saleOrder.DSLoadRelations('positions')
+          .then(() => {
+            saleOrder.updateTotalCost();
+            return saveUpdateSaleOrderProcessing()
+          });
 
-        saleOrder.safeSave()
-          .then(saleOrder => {
+        function saveUpdateSaleOrderProcessing() {
 
-            let workflowStep = _.get(saleOrder, 'workflowStep');
+          saleOrder.processing = processing;
 
-            if (!workflowStep) {
-              return;
-            }
+          return saleOrder.safeSave()
+            .then(saleOrder => {
 
-            let {desc, label} = workflowStep;
+              let workflowStep = _.get(saleOrder, 'workflowStep');
 
-            toastr.info(desc, `Статус заказа: ${label}`);
+              if (!workflowStep) {
+                return;
+              }
 
-          })
-          .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
+              let {desc, label} = workflowStep;
+
+              toastr.info(desc, `Статус заказа: ${label}`);
+
+            })
+            .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
+        }
 
       }
+
 
       function checkLimit() {
 
