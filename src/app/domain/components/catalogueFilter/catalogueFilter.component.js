@@ -2,8 +2,6 @@
 
 (function () {
 
-  const LIMIT_TO = 10;
-
   angular.module('webPage').component('catalogueFilter', {
 
     bindings: {
