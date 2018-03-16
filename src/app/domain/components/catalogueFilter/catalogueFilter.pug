@@ -36,7 +36,7 @@
         )
 
           .list-group-item(
-          ng-repeat='ancestor in vm.cvm.ancestors | limitTo: (!vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered ? 1 : false) track by ancestor.id'
+          ng-repeat='ancestor in vm.ancestorGroups() track by ancestor.id'
           )
 
             a.chevron(
@@ -54,7 +54,7 @@
           a.list-group-item.active(
           href
           ng-if='!vm.cvm.noMoreChildren && vm.cvm.currentArticleGroup.displayName || !vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered'
-          ng-click='vm.cvm.isArticleGroupsExpanded=false'
+          ng-click='vm.cvm.isArticleGroupsExpanded = false;vm.cvm.articleGroupClick();'
           )
             span {{ vm.cvm.currentArticleGroup.displayName || 'Товары заказа' }}
 
@@ -80,20 +80,20 @@
 
         ul.following-groups(ng-if='vm.cvm.showFirstLevel && vm.cvm.followingGroups.length')
 
-        .list-group-item(
-        ng-repeat='elem in vm.cvm.followingGroups | orderBy:"name" track by elem.id'
-        )
-          a.articleGroup(
-          href
-          stm-click='articleGroupAndCollapse' click-payload='elem'
+          .list-group-item(
+          ng-repeat='elem in vm.cvm.followingGroups | orderBy:"name" track by elem.id'
           )
-            .name {{::elem.displayName }}
+            a.articleGroup(
+            href
+            stm-click='articleGroupAndCollapse' click-payload='elem'
+            )
+              .name {{::elem.displayName }}
 
-          a.chevron(
-          href
-          stm-click='articleGroup' click-payload='elem'
-          )
-            i.glyphicon.glyphicon-menu-right
+            a.chevron(
+            href
+            stm-click='articleGroup' click-payload='elem'
+            )
+              i.glyphicon.glyphicon-menu-right
 
     .query(
     uib-accordion-group

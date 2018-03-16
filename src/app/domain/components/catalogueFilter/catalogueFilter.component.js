@@ -39,6 +39,7 @@
       favouriteQueryClick,
       removeQueryClick,
       dummyTagClick,
+      ancestorGroups,
 
       search: $state.params.q || '',
       currentSearchQuery: null
@@ -67,6 +68,22 @@
       onSearchChange(nv);
 
     });
+
+    function ancestorGroups() {
+
+      let {ancestors} = vm.cvm;
+
+      if (!vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered) {
+        return _.first(ancestors);
+      }
+
+      if (vm.cvm.precedingGroups) {
+        return _.slice(ancestors, 1);
+      }
+
+      return ancestors;
+
+    }
 
     function dummyTagClick(ev, tag) {
 

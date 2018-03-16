@@ -68,15 +68,16 @@
   }
 
   .preceding-groups, .following-groups {
+    margin-bottom: 0;
     padding-left: 0;
     .list-group-item {
 
       & + .list-group-item {
-        border-top-color: $gray-background-color;
+        //border-top-color: $gray-background-color;
       }
 
       > a:not(:hover) {
-        background-color: darken($gray-background-color, 10%);
+        background-color: darken($gray-background-color, 0%);
       }
 
     }
