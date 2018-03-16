@@ -97,7 +97,8 @@
         let instance = SearchQuery.createInstance({
           query: val,
           lastUsed: moment().toDate(),
-          cnt: 1
+          cnt: 1,
+          isFavourite: false
         });
 
         SearchQuery.create(instance);

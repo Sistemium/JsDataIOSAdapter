@@ -91,14 +91,13 @@
 
     function $onInit() {
 
-      SearchQuery.findAll()
-        .then((res) => {
+      SearchQuery.findAll();
 
-          res = _.orderBy(res, ['isFavourite', 'query'], ['desc', 'desc']);
+      let filter = {
+        orderBy: [['isFavourite', 'DESC'], ['query', 'ASC']]
+      };
 
-          vm.searchQueries = _.take(res, LIMIT_TO);
-
-        });
+      vm.rebindAll(SearchQuery, filter, 'vm.searchQueries');
 
       vm.articleTagGroups = ArticleTagGroup.getAll();
 
