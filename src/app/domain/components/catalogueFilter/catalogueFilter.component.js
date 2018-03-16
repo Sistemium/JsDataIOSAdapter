@@ -96,10 +96,6 @@
 
           res = _.orderBy(res, ['isFavourite', 'query'], ['desc', 'desc']);
 
-          // let groups = _.groupBy(res, (item) => {
-          //   return _.get(item, 'isFavourite') === true;
-          // });
-
           vm.searchQueries = _.take(res, LIMIT_TO);
 
         });
