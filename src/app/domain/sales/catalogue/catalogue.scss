@@ -77,7 +77,6 @@
 
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
 
   @include responsive-only(lt-sm) {
     flex-flow: column;
