@@ -27,7 +27,7 @@
       'ngPinchZoom'
     ]);
 
-  angular.module('Sales', ['sistemium', 'yaMap']);
+  angular.module('Sales', ['sistemium', 'yaMap', 'rzModule']);
 
   angular.module('jsd', ['sistemiumBootstrap', 'Models']);
 

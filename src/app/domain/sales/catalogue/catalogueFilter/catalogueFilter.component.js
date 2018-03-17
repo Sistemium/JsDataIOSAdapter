@@ -12,7 +12,8 @@
       activeGroup: '=',
       cvm: '=catalogueVm',
 
-      removeTagClick: '='
+      removeTagClick: '=',
+      priceSlider: '='
 
     },
 
@@ -45,7 +46,18 @@
 
       search: $state.params.q || '',
       currentSearchQuery: null,
-      categoryTabOpen: localStorageService.get(LS_KEY)
+      categoryTabOpen: localStorageService.get(LS_KEY),
+
+      priceSlider: {
+        min: 0,
+        max: 25000,
+        options: {
+          noSwitching: true,
+          floor: 0,
+          ceil: 25000,
+          step: 25
+        }
+      }
 
     });
 

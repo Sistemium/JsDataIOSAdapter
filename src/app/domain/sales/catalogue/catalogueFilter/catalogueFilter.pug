@@ -7,3 +7,10 @@
     include tabs/catalogueFilterArticleGroups
 
     include tabs/catalogueFilterTagGroups
+
+  label Цена
+  rzslider(
+  rz-slider-model="vm.priceSlider.min"
+  rz-slider-high="vm.priceSlider.max"
+  rz-slider-options="vm.priceSlider.options"
+  )

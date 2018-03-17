@@ -167,6 +167,10 @@
         $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
         $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
 
+        $scope.$watchGroup(['vm.priceSlider.min', 'vm.priceSlider.max'], saEtc.debounce(() => {
+          setCurrentArticleGroup(vm.currentArticleGroup);
+        }, 1000, $scope));
+
       });
 
     vm.setBusy(busy);
@@ -1287,7 +1291,30 @@
 
       DEBUG('getStockByArticlesOfGroup', 'articleIds');
 
-      let result = !articleIds ? sortedStock : _.filter(sortedStock, stock => {
+      let {priceSlider = {options:{}}} = vm;
+
+      let minPrice = priceSlider.min > 0 && priceSlider.min;
+      let maxPrice = priceSlider.max < priceSlider.options.ceil && priceSlider.max;
+
+      let noFilters = !articleIds && !minPrice && !maxPrice;
+
+      let result = noFilters ? sortedStock : _.filter(sortedStock, stock => {
+
+        let price = (minPrice || maxPrice) && stock.priceOrigin();
+
+        if (minPrice) {
+          if (price < minPrice) {
+            return;
+          }
+        }
+        if (maxPrice) {
+          if (price > maxPrice) {
+            return;
+          }
+        }
+        if (!articleIds) {
+          return true;
+        }
         if (articleIds[stock.articleId]) {
           return ++groupIds[stock.article.articleGroupId];
         }

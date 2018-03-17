@@ -8,6 +8,10 @@ catalogue-filter {
 
   .catalogue-filter {
 
+    .rzslider .rz-pointer {
+      outline: none !important;
+    }
+
     uib-accordion {
 
       .panel-group {
