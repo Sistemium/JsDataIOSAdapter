@@ -8,10 +8,6 @@ catalogue-filter {
 
   .catalogue-filter {
 
-    @include responsive-only(sm) {
-      width: 238px;
-    }
-
     uib-accordion {
 
       .query .panel-heading > h4 > a {
@@ -207,18 +203,19 @@ catalogue-filter {
 
       cursor: pointer;
 
-      .single-query {
+      .search-query {
 
         display: flex;
-        align-items: center;
+        //align-items: center;
         border-top: 1px solid $gray-border-color;
+        padding: 0 5px;
 
         .query-name {
 
           flex: 1;
           text-align: left;
 
-          padding: 10px 15px;
+          padding: 10px 5px;
           color: $article-nav-menu-text-color;
 
           text-transform: lowercase;
@@ -226,28 +223,21 @@ catalogue-filter {
 
         }
 
-        .query-buttons {
+        a {
 
-          align-self: stretch;
-          padding: 10px 5px;
+          color: darken($gray-background-color, 20%);
+          padding: 10px 7px;
 
-          display: flex;
-          justify-content: space-between;
+          &.toggle-favourite:hover, .glyphicon-heart {
+            color: red;
+          }
 
-          width: 45px;
+          &.remove:hover {
+            color: $primary-color;
+          }
 
-          a {
-
-            color: darken($gray-background-color, 20%);
-
-            &:hover {
-              color: red;
-            }
-
-            .glyphicon-heart {
-              color: red;
-            }
-
+          i {
+            vertical-align: middle;
           }
 
         }
