@@ -74,7 +74,7 @@
       priceTypeClick,
       setSaleOrderClick,
       saleOrderTotalsClick,
-      clearSearchClick,
+
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
       toggleShowFirstLevelClick,
@@ -401,10 +401,6 @@
         }
 
       }
-    }
-
-    function clearSearchClick() {
-      vm.search = '';
     }
 
     function reloadVisible() {

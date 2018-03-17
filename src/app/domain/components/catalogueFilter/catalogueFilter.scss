@@ -13,6 +13,10 @@ catalogue-filter {
 
     uib-accordion {
 
+      .query .panel-heading > h4 > a {
+        padding: 0 !important;
+      }
+
       .panel-group {
 
         margin: 0;
@@ -213,8 +217,8 @@ catalogue-filter {
 
           padding: 10px 15px;
           color: $article-nav-menu-text-color;
-          flex: 1;
-          text-transform: uppercase;
+
+          text-transform: lowercase;
           text-decoration: none;
 
         }
@@ -230,15 +234,15 @@ catalogue-filter {
           width: 45px;
 
           a {
+
             color: darken($gray-background-color, 20%);
+
+            &:hover {
+              color: red;
+            }
 
             .glyphicon-heart {
               color: red;
-
-              &:hover {
-                color: lighten(red, 25%);
-              }
-
             }
 
           }

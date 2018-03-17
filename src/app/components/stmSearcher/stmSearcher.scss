@@ -2,7 +2,12 @@
 
 .stm-searcher {
 
-  margin-bottom: 11px;
+  margin-bottom: 0;
+  font-weight: normal;
+
+  input.form-control {
+    border: none;
+  }
 
   label:first-child {
     position: absolute;
@@ -58,6 +63,10 @@
     box-shadow: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
+
+    &:focus {
+      box-shadow: none;
+    }
 
   }
 

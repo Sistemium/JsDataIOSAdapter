@@ -1,24 +1,3 @@
-.filters
-
-  catalogue-search-input(
-  search='vm.search'
-  filters='vm.filters'
-  search-enter-press='vm.searchEnterPress'
-  active-tags='vm.activeTags'
-  active-group='vm.activeGroup'
-  stock-length='vm.stock.length'
-  catalogue-vm='vm'
-  remove-tag-click='vm.removeTagClick'
-  )
-
-  button.btn.btn-default#only-shipped-filter(
-  ng-if='vm.saleOrder'
-  ng-click='vm.onlyShippedClick()'
-  ng-class='{active: vm.showOnlyShipped}'
-  )
-    i.glyphicon.glyphicon-star-empty
-
-
 font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
 
   catalogue-filter(

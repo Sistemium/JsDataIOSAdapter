@@ -12,6 +12,7 @@
       activeGroup: '=',
       cvm: '=catalogueVm',
       removeTagClick: '=',
+      inputClick: '&',
 
       stockLength: '<'
     },
@@ -41,7 +42,8 @@
       searchClick,
       popoverTrigger: popoverTrigger(),
 
-      search: $state.params.q || ''
+      search: $state.params.q || '',
+      filterRemovers
 
     });
 
@@ -50,6 +52,10 @@
       runDebounce(nv);
 
     });
+
+    function filterRemovers() {
+      return _.filter(vm.filters, 'pieceVolume');
+    }
 
     function $onInit() {
 
