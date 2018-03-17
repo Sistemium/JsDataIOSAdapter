@@ -10,10 +10,6 @@ catalogue-filter {
 
     uib-accordion {
 
-      .query .panel-heading > h4 > a {
-        padding: 0 !important;
-      }
-
       .panel-group {
 
         margin: 0;
@@ -71,10 +67,18 @@ catalogue-filter {
                 .gray {
                   margin-left: $padding;
                   @extend .ellipsis;
+                  text-transform: none;
                 }
 
                 .group-name {
                   color: black;
+                }
+
+                i {
+                  font-size: 70%;
+                  top: 1px;
+                  margin-left: 3px;
+                  //color: $black;
                 }
 
               }
@@ -134,7 +138,7 @@ catalogue-filter {
 
       cursor: pointer;
 
-      .tag-line {
+      .accordion-body {
 
         a.list-group-item {
 
@@ -156,9 +160,6 @@ catalogue-filter {
         }
 
         .panel-body {
-
-          border-top: none;
-          overflow: scroll;
 
           .active {
 

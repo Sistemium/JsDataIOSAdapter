@@ -2,6 +2,10 @@
 
 .catalogue-filter .query {
 
+  .panel-heading > h4 > a {
+    padding: 0 !important;
+  }
+
   div[uib-accordion-header] {
 
     display: flex;

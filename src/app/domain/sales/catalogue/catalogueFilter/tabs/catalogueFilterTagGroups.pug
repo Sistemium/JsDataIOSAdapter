@@ -13,9 +13,11 @@ ng-click='vm.initActiveGroupPropsClick(tagGroup.id)'
       ng-repeat='tag in vm.activeGroup[tagGroup.id].selected track by $index'
       ng-if='vm.activeGroup[tagGroup.id].cnt === false && vm.activeGroup[tagGroup.id].selected.length'
       ng-click='vm.dummyTagClick($event, {label: tag})'
-      ) {{ tag }}
+      )
+        span {{ tag }}
+        i.glyphicon.glyphicon-remove
 
-  .accordion-body.tag-line
+  .accordion-body
 
     a.list-group-item(
     href
