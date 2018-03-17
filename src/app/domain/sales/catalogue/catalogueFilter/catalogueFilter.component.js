@@ -23,7 +23,9 @@
 
   });
 
-  function catalogueFilterController($scope, Schema, saControllerHelper, $state) {
+  const LS_KEY = 'catalogueFilter.categoryTabOpen';
+
+  function catalogueFilterController($scope, Schema, saControllerHelper, $state, localStorageService) {
 
     const {SearchQuery, ArticleTagGroup} = Schema.models();
 
@@ -43,8 +45,17 @@
 
       search: $state.params.q || '',
       currentSearchQuery: null,
-      categoryTabOpen: true
+      categoryTabOpen: localStorageService.get(LS_KEY)
 
+    });
+
+    vm.queryTabOpen = (vm.categoryTabOpen === false);
+    vm.categoryTabOpen = !vm.queryTabOpen;
+
+    vm.watchScope('vm.categoryTabOpen', (nv, ov) => {
+      if (nv !== ov) {
+        localStorageService.set(LS_KEY, !!nv);
+      }
     });
 
     $scope.$watchCollection('vm.searchQueries', (n, o) => {
