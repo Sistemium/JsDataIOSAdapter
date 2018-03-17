@@ -1,0 +1,25 @@
+.tag(
+ng-repeat='tagGroup in vm.articleTagGroups track by tagGroup.id'
+uib-accordion-group
+class='panel-default'
+is-open='vm.activeGroup[tagGroup.id].cnt'
+ng-click='vm.initActiveGroupPropsClick(tagGroup.id)'
+)
+  uib-accordion-heading {{tagGroup.name}}
+
+    .dummy-tags
+      a(
+      href
+      ng-repeat='tag in vm.activeGroup[tagGroup.id].selected track by $index'
+      ng-if='vm.activeGroup[tagGroup.id].cnt === false && vm.activeGroup[tagGroup.id].selected.length'
+      ng-click='vm.dummyTagClick($event, {label: tag})'
+      ) {{ tag }}
+
+  .accordion-body.tag-line
+
+    a.list-group-item(
+    href
+    ng-repeat='tag in tagGroup.tags track by $index'
+    ng-click='vm.tagClick(tag, tagGroup.allowMultiple)'
+    ng-class='{active : (vm.activeTags[tag.groupId] || vm.activeTags[tag.id]) === tag.label}'
+    ) {{tag.label}}

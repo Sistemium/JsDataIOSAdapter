@@ -1,0 +1,51 @@
+.query(
+uib-accordion-group
+class='panel-default'
+is-disabled='!vm.searchQueries.length'
+template-url='app/domain/components/catalogueFilter/catalogueFilterSearcher.html'
+is-open="vm.queryTabOpen"
+)
+  uib-accordion-heading
+
+    catalogue-search-input(
+    search='vm.search'
+    filters='vm.filters'
+    search-enter-press='vm.searchEnterPress'
+    active-tags='vm.activeTags'
+    active-group='vm.activeGroup'
+    stock-length='vm.stock.length'
+    catalogue-vm='vm'
+    remove-tag-click='vm.removeTagClick'
+    input-click='vm.queryTabOpen = !vm.queryTabOpen'
+    )
+
+    button.btn.btn-default#only-shipped-filter(
+    ng-if='vm.saleOrder'
+    ng-click='vm.onlyShippedClick()'
+    ng-class='{active: vm.showOnlyShipped}'
+    )
+      i.glyphicon.glyphicon-star-empty
+
+  .accordion-body
+
+    .single-query(
+    ng-repeat='query in vm.searchQueries track by query.id'
+    ng-class='{active : vm.currentSearchQuery === query.query}'
+    )
+      a.query-name(
+      ng-click='vm.queryClick(query)'
+      ) {{query.query}}
+
+      .query-buttons
+        a(
+        href
+        ng-click='vm.favouriteQueryClick(query)'
+        )
+          i.glyphicon.glyphicon-heart-empty(ng-if='!query.isFavourite')
+          i.glyphicon.glyphicon-heart(ng-if='query.isFavourite')
+
+        a(
+        href
+        ng-click='vm.removeQueryClick(query)'
+        )
+          i.glyphicon.glyphicon-remove
