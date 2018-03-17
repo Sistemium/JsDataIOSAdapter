@@ -1,0 +1,36 @@
+@import "variables";
+
+.catalogue-filter .query {
+
+  div[uib-accordion-header] {
+
+    display: flex;
+
+    catalogue-search-input {
+      flex: 1;
+    }
+
+    #only-shipped-filter {
+
+      border-radius: $border-radius;
+
+      border: none;
+      margin: 3px 3px 3px 0;
+      padding: 5px;
+
+      color: yellowgreen;
+
+      i {
+        left: 1px;
+      }
+
+    }
+
+    .stm-searcher {
+      flex: 1;
+      margin: 0;
+    }
+
+  }
+
+}
