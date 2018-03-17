@@ -75,10 +75,10 @@
       let {ancestors} = vm.cvm;
 
       if (!vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered) {
-        return _.first(ancestors);
+        return [_.first(ancestors)];
       }
 
-      if (vm.cvm.precedingGroups) {
+      if (vm.cvm.precedingGroups && vm.cvm.showFirstLevel) {
         return _.slice(ancestors, 1);
       }
 
