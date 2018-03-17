@@ -33,10 +33,11 @@ is-open="vm.queryTabOpen"
     )
       a.query-name(href ng-click='vm.queryClick(query)') {{query.query}}
 
-      //.query-buttons
-
       a.toggle-favourite(href ng-click='vm.favouriteQueryClick(query)')
         i.glyphicon(ng-class='query.isFavourite ? "glyphicon-heart" : "glyphicon-heart-empty"')
 
-      a.remove(href ng-click='vm.removeQueryClick(query)')
+      a.remove(
+      ng-if='!query.isFavourite'
+      href ng-click='vm.removeQueryClick(query)'
+      )
         i.glyphicon.glyphicon-remove
