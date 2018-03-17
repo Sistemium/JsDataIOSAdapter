@@ -16,7 +16,7 @@
 
     },
 
-    templateUrl: 'app/domain/components/catalogueFilter/catalogueFilter.html',
+    templateUrl: 'app/domain/sales/catalogue/catalogueFilter/catalogueFilter.html',
 
     controller: catalogueFilterController,
     controllerAs: 'vm'

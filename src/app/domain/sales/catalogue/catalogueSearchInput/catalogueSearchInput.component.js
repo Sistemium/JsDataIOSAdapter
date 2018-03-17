@@ -17,7 +17,7 @@
       stockLength: '<'
     },
 
-    templateUrl: 'app/domain/components/catalogueSearchInput/catalogueSearchInput.html',
+    templateUrl: 'app/domain/sales/catalogue/catalogueSearchInput/catalogueSearchInput.html',
 
     controller: catalogueSearchInputController,
     controllerAs: 'vm'
