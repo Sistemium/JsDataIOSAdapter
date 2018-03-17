@@ -57,14 +57,14 @@
 
 
     .block-to-collapse.scroll-y.article-groups(
-    no-uib-collapse='!vm.cvm.isArticleGroupsExpanded && !vm.cvm.isWideScreen'
-    no-collapsed='vm.cvm.isArticleGroupsCollapsingDone=true'
     class='panel-default'
     uib-accordion-group
-    is-open='true'
+    is-open='vm.categoryTabOpen'
     )
 
-      uib-accordion-heading Категории
+      uib-accordion-heading
+        span Группа
+        span.gray(ng-if='!vm.categoryTabOpen') {{ vm.cvm.currentArticleGroup.displayName }}
 
       .accordion-body
 

@@ -3,6 +3,7 @@
 catalogue-filter {
 
   $border-radius: 10px;
+  $padding: 5px;
   display: block;
 
   .catalogue-filter {
@@ -69,14 +70,15 @@ catalogue-filter {
 
                 padding: 10px;
                 display: block;
+                color: $primary-color;
+
+                .gray {
+                  margin-left: $padding;
+                  @extend .ellipsis;
+                }
 
                 .group-name {
                   color: black;
-                }
-
-                .no-queries {
-                  text-transform: lowercase;
-                  color: red;
                 }
 
               }
@@ -208,12 +210,13 @@ catalogue-filter {
       .single-query {
 
         display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
         align-items: center;
         border-top: 1px solid $gray-border-color;
 
         .query-name {
+
+          flex: 1;
+          text-align: left;
 
           padding: 10px 15px;
           color: $article-nav-menu-text-color;

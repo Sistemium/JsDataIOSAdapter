@@ -42,7 +42,8 @@
       ancestorGroups,
 
       search: $state.params.q || '',
-      currentSearchQuery: null
+      currentSearchQuery: null,
+      categoryTabOpen: true
 
     });
 
