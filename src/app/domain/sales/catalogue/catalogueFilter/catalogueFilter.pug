@@ -10,8 +10,8 @@
 
   .price
     label Цена
-    span(ng-if='vm.priceSlider.min > 0') от {{vm.priceSlider.min}}
-    span(ng-if='vm.priceSlider.max < vm.priceSlider.options.ceil') до {{vm.priceSlider.max}}
+    span(ng-if='vm.priceSlider.min > 0') от {{vm.priceSlider.min}} ₽
+    span(ng-if='vm.priceSlider.max < vm.priceSlider.options.ceil') до {{vm.priceSlider.max}} ₽
 
   rzslider(
   rz-slider-model="vm.priceSlider.min"

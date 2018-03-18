@@ -55,7 +55,9 @@
           noSwitching: true,
           floor: 0,
           ceil: 25000,
-          step: 25
+          step: 25,
+          customValueToPosition,
+          customPositionToValue
         }
       }
 
@@ -88,10 +90,39 @@
       if (_.isEmpty(vm.searchQueries)) {
         return;
       }
+    const pow = 4;
 
       onSearchChange(nv);
+    function power(val) {
+      return Math.pow(val, pow);
+    }
 
     });
+    function root(val) {
+      return Math.pow(val, 1/pow);
+    }
+
+    function customValueToPosition() {
+
+      let [val, minVal, maxVal] = _.map(arguments, root);
+
+      let range = maxVal - minVal;
+      return (val - minVal) / range;
+
+    }
+
+    function customPositionToValue(percent, minVal, maxVal) {
+      minVal = root(minVal);
+      maxVal = root(maxVal);
+      let value = percent * (maxVal - minVal) + minVal;
+      return power(value);
+    }
+
+    function removeTagClick(tag) {
+
+      tagClick(tag);
+
+    }
 
     function ancestorGroups() {
 
