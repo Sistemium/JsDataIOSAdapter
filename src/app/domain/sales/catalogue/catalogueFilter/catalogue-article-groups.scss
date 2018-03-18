@@ -90,6 +90,15 @@
 
   .block-to-collapse {
 
+
+    .active-tags {
+      display: block;
+      min-width: 0;
+      margin-left: 7px;
+      @extend .ellipsis;
+      //text-transform: none;
+    }
+
     .list-group-item:first-of-type {
       border-top-right-radius: $border-radius;
       border-top-left-radius: $border-radius;
