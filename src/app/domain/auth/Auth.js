@@ -75,6 +75,7 @@
         if (next.name !== 'auth') {
 
           event.preventDefault();
+
           if (rolesPromise) {
             rolesPromise.then(() => {
               $state.go(next, nextParams);
@@ -82,14 +83,20 @@
             return;
           }
 
-          $state.go('auth');
+          if (!getAccessToken()) {
+             $state.go('auth');
+          }
+
 
         }
       } else {
+
         me.profileState = 'profile';
+
         if (_.get(next, 'data.auth') === 'pickerAuth') {
           me.profileState = 'picker';
         }
+        
       }
 
       let needRoles = _.get(next, 'data.auth');
