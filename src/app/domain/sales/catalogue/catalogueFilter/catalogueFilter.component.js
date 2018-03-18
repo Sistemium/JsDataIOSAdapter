@@ -44,6 +44,8 @@
       ancestorGroups,
       removeTagClick,
       clearFilters,
+      groupHasActiveTags,
+      activeArticleGroupClick,
 
       search: $state.params.q || '',
       currentSearchQuery: null,
@@ -87,6 +89,12 @@
     Functions
      */
 
+    function activeArticleGroupClick($event) {
+      // vm.cvm.currentArticleGroup = null;
+      $event.stopPropagation();
+      vm.cvm.articleGroupClick();
+    }
+
     const pow = 4;
 
     function power(val) {
@@ -94,7 +102,7 @@
     }
 
     function root(val) {
-      return Math.pow(val, 1/pow);
+      return Math.pow(val, 1 / pow);
     }
 
     function customValueToPosition() {
@@ -207,6 +215,10 @@
 
       SearchQuery.destroy(searchQuery);
 
+    }
+
+    function groupHasActiveTags(tagGroup) {
+      return Object.keys(vm.activeTags[tagGroup.id] || {}).length;
     }
 
     function tagClick(tag) {

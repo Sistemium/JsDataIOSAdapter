@@ -6,7 +6,6 @@ catalogue-filter {
   $padding: 5px;
   display: block;
 
-
   .full-screen-controls {
 
     @include responsive-only(gt-xs) {
@@ -57,7 +56,7 @@ catalogue-filter {
           border: 1px solid $gray-border-color;
         }
 
-        .panel-default, .panel-tag {
+        .panel-default {
 
           &.panel-open {
             .active-tags {
@@ -109,16 +108,31 @@ catalogue-filter {
               span[uib-accordion-header] {
 
                 display: flex;
-                //justify-content: space-between;
+
+                .title {
+                  flex: 1;
+                }
 
                 .gray {
                   flex: 1;
                   text-align: right;
                 }
 
+                .active-tags, .gray {
+                  & + .caret {
+                    display: none;
+                  }
+                }
+
+                .caret {
+                  margin-left: 10px;
+                  .turn-90-counter-clock {
+                    top: 0;
+                  }
+                }
+
                 .active-tags {
 
-                  flex: 1;
                   transition: all .3s;
 
                   display: flex;
@@ -126,10 +140,17 @@ catalogue-filter {
 
                   a {
 
+                    //border: solid 1px $gray-border-color;
                     opacity: 1;
                     text-transform: lowercase;
                     margin: 0 5px;
-                    padding: 0;
+                    //padding: 0px 4px 1px;
+                    //border-radius: 4px;
+
+                    i {
+                      top: 0;
+                      display: none;
+                    }
 
                     &:last-of-type {
                       margin-right: 0;
@@ -161,7 +182,6 @@ catalogue-filter {
     .tag {
       cursor: pointer;
     }
-
 
     .accordion-body {
 

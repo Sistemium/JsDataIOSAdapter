@@ -1,12 +1,15 @@
-.block-to-collapse.scroll-y.article-groups(
+.block-to-collapse.article-groups(
 class='panel-default'
 uib-accordion-group
 is-open='vm.tabsOpen.categories'
 )
 
   uib-accordion-heading
-    span Группа
-    span.gray(ng-if='!vm.categoryTabOpen') {{ vm.cvm.currentArticleGroup.displayName }}
+    .title Группа
+    .active-tags(ng-if='!vm.tabsOpen.categories && vm.cvm.currentArticleGroup')
+      a(href ng-click='vm.activeArticleGroupClick($event)')
+        | {{ vm.cvm.currentArticleGroup.displayName }}
+    //.caret.turnable(ng-class='{"turn-90-counter-clock": vm.tabsOpen.categories}')
 
   .accordion-body
 
@@ -50,7 +53,7 @@ is-open='vm.tabsOpen.categories'
       a.list-group-item.active(
       href
       ng-if='!vm.cvm.noMoreChildren && vm.cvm.currentArticleGroup.displayName || !vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered'
-      ng-click='vm.cvm.isArticleGroupsExpanded = false;vm.cvm.articleGroupClick();'
+      ng-click='vm.cvm.articleGroupClick();'
       )
         span {{ vm.cvm.currentArticleGroup.displayName || 'Товары заказа' }}
 
