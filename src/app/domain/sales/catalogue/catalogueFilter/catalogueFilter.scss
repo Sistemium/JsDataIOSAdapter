@@ -8,6 +8,12 @@ catalogue-filter {
 
   .catalogue-filter {
 
+    > .price {
+      * + span {
+        margin-left: $padding;
+      }
+    }
+
     .rzslider .rz-pointer {
       outline: none !important;
     }
