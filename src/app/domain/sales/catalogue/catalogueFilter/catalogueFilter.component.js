@@ -56,7 +56,7 @@
           noSwitching: true,
           floor: 0,
           ceil: 25000,
-          step: 25,
+          step: 1,
           customValueToPosition,
           customPositionToValue,
           translate: translateSlider
