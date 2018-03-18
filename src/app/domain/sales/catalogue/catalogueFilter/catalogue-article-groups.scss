@@ -36,6 +36,11 @@
       width: 100%;
 
       &.not-full-screen {
+
+        .catalogue-filter-body {
+          padding-bottom: 0;
+        }
+
         .panel-default:not(.query), .rzslider, .panel-default.query .panel-collapse {
           display: none;
         }

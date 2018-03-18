@@ -6,39 +6,6 @@
     @extend %rounded-borders;
   }
 
-  .collapser {
-
-    @include responsive-only(gt-xs) {
-      display: none;
-    }
-
-    @extend %rounded-borders;
-
-    padding: 0;
-
-    a {
-
-      @extend %flex-center;
-      padding: 8px 10px;
-
-      &:hover {
-        text-decoration: none;
-      }
-
-      span:first-child {
-        @extend .ellipsis;
-        flex: 1;
-      }
-
-      .caret {
-        @extend .turnable;
-        top: 1px;
-      }
-
-    }
-
-  }
-
   .breadcrumb {
 
     @extend %rounded-borders;

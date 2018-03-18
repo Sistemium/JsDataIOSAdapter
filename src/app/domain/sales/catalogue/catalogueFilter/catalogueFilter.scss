@@ -111,6 +111,11 @@ catalogue-filter {
                 display: flex;
                 //justify-content: space-between;
 
+                .gray {
+                  flex: 1;
+                  text-align: right;
+                }
+
                 .active-tags {
 
                   flex: 1;
@@ -140,13 +145,8 @@ catalogue-filter {
           }
 
           .panel-collapse {
-            border-bottom-right-radius: $border-radius;
-            border-bottom-left-radius: $border-radius;
-
-            @include responsive-only(lt-sm) {
-              border-radius: 0;
-            }
-
+            border-bottom-right-radius: $border-radius - 1;
+            border-bottom-left-radius: $border-radius - 1;
           }
 
           .panel-body {
@@ -159,48 +159,42 @@ catalogue-filter {
     }
 
     .tag {
-
       cursor: pointer;
+    }
 
-      .accordion-body {
 
-        a.list-group-item {
+    .accordion-body {
 
-          border-right: none;
-          border-left: none;
-          border-radius: 0;
+      a.list-group-item {
 
-          &:last-of-type {
-            border-bottom: none;
-            border-bottom-left-radius: $border-radius - 1;
-            border-bottom-right-radius: $border-radius - 1;
+        border-right: none;
+        border-left: none;
+        border-radius: 0;
 
-            @include responsive-only(lt-sm) {
-              border-radius: 0;
-            }
-
-          }
-
+        &:last-of-type {
+          border-bottom: none;
+          border-bottom-left-radius: $border-radius - 1;
+          border-bottom-right-radius: $border-radius - 1;
         }
-
-        .panel-body {
-
-          .active {
-
-            background-color: $primary-color;
-            color: $white;
-
-            &:hover {
-              background-color: lighten($primary-color, 20%);
-            }
-
-          }
-
-        }
-
-        width: 100%;
 
       }
+
+      .panel-body {
+
+        .active {
+
+          background-color: $primary-color;
+          color: $white;
+
+          &:hover {
+            background-color: lighten($primary-color, 20%);
+          }
+
+        }
+
+      }
+
+      width: 100%;
 
     }
 

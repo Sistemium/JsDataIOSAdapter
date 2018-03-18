@@ -42,7 +42,6 @@
   .search-query {
 
     display: flex;
-    //align-items: center;
     border-top: 1px solid $gray-border-color;
     padding: 0 5px;
 
@@ -74,16 +73,6 @@
 
       i {
         vertical-align: middle;
-      }
-
-    }
-
-    &:last-of-type {
-      border-bottom-right-radius: $border-radius - 1;
-      border-bottom-left-radius: $border-radius - 1;
-
-      @include responsive-only(lt-sm) {
-        border-radius: 0 !important;
       }
 
     }
