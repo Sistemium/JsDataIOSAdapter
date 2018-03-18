@@ -38,7 +38,6 @@
 
       clearSearchClick,
       onSearchEnter,
-      removeTagClick,
       searchClick,
       popoverTrigger: popoverTrigger(),
 
@@ -54,6 +53,7 @@
     });
 
     function filterRemovers() {
+      // TODO: implement volume filters with a dynamic ArticleTagGroup then remove this stuff from the component
       return _.filter(vm.filters, 'pieceVolume');
     }
 
@@ -133,37 +133,6 @@
 
     function onSearchEnter() {
       vm.searchEnterPress = true;
-    }
-
-    function removeTagClick(tag) {
-
-      let {label} = tag;
-
-      _.each(vm.activeTags, (val, key) => {
-        if (val === label) {
-
-          let activeGroupKey = key;
-
-          //TODO: hardcoded other group's values
-
-          if (activeGroupKey === 'gift' || activeGroupKey === 'sparkling') {
-            activeGroupKey = 'other'
-          }
-
-          _.pull(vm.activeGroup[activeGroupKey].selected, label);
-
-          if (!vm.activeGroup[activeGroupKey].selected.length) {
-            vm.activeGroup[activeGroupKey].cnt = false;
-          }
-
-          vm.activeTags = _.omit(vm.activeTags, key);
-          return false;
-
-        }
-      });
-
-      _.remove(vm.filters, _.find(vm.filters, {label: label}));
-
     }
 
   }

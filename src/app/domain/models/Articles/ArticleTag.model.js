@@ -47,7 +47,7 @@
 
       let [id, label, re, groupId] = tag;
 
-      model.inject({id, label, re, groupId});
+      model.inject({id, label, re, groupId, code: id});
 
     });
 

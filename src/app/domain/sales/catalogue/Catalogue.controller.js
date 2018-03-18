@@ -468,58 +468,9 @@
 
     }
 
-    function articleTagClick(articleTagObj) {
+    function articleTagClick(tag) {
 
-      let {code, label} = articleTagObj;
-
-      let tagInfo = _.find(vm.tags, tag => {
-        return tag.id === code
-      });
-
-      let normalGroupId = _.get(tagInfo, 'groupId');
-
-      if (!_.find(vm.filters, {code: code})) {
-
-        let allowMultiple = _.get(tagInfo, 'group.allowMultiple');
-
-        if (!_.get(vm.activeGroup, normalGroupId)) {
-          vm.activeGroup[normalGroupId] = {cnt: true, selected: [label]};
-        } else {
-
-          if (!_.get(vm.activeGroup[normalGroupId], 'selected')) {
-            vm.activeGroup[normalGroupId].selected = [];
-          }
-
-          vm.activeGroup[normalGroupId].cnt = true;
-
-          vm.activeGroup[normalGroupId].selected.push(label);
-        }
-
-        if (allowMultiple) {
-          normalGroupId = _.get(tagInfo, 'id');
-        }
-
-        vm.activeTags[normalGroupId] = label;
-        vm.filters.push(articleTagObj);
-
-      } else {
-
-        _.each(vm.activeTags, (val, key) => {
-          if (val === label) {
-
-            _.pull(vm.activeGroup[normalGroupId].selected, label);
-            vm.activeTags = _.omit(vm.activeTags, key);
-
-            if (!vm.activeGroup[normalGroupId].selected.length) {
-              vm.activeGroup[normalGroupId].cnt = false;
-            }
-
-            return false;
-          }
-        });
-
-        _.remove(vm.filters, _.find(vm.filters, {label: label}));
-      }
+      vm.removeTagClick(tag);
 
     }
 

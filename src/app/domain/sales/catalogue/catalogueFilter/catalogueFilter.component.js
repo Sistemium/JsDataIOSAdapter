@@ -24,11 +24,11 @@
 
   });
 
-  const LS_KEY = 'catalogueFilter.categoryTabOpen';
+  const LS_KEY = 'catalogueFilter.tabsOpen';
 
   function catalogueFilterController($scope, Schema, saControllerHelper, $state, localStorageService) {
 
-    const {SearchQuery, ArticleTagGroup} = Schema.models();
+    const {SearchQuery, ArticleTagGroup, ArticleTag} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -37,16 +37,15 @@
 
       queryClick,
       tagClick,
-      initActiveGroupPropsClick,
-
       favouriteQueryClick,
       removeQueryClick,
-      dummyTagClick,
+      activeTagClick,
       ancestorGroups,
+      removeTagClick,
 
       search: $state.params.q || '',
       currentSearchQuery: null,
-      categoryTabOpen: localStorageService.get(LS_KEY),
+      tabsOpen: localStorageService.get(LS_KEY) || {categories: true},
 
       priceSlider: {
         min: 0,
@@ -63,41 +62,32 @@
 
     });
 
-    vm.queryTabOpen = (vm.categoryTabOpen === false);
-    vm.categoryTabOpen = !vm.queryTabOpen;
-
-    vm.watchScope('vm.categoryTabOpen', (nv, ov) => {
-      if (nv !== ov) {
-        localStorageService.set(LS_KEY, !!nv);
+    vm.watchScope('vm.tabsOpen', nv => {
+      if (nv) {
+        localStorageService.set(LS_KEY, nv);
       }
-    });
-
-    $scope.$watchCollection('vm.searchQueries', (n, o) => {
-
-      if (!n || !o) {
-        return;
-      }
-
-      if (n.length - 1 === o.length) {
-        let queries = _.orderBy(n, 'lastUsed', 'desc');
-        vm.currentSearchQuery = _.get(queries[0], 'query');
-      }
-
-    });
+    }, true);
 
     $scope.$watch('vm.search', nv => {
 
       if (_.isEmpty(vm.searchQueries)) {
         return;
       }
-    const pow = 4;
 
       onSearchChange(nv);
+
+    });
+
+    /*
+    Functions
+     */
+
+    const pow = 4;
+
     function power(val) {
       return Math.pow(val, pow);
     }
 
-    });
     function root(val) {
       return Math.pow(val, 1/pow);
     }
@@ -140,7 +130,7 @@
 
     }
 
-    function dummyTagClick(ev, tag) {
+    function activeTagClick(ev, tag) {
 
       ev.stopPropagation();
 
@@ -197,55 +187,29 @@
 
     }
 
-    function initActiveGroupPropsClick(groupId) {
+    function tagClick(tag) {
 
-      if (!_.get(vm.activeGroup, groupId)) {
-        vm.activeGroup[groupId] = {};
+      if (!tag.id && tag.code) {
+        tag = ArticleTag.get(tag.code);
       }
 
-      if (!_.get(vm.activeGroup[groupId], 'selected')) {
-        vm.activeGroup[groupId].selected = [];
-      }
+      let {groupId = '_', id = tag.label, group = {}, label} = tag;
 
-    }
+      let {allowMultiple} = group;
 
-    function tagClick(arg, allowMultiple) {
+      let groupData = vm.activeTags[groupId] || {};
 
-      let {groupId, label, id} = arg;
+      let newData = allowMultiple ? groupData : {};
 
-      let normalGroupId = groupId;
-
-      if (allowMultiple) {
-        groupId = id;
-      }
-
-      if (vm.activeTags[groupId] === label) {
-
-        vm.activeTags = _.omit(vm.activeTags, groupId);
-        _.remove(vm.filters, {code: id});
-
-        _.pull(vm.activeGroup[normalGroupId].selected, label);
-
-        if (!vm.activeGroup[normalGroupId].selected.length) {
-          vm.activeGroup[normalGroupId].cnt = false;
-        }
-
+      if (groupData[id] || _.find(vm.filters, {label})) {
+        delete newData[id];
       } else {
-
-        if (allowMultiple) {
-          vm.activeGroup[normalGroupId].selected.push(label);
-        } else {
-          vm.activeGroup[normalGroupId].selected = [label];
-        }
-
-        if (!allowMultiple) {
-          _.remove(vm.filters, {label: vm.activeTags[groupId]});
-        }
-
-        vm.filters.push({code: id, label: label});
-        vm.activeTags[groupId] = label;
-
+        newData[id] = tag;
       }
+
+      vm.activeTags[groupId] = newData;
+
+      setFilters();
 
     }
 
@@ -270,6 +234,10 @@
         vm.search = vm.currentSearchQuery = queryStr;
       }
 
+    }
+
+    function setFilters() {
+      vm.filters = _.flatten(_.map(vm.activeTags, groupTags => _.map(groupTags)));
     }
 
   }

@@ -46,7 +46,7 @@ catalogue-filter {
         .panel-default, .panel-tag {
 
           &.panel-open {
-            .dummy-tags {
+            .active-tags {
               opacity: 0;
             }
           }
@@ -98,7 +98,7 @@ catalogue-filter {
                 display: flex;
                 justify-content: space-between;
 
-                .dummy-tags {
+                .active-tags {
 
                   transition: all .3s;
 

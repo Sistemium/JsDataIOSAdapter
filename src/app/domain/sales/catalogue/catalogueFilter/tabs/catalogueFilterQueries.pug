@@ -3,7 +3,7 @@ uib-accordion-group
 class='panel-default'
 is-disabled='!vm.searchQueries.length'
 template-url='app/domain/sales/catalogue/catalogueFilter/tabs/catalogueFilterSearcher.html'
-is-open="vm.queryTabOpen"
+is-open="vm.tabsOpen.queries"
 )
   uib-accordion-heading
 
@@ -16,7 +16,7 @@ is-open="vm.queryTabOpen"
     stock-length='vm.cvm.stock.length'
     catalogue-vm='vm'
     remove-tag-click='vm.removeTagClick'
-    input-click='vm.queryTabOpen = true'
+    input-click='vm.tabsOpen.queries = true'
     )
 
     button.btn.btn-default#only-shipped-filter(
