@@ -79,6 +79,8 @@
 
     });
 
+    vm.watchScope('vm.searchFocused', onSearchFocus);
+
     /*
     Functions
      */
@@ -117,6 +119,12 @@
           return `до ${value} ₽`;
         default:
           return `${value}`
+      }
+    }
+
+    function onSearchFocus(focused) {
+      if (focused) {
+        vm.fullScreen = true;
       }
     }
 

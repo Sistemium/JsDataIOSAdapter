@@ -16,7 +16,7 @@
 
 }
 
-#article-groups, .catalogue-filter-modal {
+#article-groups {
 
   width: 300px;
   min-width: 300px;
@@ -28,12 +28,41 @@
     min-width: 250px;
   }
 
-  font-size-edit {
-    catalogue-filter {
-      @include responsive-only(lt-sm) {
-        display: none;
+  @include responsive-only(lt-sm) {
+
+    width: 100%;
+
+    .catalogue-filter {
+      width: 100%;
+
+      &.not-full-screen {
+        .panel-default:not(.query), .rzslider, .panel-default.query .panel-collapse {
+          display: none;
+        }
+
+        .stm-searcher label {
+          color: $primary-color;
+        }
+      }
+
+      &.full-screen {
+        position: absolute;
+        top: -50px;
+        //padding-top: 10px;
+        bottom: 0;
+        z-index: 100;
+        background: $white;
+
+        .catalogue-filter-body {
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          top: 30px;
+          padding-bottom: 20px;
+        }
       }
     }
+
   }
 
   .preceding-groups, .following-groups {

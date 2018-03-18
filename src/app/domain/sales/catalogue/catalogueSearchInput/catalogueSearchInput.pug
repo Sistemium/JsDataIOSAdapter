@@ -1,6 +1,6 @@
 .stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
 
-  label(ng-click='vm.searchClick($event)')
+  label(ng-click='vm.labelClick($event)')
     i.glyphicon.glyphicon-search
 
   input#search-input.form-control(
@@ -11,7 +11,9 @@
   aria-describedby='search-input'
   ng-model='vm.search'
   on-enter='vm.onSearchEnter()'
-  ng-click='vm.inputClick($event);'
+  ng-click='vm.inputClick($event)'
+  ng-focus='vm.onFocus(true)'
+  ng-blur='vm.onFocus(false)'
   )
 
   span.form-control-feedback(ng-hide='!vm.search')

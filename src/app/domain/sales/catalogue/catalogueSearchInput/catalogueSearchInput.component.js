@@ -13,6 +13,8 @@
       cvm: '=catalogueVm',
       removeTagClick: '=',
       inputClick: '&',
+      focused: '=?',
+      labelClick: '&',
 
       stockLength: '<'
     },
@@ -24,7 +26,7 @@
 
   });
 
-  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state, saMedia, $uibModal) {
+  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state, saMedia) {
 
     const {SearchQuery} = Schema.models();
 
@@ -38,11 +40,11 @@
 
       clearSearchClick,
       onSearchEnter,
-      searchClick,
       popoverTrigger: popoverTrigger(),
 
       search: $state.params.q || '',
-      filterRemovers
+      filterRemovers,
+      onFocus
 
     });
 
@@ -69,29 +71,6 @@
 
     function popoverTrigger() {
       return (saMedia.xsWidth || saMedia.xxsWidth) ? 'none' : 'outsideClick';
-    }
-
-    function searchClick() {
-
-      if (vm.popoverTrigger !== 'none') {
-        return;
-      }
-
-      vm.modal = $uibModal.open({
-
-        animation: false,
-        templateUrl: 'app/domain/components/catalogueFilter/catalogueFilterModal.html',
-
-        size: 'lg',
-        windowClass: 'catalogue-filter-modal',
-        scope: $scope,
-        bindToController: false
-
-      });
-
-      vm.modal.result
-        .then(_.noop, _.noop);
-
     }
 
     function saveQuery(val) {
@@ -133,6 +112,12 @@
 
     function onSearchEnter() {
       vm.searchEnterPress = true;
+    }
+
+    function onFocus(focused) {
+
+      vm.focused = focused;
+
     }
 
   }

@@ -6,7 +6,34 @@ catalogue-filter {
   $padding: 5px;
   display: block;
 
+
+  .full-screen-controls {
+
+    @include responsive-only(gt-xs) {
+      display: none;
+    }
+
+    display: flex;
+
+    .title {
+      font-size: 130%;
+      flex: 1;
+      color: $gray;
+    }
+
+    a {
+      padding: 5px;
+    }
+
+  }
+
+  .catalogue-filter-body {
+    overflow-y: scroll;
+  }
+
   .catalogue-filter {
+
+    overflow: hidden;
 
     > .price {
       * + span {
@@ -24,23 +51,9 @@ catalogue-filter {
 
         margin: 0;
 
-        @include responsive-only(lt-sm) {
-          &:first-of-type {
-            margin-top: 10px;
-          }
-        }
-
         .panel {
           box-shadow: none;
           border: 1px solid $gray-border-color;
-
-          @include responsive-only(lt-sm) {
-
-            border-left: none;
-            border-right: none;
-
-          }
-
         }
 
         .panel-default, .panel-tag {
@@ -49,10 +62,6 @@ catalogue-filter {
             .active-tags {
               opacity: 0;
             }
-          }
-
-          @include responsive-only(lt-sm) {
-            border-radius: 0;
           }
 
           margin-bottom: 10px;
@@ -99,10 +108,11 @@ catalogue-filter {
               span[uib-accordion-header] {
 
                 display: flex;
-                justify-content: space-between;
+                //justify-content: space-between;
 
                 .active-tags {
 
+                  flex: 1;
                   transition: all .3s;
 
                   display: flex;
@@ -212,8 +222,6 @@ catalogue-filter {
       }
 
     }
-
-
 
     // active
 

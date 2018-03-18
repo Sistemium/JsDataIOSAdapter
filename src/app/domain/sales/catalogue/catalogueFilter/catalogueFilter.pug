@@ -1,15 +1,22 @@
-.catalogue-filter.scroll-y
+.catalogue-filter(ng-class='vm.fullScreen ? "full-screen" : "not-full-screen"')
 
-  uib-accordion(close-others='true')
+  .full-screen-controls(ng-if='vm.fullScreen')
+    .title Поиск в каталоге
+    a(href ng-click='vm.fullScreen = false')
+      i.glyphicon.glyphicon-remove
 
-    include tabs/catalogueFilterQueries
+  .catalogue-filter-body
 
-    include tabs/catalogueFilterArticleGroups
+    uib-accordion(close-others='true')
 
-    include tabs/catalogueFilterTagGroups
-      
-  rzslider(
-  rz-slider-model="vm.priceSlider.min"
-  rz-slider-high="vm.priceSlider.max"
-  rz-slider-options="vm.priceSlider.options"
-  )
+      include tabs/catalogueFilterQueries
+
+      include tabs/catalogueFilterArticleGroups
+
+      include tabs/catalogueFilterTagGroups
+
+    rzslider(
+    rz-slider-model="vm.priceSlider.min"
+    rz-slider-high="vm.priceSlider.max"
+    rz-slider-options="vm.priceSlider.options"
+    )
