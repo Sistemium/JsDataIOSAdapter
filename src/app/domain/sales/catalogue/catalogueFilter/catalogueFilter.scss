@@ -87,8 +87,11 @@ catalogue-filter {
                 i {
                   font-size: 70%;
                   top: 1px;
-                  margin-left: 3px;
                   //color: $black;
+                }
+
+                i + * {
+                  margin-left: 3px;
                 }
 
               }

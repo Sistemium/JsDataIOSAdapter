@@ -56,7 +56,8 @@
           ceil: 25000,
           step: 25,
           customValueToPosition,
-          customPositionToValue
+          customPositionToValue,
+          translate: translateSlider
         }
       }
 
@@ -106,6 +107,17 @@
       maxVal = root(maxVal);
       let value = percent * (maxVal - minVal) + minVal;
       return power(value);
+    }
+
+    function translateSlider(value, sliderId, label) {
+      switch (label) {
+        case 'model':
+          return `Цена от ${value}`;
+        case 'high':
+          return `до ${value} ₽`;
+        default:
+          return `${value}`
+      }
     }
 
     function removeTagClick(tag) {

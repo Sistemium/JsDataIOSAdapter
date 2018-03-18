@@ -12,8 +12,8 @@ is-open='vm.tabsOpen[tagGroup.id]'
       ng-if='!vm.tabsOpen[tagGroup.id]'
       ng-click='vm.activeTagClick($event, tag)'
       )
-        span {{ tag.label }}
         i.glyphicon.glyphicon-remove
+        span {{ tag.label }}
 
   .accordion-body
 
