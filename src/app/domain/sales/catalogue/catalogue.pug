@@ -21,7 +21,9 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
     append-to='catalogueArticle'
     )
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
-        | Нет подходящих товаров
+        .info Нет подходящих товаров
+        .buttons
+          a(href ng-click='vm.clearFilters()') Сбросить фильтры
 
       #scroll-articles-parent.scroll-y(
       resize resize-offset-top='5' resize-property='height'

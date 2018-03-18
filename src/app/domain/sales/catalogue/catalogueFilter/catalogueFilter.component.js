@@ -13,7 +13,8 @@
       cvm: '=catalogueVm',
 
       removeTagClick: '=',
-      priceSlider: '='
+      priceSlider: '=',
+      clearFilters: '='
 
     },
 
@@ -42,6 +43,7 @@
       activeTagClick,
       ancestorGroups,
       removeTagClick,
+      clearFilters,
 
       search: $state.params.q || '',
       currentSearchQuery: null,
@@ -258,6 +260,15 @@
 
     function setFilters() {
       vm.filters = _.flatten(_.map(vm.activeTags, groupTags => _.map(groupTags)));
+    }
+
+    function clearFilters() {
+      vm.filters = [];
+      vm.activeTags = {};
+      vm.cvm.currentArticleGroup = false;
+      vm.search = '';
+      vm.priceSlider.min = 0;
+      vm.priceSlider.max = vm.priceSlider.options.ceil;
     }
 
   }
