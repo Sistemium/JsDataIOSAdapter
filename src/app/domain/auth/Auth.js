@@ -96,7 +96,7 @@
         if (_.get(next, 'data.auth') === 'pickerAuth') {
           me.profileState = 'picker';
         }
-        
+
       }
 
       let needRoles = _.get(next, 'data.auth');
