@@ -62,7 +62,9 @@
           customValueToPosition,
           customPositionToValue,
           translate: translateSlider
-        }
+        },
+
+        hasFilter: priceSliderHasFilter
       }
 
     });
@@ -130,6 +132,10 @@
         default:
           return `${value}`
       }
+    }
+
+    function priceSliderHasFilter() {
+      return this.min > 0 || this.max < this.options.ceil;
     }
 
     function onSearchFocus(focused) {
