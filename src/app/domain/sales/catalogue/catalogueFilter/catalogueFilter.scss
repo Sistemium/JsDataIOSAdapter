@@ -117,8 +117,6 @@ catalogue-filter {
                 .active-tags {
 
                   transition: all .3s;
-                  //opacity: 0.7;
-
                   display: flex;
                   justify-content: flex-end;
 
@@ -206,7 +204,7 @@ catalogue-filter {
 
     }
 
-    .block-to-collapse {
+    .article-groups {
 
       .list-group {
         margin-bottom: 0 !important;
