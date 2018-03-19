@@ -49,7 +49,14 @@
     }
   }
 
-  .alert {
+  .alert.popovers {
+
+    @include responsive-only(gt-xxs) {
+
+      display: flex;
+      justify-content: space-between;
+
+    }
 
     @include responsive-only(lt-sm) {
       margin-bottom: 0;
@@ -60,6 +67,10 @@
       display: flex;
       justify-items: flex-end;
       align-items: center;
+
+      @include responsive-only(xxs) {
+        margin-top: $margin;
+      }
 
       span.hidden-xs {
         margin-left: 4px;
