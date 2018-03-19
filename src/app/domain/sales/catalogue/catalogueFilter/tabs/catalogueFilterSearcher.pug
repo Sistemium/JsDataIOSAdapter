@@ -2,7 +2,6 @@
   h4.panel-title(uib-accordion-transclude='heading')
     div(uib-accordion-header ng-class="{disabled: isDisabled}")
 
-
 .panel-collapse.collapse(uib-collapse='!isOpen')
-  .panel-body(style='text-align: right', ng-transclude='')
+  .panel-body(ng-transclude)
 
