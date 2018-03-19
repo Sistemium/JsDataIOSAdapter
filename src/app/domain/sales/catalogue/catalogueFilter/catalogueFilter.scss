@@ -72,83 +72,6 @@ catalogue-filter {
             background-color: transparent;
             padding: 0;
 
-            h4 {
-
-              font-size: 13px;
-              text-transform: uppercase;
-
-              > a {
-
-                padding: 10px;
-                display: block;
-                color: $primary-color;
-
-                .group-name {
-                  color: black;
-                }
-
-                i {
-                  font-size: 70%;
-                  top: 1px;
-                  //color: $black;
-                }
-
-                i + * {
-                  margin-left: 3px;
-                }
-
-              }
-
-              span[uib-accordion-header] {
-
-                display: flex;
-
-                .title {
-                  flex: 1;
-                }
-
-                .caret {
-                  margin-left: 10px;
-                  &.turn-90-counter-clock {
-                   transform: translateY(-2px) rotate(-90deg);
-                  }
-                }
-
-                .active-tags {
-
-                  transition: all .3s;
-                  display: flex;
-                  justify-content: flex-end;
-
-                  & + .caret {
-                    display: none;
-                  }
-
-                  a {
-
-                    //border: solid 1px $gray-border-color;
-                    opacity: 1;
-                    text-transform: lowercase;
-                    margin: 0 5px;
-                    //padding: 0px 4px 1px;
-                    //border-radius: 4px;
-
-                    i {
-                      top: 0;
-                      display: none;
-                    }
-
-                    &:last-of-type {
-                      margin-right: 0;
-                    }
-                  }
-
-                }
-
-              }
-
-            }
-
           }
 
           .panel-collapse {
@@ -161,6 +84,83 @@ catalogue-filter {
             border: 0;
           }
         }
+      }
+
+      .panel-heading h4 {
+
+        font-size: 13px;
+        text-transform: uppercase;
+
+        > a {
+
+          padding: 10px;
+          display: block;
+          color: $primary-color;
+
+          .group-name {
+            color: black;
+          }
+
+          i {
+            font-size: 70%;
+            top: 1px;
+            //color: $black;
+          }
+
+          i + * {
+            margin-left: 3px;
+          }
+
+        }
+
+        span[uib-accordion-header] {
+
+          display: flex;
+
+          .title {
+            flex: 1;
+          }
+
+          .caret {
+            margin-left: 10px;
+            &.turn-90-counter-clock {
+              transform: translateY(-2px) rotate(-90deg);
+            }
+          }
+
+          .active-tags {
+
+            transition: all .3s;
+            display: flex;
+            justify-content: flex-end;
+
+            & + .caret {
+              display: none;
+            }
+
+            a {
+
+              //border: solid 1px $gray-border-color;
+              opacity: 1;
+              text-transform: lowercase;
+              margin: 0 5px;
+              //padding: 0px 4px 1px;
+              //border-radius: 4px;
+
+              i {
+                top: 0;
+                display: none;
+              }
+
+              &:last-of-type {
+                margin-right: 0;
+              }
+            }
+
+          }
+
+        }
+
       }
 
     }
