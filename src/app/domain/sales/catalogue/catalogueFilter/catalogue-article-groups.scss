@@ -5,9 +5,9 @@
   #article-groups {
 
     .preceding-groups, .following-groups {
-      .list-group-item {
-        > a:hover:not(.active) {
-          background-color: darken($gray-background-color, 10%);
+      a.list-group-item {
+        &:hover:not(.active) {
+          background-color: darken($gray-background-color, 0%);
         }
       }
 
@@ -74,13 +74,10 @@
     margin-bottom: 0;
     padding-left: 0;
 
-    .list-group-item {
-
-      > a:not(:hover) {
-        background-color: darken($gray-background-color, 0%);
-      }
-
+    a.list-group-item:not(:hover) {
+      background-color: darken($gray-background-color, 0%);
     }
+
   }
 
   @include responsive-only(gt-xs) {
@@ -89,7 +86,6 @@
   }
 
   .block-to-collapse {
-
 
     .active-tags {
       display: block;
@@ -132,37 +128,36 @@
     margin-bottom: $margin-bottom-xs;
   }
 
-
-  div.list-group-item {
+  .list-group-item {
 
     overflow: hidden;
     display: flex;
     justify-content: space-between;
-    padding: 0;
+    padding: 10px 15px;
+    align-items: center;
 
-    a {
+    //a {
+    //
+    //  max-width: 100%;
+    //  display: flex;
+    //  justify-content: flex-start;
+    //  cursor: pointer;
+    //  color: $article-nav-menu-text-color;
+    //
+    //  @include responsive-only(lt-sm) {
+    //    padding: 7px 10px;
+    //  }
+    //
+    //  .badge {
+    //    margin-left: 10px;
+    //  }
+    //
+    //}
 
-      max-width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      cursor: pointer;
-      padding: 10px 15px;
-      color: $article-nav-menu-text-color;
-
-      @include responsive-only(lt-sm) {
-        padding: 7px 10px;
-      }
-
-      .badge {
-        margin-left: 10px;
-      }
-
-      .name {
-        @extend .ellipsis;
-        min-width: 0;
-        flex: 1;
-      }
-
+    .name {
+      @extend .ellipsis;
+      min-width: 0;
+      flex: 1;
     }
 
     &.active {
