@@ -15,9 +15,23 @@ catalogue-filter {
     display: flex;
 
     .title {
+
       font-size: 130%;
       flex: 1;
-      color: $gray;
+
+      &.not-found > * {
+        color: $red;
+      }
+
+      label {
+        color: $gray;
+      }
+
+      strong {
+        margin-left: $padding;
+        color: $black;
+      }
+
     }
 
     a {

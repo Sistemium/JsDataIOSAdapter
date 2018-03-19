@@ -1,7 +1,10 @@
 .catalogue-filter(ng-class='vm.fullScreen ? "full-screen" : "not-full-screen"')
 
   .full-screen-controls(ng-if='vm.fullScreen')
-    .title Поиск в каталоге
+    .title(ng-class='{"not-found": !vm.cvm.stock.length}')
+      label Товаров в каталоге:
+      strong {{ vm.cvm.stock.length | number:0 }}
+
     a(href ng-click='vm.fullScreen = false')
       i.glyphicon.glyphicon-remove
 
