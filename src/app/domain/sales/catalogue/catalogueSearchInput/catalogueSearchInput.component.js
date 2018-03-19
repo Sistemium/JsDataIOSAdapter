@@ -75,6 +75,8 @@
 
     function saveQuery(val) {
 
+      val = _.lowerCase(_.trim(val));
+
       let searchQuery = _.find(vm.searchQueries, {query: val});
 
       if (!searchQuery) {

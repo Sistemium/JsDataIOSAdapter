@@ -176,6 +176,8 @@
 
     function onSearchChange(nv) {
 
+      nv = _.lowerCase(_.trim(nv));
+
       const savedQuery = _.find(vm.searchQueries, {query: nv});
 
       if (savedQuery) {
@@ -183,6 +185,7 @@
       } else {
         vm.currentSearchQuery = null;
       }
+
     }
 
     function $onInit() {
@@ -193,7 +196,9 @@
         orderBy: [['isFavourite', 'DESC'], ['query', 'ASC']]
       };
 
-      vm.rebindAll(SearchQuery, filter, 'vm.searchQueries');
+      vm.rebindAll(SearchQuery, filter, 'vm.searchQueries', () => {
+        vm.search && onSearchChange(vm.search);
+      });
 
       vm.articleTagGroups = ArticleTagGroup.getAll();
 
@@ -213,7 +218,7 @@
       if (query === vm.currentSearchQuery) {
         vm.currentSearchQuery = null;
 
-        if (vm.search === query) {
+        if (_.lowerCase(_.trim(vm.search)) === query) {
           vm.search = null;
         }
 
