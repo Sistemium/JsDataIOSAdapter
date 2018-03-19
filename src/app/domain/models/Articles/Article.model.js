@@ -81,8 +81,8 @@
         }],
 
         lastName: ['name', 'firstName', lastNameFn],
-        secondName: ['primaryTag', secondNameFn],
         primaryTag: ['tags', primaryTagFn],
+        secondName: ['primaryTag', secondNameFn],
 
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
