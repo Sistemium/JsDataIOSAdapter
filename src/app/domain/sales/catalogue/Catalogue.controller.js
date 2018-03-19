@@ -737,29 +737,34 @@
 
       if (!vm.currentPriceType) return;
 
-      let stockCache = _.orderBy(
-        _.map(
-          Stock.meta.getAll(),
-          stock => {
-            return {
-              id: stock.id,
-              volume: stock.volume,
-              displayVolume: stock.displayVolume,
-              article: stock.article,
-              articleId: stock.articleId,
-              priceAgent: stock.priceAgent,
-              discountPercent,
-              targetDiscountPercent,
-              discountPrice,
-              discountPriceDoc,
-              priceOrigin,
-              discountScope,
-              setDiscountScope
-            };
-          }
-        ),
+      let stockCache = [];
+
+      _.each(Stock.meta.getAll(), stock => {
+
+        if (!stock.article) return;
+
+        stockCache.push({
+          id: stock.id,
+          volume: stock.volume,
+          displayVolume: stock.displayVolume,
+          article: stock.article,
+          articleId: stock.articleId,
+          priceAgent: stock.priceAgent,
+          discountPercent,
+          targetDiscountPercent,
+          discountPrice,
+          discountPriceDoc,
+          priceOrigin,
+          discountScope,
+          setDiscountScope
+        });
+
+      });
+
+      stockCache = _.orderBy(
+        stockCache,
         // item => item.article && item.article.name
-        ['article.firstName', 'article.pieceVolume', 'article.name']
+        ['article.firstName', 'article.secondName', 'article.pieceVolume', 'article.name']
       );
 
       DEBUG('filterStock', 'orderBy');
@@ -1242,7 +1247,7 @@
 
       DEBUG('getStockByArticlesOfGroup', 'articleIds');
 
-      let {priceSlider = {options:{}}} = vm;
+      let {priceSlider = {options: {}}} = vm;
 
       let minPrice = priceSlider.min > 0 && priceSlider.min;
       let maxPrice = priceSlider.max < priceSlider.options.ceil && priceSlider.max;
