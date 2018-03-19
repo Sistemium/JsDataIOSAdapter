@@ -233,18 +233,12 @@ catalogue-filter {
 
         background-color: $primary-color;
 
-        .query-buttons a, .query-name {
+        .query-name, .toggle-favourite, a.remove {
           color: $white;
         }
 
         &:hover {
-
           background-color: lighten($primary-color, 20%);
-
-          .query-buttons a {
-            color: $white;
-          }
-
         }
 
       }
