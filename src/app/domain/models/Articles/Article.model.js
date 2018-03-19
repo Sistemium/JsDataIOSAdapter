@@ -81,6 +81,7 @@
         }],
 
         lastName: ['name', 'firstName', lastNameFn],
+        secondName: ['name', 'tags', secondNameFn],
 
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
@@ -125,6 +126,14 @@
 
     });
 
+    function secondNameFn(name, tags) {
+
+      let primaryTag = _.find(tags, tag => tag.groupId !== 'other');
+
+      return primaryTag && primaryTag.label || null;
+
+    }
+    
     function lastNameFn(name, firstName) {
 
       let preName = preNameFn(name);
@@ -165,7 +174,8 @@
           name = _.replace(name, cfg[2], '');
           return {
             code: cfg[0],
-            label: cfg[1]
+            label: cfg[1],
+            groupId: cfg[3]
           };
         }
       });
