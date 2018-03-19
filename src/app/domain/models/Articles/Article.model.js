@@ -81,7 +81,8 @@
         }],
 
         lastName: ['name', 'firstName', lastNameFn],
-        secondName: ['name', 'tags', secondNameFn],
+        secondName: ['primaryTag', secondNameFn],
+        primaryTag: ['tags', primaryTagFn],
 
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
@@ -126,14 +127,20 @@
 
     });
 
-    function secondNameFn(name, tags) {
-
-      let primaryTag = _.find(tags, tag => tag.groupId !== 'other');
+    function secondNameFn(primaryTag) {
 
       return primaryTag && primaryTag.label || null;
 
     }
-    
+
+    function primaryTagFn(tags) {
+
+      let primaryTag = _.find(tags, 'primary');
+
+      return primaryTag || null;
+
+    }
+
     function lastNameFn(name, firstName) {
 
       let preName = preNameFn(name);
@@ -170,12 +177,16 @@
     function tagger(name) {
 
       let res = _.map(tagRegs, cfg => {
-        if (cfg[2].test(name)) {
-          name = _.replace(name, cfg[2], '');
+
+        let [code, label, re, groupId] = cfg;
+
+        if (re.test(name)) {
+          name = _.replace(name, re, '');
           return {
-            code: cfg[0],
-            label: cfg[1],
-            groupId: cfg[3]
+            code,
+            label,
+            groupId,
+            primary: !/other|taste/.test(groupId)
           };
         }
       });

@@ -236,11 +236,15 @@
 
     .article-info {
 
-      margin-left: 5px;
+      //margin-left: 5px;
       white-space: nowrap;
       flex-shrink: 0;
       flex-grow: 1;
       padding-right: 6px;
+
+      > * {
+        margin-left: 5px;
+      }
 
     }
 
@@ -307,7 +311,7 @@
 
   }
 
-  .article-name-second .tag {
+  .article-name .tag {
 
     color: $primary-color;
 
