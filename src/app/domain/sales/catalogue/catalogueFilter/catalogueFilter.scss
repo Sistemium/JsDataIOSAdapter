@@ -171,11 +171,17 @@ catalogue-filter {
 
     .accordion-body {
 
+      width: 100%;
+
       a.list-group-item, .search-query {
 
         border-right: none;
         border-left: none;
         border-radius: 0;
+
+      }
+
+      > a.list-group-item, .search-query, ul:last-of-type .list-group-item {
 
         &:last-of-type {
           border-bottom: none;
@@ -199,8 +205,6 @@ catalogue-filter {
         }
 
       }
-
-      width: 100%;
 
     }
 
