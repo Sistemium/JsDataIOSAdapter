@@ -364,7 +364,7 @@
       //text-align: right;
       color: $gray;
       display: flex;
-      //justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
 
       @include responsive-only(gt-xs) {
@@ -380,6 +380,7 @@
 
       .icon {
         min-width: 20px;
+        //flex: 1;
         .glyphicon {
           right: 2px;
         }
