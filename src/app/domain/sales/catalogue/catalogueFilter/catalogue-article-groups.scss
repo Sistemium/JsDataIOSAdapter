@@ -45,9 +45,15 @@
           display: none;
         }
 
-        .stm-searcher label {
-          color: $primary-color;
+        .stm-searcher {
+          label {
+            color: $primary-color;
+          }
+          .filters {
+            display: none;
+          }
         }
+
       }
 
       &.full-screen {
