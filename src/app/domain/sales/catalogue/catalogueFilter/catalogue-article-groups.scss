@@ -115,50 +115,6 @@
       flex: 1;
     }
 
-    &.active {
-
-      a, a:hover {
-        color: #fff;
-        text-decoration: none;
-        span.badge {
-          background-color: #fff;
-          color: $active-color;
-        }
-      }
-
-    }
-
-    &:not(.active) a:hover {
-      background: $gray-background-color;
-      text-decoration: none;
-    }
-
-    a.chevron {
-
-      @extend %center-vertical;
-      height: auto;
-
-      .glyphicon {
-        top: 0;
-      }
-
-    }
-
-    a:not(.chevron) {
-      flex: 1;
-      &:not(:first-child) {
-        padding-left: 0;
-      }
-
-    }
-
-    .chevron + a:not(.chevron) {
-      @include responsive-only(gt-xs) {
-        margin-left: -48px;
-        padding-left: 48px;
-      }
-    }
-
   }
 
 }

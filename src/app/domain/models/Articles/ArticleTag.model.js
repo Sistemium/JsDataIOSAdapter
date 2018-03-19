@@ -51,7 +51,7 @@
       model.inject({id, label, re, groupId, code: id});
 
     });
-    
+
 
   }
 
