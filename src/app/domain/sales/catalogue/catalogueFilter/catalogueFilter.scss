@@ -178,13 +178,13 @@ catalogue-filter {
         border-right: none;
         border-left: none;
         border-radius: 0;
+        border-bottom: none;
 
       }
 
       > a.list-group-item, .search-query, ul:last-of-type .list-group-item {
 
         &:last-of-type {
-          border-bottom: none;
           border-bottom-left-radius: $border-radius - 1;
           border-bottom-right-radius: $border-radius - 1;
         }
@@ -208,23 +208,8 @@ catalogue-filter {
 
     }
 
-    .article-groups {
-
-      .list-group {
-        margin-bottom: 0 !important;
-      }
-
-      .list-group-item {
-
-        border-left: none;
-        border-right: none;
-
-        &:last-of-type {
-          border-bottom: none;
-        }
-
-      }
-
+    .list-group {
+      margin-bottom: 0;
     }
 
     // active
