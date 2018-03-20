@@ -2,6 +2,7 @@
 
 (function () {
 
+  /** @ngInject */
   function Auth($rootScope, $q, $state, $window, IOS, PickerAuth) {
 
     const me = this;
@@ -72,6 +73,7 @@
     function onStateChangeStart(event, next, nextParams, from) {
 
       if (!roles) {
+
         if (next.name !== 'auth') {
 
           event.preventDefault();
@@ -87,8 +89,10 @@
              $state.go('auth');
           }
 
-
         }
+
+        return;
+
       } else {
 
         me.profileState = 'profile';

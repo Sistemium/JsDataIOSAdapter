@@ -27,6 +27,7 @@
     return saDebug.log('stg:log');
   }
 
+  /** @ngInject */
   function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService,
                IOS, PickerAuth, localStorageService, $injector,
                appcache) {
@@ -82,18 +83,7 @@
           .then(function (p) {
             PickerAuth.login(p, lastState);
           });
-      } /*else if (lastState) {
-        $state.go(lastState.name, lastState.params);
-      }*/
-
-      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
-        (e, to, params) => localStorageService.set('lastState', {
-          name: to.name,
-          params: params
-        })
-      ));
-
-
+      }
 
       function sockAuth() {
 
@@ -105,10 +95,18 @@
             .catch(() => 'no update');
 
           if (!accessToken) {
-            return $state.go('auth');
+            console.log('sockAuth no auth');
+            return;
           }
 
         }
+
+        $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
+          (e, to, params) => localStorageService.set('lastState', {
+            name: to.name,
+            params: params
+          })
+        ));
 
         Sockets.emit('authorization', {accessToken: accessToken}, ack => {
 

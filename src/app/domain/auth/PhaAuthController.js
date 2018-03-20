@@ -5,6 +5,7 @@
   angular.module('core.services')
     .controller('PhaAuthController', PhaAuthController);
 
+  /** @ngInject */
   function PhaAuthController(phaService, $state, toastr) {
 
     const vm = this;
