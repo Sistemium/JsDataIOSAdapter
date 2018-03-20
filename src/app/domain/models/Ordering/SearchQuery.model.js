@@ -8,9 +8,7 @@
 
     const SearchQuery = Schema.register({
 
-      name: 'SearchQuery',
-
-      defaultAdapter: 'localStorage'
+      name: 'SearchQuery'
 
     });
 

@@ -61,8 +61,6 @@
 
     function $onInit() {
 
-      SearchQuery.findAll();
-
       SearchQuery.bindAll({
         orderBy: 'query'
       }, $scope, 'vm.searchQueries');
