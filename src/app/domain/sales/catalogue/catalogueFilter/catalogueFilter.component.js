@@ -146,6 +146,10 @@
 
     function removeTagClick(tag) {
 
+      if (tag.pieceVolume) {
+        return _.remove(vm.filters, 'pieceVolume');
+      }
+
       tagClick(tag);
 
     }
@@ -302,7 +306,9 @@
     }
 
     function setFilters() {
-      vm.filters = _.flatten(_.map(vm.activeTags, groupTags => _.map(groupTags)));
+      let pieceVolume = _.find(vm.filters, 'pieceVolume');
+      let filters = _.flattenDeep([_.map(vm.activeTags, groupTags => _.map(groupTags)), pieceVolume]);
+      vm.filters = _.filter(filters);
     }
 
     function clearFilters() {
