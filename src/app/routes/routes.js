@@ -41,19 +41,21 @@
       .state({
         name: 'auth',
         url: '/auth?access-token',
-        templateProvider: function ($templateCache, $timeout) {
+        templateProvider: function ($templateCache, $timeout, $templateRequest) {
 
           let tpl = getTpl();
+          const url = 'app/domain/auth/views/phaAuth.html';
 
           if (!tpl) {
             return $timeout(100)
-              .then(getTpl);
+              .then(getTpl)
+              .then(res => res || $templateRequest(url));
           }
 
           return tpl;
 
           function getTpl() {
-            return $templateCache.get('app/domain/auth/views/phaAuth.html');
+            return $templateCache.get(url);
           }
 
         },
