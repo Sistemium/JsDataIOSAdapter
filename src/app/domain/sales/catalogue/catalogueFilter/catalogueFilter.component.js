@@ -140,7 +140,8 @@
 
     function onSearchFocus(focused) {
       if (focused) {
-        vm.fullScreen = true;
+        // vm.fullScreen = true;
+        vm.tabsOpen.queries = true;
       }
     }
 
