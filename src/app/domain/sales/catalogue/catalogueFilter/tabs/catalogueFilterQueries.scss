@@ -2,11 +2,13 @@
 
 .catalogue-filter .query {
 
+  $padding: 6px;
+
   .panel-heading > h4 > a {
     padding: 0 !important;
   }
 
-  div[uib-accordion-header] {
+  [uib-accordion-header] {
 
     display: flex;
 
@@ -28,6 +30,18 @@
 
       i {
         left: 1px;
+      }
+
+    }
+
+    > a.toggle-open {
+
+      padding: $padding;
+      outline: none;
+      margin-right: 4px;
+
+      .caret {
+        top: 3px;
       }
 
     }
