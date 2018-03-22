@@ -46,6 +46,8 @@
       clearFilters,
       groupHasActiveTags,
       activeArticleGroupClick,
+      articleGroupClick,
+      searchInputToggleOpenClick,
 
       search: $state.params.q || '',
       currentSearchQuery: null,
@@ -300,6 +302,7 @@
       if (vm.currentSearchQuery === queryStr) {
         vm.search = vm.currentSearchQuery = null;
       } else {
+        vm.fullScreen = false;
         saveQuery(queryStr);
         vm.search = vm.currentSearchQuery = queryStr;
       }
@@ -319,6 +322,21 @@
       vm.search = '';
       vm.priceSlider.min = 0;
       vm.priceSlider.max = vm.priceSlider.options.ceil;
+    }
+
+    function articleGroupClick(articleGroup) {
+
+      if (articleGroup && vm.cvm.articleGroupIds[articleGroup.id]) {
+        vm.fullScreen = false;
+      }
+
+      vm.cvm.articleGroupClick(articleGroup);
+
+    }
+
+    function searchInputToggleOpenClick() {
+      vm.tabsOpen.queries = !vm.tabsOpen.queries;
+      vm.fullScreen = true;
     }
 
   }

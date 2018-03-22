@@ -25,7 +25,10 @@ is-open="vm.tabsOpen.queries"
     )
       i.glyphicon(ng-class='vm.cvm.showOnlyShipped ? "glyphicon-star" : "glyphicon-star-empty"')
 
-    a.toggle-open(href ng-click='vm.tabsOpen.queries = !vm.tabsOpen.queries')
+    a.toggle-open(
+    href ng-click='vm.searchInputToggleOpenClick()'
+    ng-class='vm.tabsOpen.queries ? "opened" : "closed"'
+    )
       span.caret.turnable(ng-class='{"turn-90-counter-clock": vm.tabsOpen.queries}')
 
   .accordion-body

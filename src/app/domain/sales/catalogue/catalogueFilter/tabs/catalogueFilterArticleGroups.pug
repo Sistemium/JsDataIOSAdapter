@@ -53,7 +53,7 @@ is-open='vm.tabsOpen.categories'
       href
       ng-repeat='elem in vm.cvm.articleGroups | orderBy:"name" track by elem.id'
       ng-class='{active: vm.cvm.currentArticleGroup.id === elem.id}'
-      stm-click='articleGroup' click-payload='elem'
+      ng-click='vm.articleGroupClick(elem)'
       )
         span.name {{::elem.displayName }}
 
