@@ -750,11 +750,7 @@
 
       });
 
-      stockCache = _.orderBy(
-        stockCache,
-        // item => item.article && item.article.name
-        ['article.firstName', 'article.secondName', 'article.pieceVolume', 'article.name']
-      );
+      stockCache = _.orderBy(stockCache, item => item.article && item.article.sortName);
 
       DEBUG('filterStock', 'orderBy');
 
@@ -1183,7 +1179,7 @@
 
       if (vm.search || vm.filters.length || vm.showOnlyShipped) {
 
-        let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
+        let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), / /g, '.+'), 'i');
 
         let pieceVolume;
 
@@ -1199,11 +1195,7 @@
 
         _.each(articles, article => {
 
-          let res = !reg ||
-            reg.test(article.name) ||
-            reg.test(article.preName) ||
-            reg.test(article.lastName) ||
-            article.ArticleGroup && reg.test(article.ArticleGroup.name);
+          let res = !reg || reg.test(article.sortName);
 
           if (res && vm.showOnlyShipped && vm.articleStats) {
             res = vm.articleStats[article.id];
