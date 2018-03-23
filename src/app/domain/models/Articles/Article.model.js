@@ -90,7 +90,9 @@
 
         pcsLabel: ['pieceVolume', function (pieceVolume) {
           return pieceVolume ? 'б' : 'шт';
-        }]
+        }],
+
+        sortName: ['articleGroupId', 'firstName', 'secondName', 'pieceVolume', sortNameFn]
 
       },
 
@@ -126,6 +128,12 @@
       }
 
     });
+
+    function sortNameFn(articleGroupId, firstName, secondName, pieceVolume) {
+      const {ArticleGroup} = Schema.models();
+      let groupName = _.result(ArticleGroup.get(articleGroupId), 'ancestorNames');
+      return `${groupName} ${firstName} ${secondName} ${pieceVolume} ${this.name}`;
+    }
 
     function secondNameFn(primaryTag) {
 

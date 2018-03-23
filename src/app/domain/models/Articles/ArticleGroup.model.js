@@ -50,7 +50,9 @@
 
         hasDescendants: function (ids) {
           return _.find(this.descendantsCache, item => ids[item]);
-        }
+        },
+
+        ancestorNames
 
       }
 
@@ -79,11 +81,15 @@
     }
 
     function setCache(store, id, articleGroupId) {
+
       let cache = store[id];
+
       if (!cache) {
         cache = store[id] = []
       }
+
       articleGroupId && cache.indexOf(articleGroupId) === -1 && cache.push(articleGroupId);
+
       return cache;
     }
 
@@ -107,6 +113,15 @@
       });
 
       return ownCache;
+
+    }
+
+    function ancestorNames() {
+
+      let parent = this.articleGroup;
+      let names = (parent ? `${parent.ancestorNames()} / ` : '') + this.name;
+
+      return names || '';
 
     }
 
