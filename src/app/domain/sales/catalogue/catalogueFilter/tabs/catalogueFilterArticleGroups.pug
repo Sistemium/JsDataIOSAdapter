@@ -57,7 +57,7 @@ is-open='vm.tabsOpen.categories'
       )
         span.name {{::elem.displayName }}
 
-        span.badge(ng-if='::vm.cvm.articleGroupIds[elem.id]')
+        //span.badge(ng-if='::vm.cvm.articleGroupIds[elem.id]')
           span {{::vm.cvm.articleGroupIds[elem.id]}}
           span(ng-if='::elem.children.length') +
 
