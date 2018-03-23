@@ -72,9 +72,9 @@
       return (saMedia.xsWidth || saMedia.xxsWidth) ? 'none' : 'outsideClick';
     }
 
-    function saveQuery(val) {
+    function saveQuery(val = '') {
 
-      val = _.lowerCase(_.trim(val));
+      val = _.trim(val).toLocaleLowerCase();
 
       let searchQuery = _.find(vm.searchQueries, {query: val});
 

@@ -196,9 +196,9 @@
 
     }
 
-    function onSearchChange(nv) {
+    function onSearchChange(nv = '') {
 
-      nv = _.lowerCase(_.trim(nv));
+      nv = nv.toLocaleLowerCase();
 
       const savedQuery = _.find(vm.searchQueries, {query: nv});
 
@@ -260,7 +260,7 @@
       if (query === vm.currentSearchQuery) {
         vm.currentSearchQuery = null;
 
-        if (_.lowerCase(_.trim(vm.search)) === query) {
+        if (vm.search && vm.search.toLocaleLowerCase() === query) {
           vm.search = null;
         }
 
