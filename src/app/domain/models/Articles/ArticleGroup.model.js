@@ -12,10 +12,6 @@
 
       relations: {
         hasMany: {
-          Article: {
-            localField: 'Articles',
-            foreignKey: 'articleGroupId'
-          },
           ArticleGroup: {
             localField: 'children',
             foreignKey: 'articleGroupId'
