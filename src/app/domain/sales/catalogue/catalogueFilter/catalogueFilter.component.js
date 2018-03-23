@@ -320,6 +320,7 @@
         vm.fullScreen = false;
         saveQuery(queryStr);
         vm.search = vm.currentSearchQuery = queryStr;
+        onSearchEnter();
       }
 
     }
