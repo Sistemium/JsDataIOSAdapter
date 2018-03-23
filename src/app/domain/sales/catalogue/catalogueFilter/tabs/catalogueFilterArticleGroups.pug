@@ -51,7 +51,7 @@ is-open='vm.tabsOpen.categories'
 
       a.list-group-item(
       href
-      ng-repeat='elem in vm.cvm.articleGroups | orderBy:"name" track by elem.id'
+      ng-repeat='elem in vm.cvm.articleGroups | orderBy:"sortName" track by elem.id'
       ng-class='{active: vm.cvm.currentArticleGroup.id === elem.id}'
       ng-click='vm.articleGroupClick(elem)'
       )

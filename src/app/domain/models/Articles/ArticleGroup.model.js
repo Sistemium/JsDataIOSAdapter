@@ -38,7 +38,8 @@
       computed: {
         displayName: ['name', cleanName],
         ancestorsCache: ['id', 'articleGroupId', setACache],
-        descendantsCache: ['id', 'articleGroupId', setDCache]
+        descendantsCache: ['id', 'articleGroupId', setDCache],
+        sortName: ['id', 'name', sortNameFn]
       },
 
       methods: {
@@ -60,6 +61,10 @@
 
     let cacheA = {};
     let cacheD = {};
+
+    function sortNameFn(id, name) {
+      return `${(id === DomainOption.stmArticleGroupId()) ? '.' : ''}${name}`;
+    }
 
     function stmRoot() {
       let id = DomainOption.stmArticleGroupId();
@@ -119,7 +124,7 @@
     function ancestorNames() {
 
       let parent = this.articleGroup;
-      let names = (parent ? `${parent.ancestorNames()} / ` : '') + this.name;
+      let names = (parent ? `${parent.ancestorNames()} / ` : '') + this.sortName;
 
       return names || '';
 
