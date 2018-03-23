@@ -62,12 +62,12 @@
           floor: 0,
           ceil: 25000,
           step: 1,
-          customValueToPosition,
-          customPositionToValue,
-          translate: translateSlider
+          customValueToPosition: sliderValueToPosition,
+          customPositionToValue: sliderPositionToValue,
+          translate: sliderTranslate
         },
 
-        hasFilter: priceSliderHasFilter
+        hasFilter: sliderHasFilter
       }
 
     });
@@ -110,31 +110,36 @@
 
     const pow = 4;
 
-    function power(val) {
+    function sliderPower(val) {
       return Math.pow(val, pow);
     }
 
-    function root(val) {
+    function sliderBrake(val) {
       return Math.pow(val, 1 / pow);
     }
 
-    function customValueToPosition() {
+    function sliderValueToPosition() {
 
-      let [val, minVal, maxVal] = _.map(arguments, root);
-
+      let [val, minVal, maxVal] = _.map(arguments, sliderBrake);
       let range = maxVal - minVal;
+
       return (val - minVal) / range;
 
     }
 
-    function customPositionToValue(percent, minVal, maxVal) {
-      minVal = root(minVal);
-      maxVal = root(maxVal);
+    function sliderPositionToValue(percent, minVal, maxVal) {
+
+      minVal = sliderBrake(minVal);
+      maxVal = sliderBrake(maxVal);
+
       let value = percent * (maxVal - minVal) + minVal;
-      return power(value);
+
+      return sliderPower(value);
+
     }
 
-    function translateSlider(value, sliderId, label) {
+    function sliderTranslate(value, sliderId, label) {
+
       switch (label) {
         case 'model':
           return `Цена от ${value}`;
@@ -143,9 +148,10 @@
         default:
           return `${value}`
       }
+
     }
 
-    function priceSliderHasFilter() {
+    function sliderHasFilter() {
       return this.min > 0 || this.max < this.options.ceil;
     }
 

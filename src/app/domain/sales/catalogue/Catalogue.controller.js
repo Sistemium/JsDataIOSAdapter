@@ -1185,13 +1185,6 @@
 
         let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
 
-        // if (vm.search === '**' && vm.saleOrder) {
-        //   reg = false;
-        //   vm.showOnlyShipped = true;
-        // } else {
-        //   vm.showOnlyShipped = false;
-        // }
-
         let pieceVolume;
 
         let filteredPieceVolume = _.find(vm.filters, 'pieceVolume');
