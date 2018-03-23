@@ -48,6 +48,7 @@
       activeArticleGroupClick,
       articleGroupClick,
       searchInputToggleOpenClick,
+      onSearchEnter,
 
       search: $state.params.q || '',
       currentSearchQuery: null,
@@ -92,6 +93,14 @@
     /*
     Functions
      */
+
+    function onSearchEnter() {
+      vm.filters = [];
+      vm.activeTags = {};
+      vm.cvm.currentArticleGroup = false;
+      vm.priceSlider.min = 0;
+      vm.priceSlider.max = vm.priceSlider.options.ceil;
+    }
 
     function activeArticleGroupClick($event) {
       // vm.cvm.currentArticleGroup = null;

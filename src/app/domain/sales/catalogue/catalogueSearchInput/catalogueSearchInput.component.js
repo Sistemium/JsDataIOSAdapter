@@ -16,7 +16,9 @@
       focused: '=?',
       labelClick: '&',
 
-      stockLength: '<'
+      stockLength: '<',
+      onSearchEnter: '&'
+
     },
 
     templateUrl: 'app/domain/sales/catalogue/catalogueSearchInput/catalogueSearchInput.html',
@@ -39,7 +41,6 @@
       $onInit,
 
       clearSearchClick,
-      onSearchEnter,
       popoverTrigger: popoverTrigger(),
 
       search: $state.params.q || '',
@@ -108,10 +109,6 @@
 
     function clearSearchClick() {
       vm.search = null;
-    }
-
-    function onSearchEnter() {
-      vm.searchEnterPress = true;
     }
 
     function onFocus(focused) {
