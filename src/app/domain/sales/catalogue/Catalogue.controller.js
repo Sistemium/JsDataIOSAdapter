@@ -1211,7 +1211,7 @@
           let res = true;
 
           if (reg) {
-            let match = article.sortName.match(reg);
+            let match = _.uniq(article.sortName.match(reg));
             res = match && (match.length >= regParts);
           }
 
