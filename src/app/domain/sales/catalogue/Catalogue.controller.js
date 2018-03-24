@@ -1179,7 +1179,20 @@
 
       if (vm.search || vm.filters.length || vm.showOnlyShipped) {
 
-        let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), / /g, '.+'), 'i');
+        let reg = false;
+        let regParts = 0;
+
+        if (vm.search) {
+
+          let search = vm.search.replace(/[ ]{2,}/g, ' ');
+
+          let re = _.map(_.split(search, ' '), part => `(${_.escapeRegExp(part)})`);
+
+          regParts = re.length;
+
+          reg = new RegExp(re.join('|'), 'ig');
+
+        }
 
         let pieceVolume;
 
@@ -1195,7 +1208,12 @@
 
         _.each(articles, article => {
 
-          let res = !reg || reg.test(article.sortName);
+          let res = true;
+
+          if (reg) {
+            let match = article.sortName.match(reg);
+            res = match && (match.length >= regParts);
+          }
 
           if (res && vm.showOnlyShipped && vm.articleStats) {
             res = vm.articleStats[article.id];
