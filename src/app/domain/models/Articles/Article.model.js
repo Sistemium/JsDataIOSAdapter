@@ -129,10 +129,11 @@
 
     });
 
+    let {ArticleGroup} = Schema.models();
+
     function sortNameFn(articleGroupId, firstName, secondName, pieceVolume) {
-      const {ArticleGroup} = Schema.models();
-      let groupName = _.result(ArticleGroup.get(articleGroupId), 'ancestorNames');
-      return `${groupName} ${firstName} ${secondName} ${pieceVolume} ${this.name}`;
+      let groupName = articleGroupId && _.result(ArticleGroup.get(articleGroupId), 'ancestorNames');
+      return `${groupName||''} ${firstName} ${secondName} ${pieceVolume} ${this.name}`;
     }
 
     function secondNameFn(primaryTag) {
