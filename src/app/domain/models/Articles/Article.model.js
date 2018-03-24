@@ -133,7 +133,7 @@
 
     function sortNameFn(articleGroupId, firstName, secondName, pieceVolume) {
       let groupName = articleGroupId && _.result(ArticleGroup.get(articleGroupId), 'ancestorNames');
-      return `${groupName||''} ${firstName} ${secondName} ${pieceVolume} ${this.name}`;
+      return `${groupName||''} ${firstName} ${secondName} ${pieceVolume} ${this.name}`.toLocaleLowerCase();
     }
 
     function secondNameFn(primaryTag) {
