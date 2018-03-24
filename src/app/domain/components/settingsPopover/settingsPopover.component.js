@@ -13,7 +13,7 @@
 
   function settingsPopoverController($scope, $rootScope, localStorageService) {
 
-    const items = ['showFirstLevel', 'showImages', 'hideBoxes', 'showBarCodes'];
+    const items = ['showFirstLevel', 'showImages', 'hideBoxes', 'showBarCodes', 'catalogueLeft'];
 
     const vm = _.assign(this, {
       $onInit

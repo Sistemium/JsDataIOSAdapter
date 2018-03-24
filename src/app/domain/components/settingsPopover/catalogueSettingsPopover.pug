@@ -21,3 +21,9 @@ stm-click='toggleBarCodes'
 ng-click='vm.showBarCodesClick()'
 )
   | {{ vm.showBarCodes ? 'Убрать штрих-коды' : 'Показать штрих-коды'}}
+
+button.btn.btn-default(
+stm-click='catalogueLeft'
+ng-click='vm.catalogueLeftClick()'
+)
+  | {{ vm.catalogueLeft ? 'Цены справа' : 'Цены слева' }}
