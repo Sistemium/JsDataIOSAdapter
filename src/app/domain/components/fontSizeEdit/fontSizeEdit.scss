@@ -2,9 +2,9 @@
 
 font-size-edit {
 
-  @include responsive-only(gt-xs) {
+  //@include responsive-only(gt-xs) {
     display: block;
-  }
+  //}
 
   .isShownSettings {
 
