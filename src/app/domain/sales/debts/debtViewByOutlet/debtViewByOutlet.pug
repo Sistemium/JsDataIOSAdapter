@@ -1,6 +1,9 @@
 .debt-view-by-outlet(cg-busy='vm.cgBusy')
 
-  .debt-view-table(ng-if='vm.data.length')
+  font-size-edit.debt-view-table(
+  append-to='catalogueArticle'
+  cg-busy='vm.cgBusy'
+  )
 
     .alert.alert-default.h4.popovers.spaced(ng-if='!vm.disableElements')
       span.popover-trigger(
