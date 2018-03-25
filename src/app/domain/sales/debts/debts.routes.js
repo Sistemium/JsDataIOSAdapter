@@ -41,6 +41,7 @@
           template: '<debt-view class="debt-by-outlet"></debt-view>',
 
           data: {
+            settings: 'debts',
             title: 'Долги по точкам',
             rootState: 'sales.debtByOutlet'
           },

@@ -2,6 +2,10 @@
 @import "alerts";
 @import "flags";
 
+.popover-settings-debts.popover {
+  display: none !important;
+}
+
 .debt-view {
 
   $margin: 6px;
@@ -398,7 +402,6 @@
     }
   }
 
-
   .font-size-17, .font-size-18 {
 
     .totals > * + * {
@@ -413,6 +416,5 @@
       min-width: 120px;
     }
   }
-
 
 }

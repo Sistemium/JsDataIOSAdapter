@@ -2,7 +2,9 @@
 
   module.component('settingsPopover', {
 
-    bindings: {},
+    bindings: {
+      items: '<'
+    },
 
     controller: settingsPopoverController,
     controllerAs: 'vm',
@@ -13,7 +15,10 @@
 
   function settingsPopoverController($scope, $rootScope, localStorageService) {
 
-    const items = ['showFirstLevel', 'showImages', 'hideBoxes', 'showBarCodes', 'catalogueLeft'];
+    const items = {
+      catalogue: ['showFirstLevel', 'showImages', 'hideBoxes', 'showBarCodes', 'catalogueLeft'],
+      debts: []
+    };
 
     const vm = _.assign(this, {
       $onInit
@@ -24,7 +29,7 @@
     });
 
     function $onInit() {
-      _.each(items, item => {
+      _.each(items[vm.items], item => {
         $rootScope[item] = vm[item] = localStorageService.get(item) || false;
         vm[`${item}Click`] = () => toggleItemClick(item);
       });
