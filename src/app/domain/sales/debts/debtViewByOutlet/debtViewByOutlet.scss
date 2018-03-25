@@ -29,7 +29,7 @@
   }
 
   .in-progress {
-    .date .ndoc > span {
+    .date .info > span {
       color: $primary-color;
     }
     div.debt *:hover {
@@ -320,7 +320,7 @@
 
     @include responsive-only(lt-sm) {
       display: block;
-      .ndoc {
+      .info {
         display: block;
       }
     }
@@ -332,10 +332,21 @@
     text-align: right;
 
     .debt {
+
       @extend %table-row;
+
       & *:focus {
         outline: none;
       }
+
+      .info {
+        //display: flex;
+        //justify-content: space-between;
+        > * {
+          //flex: 1;
+        }
+      }
+
     }
 
     .cashed {
@@ -351,7 +362,7 @@
       }
     }
 
-    .ndoc {
+    .info {
 
       font-weight: normal;
       text-align: left;
@@ -368,7 +379,9 @@
       }
 
       > .ndoc {
+        min-width: 130px;
         margin-left: $margin;
+        display: inline-block;
       }
 
     }
