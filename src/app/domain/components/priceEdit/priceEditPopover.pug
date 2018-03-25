@@ -89,7 +89,7 @@
     .price(ng-if='vm.mode !== "price"')
 
       .form-group
-        label {{ vm.mode === 'markup' ? 'С наценкой' : 'Со скидкой'}}:
+        label Цена:
         span.form-control
           span {{ vm.price | number:2 }}
           span.currency ₽
@@ -110,7 +110,7 @@
     .priceOrigin
 
       .form-group
-        label Без скидки:
+        label Базовая:
         span.form-control {{ vm.priceOrigin | number:2 }}
           span.currency ₽
 
