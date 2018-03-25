@@ -5,7 +5,8 @@
   const priceEditPopover = {
 
     bindings: {
-      stock: '<'
+      stock: '<',
+      popoverOpen: '='
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEditPopover.html',
