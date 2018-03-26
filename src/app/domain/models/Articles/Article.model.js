@@ -129,11 +129,11 @@
 
     });
 
-    let {ArticleGroup} = Schema.models();
 
     function sortNameFn(articleGroupId, firstName, secondName, pieceVolume) {
-      let groupName = articleGroupId && _.result(ArticleGroup.get(articleGroupId), 'ancestorNames');
-      return `${groupName||''} ${firstName} ${secondName} ${pieceVolume} ${this.name}`.toLocaleLowerCase();
+      let {ArticleGroup} = Schema.models();
+      let groupName = articleGroupId && _.trim(_.result(ArticleGroup.get(articleGroupId), 'ancestorNames'));
+      return `${groupName||''}/${firstName} ${secondName} ${pieceVolume} ${this.name}`.toLocaleLowerCase();
     }
 
     function secondNameFn(primaryTag) {

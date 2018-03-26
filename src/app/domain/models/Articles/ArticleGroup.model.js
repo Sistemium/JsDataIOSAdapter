@@ -63,7 +63,7 @@
     let cacheD = {};
 
     function sortNameFn(id, name) {
-      return `${(id === DomainOption.stmArticleGroupId()) ? '.' : ''}${name}`.toLocaleLowerCase();
+      return `${(id === DomainOption.stmArticleGroupId()) ? '!' : ''}${_.trim(name)}`.toLocaleLowerCase();
     }
 
     function stmRoot() {
