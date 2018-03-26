@@ -210,25 +210,9 @@
 
     }
 
-    let searchQueryMigratedKey = 'SearchQuery.migrated';
-
     function $onInit() {
 
-      // TODO: remove all the migration stuff after test users done migration
       SearchQuery.findAll()
-        .then(() => {
-          if (SearchQuery.adapter === 'localStorage') {
-            return;
-          }
-          if (!localStorageService.get(searchQueryMigratedKey)) {
-            return SearchQuery.findAll({}, {adapter: 'localStorage', bypassCache: true})
-              .then(res => _.map(res, item => SearchQuery.create(item)))
-              .then(() => {
-                localStorageService.set(searchQueryMigratedKey, true);
-                return SearchQuery.destroyAll({}, {adapter: 'localStorage'});
-              });
-          }
-        })
         .catch(() => {
           SearchQuery.adapter = 'localStorage';
           return SearchQuery.findAll({}, {bypassCache: true});

@@ -28,7 +28,7 @@
 
   });
 
-  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state, saMedia) {
+  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state) {
 
     const {SearchQuery} = Schema.models();
 
@@ -41,7 +41,6 @@
       $onInit,
 
       clearSearchClick,
-      popoverTrigger: popoverTrigger(),
 
       search: $state.params.q || '',
       filterRemovers,
@@ -66,10 +65,6 @@
         orderBy: 'query'
       }, $scope, 'vm.searchQueries');
 
-    }
-
-    function popoverTrigger() {
-      return (saMedia.xsWidth || saMedia.xxsWidth) ? 'none' : 'outsideClick';
     }
 
     function saveQuery(val = '') {
