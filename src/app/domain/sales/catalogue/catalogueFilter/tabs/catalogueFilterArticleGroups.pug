@@ -44,7 +44,7 @@ is-open='vm.tabsOpen.categories'
 
       a.list-group-item.active(
       href
-      ng-if='!vm.cvm.noMoreChildren && vm.cvm.currentArticleGroup.displayName || !vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered'
+      ng-if='vm.needShowCurrentArticleGroup()'
       ng-click='vm.cvm.articleGroupClick();'
       )
         span.name {{ vm.cvm.currentArticleGroup.displayName || 'Товары заказа' }}
@@ -62,7 +62,7 @@ is-open='vm.tabsOpen.categories'
           span(ng-if='::elem.children.length') +
 
         span.chevron(
-        ng-if='::elem.children.length && !vm.cvm.articleGroupIds[elem.id]'
+        ng-if='::elem.children.length'
         )
           i.glyphicon.glyphicon-menu-right
 

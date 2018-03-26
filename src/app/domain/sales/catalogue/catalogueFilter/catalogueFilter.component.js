@@ -49,6 +49,7 @@
       articleGroupClick,
       searchInputToggleOpenClick,
       onSearchEnter,
+      needShowCurrentArticleGroup,
 
       search: $state.params.q || '',
       currentSearchQuery: null,
@@ -326,17 +327,23 @@
 
     function articleGroupClick(articleGroup) {
 
-      if (articleGroup && vm.cvm.articleGroupIds[articleGroup.id]) {
+      vm.cvm.articleGroupClick(articleGroup);
+
+      if (articleGroup && !_.get(vm, 'cvm.articleGroups.length') || !articleGroup.children.length) {
         vm.fullScreen = false;
       }
-
-      vm.cvm.articleGroupClick(articleGroup);
 
     }
 
     function searchInputToggleOpenClick() {
       vm.tabsOpen.queries = !vm.tabsOpen.queries;
       vm.fullScreen = true;
+    }
+
+    function needShowCurrentArticleGroup() {
+      return !vm.cvm.noMoreChildren && vm.cvm.currentArticleGroup && vm.cvm.currentArticleGroup.displayName ||
+        !vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered ||
+        vm.cvm.currentArticleGroup && !vm.cvm.articleGroups;
     }
 
   }
