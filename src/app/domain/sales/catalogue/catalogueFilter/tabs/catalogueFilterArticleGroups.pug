@@ -40,7 +40,7 @@ is-open='vm.tabsOpen.categories'
 
         span.name {{::ancestor.displayName}}
 
-    ul.list-group
+    ul.list-group.article-groups
 
       a.list-group-item.active(
       href
@@ -52,7 +52,7 @@ is-open='vm.tabsOpen.categories'
       a.list-group-item(
       href
       ng-repeat='elem in vm.cvm.articleGroups | orderBy:"sortName" track by elem.id'
-      ng-class='{active: vm.cvm.currentArticleGroup.id === elem.id}'
+      ng-class='{active: vm.cvm.currentArticleGroup.id === elem.id, descendant: elem.articleGroupId}'
       ng-click='vm.articleGroupClick(elem)'
       )
         span.name {{::elem.displayName }}
