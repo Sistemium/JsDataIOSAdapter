@@ -21,9 +21,6 @@
         }
 
         .stm-searcher {
-          label {
-            color: $primary-color;
-          }
           .filters {
             display: none;
           }
@@ -48,6 +45,12 @@
           position: absolute;
           bottom: 0;
           top: 30px;
+        }
+      }
+
+      .stm-searcher {
+        label {
+          color: $primary-color;
         }
       }
     }
