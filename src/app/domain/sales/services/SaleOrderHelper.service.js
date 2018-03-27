@@ -25,7 +25,6 @@
           }
 
           if (data.deviceCts) {
-            // IOS
 
             if (SaleOrder.hasChanges(id)) {
               return DEBUG('CatalogueSaleOrder:onJSData:ios', 'ignore saleOrder with changes');
@@ -42,41 +41,11 @@
               SaleOrderPosition.findAllWithRelations({saleOrderId: data.id}, {bypassCache: true})('Article');
             }
 
-          } else {
-            // Not IOS
-
-            if (saleOrderId === data.id && data.ts <= _.get(vm, 'saleOrder.ts')) {
-              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts');
-            }
-
-            SaleOrder.find(id, {bypassCache: true, cacheResponse: false})
-              .then(saleOrder => {
-
-                if (SaleOrder.hasChanges(id)) return;
-
-                if (saleOrder.ts <= _.get(vm, 'saleOrder.ts')) {
-                  return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts after find');
-                }
-
-                SaleOrder.inject(saleOrder);
-
-                if (vm.date === saleOrder.date || saleOrderId === saleOrder.id) {
-                  SaleOrderPosition.findAllWithRelations({saleOrderId: saleOrder.id}, {bypassCache: true})('Article');
-                }
-
-              })
-              .catch(err => {
-                if (err.error === 404) {
-                  SaleOrder.eject(id)
-                }
-              });
-
           }
 
         } else if (resource === 'SaleOrderPosition' && saleOrderId) {
 
           if (data.saleOrderId === saleOrderId) {
-            // IOS
 
             let position = getPosition(data.articleId);
 
@@ -88,6 +57,9 @@
               if (data.deviceTs < position.deviceTs) {
                 return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrderPosition with old deviceTs');
               }
+            } else if (SaleOrderPosition.meta.isDeleted(data.id)) {
+              console.warn('SaleOrderHelper ignore deleted position', data.id);
+              return;
             }
 
             DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
@@ -96,20 +68,6 @@
 
             SaleOrderPosition.loadRelations(position);
 
-          } else if (!data.saleOrderId) {
-            // not IOS
-            return SaleOrderPosition.find(id, {bypassCache: true, cacheResponse: false})
-              .then(updated => {
-                if (updated.saleOrderId === saleOrderId) {
-                  let existing = getPosition(updated.articleId);
-                  if (existing && (SaleOrderPosition.hasChanges(existing) || updated.ts <= existing.ts)) {
-                    DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
-                  } else {
-                    SaleOrderPosition.inject(updated);
-                    SaleOrderPosition.loadRelations(updated);
-                  }
-                }
-              });
           }
 
         }
@@ -136,29 +94,39 @@
 
         let {saleOrder} = vm;
 
-        if (_.get(saleOrder, 'workflowStep.editable')) {
-          saleOrder.updateTotalCost();
+        if (!_.get(saleOrder, 'workflowStep.editable')) {
+          return saveUpdateSaleOrderProcessing();
         }
 
-        saleOrder.processing = processing;
+        return saleOrder.DSLoadRelations('positions')
+          .then(() => {
+            saleOrder.updateTotalCost();
+            return saveUpdateSaleOrderProcessing()
+          });
 
-        saleOrder.safeSave()
-          .then(saleOrder => {
+        function saveUpdateSaleOrderProcessing() {
 
-            let workflowStep = _.get(saleOrder, 'workflowStep');
+          saleOrder.processing = processing;
 
-            if (!workflowStep) {
-              return;
-            }
+          return saleOrder.safeSave()
+            .then(saleOrder => {
 
-            let {desc, label} = workflowStep;
+              let workflowStep = _.get(saleOrder, 'workflowStep');
 
-            toastr.info(desc, `Статус заказа: ${label}`);
+              if (!workflowStep) {
+                return;
+              }
 
-          })
-          .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
+              let {desc, label} = workflowStep;
+
+              toastr.info(desc, `Статус заказа: ${label}`);
+
+            })
+            .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
+        }
 
       }
+
 
       function checkLimit() {
 

@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run((Schema, RelationLoader, ArticleTagRegs) => {
 
     const znmpRe = new RegExp([
       'защ[^ .]*[ .]*наи[^ .]*[ .]+мест[^ .]*[ .]+проис[^ ]*',
@@ -14,24 +14,9 @@
       'гео[^ .]*[ .]*наи[^ ]*'
     ].join('[.,]*|'));
 
-    const tagRegs = [
-      ['age3', '3 года', /[^0-9]3 года|тр[её]хлетний/],
-      ['age4', '4 года', /[^0-9]4 года|четыр[её]хлетний/],
-      ['age5', '5 лет', /[^0-9]5 лет|пятилетний/],
-      ['age12', '12 лет', /[^0-9]12 лет/],
-      ['age18', '18 лет', /[^0-9]18 лет/],
-      ['age25', '25 лет', /[^0-9]25 лет/],
-      ['sparkling', 'игристое', /игристое/i],
-      ['rose', 'розовое', /розовый|розовое|розов\./i],
-      ['red', 'красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
-      ['white', 'белое', /([^A-я]|^)бел[. ]|белое|белый/i],
-      ['semiDry', 'п/сух', /полусухое|п\/сух\.?/ig],
-      ['semiSweet', 'п/сл', /п\/слад\.|полуслад[^ ,"]*|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
-      ['dry', 'сухое', /сухое|сух[.,]+|[ .,]+сух(?=[ ]|$)/i],
-      ['sweet', 'сладкое', /([ ]|^)+сладк[^ ,"]*|сладкое|сл\./i],
-      ['brut', 'брют', /брют/i],
-      ['gift', 'п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
-    ];
+    const tagRegs = ArticleTagRegs;
+
+    let barCodeLoader = new RelationLoader('barCodes');
 
     Schema.register({
 
@@ -65,6 +50,10 @@
           SaleOrderPosition: {
             localField: 'saleOrders',
             foreignKey: 'articleId'
+          },
+          ArticleBarCode: {
+            localField: 'barCodes',
+            foreignKey: 'articleId'
           }
         }
       },
@@ -92,6 +81,8 @@
         }],
 
         lastName: ['name', 'firstName', lastNameFn],
+        primaryTag: ['tags', primaryTagFn],
+        secondName: ['primaryTag', secondNameFn],
 
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
@@ -99,7 +90,9 @@
 
         pcsLabel: ['pieceVolume', function (pieceVolume) {
           return pieceVolume ? 'б' : 'шт';
-        }]
+        }],
+
+        sortName: ['articleGroupId', 'firstName', 'secondName', 'pieceVolume', sortNameFn]
 
       },
 
@@ -126,11 +119,36 @@
             + (pcs && !half ? `${pcs} ${this.pcsLabel}` : '')
           }
 
+        },
+
+        barCodesLazy: function () {
+          return barCodeLoader.lazyItems(this);
         }
 
       }
 
     });
+
+
+    function sortNameFn(articleGroupId, firstName, secondName, pieceVolume) {
+      let {ArticleGroup} = Schema.models();
+      let groupName = articleGroupId && _.trim(_.result(ArticleGroup.get(articleGroupId), 'ancestorNames'));
+      return `${groupName||''}/${firstName} ${secondName} ${pieceVolume} ${this.name}`.toLocaleLowerCase();
+    }
+
+    function secondNameFn(primaryTag) {
+
+      return primaryTag && primaryTag.label || null;
+
+    }
+
+    function primaryTagFn(tags) {
+
+      let primaryTag = _.find(tags, 'primary');
+
+      return primaryTag || null;
+
+    }
 
     function lastNameFn(name, firstName) {
 
@@ -168,11 +186,16 @@
     function tagger(name) {
 
       let res = _.map(tagRegs, cfg => {
-        if (cfg[2].test(name)) {
-          name = _.replace(name, cfg[2], '');
+
+        let [code, label, re, groupId] = cfg;
+
+        if (re.test(name)) {
+          name = _.replace(name, re, '');
           return {
-            code: cfg[0],
-            label: cfg[1]
+            code,
+            label,
+            groupId,
+            primary: !/other|taste/.test(groupId)
           };
         }
       });
@@ -210,6 +233,8 @@
       let m = name.match(/("[^"]+")[^"]*$/);
 
       let res = _.last(m);
+
+      res = _.replace(res, /" | "/, '"');
 
       if (!res) {
         let words = _.words(name, wordsRe);

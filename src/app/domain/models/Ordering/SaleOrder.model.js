@@ -82,11 +82,12 @@
         totalCostCached: cachedValue('totalCost'),
         totalPositionsCached: cachedValue('positionsCount'),
         totalBoxesCached: cachedValue('totalBoxes'),
+        stmRatioCached: cachedValue('stmRatio'),
 
         updateTotalCost: function () {
           this.totalCost = parseFloat(Schema.aggregate('cost').sum(this.positions).toFixed(2));
           this.totalSelfCost = parseFloat(Schema.aggregate('selfCost').sum(this.positions).toFixed(2));
-          this.totalCostDoc = this.totalCost;
+          this.totalCostDoc = parseFloat(Schema.aggregate('costDoc').sum(this.positions).toFixed(2));
           this.deviceTs = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
         },
 
@@ -113,13 +114,13 @@
 
           const {SaleOrderPosition} = Schema.models();
 
-          if (!this.isValid()) return $q.reject();
+          if (!this.isValid()) return $q.reject('Not valid');
 
           if (!this.id) {
             return SaleOrder.create(this);
           }
 
-          let positions = _.filter(this.positions, SaleOrderPosition.hasChanges);
+          let positions = _.filter(this.positions, position => position.DSHasChanges() || !position.DSLastSaved());
 
           let lastModified = this.deviceTs;
 
@@ -187,7 +188,7 @@
 
       let {id} = saleOrder;
 
-      const {SaleOrderPosition} = Schema.models();
+      const {SaleOrderPosition, ArticleGroup} = Schema.models();
 
       const cached = caches[saleOrder.id] = caches[saleOrder.id] || {};
 
@@ -200,7 +201,15 @@
             positionsCount: positions.length || null,
             totalCost: Schema.aggregate('cost').sum(positions) || null,
             totalBoxes: Schema.aggregate('boxVolume').sumFn(positions) || null
-          })
+          });
+
+          let stmRoot = ArticleGroup.meta.stmRoot();
+
+          if (stmRoot) {
+            let stmPositions = stmRoot.filterDescendantArticles(positions);
+            cached.stmRatio = _.round(100.0 * Schema.aggregate('cost').sum(stmPositions) / cached.totalCost, 1);
+          }
+
         });
 
       return cached;

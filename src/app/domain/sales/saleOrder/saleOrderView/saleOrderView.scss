@@ -3,8 +3,8 @@
 
 .sale-order-view {
 
-  $width-processing: 0.1;
-  $width-salesman: 0.135;
+  $width-processing: 85px;
+  $width-salesman: 90px;
   $width-outlet: 0.9;
   $width-totals: 0.13;
 
@@ -13,8 +13,7 @@
   $headers: (
       ($width-processing, 'processing'),
       ($width-salesman, 'salesman'),
-      ($width-outlet, 'outlet'),
-      ($width-totals, 'totals')
+      ($width-outlet, 'outlet')
   );
 
   @mixin initHeadersWidth {
@@ -95,7 +94,23 @@
       }
     }
 
-    @include initHeadersWidth;
+    .processing {
+      max-width: $width-processing;
+      min-width: $width-processing;
+    }
+
+    .salesman {
+      min-width: $width-salesman;
+      max-width: $width-salesman;
+    }
+
+    .outlet {
+      flex: 1;
+    }
+
+    .totals {
+      //max-width: 60px;
+    }
 
   }
 
@@ -151,6 +166,8 @@
 
         @include responsive-only(gt-xs) {
           margin-right: 5px;
+          max-width: $width-processing;
+          min-width: $width-processing;
         }
 
         .badge {
@@ -175,6 +192,18 @@
           @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
         }
 
+      }
+
+      .sales-schema {
+        @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
+        display: inline-block;
+        margin-left: 6px;
+        border-radius: 6px;
+        padding: 0px 6px;
+      }
+
+      .outlet {
+        flex: 1;
       }
 
       .outlet .address {
@@ -202,7 +231,46 @@
         }
       }
 
-      @include initHeadersWidth;
+      .salesman {
+        min-width: $width-salesman;
+        max-width: $width-salesman;
+      }
+
+      .totals {
+
+        .cost {
+          white-space: nowrap;
+        }
+
+        .cost-doc {
+          color: $green;
+          &:before {
+            content: '+[';
+          }
+          &:after {
+            margin-left: 2px;
+            content: ']';
+          }
+        }
+
+      }
+
+      .totals {
+        //max-width: 170px;
+        .cost {
+          white-space: nowrap;
+        }
+        .cost-doc {
+          color: $green;
+          &:before {
+            content: '+[';
+          }
+          &:after {
+            margin-left: 2px;
+            content: ']';
+          }
+        }
+      }
 
       @include responsive-only(lt-sm) {
 
@@ -293,11 +361,15 @@
 
       height: 20px;
       font-style: italic;
-      text-align: right;
+      //text-align: right;
       color: $gray;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
+
+      @include responsive-only(gt-xs) {
+        margin-left: $width-processing;
+      }
 
       .comment-text {
         @extend .ellipsis;
@@ -308,6 +380,7 @@
 
       .icon {
         min-width: 20px;
+        //flex: 1;
         .glyphicon {
           right: 2px;
         }

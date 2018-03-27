@@ -27,6 +27,7 @@
     return saDebug.log('stg:log');
   }
 
+  /** @ngInject */
   function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService,
                IOS, PickerAuth, localStorageService, $injector,
                appcache) {
@@ -52,7 +53,7 @@
       console.log('Auth', authorization);
 
       let org = _.get(authorization, 'account.org');
-      let isTestOrg = /^(dev|dr50)$/.test(org);
+      let isTestOrg = /^(dev|dr50p?)$/.test(org);
 
       let appConfig =
         // InitService.localDevMode ? {} :
@@ -75,28 +76,6 @@
       //sockAuth();
       InitService.then(() => Sockets.on('connect', sockAuth));
 
-      function sockAuth() {
-
-        let accessToken = Auth.getAccessToken();
-
-        if (!accessToken) {
-          return;
-        }
-
-        if (!IOS.isIos()) {
-          appcache.checkUpdate()
-            .catch(() => 'no update');
-        }
-
-        Sockets.emit('authorization', {accessToken: accessToken}, ack => {
-          DEBUG('Socket authorization:', ack);
-          $rootScope.$broadcast('socket:authorized');
-        });
-
-      }
-
-      //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
-
       let lastPicker = window.localStorage.getItem('currentPickerId');
 
       if (lastPicker) {
@@ -104,24 +83,52 @@
           .then(function (p) {
             PickerAuth.login(p, lastState);
           });
-      } else if (lastState) {
-        $state.go(lastState.name, lastState.params);
       }
 
-      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
-        (e, to, params) => localStorageService.set('lastState', {
-          name: to.name,
-          params: params
-        })
-      ));
+      function sockAuth() {
 
-      if (Auth.isAuthorized(['salesman', 'supervisor'])) {
-        console.info($injector.get('SalesmanAuth'));
-        if (lastState) {
-          // console.warn('Resoiring last state', lastState.name, lastState.params);
-          $state.go(lastState.name, lastState.params);
+        let accessToken = Auth.getAccessToken();
+
+        if (!IOS.isIos()) {
+
+          appcache.checkUpdate()
+            .catch(() => 'no update');
+
+          if (!accessToken) {
+            console.log('sockAuth no auth');
+            return;
+          }
+
         }
+
+        $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
+          (e, to, params) => localStorageService.set('lastState', {
+            name: to.name,
+            params: params
+          })
+        ));
+
+        Sockets.emit('authorization', {accessToken: accessToken}, ack => {
+
+          DEBUG('Socket authorization:', ack);
+          $rootScope.$broadcast('socket:authorized');
+
+          //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
+
+          if (Auth.isAuthorized(['salesman', 'supervisor'])) {
+            console.info($injector.get('SalesmanAuth'));
+          }
+
+          if (lastState) {
+            console.warn('Restoring last state', lastState.name, lastState.params);
+            $state.go(lastState.name, lastState.params);
+            lastState = false;
+          }
+
+        });
+
       }
+
 
     }
 

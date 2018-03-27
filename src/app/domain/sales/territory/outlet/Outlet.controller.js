@@ -7,7 +7,7 @@
     // TODO: allow to add/change location for an existing outlet
 
     const {PhotoHelper, LocationHelper, toastr, saControllerHelper} = Helpers;
-    const {Outlet, Visit, OutletPhoto, Location, OutletSalesmanContract} = Schema.models();
+    const {Outlet, OutletPhoto, Location, OutletSalesmanContract} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -104,12 +104,6 @@
 
     }
 
-    function currentFilter() {
-      return SalesmanAuth.makeFilter({
-        outletId: stateFilter
-      });
-    }
-
     function refresh(salesman) {
 
       vm.currentSalesman = salesman;
@@ -123,11 +117,8 @@
         vm.avatarSrc = _.get(avatar, 'srcThumbnail');
       });
 
-      Visit.bindAll(currentFilter(), $scope, 'vm.visits');
-
       vm.busy = $q.all([
-        Outlet.find(stateFilter),
-        Visit.findAllWithRelations(currentFilter())(['VisitAnswer', 'VisitPhoto'])
+        Outlet.find(stateFilter)
       ]);
 
     }

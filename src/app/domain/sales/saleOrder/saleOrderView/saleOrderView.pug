@@ -53,16 +53,25 @@
 
           .outlet(ng-class='{blocked: item.outlet.isActive === false}')
             span.name {{ item.outlet.name }}
+
+              span.sales-schema(ng-if='item.salesSchema > 1')
+                span Сх
+                span.hidden-xs ема&nbsp;
+                span {{ item.salesSchema }}
+
             .address
               .gray {{ item.outlet.address }}
               .salesman(ng-if='!vm.currentSalesman') {{ ::item.salesman.tinyName }}
 
           .totals
             .cost
-              currency-value(value='item.totalCostCached() || 0')
+              currency-value.cost-doc(
+              value='item.totalCostDoc - item.totalCost'
+              ng-if='item.totalCostDoc !== item.totalCost'
+              )
+              currency-value(value='item.totalCost || 0')
             .position
-              strong {{ item.totalPositionsCached() || 0 }}
-              span П
+              currency-value(value='item.totalPositionsCached() || 0' currency='П' decimals='0')
 
         .list-item-footer
 

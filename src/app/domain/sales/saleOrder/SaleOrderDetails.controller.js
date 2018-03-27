@@ -28,6 +28,8 @@
 
     vm.setBusy(getData());
 
+    $scope.$on('$destroy', $onDestroy);
+
     /*
      Listeners
      */
@@ -42,6 +44,10 @@
     /*
      Functions
      */
+
+    function $onDestroy() {
+      return safeSave();
+    }
 
     function copySaleOrderClick() {
 

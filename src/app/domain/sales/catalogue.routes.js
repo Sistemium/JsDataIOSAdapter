@@ -15,6 +15,7 @@
           controllerAs: 'vm',
 
           data: {
+            settings: 'catalogue',
             title: 'Каталог',
             auth: 'SalesmanAuth',
             rootState: 'sales.catalogue'

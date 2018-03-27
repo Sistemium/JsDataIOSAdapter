@@ -1,0 +1,96 @@
+@import "variables";
+
+.catalogue-filter .query {
+
+  $padding: 6px;
+
+  .panel-heading > h4 > a {
+    padding: 0 !important;
+  }
+
+  [uib-accordion-header] {
+
+    display: flex;
+
+    cursor: pointer;
+
+    catalogue-search-input {
+      flex: 1;
+    }
+
+    #only-shipped-filter {
+
+      border-radius: $border-radius;
+
+      border: none;
+      margin: 3px 3px 3px 0;
+      padding: 5px;
+
+      color: yellowgreen;
+
+      i {
+        left: 1px;
+      }
+
+    }
+
+    > a.toggle-open {
+
+      padding: $padding;
+      outline: none;
+      margin-right: 4px;
+
+      .caret {
+        top: 3px;
+      }
+
+    }
+
+    .stm-searcher {
+      flex: 1;
+      margin: 0;
+    }
+
+  }
+
+  .search-query {
+
+    display: flex;
+    border-top: 1px solid $gray-border-color;
+    padding: 0 5px;
+
+    .query-name {
+
+      flex: 1;
+      text-align: left;
+
+      padding: 10px 5px;
+      color: $article-nav-menu-text-color;
+
+      text-transform: lowercase;
+      text-decoration: none;
+
+    }
+
+    a {
+
+      color: darken($gray-background-color, 20%);
+      padding: 10px 7px;
+
+      &.toggle-favourite:hover, .glyphicon-heart {
+        color: $red;
+      }
+
+      &.remove:hover {
+        color: $primary-color;
+      }
+
+      i {
+        vertical-align: middle;
+      }
+
+    }
+
+  }
+
+}

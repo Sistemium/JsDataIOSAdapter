@@ -23,10 +23,6 @@
           //   localField: 'salesmanOutletRestrictions',
           //   foreignKey: 'salesmanId'
           // },
-          PrePreOrder: {
-            localField: 'prePreOrders',
-            foreignKey: 'salesmanId'
-          }
         }
       },
 

@@ -6,7 +6,9 @@
   ng-click='vm.click($event)'
   popover-trigger='::vm.popoverTrigger'
   popover-is-open='vm.popoverOpen'
-  popover-placement='bottom-right auto'
+  popover-placement='bottom auto'
+  popover-append-to-body='true'
+  popover-class='price-edit-popover'
   )
     span.value {{ vm.discountPrice() | number:2 }}
     span.currency ₽
@@ -14,5 +16,8 @@
     span.discount(
     ng-if='vm.discountPercent()'
     ) ({{vm.discountPercent() > 0 ? '+' : '' }}{{ vm.discountPercent() | number }}%)
+
+    span.price-doc(ng-if='vm.discountPrice() !== vm.discountPrice("Doc")')
+      span.value [{{ vm.discountPrice('Doc') | number:2 }}]
 
     span.caret

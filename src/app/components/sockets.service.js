@@ -71,7 +71,7 @@ angular.module('core.services')
 
     $window[CALLBACK] = subscribeCallback;
 
-    function onFn(event, callback) {
+    function onJsData(event, callback) {
 
       const subscription = {
         event: event,
@@ -120,14 +120,25 @@ angular.module('core.services')
       };
     }
 
+    function onFn(event, callback) {
+
+      switch (event) {
+        case 'connect': {
+          return callback();
+        }
+      }
+
+    }
+
     return {
 
       on: onFn,
-      onJsData: onFn,
+      onJsData,
       jsDataSubscribe,
 
       init: x => x,
-      emitQ: () => $q.reject(false)
+      emitQ: () => $q.reject(false),
+      emit: (event, data, ack) => ack(data)
 
     };
 

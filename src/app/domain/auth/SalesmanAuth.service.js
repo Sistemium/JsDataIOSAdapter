@@ -113,7 +113,7 @@
 
         });
 
-      $rootScope.$on('$destroy', $rootScope.$on('auth-logout', logout));
+      $rootScope.$on('auth-logout', logout);
 
       return initPromise;
 
@@ -153,7 +153,7 @@
         'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'Visit', 'Partner', 'Contract'
       ];
 
-      const {Workflow, SaleOrder, NewsMessage} = Schema.models();
+      const {Workflow, SaleOrder, NewsMessage, ArticleGroup} = Schema.models();
 
       $rootScope.$on('menu-show', setBadges);
 
@@ -187,6 +187,7 @@
 
             })
             .then(() => {
+                ArticleGroup.cachedFindAll();
               _.each(SaleOrder.getAll(), saleOrder => SaleOrder.compute(saleOrder));
             });
 

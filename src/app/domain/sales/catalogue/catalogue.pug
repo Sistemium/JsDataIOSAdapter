@@ -1,6 +1,6 @@
 section(
 cg-busy='vm.cgBusy'
-ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
+ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered, "catalogue-left": catalogueLeft}]'
 )
 
   .ui-view
@@ -14,15 +14,16 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
   ng-show='!saleOrderExpanded'
   )
 
-    #article-groups
+    #catalogue-sidenav
       include catalogueArticleGroups
 
     font-size-edit#scroll-articles.animate-show(
-    ng-show='vm.isWideScreen || !vm.isArticleGroupsExpanded'
     append-to='catalogueArticle'
     )
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
-        | Нет подходящих товаров
+        .info Нет подходящих товаров
+        .buttons
+          a(href ng-click='vm.clearFilters()') Сбросить фильтры
 
       #scroll-articles-parent.scroll-y(
       resize resize-offset-top='5' resize-property='height'

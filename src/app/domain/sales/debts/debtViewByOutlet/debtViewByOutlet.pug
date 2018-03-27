@@ -1,6 +1,9 @@
 .debt-view-by-outlet(cg-busy='vm.cgBusy')
 
-  .debt-view-table(ng-if='vm.data.length')
+  font-size-edit.debt-view-table(
+  append-to='catalogueArticle'
+  cg-busy='vm.cgBusy'
+  )
 
     .alert.alert-default.h4.popovers.spaced(ng-if='!vm.disableElements')
       span.popover-trigger(
@@ -101,7 +104,7 @@
             ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id'
             )
 
-              label.ndoc(ng-click='vm.debtClick(debt, $event)')
+              .info(ng-click='vm.debtClick(debt, $event)')
 
                 small.tip.overdue(ng-if='::debt.isOverdue()')
                   span Просрочено

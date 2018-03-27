@@ -54,16 +54,17 @@
 
     .num-pad-button .btn {
       font-size: 100%;
-      padding: 5px 10px;
+      padding: 10px 15px;
       color: $black;
-      min-width: 35px;
+      min-width: 45px;
     }
 
   }
 
   .extras {
     border-top: solid thin $border-gray;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
   }
 
   .delete.confirmation {

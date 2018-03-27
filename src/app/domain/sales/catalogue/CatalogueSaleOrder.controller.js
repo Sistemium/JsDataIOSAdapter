@@ -2,7 +2,7 @@
 
 (function () {
 
-  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q,
+  function CatalogueSaleOrderController($scope, $state, Helpers, Schema, $q, localStorageService,
                                         SalesmanAuth, SaleOrderHelper, $timeout, DomainOption) {
 
     const {SaleOrder, SaleOrderPosition, Outlet} = Schema.models('SaleOrder');
@@ -13,6 +13,8 @@
       .use(SaleOrderHelper);
 
     let {saleOrderId, outletId, salesmanId} = $state.params;
+
+    const domainOptions = DomainOption.saleOrderOptions();
 
     vm.use({
 
@@ -47,12 +49,18 @@
 
     } else {
 
-      vm.saleOrder = SaleOrder.createInstance({
+      let saleOrderDefaults = {
         outletId,
         salesmanId: salesmanId || _.get(SalesmanAuth.getCurrentUser(), 'id'),
         date: moment().add(1, 'days').format(),
         processing: 'draft'
-      });
+      };
+
+      if (domainOptions.schemaOption) {
+        saleOrderDefaults.salesSchema = 1;
+      }
+
+      vm.saleOrder = SaleOrder.createInstance(saleOrderDefaults);
 
     }
 
@@ -70,7 +78,10 @@
 
     $scope.$on('$destroy', () => {
       // SaleOrder.watchChanges = false;
-      SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
+      onSaleOrderChange()
+        .then(() => {
+          SaleOrderPosition.ejectAll({saleOrderId: saleOrderId});
+        });
     });
 
     vm.onScope('kPlusButtonClick', kPlusButtonClick);
@@ -148,12 +159,16 @@
 
     function onSaleOrderChange() {
 
-      if (!vm.saleOrder || !vm.saleOrder.isValid()) return;
+      if (!vm.saleOrder || !vm.saleOrder.isValid()) return $q.resolve();
 
       let busy = vm.saleOrder.safeSave()
         .then(saleOrder => {
           if (!saleOrderId) {
-            $state.go('.', {saleOrderId: saleOrder.id}, {notify: false});
+            let stateParams = {saleOrderId: saleOrder.id};
+            $state.go('.', stateParams, {notify: false})
+              .then(() => {
+                localStorageService.set('lastState', {name: $state.current.name, stateParams});
+              });
             saleOrderId = saleOrder.id;
             bindToChanges();
             $scope.$emit('setSaleOrderId', saleOrder.id);
@@ -173,7 +188,9 @@
       saEtc.focusElementById(id);
     }
 
-    function minusButtonClick(article) {
+    function minusButtonClick(stock) {
+
+      let {article} = stock;
 
       let minus = vm.lastPlus[article.id];
 
@@ -187,7 +204,7 @@
         vm.lastPlus[id] = minus;
       }
 
-      addPositionVolume(article.id, -minus);
+      addPositionVolume(article.id, -minus, stock);
 
     }
 
@@ -213,6 +230,11 @@
     let unbindToChanges;
     const requiredColumns = ['outletId', 'salesmanId', 'date', 'contractId', 'priceTypeId'];
 
+    if (domainOptions.schemaOption) {
+      requiredColumns.push('salesSchema');
+      // vm.saleOrder.salesSchema = vm.saleOrder.salesSchema || 1;
+    }
+
     function bindToChanges() {
 
       if (saleOrderId) {
@@ -237,7 +259,13 @@
 
       let position = getPosition(articleId);
 
-      if (!position && volume <= 0) {
+      if (!price || !position && volume <= 0) {
+        return;
+      }
+
+      let priceOrigin = price.priceOrigin();
+
+      if (!priceOrigin && volume > 0) {
         return;
       }
 
@@ -247,8 +275,8 @@
           saleOrderId: vm.saleOrder.id,
           volume: 0,
           price: price.discountPrice(),
-          priceDoc: price.priceOrigin(),
-          priceOrigin: price.priceOrigin(),
+          priceDoc: price.discountPriceDoc(),
+          priceOrigin,
           priceAgent: price.priceAgent,
           articleId: articleId
         });

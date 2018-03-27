@@ -1,0 +1,25 @@
+.catalogue-filter(ng-class='vm.fullScreen ? "full-screen" : "not-full-screen"')
+
+  .full-screen-controls(ng-if='vm.fullScreen')
+    .title(ng-class='{"not-found": !vm.cvm.stock.length}')
+      label Товаров в каталоге:
+      strong {{ vm.cvm.stock.length | number:0 }}
+
+    a(href ng-click='vm.fullScreen = false')
+      i.glyphicon.glyphicon-remove
+
+  .catalogue-filter-body
+
+    uib-accordion(close-others='true')
+
+      include tabs/catalogueFilterQueries
+
+      include tabs/catalogueFilterArticleGroups
+
+      include tabs/catalogueFilterTagGroups
+
+    rzslider(
+    rz-slider-model="vm.priceSlider.min"
+    rz-slider-high="vm.priceSlider.max"
+    rz-slider-options="vm.priceSlider.options"
+    )

@@ -60,15 +60,18 @@
 
       });
 
+      vm.modal.result
+        .then(_.noop, _.noop);
+
     }
 
-    function discountPrice() {
-      return vm.stock.discountPrice();
+    function discountPrice(target = '') {
+      return vm.stock.discountPrice(target);
     }
 
     function discountPercent() {
 
-      return - vm.stock.discountPercent();
+      return -vm.stock.discountPercent();
 
     }
 

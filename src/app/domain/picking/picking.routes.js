@@ -46,7 +46,7 @@
         .state({
           name: 'picking',
           abstract: true,
-          templateUrl: 'app/domain/ui-view.html',
+          template: '<div class="domain-ui-view picking" ui-view></div>',
           data: {
             auth: 'pickerAuth'
           },

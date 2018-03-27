@@ -103,6 +103,9 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
     @else if $media == lt-md {
       @media (max-width: $screen-md-min) { @content; }
     }
+    @else if $media == lt-lg {
+      @media (max-width: $screen-lg-min) { @content; }
+    }
     @else if $media == gt-xs {
       @media (min-width: $screen-sm-min) { @content; }
     }

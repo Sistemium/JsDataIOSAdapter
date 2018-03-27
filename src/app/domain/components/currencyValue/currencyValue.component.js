@@ -6,7 +6,8 @@
       hideEmpty: '<',
       value: '<',
       label: '@',
-      currency: '@'
+      currency: '@',
+      decimals: '<'
     },
 
     controller: currencyValueController,
@@ -22,6 +23,10 @@
 
     if (!vm.weight) {
       vm.weight = 600
+    }
+
+    if (!_.isNumber(vm.decimals)) {
+      vm.decimals = 2
     }
 
     vm.currency = vm.currency || '₽';

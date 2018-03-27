@@ -23,7 +23,7 @@ li(uib-dropdown is-open='priceTypesOpen' ng-disabled='vm.saleOrder || vm.priceTy
       href ng-click='vm.priceTypeClick(priceType)'
       ) {{priceType.name}}
 
-li.ancestor(ng-repeat='ancestor in vm.ancestors track by ancestor.id')
+li.ancestor(ng-repeat='ancestor in vm.ancestors | limitTo:1:1 track by ancestor.id')
   a(
   href ng-click='vm.articleGroupClick(ancestor)'
   ) {{ ancestor.displayName }}

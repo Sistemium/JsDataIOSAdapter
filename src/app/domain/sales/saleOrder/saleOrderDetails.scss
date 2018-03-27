@@ -66,7 +66,7 @@
     @extend %flag;
   }
 
-  td.price > * {
+  td.price .wrapper {
 
     @extend %flex-row;
 
@@ -79,15 +79,31 @@
     }
 
     justify-content: space-between;
-    align-items: center;
+    //align-items: center;
     height: 100%;
 
     strong {
       font-weight: normal;
     }
 
-    currency-value {
+    > .flags {
+      white-space: nowrap;
+    }
+
+    > .prices {
       flex: 1;
+    }
+
+    .price-doc {
+      position: relative;
+      right: -3px;
+      color: $green;
+      &:before {
+        content: '[';
+      }
+      &:after {
+        content: ']';
+      }
     }
 
   }

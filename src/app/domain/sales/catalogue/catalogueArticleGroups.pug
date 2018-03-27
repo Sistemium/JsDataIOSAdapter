@@ -1,125 +1,38 @@
-.stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
+font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
 
-  label(for="search-input")
-    i.glyphicon.glyphicon-search
-
-  input#search-input.form-control(
-  type='search'
-  placeholder='Поиск'
-  select-on-focus
-  track-focused
-  aria-describedby='search-input'
-  ng-model='vm.search'
-  ng-model-options='{debounce: vm.debounce}'
-  on-enter='vm.onSearchEnter()'
+  catalogue-filter(
+  search='vm.search'
+  filters='vm.filters'
+  active-tags='vm.activeTags'
+  active-group='vm.activeGroup'
+  catalogue-vm='vm'
+  remove-tag-click='vm.removeTagClick'
+  price-slider='vm.priceSlider'
+  clear-filters='vm.clearFilters'
   )
 
-  span.form-control-feedback(ng-hide='!vm.search')
-    a(ng-click='vm.clearSearchClick()' href)
-      i.glyphicon.glyphicon-remove
+  .active-filters(ng-if='vm.filters.length || vm.currentArticleGroup || vm.priceSlider.hasFilter()')
 
-  .filters
+    a.current-article-group(
+    href ng-click='vm.articleGroupClick()'
+    ng-if='vm.currentArticleGroup'
+    )
+      | {{ vm.currentArticleGroup.displayName }}
+
     a.filter(
-    href
-    ng-click='vm.removeFilterClick(filter)'
     ng-repeat='filter in vm.filters track by $index'
+    href ng-click='vm.removeTagClick(filter)'
     )
-      i.glyphicon.glyphicon-remove
-      span {{ filter.label }}
+      | {{ filter.label }}
 
-.alert.alert-default.collapser
-  a(
-  href
-  ng-click='vm.isArticleGroupsExpanded = !vm.isArticleGroupsExpanded'
-  )
-    span {{ vm.currentArticleGroup.displayName || vm.showOnlyOrdered && 'Товары заказа' || '  Все товары' }}
-    span.caret(ng-class='{"flip-vertical": vm.isArticleGroupsExpanded}')
-
-font-size-edit(append-to='articleGroups')
-
-  .block-to-collapse.scroll-y.article-groups(
-  uib-collapse='!vm.isArticleGroupsExpanded && !vm.isWideScreen'
-  collapsed='vm.isArticleGroupsCollapsingDone=true'
-  resize resize-offset-top='5'
-  )
-
-    ul.preceding-groups(ng-if='vm.showFirstLevel && vm.precedingGroups.length')
-
-      .list-group-item(
-      ng-repeat='elem in vm.precedingGroups | orderBy:"name" track by elem.id'
-      )
-        a.articleGroup(
-        href
-        stm-click='articleGroupAndCollapse' click-payload='elem'
-        )
-          .name {{::elem.displayName }}
-
-        a.chevron(
-        href
-        stm-click='articleGroup' click-payload='elem'
-        )
-          i.glyphicon.glyphicon-menu-right
-
-    ul.list-group.xs-ancestors(
-    ng-if='vm.ancestors.length'
+    a.price-min(
+    ng-if='vm.priceSlider.min'
+    href ng-click='vm.priceSlider.min = 0'
     )
+      | Цена от {{ vm.priceSlider.min }} ₽
 
-      .list-group-item(
-      ng-repeat='ancestor in vm.ancestors | limitTo: (!vm.currentArticleGroup && vm.showOnlyOrdered ? 1 : false) track by ancestor.id'
-      )
-
-        a.chevron(
-        stm-click='articleGroup' click-payload='ancestor'
-        )
-          i.glyphicon.glyphicon-menu-left
-
-        a.articleGroup(
-        href
-        stm-click='articleGroupAndCollapse' click-payload='ancestor'
-        ) {{::ancestor.displayName}}
-
-    ul.list-group.expanded
-
-      a.list-group-item.active(
-      href
-      ng-if='!vm.noMoreChildren && vm.currentArticleGroup.displayName || !vm.currentArticleGroup && vm.showOnlyOrdered'
-      ng-click='vm.isArticleGroupsExpanded=false'
-      )
-        span {{ vm.currentArticleGroup.displayName || 'Товары заказа' }}
-
-      .list-group-item(
-      ng-repeat='elem in vm.articleGroups | orderBy:"name" track by elem.id'
-      ng-class='{active: vm.currentArticleGroup.id === elem.id}'
-      )
-        a.articleGroup(
-        href
-        stm-click='articleGroupAndCollapse' click-payload='elem'
-        )
-          .name {{::elem.displayName }}
-          .badge(ng-if='::vm.articleGroupIds[elem.id]')
-            span {{::vm.articleGroupIds[elem.id]}}
-            span(ng-if='::elem.children.length') +
-
-        a.chevron(
-        href
-        stm-click='articleGroup' click-payload='elem'
-        ng-if='::elem.children.length && !vm.articleGroupIds[elem.id]'
-        )
-          i.glyphicon.glyphicon-menu-right
-
-    ul.following-groups(ng-if='vm.showFirstLevel && vm.followingGroups.length')
-
-      .list-group-item(
-      ng-repeat='elem in vm.followingGroups | orderBy:"name" track by elem.id'
-      )
-        a.articleGroup(
-        href
-        stm-click='articleGroupAndCollapse' click-payload='elem'
-        )
-          .name {{::elem.displayName }}
-
-        a.chevron(
-        href
-        stm-click='articleGroup' click-payload='elem'
-        )
-          i.glyphicon.glyphicon-menu-right
+    a.price-max(
+    ng-if='vm.priceSlider.max < vm.priceSlider.options.ceil'
+    href ng-click='vm.priceSlider.max = vm.priceSlider.options.ceil'
+    )
+      | Цена до {{ vm.priceSlider.max }} ₽

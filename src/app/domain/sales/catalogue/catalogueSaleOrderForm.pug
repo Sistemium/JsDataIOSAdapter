@@ -15,6 +15,10 @@ close='vm.saleOrder.processingMessage = null'
     sale-order='vm.saleOrder'
     )
 
+.btn-group.sales-schema(ng-if='vm.schemaOption')
+  button.btn.btn-default(ng-model='vm.saleOrder.salesSchema' uib-btn-radio="1" uib-uncheckable='false') Схема 1
+  button.btn.btn-default(ng-model='vm.saleOrder.salesSchema' uib-btn-radio="2" uib-uncheckable='false') Схема 2
+
 .form-group
   label.control-label.col-md-9.col-sm-8 Дата доставки
   sab-date-picker.col-md-3.col-sm-4(

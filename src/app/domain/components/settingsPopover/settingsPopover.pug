@@ -5,6 +5,7 @@ popover-animation='true'
 uib-popover-template="'app/domain/components/settingsPopover/catalogueSettingsPopover.html'"
 popover-open='vm.isPopoverOpen'
 popover-trigger='"click"'
-popover-placement='bottom-right auto'
+popover-placement='bottom auto'
+popover-class='{{"popover-settings-" + vm.items}}'
 )
   i.glyphicon.glyphicon-cog
