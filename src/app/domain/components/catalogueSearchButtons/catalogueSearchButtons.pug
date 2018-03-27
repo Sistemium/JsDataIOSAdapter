@@ -1,0 +1,31 @@
+.catalogue-search-buttons(cg-busy='vm.busy')
+
+  .alphabet
+
+    .alphabet-block
+      a.btn.btn-primary.alphabet-language(
+      ng-click='vm.changeLangClick()'
+      )
+        span {{vm.currentLanguage === 'Rus' ? 'Рус': 'Eng'}}
+
+    .alphabet-search-letters
+
+      .letters-block(
+      ng-repeat='letter in vm.alphabet track by $index'
+      ng-class='{"active-alphabet-letter": vm.currentLetter === letter}'
+      )
+
+        span.alphabet-letter.btn(
+        ng-click='vm.alphabetLetterClick(letter)'
+        ) {{letter}}
+
+        .sub-letters(ng-if='vm.currentLetter === letter')
+          a.btn.sub-letter(
+          href
+          ng-repeat='subLetter in vm.subLetters track by subLetter'
+          ng-click='vm.subLetterClick(subLetter)'
+          ng-class='{"active-sub-letter": vm.subLetter === subLetter}'
+          ) {{subLetter}}
+
+  .articles-by-sub-letter(ng-if='vm.filteredArticles')
+    a.btn.article(ng-repeat='article in vm.filteredArticles track by $index') {{article}}
