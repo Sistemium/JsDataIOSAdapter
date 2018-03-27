@@ -37,7 +37,7 @@
           if (!name) {
             return;
           }
-          name = name.replace(/"[КK]"/i,'');
+          name = name.replace(/"[КKРP]"/i,'');
           let match = name.match(/"([^"]*[^ ])"/) || name.match(/"([^"]*[^ "]*)"/);
           return match ? match[1] : name;
         }]
