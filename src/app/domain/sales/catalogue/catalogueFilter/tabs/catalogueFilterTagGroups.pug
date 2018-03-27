@@ -1,0 +1,28 @@
+.tag.panel-default(
+ng-repeat='tagGroup in vm.articleTagGroups track by tagGroup.id'
+uib-accordion-group
+is-open='vm.tabsOpen[tagGroup.id]'
+)
+  uib-accordion-heading
+
+    .title {{tagGroup.name}}
+
+    .active-tags(ng-if='vm.groupHasActiveTags(tagGroup) && !vm.tabsOpen[tagGroup.id]')
+      a(
+      href
+      ng-repeat='(code, tag) in vm.activeTags[tagGroup.id] track by tag.id'
+      ng-click='vm.activeTagClick($event, tag)'
+      )
+        i.glyphicon.glyphicon-remove
+        span {{ tag.label }}
+
+    span.caret.turnable(ng-class='{"turn-90-counter-clock": vm.tabsOpen[tagGroup.id]}')
+
+  .accordion-body
+
+    a.list-group-item(
+    href
+    ng-repeat='tag in tagGroup.tags track by tag.id'
+    ng-click='vm.tagClick(tag)'
+    ng-class='{active : vm.activeTags[tag.groupId][tag.id]}'
+    ) {{ tag.label }}

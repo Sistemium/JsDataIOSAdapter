@@ -54,3 +54,11 @@
   }
 
 }
+
+@include responsive-only(lt-md) {
+
+  .container {
+    width: auto;
+  }
+
+}

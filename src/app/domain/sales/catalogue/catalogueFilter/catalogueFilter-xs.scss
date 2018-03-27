@@ -1,0 +1,60 @@
+@import "variables";
+
+@include responsive-only(lt-sm) {
+
+  #catalogue-sidenav {
+
+    width: 100%;
+
+    .catalogue-filter {
+
+      width: 100%;
+
+      &.not-full-screen {
+
+        .catalogue-filter-body {
+          padding-bottom: 0;
+        }
+
+        .panel-default:not(.query), .rzslider, .panel-default.query .panel-collapse {
+          display: none;
+        }
+
+        .stm-searcher {
+          .filters {
+            display: none;
+          }
+        }
+
+        a.toggle-open.opened {
+          display: none;
+        }
+
+      }
+
+      &.full-screen {
+        position: absolute;
+        top: -50px;
+        //padding-top: 10px;
+        bottom: 0;
+        z-index: 100;
+        background: $white;
+
+        .catalogue-filter-body {
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          top: 30px;
+        }
+      }
+
+      .stm-searcher {
+        label {
+          color: $primary-color;
+        }
+      }
+    }
+
+  }
+
+}

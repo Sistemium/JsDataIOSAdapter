@@ -2,12 +2,11 @@
 
 (function () {
 
-  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window) {
+  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo) {
 
     const vm = this;
-    const ua = new UAParser();
-    const osInfo = ua.getOS();
-    const deviceInfo = ua.getDevice();
+
+    const {osInfo, deviceInfo} = userAgentInfo;
 
     let classes = [];
 
@@ -34,8 +33,6 @@
         }
       });
     }
-
-    $window.stmAppCacheUpdated = onUpdate;
 
     appcache.addEventListener('updateready', onUpdate, true);
 

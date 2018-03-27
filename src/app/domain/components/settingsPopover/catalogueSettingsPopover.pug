@@ -1,23 +1,31 @@
-button.btn.btn-default(
-stm-click='toggleShowImages'
-ng-click='vm.showImagesClick()'
-)
-  | {{ vm.showImages ? 'Убрать фото' : 'Показать фото' }}
+.settings-popover(ng-if='vm.items==="catalogue"')
 
-button.btn.btn-default(
-stm-click='toggleShowFirstLevel'
-ng-click='vm.showFirstLevelClick()'
-)
-  | {{ vm.showFirstLevel ? 'Скрыть первый уровень' : 'Показать первый уровень' }}
+  button.btn.btn-default(
+  stm-click='toggleShowImages'
+  ng-click='vm.showImagesClick()'
+  )
+    | {{ vm.showImages ? 'Убрать фото' : 'Показать фото' }}
 
-button.btn.btn-default(
-stm-click='toggleHideBoxes'
-ng-click='vm.hideBoxesClick()'
-)
-  | {{ vm.hideBoxes ? 'Показать коробки' : 'Убрать коробки'}}
+  button.btn.btn-default(
+  stm-click='toggleShowFirstLevel'
+  ng-click='vm.showFirstLevelClick()'
+  )
+    | {{ vm.showFirstLevel ? 'Скрыть первый уровень' : 'Показать первый уровень' }}
 
-button.btn.btn-default(
-stm-click='toggleBarCodes'
-ng-click='vm.showBarCodesClick()'
-)
-  | {{ vm.showBarCodes ? 'Убрать штрих-коды' : 'Показать штрих-коды'}}
+  button.btn.btn-default(
+  stm-click='toggleHideBoxes'
+  ng-click='vm.hideBoxesClick()'
+  )
+    | {{ vm.hideBoxes ? 'Показать коробки' : 'Убрать коробки'}}
+
+  button.btn.btn-default(
+  stm-click='toggleBarCodes'
+  ng-click='vm.showBarCodesClick()'
+  )
+    | {{ vm.showBarCodes ? 'Убрать штрих-коды' : 'Показать штрих-коды'}}
+
+  button.btn.btn-default(
+  stm-click='catalogueLeft'
+  ng-click='vm.catalogueLeftClick()'
+  )
+    | {{ vm.catalogueLeft ? 'Цены справа' : 'Цены слева' }}

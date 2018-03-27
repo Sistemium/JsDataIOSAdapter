@@ -1,27 +1,32 @@
 .stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
 
-  label(ng-click='vm.searchClick($event)')
+  label(ng-click='vm.labelClick($event)')
     i.glyphicon.glyphicon-search
 
   input#search-input.form-control(
   type='search'
   placeholder='Поиск'
+  autocomplete='off'
   select-on-focus
   track-focused
   aria-describedby='search-input'
   ng-model='vm.search'
+  ng-model-options='{debounce: 700}'
   on-enter='vm.onSearchEnter()'
+  ng-click='vm.inputClick($event)'
+  ng-focus='vm.onFocus(true)'
+  ng-blur='vm.onFocus(false)'
   )
 
   span.form-control-feedback(ng-hide='!vm.search')
-    a(ng-click='vm.clearSearchClick()' href)
+    a(ng-click='vm.clearSearchClick($event)' href)
       i.glyphicon.glyphicon-remove
 
   .filters
     a.filter(
     href
     ng-click='vm.removeTagClick(filter)'
-    ng-repeat='filter in vm.filters track by $index'
+    ng-repeat='filter in vm.filterRemovers() track by $index'
     )
       i.glyphicon.glyphicon-remove
       span {{ filter.label }}

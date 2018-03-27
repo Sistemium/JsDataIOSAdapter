@@ -105,6 +105,12 @@ sale-order-alert {
       padding: $margin-bottom-xs/2 $margin-bottom-xs;
     }
 
+    @include responsive-only(gt-xs) {
+      .sales-schema {
+        position: absolute;
+      }
+    }
+
     .btn-group {
 
       display: flex;

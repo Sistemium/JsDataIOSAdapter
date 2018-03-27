@@ -113,7 +113,7 @@
 
         });
 
-      $rootScope.$on('$destroy', $rootScope.$on('auth-logout', logout));
+      $rootScope.$on('auth-logout', logout);
 
       return initPromise;
 

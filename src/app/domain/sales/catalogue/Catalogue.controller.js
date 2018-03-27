@@ -74,7 +74,7 @@
       priceTypeClick,
       setSaleOrderClick,
       saleOrderTotalsClick,
-      clearSearchClick,
+
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
       toggleShowFirstLevelClick,
@@ -91,7 +91,6 @@
       onScrolledToBeginning,
       onlyShippedClick,
 
-      onSearchEnter,
       onStateChange,
       // articleRowHeight,
       alertCheck,
@@ -167,6 +166,10 @@
         $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
         $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
 
+        $scope.$watchGroup(['vm.priceSlider.min', 'vm.priceSlider.max'], saEtc.debounce(() => {
+          setCurrentArticleGroup(vm.currentArticleGroup);
+        }, 1000, $scope));
+
       });
 
     vm.setBusy(busy);
@@ -183,12 +186,6 @@
     $scope.$on('$destroy', Sockets.onJsData('jsData:update:finished', onJSDataFinished));
     $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
 
-    $scope.$watch('vm.searchEnterPress', () => {
-      if (vm.searchEnterPress) {
-        setCurrentArticleGroup();
-        vm.searchEnterPress = !vm.searchEnterPress;
-      }
-    });
 
     vm.watchScope('vm.fontSize', fontSize => {
       if (fontSize) {
@@ -309,10 +306,6 @@
 
     }
 
-    function onSearchEnter() {
-      setCurrentArticleGroup();
-    }
-
     function thumbClick(stock) {
 
       $scope.imagesAll = $scope.imagesAll || _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
@@ -403,10 +396,6 @@
       }
     }
 
-    function clearSearchClick() {
-      vm.search = '';
-    }
-
     function reloadVisible() {
       filterStock();
       return setCurrentArticleGroup(vm.currentArticleGroup);
@@ -468,58 +457,9 @@
 
     }
 
-    function articleTagClick(articleTagObj) {
+    function articleTagClick(tag) {
 
-      let {code, label} = articleTagObj;
-
-      let tagInfo = _.find(vm.tags, tag => {
-        return tag.id === code
-      });
-
-      let normalGroupId = _.get(tagInfo, 'groupId');
-
-      if (!_.find(vm.filters, {code: code})) {
-
-        let allowMultiple = _.get(tagInfo, 'group.allowMultiple');
-
-        if (!_.get(vm.activeGroup, normalGroupId)) {
-          vm.activeGroup[normalGroupId] = {cnt: true, selected: [label]};
-        } else {
-
-          if (!_.get(vm.activeGroup[normalGroupId], 'selected')) {
-            vm.activeGroup[normalGroupId].selected = [];
-          }
-
-          vm.activeGroup[normalGroupId].cnt = true;
-
-          vm.activeGroup[normalGroupId].selected.push(label);
-        }
-
-        if (allowMultiple) {
-          normalGroupId = _.get(tagInfo, 'id');
-        }
-
-        vm.activeTags[normalGroupId] = label;
-        vm.filters.push(articleTagObj);
-
-      } else {
-
-        _.each(vm.activeTags, (val, key) => {
-          if (val === label) {
-
-            _.pull(vm.activeGroup[normalGroupId].selected, label);
-            vm.activeTags = _.omit(vm.activeTags, key);
-
-            if (!vm.activeGroup[normalGroupId].selected.length) {
-              vm.activeGroup[normalGroupId].cnt = false;
-            }
-
-            return false;
-          }
-        });
-
-        _.remove(vm.filters, _.find(vm.filters, {label: label}));
-      }
+      vm.removeTagClick(tag);
 
     }
 
@@ -786,30 +726,31 @@
 
       if (!vm.currentPriceType) return;
 
-      let stockCache = _.orderBy(
-        _.map(
-          Stock.meta.getAll(),
-          stock => {
-            return {
-              id: stock.id,
-              volume: stock.volume,
-              displayVolume: stock.displayVolume,
-              article: stock.article,
-              articleId: stock.articleId,
-              priceAgent: stock.priceAgent,
-              discountPercent,
-              targetDiscountPercent,
-              discountPrice,
-              discountPriceDoc,
-              priceOrigin,
-              discountScope,
-              setDiscountScope
-            };
-          }
-        ),
-        // item => item.article && item.article.name
-        ['article.firstName', 'article.pieceVolume', 'article.name']
-      );
+      let stockCache = [];
+
+      _.each(Stock.meta.getAll(), stock => {
+
+        if (!stock.article) return;
+
+        stockCache.push({
+          id: stock.id,
+          volume: stock.volume,
+          displayVolume: stock.displayVolume,
+          article: stock.article,
+          articleId: stock.articleId,
+          priceAgent: stock.priceAgent,
+          discountPercent,
+          targetDiscountPercent,
+          discountPrice,
+          discountPriceDoc,
+          priceOrigin,
+          discountScope,
+          setDiscountScope
+        });
+
+      });
+
+      stockCache = _.orderBy(stockCache, item => item.article && item.article.sortName);
 
       DEBUG('filterStock', 'orderBy');
 
@@ -1238,14 +1179,20 @@
 
       if (vm.search || vm.filters.length || vm.showOnlyShipped) {
 
-        let reg = vm.search && new RegExp(_.replace(_.escapeRegExp(vm.search), ' ', '.+'), 'i');
+        let reg = false;
+        let regParts = 0;
 
-        // if (vm.search === '**' && vm.saleOrder) {
-        //   reg = false;
-        //   vm.showOnlyShipped = true;
-        // } else {
-        //   vm.showOnlyShipped = false;
-        // }
+        if (vm.search) {
+
+          let search = vm.search.replace(/[ ]{2,}/g, ' ');
+
+          let re = _.map(_.split(search, ' '), part => `(${_.escapeRegExp(part)})`);
+
+          regParts = re.length;
+
+          reg = new RegExp(re.join('|'), 'ig');
+
+        }
 
         let pieceVolume;
 
@@ -1261,11 +1208,12 @@
 
         _.each(articles, article => {
 
-          let res = !reg ||
-            reg.test(article.name) ||
-            reg.test(article.preName) ||
-            reg.test(article.lastName) ||
-            article.ArticleGroup && reg.test(article.ArticleGroup.name);
+          let res = true;
+
+          if (reg) {
+            let match = _.uniq(article.sortName.match(reg));
+            res = match && (match.length >= regParts);
+          }
 
           if (res && vm.showOnlyShipped && vm.articleStats) {
             res = vm.articleStats[article.id];
@@ -1291,7 +1239,30 @@
 
       DEBUG('getStockByArticlesOfGroup', 'articleIds');
 
-      let result = !articleIds ? sortedStock : _.filter(sortedStock, stock => {
+      let {priceSlider = {options: {}}} = vm;
+
+      let minPrice = priceSlider.min > 0 && priceSlider.min;
+      let maxPrice = priceSlider.max < priceSlider.options.ceil && priceSlider.max;
+
+      let noFilters = !articleIds && !minPrice && !maxPrice;
+
+      let result = noFilters ? sortedStock : _.filter(sortedStock, stock => {
+
+        let price = (minPrice || maxPrice) && stock.priceOrigin();
+
+        if (minPrice) {
+          if (price < minPrice) {
+            return;
+          }
+        }
+        if (maxPrice) {
+          if (price > maxPrice) {
+            return;
+          }
+        }
+        if (!articleIds) {
+          return true;
+        }
         if (articleIds[stock.articleId]) {
           return ++groupIds[stock.article.articleGroupId];
         }

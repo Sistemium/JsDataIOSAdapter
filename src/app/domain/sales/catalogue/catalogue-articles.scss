@@ -236,11 +236,19 @@
 
     .article-info {
 
-      margin-left: 5px;
+      //margin-left: 5px;
       white-space: nowrap;
       flex-shrink: 0;
       flex-grow: 1;
       padding-right: 6px;
+
+      > * {
+        margin-left: 5px;
+      }
+
+      .tag {
+        font-weight: bold;
+      }
 
     }
 
@@ -307,7 +315,7 @@
 
   }
 
-  .article-name-second .tag {
+  .article-name .tag {
 
     color: $primary-color;
 
@@ -348,5 +356,11 @@
     color: $primary-color;
     font-weight: bold;
   }
+
+}
+
+.catalogue-left #scroll-articles .article-name-third {
+
+  text-align: left;
 
 }

@@ -1,6 +1,9 @@
 .debt-view.ui-view()
 
-  .debt-view-table(cg-busy='vm.cgBusy')
+  font-size-edit.debt-view-table(
+  append-to='catalogueArticle'
+  cg-busy='vm.cgBusy'
+  )
 
     .table-header
       .responsibility-filter

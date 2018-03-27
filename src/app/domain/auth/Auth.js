@@ -2,6 +2,7 @@
 
 (function () {
 
+  /** @ngInject */
   function Auth($rootScope, $q, $state, $window, IOS, PickerAuth) {
 
     const me = this;
@@ -72,9 +73,11 @@
     function onStateChangeStart(event, next, nextParams, from) {
 
       if (!roles) {
+
         if (next.name !== 'auth') {
 
           event.preventDefault();
+
           if (rolesPromise) {
             rolesPromise.then(() => {
               $state.go(next, nextParams);
@@ -82,14 +85,22 @@
             return;
           }
 
-          $state.go('auth');
+          if (!getAccessToken()) {
+             $state.go('auth');
+          }
 
         }
+
+        return;
+
       } else {
+
         me.profileState = 'profile';
+
         if (_.get(next, 'data.auth') === 'pickerAuth') {
           me.profileState = 'picker';
         }
+
       }
 
       let needRoles = _.get(next, 'data.auth');

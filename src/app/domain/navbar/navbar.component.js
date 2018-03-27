@@ -47,6 +47,7 @@
       let rootState = _.get(to, 'data.rootState');
 
       vm.use({
+        state: to,
         hide: !!_.get(to, 'data.hideTopBar'),
         hideNavs: !!_.get(to, 'data.hideNavs'),
         title: _.get(to, 'data.title') || DEFAULT_TITLE,

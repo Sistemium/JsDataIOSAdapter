@@ -1,0 +1,251 @@
+@import "variables";
+
+catalogue-filter {
+
+  $border-radius: 10px;
+  $padding: 5px;
+  display: block;
+
+  .full-screen-controls {
+
+    @include responsive-only(gt-xs) {
+      display: none;
+    }
+
+    display: flex;
+
+    .title {
+
+      font-size: 130%;
+      flex: 1;
+
+      &.not-found > * {
+        color: $red;
+      }
+
+      label {
+        color: $gray;
+      }
+
+      strong {
+        margin-left: $padding;
+        color: $black;
+      }
+
+    }
+
+    a {
+      padding: 5px;
+    }
+
+  }
+
+  .catalogue-filter-body {
+    overflow-y: scroll;
+    padding-bottom: 20px;
+  }
+
+  .catalogue-filter {
+
+    overflow: hidden;
+
+    > .price {
+      * + span {
+        margin-left: $padding;
+      }
+    }
+
+    .rzslider .rz-pointer {
+      outline: none !important;
+    }
+
+    uib-accordion {
+
+      .panel-group {
+
+        margin: 0;
+
+        .panel {
+          box-shadow: none;
+          border: 1px solid $gray-border-color;
+        }
+
+        .panel-default {
+
+          &.panel-open {
+            .active-tags {
+              opacity: 0;
+            }
+          }
+
+          margin-bottom: 10px;
+          border-radius: $border-radius;
+
+          .panel-heading {
+
+            background-color: transparent;
+            padding: 0;
+
+          }
+
+          .panel-collapse {
+            border-bottom-right-radius: $border-radius - 1;
+            border-bottom-left-radius: $border-radius - 1;
+          }
+
+          .panel-body {
+            padding: 0;
+            border: 0;
+          }
+        }
+      }
+
+      .panel-heading h4 {
+
+        font-size: 13px;
+        text-transform: uppercase;
+
+        > a {
+
+          padding: 10px;
+          display: block;
+          color: $primary-color;
+
+          .group-name {
+            color: black;
+          }
+
+          i {
+            font-size: 70%;
+            top: 1px;
+            //color: $black;
+          }
+
+          i + * {
+            margin-left: 3px;
+          }
+
+        }
+
+        span[uib-accordion-header] {
+
+          display: flex;
+
+          .title {
+            flex: 1;
+          }
+
+          .caret {
+            margin-left: 10px;
+            &.turn-90-counter-clock {
+              transform: translateY(-2px) rotate(-90deg);
+            }
+          }
+
+          .active-tags {
+
+            transition: all .3s;
+            display: flex;
+            justify-content: flex-end;
+
+            & + .caret {
+              display: none;
+            }
+
+            a {
+
+              //border: solid 1px $gray-border-color;
+              opacity: 1;
+              text-transform: lowercase;
+              margin: 0 5px;
+              //padding: 0px 4px 1px;
+              //border-radius: 4px;
+
+              i {
+                top: 0;
+                display: none;
+              }
+
+              &:last-of-type {
+                margin-right: 0;
+              }
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+    .tag {
+      cursor: pointer;
+    }
+
+    .accordion-body {
+
+      width: 100%;
+
+      a.list-group-item, .search-query {
+
+        border-right: none;
+        border-left: none;
+        border-radius: 0;
+        border-bottom: none;
+
+      }
+
+      > a.list-group-item, .search-query, ul:last-of-type .list-group-item {
+
+        &:last-of-type {
+          border-bottom-left-radius: $border-radius - 1;
+          border-bottom-right-radius: $border-radius - 1;
+        }
+
+      }
+
+      .panel-body {
+
+        .active {
+
+          background-color: $primary-color;
+          color: $white;
+
+          &:hover {
+            background-color: lighten($primary-color, 20%);
+          }
+
+        }
+
+      }
+
+    }
+
+    .list-group {
+      margin-bottom: 0;
+    }
+
+    // active
+
+    .panel-body, .query {
+      .active {
+
+        background-color: $primary-color;
+
+        .query-name, .toggle-favourite, a.remove {
+          color: $white;
+        }
+
+        &:hover {
+          background-color: lighten($primary-color, 20%);
+        }
+
+      }
+
+    }
+
+  }
+
+}
+

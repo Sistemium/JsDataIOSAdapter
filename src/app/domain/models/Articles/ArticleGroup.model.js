@@ -12,10 +12,6 @@
 
       relations: {
         hasMany: {
-          Article: {
-            localField: 'Articles',
-            foreignKey: 'articleGroupId'
-          },
           ArticleGroup: {
             localField: 'children',
             foreignKey: 'articleGroupId'
@@ -42,7 +38,8 @@
       computed: {
         displayName: ['name', cleanName],
         ancestorsCache: ['id', 'articleGroupId', setACache],
-        descendantsCache: ['id', 'articleGroupId', setDCache]
+        descendantsCache: ['id', 'articleGroupId', setDCache],
+        sortName: ['id', 'name', sortNameFn]
       },
 
       methods: {
@@ -54,7 +51,9 @@
 
         hasDescendants: function (ids) {
           return _.find(this.descendantsCache, item => ids[item]);
-        }
+        },
+
+        ancestorNames
 
       }
 
@@ -62,6 +61,10 @@
 
     let cacheA = {};
     let cacheD = {};
+
+    function sortNameFn(id, name) {
+      return `${(id === DomainOption.stmArticleGroupId()) ? '!' : ''}${_.trim(name)}`.toLocaleLowerCase();
+    }
 
     function stmRoot() {
       let id = DomainOption.stmArticleGroupId();
@@ -83,11 +86,15 @@
     }
 
     function setCache(store, id, articleGroupId) {
+
       let cache = store[id];
+
       if (!cache) {
         cache = store[id] = []
       }
+
       articleGroupId && cache.indexOf(articleGroupId) === -1 && cache.push(articleGroupId);
+
       return cache;
     }
 
@@ -111,6 +118,15 @@
       });
 
       return ownCache;
+
+    }
+
+    function ancestorNames() {
+
+      let parent = this.articleGroup;
+      let names = (parent ? `${parent.ancestorNames()} / ` : '') + this.sortName;
+
+      return names || '';
 
     }
 

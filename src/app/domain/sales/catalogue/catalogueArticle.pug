@@ -29,9 +29,15 @@ before-tag-name='li'
         uib-tooltip-template='vm.articleTooltipTpl'
         ) {{::stock.article.firstName}}
 
-        .article-info(
-        ng-class='::{gray: stock.article.firstName.length}'
-        )
+        .article-info
+
+          //strong(ng-if='::stock.article.secondName') {{::stock.article.secondName}}
+          small.tag(
+          ng-if='::stock.article.primaryTag'
+          ng-class='::stock.article.primaryTag.code'
+          )
+            a(href ng-click='vm.articleTagClick(stock.article.primaryTag)')
+              | {{ stock.article.primaryTag.label }}
 
           a.pieceVolume(
           href ng-click='vm.pieceVolumeClick(stock.article.pieceVolume)'
@@ -63,6 +69,7 @@ before-tag-name='li'
         small.tag(
         ng-repeat='tag in ::stock.article.tags track by tag.code'
         ng-class='::tag.code'
+        ng-if='!tag.primary'
         )
           a(href ng-click='vm.articleTagClick(tag)') {{ tag.label }}
 

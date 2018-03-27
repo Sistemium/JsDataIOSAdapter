@@ -5,12 +5,18 @@
   min-width: 240px;
 }
 
+.modal-body .price-edit-popover {
+  .extras {
+    display: none;
+  }
+}
+
 .price-edit-popover {
 
   //display: flex;
   //flex-flow: row wrap;
 
-  @include responsive-only(gt-xxs) {
+  @include responsive-only(gt-xs) {
 
     .controls {
       float: left;
@@ -40,7 +46,7 @@
 
     .num-pad-button .btn {
       font-size: 100%;
-      padding: 7px 15px;
+      padding: 10px 15px;
       color: $black;
       min-width: 45px;
     }
@@ -190,6 +196,8 @@
   }
 
   .extras {
+    clear: both;
+    margin-bottom: -4px;
     border-top: solid thin $border-gray;
     text-align: right;
   }

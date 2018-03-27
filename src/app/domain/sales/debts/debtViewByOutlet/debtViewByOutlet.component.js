@@ -102,7 +102,7 @@
       }, responsibility);
 
       return Debt.findAll({where})
-        .then(data => vm.debts = _.filter(data, debt => debt.summ > 0))
+        .then(data => vm.debts = _.filter(data, debt => debt.summ || debt.summDoc ))
         .then(data => {
 
           data = _.groupBy(data, 'date');
