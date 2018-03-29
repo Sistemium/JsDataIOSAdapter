@@ -11,20 +11,31 @@
 
     templateUrl: 'app/domain/components/settingsPopover/settingsPopover.html'
 
-  });
+  })
+    .run(initSettings);
+
+  const items = {
+    catalogue: [
+      {code: 'showFirstLevel', labelOff: 'Скрыть первый уровень', labelOn: 'Показать первый уровень'},
+      {code: 'showImages', labelOff: 'Убрать фото', labelOn: 'Показать фото'},
+      {code: 'hideBoxes', labelOff: 'Показать коробки', labelOn: 'Убрать коробки'},
+      {code: 'showBarCodes', labelOff: 'Убрать штрих-коды', labelOn: 'Показать штрих-коды'},
+      {code: 'catalogueLeft', labelOff: 'Цены справа', labelOn: 'Цены слева'},
+      {code: 'hideSearchHistory', labelOff: 'Показывать историю поиска', labelOn: 'Скрыть историю поиска'}
+    ],
+    debts: []
+  };
+
+  function initSettings($rootScope, localStorageService) {
+    _.each(items, settingsGroup => {
+      _.each(settingsGroup, item => {
+        let {code} = item;
+        $rootScope[code] = localStorageService.get(code) || false;
+      });
+    });
+  }
 
   function settingsPopoverController($scope, $rootScope, localStorageService) {
-
-    const items = {
-      catalogue: [
-        {code: 'showFirstLevel', labelOff: 'Скрыть первый уровень', labelOn: 'Показать первый уровень'},
-        {code: 'showImages', labelOff: 'Убрать фото', labelOn: 'Показать фото'},
-        {code: 'hideBoxes', labelOff: 'Показать коробки', labelOn: 'Убрать коробки'},
-        {code: 'showBarCodes', labelOff: 'Убрать штрих-коды', labelOn: 'Показать штрих-коды'},
-        {code: 'catalogueLeft', labelOff: 'Цены справа', labelOn: 'Цены слева'}
-      ],
-      debts: []
-    };
 
     const vm = _.assign(this, {
       $onInit,
@@ -45,9 +56,9 @@
 
         let {code} = item;
 
-        $rootScope[item] = vm[code] = localStorageService.get(code) || false;
+        vm[code] = $rootScope[code];
 
-        let stmClick = `toggle${_.upperFirst(code)}`;
+        let stmClick = `toggle${_.upperFirst(item.code)}`;
 
         return _.assign({stmClick}, item);
 
