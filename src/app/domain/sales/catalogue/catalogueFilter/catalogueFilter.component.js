@@ -14,7 +14,8 @@
 
       removeTagClick: '=',
       priceSlider: '=',
-      clearFilters: '='
+      clearFilters: '=',
+      showSearchHistory: '='
 
     },
 
