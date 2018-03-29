@@ -78,15 +78,7 @@
       }
     }, true);
 
-    $scope.$watch('vm.search', nv => {
-
-      if (_.isEmpty(vm.searchQueries)) {
-        return;
-      }
-
-      onSearchChange(nv);
-
-    });
+    vm.watchScope('vm.search', onSearchChange);
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
 
@@ -198,9 +190,11 @@
 
     function onSearchChange(nv) {
 
-      nv = (nv || '').toLocaleLowerCase();
+      nv = _.trim(nv).toLocaleLowerCase();
 
-      const savedQuery = _.find(vm.searchQueries, {query: nv});
+      vm.searchQueries = _.filter(vm.allSearchQueries, sq => {
+        return nv ? _.startsWith(sq.query, nv) : sq.isFavourite;
+      });
 
     }
 
@@ -216,8 +210,8 @@
         orderBy: [['isFavourite', 'DESC'], ['query', 'ASC']]
       };
 
-      vm.rebindAll(SearchQuery, filter, 'vm.searchQueries', () => {
-        vm.search && onSearchChange(vm.search);
+      vm.rebindAll(SearchQuery, filter, 'vm.allSearchQueries', () => {
+        onSearchChange(vm.search);
       });
 
       vm.articleTagGroups = ArticleTagGroup.getAll();

@@ -199,12 +199,7 @@
         .then(() => setCurrentArticleGroup(null))
     );
 
-    vm.watchScope('vm.search', (newValue, oldValue) => {
-      if (newValue != oldValue) {
-        vm.firstLevelGroups = null;
-        setCurrentArticleGroup(vm.currentArticleGroup);
-      }
-    });
+    vm.watchScope('vm.search', saEtc.debounce(onSearch, 1000, $scope));
 
     $scope.$watchCollection('vm.filters', (o, n) => {
       if (o && n && (o.length || n.length)) {
@@ -227,6 +222,14 @@
     /*
      Handlers
      */
+
+    function onSearch(newValue, oldValue) {
+      if (newValue === oldValue) {
+        return;
+      }
+      vm.firstLevelGroups = null;
+      setCurrentArticleGroup(vm.currentArticleGroup);
+    }
 
     function onlyShippedClick() {
       vm.showOnlyShipped = !vm.showOnlyShipped;
