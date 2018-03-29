@@ -1,0 +1,8 @@
+.settings-popover
+
+  button.btn.btn-default(
+  ng-repeat='button in vm.buttons track by button.code'
+  stm-click='{{button.stmClick}}'
+  ng-click='vm.buttonClick(button)'
+  )
+    | {{ vm[button.code] ? button.labelOff : button.labelOn }}
