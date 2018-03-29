@@ -36,7 +36,7 @@ is-open="vm.tabsOpen.queries"
 
     .search-query(
     ng-repeat='query in vm.searchQueries track by query.id'
-    ng-class='{active : vm.currentSearchQuery === query.query}'
+    ng-class='{active : vm.search === query.query}'
     )
       a.query-name(href ng-click='vm.queryClick(query)') {{query.query}}
 

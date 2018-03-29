@@ -52,7 +52,6 @@
       needShowCurrentArticleGroup,
 
       search: $state.params.q || '',
-      currentSearchQuery: null,
       tabsOpen: localStorageService.get(LS_KEY) || {categories: true},
 
       priceSlider: {
@@ -203,12 +202,6 @@
 
       const savedQuery = _.find(vm.searchQueries, {query: nv});
 
-      if (savedQuery) {
-        vm.currentSearchQuery = savedQuery.query;
-      } else {
-        vm.currentSearchQuery = null;
-      }
-
     }
 
     function $onInit() {
@@ -242,13 +235,8 @@
 
       let {query} = searchQuery;
 
-      if (query === vm.currentSearchQuery) {
-        vm.currentSearchQuery = null;
-
-        if (vm.search && vm.search.toLocaleLowerCase() === query) {
-          vm.search = null;
-        }
-
+      if (vm.search && vm.search.toLocaleLowerCase() === query) {
+        vm.search = null;
       }
 
       SearchQuery.destroy(searchQuery);
@@ -299,12 +287,12 @@
 
       let queryStr = _.get(query, 'query');
 
-      if (vm.currentSearchQuery === queryStr) {
-        vm.search = vm.currentSearchQuery = null;
+      if (vm.search === queryStr) {
+        vm.search = null;
       } else {
         vm.fullScreen = false;
         saveQuery(queryStr);
-        vm.search = vm.currentSearchQuery = queryStr;
+        vm.search = queryStr;
         onSearchEnter();
       }
 
