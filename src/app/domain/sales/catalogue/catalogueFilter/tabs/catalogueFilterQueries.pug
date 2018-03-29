@@ -27,6 +27,7 @@ is-open="vm.tabsOpen.queries"
       i.glyphicon(ng-class='vm.cvm.showOnlyShipped ? "glyphicon-star" : "glyphicon-star-empty"')
 
     a.toggle-open(
+    ng-if='vm.showSearchHistory'
     href ng-click='vm.searchInputToggleOpenClick()'
     ng-class='vm.tabsOpen.queries ? "opened" : "closed"'
     )

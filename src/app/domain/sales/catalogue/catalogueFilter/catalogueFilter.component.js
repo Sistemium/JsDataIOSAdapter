@@ -149,6 +149,11 @@
     }
 
     function onSearchFocus(focused) {
+
+      if (!vm.showSearchHistory) {
+        return;
+      }
+
       if (focused) {
         // vm.fullScreen = true;
         vm.tabsOpen.queries = true;
