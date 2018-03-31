@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema) {
 
-    const LIMIT_TO = 10;
+    const LIMIT_TO = 300;
 
     const SearchQuery = Schema.register({
 
@@ -16,17 +16,15 @@
 
     function removeItemsToLimit() {
 
-      let notFavouriteFilter = {isFavourite: false, orderBy: 'lastUsed'};
-
-      let notFavourites = SearchQuery.filter(notFavouriteFilter);
-
-      let destroyCount = notFavourites.length - LIMIT_TO;
+      let destroyCount = SearchQuery.getAll().length - LIMIT_TO;
 
       if (destroyCount < 1) {
         return;
       }
 
-      let toDestroy = _.take(notFavourites, destroyCount);
+      let notFavouriteFilter = {isFavourite: false, orderBy: 'lastUsed', limit: destroyCount};
+
+      let toDestroy = SearchQuery.filter(notFavouriteFilter);
 
       _.each(toDestroy, item => item.DSDestroy());
 
