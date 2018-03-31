@@ -28,7 +28,7 @@
 
   const LS_KEY = 'catalogueFilter.tabsOpen';
 
-  function catalogueFilterController($scope, Schema, saControllerHelper, $state, localStorageService) {
+  function catalogueFilterController($scope, Schema, saControllerHelper, $state, localStorageService, saEtc) {
 
     const {SearchQuery, ArticleTagGroup, ArticleTag} = Schema.models();
 
@@ -73,13 +73,20 @@
 
     });
 
+    const debouncedSearch = saEtc.debounce(setCatalogueSearch, 1000, $scope);
+
     vm.watchScope('vm.tabsOpen', nv => {
       if (nv) {
         localStorageService.set(LS_KEY, nv);
       }
     }, true);
 
-    vm.watchScope('vm.search', onSearchChange);
+    vm.watchScope('vm.searchText', onSearchChange);
+    vm.watchScope('vm.search', nv => {
+      if (!nv) {
+        vm.searchText = '';
+      }
+    });
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
 
@@ -87,12 +94,17 @@
     Functions
      */
 
+    function setCatalogueSearch() {
+      vm.search = _.trim(vm.searchText);
+    }
+
     function onSearchEnter() {
       vm.filters = [];
       vm.activeTags = {};
       vm.cvm.currentArticleGroup = false;
       vm.priceSlider.min = 0;
       vm.priceSlider.max = vm.priceSlider.options.ceil;
+      setCatalogueSearch();
     }
 
     function activeArticleGroupClick($event) {
@@ -157,7 +169,10 @@
       if (focused) {
         // vm.fullScreen = true;
         vm.tabsOpen.queries = true;
+      } else {
+        // setCatalogueSearch();
       }
+
     }
 
     function removeTagClick(tag) {
@@ -196,10 +211,16 @@
 
     function onSearchChange(nv) {
 
-      nv = _.trim(nv).toLocaleLowerCase();
+      filterVisibleQueries(_.trim(nv).toLocaleLowerCase());
+
+      debouncedSearch();
+
+    }
+
+    function filterVisibleQueries(text) {
 
       vm.searchQueries = _.filter(vm.allSearchQueries, sq => {
-        return nv ? _.startsWith(sq.query, nv) : sq.isFavourite;
+        return text ? _.startsWith(sq.query, text) : sq.isFavourite;
       });
 
     }
@@ -217,7 +238,7 @@
       };
 
       vm.rebindAll(SearchQuery, filter, 'vm.allSearchQueries', () => {
-        onSearchChange(vm.search);
+        filterVisibleQueries(vm.searchText);
       });
 
       vm.articleTagGroups = ArticleTagGroup.getAll();
@@ -273,9 +294,7 @@
 
     }
 
-    function saveQuery(val) {
-
-      let searchQuery = _.find(vm.searchQueries, {query: val});
+    function saveQuery(searchQuery) {
 
       searchQuery.cnt++;
       searchQuery.lastUsed = moment().toDate();
@@ -291,9 +310,9 @@
         vm.search = null;
       } else {
         vm.fullScreen = false;
-        saveQuery(queryStr);
-        vm.search = queryStr;
+        saveQuery(query);
         onSearchEnter();
+        vm.search = queryStr;
       }
 
     }
@@ -309,6 +328,7 @@
       vm.activeTags = {};
       vm.cvm.currentArticleGroup = false;
       vm.search = '';
+      vm.searchText = '';
       vm.priceSlider.min = 0;
       vm.priceSlider.max = vm.priceSlider.options.ceil;
     }
