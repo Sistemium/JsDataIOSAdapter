@@ -85,6 +85,7 @@
     vm.watchScope('vm.search', nv => {
       if (!nv) {
         vm.searchText = '';
+        setFilters();
       }
     });
 
@@ -325,12 +326,17 @@
 
     }
 
+    function shouldShowSearchAsFilter() {
+      return vm.search && vm.searchText !== vm.search &&
+        (!vm.tabsOpen.queries || !vm.fullScreen);
+    }
+
     function setFilters() {
 
       let pieceVolume = _.find(vm.filters, 'pieceVolume');
       let filters = _.flattenDeep([_.map(vm.activeTags, groupTags => _.map(groupTags)), pieceVolume]);
 
-      if (vm.search && vm.searchText !== vm.search && !vm.tabsOpen.queries) {
+      if (shouldShowSearchAsFilter()) {
         filters.push({label: vm.search, isSearch: true});
       }
 
