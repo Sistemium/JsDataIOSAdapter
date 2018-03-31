@@ -51,7 +51,7 @@
 
     function filterRemovers() {
       // TODO: implement volume filters with a dynamic ArticleTagGroup then remove this stuff from the component
-      return _.filter(vm.filters, 'pieceVolume');
+      return _.filter(vm.filters, f => f.pieceVolume || f.isSearch);
     }
 
     function $onInit() {

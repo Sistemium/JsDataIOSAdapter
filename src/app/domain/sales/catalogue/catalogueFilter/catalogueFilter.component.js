@@ -89,6 +89,7 @@
     });
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
+    vm.watchScope('vm.tabsOpen.queries', (nv, ov) => (ov && !nv || !ov && nv) && setFilters());
 
     /*
     Functions
@@ -170,7 +171,7 @@
         // vm.fullScreen = true;
         vm.tabsOpen.queries = true;
       } else {
-        // setCatalogueSearch();
+        // setFilters();
       }
 
     }
@@ -179,6 +180,11 @@
 
       if (tag.pieceVolume) {
         return _.remove(vm.filters, 'pieceVolume');
+      }
+
+      if (tag.isSearch) {
+        vm.search = '';
+        return _.remove(vm.filters, 'isSearch');
       }
 
       tagClick(tag);
@@ -315,12 +321,21 @@
         vm.search = queryStr;
       }
 
+      setFilters();
+
     }
 
     function setFilters() {
+
       let pieceVolume = _.find(vm.filters, 'pieceVolume');
       let filters = _.flattenDeep([_.map(vm.activeTags, groupTags => _.map(groupTags)), pieceVolume]);
+
+      if (vm.search && vm.searchText !== vm.search && !vm.tabsOpen.queries) {
+        filters.push({label: vm.search, isSearch: true});
+      }
+
       vm.filters = _.filter(filters);
+
     }
 
     function clearFilters() {
