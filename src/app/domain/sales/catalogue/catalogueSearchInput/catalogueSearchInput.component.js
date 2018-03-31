@@ -79,14 +79,32 @@
 
       let spaceCount = spacesCountIn(val);
 
+      let longerCount = 0;
+
       let matching = _.filter(SearchQuery.getAll(), sq => {
+
         let {query, isFavourite} = sq;
-        return isFavourite ? query === val : _.startsWith(val, query) && spaceCount === spacesCountIn(query);
+
+        if (_.startsWith(query, val)) {
+          longerCount++;
+        }
+
+        if (isFavourite) {
+          return query === val;
+        } else {
+          return _.startsWith(val, query) && spaceCount === spacesCountIn(query);
+        }
+
       });
 
       let searchQuery = _.maxBy(matching, 'query.length');
 
       if (!searchQuery) {
+
+        if (longerCount) {
+          console.info('Rejecting searchQuery save longerCount:', longerCount);
+          return;
+        }
 
         searchQuery = SearchQuery.createInstance({
           cnt: 0,
@@ -110,6 +128,10 @@
     }
 
     function onFocus(focused) {
+
+      // if (!focused && vm.search) {
+      //   saveQuery(vm.search);
+      // }
 
       vm.focused = focused;
 
