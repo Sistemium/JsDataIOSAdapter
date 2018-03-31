@@ -28,7 +28,9 @@
 
   const LS_KEY = 'catalogueFilter.tabsOpen';
 
-  function catalogueFilterController($scope, Schema, saControllerHelper, $state, localStorageService, saEtc) {
+  function catalogueFilterController($scope, Schema, saControllerHelper,
+                                     $state, localStorageService, saEtc,
+                                     saMedia) {
 
     const {SearchQuery, ArticleTagGroup, ArticleTag} = Schema.models();
 
@@ -91,6 +93,7 @@
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
     vm.watchScope('vm.tabsOpen.queries', (nv, ov) => (ov && !nv || !ov && nv) && setFilters());
+    vm.isPhone = saMedia.xxsWidth || saMedia.xsWidth;
 
     /*
     Functions
@@ -328,7 +331,7 @@
 
     function shouldShowSearchAsFilter() {
       return vm.search && vm.searchText !== vm.search &&
-        (!vm.tabsOpen.queries || !vm.fullScreen);
+        (!vm.tabsOpen.queries || vm.isPhone && !vm.fullScreen);
     }
 
     function setFilters() {
