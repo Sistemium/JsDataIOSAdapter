@@ -199,7 +199,7 @@
         .then(() => setCurrentArticleGroup(null))
     );
 
-    vm.watchScope('vm.search', saEtc.debounce(onSearch, 1000, $scope));
+    vm.watchScope('vm.search', onSearch);
 
     $scope.$watchCollection('vm.filters', (o, n) => {
       if (o && n && (o.length || n.length)) {
