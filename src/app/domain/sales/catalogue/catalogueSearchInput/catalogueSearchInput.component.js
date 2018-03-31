@@ -7,6 +7,7 @@
     bindings: {
       search: '=',
       filters: '=',
+      placeholder: '<',
       searchEnterPress: '=',
       activeTags: '=',
       activeGroup: '=',

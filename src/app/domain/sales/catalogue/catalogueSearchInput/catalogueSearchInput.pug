@@ -5,7 +5,7 @@
 
   input#search-input.form-control(
   type='search'
-  placeholder='Поиск'
+  ng-attr-placeholder='{{vm.placeholder || "Поиск"}}'
   autocomplete='off'
   select-on-focus
   track-focused
