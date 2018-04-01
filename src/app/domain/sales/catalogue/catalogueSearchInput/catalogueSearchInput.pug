@@ -5,13 +5,12 @@
 
   input#search-input.form-control(
   type='search'
-  placeholder='Поиск'
+  ng-attr-placeholder='{{vm.placeholder || "Поиск"}}'
   autocomplete='off'
   select-on-focus
   track-focused
   aria-describedby='search-input'
   ng-model='vm.search'
-  ng-model-options='{debounce: 700}'
   on-enter='vm.onSearchEnter()'
   ng-click='vm.inputClick($event)'
   ng-focus='vm.onFocus(true)'

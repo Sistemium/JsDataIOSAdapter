@@ -23,6 +23,7 @@
     _.assign(vm, {
 
       discountPercent,
+      discountPercentDoc,
       discountPrice,
       click,
       closeClick,
@@ -73,6 +74,10 @@
 
       return -vm.stock.discountPercent();
 
+    }
+
+    function discountPercentDoc() {
+      return -vm.stock.discountPercent(null, 'Doc');
     }
 
   }

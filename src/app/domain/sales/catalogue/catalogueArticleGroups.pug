@@ -9,6 +9,7 @@ font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
   remove-tag-click='vm.removeTagClick'
   price-slider='vm.priceSlider'
   clear-filters='vm.clearFilters'
+  show-search-history='!hideSearchHistory'
   )
 
   .active-filters(ng-if='vm.filters.length || vm.currentArticleGroup || vm.priceSlider.hasFilter()')

@@ -14,7 +14,8 @@
 
       removeTagClick: '=',
       priceSlider: '=',
-      clearFilters: '='
+      clearFilters: '=',
+      showSearchHistory: '='
 
     },
 
@@ -27,7 +28,9 @@
 
   const LS_KEY = 'catalogueFilter.tabsOpen';
 
-  function catalogueFilterController($scope, Schema, saControllerHelper, $state, localStorageService) {
+  function catalogueFilterController($scope, Schema, saControllerHelper,
+                                     $state, localStorageService, saEtc,
+                                     saMedia) {
 
     const {SearchQuery, ArticleTagGroup, ArticleTag} = Schema.models();
 
@@ -72,27 +75,33 @@
 
     });
 
+    const debouncedSearch = saEtc.debounce(setCatalogueSearch, 1000, $scope);
+
     vm.watchScope('vm.tabsOpen', nv => {
       if (nv) {
         localStorageService.set(LS_KEY, nv);
       }
     }, true);
 
-    $scope.$watch('vm.search', nv => {
-
-      if (_.isEmpty(vm.searchQueries)) {
-        return;
+    vm.watchScope('vm.searchText', onSearchChange);
+    vm.watchScope('vm.search', nv => {
+      if (!nv) {
+        vm.searchText = '';
+        setFilters();
       }
-
-      onSearchChange(nv);
-
     });
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
+    vm.watchScope('vm.tabsOpen.queries', (nv, ov) => (ov && !nv || !ov && nv) && setFilters());
+    vm.isPhone = saMedia.xxsWidth || saMedia.xsWidth;
 
     /*
     Functions
      */
+
+    function setCatalogueSearch() {
+      vm.search = _.trim(vm.searchText);
+    }
 
     function onSearchEnter() {
       vm.filters = [];
@@ -100,6 +109,7 @@
       vm.cvm.currentArticleGroup = false;
       vm.priceSlider.min = 0;
       vm.priceSlider.max = vm.priceSlider.options.ceil;
+      setCatalogueSearch();
     }
 
     function activeArticleGroupClick($event) {
@@ -156,16 +166,29 @@
     }
 
     function onSearchFocus(focused) {
+
+      if (!vm.showSearchHistory) {
+        return;
+      }
+
       if (focused) {
         // vm.fullScreen = true;
         vm.tabsOpen.queries = true;
+      } else {
+        // setFilters();
       }
+
     }
 
     function removeTagClick(tag) {
 
       if (tag.pieceVolume) {
         return _.remove(vm.filters, 'pieceVolume');
+      }
+
+      if (tag.isSearch) {
+        vm.search = '';
+        return _.remove(vm.filters, 'isSearch');
       }
 
       tagClick(tag);
@@ -198,9 +221,17 @@
 
     function onSearchChange(nv) {
 
-      nv = (nv || '').toLocaleLowerCase();
+      filterVisibleQueries(_.trim(nv).toLocaleLowerCase());
 
-      const savedQuery = _.find(vm.searchQueries, {query: nv});
+      debouncedSearch();
+
+    }
+
+    function filterVisibleQueries(text) {
+
+      vm.searchQueries = _.filter(vm.allSearchQueries, sq => {
+        return text ? _.startsWith(sq.query, text) : sq.isFavourite;
+      });
 
     }
 
@@ -216,8 +247,8 @@
         orderBy: [['isFavourite', 'DESC'], ['query', 'ASC']]
       };
 
-      vm.rebindAll(SearchQuery, filter, 'vm.searchQueries', () => {
-        vm.search && onSearchChange(vm.search);
+      vm.rebindAll(SearchQuery, filter, 'vm.allSearchQueries', () => {
+        filterVisibleQueries(vm.searchText);
       });
 
       vm.articleTagGroups = ArticleTagGroup.getAll();
@@ -273,9 +304,7 @@
 
     }
 
-    function saveQuery(val) {
-
-      let searchQuery = _.find(vm.searchQueries, {query: val});
+    function saveQuery(searchQuery) {
 
       searchQuery.cnt++;
       searchQuery.lastUsed = moment().toDate();
@@ -291,17 +320,31 @@
         vm.search = null;
       } else {
         vm.fullScreen = false;
-        saveQuery(queryStr);
-        vm.search = queryStr;
+        saveQuery(query);
         onSearchEnter();
+        vm.search = queryStr;
       }
+
+      setFilters();
 
     }
 
+    function shouldShowSearchAsFilter() {
+      return vm.search && vm.searchText !== vm.search &&
+        (!vm.tabsOpen.queries || vm.isPhone && !vm.fullScreen);
+    }
+
     function setFilters() {
+
       let pieceVolume = _.find(vm.filters, 'pieceVolume');
       let filters = _.flattenDeep([_.map(vm.activeTags, groupTags => _.map(groupTags)), pieceVolume]);
+
+      if (shouldShowSearchAsFilter()) {
+        filters.push({label: vm.search, isSearch: true});
+      }
+
       vm.filters = _.filter(filters);
+
     }
 
     function clearFilters() {
@@ -309,6 +352,7 @@
       vm.activeTags = {};
       vm.cvm.currentArticleGroup = false;
       vm.search = '';
+      vm.searchText = '';
       vm.priceSlider.min = 0;
       vm.priceSlider.max = vm.priceSlider.options.ceil;
     }

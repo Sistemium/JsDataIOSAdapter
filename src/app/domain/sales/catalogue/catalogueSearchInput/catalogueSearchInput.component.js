@@ -7,6 +7,7 @@
     bindings: {
       search: '=',
       filters: '=',
+      placeholder: '<',
       searchEnterPress: '=',
       activeTags: '=',
       activeGroup: '=',
@@ -28,11 +29,9 @@
 
   });
 
-  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state) {
+  function catalogueSearchInputController($scope, Schema, saControllerHelper, $state, saEtc) {
 
     const {SearchQuery} = Schema.models();
-
-    const runDebounce = _.debounce(delayedSave, 1000);
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -48,57 +47,80 @@
 
     });
 
-    $scope.$watch('vm.search', nv => {
-
-      runDebounce(nv);
-
-    });
+    $scope.$watch('vm.search', saEtc.debounce(saveQuery, 2000, $scope));
 
     function filterRemovers() {
       // TODO: implement volume filters with a dynamic ArticleTagGroup then remove this stuff from the component
-      return _.filter(vm.filters, 'pieceVolume');
+      return _.filter(vm.filters, f => f.pieceVolume || f.isSearch);
     }
 
     function $onInit() {
 
-      SearchQuery.bindAll({
-        orderBy: 'query'
-      }, $scope, 'vm.searchQueries');
+      // SearchQuery.bindAll({
+      //   orderBy: 'query'
+      // }, $scope, 'vm.searchQueries');
 
     }
 
-    function saveQuery(val = '') {
+    const spacesRe = /[ ]/g;
+
+    function spacesCountIn(val) {
+
+      return _.get(val.match(spacesRe), 'length') || 0;
+
+    }
+
+    function saveQuery(val) {
 
       val = _.trim(val).toLocaleLowerCase();
 
-      let searchQuery = _.find(vm.searchQueries, {query: val});
+      if (!val || val.length < 3 || !vm.stockLength) {
+        return;
+      }
+
+      let spaceCount = spacesCountIn(val);
+
+      let longerCount = 0;
+
+      let matching = _.filter(SearchQuery.getAll(), sq => {
+
+        let {query, isFavourite} = sq;
+
+        if (_.startsWith(query, val)) {
+          longerCount++;
+        }
+
+        if (isFavourite) {
+          return query === val;
+        } else {
+          return _.startsWith(val, query) && spaceCount === spacesCountIn(query);
+        }
+
+      });
+
+      let searchQuery = _.maxBy(matching, 'query.length');
 
       if (!searchQuery) {
 
-        let instance = SearchQuery.createInstance({
-          query: val,
-          lastUsed: moment().toDate(),
-          cnt: 1,
+        if (longerCount) {
+          console.info('Rejecting searchQuery save longerCount:', longerCount);
+          return;
+        }
+
+        searchQuery = SearchQuery.createInstance({
+          cnt: 0,
           isFavourite: false
         });
 
-        SearchQuery.create(instance);
-
-      } else {
-
-        searchQuery.cnt++;
-        searchQuery.lastUsed = moment().toDate();
-        SearchQuery.create(searchQuery);
-
       }
 
-    }
+      _.assign(searchQuery, {
+        query: val,
+        lastUsed: moment().toDate()
+      });
 
-    function delayedSave(nv) {
-
-      if (nv && nv.length > 2 && vm.stockLength) {
-        saveQuery(nv);
-      }
+      searchQuery.cnt++;
+      SearchQuery.create(searchQuery);
 
     }
 
@@ -107,6 +129,10 @@
     }
 
     function onFocus(focused) {
+
+      // if (!focused && vm.search) {
+      //   saveQuery(vm.search);
+      // }
 
       vm.focused = focused;
 
