@@ -38,6 +38,10 @@
         left: 1px;
       }
 
+      &:last-child {
+        margin-right: 3px;
+      }
+
     }
 
     > a.toggle-favourite {
