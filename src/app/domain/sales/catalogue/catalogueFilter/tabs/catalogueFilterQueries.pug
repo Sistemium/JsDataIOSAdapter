@@ -22,7 +22,7 @@ is-open="vm.tabsOpen.queries"
 
     a.toggle-favourite(
     href ng-click='vm.toggleFavouriteClick()'
-    ng-show='vm.searchText && vm.cvm.stock.length'
+    ng-show='vm.searchText.length > 3 && vm.cvm.stock.length'
     )
       i.glyphicon(
       ng-class='vm.currentSearchQuery.isFavourite ? "glyphicon-heart" : "glyphicon-heart-empty"'
