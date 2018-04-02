@@ -20,8 +20,13 @@ is-open="vm.tabsOpen.queries"
     on-search-enter='vm.onSearchEnter()'
     )
 
-    a.toggle-favourite(href ng-click='vm.toggleFavouriteClick()' ng-show='vm.searchText')
-      i.glyphicon(ng-class='vm.currentSearchQuery.isFavourite ? "glyphicon-heart" : "glyphicon-heart-empty"')
+    a.toggle-favourite(
+    href ng-click='vm.toggleFavouriteClick()'
+    ng-show='vm.searchText && vm.cvm.stock.length'
+    )
+      i.glyphicon(
+      ng-class='vm.currentSearchQuery.isFavourite ? "glyphicon-heart" : "glyphicon-heart-empty"'
+      )
 
     button.btn.btn-default#only-shipped-filter(
     ng-if='vm.cvm.saleOrder'

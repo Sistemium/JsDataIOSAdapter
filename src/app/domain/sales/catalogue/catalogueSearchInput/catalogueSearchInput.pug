@@ -26,6 +26,7 @@
     href
     ng-click='vm.removeTagClick(filter)'
     ng-repeat='filter in vm.filterRemovers() track by $index'
+    ng-class='filter.cls'
     )
       i.glyphicon.glyphicon-remove
       span {{ filter.label }}

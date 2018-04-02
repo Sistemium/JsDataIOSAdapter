@@ -94,7 +94,15 @@
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
     vm.watchScope('vm.tabsOpen.queries', (nv, ov) => (ov && !nv || !ov && nv) && setFilters());
-    vm.isPhone = saMedia.xxsWidth || saMedia.xsWidth;
+
+    vm.watchScope(
+      () => saMedia.xxsWidth || saMedia.xsWidth,
+      nv => {
+        vm.isPhone = !!nv;
+        console.warn('vm.isPhone', vm.isPhone);
+      }
+    );
+
 
     /*
     Functions
@@ -425,7 +433,7 @@
       let filters = _.flattenDeep([_.map(vm.activeTags, groupTags => _.map(groupTags)), pieceVolume]);
 
       if (shouldShowSearchAsFilter()) {
-        filters.push({label: vm.search, isSearch: true});
+        filters.push({label: vm.search, isSearch: true, cls: 'search'});
       }
 
       vm.filters = _.filter(filters);
