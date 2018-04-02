@@ -8,6 +8,12 @@
     padding: 0 !important;
   }
 
+  a {
+    &.toggle-favourite, &.toggle-favourite:hover, .glyphicon-heart {
+      color: $red;
+    }
+  }
+
   [uib-accordion-header] {
 
     display: flex;
@@ -23,7 +29,7 @@
       border-radius: $border-radius;
 
       border: none;
-      margin: 3px 3px 3px 0;
+      margin: 3px 0px 3px 0;
       padding: 5px;
 
       color: yellowgreen;
@@ -32,6 +38,11 @@
         left: 1px;
       }
 
+    }
+
+    > a.toggle-favourite {
+      padding: 6px;
+      margin: 3px 3px 3px 0;
     }
 
     > a.toggle-open {
@@ -76,10 +87,6 @@
 
       color: darken($gray-background-color, 20%);
       padding: 10px 7px;
-
-      &.toggle-favourite:hover, .glyphicon-heart {
-        color: $red;
-      }
 
       &.remove:hover {
         color: $primary-color;
