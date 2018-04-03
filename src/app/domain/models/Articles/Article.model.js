@@ -118,7 +118,7 @@
           return {
             box: box,
             pcs: pcs,
-            full: (box || half ? `${box || ''}${half && '½' || ''} к` : '')
+            full: (box || half ? `${box || ''}${half && '½' || ''} К` : '')
             + (box && pcs && !half && ' ' || '')
             + (pcs && !half ? `${pcs} ${this.pcsLabel}` : '')
           }
