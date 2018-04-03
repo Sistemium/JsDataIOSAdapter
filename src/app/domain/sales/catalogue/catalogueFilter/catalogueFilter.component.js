@@ -246,7 +246,7 @@
 
     function filterVisibleQueries(text) {
 
-      // text expected in lowercase
+      text = _.trim(text).toLocaleLowerCase();
 
       let searchQueries = _.filter(vm.allSearchQueries, sq => {
         return sq.isFavourite && (text ? _.startsWith(sq.query, text) : sq.isFavourite);
@@ -410,7 +410,7 @@
       let queryStr = _.get(query, 'query');
 
       if (vm.search === queryStr) {
-        vm.search = null;
+        vm.search = vm.searchText;
       } else {
         vm.fullScreen = false;
         saveQuery(query);
