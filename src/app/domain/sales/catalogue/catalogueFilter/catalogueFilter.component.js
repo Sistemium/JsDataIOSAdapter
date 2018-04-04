@@ -123,6 +123,7 @@
       vm.priceSlider.min = 0;
       vm.priceSlider.max = vm.priceSlider.options.ceil;
       setCatalogueSearch();
+      vm.cvm.articleGroupClick();
     }
 
     function activeArticleGroupClick($event) {

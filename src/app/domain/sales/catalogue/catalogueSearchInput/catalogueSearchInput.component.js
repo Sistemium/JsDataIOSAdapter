@@ -8,7 +8,6 @@
       search: '=',
       filters: '=',
       placeholder: '<',
-      searchEnterPress: '=',
       activeTags: '=',
       activeGroup: '=',
       cvm: '=catalogueVm',
