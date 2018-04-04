@@ -93,7 +93,7 @@
           ctrl.busy = getImageSrc(pic, size)
             .then(src => {
               ctrl.src = src;
-            }, err => {
+            }, () => {
 
               // console.log(err);
               ctrl.cancel();

@@ -129,7 +129,7 @@
 
               if (!SaleOrder.hasChanges(this)) return;
 
-              let nowModified = this.deviceTs;
+              // let nowModified = this.deviceTs;
 
               if (this.deviceTs !== lastModified) {
                 // SaleOrder.revert(this);

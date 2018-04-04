@@ -70,7 +70,7 @@
       $window.localStorage.setItem('authorization', res.accessToken);
     }
 
-    function onStateChangeStart(event, next, nextParams, from) {
+    function onStateChangeStart(event, next, nextParams) {
 
       if (!roles) {
 
