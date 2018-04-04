@@ -133,7 +133,7 @@
         if (!isIos) {
           let maxTs = _.maxBy(data, 'ts');
           meta.lastOffset = `1-${moment(maxTs.ts).format('YYYYMMDDHHmmssSSS')}-0`;
-          console.warn('maxTs', maxTs, meta.lastOffset);
+          // console.warn('maxTs', maxTs, meta.lastOffset);
         }
 
         let {indexByArticleId} = meta;

@@ -95,7 +95,7 @@
               ctrl.src = src;
             }, err => {
 
-              console.log(err);
+              // console.log(err);
               ctrl.cancel();
               toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
 

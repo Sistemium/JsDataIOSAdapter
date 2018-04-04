@@ -45,7 +45,7 @@
         isSending, hasUnsynced
       });
 
-      console.warn(syncerState, state, status);
+      // console.warn(syncerState, state, status);
 
     }
 

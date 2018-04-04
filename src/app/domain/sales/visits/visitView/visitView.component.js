@@ -94,7 +94,7 @@
         return;
       }
 
-      console.warn(event.data);
+      // console.warn(event.data);
 
       let instance = model.inject(event.data);
 

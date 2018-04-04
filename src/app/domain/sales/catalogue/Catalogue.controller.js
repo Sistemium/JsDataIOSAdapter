@@ -989,7 +989,7 @@
 
     function setCurrentArticleGroup(articleGroupOrId) {
 
-      console.log('setCurrentArticleGroup', articleGroupOrId);
+      // console.log('setCurrentArticleGroup', articleGroupOrId);
 
       let articleGroup = articleGroupOrId;
 

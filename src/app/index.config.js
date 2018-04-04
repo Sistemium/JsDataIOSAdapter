@@ -50,7 +50,7 @@
 
     function onAuth(authorization) {
 
-      console.log('Auth', authorization);
+      // console.log('Auth', authorization);
 
       let org = _.get(authorization, 'account.org');
       let isTestOrg = /^(dev|dr50p?)$/.test(org);
@@ -116,7 +116,8 @@
           //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
           if (Auth.isAuthorized(['salesman', 'supervisor'])) {
-            console.info($injector.get('SalesmanAuth'));
+            let sAuth = $injector.get('SalesmanAuth');
+            DEBUG('Injecting SalesmanAuth:', sAuth);
           }
 
           if (lastState) {

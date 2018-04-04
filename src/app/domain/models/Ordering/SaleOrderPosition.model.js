@@ -54,12 +54,12 @@
                 let nowModified = this.deviceTs;
                 if (isDeleted(this.id)) {
                   options.cacheResponse = false;
-                  console.warn('Ignore destroyed SaleOrderPosition', this.id, nowModified, lastModified);
+                  // console.warn('Ignore destroyed SaleOrderPosition', this.id, nowModified, lastModified);
                 } else if (nowModified > lastModified) {
                   options.cacheResponse = false;
-                  console.warn('Ignore server response SaleOrderPosition', nowModified, lastModified);
+                  // console.warn('Ignore server response SaleOrderPosition', nowModified, lastModified);
                 } else {
-                  console.info('SaleOrderPosition last modified:', lastModified, nowModified);
+                  // console.info('SaleOrderPosition last modified:', lastModified, nowModified);
                 }
                 return $q.resolve(attrs);
               }

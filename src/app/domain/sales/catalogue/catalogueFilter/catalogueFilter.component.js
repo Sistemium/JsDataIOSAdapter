@@ -99,7 +99,7 @@
       () => saMedia.xxsWidth || saMedia.xsWidth,
       nv => {
         vm.isPhone = !!nv;
-        console.warn('vm.isPhone', vm.isPhone);
+        // console.warn('vm.isPhone', vm.isPhone);
       }
     );
 

@@ -107,7 +107,7 @@
 
       if (needRoles && !event[needRoles]) {
         event.preventDefault();
-        console.info(`Should be prevented state change to ${next.name} from ${from.name} by ${needRoles}`);
+        // console.info(`Should be prevented state change to ${next.name} from ${from.name} by ${needRoles}`);
       }
 
     }

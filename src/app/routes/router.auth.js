@@ -14,7 +14,7 @@
           event.preventDefault();
         }
 
-        console.error('routerAuth:', next, nextParams, needRoles);
+        // console.error('routerAuth:', next, nextParams, needRoles);
 
       }));
 

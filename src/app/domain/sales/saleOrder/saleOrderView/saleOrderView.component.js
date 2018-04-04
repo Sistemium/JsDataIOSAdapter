@@ -83,7 +83,7 @@
 
     function onDestroySaleOrder(model, saleOrder) {
 
-      console.warn('onDestroySaleOrder', saleOrder);
+      // console.warn('onDestroySaleOrder', saleOrder);
 
       let {date, id} = saleOrder;
 
@@ -112,7 +112,7 @@
       let saleOrder = SaleOrder.get(data.id);
 
       if (!_.matches(SalesmanAuth.makeFilter())(data)) {
-        console.info('ignore saleOrder', data);
+        // console.info('ignore saleOrder', data);
         return;
       } else if (vm.currentWorkflow && vm.currentWorkflow !== data.processing) {
         return onDestroySaleOrder({}, data);

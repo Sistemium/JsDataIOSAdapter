@@ -133,7 +133,8 @@
 
               if (this.deviceTs !== lastModified) {
                 // SaleOrder.revert(this);
-                return console.warn('Ignore SaleOrder update after update position', nowModified, lastModified);
+                // console.warn('Ignore SaleOrder update after update position', nowModified, lastModified);
+                return;
               }
 
               let changedKeys = _.keys(_.get(SaleOrder.changes(this), 'changed'));
@@ -142,7 +143,7 @@
 
               // only deviceTs changed
               if (!changedKeys.length) {
-                return console.info('SaleOrder has changes but no changedKeys');
+                return; // console.info('SaleOrder has changes but no changedKeys');
               }
 
               return SaleOrder.create(this, {
@@ -150,7 +151,7 @@
                   let nowModified = this.deviceTs;
                   if (nowModified >= lastModified) {
                     options.cacheResponse = false;
-                    console.warn('Ignore server response SaleOrder', nowModified, lastModified);
+                    // console.warn('Ignore server response SaleOrder', nowModified, lastModified);
                   }
                   return $q.resolve(attrs);
                 }

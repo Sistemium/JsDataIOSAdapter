@@ -103,7 +103,7 @@
       if (!searchQuery) {
 
         if (longerCount) {
-          console.info('Rejecting searchQuery save longerCount:', longerCount);
+          // console.info('Rejecting searchQuery save longerCount:', longerCount);
           return;
         }
 

@@ -196,7 +196,7 @@
       function onKeyDown(event) {
 
         if (!$scope.opened) {
-          return console.error('!scope.opened');
+          return; // console.error('!scope.opened');
         }
 
         let which = event.which;

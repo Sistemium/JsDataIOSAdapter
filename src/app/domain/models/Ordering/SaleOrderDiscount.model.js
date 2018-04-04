@@ -51,9 +51,9 @@
       ];
 
       return $q.all(_.map(res, item => SaleOrderDiscount.destroy(item.id)))
-        .then(res => {
-          console.warn('ensureUnique destroyed', res);
-        })
+        // .then(res => {
+        //   console.warn('ensureUnique destroyed', res);
+        // })
         .catch(err => {
           console.warn('ensureUnique destroyed fail', err);
         });
@@ -77,7 +77,7 @@
     function updateSaleOrder(saleOrder, scopePath, discount, discountDoc = discount) {
 
       if (_.isUndefined(discount)) {
-        console.warn('undefined discount', scopePath);
+        // console.warn('undefined discount', scopePath);
         return $q.reject('undefined discount');
       }
 
