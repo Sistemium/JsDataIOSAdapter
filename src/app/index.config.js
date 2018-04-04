@@ -115,7 +115,7 @@
 
           //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
-          if (Auth.isAuthorized(['salesman', 'supervisor'])) {
+          if (Auth.isAuthorized(['salesman', 'supervisor', 'outlet'])) {
             let sAuth = $injector.get('SalesmanAuth');
             DEBUG('Injecting SalesmanAuth:', sAuth);
           }
