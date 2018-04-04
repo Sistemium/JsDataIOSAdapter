@@ -260,7 +260,7 @@
 
       let res = [];
 
-      _.each(words()[text[0]], query => {
+      _.each(_.get(words(), text[0]), query => {
 
         if (!_.startsWith(query, text)) {
           return;
