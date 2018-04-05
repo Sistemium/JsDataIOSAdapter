@@ -120,7 +120,7 @@
         let {volume} = vm;
 
         if (!position) {
-          console.error('no position');
+          // console.error('no position');
           return;
         }
 
@@ -162,7 +162,7 @@
 
         if (!position) {
 
-          console.error('no position');
+          // console.error('no position');
 
           return;
         }

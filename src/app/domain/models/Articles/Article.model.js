@@ -18,7 +18,7 @@
 
     let barCodeLoader = new RelationLoader('barCodes');
 
-    Schema.register({
+    const Article = Schema.register({
 
       name: 'Article',
 
@@ -32,10 +32,10 @@
         },
 
         hasOne: {
-          Stock: {
-            localField: 'stock',
-            foreignKey: 'articleId'
-          },
+          // Stock: {
+          //   localField: 'stock',
+          //   foreignKey: 'articleId'
+          // },
           ArticlePicture: {
             localField: 'avatar',
             localKey: 'avatarPictureId'
@@ -43,14 +43,14 @@
         },
 
         hasMany: {
-          StockBatch: {
-            localField: 'stockBatches',
-            foreignKey: 'articleId'
-          },
-          SaleOrderPosition: {
-            localField: 'saleOrders',
-            foreignKey: 'articleId'
-          },
+          // StockBatch: {
+          //   localField: 'stockBatches',
+          //   foreignKey: 'articleId'
+          // },
+          // SaleOrderPosition: {
+          //   localField: 'saleOrders',
+          //   foreignKey: 'articleId'
+          // },
           ArticleBarCode: {
             localField: 'barCodes',
             foreignKey: 'articleId'
@@ -63,6 +63,10 @@
 
       instanceEvents: false,
       notify: false,
+
+      meta: {
+        words
+      },
 
       computed: {
 
@@ -114,7 +118,7 @@
           return {
             box: box,
             pcs: pcs,
-            full: (box || half ? `${box || ''}${half && '½' || ''} к` : '')
+            full: (box || half ? `${box || ''}${half && '½' || ''} К` : '')
             + (box && pcs && !half && ' ' || '')
             + (pcs && !half ? `${pcs} ${this.pcsLabel}` : '')
           }
@@ -125,6 +129,11 @@
           return barCodeLoader.lazyItems(this);
         }
 
+      },
+
+      aflterFindAll: (options, data) => {
+        clearCaches();
+        return data;
       }
 
     });
@@ -133,7 +142,7 @@
     function sortNameFn(articleGroupId, firstName, secondName, pieceVolume) {
       let {ArticleGroup} = Schema.models();
       let groupName = articleGroupId && _.trim(_.result(ArticleGroup.get(articleGroupId), 'ancestorNames'));
-      return `${groupName||''}/${firstName} ${secondName} ${pieceVolume} ${this.name}`.toLocaleLowerCase();
+      return `${groupName || ''}/${firstName} ${secondName} ${pieceVolume} ${this.name}`.toLocaleLowerCase();
     }
 
     function secondNameFn(primaryTag) {
@@ -254,6 +263,40 @@
       }
 
       return res;
+
+    }
+
+    let wordsCache = false;
+
+    function clearCaches() {
+      wordsCache = false;
+    }
+
+    function words() {
+
+      if (wordsCache) {
+        return wordsCache;
+      }
+
+      let wordsArray = getWords();
+
+      if (!wordsArray.length) {
+        return;
+      }
+
+      return (wordsCache = _.groupBy(wordsArray, _.first));
+
+    }
+
+    function getWords() {
+
+      let pre = _.map(Article.getAll(), article => _.words(article.name));
+
+      pre = _.filter(_.flatten(pre), word => word.length > 2 && /[A-ZА-Я]/.test(word[0]));
+
+      pre = _.map(pre, word => word.toLocaleLowerCase());
+
+      return _.orderBy(_.uniq(pre));
 
     }
 

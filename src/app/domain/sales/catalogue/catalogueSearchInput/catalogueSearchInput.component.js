@@ -8,7 +8,6 @@
       search: '=',
       filters: '=',
       placeholder: '<',
-      searchEnterPress: '=',
       activeTags: '=',
       activeGroup: '=',
       cvm: '=catalogueVm',
@@ -16,6 +15,7 @@
       inputClick: '&',
       focused: '=?',
       labelClick: '&',
+      saveQueries: '<',
 
       stockLength: '<',
       onSearchEnter: '&'
@@ -47,18 +47,17 @@
 
     });
 
-    $scope.$watch('vm.search', saEtc.debounce(saveQuery, 2000, $scope));
-
     function filterRemovers() {
-      // TODO: implement volume filters with a dynamic ArticleTagGroup then remove this stuff from the component
+      // TODO: implement volume filters with a dynamic ArticleTagGroup
+      // then remove this stuff from the component
       return _.filter(vm.filters, f => f.pieceVolume || f.isSearch);
     }
 
     function $onInit() {
 
-      // SearchQuery.bindAll({
-      //   orderBy: 'query'
-      // }, $scope, 'vm.searchQueries');
+      if (vm.saveQueries) {
+        $scope.$watch('vm.search', saEtc.debounce(saveQuery, 2000, $scope));
+      }
 
     }
 
@@ -103,7 +102,7 @@
       if (!searchQuery) {
 
         if (longerCount) {
-          console.info('Rejecting searchQuery save longerCount:', longerCount);
+          // console.info('Rejecting searchQuery save longerCount:', longerCount);
           return;
         }
 
@@ -129,10 +128,6 @@
     }
 
     function onFocus(focused) {
-
-      // if (!focused && vm.search) {
-      //   saveQuery(vm.search);
-      // }
 
       vm.focused = focused;
 

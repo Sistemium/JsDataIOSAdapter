@@ -28,7 +28,8 @@
     "ng-file-upload": "^12.2.13",
     "angular-pinch-zoom": "Sistemium/angular-pinch-zoom",
     "js-data-localstorage": "^2.3.2",
-    "angularjs-slider": "^6.5.0"
+    "angularjs-slider": "^6.5.0",
+    "socket.io-client": "^2.1.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.3"
@@ -57,6 +58,11 @@
     "angular-i18n": {
       "main": [
         "angular-locale_ru.js"
+      ]
+    },
+    "socket.io-client": {
+      "main": [
+        "dist/socket.io.js"
       ]
     }
   }

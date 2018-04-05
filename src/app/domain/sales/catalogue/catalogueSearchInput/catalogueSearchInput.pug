@@ -11,7 +11,7 @@
   track-focused
   aria-describedby='search-input'
   ng-model='vm.search'
-  on-enter='vm.onSearchEnter()'
+  sa-enter-key='vm.onSearchEnter()'
   ng-click='vm.inputClick($event)'
   ng-focus='vm.onFocus(true)'
   ng-blur='vm.onFocus(false)'
@@ -26,6 +26,7 @@
     href
     ng-click='vm.removeTagClick(filter)'
     ng-repeat='filter in vm.filterRemovers() track by $index'
+    ng-class='filter.cls'
     )
       i.glyphicon.glyphicon-remove
       span {{ filter.label }}

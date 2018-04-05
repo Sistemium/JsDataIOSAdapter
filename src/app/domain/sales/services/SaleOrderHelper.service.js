@@ -58,7 +58,7 @@
                 return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrderPosition with old deviceTs');
               }
             } else if (SaleOrderPosition.meta.isDeleted(data.id)) {
-              console.warn('SaleOrderHelper ignore deleted position', data.id);
+              // console.warn('SaleOrderHelper ignore deleted position', data.id);
               return;
             }
 

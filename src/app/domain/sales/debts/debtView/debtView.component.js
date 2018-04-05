@@ -83,7 +83,7 @@
       let elem = getScrollerElement();
 
       if (!elem) {
-        console.warn('no scroller element');
+        // console.warn('no scroller element');
         return;
       }
 

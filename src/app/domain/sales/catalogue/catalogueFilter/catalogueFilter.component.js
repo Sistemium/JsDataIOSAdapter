@@ -32,7 +32,7 @@
                                      $state, localStorageService, saEtc,
                                      saMedia) {
 
-    const {SearchQuery, ArticleTagGroup, ArticleTag} = Schema.models();
+    const {SearchQuery, Article, ArticleTagGroup, ArticleTag} = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -53,6 +53,7 @@
       searchInputToggleOpenClick,
       onSearchEnter,
       needShowCurrentArticleGroup,
+      toggleFavouriteClick,
 
       search: $state.params.q || '',
       tabsOpen: localStorageService.get(LS_KEY) || {categories: true},
@@ -93,11 +94,23 @@
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
     vm.watchScope('vm.tabsOpen.queries', (nv, ov) => (ov && !nv || !ov && nv) && setFilters());
-    vm.isPhone = saMedia.xxsWidth || saMedia.xsWidth;
+
+    vm.watchScope(
+      () => saMedia.xxsWidth || saMedia.xsWidth,
+      nv => {
+        vm.isPhone = !!nv;
+        // console.warn('vm.isPhone', vm.isPhone);
+      }
+    );
+
 
     /*
     Functions
      */
+
+    function words() {
+      return Article.meta.words();
+    }
 
     function setCatalogueSearch() {
       vm.search = _.trim(vm.searchText);
@@ -110,6 +123,7 @@
       vm.priceSlider.min = 0;
       vm.priceSlider.max = vm.priceSlider.options.ceil;
       setCatalogueSearch();
+      vm.cvm.articleGroupClick();
     }
 
     function activeArticleGroupClick($event) {
@@ -221,7 +235,11 @@
 
     function onSearchChange(nv) {
 
-      filterVisibleQueries(_.trim(nv).toLocaleLowerCase());
+      nv = _.trim(nv).toLocaleLowerCase();
+
+      filterVisibleQueries(nv);
+
+      vm.currentSearchQuery = getSearchQuery(nv);
 
       debouncedSearch();
 
@@ -229,9 +247,43 @@
 
     function filterVisibleQueries(text) {
 
-      vm.searchQueries = _.filter(vm.allSearchQueries, sq => {
-        return text ? _.startsWith(sq.query, text) : sq.isFavourite;
+      text = _.trim(text).toLocaleLowerCase();
+
+      let searchQueries = _.filter(vm.allSearchQueries, sq => {
+        return sq.isFavourite && (text ? _.startsWith(sq.query, text) : sq.isFavourite);
       });
+
+      if (!text) {
+        vm.searchQueries = searchQueries;
+        return;
+      }
+
+      let res = [];
+
+      _.each(_.get(words(), text[0]), query => {
+
+        if (!_.startsWith(query, text)) {
+          return;
+        }
+
+        let existing = _.find(searchQueries, {query});
+
+        if (existing) {
+          if (existing.isFavourite) {
+            return;
+          }
+          _.remove(searchQueries, existing);
+        } else {
+          existing = {query};
+        }
+
+        res.push(existing);
+
+      });
+
+      Array.prototype.push.apply(searchQueries, res);
+
+      vm.searchQueries = searchQueries;
 
     }
 
@@ -257,8 +309,48 @@
 
     function favouriteQueryClick(query) {
 
+      query = query.id ? query : getSearchQuery(query.query);
+
       query.isFavourite = _.get(query, 'isFavourite') !== true;
-      SearchQuery.save(query);
+      SearchQuery.create(query);
+
+    }
+
+    function getSearchQuery(searchText) {
+
+      let query = searchText;
+      let searchQuery = _.find(SearchQuery.getAll(), {query});
+
+      if (!searchQuery) {
+        searchQuery = SearchQuery.createInstance({
+          cnt: 0,
+          query,
+          lastUsed: moment().toDate()
+        });
+      }
+
+      return searchQuery;
+
+    }
+
+    function toggleFavouriteClick() {
+
+      let query = vm.searchText;
+      let searchQuery = _.find(SearchQuery.getAll(), {query});
+
+      if (!searchQuery) {
+        searchQuery = {
+          cnt: 0,
+          query
+        }
+      }
+
+      searchQuery.isFavourite = !searchQuery.isFavourite;
+      searchQuery.lastUsed = moment().toDate();
+
+      vm.currentSearchQuery = searchQuery;
+
+      SearchQuery.create(searchQuery);
 
     }
 
@@ -270,7 +362,9 @@
         vm.search = null;
       }
 
-      SearchQuery.destroy(searchQuery);
+      if (searchQuery.id) {
+        SearchQuery.destroy(searchQuery);
+      }
 
     }
 
@@ -306,7 +400,7 @@
 
     function saveQuery(searchQuery) {
 
-      searchQuery.cnt++;
+      searchQuery.cnt = (searchQuery.cnt || 0) + 1;
       searchQuery.lastUsed = moment().toDate();
       SearchQuery.create(searchQuery);
 
@@ -317,7 +411,7 @@
       let queryStr = _.get(query, 'query');
 
       if (vm.search === queryStr) {
-        vm.search = null;
+        vm.search = vm.searchText;
       } else {
         vm.fullScreen = false;
         saveQuery(query);
@@ -340,7 +434,7 @@
       let filters = _.flattenDeep([_.map(vm.activeTags, groupTags => _.map(groupTags)), pieceVolume]);
 
       if (shouldShowSearchAsFilter()) {
-        filters.push({label: vm.search, isSearch: true});
+        filters.push({label: vm.search, isSearch: true, cls: 'search'});
       }
 
       vm.filters = _.filter(filters);

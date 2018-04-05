@@ -30,6 +30,10 @@
           display: none;
         }
 
+        a.toggle-favourite {
+          display: none;
+        }
+
       }
 
       &.full-screen {
@@ -52,6 +56,11 @@
         label {
           color: $primary-color;
         }
+
+        .filters .filter.search {
+          display: none;
+        }
+
       }
     }
 

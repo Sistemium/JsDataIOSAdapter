@@ -85,7 +85,7 @@
       }
 
       if (redirectTo) {
-        console.info('SalesmanAuth redirect to:', redirectTo.state, redirectTo.params);
+        // console.info('SalesmanAuth redirect to:', redirectTo.state, redirectTo.params);
         $state.go(redirectTo.state, redirectTo.params);
         redirectTo = false;
       }

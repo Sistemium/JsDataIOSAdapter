@@ -50,7 +50,7 @@
 
     function onAuth(authorization) {
 
-      console.log('Auth', authorization);
+      // console.log('Auth', authorization);
 
       let org = _.get(authorization, 'account.org');
       let isTestOrg = /^(dev|dr50p?)$/.test(org);
@@ -59,7 +59,7 @@
         // InitService.localDevMode ? {} :
         {
           url: {
-            socket: isTestOrg ? 'https://socket2.sistemium.com' : 'https://socket.sistemium.com'
+            socket: isTestOrg ? 'https://socket-v2.sistemium.com' : 'https://socket-v2.sistemium.com'
           }
         }
       ;
@@ -115,8 +115,9 @@
 
           //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
-          if (Auth.isAuthorized(['salesman', 'supervisor'])) {
-            console.info($injector.get('SalesmanAuth'));
+          if (Auth.isAuthorized(['salesman', 'supervisor', 'outlet'])) {
+            let sAuth = $injector.get('SalesmanAuth');
+            DEBUG('Injecting SalesmanAuth:', sAuth);
           }
 
           if (lastState) {
