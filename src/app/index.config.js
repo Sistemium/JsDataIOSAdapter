@@ -59,7 +59,7 @@
         // InitService.localDevMode ? {} :
         {
           url: {
-            socket: isTestOrg ? 'https://socket2.sistemium.com' : 'https://socket.sistemium.com'
+            socket: isTestOrg ? 'https://socket-v2.sistemium.com' : 'https://socket-v2.sistemium.com'
           }
         }
       ;
