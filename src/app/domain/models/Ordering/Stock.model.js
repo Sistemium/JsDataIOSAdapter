@@ -130,6 +130,10 @@
 
         const {Article} = Schema.models();
 
+        if (!data.length) {
+          return;
+        }
+
         if (!isIos) {
           let maxTs = _.maxBy(data, 'ts');
           meta.lastOffset = `1-${moment(maxTs.ts).format('YYYYMMDDHHmmssSSS')}-0`;
