@@ -49,7 +49,7 @@
      */
 
     function rowHeight() {
-      return isWideScreen() ? 40 : 79;
+      return isWideScreen() ? 46 : 79;
     }
 
     function onSalesmanChange(salesman) {

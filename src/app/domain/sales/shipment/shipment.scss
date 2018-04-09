@@ -2,7 +2,7 @@
 @import "alerts";
 
 
-.shipmentDetails {
+.shipment-details {
 
   .alert {
     @extend %header-alert;
@@ -40,8 +40,8 @@
   $font-weight-bold: 600;
   $font-weight-normal: normal;
 
-  $xs-height: 40px;
-  $gt-xs-height: 79px;
+  $gt-xs-height: 46px;
+  $xs-height: 79px;
 
   // to show cg-busy
   min-height: 50px;
@@ -73,10 +73,10 @@
 
   .repeated-item {
 
-    height: $xs-height;
+    height: $gt-xs-height;
 
     @include responsive-only(lt-sm) {
-      height: $gt-xs-height;
+      height: $xs-height;
     }
 
     .date {
@@ -105,10 +105,14 @@
 
     .shipment {
 
+      cursor: pointer;
+
       border-bottom: 1px solid $gray-border-color;
       display: flex;
       height: inherit;
       position: relative;
+
+      padding: 3px 0;
 
       @include responsive-only(lt-sm) {
         display: flex;
@@ -160,6 +164,9 @@
       .salesman {
         @include responsive-only(lt-sm) {
           display: none;
+        }
+        @include responsive-only(gt-xs) {
+          max-width: $width-salesman;
         }
       }
 
