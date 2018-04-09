@@ -1,10 +1,9 @@
-.shipmentDetails(cg-busy='vm.busy')
+.shipment-details(cg-busy='vm.busy')
 
   .alert.alert-default
 
     h4.popovers.spaced
-      span.popover-trigger(
-      )
+      span.popover-trigger
         .outlet
           .name
             span(ng-if='vm.shipment.outlet.id') {{ vm.shipment.outlet.name }}
@@ -26,7 +25,7 @@
         strong {{ vm.shipment.totalCost() | number: 2 }}
         span ₽
 
-  .animate-show#scroll-main(
+  .animate-show.scroll-y(
   resize resize-offset-top='5' resize-property='height'
   ng-show='!alertExpanded'
   )
