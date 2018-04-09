@@ -4,7 +4,8 @@
     .component('shipmentDetails', {
 
       bindings: {
-        shipmentId: '<'
+        shipmentId: '<',
+        offsetTop: '<'
       },
 
       templateUrl: 'app/domain/sales/shipment/shipmentDetails/shipmentDetails.html',
@@ -41,6 +42,8 @@
         vm.setBusy(getData(vm.shipmentId));
       }
 
+      vm.offsetTop = vm.offsetTop || 5;
+
     }
 
     /*
@@ -55,8 +58,13 @@
 
       return Shipment.find(shipmentId, {bypassCache})
         .then(item => item.DSLoadRelations('ShipmentPosition', {bypassCache}))
-        .then(item => $q.all(_.map(item.positions, position => position.DSLoadRelations())))
-        .catch(e => console.error(e));
+        .then(item => $q.all(_.map(item.positions, position => {
+          return position.DSLoadRelations()
+            .catch(_.noop);
+        })))
+        .catch(e => {
+          vm.error = e;
+        });
     }
 
   }

@@ -2,6 +2,21 @@
 @import "alerts";
 
 
+.shipment-modal {
+
+  button.close-modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px 9px;
+    z-index: 3;
+    font-size: 120%;
+    //color: $primary-color;
+  }
+
+}
+
+
 .shipment-details {
 
   .alert {
@@ -12,7 +27,12 @@
       color: $black;
     }
 
+    &.alert-warning {
+      margin-bottom: 0;
+    }
+
   }
+
 
   table {
     @include responsive-only(xxs) {
