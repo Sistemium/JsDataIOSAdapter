@@ -21,8 +21,8 @@
           children: [{
             url: '/:id',
             name: 'item',
-            templateUrl: 'app/domain/sales/shipment/ShipmentDetails.html',
-            controller: 'ShipmentDetailsController as vm'
+            template: '<shipment-details shipment-id="vm.params.id"></shipment-details>',
+            controller: 'StateController as vm'
           }]
 
         });
