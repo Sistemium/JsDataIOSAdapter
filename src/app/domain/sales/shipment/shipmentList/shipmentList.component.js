@@ -1,5 +1,17 @@
 (function (module) {
 
+  module.component('shipmentList', {
+
+    bindings: {
+      filter: '<'
+    },
+
+    templateUrl: 'app/domain/sales/shipment/shipmentList/shipmentList.html',
+    controller: ShipmentListController,
+    controllerAs: 'vm'
+
+  });
+
   function ShipmentListController(Schema, Helpers, $scope, SalesmanAuth, $state, saMedia) {
 
     const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
@@ -187,7 +199,5 @@
     }
 
   }
-
-  module.controller('ShipmentListController', ShipmentListController);
 
 })(angular.module('Sales'));

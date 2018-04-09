@@ -10,8 +10,7 @@
 
           url: '/shipment',
           name: 'sales.shipmentList',
-          templateUrl: 'app/domain/sales/shipment/ShipmentList.html',
-          controller: 'ShipmentListController as vm',
+          template: '<shipment-list></shipment-list>',
 
           data: {
             title: 'Отгрузки',
