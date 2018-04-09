@@ -18,11 +18,21 @@
   function outletNavigationBar($timeout, $scope, $window, saEtc, DomainOption) {
 
     const vm = _.assign(this, {
-      tabs: {miscellaneous: 'О точке', saleOrder: 'Заказы', debt: 'Долги', visit: 'Визиты'},
+
+      tabs: {
+        miscellaneous: 'О точке',
+        saleOrder: 'Заказы',
+        shipments: 'Отгрузки',
+        debt: 'Долги',
+        visit: 'Визиты'
+      },
+
       $onInit,
       moveTo,
+
       showLeft: null,
       showRight: null
+
     });
 
     if (DomainOption.visitsDisabled()) {
@@ -74,13 +84,6 @@
       });
 
     }
-
-    //function moveTo() {
-    //  let activeTab = angular.element(document.getElementsByClassName('active-tab'))[0];
-    //  let tabBar = angular.element(document.getElementsByClassName('tab-bar'))[0];
-    //
-    //  tabBar.scrollLeft = activeTab.dataset.key * activeTab.clientWidth + (activeTab.dataset.key > 0 ? 1 : 0) + (vm.showLeft || vm.showRight ? chevronWidth : 0);
-    //}
 
   }
 

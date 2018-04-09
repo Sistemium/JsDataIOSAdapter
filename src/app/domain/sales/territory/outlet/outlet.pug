@@ -58,6 +58,9 @@
       ng-if='vm.saleOrderFilter'
       )
 
+    .outlet-shipments(ng-switch-when='shipments')
+      shipment-list(filter='vm.visitFilter')
+
     .outlet-debts(ng-switch-when='debt')
       debt-view-by-outlet(
       custom-filter='vm.debtFilter'
