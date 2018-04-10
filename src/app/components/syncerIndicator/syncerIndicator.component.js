@@ -13,11 +13,7 @@
 
   });
 
-<<<<<<< HEAD
-  function syncerIndicatorController($scope, SyncerInfo, toastr, $window, IOS) {
-=======
-  function syncerIndicatorController($scope, SyncerInfo, toastr, $window, saEtc) {
->>>>>>> origin/catalogueSearchV2
+  function syncerIndicatorController($scope, SyncerInfo, toastr, $window, IOS, saEtc) {
 
     const vm = _.assign(this, {
       $onInit,
