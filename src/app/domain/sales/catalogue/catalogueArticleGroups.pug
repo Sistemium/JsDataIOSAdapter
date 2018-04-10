@@ -1,0 +1,39 @@
+font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
+
+  catalogue-filter(
+  search='vm.search'
+  filters='vm.filters'
+  active-tags='vm.activeTags'
+  active-group='vm.activeGroup'
+  catalogue-vm='vm'
+  remove-tag-click='vm.removeTagClick'
+  price-slider='vm.priceSlider'
+  clear-filters='vm.clearFilters'
+  show-search-history='!hideSearchHistory'
+  )
+
+  .active-filters(ng-if='vm.filters.length || vm.currentArticleGroup || vm.priceSlider.hasFilter()')
+
+    a.current-article-group(
+    href ng-click='vm.articleGroupClick()'
+    ng-if='vm.currentArticleGroup'
+    )
+      | {{ vm.currentArticleGroup.displayName }}
+
+    a.filter(
+    ng-repeat='filter in vm.filters track by $index'
+    href ng-click='vm.removeTagClick(filter)'
+    )
+      | {{ filter.label }}
+
+    a.price-min(
+    ng-if='vm.priceSlider.min'
+    href ng-click='vm.priceSlider.min = 0'
+    )
+      | Цена от {{ vm.priceSlider.min }} ₽
+
+    a.price-max(
+    ng-if='vm.priceSlider.max < vm.priceSlider.options.ceil'
+    href ng-click='vm.priceSlider.max = vm.priceSlider.options.ceil'
+    )
+      | Цена до {{ vm.priceSlider.max }} ₽

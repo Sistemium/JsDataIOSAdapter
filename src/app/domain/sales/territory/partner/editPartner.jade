@@ -1,0 +1,75 @@
+hr
+
+h3 Редактирование контрагента
+
+hr
+
+section.row-fluid(cg-busy='{promise: vm.busy, message: vm.busyMessage}')
+  form.form-horizontal(
+  name="editPartnerForm"
+  novalidate
+  )
+    .form-group
+      label.col-sm-4.control-label(for="inputName") Полное название
+      .col-sm-8
+        p.form-control-static
+          span {{ vm.partner.name }}
+    .form-group
+      label.col-sm-4.control-label(for="inputName")
+        | Название
+      .col-sm-8
+        input#inputName.form-control(
+        ng-model='vm.shortName'
+        ng-change='vm.onShortNameChange()'
+        sa-auto-focus='false'
+        type="text"
+        name="name"
+        ng-required='true'
+        placeholder="Название без кавычек"
+        autocomplete="off"
+        )
+    .form-group
+      label.col-sm-4.control-label(for="inputLegalForm") Форма собственности
+      .col-sm-8
+        stm-typeahead(
+        input-required='true'
+        input-model='vm.legalForm'
+        selected-model='vm.legalForm'
+        input-id='inputLegalForm'
+        input-class='form-control'
+        placeholder='Нажмите для выбора'
+        placeholder-focused='Выберите из предложенного'
+        rows-data='vm.legalForms'
+        rows-filters='filter:{name:$viewValue}'
+        row-as='name'
+        on-select-item-fn='vm.onLegalFormChange'
+        )
+    .form-group(
+    ng-class="editPartnerForm.inn.$dirty && editPartnerForm.inn.$invalid && 'has-error'"
+    )
+      label.col-sm-4.control-label(for="inputINN") ИНН
+      .col-sm-8
+        input#inputINN.form-control(
+        inn-input
+        type="text"
+        name="inn"
+        ng-pattern='innPattern'
+        placeholder='10 или 12 цифр (если известен)'
+        ng-model="vm.partner.inn"
+        autocomplete="off"
+        )
+        div(
+        class="help-block"
+        ng-if="editPartnerForm.inn.$dirty && (editPartnerForm.inn.$error.pattern || editPartnerForm.inn.$error.innInput)"
+        ng-messages="editPartnerForm.inn.$error"
+        )
+          p(ng-message="pattern") ИНН: 10 или 12 цифр
+          p(ng-message="innInput") Неверная контрольная сумма
+    hr
+    .form-group.text-right
+      sab-confirm-buttons.col-sm-4.col-sm-offset-8.col-xs-12(
+      submit-disable='!vm.partnerDataWasChanged() || editPartnerForm.$invalid'
+      form='editPartnerForm'
+      on-cancel='vm.cancel'
+      on-submit='vm.submit'
+      )

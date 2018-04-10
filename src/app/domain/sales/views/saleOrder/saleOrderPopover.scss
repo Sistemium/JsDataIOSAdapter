@@ -1,0 +1,40 @@
+@import "variables";
+
+.sale-order-popover {
+
+  .option {
+
+    .name {
+      @extend %flex-center;
+      .flex-1 {
+        @extend .ellipsis;
+      }
+    }
+
+    .address {
+      @extend .ellipsis;
+    }
+
+  }
+
+  .new-item {
+
+    text-align: right;
+
+    .btn {
+      display: block;
+      padding: 4px 8px;
+      width: 100%;
+      span {
+        top: -2px;
+        position: relative;
+        display: inline-block;
+      }
+      i {
+        font-size: 19px;
+      }
+    }
+
+  }
+
+}

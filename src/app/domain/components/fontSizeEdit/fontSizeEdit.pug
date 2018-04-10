@@ -1,8 +1,12 @@
-.font-size-edit-buttons(ng-class='vm.appendTo' ng-if='vm.isShown')
-  button.btn.btn-secondary(type="button" ng-click='vm.incrementClick()')
-    i.glyphicon.glyphicon-plus
-  button.btn.btn-secondary(type="button" ng-click='vm.decrementClick()')
-    i.glyphicon.glyphicon-minus
+.font-size-edit
 
-ng-transclude(ng-style='{"font-size": vm.fontSize + "px"}' ng-class='{isShownSettings: vm.isShown}')
+  .font-size-edit-buttons(ng-class='vm.appendTo' ng-if='vm.isShown')
+    button.btn.btn-secondary(type="button" ng-click='vm.incrementClick()')
+      i.glyphicon.glyphicon-plus
+    button.btn.btn-secondary(type="button" ng-click='vm.decrementClick()')
+      i.glyphicon.glyphicon-minus
 
+  ng-transclude(
+  ng-style='{"font-size": vm.fontSize + "px"}'
+  ng-class='[{isShownSettings: vm.isShown}, "font-size-" + vm.fontSize]'
+  )

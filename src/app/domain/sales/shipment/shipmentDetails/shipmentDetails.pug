@@ -1,0 +1,55 @@
+.shipment-details(cg-busy='vm.busy')
+
+  .alert.alert-warning(ng-if='vm.error')
+    | Информация об отгрузке недоступна
+
+  .alert.alert-default(ng-if='vm.shipment')
+
+    h4.popovers.spaced
+      span.popover-trigger
+        .outlet
+          .name
+            span(ng-if='vm.shipment.outlet.id') {{ vm.shipment.outlet.name }}
+            span.animate-show.spaced
+              small {{ vm.shipment.ndoc }}
+              small на
+              small.strong {{ vm.shipment.date | amDateFormat:"DD.MM.YYYY" }}
+          .address
+            small {{vm.shipment.outlet.address}}
+          .comment
+            small {{ vm.shipment.commentText }}
+
+    .totals
+
+      .info
+        strong {{ vm.shipment.positions.length | number: 0 }}
+        span {{ vm.shipment.positionsCountRu() }}
+        span на сумму
+        strong {{ vm.shipment.totalCost() | number: 2 }}
+        span ₽
+
+  .animate-show.scroll-y(
+  resize resize-offset-top='{{::vm.offsetTop}}'
+  ng-if='vm.shipment'
+  )
+    table.table.table-striped.table-hover(
+    ng-if='vm.shipment.positions.length'
+    )
+      thead
+        tr
+          th Товар
+          th.number
+            .hidden-xs Количество
+            .visible-xs Кол-во
+          th.number Цена
+          th.number.hidden-xs Стоимость
+      tbody
+        tr(
+        ng-repeat='item in vm.shipment.positions | orderBy:"article.name" track by item.id'
+        )
+          td {{ item.article.name || 'Товар не найден' }}
+          td.number
+            | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
+          td.number
+            span {{ item.price | number:2 }}
+          td.number.hidden-xs {{ item.cost | number:2}}

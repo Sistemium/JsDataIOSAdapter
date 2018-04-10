@@ -1,4 +1,4 @@
-section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
+section.ui-view.photo-report-list()
 
   .header
 
@@ -8,6 +8,7 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
       ng-model='vm.campaignGroupId'
       items-data-source-name='CampaignGroup'
       items-data='vm.campaignGroups'
+      order-dir='desc'
       )
 
       sab-dropdown(
@@ -49,10 +50,9 @@ section.ui-view.photo-report-list(cg-busy='vm.cgBusy')
   .alert.alert-info(ng-if='!vm.busy && !vm.data.length') Нет фото-отчетов в указанном периоде
 
   #scroll-main.scroll-y(
+  cg-busy='vm.cgBusy'
   resize
   resize-offset-top='10'
-  resize-property='max-height'
-  ng-if='vm.data.length'
   ng-disabled='vm.isPopoverOpen'
   )
     .photo-reports(vs-repeat='100' vs-scroll-parent='#scroll-main')

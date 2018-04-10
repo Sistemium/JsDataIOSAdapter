@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 .edit-news-message {
 
@@ -30,6 +30,14 @@
     flex-flow: column nowrap;
 
     .subject {
+
+    }
+
+    .toggler {
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
 
     }
 

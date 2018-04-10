@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 currency-value {
 
@@ -6,12 +6,6 @@ currency-value {
 
   .currency-value {
     display: inline-block;
-  }
-
-  .currency {
-    font-weight: normal;
-    color: $gray;
-    margin-left: 6px;
   }
 
   label {
@@ -23,4 +17,10 @@ currency-value {
     margin-left: 4px;
   }
 
+}
+
+.currency {
+  font-weight: normal;
+  color: $gray;
+  margin-left: 3px;
 }

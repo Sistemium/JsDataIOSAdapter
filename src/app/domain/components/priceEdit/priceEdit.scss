@@ -1,26 +1,172 @@
-@import "../../../styles/variables";
+@import "variables";
+
+.popover .price-edit-popover {
+  padding-top: 2px;
+  min-width: 240px;
+}
+
+.modal-body .price-edit-popover {
+  .extras {
+    display: none;
+  }
+}
 
 .price-edit-popover {
 
-  .btn-default {
-    background: none;
+  //display: flex;
+  //flex-flow: row wrap;
+
+  @include responsive-only(gt-xs) {
+
+    .controls {
+      float: left;
+      min-width: 170px;
+    }
+
+    .buttons {
+      min-width: 230px;
+      float: right;
+      margin-left: 6px;
+      margin-bottom: 6px;
+    }
+
   }
 
-  .inputs {
-    a.btn.btn-link {
-      display: none;
+  .btn-default {
+    background: none;
+    &.active {
+      font-weight: 500;
     }
   }
 
-  a {
-    display: block;
+  sa-keyboard {
+
+    margin-top: 6px;
+    margin-bottom: 0;
+
+    .num-pad-button .btn {
+      font-size: 100%;
+      padding: 10px 15px;
+      color: $black;
+      min-width: 45px;
+    }
+
+  }
+
+  .discount-scope {
+
+    width: 100%;
+    margin: 0 0 6px;
+
+    > a {
+
+      margin-left: 0 !important;
+      padding: 6px;
+      text-align: center;
+
+      &.active .gray {
+        color: $gray-border-color;
+      }
+
+    }
+
+    .gray {
+      font-size: 80%;
+    }
+
+  }
+
+  .btn-group.mode {
+
+    display: flex;
+    margin-bottom: 8px;
+
+    .btn {
+      flex: 1;
+    }
+
+  }
+
+  .form-group {
+    .form-control {
+      height: auto;
+    }
+  }
+
+  .display > {
+    .form-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .input-group {
+
+    margin-left: 6px;
+    display: flex;
+
+    #price-edit-discount {
+
+      padding-top: 6px;
+      max-width: 63px;
+      text-align: center;
+      margin: 0;
+      color: $primary-color;
+      flex: 1;
+
+      > * {
+        margin-left: 0;
+      }
+
+      span {
+        margin-left: 2px;
+      }
+
+    }
+
+    a.btn.input-group-addon {
+
+      width: 30px;
+      padding: 9px 6px 6px;
+      color: $primary-color;
+
+      i {
+        top: 2px
+      }
+
+      background: none;
+      font-size: 80%;
+
+      span {
+        margin-left: 2px;
+        color: $gray;
+      }
+
+    }
+
+    * + .input-group-addon {
+
+      margin-left: 0 !important;
+      border-left: none;
+
+    }
+
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
   }
 
   .form-control {
+
     display: inline-block;
     text-align: right;
     width: 80px;
-    margin: 4px 0 4px 4px;
     padding: 5px;
 
     &.ng-invalid {
@@ -43,13 +189,20 @@
     box-shadow: none;
   }
 
+  .fields {
+    .price-doc > * {
+      color: $green;
+    }
+  }
+
   .extras {
+    clear: both;
+    margin-bottom: -4px;
     border-top: solid thin $border-gray;
     text-align: right;
   }
 
 }
-
 
 // FIXME: copy-pasted from quantity-edit
 
@@ -57,24 +210,28 @@
 
   display: inline-block;
 
-  .popover-content {
-
-    padding: 0;
-
-    .inputs {
-      padding: 4px 10px;
-    }
-    .extras {
-      padding: 4px 10px;
-    }
-
+  a[disabled] .value {
+    color: $black;
   }
+
+  .price-doc {
+    color: $green;
+  }
+
+}
+
+.price-edit-popover.popover {
+
+  .popover-content {
+    padding: 4px 6px;
+  }
+
   div.popover {
     min-width: 200px;
   }
 
-  a[disabled] .value {
-    color: $black;
+  & {
+    max-width: 470px;
   }
 
 }

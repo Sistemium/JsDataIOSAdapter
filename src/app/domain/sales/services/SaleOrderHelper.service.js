@@ -6,7 +6,6 @@
 
     function setupController(vm, $scope) {
 
-
       function onJSData(event) {
 
         const saleOrderId = _.get(vm, 'saleOrder.id');
@@ -26,7 +25,6 @@
           }
 
           if (data.deviceCts) {
-            // IOS
 
             if (SaleOrder.hasChanges(id)) {
               return DEBUG('CatalogueSaleOrder:onJSData:ios', 'ignore saleOrder with changes');
@@ -43,41 +41,11 @@
               SaleOrderPosition.findAllWithRelations({saleOrderId: data.id}, {bypassCache: true})('Article');
             }
 
-          } else {
-            // Not IOS
-
-            if (saleOrderId === data.id && data.ts <= _.get(vm, 'saleOrder.ts')) {
-              return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts');
-            }
-
-            SaleOrder.find(id, {bypassCache: true, cacheResponse:false})
-              .then(saleOrder => {
-
-                if (SaleOrder.hasChanges(id)) return;
-
-                if (saleOrder.ts <= _.get(vm, 'saleOrder.ts')) {
-                  return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrder with old ts after find');
-                }
-
-                SaleOrder.inject(saleOrder);
-
-                if (vm.date === saleOrder.date || saleOrderId === saleOrder.id) {
-                  SaleOrderPosition.findAllWithRelations({saleOrderId: saleOrder.id}, {bypassCache: true})('Article');
-                }
-
-              })
-              .catch(err => {
-                if (err.error === 404) {
-                  SaleOrder.eject(id)
-                }
-              });
-
           }
 
         } else if (resource === 'SaleOrderPosition' && saleOrderId) {
 
           if (data.saleOrderId === saleOrderId) {
-            // IOS
 
             let position = getPosition(data.articleId);
 
@@ -89,6 +57,9 @@
               if (data.deviceTs < position.deviceTs) {
                 return DEBUG('CatalogueSaleOrder:onJSData', 'ignore saleOrderPosition with old deviceTs');
               }
+            } else if (SaleOrderPosition.meta.isDeleted(data.id)) {
+              // console.warn('SaleOrderHelper ignore deleted position', data.id);
+              return;
             }
 
             DEBUG('CatalogueSaleOrder:onJSData', 'inject position');
@@ -97,42 +68,20 @@
 
             SaleOrderPosition.loadRelations(position);
 
-          } else if (!data.saleOrderId) {
-            // not IOS
-            return SaleOrderPosition.find(id, {bypassCache: true, cacheResponse: false})
-              .then(updated => {
-                if (updated.saleOrderId === saleOrderId) {
-                  let existing = getPosition(updated.articleId);
-                  if (existing && (SaleOrderPosition.hasChanges(existing) || updated.ts <= existing.ts)) {
-                    DEBUG('Ignore SaleOrderPosition', updated.ts, existing.ts);
-                  } else {
-                    SaleOrderPosition.inject(updated);
-                    SaleOrderPosition.loadRelations(updated);
-                  }
-                }
-              });
           }
 
         }
 
       }
 
-      const SUBSCRIPTIONS = ['SaleOrder', 'SaleOrderPosition'];
-
       function onJSDataDestroy(event) {
 
-        const saleOrderId = _.get(vm, 'saleOrder.id');
-
-        DEBUG('onJSDataDestroy', event);
+        DEBUG('SaleOrderHelper onJSDataDestroy', event);
         let id = _.get(event, 'data.id');
-        if (!id) return;
 
-        if (SUBSCRIPTIONS.indexOf(event.resource) > -1) {
-          Schema.model(event.resource).eject(id);
-          if (id === saleOrderId) {
-            toastr.error('Заказ удален');
-            $state.go('^');
-          }
+        if (id && id === _.get(vm, 'saleOrder.id') || id === $state.params.id) {
+          toastr.error('Заказ удален');
+          $state.go('^');
         }
 
       }
@@ -141,10 +90,81 @@
         return vm.saleOrder && _.find(vm.saleOrder.positions, {articleId: articleId});
       }
 
+      function setProcessingClick(processing) {
+
+        let {saleOrder} = vm;
+
+        if (!_.get(saleOrder, 'workflowStep.editable')) {
+          return saveUpdateSaleOrderProcessing();
+        }
+
+        return saleOrder.DSLoadRelations('positions')
+          .then(() => {
+            saleOrder.updateTotalCost();
+            return saveUpdateSaleOrderProcessing()
+          });
+
+        function saveUpdateSaleOrderProcessing() {
+
+          saleOrder.processing = processing;
+
+          return saleOrder.safeSave()
+            .then(saleOrder => {
+
+              let workflowStep = _.get(saleOrder, 'workflowStep');
+
+              if (!workflowStep) {
+                return;
+              }
+
+              let {desc, label} = workflowStep;
+
+              toastr.info(desc, `Статус заказа: ${label}`);
+
+            })
+            .catch(e => toastr.info(angular.toJson(e), 'Ошибка сохранения'));
+        }
+
+      }
+
+
+      function checkLimit() {
+
+        vm.overLimit = 0;
+
+        if (!vm.saleOrder || !_.get(vm.saleOrder, 'workflowStep.editable')) {
+          return;
+        }
+
+        let {contract = {}, totalCost} = vm.saleOrder;
+
+        let {creditLimit, creditRemains} = contract;
+
+        if (!creditLimit) {
+          return;
+        }
+
+        let overLimit = totalCost - creditRemains;
+
+        if (overLimit > 0) {
+          // let msg = `<div>Лимит: <b>${numberFilter(creditLimit, 2)}</b></div>` +
+          //   `<div>Сумма превышения: <b>${numberFilter(overLimit, 2)}</b></div>`;
+          // toastr.error(msg, 'Превышен лимит по договору', {preventDuplicates: true});
+          vm.overLimit = overLimit;
+        }
+
+      }
+
+      $scope.$watchGroup([
+        'vm.saleOrder.totalCost',
+        'vm.saleOrder.contract.creditRemains',
+        'vm.saleOrder.workflowStep.editable'
+      ], checkLimit);
+
       $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
       $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
-      _.defaults(vm, {});
+      _.defaults(vm, {setProcessingClick});
 
     }
 

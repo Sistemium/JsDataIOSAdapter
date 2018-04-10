@@ -1,4 +1,28 @@
-@import "../../styles/variables";
+@import "variables";
+
+.domain-ui-view.picking {
+
+  .list-group {
+    margin-bottom: 10px;
+  }
+
+  .list-group-item {
+    padding: $margin-bottom-xs-minus $margin-bottom-xs;
+  }
+
+  .display-flex > button {
+
+    margin-top: -8px;
+    margin-bottom: -8px;
+
+
+  }
+
+  button.flex-right {
+    margin-right: -11px;
+  }
+
+}
 
 .picking-article-list {
 

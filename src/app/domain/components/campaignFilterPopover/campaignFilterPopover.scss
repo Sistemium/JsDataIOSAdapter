@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 campaign-filter-popover {
 
@@ -6,7 +6,7 @@ campaign-filter-popover {
 
     background-color: $gray-background-color;
     padding: 15px 15px;
-    border-radius: 10px;
+    border-radius: $border-radius;
 
     @extend %flex-row;
 
@@ -38,10 +38,6 @@ campaign-filter-popover {
     }
 
     .popover {
-
-      @include responsive-only(gt-xxs) {
-        top: 40px !important;
-      }
 
       .popover-content {
         padding: 0 10px;

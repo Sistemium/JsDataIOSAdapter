@@ -1,0 +1,416 @@
+@import "variables";
+@import "flags";
+
+.sale-order-view {
+
+  $width-processing: 85px;
+  $width-salesman: 105px;
+  $width-outlet: 0.9;
+  $width-totals: 0.13;
+
+  $processing-xs-max-width: 90px;
+
+  $headers: (
+      ($width-processing, 'processing'),
+      ($width-salesman, 'salesman'),
+      ($width-outlet, 'outlet')
+  );
+
+  @mixin initHeadersWidth {
+
+    @each $var, $class in $headers {
+
+      $flex-basis: 100px * $var * 10;
+
+      @include responsive-only(gt-xs) {
+        .#{$class} {
+          flex: $var;
+          flex-basis: $flex-basis;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+    }
+
+    .outlet {
+      @include responsive-only(md) {
+        flex-basis: 850px;
+      }
+
+      @include responsive-only(sm) {
+        flex-basis: 600px;
+      }
+
+    }
+
+  }
+
+  > .buttons {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    filter-workflow {
+      @extend .ellipsis;
+    }
+
+    .add-sale-order {
+      @include responsive-only(xxs) {
+        margin-left: 10px;
+        span {
+          display: none;
+        }
+      }
+    }
+
+    @include responsive-only(lt-sm) {
+      margin-bottom: 10px;
+    }
+
+  }
+
+  .headers {
+
+    margin-top: 8px;
+
+    > :last-of-type {
+      text-align: right;
+    }
+
+    @include responsive-only(lt-sm) {
+      display: none;
+    }
+
+    @include responsive-only(gt-xs) {
+      display: flex;
+      border-bottom: 2px solid $gray-border-color;
+      padding-bottom: 8px;
+
+      > div {
+        font-weight: bold;
+      }
+    }
+
+    .processing {
+      max-width: $width-processing;
+      min-width: $width-processing;
+    }
+
+    .salesman {
+      min-width: $width-salesman;
+      max-width: $width-salesman;
+    }
+
+    .outlet {
+      flex: 1;
+    }
+
+    .totals {
+      //max-width: 60px;
+    }
+
+  }
+
+  .alert {
+    margin-top: 10px;
+  }
+
+  #scroll-main .list-item {
+
+    position: relative;
+    border-bottom: 1px solid $gray-border-color;
+
+    .outlet {
+      color: $black;
+    }
+
+    @include responsive-only(lt-sm) {
+
+      a.sale-order {
+        padding: 5px 0;
+      }
+
+    }
+
+    .date {
+
+      height: 66px;
+      padding-top: 25px;
+      cursor: default;
+
+      @include responsive-only(lt-sm) {
+        padding-top: 50px;
+        height: 90px;
+      }
+
+      .title {
+        font-size: 150%;
+      }
+
+    }
+
+    .list-item-body {
+
+      @include responsive-only(gt-xs) {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+      }
+
+      .processing {
+
+        text-align: left;
+
+        @include responsive-only(gt-xs) {
+          margin-right: 5px;
+          max-width: $width-processing;
+          min-width: $width-processing;
+        }
+
+        .badge {
+          font-weight: normal;
+          padding: 4px 6px;
+          max-width: 85px;
+        }
+
+        &.blue .badge {
+          @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
+        }
+
+        &.green .badge {
+          @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
+        }
+
+        &.orange .badge {
+          @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
+        }
+
+        &.red .badge {
+          @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
+        }
+
+      }
+
+      .sales-schema {
+        @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
+        display: inline-block;
+        margin-left: 6px;
+        border-radius: 6px;
+        padding: 0px 6px;
+      }
+
+      .outlet {
+        flex: 1;
+      }
+
+      .outlet .address {
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+
+        .gray {
+          min-width: 0;
+          @extend .ellipsis;
+          flex: 1;
+        }
+
+        .salesman {
+          margin-left: 6px;
+          flex: .3;
+          text-align: right;
+        }
+
+        @include responsive-only(gt-xs) {
+          .salesman {
+            display: none;
+          }
+        }
+      }
+
+      .salesman {
+        min-width: $width-salesman;
+        max-width: $width-salesman;
+      }
+
+      .totals {
+
+        .cost {
+          white-space: nowrap;
+        }
+
+        .cost-doc {
+          color: $green;
+          &:before {
+            content: '+[';
+          }
+          &:after {
+            margin-left: 2px;
+            content: ']';
+          }
+        }
+
+      }
+
+      .totals {
+        //max-width: 170px;
+        .cost {
+          white-space: nowrap;
+        }
+        .cost-doc {
+          color: $green;
+          &:before {
+            content: '+[';
+          }
+          &:after {
+            margin-left: 2px;
+            content: ']';
+          }
+        }
+      }
+
+      @include responsive-only(lt-sm) {
+
+        flex-flow: column nowrap;
+        height: 60px;
+        position: relative;
+
+        .processing {
+          max-width: $processing-xs-max-width;
+          position: absolute;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          right: 0;
+          top: 1px;
+        }
+
+        > .salesman {
+          display: none;
+        }
+
+        div {
+          align-items: center;
+        }
+
+        .totals {
+
+          display: flex;
+          justify-content: space-between;
+          .cost {
+            order: 2;
+          }
+
+          .position {
+            order: 1;
+          }
+
+        }
+
+        .outlet {
+
+          flex-flow: column nowrap;
+          align-items: flex-start;
+          order: -1;
+
+          .name {
+            font-weight: 600;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: calc(100% - #{$processing-xs-max-width});
+            display: block;
+          }
+
+          .address {
+            width: 100%;
+          }
+
+        }
+
+      }
+
+      > .outlet {
+
+        > div {
+          height: 20px;
+          @extend .ellipsis;
+        }
+
+      }
+
+      .totals {
+
+        text-align: right;
+
+        .position {
+          span {
+            color: $gray;
+            margin-left: 5px;
+          }
+        }
+
+      }
+
+    }
+
+    .list-item-footer {
+
+      height: 20px;
+      font-style: italic;
+      //text-align: right;
+      color: $gray;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      @include responsive-only(gt-xs) {
+        margin-left: $width-processing;
+      }
+
+      .comment-text {
+        @extend .ellipsis;
+        display: block;
+        padding-left: 5px;
+        //max-width: calc(100% - 25px);
+      }
+
+      .icon {
+        min-width: 20px;
+        //flex: 1;
+        .glyphicon {
+          right: 2px;
+        }
+      }
+
+    }
+
+  }
+
+  .alert {
+    .processingMessage {
+
+      margin-bottom: $margin-bottom-xs;
+
+      strong + span {
+        margin-left: 1em;
+      }
+
+      padding-right: 15px;
+
+      @include responsive-only(lt-sm) {
+        padding-right: 10px;
+      }
+
+      button {
+        right: 0;
+      }
+
+    }
+  }
+
+}
+

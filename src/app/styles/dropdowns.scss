@@ -1,6 +1,16 @@
 @import "variables";
 
+sab-dropdown .popover {
+  width: auto;
+  @include responsive-only(xxs) {
+    max-width: 250px;
+    min-width: 250px;
+  }
+}
+
 .popover {
+
+  border-radius: $border-radius;
 
   .option {
 
@@ -43,7 +53,13 @@
   .caret {
     display: none;
   }
+
 }
+
+a[disabled] + .popover {
+  display: none !important;
+}
+
 
 span.caret {
 

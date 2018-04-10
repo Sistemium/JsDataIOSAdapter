@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import "variables";
 
 .iOS .news-feed {
   .scroll-y > .news-message {
@@ -14,21 +14,39 @@
   }
 }
 
+.valid-life-time {
+  @include responsive-only(xxs) {
+    label, .period {
+      display: none;
+    }
+  }
+}
+
 .news-feed {
 
   $padding: 5px;
+  $margin: $padding * 2;
 
   label {
     margin-bottom: 0;
   }
 
-  > .buttons {
+  > .header {
 
-    text-align: right;
-    margin: 20px 0 $padding;
+    @include responsive-only(gt-xxs) {
+      display: flex;
+      justify-content: space-between;
+    }
 
-    @include responsive-only(lt-sm) {
-      margin-top: 0;
+    > .buttons {
+
+      text-align: right;
+      margin-bottom: $padding;
+
+      @include responsive-only(xxs) {
+        margin-top: 5px;
+      }
+
     }
 
   }
@@ -67,7 +85,7 @@
     border-radius: $border-radius;
 
     & + .news-message {
-      margin-top: 20px;
+      //margin-top: 20px;
     }
 
     &:hover, &:hover .body p:after {
@@ -112,6 +130,12 @@
     .body {
 
       max-height: 56px;
+
+      img {
+        float: left;
+        max-height: 56px;
+        margin-right: $margin;
+      }
 
       p {
         margin: 5px 10px;
@@ -158,15 +182,38 @@
       align-items: center;
       margin-top: $padding * 2;
 
-      color: $gray;
+      @include responsive-only(xxs) {
+        .common-rating {
+          display: none;
+        }
+      }
 
-      .common-rating {
-        > * {
-          font-weight: normal;
+      > * + * {
+        margin-left: $margin;
+      }
+
+      > * label {
+        font-weight: normal;
+        color: $gray;
+        margin-right: $padding;
+      }
+
+      > .red {
+        label {
+          color: $red;
         }
-        > label {
-          margin-right: $padding;
+        strong, label {
+          font-weight: bold;
         }
+      }
+
+      @include responsive-only(xxs) {
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      strong {
+        font-weight: normal;
       }
 
       > .rating {
@@ -179,16 +226,13 @@
         justify-content: flex-end;
         align-items: center;
 
-        label {
-          font-weight: normal;
-          color: $gray;
+        > label {
           margin-right: 0;
         }
 
       }
 
     }
-
 
   }
 

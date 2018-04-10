@@ -4,7 +4,7 @@
 
   angular.module('Models').run(Responsibility);
 
-  function Responsibility(Schema, localStorageService, $timeout) {
+  function Responsibility(Schema, localStorageService) {
 
     const lsKey = 'Responsibility';
 
@@ -48,10 +48,37 @@
 
           return responsibility.length ? where : false;
 
-        }
+        },
+
+        initData
+
       }
 
     });
+
+    function initData(DomainOption) {
+
+      if (!DomainOption.hasMVZ()) {
+        _.remove(items, {id: 'mvz'});
+      }
+
+      _.each(items, item => {
+
+        item.flagged = data[item.id];
+
+        if (_.isUndefined(item.flagged)) {
+          item.flagged = true;
+        }
+
+        data[item.id] = item.flagged;
+
+        model.inject(item);
+
+      });
+
+      localStorageService.set(lsKey, data);
+
+    }
 
     const items = [
       {
@@ -65,17 +92,6 @@
         name: 'ЭТП'
       }
     ];
-
-    _.each(items, item => {
-      item.flagged = data[item.id];
-      if (_.isUndefined(item.flagged)) {
-        item.flagged = true;
-      }
-      data[item.id] = item.flagged;
-      $timeout().then(() => model.inject(item));
-    });
-
-    localStorageService.set(lsKey, data);
 
     function toggled() {
       return _.map(model.filter({flagged: true}), item => item.id);

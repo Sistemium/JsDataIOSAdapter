@@ -7,13 +7,15 @@
 
       stateHelperProvider
         .state({
+
           url: '/catalogue/{articleGroupId}?q',
           name: 'sales.catalogue',
-          templateUrl: 'app/domain/sales/views/catalogue.html',
+          templateUrl: 'app/domain/sales/catalogue/catalogue.html',
           controller: 'CatalogueController',
           controllerAs: 'vm',
 
           data: {
+            settings: 'catalogue',
             title: 'Каталог',
             auth: 'SalesmanAuth',
             rootState: 'sales.catalogue'
@@ -22,8 +24,8 @@
           children: [
             {
               name: 'saleOrder',
-              url: '/saleOrder/{saleOrderId}?ordered',
-              templateUrl: 'app/domain/sales/views/catalogue/catalogueSaleOrder.html',
+              url: '/saleOrder/{saleOrderId}?ordered&outletId&salesmanId',
+              templateUrl: 'app/domain/sales/catalogue/catalogueSaleOrder.html',
               controller: 'CatalogueSaleOrderController',
               controllerAs: 'vm'
             }

@@ -20,10 +20,6 @@
 
   }
 
-  h2.root-navbar {
-    margin-bottom: -1px;
-  }
-
   h4, .h4 {
     font-size: 15px;
   }
@@ -55,6 +51,14 @@
 
   .list-group-item {
     padding: $margin-bottom-xs-minus $margin-bottom-xs;
+  }
+
+}
+
+@include responsive-only(lt-md) {
+
+  .container {
+    width: auto;
   }
 
 }

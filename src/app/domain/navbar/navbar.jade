@@ -13,17 +13,17 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
   .separator
 
-  small(ng-if='vm.lastDigest >= 0') D:{{ vm.lastDigest }}
+  small.last-digest(ng-if='vm.lastDigest >= 0') D:{{ vm.lastDigest }}
 
   syncer-indicator
 
   fullscreen-menu(ng-show='vm.isHomeState')
 
+  account-menu(ng-if='vm.isHomeState')
+
   // TODO: add component config option to unhardcode domain content
   .sales-navs(ng-if='vm.isSalesState')
 
-    settings-popover(ng-if='vm.isCatalogueState')
+    settings-popover(ng-if='vm.state.data.settings' items='vm.state.data.settings')
     campaign-popover(ng-if='vm.isCatalogueState')
     salesman-menu
-
-hr

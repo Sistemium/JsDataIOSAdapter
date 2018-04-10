@@ -57,7 +57,7 @@
         name: 'partner',
         url: '/partner/:id',
 
-        templateUrl: 'app/domain/sales/views/partner.html',
+        templateUrl: 'app/domain/sales/territory/partner/partner.html',
         controller: 'PartnerController',
         controllerAs: 'vm',
 
@@ -70,7 +70,7 @@
         name: 'editPartner',
         url: '/partner/:id/edit',
 
-        templateUrl: 'app/domain/sales/views/editPartner.html',
+        templateUrl: 'app/domain/sales/territory/partner/editPartner.html',
         controller: 'EditPartnerController',
         controllerAs: 'vm',
 
@@ -148,20 +148,22 @@
 
       }, territory);
 
+      const visitsOutlet = _.set(_.cloneDeep(outlet), 'data.rootState', 'sales.visits');
+
+      visitsOutlet.children[0].data.rootState = 'sales.visits';
+
       const visits = {
 
         name: 'visits',
         url: '/visits?date',
 
         templateUrl: 'app/domain/sales/visits/visits.html',
-        controller: 'VisitsController',
-        controllerAs: 'vm',
 
         data: {
           title: 'Визиты'
         },
 
-        children: [territory, _.cloneDeep(outlet), _.cloneDeep(visit), _.cloneDeep(visitCreate)]
+        children: [territory, visitsOutlet, _.cloneDeep(visitCreate)]
 
       };
 

@@ -1,13 +1,20 @@
-@import "../../styles/variables";
-@import "../../styles/flex";
+@import "variables";
+@import "flex";
 
 .root-navbar {
 
   @extend %flex-center;
+  overflow-x: scroll;
+  overflow-y: hidden;
 
-  margin-bottom: -7px;
+  margin-bottom: 10px;
   margin-top: $margin-bottom-xs;
-  height: 37px;
+
+  .last-digest {
+    position: fixed;
+    top: 5px;
+    right: 5px;
+  }
 
   > .separator {
     @extend .flex-1;
@@ -33,13 +40,14 @@
 
   > a + a {
     margin-left: 20px;
-    @media (max-width: $screen-xs-max) {
-      margin-left: 15px;
+    @include responsive-only(xxs) {
+      margin-left: 10px;
     }
   }
 
   & + hr {
-    margin-top: 12px;
+    margin-top: 9px;
+    margin-bottom: 9px;
   }
 
   a.home {
@@ -71,7 +79,7 @@
 
   a.sub-root-nav {
     @include responsive-only(xxs) {
-      display: none;
+      //display: none;
     }
   }
 

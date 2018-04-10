@@ -1,0 +1,17 @@
+.workflow-popover
+
+  .cancel-button(ng-if='vm.currentWorkflow')
+    a.btn-link.btn.btn-block(href ng-click='vm.onWorkflowClick()') Отменить выбор
+
+  .scroll-y.workflows(
+  resize
+  resize-offset-top='25'
+  )
+    a.workflow(
+    href
+    ng-repeat='workflow in vm.workflowStats track by workflow.processing'
+    ng-click='vm.onWorkflowClick(workflow.processing)'
+    ng-class='[{active: workflow.processing === vm.currentWorkflow}, workflow.cls]'
+    )
+      span {{ workflow.label || workflow.processing }}
+      span.badge {{ workflow.cnt }}

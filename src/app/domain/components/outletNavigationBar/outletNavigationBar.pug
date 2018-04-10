@@ -1,0 +1,15 @@
+.outlet-navigation-bar
+
+  span.chevron.chevron-left(ng-class='{"show-chevron": vm.showLeft }')
+    i.glyphicon.glyphicon-chevron-left
+
+  .tab-bar#outlet-navigation-tabbar
+    a.tab(
+    ng-repeat='(key, val) in vm.tabs track by $index'
+    ng-click='vm.currentTab = key'
+    ng-class='{"active-tab": vm.currentTab === key}'
+    data-key='{{$index}}'
+    ) {{::val}}
+
+  span.chevron.chevron-right(ng-class='{"show-chevron": vm.showRight }')
+    i.glyphicon.glyphicon-chevron-right

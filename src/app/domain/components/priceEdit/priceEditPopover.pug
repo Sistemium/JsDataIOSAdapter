@@ -1,34 +1,136 @@
-fieldset.price-edit-popover
+.price-edit-popover(ng-class='{disabled: !vm.editable}')
 
-  .inputs
+  .controls
+    .list-group.discount-scope
 
-    .price
+      a.list-group-item(
+      href
+      ng-model='vm.discountScope'
+      uib-btn-radio="'article'" uib-uncheckable='false'
+      ) На товар
 
-      a.btn.btn-link(ng-click='vm.incrementPrice()') +%
+      a.list-group-item(
+      href
+      ng-if='vm.priceGroup'
+      ng-model='vm.discountScope'
+      uib-btn-radio="'priceGroup'" uib-uncheckable='false'
+      )
+        .name На группу
+        .gray «{{ vm.priceGroup.name }}»
 
-      .form-group
-        label Со скидкой:
-        input.form-control#price-edit-price(
-        select-on-focus
-        ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-        track-focused
-        ng-model='vm.price'
-        ng-model-options='{debounce: 1000}'
-        ng-readonly='!vm.editable'
+      a.list-group-item(
+      href
+      ng-model='vm.discountScope'
+      uib-btn-radio="'saleOrder'" uib-uncheckable='false'
+      ) На весь заказ
+
+
+
+  .buttons
+
+    .btn-group.mode
+
+      button.btn.btn-default(ng-model='vm.mode' uib-btn-radio="'discount'" uib-uncheckable='false') Скидка
+      button.btn.btn-default(ng-model='vm.mode' uib-btn-radio="'markup'" uib-uncheckable='false') Наценка
+      button.btn.btn-default(ng-model='vm.mode' uib-btn-radio="'price'" uib-uncheckable='false') Цена
+
+    .display
+
+      .form-group(ng-switch='vm.mode')
+
+        .btn-group.target
+
+          button.btn.btn-default.taget-man(ng-model='vm.target' uib-btn-radio="''" uib-uncheckable='false') Упр
+          button.btn.btn-default.target-doc(ng-model='vm.target' uib-btn-radio="'Doc'" uib-uncheckable='false') Бух
+
+        .form-control#price-edit-price-display(
+        ng-switch-when='price'
+        ng-class='{"ng-invalid": vm.invalidPrice}'
         )
 
-      a.btn.btn-link(ng-click='vm.decrementPrice()') -%
+          strong {{ vm.priceView || 0 }}
+          span.currency ₽
+
+        .input-group(ng-switch-when='markup|discount' ng-switch-when-separator="|")
+
+          a.btn.input-group-addon(href ng-click='vm.decrementPercentClick()')
+            i.glyphicon.glyphicon-minus
+
+          .form-control#price-edit-discount
+            strong {{ vm.discountPercentView || 0 }}
+            span.currency %
+
+          a.btn.input-group-addon(href ng-click='vm.incrementPercentClick()')
+            i.glyphicon.glyphicon-plus
+
+    sa-keyboard(
+    datatype='price'
+    ng-if='vm.mode !== "price"'
+    model='vm.discountPercentView'
+    export-model='vm.discountPercent'
+    model-max='vm.maxDiscount'
+    box-rel='","'
+    touched='vm.keyBoardTouched'
+    )
+
+    sa-keyboard(
+    datatype='price'
+    ng-if='vm.mode === "price"'
+    model='vm.priceView'
+    export-model='vm.priceEdit'
+    model-max='vm.maxPrice'
+    box-rel='","'
+    touched='vm.keyBoardTouched'
+    )
+
+
+  .fields
+
+    .price(ng-if='vm.mode !== "price"')
+
+      .form-group
+        label Цена:
+        span.form-control
+          span {{ vm.price | number:2 }}
+          span.currency ₽
+
+      .form-group.price-doc(ng-if='vm.priceDoc !== vm.price')
+        label Бух:
+        span.form-control
+          span {{ vm.priceDoc | number:2 }}
+          span.currency ₽
+
+    .discount(ng-if='vm.mode === "price"')
+
+      .form-group
+        label {{ vm.mode === 'markup' ? 'Наценка' : 'Скидка' }}:
+        span.form-control {{ vm.signedDiscountPercent() | number }}
+          span.currency %
 
     .priceOrigin
 
       .form-group
-        label Без скидки:
-        = ' '
-        span.form-control#price-edit-priceOrigin {{ vm.priceOrigin | number:2 }}
+        label Базовая:
+        span.form-control {{ vm.priceOrigin | number:2 }}
+          span.currency ₽
+
+    //.priceAgent(ng-if='vm.priceAgent')
+
+      .form-group
+        label Цена агента:
+        span.form-control#price-edit-priceAgent {{ vm.priceAgent | number:2 }}
+
+    .profit(ng-if='vm.priceAgent')
+
+      .form-group
+        label Профит:
+        span.form-control#price-edit-profit {{ vm.profit() | number:2 }}
+          span.currency %
+
 
   .extras
 
-    button.btn(
-    ng-class='vm.position.isCompDiscount ? "btn-primary" : "btn-default"'
-    ng-click='vm.ksButtonClick()'
-    ) КС
+    a.btn.btn-link(
+    href
+    ng-click='vm.popoverOpen = false'
+    ) Готово

@@ -1,0 +1,31 @@
+section(
+cg-busy='vm.cgBusy'
+ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered, "catalogue-left": catalogueLeft}]'
+)
+
+  .ui-view
+
+  ol.breadcrumb(
+  ng-hide='!vm.isWideScreen && vm.saleOrder'
+  )
+    include catalogueBreadcrumb
+
+  section.animate-show#catalogue-main(
+  ng-show='!saleOrderExpanded'
+  )
+
+    #catalogue-sidenav
+      include catalogueArticleGroups
+
+    font-size-edit#scroll-articles.animate-show(
+    append-to='catalogueArticle'
+    )
+      .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
+        .info Нет подходящих товаров
+        .buttons
+          a(href ng-click='vm.clearFilters()') Сбросить фильтры
+
+      #scroll-articles-parent.scroll-y(
+      resize resize-offset-top='5' resize-property='height'
+      )
+        include catalogueArticle

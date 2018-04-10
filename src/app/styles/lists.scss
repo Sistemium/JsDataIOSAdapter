@@ -1,3 +1,5 @@
+@import "variables";
+
 li.active {
   .gray {
     color: white;
@@ -18,39 +20,31 @@ li.active {
 
 }
 
-.list-group li {
-  list-style: none;
+.list-item {
+
+  & + .list-item {
+    border-top: 1px solid $gray-border-color;
+  }
+
+  a {
+
+    display: block;
+    padding: 3px;
+
+    &:hover {
+      text-decoration: none;
+      background: $position-hover-color;
+    }
+
+  }
 }
 
-.block-to-collapse {
+.list-group {
 
-  width: 33.1%;
+  margin-bottom: 0;
 
-  .list-group-item:first-of-type {
-    border-top-right-radius: $border-radius;
-    border-top-left-radius: $border-radius;
-  }
-
-  .list-group-item:last-of-type {
-    border-bottom-right-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
-  }
-
-  .list-group-item:only-of-type {
-    border-radius: $border-radius;
-  }
-
-  a.list-group-item.active:first-of-type {
-    border-radius: $border-radius $border-radius 0 0;
-  }
-
-  a.list-group-item.active:first-of-type + .list-group-item {
-    border-radius: 0;
-  }
-
-  .list-group-item.active:first-of-type + .list-group-item:last-of-type {
-    border-bottom-right-radius: $border-radius;
-    border-bottom-left-radius: $border-radius;
+  li {
+    list-style: none;
   }
 
 }

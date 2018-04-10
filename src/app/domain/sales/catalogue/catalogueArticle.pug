@@ -1,0 +1,142 @@
+.list-group.vr-parent(
+vs-repeat='{{vm.articleRowHeight}}'
+vs-scroll-parent="#scroll-articles-parent"
+vs-excess='3'
+before-tag-name='li'
+)
+
+  .list-group-item.catalogue-article(
+  ng-repeat='stock in vm.stock track by stock.id'
+  )
+
+    a.thumb(
+    ng-disabled='!stock.article.avatar'
+    ng-if='vm.showImages'
+    href
+    ng-click='vm.thumbClick(stock)'
+    )
+      img(
+      ng-src='{{ stock.article.avatar.srcThumbnail || "images/placeholder.png"}}'
+      )
+
+    .article-name(
+    ng-class='{lowStock: stock.volume < vm.lowStockThreshold}'
+    ng-disabled='vm.saleOrder && !vm.saleOrder.workflowStep.editable'
+    )
+      .article-name-first
+
+        strong.name-first(
+        uib-tooltip-template='vm.articleTooltipTpl'
+        ) {{::stock.article.firstName}}
+
+        .article-info
+
+          //strong(ng-if='::stock.article.secondName') {{::stock.article.secondName}}
+          small.tag(
+          ng-if='::stock.article.primaryTag'
+          ng-class='::stock.article.primaryTag.code'
+          )
+            a(href ng-click='vm.articleTagClick(stock.article.primaryTag)')
+              | {{ stock.article.primaryTag.label }}
+
+          a.pieceVolume(
+          href ng-click='vm.pieceVolumeClick(stock.article.pieceVolume)'
+          ) {{::stock.article.pieceVolume}}л
+          small.gray(ng-if='::!vm.saleOrder || vm.hideBoxes') x {{::stock.article.packageRel}}
+          small.gray(ng-if='::!vm.saleOrder && stock.article.factor > 1') : {{::stock.article.factor}}
+
+        // TODO: allow removing restricted positions
+        a.minus.btn-default(
+        ng-if='vm.saleOrderPositionByArticle[stock.articleId].volume'
+        href stm-click='minusButton' click-payload='stock'
+        )
+          i.glyphicon.glyphicon-minus
+
+        quantity-edit(
+        ng-disabled='vm.restrictedArticles[stock.articleId]'
+        ng-if='vm.saleOrder'
+        stock='stock'
+        article='stock.article'
+        sale-order='vm.saleOrder'
+        price='vm.prices[stock.articleId]'
+        position='vm.saleOrderPositionByArticle[stock.articleId]'
+        )
+
+      .article-name-second
+
+        small {{::stock.article.preName}}
+
+        small.tag(
+        ng-repeat='tag in ::stock.article.tags track by tag.code'
+        ng-class='::tag.code'
+        ng-if='!tag.primary'
+        )
+          a(href ng-click='vm.articleTagClick(tag)') {{ tag.label }}
+
+        small(
+        ng-if='::stock.article.lastName'
+        uib-tooltip-template='vm.articleTooltipTpl'
+        ) {{::stock.article.lastName}}
+
+        small {{::stock.article.extraLabel}}
+
+      .article-name-third
+
+        span.bar-codes(
+        ng-if='showBarCodes && stock.article.barCodesLazy().length'
+        uib-tooltip-template='vm.barCodesTooltipTpl'
+        )
+          i.glyphicon.glyphicon-barcode
+
+        small.flagged(ng-if='stock.article.hasAction') A
+
+        i.recently-shipped.glyphicon.glyphicon-star-empty(
+        ng-if='vm.articleStats[stock.articleId]'
+        uib-tooltip-template="'app/domain/sales/views/catalogue/recentlyShippedTooltip.html'"
+        )
+
+        small.article-restricted(ng-if='vm.restrictedArticles[stock.articleId]')
+          i.red.glyphicon.glyphicon-ban-circle
+          span.red "{{ vm.restrictedArticles[stock.articleId].name }}"
+
+        i.red.glyphicon.glyphicon-warning-sign(
+        ng-if='!stock.volume || stock.volume < vm.saleOrderPositionByArticle[stock.articleId].volume'
+        uib-tooltip='Нет в наличии'
+        )
+
+        small.gray.nowrap(ng-if='stock.volume')
+          span ~{{stock.displayVolume}}
+
+        small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
+          a.compDiscount(
+          href
+          ng-if='vm.hasKS'
+          ng-click='vm.compDiscountClick(stock)'
+          ng-class='{flag: vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount}'
+          ) КС
+          span {{ vm.saleOrderPositionByArticle[stock.articleId].cost | number:2 }}
+          span.gray
+            | =
+          span {{ vm.saleOrderPositionByArticle[stock.articleId].volume | number:0 }}
+          span.gray
+            | x
+
+        price-edit(
+        ng-disabled='!vm.saleOrder.workflowStep.editable'
+        stock='stock'
+        positions='vm.saleOrderPositionByArticle'
+        )
+
+    .right(
+    ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
+    ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
+    )
+
+      button.btn.btn-default.plus-box(
+      ng-hide=':: vm.hideBoxes || !vm.noFactor && stock.article.factor === stock.article.packageRel'
+      ng-click='vm.kPlusButtonClick(stock)'
+      ) +{{ ::stock.article.packageRel }}
+
+      button.btn.btn-default(
+      ng-click='vm.bPlusButtonClick(stock)'
+      ) +{{ ::vm.noFactor ? 1 : stock.article.factor }}

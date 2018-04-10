@@ -1,0 +1,15 @@
+//.modal-header
+
+  .name Отгрузка
+
+.modal-body
+
+  button.btn.btn-link.close-modal(
+  ng-click='vm.closeClick()'
+  )
+    i.glyphicon.glyphicon-remove
+
+  shipment-details(
+  shipment-id='vm.shipmentId'
+  offset-top='45'
+  )

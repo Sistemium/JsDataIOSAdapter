@@ -5,9 +5,7 @@
   const priceEdit = {
 
     bindings: {
-      prices: '<',
-      position: '<',
-      discount: '='
+      stock: '<'
     },
 
     templateUrl: 'app/domain/components/priceEdit/priceEdit.html',
@@ -17,34 +15,69 @@
 
   };
 
-  function priceEditController() {
+  /** @ngInject */
+  function priceEditController(saMedia, $uibModal, $scope) {
 
     let vm = this;
 
     _.assign(vm, {
 
-      discountPercent
+      discountPercent,
+      discountPercentDoc,
+      discountPrice,
+      click,
+      closeClick,
+      popoverTrigger: popoverTrigger()
 
     });
-
-    /*
-     Init
-     */
-
-    /*
-     Listeners
-     */
 
     /*
      Functions
      */
 
+    function closeClick() {
+      _.result(vm.modal, 'close');
+    }
+
+    function popoverTrigger() {
+      return (saMedia.xsWidth || saMedia.xxsWidth) ? 'none' : 'outsideClick';
+    }
+
+    function click() {
+
+      if (vm.popoverTrigger !== 'none') {
+        return;
+      }
+
+      vm.modal = $uibModal.open({
+
+        animation: false,
+        templateUrl: 'app/domain/components/priceEdit/priceEdit.modal.html',
+
+        size: 'sm',
+        windowClass: 'price-edit modal-info',
+        scope: $scope,
+        bindToController: false
+
+      });
+
+      vm.modal.result
+        .then(_.noop, _.noop);
+
+    }
+
+    function discountPrice(target = '') {
+      return vm.stock.discountPrice(target);
+    }
+
     function discountPercent() {
 
-      if (!vm.position) return -vm.discount;
+      return -vm.stock.discountPercent();
 
-      return _.round(vm.position.price / vm.position.priceOrigin * 100 - 100, 1);
+    }
 
+    function discountPercentDoc() {
+      return -vm.stock.discountPercent(null, 'Doc');
     }
 
   }

@@ -143,11 +143,10 @@
       let filter = SalesmanAuth.makeFilter();
 
       let q = [
-        CampaignGroup.findAll(),
+        loadCampaignGroup(),
         Campaign.findAll(),
         Outlet.findAll(Outlet.meta.salesmanFilter(filter))
           .then(data => vm.outlets = data)
-          .then(loadFiltersData)
       ];
 
       vm.setBusy(q);
@@ -160,18 +159,16 @@
 
     }
 
-    function loadFiltersData() {
+    function loadCampaignGroup() {
 
-      return CampaignGroup.findAll()
-        .then(groups => {
+      return CampaignGroup.findAll(CampaignGroup.meta.filterActual())
+        .then(campaignGroups => {
 
-          vm.campaignGroups = _.filter(groups, campaignGroup => {
-            return moment().isAfter(campaignGroup.dateB) && moment().add(-90, 'days').isBefore(campaignGroup.dateE);
-          });
+          vm.campaignGroups = _.orderBy(campaignGroups, ['dateB'], ['desc']);
 
           if (!vm.campaignGroupId) {
             let today = moment().format();
-            vm.campaignGroupId = _.get(_.find(groups, group => group.dateB <= today && today <= group.dateE), 'id');
+            vm.campaignGroupId = _.get(_.find(campaignGroups, group => group.dateB <= today && today <= group.dateE), 'id');
           }
 
           $scope.$watch('vm.campaignGroupId', onCampaignGroupChange);

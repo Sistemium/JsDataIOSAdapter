@@ -7,7 +7,7 @@
     // TODO: allow to add/change location for an existing outlet
 
     const {PhotoHelper, LocationHelper, toastr, saControllerHelper} = Helpers;
-    const {Outlet, Visit, OutletPhoto, Location, OutletSalesmanContract} = Schema.models();
+    const {Outlet, OutletPhoto, Location, OutletSalesmanContract} = Schema.models();
 
     let vm = saControllerHelper.setup(this, $scope);
 
@@ -47,8 +47,15 @@
 
       if (!vm.outlet) return;
 
-      Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner'])
+      Outlet.loadRelations(vm.outlet, ['photos', 'Location', 'Partner', 'saleOrders', 'Debt'])
         .then(outlet => {
+
+          let outletId = outlet.id;
+          let filterByOutletId = {outletId: outletId};
+
+          vm.saleOrderFilter = _.assign({'x-order-by:': '-date'}, filterByOutletId);
+          vm.debtFilter = outletId;
+          vm.visitFilter = filterByOutletId;
 
           if (outlet.location) {
             initMap(outlet.location);
@@ -77,7 +84,6 @@
 
       return OutletSalesmanContract.findAllWithRelations({outletId: outlet.id}, {bypassCache: true})('Contract')
         .then(data => vm.outletSalesmanContracts = data);
-
     }
 
     function onStateChange(to) {
@@ -98,12 +104,6 @@
 
     }
 
-    function currentFilter() {
-      return SalesmanAuth.makeFilter({
-        outletId: stateFilter
-      });
-    }
-
     function refresh(salesman) {
 
       vm.currentSalesman = salesman;
@@ -117,11 +117,8 @@
         vm.avatarSrc = _.get(avatar, 'srcThumbnail');
       });
 
-      Visit.bindAll(currentFilter(), $scope, 'vm.visits');
-
       vm.busy = $q.all([
-        Outlet.find(stateFilter),
-        Visit.findAllWithRelations(currentFilter())(['VisitAnswer', 'VisitPhoto'])
+        Outlet.find(stateFilter)
       ]);
 
     }
@@ -150,7 +147,6 @@
       if (!vm.avatar) {
         return takePhoto();
       }
-
 
       vm.commentText = `${vm.outlet.partner.shortName} (${vm.outlet.address})`;
       $scope.imagesAll = vm.photos;

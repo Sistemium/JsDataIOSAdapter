@@ -13,6 +13,8 @@
   resize-offset-top='40'
   )
 
+    p(ng-if='vm.ready && !vm.teams.length') Нет акций
+
     .wrapper
       #scrollable-div(
       vs-repeat='110'

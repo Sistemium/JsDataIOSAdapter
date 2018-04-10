@@ -1,0 +1,17 @@
+.modal-header
+
+  .name {{ vm.stock.article.name }}
+
+  button.btn.btn-link(
+  ng-click='vm.closeClick()'
+  )
+    i.glyphicon.glyphicon-remove
+
+.modal-body
+
+  price-edit-popover(
+  popover-open='vm.popoverOpen'
+  stock='vm.stock'
+  )
+
+//.modal-footer

@@ -1,0 +1,133 @@
+.sale-order-details(cg-busy='vm.busy')
+
+  //.buttons.text-right(ng-include='"app/domain/sales/views/saleOrder/saleOrderMenu.html"')
+
+  sale-order-alert(expanded='saleOrderExpanded' sale-order='vm.saleOrder')
+
+    popovers
+      a.popover-trigger(
+      href
+      uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
+      popover-is-open='vm.isSaleOrderPopoverOpen'
+      ng-disabled='saleOrderExpanded'
+      )
+        .outlet(ng-class='{blocked: vm.saleOrder.outlet.isActive === false}')
+          .info
+            span.name(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+            span.name(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+            span.animate-show.spaced
+              small на
+              small.strong {{ vm.saleOrder.date | amDateFormat:'DD.MM.YYYY' }}
+              small(
+              ng-class='["processing", vm.saleOrder.workflowStep.cls, vm.saleOrder.processing]'
+              )
+                span {{ vm.saleOrder.workflowStep.label }}
+          .address
+            small {{vm.saleOrder.outlet.address}}
+        span.caret
+
+    totals.animate-show(ng-hide='vm.busy')
+
+      .has-positions
+
+        .info
+          strong {{ vm.saleOrder.positions.length | number:0 }}
+          span.currency(ng-if='vm.overLimit') П
+          span(ng-if='!vm.overLimit') {{ vm.saleOrder.positionsCountRu() }}
+          span на сумму
+          strong {{ vm.saleOrder.totalCost || 0 | number:2 }}
+          span.currency ₽
+
+        contract-info.over-limit(
+        ng-if='vm.overLimit'
+        contract='vm.saleOrder.contract'
+        ) Превышение лимита: {{ vm.overLimit | number:2 }}
+          span.currency ₽
+
+      .no-positions(ng-if='saleOrderExpanded')
+        span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
+        a(
+        href
+        ng-if='!vm.saleOrder.outletId || saleOrderExpanded'
+        popover-is-open='vm.isOutletPopoverOpen'
+        uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
+        )
+          //span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
+          //span.caret
+
+      a.toggle-edit.animate-show(
+      href ng-click='vm.toggleEditClick()'
+      ng-if='vm.saleOrder && vm.saleOrder.workflowStep.editable'
+      ng-hide='saleOrderExpanded'
+      )
+        i.glyphicon(ng-class='vm.editing ? "glyphicon-lock" : "glyphicon-edit"')
+
+    buttons
+
+      button.btn.btn-sm(
+      ng-click='vm.copySaleOrderClick()'
+      ng-if='vm.saleOrder.totalCost'
+      ng-class='vm.confirmCopySaleOrder ? "btn-warning" : "btn-default"'
+      )
+        span Скопировать
+        span(ng-show='vm.confirmCopySaleOrder') ?
+
+      button.btn.btn-primary.btn-sm(
+      ng-repeat='(destination, label) in vm.saleOrder.workflowStep.to'
+      ng-click='vm.setProcessingClick(destination)'
+      ng-disabled='!vm.saleOrder.isValid() || !vm.saleOrder.totalCost'
+      ) {{ label }}
+
+
+  .alert.alert-info.processingMessage.animate-show.spaced(
+  uib-alert
+  ng-repeat='processingMessage in vm.saleOrder.processingMessages() track by $index'
+  close='vm.saleOrder.processingMessage = null'
+  )
+    strong(ng-class='vm.saleOrder.workflowStep.messageCls')
+      i.glyphicon.glyphicon-warning-sign
+    span {{ ::processingMessage }}
+
+  .animate-show#scroll-main(
+  resize resize-offset-top='5' resize-property='height'
+  ng-show='!saleOrderExpanded'
+  )
+    table.table.table-striped.table-hover(
+    ng-if='vm.saleOrder.positions.length'
+    )
+      thead
+        tr
+          th Товар
+          th.number
+            .hidden-xs Количество
+            .visible-xs Кол-во
+          th.number.price Цена
+          th.number.cost Стоимость
+      tbody(ng-class='{disabled: !vm.editing || !vm.saleOrder.workflowStep.editable}')
+        tr.clickable(
+        ng-repeat='item in vm.saleOrder.positions | orderBy:"article.name" track by item.id'
+        )
+          td
+            .name {{ item.article.name }}
+            //.spaced
+              span.flag(ng-if='item.isCompDiscount') КС
+              span {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
+              span.gray
+                | x
+              span {{ item.price | number:2 }} ₽
+              span.gray
+                | =
+              span {{ item.cost | number:2 }} ₽
+          td.number
+            //quantity-edit(position='item')
+            | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
+          td.number.price
+            .wrapper
+              .flags
+                span.flag(ng-if='item.isCompDiscount') КС
+                span.discount(ng-if='item.priceOrigin && item.price != item.priceOrigin') ({{ item.discountPercent() }}%)
+              .prices
+                currency-value(value='item.price')
+                currency-value.price-doc(value='item.priceDoc' ng-if='item.priceDoc !== item.price')
+          td.number.cost
+            currency-value(value='item.cost')

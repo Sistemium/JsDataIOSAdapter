@@ -1,0 +1,75 @@
+@import "../styles/variables";
+
+section.main {
+
+  display: flex;
+
+  flex-direction: column;
+
+  .stm-menu {
+    flex: 1;
+  }
+
+  .news-carousel {
+
+    $image-height: 135px;
+    $image-height-xs: 85px;
+
+    .carousel-indicators {
+      display: none;
+    }
+
+    @media (max-height: 450px) {
+      display: none;
+    }
+
+    .carousel-caption {
+
+      color: $gray;
+      padding: 0;
+      margin-bottom: 10px;
+      position: static;
+      text-shadow: none;
+
+      &.red {
+        color: $red;
+      }
+
+      h4 {
+        margin: 0;
+        @include responsive-only(xxs) {
+          font-size: 75%;
+        }
+      }
+
+    }
+
+    .carousel-inner {
+
+      display: block;
+      //height: 150px;
+      margin: 10px 0;
+      text-align: center;
+
+      @include responsive-only(lt-sm) {
+        margin-bottom: 5px;
+      }
+
+      img {
+        max-height: $image-height;
+        min-height: $image-height;
+        @include responsive-only(xxs) {
+          max-height: $image-height-xs;
+          min-height: $image-height-xs;
+        }
+      }
+
+    }
+
+    .carousel-control {
+      background-image: none;
+    }
+
+  }
+
+}

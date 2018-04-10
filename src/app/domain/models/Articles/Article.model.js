@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run((Schema, RelationLoader, ArticleTagRegs) => {
 
     const znmpRe = new RegExp([
       'защ[^ .]*[ .]*наи[^ .]*[ .]+мест[^ .]*[ .]+проис[^ ]*',
@@ -14,23 +14,11 @@
       'гео[^ .]*[ .]*наи[^ ]*'
     ].join('[.,]*|'));
 
-    const tagRegs = [
-      ['age3', '3 года', /[^0-9]3 года|тр[её]хлетний/],
-      ['age4', '4 года', /[^0-9]4 года|четыр[её]хлетний/],
-      ['age5', '5 лет', /[^0-9]5 лет|пятилетний/],
-      ['sparkling', 'игристое', /игристое/i],
-      ['rose', 'розовое', /розовый|розовое|розов\./i],
-      ['red', 'красное', /красн\.|красное|кр\.(?![^\d][\d]+)/i],
-      ['white', 'белое', /([^A-я]|^)бел[. ]|белое|белый/i],
-      ['semiDry', 'п/сух', /полусухое|п\/сух\.?/ig],
-      ['semiSweet', 'п/сл', /п\/слад\.|полуслад[^ ,"]*|п\/сл[,.]+|п\/сл(?=[ ]|$)/ig],
-      ['dry', 'сухое', /сухое|сух[.,]+|[ .,]+сух(?=[ ]|$)/i],
-      ['sweet', 'сладкое', /([ ]|^)+сладк[^ ,"]*|сладкое|сл\./i],
-      ['brut', 'брют', /брют/i],
-      ['gift', 'п/у', /подар[^ .]*|под[^ .]*[ .]{1,2}упа[^ .)]*|в п\/у[^ .)]*|п\/у[^ .)]*/i]
-    ];
+    const tagRegs = ArticleTagRegs;
 
-    Schema.register({
+    let barCodeLoader = new RelationLoader('barCodes');
+
+    const Article = Schema.register({
 
       name: 'Article',
 
@@ -44,10 +32,10 @@
         },
 
         hasOne: {
-          Stock: {
-            localField: 'stock',
-            foreignKey: 'articleId'
-          },
+          // Stock: {
+          //   localField: 'stock',
+          //   foreignKey: 'articleId'
+          // },
           ArticlePicture: {
             localField: 'avatar',
             localKey: 'avatarPictureId'
@@ -55,12 +43,16 @@
         },
 
         hasMany: {
-          StockBatch: {
-            localField: 'stockBatches',
-            foreignKey: 'articleId'
-          },
-          SaleOrderPosition: {
-            localField: 'saleOrders',
+          // StockBatch: {
+          //   localField: 'stockBatches',
+          //   foreignKey: 'articleId'
+          // },
+          // SaleOrderPosition: {
+          //   localField: 'saleOrders',
+          //   foreignKey: 'articleId'
+          // },
+          ArticleBarCode: {
+            localField: 'barCodes',
             foreignKey: 'articleId'
           }
         }
@@ -71,6 +63,10 @@
 
       instanceEvents: false,
       notify: false,
+
+      meta: {
+        words
+      },
 
       computed: {
 
@@ -89,6 +85,8 @@
         }],
 
         lastName: ['name', 'firstName', lastNameFn],
+        primaryTag: ['tags', primaryTagFn],
+        secondName: ['primaryTag', secondNameFn],
 
         sameId: ['articleSame', 'id', function (articleSame, id) {
           return articleSame || id;
@@ -96,7 +94,9 @@
 
         pcsLabel: ['pieceVolume', function (pieceVolume) {
           return pieceVolume ? 'б' : 'шт';
-        }]
+        }],
+
+        sortName: ['articleGroupId', 'firstName', 'secondName', 'pieceVolume', sortNameFn]
 
       },
 
@@ -118,16 +118,46 @@
           return {
             box: box,
             pcs: pcs,
-            full: (box || half ? `${box || ''}${half && '½' || ''} к` : '')
+            full: (box || half ? `${box || ''}${half && '½' || ''} К` : '')
             + (box && pcs && !half && ' ' || '')
             + (pcs && !half ? `${pcs} ${this.pcsLabel}` : '')
           }
 
+        },
+
+        barCodesLazy: function () {
+          return barCodeLoader.lazyItems(this);
         }
 
+      },
+
+      aflterFindAll: (options, data) => {
+        clearCaches();
+        return data;
       }
 
     });
+
+
+    function sortNameFn(articleGroupId, firstName, secondName, pieceVolume) {
+      let {ArticleGroup} = Schema.models();
+      let groupName = articleGroupId && _.trim(_.result(ArticleGroup.get(articleGroupId), 'ancestorNames'));
+      return `${groupName || ''}/${firstName} ${secondName} ${pieceVolume} ${this.name}`.toLocaleLowerCase();
+    }
+
+    function secondNameFn(primaryTag) {
+
+      return primaryTag && primaryTag.label || null;
+
+    }
+
+    function primaryTagFn(tags) {
+
+      let primaryTag = _.find(tags, 'primary');
+
+      return primaryTag || null;
+
+    }
 
     function lastNameFn(name, firstName) {
 
@@ -165,11 +195,16 @@
     function tagger(name) {
 
       let res = _.map(tagRegs, cfg => {
-        if (cfg[2].test(name)) {
-          name = _.replace(name, cfg[2], '');
+
+        let [code, label, re, groupId] = cfg;
+
+        if (re.test(name)) {
+          name = _.replace(name, re, '');
           return {
-            code: cfg[0],
-            label: cfg[1]
+            code,
+            label,
+            groupId,
+            primary: !/other|taste/.test(groupId)
           };
         }
       });
@@ -208,6 +243,8 @@
 
       let res = _.last(m);
 
+      res = _.replace(res, /" | "/, '"');
+
       if (!res) {
         let words = _.words(name, wordsRe);
         let stop = false;
@@ -226,6 +263,40 @@
       }
 
       return res;
+
+    }
+
+    let wordsCache = false;
+
+    function clearCaches() {
+      wordsCache = false;
+    }
+
+    function words() {
+
+      if (wordsCache) {
+        return wordsCache;
+      }
+
+      let wordsArray = getWords();
+
+      if (!wordsArray.length) {
+        return;
+      }
+
+      return (wordsCache = _.groupBy(wordsArray, _.first));
+
+    }
+
+    function getWords() {
+
+      let pre = _.map(Article.getAll(), article => _.words(article.name));
+
+      pre = _.filter(_.flatten(pre), word => word.length > 2 && /[A-ZА-Я]/.test(word[0]));
+
+      pre = _.map(pre, word => word.toLocaleLowerCase());
+
+      return _.orderBy(_.uniq(pre));
 
     }
 

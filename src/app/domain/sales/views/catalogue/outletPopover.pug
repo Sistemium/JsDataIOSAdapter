@@ -1,31 +1,33 @@
-.stm-searcher.form-group.has-feedback
+.outlet-popover(cg-busy='vm.outletBusy')
 
-  label(for="search-outlet")
-    i.glyphicon.glyphicon-search
+  .stm-searcher.form-group.has-feedback
 
-  input#search-outlet.form-control(
-  type='search'
-  placeholder='Поиск'
-  ng-model='vm.outletSearch'
-  select-on-focus
-  auto-focus='select'
+    label(for="search-outlet")
+      i.glyphicon.glyphicon-search
+
+    input#search-outlet.form-control(
+    type='search'
+    placeholder='Поиск'
+    ng-model='vm.outletSearch'
+    select-on-focus
+    sa-auto-focus='select'
+    )
+
+    span.form-control-feedback(ng-hide='!vm.outletSearch' )
+      a(ng-click='vm.outletSearch=""' href)
+        i.glyphicon.glyphicon-remove
+
+  .scroll-y(
+  resize resize-offset-top='15'
+  vs-repeat='55'
   )
-
-  span.form-control-feedback(ng-hide='!vm.outletSearch' )
-    a(ng-click='vm.outletSearch=""' href)
-      i.glyphicon.glyphicon-remove
-
-.scroll-y(
-resize resize-offset-top='15'
-vs-repeat='55'
-)
-  .option.outlet(
-  ng-class='{active: vm.saleOrder.outlet.id === outlet.id, blocked: outlet.isActive === false}'
-  ng-repeat='outlet in vm.outlets | filter:vm.outletSearch track by outlet.id'
-  )
-    a(href stm-click='searchOutlet' click-payload='outlet' ng-click='vm.isOutletPopoverOpen=false')
-      .name
-        span {{ ::outlet.name }}
-        span.comment-text(ng-if='outlet.commentText') {{ outlet.commentText }}
-      .gray.address
-        small {{::outlet.address}}
+    .option.outlet(
+    ng-class='{active: vm.saleOrder.outlet.id === outlet.id, blocked: outlet.isActive === false}'
+    ng-repeat='outlet in vm.outlets | filter:vm.outletSearch track by outlet.id'
+    )
+      a(href stm-click='searchOutlet' click-payload='outlet' ng-click='vm.isOutletPopoverOpen=false')
+        .name
+          span {{ ::outlet.name }}
+          span.comment-text(ng-if='outlet.commentText') {{ outlet.commentText }}
+        .gray.address
+          small {{::outlet.address}}

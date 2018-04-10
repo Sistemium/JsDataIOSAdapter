@@ -2,18 +2,15 @@
 
 (function () {
 
-  function CampaignsController( saControllerHelper, $scope, $state, GalleryHelper, localStorageService, $window) {
+  function CampaignsController(saControllerHelper, $scope, $state, Helpers) {
 
-    const sectionElem = document.getElementsByClassName('campaigns');
-    const appWindow = angular.element($window);
+    const {GalleryHelper, saMedia, saEtc} = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
       .use({
 
-        currentItem: localStorageService.get('lastState').params.campaignGroupId || '',
         initGroupId: $state.params.campaignGroupId,
-        limit: getSectionWidth(),
 
         thumbClick,
         showHiddenPic
@@ -24,35 +21,31 @@
      Listeners
      */
 
-    appWindow.bind('resize', function () {
-      vm.limit = getSectionWidth()
-    });
-
+    vm.watchScope(
+      () => saMedia.windowWidth,
+      () => vm.limit = getSectionWidth()
+    );
 
     vm.watchScope('vm.campaignGroup.id', campaignGroupId => {
 
       if (!campaignGroupId) return;
 
       $state.go('.', {campaignGroupId}, {notify: false});
-      // vm.setBusy(refresh(campaignGroupId));
 
     });
-
-    $scope.$on('$stateChangeStart', onStateChange);
-
 
     /*
      Functions
      */
 
     function getSectionWidth() {
+
+      const sectionElem = saEtc.getElementById('campaigns-list');
+
       let currWidth = angular.element(sectionElem)[0].clientWidth;
       let show = Math.floor((currWidth - 40 - 90) / 142);
       return show > 0 ? show : 1
-    }
 
-    function onStateChange() {
-      appWindow.unbind();
     }
 
     function showHiddenPic(campaign) {
@@ -64,21 +57,6 @@
       }
 
     }
-
-    // function refresh(campaignGroupId) {
-    //
-    //   return Campaign.findAllWithRelations({campaignGroupId})('CampaignPicture')
-    //     .then(campaigns => {
-    //       vm.campaigns = _.filter(campaigns, function (campaign) {
-    //         campaign.showAllPhotos = false;
-    //         campaign.photoCount = campaign.campaignPictures.length;
-    //         return campaign.campaignPictures.length
-    //       });
-    //
-    //     })
-    //     .catch(e => console.error(e));
-    //
-    // }
 
     function thumbClick(picture) {
 

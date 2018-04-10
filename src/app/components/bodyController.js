@@ -2,31 +2,40 @@
 
 (function () {
 
-    angular.module('webPage').controller('BodyController', function (appcache, toastr, $window) {
+  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo) {
 
-      var vm = this;
-      var ua = new UAParser();
-      var deviceInfo = ua.getOS();
+    const vm = this;
 
-      vm.cls = deviceInfo.name ? deviceInfo.name.replace (' ','') : '';
-      vm.cacheStatus = function () {
-        return appcache.textStatus;
-      };
+    const {osInfo, deviceInfo} = userAgentInfo;
 
-      function onUpdate () {
-        toastr.error ('Нажмите, чтобы применить его', 'Получено обновление', {
-          timeOut: 0,
-          extendedTimeOut: 0,
-          onTap: function () {
-            $window.location.reload (true);
-          }
-        });
-      }
+    let classes = [];
 
-      $window.stmAppCacheUpdated = onUpdate;
+    if (osInfo.name) {
+      classes.push(osInfo.name.replace(' ', ''));
+    }
 
-      appcache.addEventListener('updateready', onUpdate, true);
+    if (deviceInfo.type) {
+      classes.push(deviceInfo.type);
+    }
 
-    });
+    vm.cls = classes.join(' ');
+
+    vm.cacheStatus = function () {
+      return appcache.textStatus;
+    };
+
+    function onUpdate() {
+      toastr.error('Нажмите, чтобы применить его', 'Получено обновление программы', {
+        timeOut: 0,
+        extendedTimeOut: 0,
+        onTap: function () {
+          $window.location.reload(true);
+        }
+      });
+    }
+
+    appcache.addEventListener('updateready', onUpdate, true);
+
+  });
 
 })();

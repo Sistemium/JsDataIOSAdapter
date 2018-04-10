@@ -1,4 +1,8 @@
-.name {{ vm.driver.name }}
-.phone(ng-if='vm.driver.mobileNumber')
-  label Телефон:
-  a(href='tel:{{ vm.driver.mobileNumber }}') {{ vm.driver.mobileNumber }}
+.driver-popover-content
+  .name {{ vm.driver.name }}
+  .phone(ng-if='vm.driver.mobileNumber')
+    label Телефон:
+    a(
+    ng-click='vm.popoverOpen = !vm.popoverOpen; $event.stopPropagation()'
+    href='tel:{{ vm.driver.mobileNumber }}'
+    ) {{ vm.driver.mobileNumber }}

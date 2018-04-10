@@ -1,0 +1,79 @@
+sale-order-alert(expanded='$parent.saleOrderExpanded' sale-order='vm.saleOrder' discounts='$parent.vm.discounts')
+
+  popovers
+    a.popover-trigger(
+    href
+    ng-click='vm.saleOrderClick()'
+    uib-popover-template='"app/domain/sales/views/saleOrder/saleOrderPopover.html"'
+    popover-is-open='vm.isSaleOrderPopoverOpen'
+    ng-disabled='saleOrderExpanded'
+    )
+      .outlet
+        .info
+          span.name(ng-if='vm.saleOrder.outlet.id') {{ vm.saleOrder.outlet.name }}
+          span.name(ng-if='!vm.saleOrder.outlet.id') Новый заказ
+          span.animate-show.spaced
+            small на
+            small.strong {{ vm.saleOrder.date | amDateFormat:'DD.MM.YYYY' }}
+            small(
+            ng-class='["processing", vm.saleOrder.workflowStep.cls, vm.saleOrder.processing]'
+            )
+              span {{ vm.saleOrder.workflowStep.label }}
+        .address
+          small {{vm.saleOrder.outlet.address}}
+      span.caret
+
+  totals.animate-show(ng-hide='vm.busy')
+
+    .has-positions(ng-if='vm.saleOrder.positions.length && !saleOrderExpanded')
+
+      a.info(href stm-click='saleOrderTotals')
+
+        strong {{ vm.saleOrder.positions.length | number:0 }}
+        span(ng-if='!vm.overLimit') {{ vm.saleOrder.positionsCountRu() }}
+        span.currency(ng-if='vm.overLimit') П
+        span на сумму
+        strong {{ vm.saleOrder.totalCost | number:2 }}
+        span.currency ₽
+
+      contract-info.over-limit(
+      ng-if='vm.overLimit'
+      contract='vm.saleOrder.contract'
+      ) Превышение лимита: {{ vm.overLimit | number:2 }}
+        span.currency ₽
+
+    span.no-positions(ng-if='!vm.saleOrder.positions.length || saleOrderExpanded')
+      span(ng-if='vm.saleOrder.outletId && !saleOrderExpanded') В заказе нет позиций
+      a.choose-outlet(
+      href
+      ng-if='!vm.saleOrder.outletId || saleOrderExpanded && vm.saleOrder.workflowStep.editable || !vm.saleOrder.id'
+      ng-click='vm.outletClick()'
+      popover-is-open='vm.isOutletPopoverOpen'
+      uib-popover-template='"app/domain/sales/views/catalogue/outletPopover.html"'
+      )
+        span {{ vm.saleOrder.outletId ? 'Поменять точку доставки' : 'Выберите точку доставки' }}
+        span.caret
+
+  buttons
+    button.btn.btn-success.btn-sm(
+    ng-if='!vm.saleOrder.totalCost'
+    stm-click='saleOrderSaveDraft'
+    ng-disabled='!vm.saleOrder.isValid()'
+    ) Добавить товары
+
+    button.btn.btn-primary.btn-sm(
+    ng-repeat='(destination, label) in vm.saleOrder.workflowStep.to'
+    ng-click='vm.setProcessingClick(destination)'
+    ng-if='vm.saleOrder.totalCost'
+    ng-disabled='!vm.saleOrder.isValid()'
+    ) {{ label }}
+
+.alert.alert-info.processingMessage.animate-show(
+uib-alert
+ng-repeat='processingMessage in vm.saleOrder.processingMessages() track by $index'
+close='vm.saleOrder.processingMessage = null'
+)
+  strong(ng-class='vm.saleOrder.workflowStep.messageCls')
+    i.glyphicon.glyphicon-warning-sign
+  = ' '
+  span {{ processingMessage }}

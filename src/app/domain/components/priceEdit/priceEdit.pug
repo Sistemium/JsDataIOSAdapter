@@ -1,18 +1,23 @@
 .price-edit
-  // TODO: format price with user's locale (comma decimal part delimiter)
+
   a(
   href
   uib-popover-template="'app/domain/components/priceEdit/priceEditPopover.trigger.html'"
+  ng-click='vm.click($event)'
+  popover-trigger='::vm.popoverTrigger'
   popover-is-open='vm.popoverOpen'
-  popover-trigger='outsideClick'
-  popover-placement='auto bottom-right'
-  ng-disabled='!vm.position'
+  popover-placement='bottom auto'
+  popover-append-to-body='true'
+  popover-class='price-edit-popover'
   )
-    span.value {{ vm.position ? vm.position.price : vm.prices.price | number:2 }}
+    span.value {{ vm.discountPrice() | number:2 }}
     span.currency ₽
 
     span.discount(
     ng-if='vm.discountPercent()'
     ) ({{vm.discountPercent() > 0 ? '+' : '' }}{{ vm.discountPercent() | number }}%)
+
+    span.price-doc(ng-if='vm.discountPrice() !== vm.discountPrice("Doc")')
+      span.value [{{ vm.discountPercentDoc() | signedNumber }}%]
 
     span.caret

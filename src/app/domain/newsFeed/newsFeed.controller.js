@@ -4,7 +4,9 @@
 
   function NewsFeedController($state, Schema, saControllerHelper, $scope, toastr, Sockets, Auth, IOS) {
 
-    const {NewsMessage, UserNewsMessage, Account} = Schema.models();
+    const {NewsMessage, UserNewsMessage, Account, Commentary, NewsMessagePicture} = Schema.models();
+
+    const SUBSCRIPTIONS = ['NewsMessage', 'Commentary', 'NewsMessagePicture'];
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -19,9 +21,17 @@
       isNewsMaker: Auth.isAuthorized(['newsMaker', 'admin']),
 
       ratings: {},
-      ratingTitles: NewsMessage.meta.ratingTitles
+      ratingTitles: NewsMessage.meta.ratingTitles,
+
+      filterActualClick: filterClicker('Actual'),
+      filterPastClick: filterClicker('Past'),
+      filterFutureClick: filterClicker('Future'),
+
+      filter: 'Actual'
 
     });
+
+    vm.discloseRatings = vm.isNewsMaker && !IOS.isIos();
 
     const {authId} = Auth.getAccount();
 
@@ -29,20 +39,35 @@
       $state.go('newsFeed');
     });
 
-    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+    const unSubscribeCollections = Sockets.jsDataSubscribe(SUBSCRIPTIONS);
+    const unSubscribeJSD = Sockets.onJsData('jsData:update', onJSData);
+
+    $scope.$on('$destroy', Sockets.onJsData('jsData:destroy', onJSDataDestroy));
 
     let cts = IOS.isIos() ? 'deviceCts' : 'cts';
 
-    let filter = NewsMessage.meta.filterActual({orderBy: [[cts, 'DESC']]});
-
-    vm.rebindAll(NewsMessage, filter, 'vm.newsMessages');
     vm.rebindAll(UserNewsMessage, {}, 'vm.userNewsMessages', cacheRatings);
 
     refresh();
 
+    $scope.$on('$destroy', onDestroy);
+
     /*
      Functions
      */
+
+    function filterClicker(time) {
+      return () => {
+        vm.filter = time;
+        refresh();
+      }
+    }
+
+    function onDestroy() {
+      unSubscribeJSD();
+      unSubscribeCollections();
+      Commentary.ejectAll();
+    }
 
     function showCommonRating(newsMessage) {
       return newsMessage.rating &&
@@ -50,11 +75,23 @@
     }
 
     function refresh() {
+
+      let options = {bypassCache: true};
+
+      let filter = NewsMessage.meta[`filter${vm.filter}`]({orderBy: [[cts, 'DESC']]});
+
+      vm.rebindAll(NewsMessage, filter, 'vm.newsMessages');
+
+      const relations = ['UserNewsMessage', 'NewsMessagePicture'];
+
       vm.setBusy([
-        Account.findAll({}, {bypassCache: true}),
-        NewsMessage.findAll({}, {bypassCache: true}),
-        UserNewsMessage.findAll({}, {bypassCache: true})
+        Account.findAll({}, options),
+        NewsMessage.findAllWithRelations(filter, options)(relations, false, false, options),
+        Commentary.groupBy({source: 'NewsMessage'}, ['ownerXid'])
+          .then(res => vm.commentaryStats = _.keyBy(res, 'ownerXid'))
+          .catch(() => vm.disableCommentaries = true)
       ]);
+
     }
 
     function cacheRatings() {
@@ -62,27 +99,59 @@
       // vm.ratings = {};
 
       _.forEach(vm.userNewsMessages, userNewsMessage => {
-        vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage.rating;
+        vm.ratings[userNewsMessage.newsMessageId] = userNewsMessage;
       })
+
+    }
+
+    function onJSDataDestroy(event) {
+
+      let id = _.get(event, 'data.id');
+      let model = Schema.model(event.resource);
+
+      if (!id || !model || SUBSCRIPTIONS.indexOf(event.resource) === -1) {
+        return;
+      }
+
+      model.eject(id);
 
     }
 
     function onJSData(event) {
 
-      if (event.resource !== 'NewsMessage' || !event.data) {
+      const handlers = {onJSDCommentary, onJSDNewsMessage, onJSDNewsMessagePicture};
+
+      let handler = handlers[`onJSD${event.resource}`];
+
+      if (!event.data || !handler) {
         return;
       }
 
-      let {id} = event.data;
+      handler(event.data);
 
-      NewsMessage.find(id, {bypassCache: true})
-        .then(msg => console.info('updated newsMessage', msg));
+    }
 
+    function onJSDCommentary(data) {
+      let {ownerXid} = data;
+      Commentary.inject(data);
+      Commentary.groupBy({source: 'NewsMessage', ownerXid}, ['ownerXid'])
+        .then(res => {
+          vm.commentaryStats[ownerXid] = _.first(res);
+        });
+    }
+
+    function onJSDNewsMessage(data) {
+      NewsMessage.inject(data);
+    }
+
+    function onJSDNewsMessagePicture(data) {
+      NewsMessagePicture.inject(data);
     }
 
     function newsRatingClick(newsMessage) {
 
       let newsMessageId = newsMessage.id;
+      let rating = _.get(vm.ratings[newsMessageId], 'rating');
 
       UserNewsMessage.findAll({newsMessageId}, {bypassCache: true})
         .then(userNewsMessages => {
@@ -94,7 +163,11 @@
             userNewsMessage = UserNewsMessage.createInstance({newsMessageId, authId});
           }
 
-          userNewsMessage.rating = vm.ratings[newsMessageId];
+          userNewsMessage.rating = rating;
+
+          if (!userNewsMessage.rating) {
+            return;
+          }
 
           UserNewsMessage.create(userNewsMessage)
             .then(() => {
@@ -114,7 +187,6 @@
     function newsMessageClick(item) {
       $state.go('.show', {newsMessageId: item.id});
     }
-
 
   }
 

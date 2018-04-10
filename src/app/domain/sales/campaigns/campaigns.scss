@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 .campaigns {
 
@@ -7,7 +7,7 @@
   $thumb-size: 130px;
   $margin: 20px;
 
-  .scroll-y.selectivity-increasing-class {
+  > .scroll-y {
 
     position: relative;
     margin-top: $margin/2;

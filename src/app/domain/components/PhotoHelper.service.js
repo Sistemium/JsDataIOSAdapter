@@ -93,9 +93,9 @@
           ctrl.busy = getImageSrc(pic, size)
             .then(src => {
               ctrl.src = src;
-            }, err => {
+            }, () => {
 
-              console.log(err);
+              // console.log(err);
               ctrl.cancel();
               toastr.error('Недоступен интернет', 'Ошибка загрузки изображения');
 
@@ -156,7 +156,7 @@
           return actingImageSrc(this, 'thumbnail');
         },
         srcFullscreen : function() {
-          return actingImageSrc(this, 'smallImage');
+          return actingImageSrc(this, 'largeImage');
         }
 
       });

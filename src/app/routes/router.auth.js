@@ -6,15 +6,15 @@
 
     function init () {
 
-      $rootScope.$on('$destroy',$rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
+      $rootScope.$on('$destroy',$rootScope.$on('$stateChangeStart', function (event, next) {
 
-        var needRoles = _.get(next, 'data.needRoles');
+        let needRoles = _.get(next, 'data.needRoles');
 
         if (needRoles && !Auth.isAuthorized(needRoles)) {
           event.preventDefault();
         }
 
-        console.error('routerAuth:', next, nextParams, needRoles);
+        // console.error('routerAuth:', next, nextParams, needRoles);
 
       }));
 

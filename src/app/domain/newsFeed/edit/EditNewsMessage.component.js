@@ -100,14 +100,15 @@
     function saveClick() {
 
       if (!hasChanges()) {
-        return $state.go('^');
+        return goShow();
       }
 
       NewsMessage.create(vm.newsMessage)
-        .then(data => {
-          vm.newsMessage = data;
-          $state.go('^');
-        });
+        .then(goShow);
+    }
+
+    function goShow(newsMessage = vm.newsMessage) {
+      $state.go('^.show', {newsMessageId: newsMessage.id});
     }
 
   }

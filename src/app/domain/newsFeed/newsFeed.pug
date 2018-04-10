@@ -1,15 +1,34 @@
 .news-feed.ui-view(cg-busy='vm.cgBusy')
 
-  .buttons(ng-if='vm.isNewsMaker')
+  .header
 
-    button.btn.btn-link(
-    ng-click='vm.createNewsMessageClick()'
-    ) Добавить новость
+    .filters(ng-if='vm.isNewsMaker')
+
+      button.btn(
+      ng-class='vm.filter === "Actual" ? "btn-success" : "btn-link"'
+      ng-click='vm.filterActualClick()'
+      ) Актуальные
+
+      button.btn(
+      ng-class='vm.filter === "Past" ? "btn-warning" : "btn-link"'
+      ng-click='vm.filterPastClick()'
+      ) Прошлые
+
+      button.btn(
+      ng-class='vm.filter === "Future" ? "btn-warning" : "btn-link"'
+      ng-click='vm.filterFutureClick()'
+      ) Будущие
+
+    .buttons(ng-if='vm.isNewsMaker')
+
+      button.btn.btn-link(
+      ng-click='vm.createNewsMessageClick()'
+      ) Добавить новость
 
   .no-news(ng-if='!vm.busy && !vm.newsMessages.length')
     p Новостей нет. Авторизованные пользователи могут добавить новость.
 
-  .scroll-y(resize resize-offset-top='5' vs-repeat='170' resize-property='height')
+  .scroll-y(resize resize-offset-top='5' vs-repeat='150' resize-property='height')
 
     .news-message(
     ng-click='vm.newsMessageClick(newsMessage)'
@@ -21,7 +40,9 @@
         valid-lifetime(date-b='newsMessage.dateB' date-e='newsMessage.dateE')
 
       .body
-        p {{newsMessage.body}}
+        p
+          img(ng-if='newsMessage.pictures.length' ng-src='{{newsMessage.pictures[0].srcThumbnail}}')
+          span(ng-bind-html='::newsMessage.htmlView()')
         //.author {{ newsMessage.authorAccount.name }}
 
       .footer
@@ -35,18 +56,25 @@
 
           strong {{ newsMessage.rating | number }}
 
-          news-message-ratings-popover(news-message='newsMessage' ng-if='vm.isAdmin')
+          news-message-ratings-popover(news-message='newsMessage' ng-if='vm.discloseRatings')
             span ({{ newsMessage.ratingsCount }})
+
+        .commentary-stats(
+        ng-if='vm.commentaryStats[newsMessage.id]'
+        ng-class='{red: newsMessage.hasUnreadComments(vm.commentaryStats)}'
+        )
+          label Комментарии:
+          strong {{ vm.commentaryStats[newsMessage.id]['count()'] }}
 
         .rating(ng-if='!newsMessage.isAuthor()')
 
-          label {{ vm.ratings[newsMessage.id] ? 'Ваша оценка:' : 'Оцените:' }}
+          label {{ vm.ratings[newsMessage.id].rating ? 'Ваша оценка:' : 'Оцените:' }}
 
           span(
           uib-rating
           enable-reset='false'
           titles='vm.ratingTitles'
-          ng-model='vm.ratings[newsMessage.id]'
+          ng-model='vm.ratings[newsMessage.id].rating'
           max='5'
           ng-click='$event.stopPropagation();vm.newsRatingClick(newsMessage)'
           )

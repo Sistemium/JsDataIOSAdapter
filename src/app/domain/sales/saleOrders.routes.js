@@ -7,10 +7,9 @@
 
       stateHelperProvider
         .state({
-          url: '/saleOrders?date',
+          url: '/saleOrders',
           name: 'sales.saleOrders',
-          templateUrl: 'app/domain/sales/views/saleOrders.html',
-          controller: 'SaleOrderController',
+          templateUrl: 'app/domain/sales/saleOrder/saleOrders.html',
           controllerAs: 'vm',
 
           data: {
@@ -21,12 +20,12 @@
           children: [{
             url: '/:id',
             name: 'item',
-            templateUrl: 'app/domain/sales/views/saleOrder/saleOrderDetails.html',
+            templateUrl: 'app/domain/sales/saleOrder/saleOrderDetails.html',
             controller: 'SaleOrderDetailsController',
             controllerAs: 'vm'
           }]
 
-        });
+        })
 
     });
 

@@ -113,11 +113,12 @@
 
           let ps = _.first(pss);
 
-          if (!ps && $state.current.name !== 'picking.orderList') {
+          if (!ps) {
 
-            $state.go('picking.orderList', {state: 'notdone'});
+            if ($state.current.name !== 'picking.orderList') {
+              $state.go('picking.orderList', {state: 'notdone'}, {reload: true});
+            }
             return;
-
           }
 
           POS.findAll({pickingSessionId: ps.id})

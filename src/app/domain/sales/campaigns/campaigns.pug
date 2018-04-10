@@ -1,4 +1,4 @@
-section.campaigns(cg-busy='vm.busy')
+section.campaigns#campaigns-list()
 
   campaign-filter-popover(
   current-item='vm.campaignGroup'
@@ -8,7 +8,7 @@ section.campaigns(cg-busy='vm.busy')
   busy='vm.busy'
   )
 
-  .scroll-y.selectivity-increasing-class(resize resize-offset-top='5')
+  .scroll-y(resize resize-offset-top='5' cg-busy='vm.busy')
 
     .campaign(ng-repeat='campaign in vm.campaigns | filter:{teamName: vm.currentTeam } | orderBy:"name" track by campaign.id')
 

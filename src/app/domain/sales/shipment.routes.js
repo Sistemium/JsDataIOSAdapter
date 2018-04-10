@@ -10,8 +10,7 @@
 
           url: '/shipment',
           name: 'sales.shipmentList',
-          templateUrl: 'app/domain/sales/shipment/ShipmentList.html',
-          controller: 'ShipmentListController as vm',
+          template: '<shipment-list></shipment-list>',
 
           data: {
             title: 'Отгрузки',
@@ -21,8 +20,8 @@
           children: [{
             url: '/:id',
             name: 'item',
-            templateUrl: 'app/domain/sales/shipment/ShipmentDetails.html',
-            controller: 'ShipmentDetailsController as vm'
+            template: '<shipment-details shipment-id="vm.params.id"></shipment-details>',
+            controller: 'StateController as vm'
           }]
 
         });

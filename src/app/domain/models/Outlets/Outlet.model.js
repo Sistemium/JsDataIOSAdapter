@@ -47,6 +47,10 @@
           Cashing: {
             localField: 'cashings',
             foreignKey: 'outletId'
+          },
+          Debt: {
+            localField: 'debts',
+            foreignKey: 'outletId'
           }
           // PickingRequest: {
           //   localField: 'pickingOrders',

@@ -1,0 +1,125 @@
+@import "variables";
+@import "flags";
+
+.sale-order-details {
+
+  @include responsive-only(lt-sm) {
+    .alert-dismissible {
+      button.close {
+        right: 0;
+      }
+    }
+  }
+
+  td .spaced {
+    display: block;
+    text-align: right;
+  }
+
+  th {
+    white-space: nowrap;
+  }
+
+  sale-order-alert {
+
+    .totals {
+
+      totals {
+        display: flex !important;
+        @include responsive-only(gt-xs) {
+          justify-content: flex-end;
+        }
+        align-items: center;
+        //justify-content: space-between;
+      }
+
+      .toggle-edit {
+        margin-left: 20px;
+      }
+
+      .has-positions {
+
+        white-space: nowrap;
+
+        .info {
+          display: inline-block;
+          white-space: normal;
+        }
+
+      }
+
+    }}
+
+  #scroll-main {
+    padding-bottom: 15px;
+    @include responsive-only(xxs) {
+      font-size: 85%;
+    }
+  }
+
+  .discount {
+    color: green;
+    margin-right: 4px;
+  }
+
+  .flag {
+    @extend %flag;
+  }
+
+  td.price .wrapper {
+
+    @extend %flex-row;
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+      align-items: flex-end;
+      > * + * {
+        margin-top: 3px;
+      }
+    }
+
+    justify-content: space-between;
+    //align-items: center;
+    height: 100%;
+
+    strong {
+      font-weight: normal;
+    }
+
+    > .flags {
+      white-space: nowrap;
+    }
+
+    > .prices {
+      flex: 1;
+    }
+
+    .price-doc {
+      position: relative;
+      right: -3px;
+      color: $green;
+      &:before {
+        content: '[';
+      }
+      &:after {
+        content: ']';
+      }
+    }
+
+  }
+
+  .cost {
+
+    @include responsive-only(lt-sm) {
+      display: none;
+    }
+
+    currency-value {
+      flex: 1;
+      strong {
+        font-weight: normal;
+      }
+    }
+  }
+
+}

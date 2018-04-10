@@ -1,0 +1,115 @@
+// TODO: show avatarPhoto or take photo button
+
+.outlet-view
+
+  .header(cg-busy='vm.busy')
+
+    .outlet
+
+      .outlet-address
+
+        .partner-name
+          a.inherit-colors.name(
+          href ui-sref='^.partner({id: vm.outlet.partner.id})'
+          ng-class='vm.partnerNavClass'
+          ) {{ vm.outlet.partner.name }}
+
+
+          .outlet-buttons
+            a.btn.btn-link(href ng-click='vm.editOutletClick()' ng-if='vm.isRootState && vm.isEditable')
+              i.glyphicon.glyphicon-edit
+
+            a.btn.btn-link(
+            popover-class='map-popover'
+            popover-placement='bottom auto'
+            popover-append-to-body='true'
+            popover-trigger='"outsideClick"'
+            uib-popover-template="'app/domain/sales/views/location.html'"
+            popover-is-open='vm.mapPopoverIsOpen'
+            type='button'
+            ng-class='{green: vm.map}'
+            ng-disabled='!vm.map'
+            )
+              i.glyphicon.glyphicon-map-marker
+
+        .address
+          a.inherit-colors(
+          href ng-click='vm.outletClick()'
+          ng-class='vm.outletNavClass'
+          ) {{ vm.outlet.address }}
+
+
+    .outlet-avatar(ng-if='vm.isRootState')
+
+      a.thumb(href ng-click='vm.thumbClick()' ng-class='{disabled: !vm.avatar}')
+        img(
+        ng-src='{{vm.avatarSrc}}'
+        ng-class='!vm.avatarSrc && "placeholder"'
+        )
+
+  outlet-navigation-bar(ng-if='vm.isRootState' current-tab='vm.currentTab')
+
+  .ui-view(ng-switch='vm.currentTab')
+
+    .outlet-saleOrder(ng-switch-when='saleOrder')
+      sale-order-view(
+      custom-filter='vm.saleOrderFilter'
+      disable-elements='true'
+      ng-if='vm.saleOrderFilter'
+      )
+
+    .outlet-shipments(ng-switch-when='shipments')
+      shipment-list(filter='vm.visitFilter')
+
+    .outlet-debts(ng-switch-when='debt')
+      debt-view-by-outlet(
+      custom-filter='vm.debtFilter'
+      disable-elements='true'
+      ng-if='vm.debtFilter'
+      )
+
+    .outlet-visit(ng-switch-when='visit')
+      visit-view(
+      custom-filter='vm.visitFilter'
+      disable-elements='true'
+      ng-if='vm.visitFilter'
+      )
+
+    .outlet-salesman-contracts(ng-switch-when='miscellaneous')
+
+      contract-view(contracts='vm.outletSalesmanContracts')
+
+        .outlet-additional-fields
+
+          .license-info(ng-if='vm.outlet.licenseInfo')
+            label Лицензия
+            span {{ vm.outlet.licenseInfo }}
+
+          .egais-code(ng-if='vm.outlet.egaisCode')
+            label ЕГАИС ИД
+            span {{ vm.outlet.egaisCode }}
+
+          .comment-text(ng-if='vm.outlet.commentText')
+            label Комментарий
+            strong {{ vm.outlet.commentText }}
+
+        .outlet-partner-limitation(ng-if='vm.outlet.partner.hasExclusions()')
+
+          label Исключения из правил:
+
+          .limitations
+            ul
+              li.allow-any-total(ng-if='vm.outlet.partner.allowLowTotal || vm.outlet.partner.allowAnyTotal')
+                span(ng-if='vm.outlet.partner.allowAnyTotal')
+                  | Нет минимальной суммы заказа
+                span(ng-if='vm.outlet.partner.allowLowTotal || !vm.outlet.partner.allowAnyTotal')
+                  | Пониженная минимальная сумма заказа
+
+              li.allow-any-volume(ng-if='vm.outlet.partner.allowAnyVolume')
+                span Не применять кратность
+
+              li.allow-no-charges(ng-if='vm.outlet.partner.allowNoCharges')
+                span Не требуется нагрузка
+
+              li.allow-no-doc-discounts(ng-if='vm.outlet.partner.allowNoDocDiscounts')
+                span Разрешены скидки в откат

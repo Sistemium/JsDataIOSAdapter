@@ -1,0 +1,59 @@
+.visit-view(cg-busy='vm.cgBusy')
+
+  .row.datepicker-with-buttons(ng-if='!vm.disableElements')
+
+    sab-date-picker.col-sm-4.col-lg-3(
+    value='vm.selectedDate'
+    init-date='vm.initDate'
+    min-date='vm.minDate'
+    max-date='vm.maxDate'
+    custom-class='vm.getDayClass'
+    clear-text='Сегодня'
+    )
+
+    .col-sm-3.col-lg-2.col-sm-offset-5.col-lg-offset-7
+      .buttons
+        button.btn.btn-block.btn-primary(
+        ng-click='vm.newVisitClick()'
+        ng-disabled='!vm.selectedSalesmanId'
+        )
+          i.glyphicon.glyphicon-plus
+          span Новый визит
+
+  hr.clear-both(ng-if='!vm.disableElements')
+
+  #scroll-main(
+  resize
+  resize-offset-top='5'
+  ng-if='vm.selectedDayVisits.length'
+  )
+    table.table.clear-both.table-hover
+      thead
+        tr
+          th(ng-if='!vm.selectedSalesmanId') ТП
+          th {{ vm.customFilter ? 'Дата' : 'Точка' }}
+          th Время
+          th.hidden-xs До точки
+          th.number.hidden-xs Фото
+          //th.number.hidden-xs Ответов
+      tbody
+        tr.visit.clickable.visit(
+        ng-repeat='visit in vm.selectedDayVisits | orderBy:"-deviceCts" track by visit.id'
+        ng-click='vm.visitClick(visit)'
+        )
+          td(ng-if='!vm.selectedSalesmanId') {{ ::visit.salesman.shortName }}
+          td(ng-if='vm.customFilter') {{ ::visit.date }}
+          td(ng-if='!vm.customFilter')
+            div {{ ::visit.outlet.name }}
+            .gray {{ ::visit.outlet.address }}
+          td
+            div {{ ::visit.checkInLocation.timestamp | amUtc | amLocal | amDateFormat:'HH:mm' }}
+            .duration(ng-if='visit.finished') {{ ::visit.duration() }}
+            .not-finished(ng-if='!visit.finished') Не завершен!
+          td.hidden-xs {{ vm.outletDistance(visit) }}
+          td.number.hidden-xs {{ visit.photos.length | number: 0 }}
+          //td.number.hidden-xs {{ visit.answers.length | number: 0 }}
+
+  .alert.alert-info.centered(ng-if='!vm.selectedDayVisits.length && !vm.busy')
+    span Нет визитов
+    span(ng-if='!vm.disableElements') &nbsp;на указанную дату

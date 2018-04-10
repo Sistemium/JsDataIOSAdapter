@@ -1,0 +1,98 @@
+@import "variables";
+
+.filter-workflow {
+
+  > a {
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    padding: 8px 10px;
+    background: $border-gray;
+    border-radius: $border-radius;
+
+    text-decoration: none;
+
+    .name {
+      display: inline-block;
+      min-width: 70px;
+      @extend .ellipsis;
+    }
+
+  }
+
+  .popover {
+    padding: 0;
+  }
+
+  .popover-content {
+    padding: 0;
+  }
+
+  .workflow-popover {
+
+    .cancel-button + .workflows > .workflow:first-of-type {
+      border-radius: 0;
+    }
+
+    .workflows {
+
+      > .workflow {
+
+        &:first-of-type {
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
+        }
+
+        &:last-of-type {
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+        }
+
+        outline: none;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 7px 10px;
+
+        text-decoration: none;
+        color: $black;
+
+        &.active {
+          background-color: $primary-color;
+          color: $white;
+        }
+
+        &:hover:not(.active) {
+          background-color: $gray-background-color;
+        }
+
+        & + * {
+          border-top: 1px solid $border-gray;
+        }
+
+        &.blue .badge {
+          @include backgroundBorderColor($state-info-bg, $state-info-border, $state-info-text);
+        }
+
+        &.green .badge {
+          @include backgroundBorderColor($state-success-bg, $state-success-border, $state-success-text);
+        }
+
+        &.orange .badge {
+          @include backgroundBorderColor($state-warning-bg, $state-warning-border, $state-warning-text);
+        }
+
+        &.red .badge {
+          @include backgroundBorderColor($state-danger-bg, $state-danger-border, $state-danger-text);
+        }
+
+      }
+
+    }
+  }
+
+}

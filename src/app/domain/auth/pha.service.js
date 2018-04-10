@@ -2,17 +2,29 @@
 
 (function () {
 
-  angular.module('core.services').service('phaService', phaService);
+  angular.module('core.services')
+    .service('phaService', phaService);
 
   function phaService($http, $rootScope) {
 
-    var
-      url = 'https://api.sistemium.com/pha/auth',
-      logoffUrl = 'https://api.sistemium.com/pha/logoff',
-      rolesUrl = 'https://api.sistemium.com/pha/roles',
-      ID;
+    const url = 'https://api.sistemium.com/pha/auth';
+    const logoffUrl = 'https://api.sistemium.com/pha/logoff';
+    const rolesUrl = 'https://api.sistemium.com/pha/roles';
 
-    var me = {};
+    let ID;
+
+    const me = {};
+
+    return _.assign(me, {
+      auth,
+      logoff,
+      confirm,
+      getRoles
+    });
+
+    /*
+    Functions
+     */
 
     function auth(mobileNumber) {
       return $http
@@ -44,34 +56,33 @@
     }
 
     function getRoles(token) {
-      return $http
-        .get(rolesUrl, {
-          headers: {
-            Authorization: token
-          },
-          timeout: 15000
-        })
-        .then(function (httpResponse) {
-          var res = httpResponse.data;
-          var response = {
+
+      let params = {
+        headers: {
+          Authorization: token
+        },
+        timeout: 15000
+      };
+
+      return $http.get(rolesUrl, params)
+        .then(httpResponse => {
+
+          const res = httpResponse.data;
+          const response = {
             accessToken: token,
             roles: res.roles,
             account: res.account
           };
+
           me.roles = res.roles;
           me.account = res.account;
-          $rootScope.$broadcast('authenticated', response);
-          return response;
-        })
-        ;
-    }
 
-    return angular.extend(me, {
-      auth: auth,
-      logoff: logoff,
-      confirm: confirm,
-      getRoles: getRoles
-    });
+          $rootScope.$broadcast('authenticated', response);
+
+          return response;
+
+        });
+    }
 
   }
 

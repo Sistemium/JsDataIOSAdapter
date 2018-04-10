@@ -1,0 +1,61 @@
+.query(
+uib-accordion-group
+class='panel-default'
+template-url='app/domain/sales/catalogue/catalogueFilter/tabs/catalogueFilterSearcher.html'
+is-open="vm.tabsOpen.queries"
+)
+  uib-accordion-heading
+
+    catalogue-search-input(
+    search='vm.searchText'
+    filters='vm.filters'
+    search-enter-press='vm.searchEnterPress'
+    active-tags='vm.activeTags'
+    active-group='vm.activeGroup'
+    stock-length='vm.cvm.stock.length'
+    catalogue-vm='vm'
+    remove-tag-click='vm.removeTagClick'
+    focused='vm.searchFocused'
+    label-click='vm.fullScreen = !vm.fullScreen'
+    on-search-enter='vm.onSearchEnter()'
+    )
+
+    a.toggle-favourite(
+    href ng-click='vm.toggleFavouriteClick()'
+    ng-show='vm.showSearchHistory && vm.searchText.length > 3 && vm.cvm.stock.length'
+    )
+      i.glyphicon(
+      ng-class='vm.currentSearchQuery.isFavourite ? "glyphicon-heart" : "glyphicon-heart-empty"'
+      )
+
+    button.btn.btn-default#only-shipped-filter(
+    ng-if='vm.cvm.saleOrder'
+    ng-click='vm.cvm.onlyShippedClick()'
+    )
+      i.glyphicon(ng-class='vm.cvm.showOnlyShipped ? "glyphicon-star" : "glyphicon-star-empty"')
+
+    a.toggle-open(
+    ng-if='vm.showSearchHistory'
+    href ng-click='vm.searchInputToggleOpenClick()'
+    ng-class='vm.tabsOpen.queries ? "opened" : "closed"'
+    )
+      span.caret.turnable(ng-class='{"turn-90-counter-clock": vm.tabsOpen.queries}')
+
+  .accordion-body(ng-if='vm.showSearchHistory')
+
+    .search-query(
+    ng-repeat='query in vm.searchQueries track by query.query'
+    ng-class='{active : vm.search === query.query}'
+    )
+      a.query-name(href ng-click='vm.queryClick(query)') {{query.query}}
+
+      a.toggle-favourite(href ng-click='vm.favouriteQueryClick(query)')
+        i.glyphicon(
+        ng-class='query.isFavourite ? "glyphicon-heart" : "glyphicon-heart-empty"'
+        )
+
+      //a.remove(
+      //ng-if='!query.isFavourite'
+      //href ng-click='vm.removeQueryClick(query)'
+      //)
+        i.glyphicon.glyphicon-remove

@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, $filter) {
+  angular.module('Models').run(function (Schema, $filter, DomainOption) {
 
     const cleanName = $filter('cleanName');
 
@@ -12,10 +12,6 @@
 
       relations: {
         hasMany: {
-          Article: {
-            localField: 'Articles',
-            foreignKey: 'articleGroupId'
-          },
           ArticleGroup: {
             localField: 'children',
             foreignKey: 'articleGroupId'
@@ -36,12 +32,14 @@
       notify: false,
 
       meta: {
+        stmRoot
       },
 
       computed: {
         displayName: ['name', cleanName],
         ancestorsCache: ['id', 'articleGroupId', setACache],
-        descendantsCache: ['id', 'articleGroupId', setDCache]
+        descendantsCache: ['id', 'articleGroupId', setDCache],
+        sortName: ['id', 'name', sortNameFn]
       },
 
       methods: {
@@ -49,10 +47,13 @@
         firstLevelAncestor,
         ancestors,
         descendants,
+        filterDescendantArticles,
 
         hasDescendants: function (ids) {
           return _.find(this.descendantsCache, item => ids[item]);
-        }
+        },
+
+        ancestorNames
 
       }
 
@@ -60,6 +61,15 @@
 
     let cacheA = {};
     let cacheD = {};
+
+    function sortNameFn(id, name) {
+      return `${(id === DomainOption.stmArticleGroupId()) ? '!' : ''}${_.trim(name)}`.toLocaleLowerCase();
+    }
+
+    function stmRoot() {
+      let id = DomainOption.stmArticleGroupId();
+      return id && ArticleGroup.get(id);
+    }
 
     function firstLevelAncestor() {
       let id = _.find(this.ancestors(), {articleGroupId: null});
@@ -76,11 +86,15 @@
     }
 
     function setCache(store, id, articleGroupId) {
+
       let cache = store[id];
+
       if (!cache) {
         cache = store[id] = []
       }
+
       articleGroupId && cache.indexOf(articleGroupId) === -1 && cache.push(articleGroupId);
+
       return cache;
     }
 
@@ -107,9 +121,34 @@
 
     }
 
+    function ancestorNames() {
+
+      let parent = this.articleGroup;
+      let names = (parent ? `${parent.ancestorNames()} / ` : '') + this.sortName;
+
+      return names || '';
+
+    }
+
     function setDCache(id) {
       return setCache(cacheD, id);
     }
+
+    function filterDescendantArticles(positions) {
+
+      let hash = {};
+
+      hash[this.id] = true;
+
+      _.each(this.descendantsCache, id => hash[id] = true);
+
+      return _.filter(positions, position => {
+        let {article = position} = position;
+        return article && hash[article.articleGroupId];
+      });
+
+    }
+
 
   });
 

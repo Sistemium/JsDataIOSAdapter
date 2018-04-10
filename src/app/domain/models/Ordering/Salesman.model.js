@@ -23,24 +23,14 @@
           //   localField: 'salesmanOutletRestrictions',
           //   foreignKey: 'salesmanId'
           // },
-          PrePreOrder: {
-            localField: 'prePreOrders',
-            foreignKey: 'salesmanId'
-          }
         }
       },
 
       computed: {
-        shortName: ['name', function (name) {
-          var m = name.match(/^[^ ]+ [^ ]+/);
-          return m ? m[0] : null;
-        }],
-        tinyName: ['name', function (name) {
-          var m = name.match(/^[^ ]+[ ]+./);
-          return m ? (m[0] + '.') : null;
-        }],
+        shortName: ['name', shortNameFn],
+        tinyName: ['name', tinyNameFn],
         initials: ['name', function (name) {
-          var m = name.match(/[А-Я]/g);
+          let m = name.match(/[А-Я]/g);
           return m ? (m[0] + '' + m[1]) : null;
         }]
       },
@@ -50,6 +40,46 @@
       }
 
     });
+
+    function etcFn(name) {
+      let etc = name.match(/\(.+\)/);
+      return etc ? etc[0] : '';
+    }
+
+    function shortNameFn(name) {
+
+      let m = name.match(/^[^ ]+ [^ ]+/);
+
+      if (!m) {
+        return name;
+      }
+
+      let res = [m[0]];
+
+      let etc = etcFn(name);
+
+      if (etc) {
+        res.push(etc);
+      }
+
+      return res.join(' ');
+    }
+
+    function tinyNameFn(name) {
+      let m = name.match(/^[^ ]+[ ]+./);
+      if (!m) {
+        return name;
+      }
+      let res = [m[0]+'.'];
+      let etc = etcFn(name);
+
+      if (etc) {
+        res.push(etc);
+      }
+
+      return res.join(' ');
+    }
+
 
   });
 

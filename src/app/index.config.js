@@ -18,13 +18,19 @@
     .config($compileProvider => {
       $compileProvider.preAssignBindingsEnabled(true);
     })
+    .config($animateProvider => {
+      $animateProvider.classNameFilter(/animate/);
+    })
   ;
 
   function debugService(saDebug) {
     return saDebug.log('stg:log');
   }
 
-  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService, IOS, PickerAuth, localStorageService, $injector) {
+  /** @ngInject */
+  function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService,
+               IOS, PickerAuth, localStorageService, $injector,
+               appcache) {
 
     let lastState = localStorageService.get('lastState');
 
@@ -35,21 +41,28 @@
       .then(saApp.init)
       .catch(error => localStorageService.set('error', angular.toJson(error)));
 
-    Auth.init(IOS.isIos() ? IOS.init() : phaService).then(function (autorization) {
+    Auth.init(IOS.isIos() ? IOS.init() : phaService)
+      .then(onAuth);
 
-      console.log('Auth', autorization);
+    /*
+    Functions
+     */
 
-      let org = _.get(autorization, 'account.org');
-      let isTestOrg = /^(dev|dr50)$/.test(org);
+    function onAuth(authorization) {
+
+      // console.log('Auth', authorization);
+
+      let org = _.get(authorization, 'account.org');
+      let isTestOrg = /^(dev|dr50p?)$/.test(org);
 
       let appConfig =
-          // InitService.localDevMode ? {} :
-          {
-            url: {
-              socket: isTestOrg ? 'https://socket2.sistemium.com' : 'https://socket.sistemium.com'
-            }
+        // InitService.localDevMode ? {} :
+        {
+          url: {
+            socket: isTestOrg ? 'https://socket2.sistemium.com' : 'https://socket-v2.sistemium.com'
           }
-        ;
+        }
+      ;
 
       if (!IOS.isIos()) {
         angular.extend(appConfig, {
@@ -63,19 +76,6 @@
       //sockAuth();
       InitService.then(() => Sockets.on('connect', sockAuth));
 
-      function sockAuth() {
-        let accessToken = Auth.getAccessToken();
-        if (!accessToken) {
-          return;
-        }
-        Sockets.emit('authorization', {accessToken: accessToken}, function (ack) {
-          DEBUG('Socket authorization:', ack);
-          $rootScope.$broadcast('socket:authorized');
-        });
-      }
-
-      //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
-
       let lastPicker = window.localStorage.getItem('currentPickerId');
 
       if (lastPicker) {
@@ -83,26 +83,55 @@
           .then(function (p) {
             PickerAuth.login(p, lastState);
           });
-      } else if (lastState) {
-        $state.go(lastState.name, lastState.params);
       }
 
-      $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
-        (e, to, params) => localStorageService.set('lastState', {
-          name: to.name,
-          params: params
-        })
-      ));
+      function sockAuth() {
 
-      if (Auth.isAuthorized(['salesman', 'supervisor'])) {
-        console.info($injector.get('SalesmanAuth'));
-        if (lastState) {
-          // console.warn('Resoiring last state', lastState.name, lastState.params);
-          $state.go(lastState.name, lastState.params);
+        let accessToken = Auth.getAccessToken();
+
+        if (!IOS.isIos()) {
+
+          appcache.checkUpdate()
+            .catch(() => 'no update');
+
+          if (!accessToken) {
+            console.log('sockAuth no auth');
+            return;
+          }
+
         }
+
+        $rootScope.$on('$destroy', $rootScope.$on('$stateChangeSuccess',
+          (e, to, params) => localStorageService.set('lastState', {
+            name: to.name,
+            params: params
+          })
+        ));
+
+        Sockets.emit('authorization', {accessToken: accessToken}, ack => {
+
+          DEBUG('Socket authorization:', ack);
+          $rootScope.$broadcast('socket:authorized');
+
+          //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
+
+          if (Auth.isAuthorized(['salesman', 'supervisor', 'outlet'])) {
+            let sAuth = $injector.get('SalesmanAuth');
+            DEBUG('Injecting SalesmanAuth:', sAuth);
+          }
+
+          if (lastState) {
+            console.warn('Restoring last state', lastState.name, lastState.params);
+            $state.go(lastState.name, lastState.params);
+            lastState = false;
+          }
+
+        });
+
       }
 
-    });
+
+    }
 
   }
 

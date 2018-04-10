@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "variables";
 
 settings-popover {
 
@@ -11,6 +11,14 @@ settings-popover {
   .popover {
 
     min-width: 250px;
+
+    @include responsive-only(xxs) {
+      min-width: 180px;
+      max-width: 200px;
+      button {
+        white-space: normal;
+      }
+    }
 
     top: 47px !important;
 

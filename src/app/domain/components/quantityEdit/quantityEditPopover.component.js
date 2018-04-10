@@ -2,160 +2,188 @@
 
 (function () {
 
-  const quantityEditPopover = {
+    const quantityEditPopover = {
 
-    bindings: {
-      article: '<',
-      saleOrder: '<',
-      price: '<',
-      popoverOpen: '=',
-      position: '<'
-    },
+      bindings: {
+        article: '<',
+        saleOrder: '<',
+        price: '<',
+        popoverOpen: '=',
+        position: '<',
+        stock: '<'
+      },
 
-    templateUrl: 'app/domain/components/quantityEdit/quantityEditPopover.html',
+      templateUrl: 'app/domain/components/quantityEdit/quantityEditPopover.html',
 
-    controller: quantityEditController,
-    controllerAs: 'vm'
+      controller: quantityEditController,
+      controllerAs: 'vm'
 
-  };
+    };
 
-  /** @ngInject */
-  function quantityEditController($scope, IOS, Schema) {
+    /** @ngInject */
+    function quantityEditController($scope, IOS, Schema, DomainOption, saEtc) {
 
-    const {SaleOrderPosition} = Schema.models();
+      const {SaleOrderPosition} = Schema.models();
 
-    let vm = this;
+      let vm = this;
 
-    let saleOrder = vm.saleOrder || _.get(vm.position, 'saleOrder');
-    let article = vm.article || _.get(vm.position, 'article');
-    let position = vm.position || _.find(_.get(saleOrder, 'positions'), {articleId: article.id});
-    let price = vm.price || _.pick(vm.position, ['price', 'priceOrigin', 'priceDoc']);
+      let saleOrder = vm.saleOrder || _.get(vm.position, 'saleOrder');
+      let article = vm.article || _.get(vm.position, 'article');
+      let position = vm.position || _.find(_.get(saleOrder, 'positions'), {articleId: article.id});
 
-    _.assign(vm, {
+      _.assign(vm, {
 
-      showBottles: article.packageRel > 1,
-      type: IOS.isIos() ? 'number' : 'text',
-      bottleLabel: _.upperCase(article.pcsLabel),
+        showBottles: article.packageRel > 1,
+        type: IOS.isIos() ? 'number' : 'text',
+        bottleLabel: _.upperCase(article.pcsLabel),
+        noFactor: !DomainOption.hasArticleFactors() || _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume'),
 
-      incrementBoxes: () => changeVolume(article.packageRel),
-      incrementBottles: () => changeVolume(1),
-      decrementBoxes: () => changeVolume(-article.packageRel),
-      decrementBottles: () => changeVolume(-1),
-      deleteClick,
-      incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel / 2))
+        incrementBoxes: () => changeVolume(article.packageRel),
+        incrementBottles: () => changeVolume(1),
+        decrementBoxes: () => changeVolume(-article.packageRel),
+        decrementBottles: () => changeVolume(-1),
+        deleteClick,
+        incrementHalfBoxes: () => changeVolume(Math.ceil(article.packageRel / 2)),
 
-    });
+        articleFactor,
 
-    /*
-     Init
-     */
+        // $onInit,
+        $onDestroy
 
-    setQty();
-
-    if (!position) {
-      createPosition();
-    }
-
-    /*
-     Listeners
-     */
-
-    $scope.$watchGroup(['vm.boxes', 'vm.bottles'], _.debounce(onQtyChange, 750));
-    $scope.$watch('vm.position.id', onPositionChange);
-
-    /*
-     Functions
-     */
-
-    function createPosition() {
-
-      position = SaleOrderPosition.createInstance({
-        saleOrderId: saleOrder.id,
-        articleId: article.id,
-        price: price.price,
-        priceDoc: price.price,
-        priceOrigin: price.priceOrigin,
-        volume: 0
       });
 
-    }
+      /*
+       Init
+       */
 
-    function onPositionChange(newPositionId, oldPositionId) {
-      if (!newPositionId && oldPositionId) {
+      if (!position) {
         createPosition();
-      }
-    }
-
-    function deleteClick() {
-      // if (position.id && !vm.deleteConfirmation) {
-      //   return vm.deleteConfirmation = true;
-      // }
-      // if (position.id) {
-        changeVolume(-position.volume);
-      // }
-      if (vm.popoverOpen) vm.popoverOpen = false;
-    }
-
-    function onQtyChange(newValues, oldValues) {
-      if (newValues[1] != oldValues[1] || newValues[0] != oldValues[0]) {
-
-        let volume = parseInt(newValues[0] * position.article.packageRel || 0)
-          + parseInt(newValues[1] || 0);
-
-        let factor = _.get(position, 'article.factor') || 1;
-        let notFactored = volume % factor;
-
-        if (notFactored) {
-          volume = volume - notFactored + factor;
-        }
-
-        position.volume = _.max([0, volume]);
-
-        if (notFactored) {
-          setQty();
-        }
-
-        injectPosition();
-        position.updateCost();
-        saleOrder.updateTotalCost();
-
-      }
-    }
-
-    function changeVolume(addVolume) {
-
-      position.volume += addVolume;
-      position.volume = _.max([0, position.volume]);
-
-      let factor = _.get(position, 'article.factor') || 1;
-      let notFactored = position.volume % factor;
-
-      if (notFactored) {
-        position.volume = position.volume - notFactored + (addVolume > 0 ? factor : 0);
       }
 
       setQty();
-      injectPosition();
 
-    }
+      /*
+       Listeners
+       */
 
-    function setQty() {
-      let boxPcs = position ? position.article.boxPcs(position.volume, false) : {};
-      _.assign(vm, {
-        boxes: boxPcs.box,
-        bottles: boxPcs.pcs
-      });
-    }
+      $scope.$watch('vm.volume', saEtc.debounce(onVolumeChange, 750, $scope));
+      $scope.$watch('vm.position.id', onPositionChange);
 
-    function injectPosition() {
-      if (!position.id) {
-        SaleOrderPosition.inject(position);
+      /*
+       Functions
+       */
+
+      function $onDestroy() {
+
       }
+
+      function createPosition() {
+
+        let {stock} = vm;
+
+        let priceOrigin = stock.priceOrigin();
+
+        if (!priceOrigin) {
+          return;
+        }
+
+        position = SaleOrderPosition.createInstance({
+          saleOrderId: saleOrder.id,
+          articleId: article.id,
+          price: stock.discountPrice(),
+          priceDoc: stock.discountPriceDoc(),
+          priceOrigin: priceOrigin,
+          priceAgent: stock.priceAgent,
+          volume: 0
+        });
+
+      }
+
+      function onPositionChange(newPositionId, oldPositionId) {
+        if (!newPositionId && oldPositionId) {
+          createPosition();
+        }
+      }
+
+      function deleteClick() {
+
+        changeVolume(-position.volume);
+        position.updateCost();
+        saleOrder.updateTotalCost();
+
+        if (vm.popoverOpen) vm.popoverOpen = false;
+
+      }
+
+      function onVolumeChange() {
+
+        let {volume} = vm;
+
+        if (!position) {
+          // console.error('no position');
+          return;
+        }
+
+        if (volume === position.volume) {
+          return;
+        }
+
+        let factor = articleFactor();
+        let notFactored = volume % factor;
+
+        if (notFactored) {
+          vm.invalidFactor = true;
+          return;
+        }
+
+        vm.invalidFactor = false;
+
+        position.volume = _.max([0, volume]);
+
+        injectPosition();
+
+      }
+
+      function articleFactor() {
+        return !vm.noFactor && _.get(vm, 'article.factor') || 1;
+      }
+
+      function changeVolume(addVolume) {
+
+        vm.volume = _.max([(vm.volume || 0) + addVolume, 0]);
+
+      }
+
+      function setQty() {
+        vm.volume = position.volume;
+      }
+
+      function injectPosition() {
+
+        if (!position) {
+
+          // console.error('no position');
+
+          return;
+        }
+
+        setQty();
+
+        position.updateCost();
+
+        if (!position.id) {
+          SaleOrderPosition.inject(position);
+        }
+
+        saleOrder.updateTotalCost();
+
+      }
+
     }
+
+    angular.module('sistemium')
+      .component('quantityEditPopover', quantityEditPopover);
 
   }
 
-  angular.module('sistemium')
-    .component('quantityEditPopover', quantityEditPopover);
-
-})();
+)();

@@ -28,7 +28,7 @@
     });
 
     function $onInit() {
-      vm.egais = vm.egais || vm.shipment.egais;
+      vm.egais = vm.egais || vm.shipment.egaisCached();
     }
 
   }

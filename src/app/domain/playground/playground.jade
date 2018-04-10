@@ -1,21 +1,16 @@
 section
 
   h2 Playground
-    .lead v{{ vm.version }}
 
-  pre(ng-if='vm.visit') Visit.id: {{ vm.visit.id }}
+  p Started at: {{ vm.started }}
+  p Finished "Price" in {{ vm.finished['Price'] || '?' }} ms.
+  p Finished "Article" in {{ vm.finished['Article'] || '?' }} ms.
+  p Finished "ArticleGroup" in {{ vm.finished['ArticleGroup'] || '?' }} ms.
 
-  p.text-right
-    button.btn.btn-primary(ng-click='vm.takePhoto()' ng-disabled='!vm.visit')
-      i.glyphicon.glyphicon-camera
+  .data(ng-if='vm.data')
+    h4 Data
+    pre {{ vm.data | json }}
 
-  .container-fluid
-    .row
-      .col-xs-2.thumbnail(ng-repeat='pic in vm.pictures track by pic.id')
-        a(ng-click='vm.thumbnailClick(pic)')
-          img(ng-src='{{::pic.srcThumbnail}}')
-
-
-  pre(ng-if='vm.photo') {{ vm.photo | json }}
-  pre.red(ng-if='vm.error') {{ vm.error | json }}
-  pre(ng-if='vm.jsData') {{ vm.jsData | json }}
+  .error(ng-if='vm.err')
+    h4 Error
+    pre {{ vm.err | json }}

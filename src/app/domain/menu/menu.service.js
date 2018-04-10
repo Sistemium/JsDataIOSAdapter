@@ -8,6 +8,7 @@
     const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
     const PICKING_ROLES = ['picker'];
     const ADMIN_ROLES = ['admin', 'tester'];
+    const OUTLET_ROLES = _.union(['outlet'], SALES_ROLES);
 
     const items = [{
       title: 'Сборка',
@@ -20,7 +21,7 @@
     }, {
       title: 'Каталог',
       state: 'sales.catalogue',
-      needRoles: SALES_ROLES
+      needRoles: OUTLET_ROLES
     }, {
       title: 'Заказы',
       state: 'sales.saleOrders',
@@ -29,11 +30,15 @@
     }, {
       title: 'Отгрузки',
       state: 'sales.shipmentList',
-      needRoles: SALES_ROLES
+      needRoles: OUTLET_ROLES
+    }, {
+      title: 'Лента новостей',
+      state: 'newsFeed',
+      needRoles: MARKETING_ROLES
     }, {
       title: 'Долги',
       state: 'sales.debtByOutlet',
-      needRoles: SALES_ROLES
+      needRoles: OUTLET_ROLES
     }, {
       title: 'Выручка',
       state: 'sales.cashing',
@@ -45,7 +50,7 @@
     }, {
       title: 'Акции',
       state: 'sales.campaigns',
-      needRoles: MARKETING_ROLES
+      needRoles: _.union(['outlet'], MARKETING_ROLES)
     }, {
       title: 'Фото-отчёты',
       state: 'sales.photoReports',
@@ -55,19 +60,15 @@
       state: 'sales.visits',
       needRoles: SALES_ROLES,
       disabled: DomainOption.visitsDisabled
-    }, {
+    // }, {
       // title: 'Фотопоток',
       // state: 'photos.stream',
       // needRoles: SALES_ROLES
       // needRoles: ['admin', 'tester']
-    // }, {
+    }, {
       title: 'Тесты',
       state: 'playground',
       needRoles: ADMIN_ROLES
-    }, {
-      title: 'Лента новостей',
-      state: 'newsFeed',
-      needRoles: MARKETING_ROLES
     }];
 
 

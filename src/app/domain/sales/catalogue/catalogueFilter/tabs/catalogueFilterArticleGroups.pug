@@ -1,0 +1,79 @@
+.article-groups(
+class='panel-default'
+uib-accordion-group
+is-open='vm.tabsOpen.categories'
+)
+
+  uib-accordion-heading
+    .title Группа
+    .active-tags(ng-if='!vm.tabsOpen.categories && vm.cvm.currentArticleGroup')
+      a(href ng-click='vm.activeArticleGroupClick($event)')
+        | {{ vm.cvm.currentArticleGroup.displayName }}
+    span.caret.turnable(ng-class='{"turn-90-counter-clock": vm.tabsOpen.categories}')
+
+  .accordion-body
+
+    ul.preceding-groups(ng-if='vm.cvm.showFirstLevel && vm.cvm.precedingGroups.length')
+
+      a.list-group-item(
+      href
+      ng-repeat='elem in vm.cvm.precedingGroups | orderBy:"name" track by elem.id'
+      stm-click='articleGroup' click-payload='elem'
+      )
+        span.name {{::elem.displayName }}
+
+        span.chevron
+          i.glyphicon.glyphicon-menu-right
+
+    ul.list-group.xs-ancestors(
+    ng-if='vm.cvm.ancestors.length'
+    )
+
+      a.list-group-item(
+      href
+      ng-repeat='ancestor in vm.ancestorGroups() track by ancestor.id'
+      stm-click='articleGroup' click-payload='ancestor'
+      )
+
+        span.chevron
+          i.glyphicon.glyphicon-menu-left
+
+        span.name {{::ancestor.displayName}}
+
+    ul.list-group.article-groups
+
+      a.list-group-item.active(
+      href
+      ng-if='vm.needShowCurrentArticleGroup()'
+      ng-click='vm.cvm.articleGroupClick();'
+      )
+        span.name {{ vm.cvm.currentArticleGroup.displayName || 'Товары заказа' }}
+
+      a.list-group-item(
+      href
+      ng-repeat='elem in vm.cvm.articleGroups | orderBy:"sortName" track by elem.id'
+      ng-class='{active: vm.cvm.currentArticleGroup.id === elem.id, descendant: elem.articleGroupId}'
+      ng-click='vm.articleGroupClick(elem)'
+      )
+        span.name {{::elem.displayName }}
+
+        //span.badge(ng-if='::vm.cvm.articleGroupIds[elem.id]')
+          span {{::vm.cvm.articleGroupIds[elem.id]}}
+          span(ng-if='::elem.children.length') +
+
+        span.chevron(
+        ng-if='::elem.children.length'
+        )
+          i.glyphicon.glyphicon-menu-right
+
+    ul.following-groups(ng-if='vm.cvm.showFirstLevel && vm.cvm.followingGroups.length')
+
+      a.list-group-item(
+      href
+      ng-repeat='elem in vm.cvm.followingGroups | orderBy:"name" track by elem.id'
+      stm-click='articleGroup' click-payload='elem'
+      )
+        span.name {{::elem.displayName }}
+
+        span.chevron
+          i.glyphicon.glyphicon-menu-right
