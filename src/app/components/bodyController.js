@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo) {
+  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo, IOS) {
 
     const vm = this;
 
@@ -34,7 +34,9 @@
       });
     }
 
-    appcache.addEventListener('updateready', onUpdate, true);
+    if (!IOS.isIos()) {
+      appcache.addEventListener('updateready', onUpdate, true);
+    }
 
   });
 
