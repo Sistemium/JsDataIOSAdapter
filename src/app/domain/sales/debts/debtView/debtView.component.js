@@ -212,6 +212,7 @@
         });
 
         return {
+          id: partnerId,
           partner: Partner.get(partnerId),
           items: _.orderBy(items, 'outlet.name'),
           'sum(cashed)': totalCashed(items),
