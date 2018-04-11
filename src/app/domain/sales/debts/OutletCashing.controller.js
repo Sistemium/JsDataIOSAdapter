@@ -15,7 +15,7 @@
 
     vm.rebindAll(Cashing, {outletId, orderBy}, 'vm.data');
 
-    refresh();
+    vm.setBusy(refresh());
 
     /*
     Functions
