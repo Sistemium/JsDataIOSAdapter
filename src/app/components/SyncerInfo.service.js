@@ -2,7 +2,7 @@
 
   module.service('SyncerInfo', SyncerInfo);
 
-  function SyncerInfo($window, $timeout) {
+  function SyncerInfo($window, $timeout, IOS) {
 
     const CALLBACK = 'unsyncedInfoCallback';
     const syncerState = {};
@@ -22,10 +22,8 @@
         }
       };
 
-      let webkit = $window.webkit;
-
-      if (webkit) {
-        webkit.messageHandlers.unsyncedInfoService.postMessage({
+      if (IOS.isIos()) {
+        IOS.handler('unsyncedInfoService').postMessage({
           unsyncedInfoCallback: CALLBACK
         });
         return true;
