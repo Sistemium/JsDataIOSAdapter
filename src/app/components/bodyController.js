@@ -34,9 +34,10 @@
       });
     }
 
-    if (!IOS.isIos()) {
+    // TODO: Android is using appcache
+    // if (!IOS.isIos()) {
       appcache.addEventListener('updateready', onUpdate, true);
-    }
+    // }
 
   });
 
