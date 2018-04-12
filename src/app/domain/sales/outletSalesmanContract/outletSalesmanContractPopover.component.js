@@ -36,7 +36,8 @@
 
       let where = {
         outletId: {'==': vm.saleOrder.outletId},
-        salesmanId: {'==': vm.saleOrder.salesmanId}
+        salesmanId: {'==': vm.saleOrder.salesmanId},
+        contractId: {'!=': null}
       };
 
       vm.busy = OutletSalesmanContract.findAllWithRelations({where})()
@@ -56,8 +57,6 @@
 
         })
         .finally(() => vm.busy = false);
-
-      where.contractId = {'!=': null};
 
       OutletSalesmanContract.bindAll({where}, $scope, 'vm.data');
 

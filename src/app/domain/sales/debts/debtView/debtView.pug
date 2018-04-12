@@ -26,7 +26,7 @@
     elem-ready='vm.restoreScrollPosition()'
     )
 
-      .partner-debt-total(ng-repeat='group in vm.data track by $index')
+      .partner-debt-total(ng-repeat='group in vm.data track by group.id')
 
         h4.name {{ ::group.partner.shortName }}
 

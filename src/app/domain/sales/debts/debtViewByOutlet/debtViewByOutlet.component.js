@@ -145,7 +145,7 @@
     function updateFilters(data) {
       vm.data = _.filter(data, date => {
         return _.find(date.items, debt => {
-          return Math.abs(debt.uncashed()) > 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
+          return Math.abs(debt.summ) >= 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
         })
       });
     }

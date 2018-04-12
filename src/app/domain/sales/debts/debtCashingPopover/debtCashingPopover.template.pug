@@ -51,13 +51,16 @@
 
   .cashings(ng-if='vm.cashings.length')
     .title Получено ранее
-    .cashing(ng-repeat='cashing in vm.cashings track by cashing.id')
+    .cashing(
+    ng-repeat='cashing in vm.cashings track by cashing.id'
+    ng-class='{red: !cashing.isProcessed}'
+    )
       a.delete(
       ng-if='!cashing.uncashingId'
       href ng-click='vm.deleteCashingClick(cashing)'
       ng-class='{confirmation: vm.deleteConfirmation[cashing.id]}'
       )
         i.glyphicon.glyphicon-trash
-      span.cts {{ cashing.deviceCts | amUtc | amLocal | amCalendar }}
+      span.cts {{ cashing.deviceCts | amUtc | amLocal | amDateFormat: 'DD.MM.YYYY HH:mm'}}
       strong.summ {{ cashing.summ | number:2 }}
       small.comment-text(ng-if='cashing.commentText') {{ cashing.commentText }}
