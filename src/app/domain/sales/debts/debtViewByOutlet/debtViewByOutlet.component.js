@@ -15,7 +15,10 @@
 
   });
 
-  function debtViewByOutletController(Schema, $scope, saControllerHelper, $state, $timeout, $filter) {
+  function debtViewByOutletController($scope, $timeout, $filter, $state,
+                                      Schema, saControllerHelper,
+                                      ShipmentModal
+                                      ) {
 
     const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
 
@@ -69,6 +72,14 @@
 
       event.preventDefault();
 
+      if (!inCheckingProgress()) {
+
+        let {documentId} = debt;
+
+        return documentId && ShipmentModal.show(documentId);
+
+      }
+
       let checked = vm.checkedDebts[debt.id];
 
       if (checked) {
@@ -102,7 +113,7 @@
       }, responsibility);
 
       return Debt.findAll({where})
-        .then(data => vm.debts = _.filter(data, debt => debt.summ || debt.summDoc ))
+        .then(data => vm.debts = _.filter(data, debt => debt.summ || debt.summDoc))
         .then(data => {
 
           data = _.groupBy(data, 'date');
@@ -134,7 +145,7 @@
     function updateFilters(data) {
       vm.data = _.filter(data, date => {
         return _.find(date.items, debt => {
-          return Math.abs(debt.uncashed()) > 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
+          return Math.abs(debt.summ) >= 0.01 || vm.cashingTotalByDebt && vm.cashingTotalByDebt[debt.id];
         })
       });
     }

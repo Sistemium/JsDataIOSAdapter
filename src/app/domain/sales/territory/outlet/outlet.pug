@@ -49,18 +49,33 @@
 
   outlet-navigation-bar(ng-if='vm.isRootState' current-tab='vm.currentTab')
 
-  .ui-view
+  .ui-view(ng-switch='vm.currentTab')
 
-    .outlet-saleOrder(ng-if='vm.currentTab == "saleOrder"')
-      sale-order-view(custom-filter='vm.saleOrderFilter' disable-elements='true' ng-if='vm.saleOrderFilter')
+    .outlet-saleOrder(ng-switch-when='saleOrder')
+      sale-order-view(
+      custom-filter='vm.saleOrderFilter'
+      disable-elements='true'
+      ng-if='vm.saleOrderFilter'
+      )
 
-    .outlet-debts(ng-if='vm.currentTab == "debt"')
-      debt-view-by-outlet(custom-filter='vm.debtFilter' disable-elements='true' ng-if='vm.debtFilter')
+    .outlet-shipments(ng-switch-when='shipments')
+      shipment-list(filter='vm.visitFilter')
 
-    .outlet-visit(ng-if='vm.currentTab == "visit"')
-      visit-view(custom-filter='vm.visitFilter' disable-elements='true' ng-if='vm.visitFilter')
+    .outlet-debts(ng-switch-when='debt')
+      debt-view-by-outlet(
+      custom-filter='vm.debtFilter'
+      disable-elements='true'
+      ng-if='vm.debtFilter'
+      )
 
-    .outlet-salesman-contracts(ng-if='vm.currentTab == "miscellaneous"')
+    .outlet-visit(ng-switch-when='visit')
+      visit-view(
+      custom-filter='vm.visitFilter'
+      disable-elements='true'
+      ng-if='vm.visitFilter'
+      )
+
+    .outlet-salesman-contracts(ng-switch-when='miscellaneous')
 
       contract-view(contracts='vm.outletSalesmanContracts')
 

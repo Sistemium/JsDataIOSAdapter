@@ -29,12 +29,14 @@
   }
 
   .in-progress {
-    .date .info > span {
-      color: $primary-color;
-    }
     div.debt *:hover {
       cursor: pointer;
     }
+  }
+
+  .date .info > .ndoc {
+    color: $primary-color;
+    cursor: pointer;
   }
 
   .date > .title {

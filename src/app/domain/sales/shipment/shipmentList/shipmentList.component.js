@@ -1,6 +1,19 @@
 (function (module) {
 
-  function ShipmentListController(Schema, Helpers, $scope, SalesmanAuth, $state, saMedia) {
+  module.component('shipmentList', {
+
+    bindings: {
+      filter: '<'
+    },
+
+    templateUrl: 'app/domain/sales/shipment/shipmentList/shipmentList.html',
+    controller: ShipmentListController,
+    controllerAs: 'vm'
+
+  });
+
+  function ShipmentListController(Schema, Helpers, $scope, SalesmanAuth, $state,
+                                  saMedia, ShipmentModal) {
 
     const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
     const {saControllerHelper, ScrollHelper} = Helpers;
@@ -49,7 +62,7 @@
      */
 
     function rowHeight() {
-      return isWideScreen() ? 40 : 79;
+      return isWideScreen() ? 46 : 79;
     }
 
     function onSalesmanChange(salesman) {
@@ -118,7 +131,12 @@
       let driverPopoverOpen = _.find(vm.driverPopoverOpen, val => val);
       if ($event.defaultPrevented || driverPopoverOpen) return;
 
-      $state.go('.item', {id: item.id});
+      if ($state.is('sales.shipmentList')) {
+        $state.go('.item', {id: item.id})
+      } else {
+        ShipmentModal.show(item.id);
+      }
+
     }
 
     function cleanup() {
@@ -144,6 +162,8 @@
         startPage: startPage + 1,
         bypassCache: true
       };
+
+      _.assign(filter, vm.filter);
 
       busyGettingData = Shipment.findAllWithRelations(filter, options)(['Outlet', 'Driver'])
         .then(res => {
@@ -173,7 +193,12 @@
 
           dates.push(...filteredData);
 
-          let data = _.orderBy(_.uniqBy(dates, 'id'), ['date', 'isFooter', 'ndoc'], ['desc', 'desc', 'desc']);
+          let data = _.orderBy(
+            _.uniqBy(dates, 'id'),
+            ['date', 'isFooter', 'ndoc'],
+            ['desc', 'desc', 'desc']
+          );
+
           vm.data = calcTotals(data);
           startPage++;
 
@@ -187,7 +212,5 @@
     }
 
   }
-
-  module.controller('ShipmentListController', ShipmentListController);
 
 })(angular.module('Sales'));

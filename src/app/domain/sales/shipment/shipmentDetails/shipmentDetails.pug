@@ -1,10 +1,12 @@
-.shipmentDetails(cg-busy='vm.busy')
+.shipment-details(cg-busy='vm.busy')
 
-  .alert.alert-default
+  .alert.alert-warning(ng-if='vm.error')
+    | Информация об отгрузке недоступна
+
+  .alert.alert-default(ng-if='vm.shipment')
 
     h4.popovers.spaced
-      span.popover-trigger(
-      )
+      span.popover-trigger
         .outlet
           .name
             span(ng-if='vm.shipment.outlet.id') {{ vm.shipment.outlet.name }}
@@ -17,7 +19,7 @@
           .comment
             small {{ vm.shipment.commentText }}
 
-    .totals.animate-show(ng-hide='vm.busy')
+    .totals
 
       .info
         strong {{ vm.shipment.positions.length | number: 0 }}
@@ -26,9 +28,9 @@
         strong {{ vm.shipment.totalCost() | number: 2 }}
         span ₽
 
-  .animate-show#scroll-main(
-  resize resize-offset-top='5' resize-property='height'
-  ng-show='!alertExpanded'
+  .animate-show.scroll-y(
+  resize resize-offset-top='{{::vm.offsetTop}}'
+  ng-if='vm.shipment'
   )
     table.table.table-striped.table-hover(
     ng-if='vm.shipment.positions.length'
@@ -45,7 +47,7 @@
         tr(
         ng-repeat='item in vm.shipment.positions | orderBy:"article.name" track by item.id'
         )
-          td {{ item.article.name }}
+          td {{ item.article.name || 'Товар не найден' }}
           td.number
             | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
           td.number

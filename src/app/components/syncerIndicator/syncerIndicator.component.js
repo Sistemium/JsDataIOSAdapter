@@ -13,7 +13,7 @@
 
   });
 
-  function syncerIndicatorController($scope, SyncerInfo, toastr, $window, saEtc) {
+  function syncerIndicatorController($scope, SyncerInfo, toastr, $window, IOS, saEtc) {
 
     const vm = _.assign(this, {
       $onInit,
@@ -40,8 +40,8 @@
 
       const options = {};
 
-      if ($window.webkit && !vm.isSending) {
-        $window.webkit.messageHandlers.remoteControl.postMessage({
+      if (IOS.isIos() && !vm.isSending) {
+        IOS.handler('remoteControl').postMessage({
           remoteCommands: {
             STMSyncer: 'upload'
           }

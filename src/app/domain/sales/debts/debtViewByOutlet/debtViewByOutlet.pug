@@ -104,7 +104,9 @@
             ng-repeat='debt in group.items | orderBy:"ndoc" track by debt.id'
             )
 
-              .info(ng-click='vm.debtClick(debt, $event)')
+              .info(
+              ng-click='vm.debtClick(debt, $event)'
+              )
 
                 small.tip.overdue(ng-if='::debt.isOverdue()')
                   span Просрочено
@@ -119,6 +121,7 @@
                 small.flag.responsible {{ ::debt.responsible.name }}
 
                 currency-value.summ-origin(value='debt.summOriginDoc || debt.summOrigin')
+
                 span.ndoc {{ ::debt.ndoc }}
 
               .summ-doc(ng-if='vm.totals.totalSummDocPlus')
