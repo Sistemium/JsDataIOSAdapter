@@ -951,6 +951,11 @@
           let newPrice = stock.discountPrice();
           let newPriceDoc = stock.discountPriceDoc();
 
+          if (!newPrice || !newPriceDoc) {
+            // TODO: log error with LogMessage
+            return;
+          }
+
           if (_.round(Math.abs(newPrice - position.price), 2) < 0.01) {
             if (_.round(Math.abs(newPriceDoc - position.priceDoc), 2) < 0.01) {
               return;
