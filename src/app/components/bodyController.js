@@ -2,7 +2,10 @@
 
 (function () {
 
-  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo, IOS) {
+  angular.module('webPage')
+    .controller('BodyController', BodyController);
+
+  function BodyController(appcache, toastr, $window, userAgentInfo) {
 
     const vm = this;
 
@@ -36,9 +39,9 @@
 
     // TODO: Android is using appcache
     // if (!IOS.isIos()) {
-      appcache.addEventListener('updateready', onUpdate, true);
+    appcache.addEventListener('updateready', onUpdate, true);
     // }
 
-  });
+  }
 
 })();
