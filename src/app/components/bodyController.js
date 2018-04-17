@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo, IOS) {
+  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo) {
 
     const vm = this;
 
