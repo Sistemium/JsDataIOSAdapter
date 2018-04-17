@@ -50,7 +50,7 @@
 
     function $onInit() {
 
-      vm.isIos = IOS.isIos();
+      vm.isIos = IOS.supportsPhotos();
 
       if (vm.isIos) return;
 
