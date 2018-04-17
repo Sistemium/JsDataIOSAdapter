@@ -12,7 +12,7 @@
     let rolesPromise;
     let resolveRoles;
     let currentUser;
-    let accessToken;
+    let accessToken = IOS.isIos();
 
     const ios = IOS.isIos();
 
