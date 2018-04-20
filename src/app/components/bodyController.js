@@ -2,14 +2,10 @@
 
 (function () {
 
-<<<<<<< HEAD
   angular.module('webPage')
     .controller('BodyController', BodyController);
 
   function BodyController(appcache, toastr, $window, userAgentInfo) {
-=======
-  angular.module('webPage').controller('BodyController', function (appcache, toastr, $window, userAgentInfo) {
->>>>>>> stm-android2
 
     const vm = this;
 
