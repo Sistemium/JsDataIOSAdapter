@@ -129,7 +129,7 @@
 
         return $q((resolve, reject) => {
 
-          if (IOS.isIos()) {
+          if (IOS.supportsPictures()) {
 
             return IOS.loadImage(img)
               .then(image => {

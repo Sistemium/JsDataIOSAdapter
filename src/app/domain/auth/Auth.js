@@ -12,6 +12,7 @@
     let rolesPromise;
     let resolveRoles;
     let currentUser;
+    let accessToken = IOS.isIos();
 
     const ios = IOS.isIos();
 
@@ -113,10 +114,11 @@
     }
 
     function getAccessToken() {
-      return ios || $window.localStorage.getItem('authorization');
+      return ios && accessToken || $window.localStorage.getItem('authorization');
     }
 
     function clearAccessToken() {
+      accessToken = false;
       return ios || $window.localStorage.removeItem('authorization');
     }
 
@@ -124,6 +126,7 @@
 
       roles = newRoles || {};
       currentUser = roles.account || {};
+      accessToken = roles.id;
 
       currentUser.shortName = (name => {
         const names = name.match(/(^[^ ]*) (.*$)/);
