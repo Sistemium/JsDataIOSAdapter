@@ -1,6 +1,6 @@
 h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
-  visit-indicator(ng-if='vm.isSalesState || vm.isHomeState')
+  visit-indicator(ng-if='vm.isSalesState || (vm.isHomeState && vm.sales)')
 
   a.home(href ui-sref='home' ng-class='{disabled: vm.isHomeState}')
     b.glyphicon.glyphicon-home
@@ -26,4 +26,4 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
     settings-popover(ng-if='vm.state.data.settings' items='vm.state.data.settings')
     campaign-popover(ng-if='vm.isCatalogueState')
-    salesman-menu
+    salesman-menu(ng-if='vm.isSalesState')

@@ -47,6 +47,7 @@
       let rootState = _.get(to, 'data.rootState');
 
       vm.use({
+        sales: Auth.isAuthorized(['salesman', 'supervisor']),
         state: to,
         hide: !!_.get(to, 'data.hideTopBar'),
         hideNavs: !!_.get(to, 'data.hideNavs'),
