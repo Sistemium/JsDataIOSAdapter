@@ -23,8 +23,8 @@
         name: 'article',
         url: '/:id',
 
-        templateUrl: 'app/domain/picking/pickingArticle.html',
-        controller: 'PickingArticleController',
+        template: '<picking-article picking="vm.picking" orders="vm.orders" on-done="vm.doneClick()"></picking-article>',
+        controller: PickingArticleController,
         controllerAs: 'vm',
 
         data: {
@@ -126,6 +126,21 @@
         ]
       })
     ;
+
+    function PickingArticleController($scope, $state) {
+
+      _.assign(this, {
+
+        orders: _.get($scope, '$parent.vm.orders'),
+        picking: _.find(_.get($scope, 'vm.articles'), {id: $state.params.id}),
+
+        doneClick: () => {
+          $state.go('^');
+        }
+
+      });
+
+    }
 
   }
 

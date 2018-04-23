@@ -19,7 +19,7 @@ section.ui-view
     span.gray ({{ vm.picking.totalVolume | bottles }})
 
   ul.list-group
-    li.list-group-item.display-flex(ng-repeat='order in vm.orders track by order.id' ng-class='{ gray: !order.volume.full}')
+    li.list-group-item.display-flex(ng-repeat='order in vm.ordered track by order.id' ng-class='{ gray: !order.volume.full}')
       .flex-1
         h4(ng-if='order.volume.full') {{ order.volume.full }}
         div
@@ -41,4 +41,4 @@ section.ui-view
         i.glyphicon.glyphicon-plus
 
   .text-right
-    button.btn.btn-primary(ng-click='vm.done()') Готово
+    button.btn.btn-primary(ng-click='vm.doneClick()') Готово
