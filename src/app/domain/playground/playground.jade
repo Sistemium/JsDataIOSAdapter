@@ -1,4 +1,4 @@
-section
+section.scroll-y(resize resize-offset-top='5')
 
   h2 Playground
 
@@ -7,6 +7,8 @@ section
   p Finished "Article" in {{ vm.finished['Article'] || '?' }} ms.
   p Finished "ArticleGroup" in {{ vm.finished['ArticleGroup'] || '?' }} ms.
 
+  p Total time {{ vm.finished.total }} ms.
+
   .data(ng-if='vm.data')
     h4 Data
     pre {{ vm.data | json }}
@@ -14,3 +16,5 @@ section
   .error(ng-if='vm.err')
     h4 Error
     pre {{ vm.err | json }}
+
+  pre {{ vm.samples | json }}
