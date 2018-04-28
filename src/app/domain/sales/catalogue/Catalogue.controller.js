@@ -676,29 +676,42 @@
 
         })
         .then(() => ArticleGroup.cachedFindAll({}, options))
-        .then(() => Article.cachedFindAll({
-          volumeNotZero: true,
-          where: {
-            'ANY stocks': volumeNotZero
-          }
-        }, options))
         .then(() => {
-          if (vm.showImages) {
-            ArticlePicture.findAll({}, options);
-          }
+
+          return $q.all([
+
+            Article.cachedFindAll({
+              volumeNotZero: true,
+              where: {
+                'ANY stocks': volumeNotZero
+              }
+            }, options)
+              .then(() => {
+                if (vm.showImages) {
+                  ArticlePicture.findAll({}, options);
+                }
+              }),
+
+            Stock.meta.cachedFindAll({
+              where: volumeNotZero
+            }, options),
+
+            Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options))
+              .then(() => {
+                if (vm.currentPriceType.parentId) {
+                  return Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.parentId}, options));
+                }
+              })
+
+          ]);
+
         })
-        .then(() => Stock.meta.cachedFindAll({
-          where: volumeNotZero
-        }, options))
-        .then(() => Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options)))
-        .then(() => {
-          if (vm.currentPriceType.parentId) {
-            return Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.parentId}, options));
-          }
-        })
+
         .then(() => {
 
           DEBUG('findAll', 'finish');
+
+          Stock.meta.checkIndexes();
 
           filterStock();
           setCurrentArticleGroup(currentArticleGroupId);
