@@ -8,6 +8,7 @@
 
       data: null,
       indexByArticleId: {},
+      toIndexByArticleId: {},
 
       lastOffset: '*',
 
@@ -16,7 +17,8 @@
       getByArticleId,
       loadArticle,
       inject,
-      findAllUpdates
+      findAllUpdates,
+      checkIndexes
 
     };
 
@@ -104,6 +106,25 @@
       return cachedFindAll({}, {mergeUpdates: true});
     }
 
+    function checkIndexes() {
+
+      const {Article} = Schema.models();
+
+      const {toIndexByArticleId} = meta;
+
+      _.each(toIndexByArticleId, (item, articleId) => {
+
+        let article = Article.get(articleId);
+
+        if (article) {
+          item.article = article;
+          delete toIndexByArticleId[articleId];
+        }
+
+      });
+
+    }
+
     function cachedFindAll(filter, options = {}) {
 
       if (meta.data && !options.mergeUpdates) {
@@ -151,8 +172,16 @@
           _.each(data, item => {
 
             let {articleId} = item;
+
             indexByArticleId[articleId] = item;
-            item.article = Article.get(articleId);
+
+            let article = Article.get(articleId)
+
+            if (article) {
+              item.article = article;
+            } else {
+              meta.toIndexByArticleId[articleId] = item;
+            }
 
           });
 
