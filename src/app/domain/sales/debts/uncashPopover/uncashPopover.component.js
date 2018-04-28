@@ -5,7 +5,7 @@
   module.component('uncashPopover', {
 
     bindings: {
-      uncashed: '<',
+      uncashed: '=',
       isPopoverOpen: '=',
       cgBusy: '=busy'
     },
@@ -19,7 +19,7 @@
   module.component('uncashingForm', {
 
     bindings: {
-      uncashed: '<',
+      uncashed: '=',
       isPopoverOpen: '='
     },
 
