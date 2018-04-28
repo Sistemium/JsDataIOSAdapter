@@ -89,16 +89,18 @@
     .price(ng-if='vm.mode !== "price"')
 
       .form-group
-        label Цена:
-        span.form-control
-          span {{ vm.price | number:2 }}
-          span.currency ₽
+        label Цена {{ vm.showDoc() ? 'Упр' : '' }}:
+        span.form-control(ng-switch='vm.price === vm.priceOrigin')
+          span.gray(ng-switch-when='true') базовая
+          span(ng-switch-when='false') {{ vm.price | number:2 }}
+          span.currency(ng-switch-when='false') ₽
 
-      .form-group.price-doc(ng-if='vm.priceDoc !== vm.price')
+      .form-group.price-doc(ng-if='vm.showDoc()')
         label Бух:
-        span.form-control
-          span {{ vm.priceDoc | number:2 }}
-          span.currency ₽
+        span.form-control(ng-switch='vm.priceDoc === vm.priceOrigin')
+          span.gray(ng-switch-when='true') базовая
+          span(ng-switch-when='false') {{ vm.priceDoc | number:2 }}
+          span.currency(ng-switch-when='false') ₽
 
     .discount(ng-if='vm.mode === "price"')
 
@@ -110,7 +112,7 @@
     .priceOrigin
 
       .form-group
-        label Базовая:
+        label База:
         span.form-control {{ vm.priceOrigin | number:2 }}
           span.currency ₽
 

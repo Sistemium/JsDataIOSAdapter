@@ -26,6 +26,7 @@
       $onInit,
       profit,
       signedDiscountPercent,
+      showDoc,
       target: ''
 
     });
@@ -242,6 +243,10 @@
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), vm.target);
       }
 
+    }
+
+    function showDoc() {
+      return vm.priceDoc !== vm.price;
     }
 
   }
