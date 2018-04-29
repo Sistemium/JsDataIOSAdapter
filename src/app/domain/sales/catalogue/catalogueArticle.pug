@@ -104,8 +104,8 @@ before-tag-name='li'
         uib-tooltip='Нет в наличии'
         )
 
-        small.gray.nowrap(ng-if='stock.volume')
-          span ~{{stock.displayVolume}}
+        small.nowrap(ng-if='stock.volume' ng-class='{gray: vm.saleOrderPositionByArticle[stock.articleId]}')
+          span ~{{ stock.displayVolume }}
 
         small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
           a.compDiscount(
