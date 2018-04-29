@@ -67,7 +67,7 @@
 
     $scope.$on('$stateChangeSuccess', (e, to) => {
       vm.hideBottomBar = !!_.get(to, 'data.hideBottomBar');
-      vm.mode = to.name.match(/[^\.]*$/)[0];
+      vm.mode = to.name.match(/[^.]*$/)[0];
       vm.onBarCode = _.get(to, 'data.needBarcode') && scanFn;
       if (to.name === 'picking.orderList') {
         setSelected();

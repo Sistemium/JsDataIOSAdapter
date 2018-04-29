@@ -172,7 +172,7 @@
 
     $scope.$on('$stateChangeSuccess', (e, to) => {
 
-      vm.mode = to.name.match(/[^\.]*$/)[0];
+      vm.mode = to.name.match(/[^.]*$/)[0];
 
       vm.title = (vm.mode === 'picked' && 'Собранные товары')
         || (vm.mode === 'articleList' && 'Товары для сборки')
