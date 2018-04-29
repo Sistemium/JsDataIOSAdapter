@@ -45,6 +45,31 @@ catalogue-filter {
     padding-bottom: 20px;
   }
 
+  .price-filter .settings {
+    font-size: 13px;
+    text-transform: uppercase;
+    i.glyphicon {
+      font-size: 70%;
+    }
+  }
+
+  .accordion-toggle, .price-filter {
+    position: relative;
+    .settings {
+
+      a {
+        color: black;
+        pointer-events: all;
+        margin-right: $padding;
+      }
+
+      z-index: 100;
+      position: absolute;
+      right: 0;
+      top: -10px;
+    }
+  }
+
   .catalogue-filter {
 
     overflow: hidden;

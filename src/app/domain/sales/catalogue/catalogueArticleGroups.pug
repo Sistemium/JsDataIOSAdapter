@@ -10,6 +10,7 @@ font-size-edit.scroll-y(append-to='articleGroups' resize resize-offset-top='5')
   price-slider='vm.priceSlider'
   clear-filters='vm.clearFilters'
   show-search-history='!hideSearchHistory'
+  show-settings='isShownSettings'
   )
 
   .active-filters(ng-if='vm.filters.length || vm.currentArticleGroup || vm.priceSlider.hasFilter()')

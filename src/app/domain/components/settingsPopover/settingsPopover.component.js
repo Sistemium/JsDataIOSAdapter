@@ -43,6 +43,7 @@
     });
 
     $scope.$watch('vm.isPopoverOpen', isPopoverOpen => {
+      $rootScope.isShownSettings = !!isPopoverOpen;
       $rootScope.$broadcast('settingsPopoverOpen', isPopoverOpen);
     });
 

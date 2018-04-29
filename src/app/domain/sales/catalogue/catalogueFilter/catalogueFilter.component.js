@@ -15,7 +15,8 @@
       removeTagClick: '=',
       priceSlider: '=',
       clearFilters: '=',
-      showSearchHistory: '='
+      showSearchHistory: '=',
+      showSettings: '='
 
     },
 
@@ -27,6 +28,7 @@
   });
 
   const LS_KEY = 'catalogueFilter.tabsOpen';
+  const LS_SETTINGS_KEY = 'catalogueFilter.settings';
 
   function catalogueFilterController($scope, Schema, saControllerHelper,
                                      $state, localStorageService, saEtc,
@@ -54,9 +56,13 @@
       onSearchEnter,
       needShowCurrentArticleGroup,
       toggleFavouriteClick,
+      settingValue,
+      settingToggleClick,
 
       search: $state.params.q || '',
+
       tabsOpen: localStorageService.get(LS_KEY) || {categories: true},
+      settings: localStorageService.get(LS_SETTINGS_KEY) || {},
 
       priceSlider: {
         min: 0,
@@ -470,6 +476,22 @@
       return !vm.cvm.noMoreChildren && vm.cvm.currentArticleGroup && vm.cvm.currentArticleGroup.displayName ||
         !vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered ||
         vm.cvm.currentArticleGroup && !vm.cvm.articleGroups;
+    }
+
+    function settingToggleClick(id, $event) {
+
+      _.set(vm.settings, id, !settingValue(id));
+
+      $event.stopPropagation();
+
+      localStorageService.set(LS_SETTINGS_KEY, vm.settings);
+
+    }
+
+    function settingValue(id) {
+
+      return _.get(vm.settings, id);
+
     }
 
   }

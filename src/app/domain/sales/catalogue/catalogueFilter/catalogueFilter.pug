@@ -18,8 +18,15 @@
 
       include tabs/catalogueFilterTagGroups
 
-    rzslider(
-    rz-slider-model="vm.priceSlider.min"
-    rz-slider-high="vm.priceSlider.max"
-    rz-slider-options="vm.priceSlider.options"
-    )
+    .price-filter(ng-if='vm.showSettings || !vm.settingValue("price")')
+
+      .settings(ng-if='vm.showSettings')
+        a(href ng-click='vm.settingToggleClick("price", $event)')
+          i.glyphicon.glyphicon-cog
+          strong {{ vm.settingValue('price') ? 'показать' : 'скрыть' }}
+
+      rzslider(
+      rz-slider-model="vm.priceSlider.min"
+      rz-slider-high="vm.priceSlider.max"
+      rz-slider-options="vm.priceSlider.options"
+      )
