@@ -20,7 +20,7 @@
 
     .controls {
       float: left;
-      min-width: 170px;
+      min-width: 180px;
     }
 
     .buttons {
@@ -28,6 +28,10 @@
       float: right;
       margin-left: 6px;
       margin-bottom: 6px;
+    }
+
+    .fields {
+      clear: left;
     }
 
   }
@@ -76,18 +80,27 @@
 
   }
 
-  .btn-group.mode {
+  .btn-group {
 
-    display: flex;
-    margin-bottom: 8px;
+    &.mode {
 
-    .btn {
-      flex: 1;
+      display: flex;
+      margin-bottom: 8px;
+
+      .btn {
+        flex: 1;
+      }
+
     }
 
   }
 
   .form-group {
+    //display: flex;
+    white-space: nowrap;
+    label {
+      white-space: nowrap;
+    }
     .form-control {
       height: auto;
     }
@@ -231,7 +244,7 @@
   }
 
   & {
-    max-width: 470px;
+    max-width: 500px;
   }
 
 }

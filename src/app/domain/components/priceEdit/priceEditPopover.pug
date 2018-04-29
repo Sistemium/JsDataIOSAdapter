@@ -40,8 +40,8 @@
 
         .btn-group.target
 
-          button.btn.btn-default.taget-man(ng-model='vm.target' uib-btn-radio="''" uib-uncheckable='false') Упр
-          button.btn.btn-default.target-doc(ng-model='vm.target' uib-btn-radio="'Doc'" uib-uncheckable='false') Бух
+          button.btn.btn-default.taget-man(ng-model='vm.target' uib-btn-radio="''" uib-uncheckable='true') Упр
+          button.btn.btn-default.target-doc(ng-model='vm.target' uib-btn-radio="'Doc'" uib-uncheckable='true') Бух
 
         .form-control#price-edit-price-display(
         ng-switch-when='price'
@@ -86,23 +86,30 @@
 
   .fields
 
-    .price(ng-if='vm.mode !== "price"')
+    .price
+      //(ng-if='vm.mode !== "price"')
 
       .form-group
-        label Цена {{ vm.showDoc() ? 'Упр' : '' }}:
+        label
+          span {{ vm.showDoc() ? 'Упр' : 'Цена' }}
+          span(ng-if='vm.price !== vm.priceOrigin') &nbsp; ({{ vm.discountPercentDisplay() }}%)
+          | :
         span.form-control(ng-switch='vm.price === vm.priceOrigin')
           span.gray(ng-switch-when='true') базовая
           span(ng-switch-when='false') {{ vm.price | number:2 }}
           span.currency(ng-switch-when='false') ₽
 
       .form-group.price-doc(ng-if='vm.showDoc()')
-        label Бух:
+        label
+          span Бух
+          span(ng-if='vm.priceDoc !== vm.priceOrigin') &nbsp; ({{ vm.discountPercentDisplay('Doc') }}%)
+          | :
         span.form-control(ng-switch='vm.priceDoc === vm.priceOrigin')
           span.gray(ng-switch-when='true') базовая
           span(ng-switch-when='false') {{ vm.priceDoc | number:2 }}
           span.currency(ng-switch-when='false') ₽
 
-    .discount(ng-if='vm.mode === "price"')
+    //.discount(ng-if='vm.mode === "price"')
 
       .form-group
         label {{ vm.mode === 'markup' ? 'Наценка' : 'Скидка' }}:
