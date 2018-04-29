@@ -94,3 +94,21 @@ a.disabled, .disabled a {
   border-radius: 6px;
 }
 
+
+
+.btn-group {
+
+  button {
+
+    color: $primary-color;
+
+    //&.active{
+    //  &::before {
+    //    content: '✔ ️';
+    //    font-size: 70%;
+    //  }
+    //}
+
+  }
+
+}

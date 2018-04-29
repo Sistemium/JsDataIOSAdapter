@@ -293,6 +293,11 @@
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), target);
       }
 
+      _.assign(vm, {
+        price: vm.stock.discountPrice(),
+        priceDoc: vm.stock.discountPrice('Doc')
+      });
+
     }
 
     function onPriceChange(newPrice, oldPrice) {
