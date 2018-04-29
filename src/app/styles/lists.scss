@@ -6,6 +6,10 @@ li.active {
   }
 }
 
+a.list-group-item {
+  color: $black;
+}
+
 .round-corners-by-type {
 
   .list-group-item:first-of-type {
