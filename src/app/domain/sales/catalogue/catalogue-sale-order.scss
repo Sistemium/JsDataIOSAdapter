@@ -108,6 +108,7 @@ sale-order-alert {
     @include responsive-only(gt-xs) {
       .sales-schema {
         position: absolute;
+        z-index: 2;
       }
     }
 
