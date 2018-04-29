@@ -1109,8 +1109,8 @@
         currentFirstLevelGroup = currentArticleGroup;
       }
 
-      vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.name < currentFirstLevelGroup.name);
-      vm.followingGroups = _.filter(vm.firstLevelGroups, group => group.name > currentFirstLevelGroup.name);
+      vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.sortName < currentFirstLevelGroup.sortName);
+      vm.followingGroups = _.filter(vm.firstLevelGroups, group => group.sortName > currentFirstLevelGroup.sortName);
 
       DEBUG('setFirstLevelGroups', 'end');
 

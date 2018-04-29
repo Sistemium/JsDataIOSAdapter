@@ -17,7 +17,7 @@ is-open='vm.tabsOpen.categories'
 
       a.list-group-item(
       href
-      ng-repeat='elem in vm.cvm.precedingGroups | orderBy:"name" track by elem.id'
+      ng-repeat='elem in vm.cvm.precedingGroups | orderBy:"sortName" track by elem.id'
       stm-click='articleGroup' click-payload='elem'
       )
         span.name {{::elem.displayName }}
@@ -70,7 +70,7 @@ is-open='vm.tabsOpen.categories'
 
       a.list-group-item(
       href
-      ng-repeat='elem in vm.cvm.followingGroups | orderBy:"name" track by elem.id'
+      ng-repeat='elem in vm.cvm.followingGroups | orderBy:"sortName" track by elem.id'
       stm-click='articleGroup' click-payload='elem'
       )
         span.name {{::elem.displayName }}
