@@ -8,7 +8,7 @@
       stock: '<'
     },
 
-    templateUrl: 'app/domain/components/priceEdit/priceEdit.html',
+    templateUrl: 'app/domain/sales/priceEdit/priceEdit.html',
 
     controller: priceEditController,
     controllerAs: 'vm'
@@ -52,7 +52,7 @@
       vm.modal = $uibModal.open({
 
         animation: false,
-        templateUrl: 'app/domain/components/priceEdit/priceEdit.modal.html',
+        templateUrl: 'app/domain/sales/priceEdit/priceEdit.modal.html',
 
         size: 'sm',
         windowClass: 'price-edit modal-info',

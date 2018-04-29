@@ -9,7 +9,7 @@
       popoverOpen: '='
     },
 
-    templateUrl: 'app/domain/components/priceEdit/priceEditPopover.html',
+    templateUrl: 'app/domain/sales/priceEdit/priceEditPopover.html',
 
     controller: priceEditController,
     controllerAs: 'vm'
@@ -245,17 +245,18 @@
         return;
       }
 
-      if (vm.mode === '' && vm.priceDoc === vm.price) {
+      if (vm.priceDoc === vm.price && vm.target === '') {
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), 'Doc');
       }
 
       setDiscount(newDiscount);
 
-      if (vm.priceDoc < vm.price) {
-        let otherTarget = (vm.target === 'Doc') ? '' : 'Doc';
+      if (vm.priceDoc < vm.price || vm.target === null) {
+        let otherTarget = vm.target ? '' : 'Doc';
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), otherTarget);
         setPriceEdit();
       }
+
 
     }
 
