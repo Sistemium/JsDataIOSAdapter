@@ -11,7 +11,7 @@ is-open='vm.tabsOpen.categories'
         | {{ vm.cvm.currentArticleGroup.displayName }}
     span.caret.turnable(ng-class='{"turn-90-counter-clock": vm.tabsOpen.categories}')
 
-  .accordion-body
+  .accordion-body(ng-class='{"show-first-level": vm.cvm.showFirstLevel}')
 
     ul.preceding-groups(ng-if='vm.cvm.showFirstLevel && vm.cvm.precedingGroups.length')
 

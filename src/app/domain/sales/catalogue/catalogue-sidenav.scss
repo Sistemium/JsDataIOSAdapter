@@ -34,7 +34,30 @@
     padding-left: 0;
 
     a.list-group-item:not(:hover) {
-      background-color: darken($gray-background-color, 0%);
+      //background-color: darken($gray-background-color, 0%);
+    }
+
+  }
+
+  .show-first-level {
+
+    .xs-ancestors > .list-group-item {
+
+      font-weight: 500;
+      .name {
+        //color: $primary-color;
+      }
+
+    }
+
+    .list-group-item.descendant {
+
+      color: $primary-color;
+
+      &.active {
+        color: $white;
+      }
+      
     }
 
   }
@@ -44,6 +67,7 @@
     padding-left: 15px;
     margin-left: 15px;
     border-bottom-left-radius: 0;
+
   }
 
   @include responsive-only(gt-xs) {
