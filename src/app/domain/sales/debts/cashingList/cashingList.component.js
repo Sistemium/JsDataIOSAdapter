@@ -2,7 +2,23 @@
 
 (function () {
 
-  function CashingController(Schema, $scope, saControllerHelper, $state, Sockets, Auth, $q, $timeout) {
+  angular.module('Sales')
+    .component('cashingList', {
+
+      bindings: {},
+
+      templateUrl: 'app/domain/sales/debts/cashingList/cashingList.html',
+
+      controller: CashingListController,
+      controllerAs: 'vm'
+
+    });
+
+
+  /** @ngInject */
+
+  function CashingListController($scope, $state, $q, $timeout,
+                                 Sockets, saControllerHelper, Schema, Auth) {
 
     const {Cashing, Outlet, Uncashing} = Schema.models();
 
@@ -244,8 +260,5 @@
 
 
   }
-
-  angular.module('webPage')
-    .controller('CashingController', CashingController);
 
 })();

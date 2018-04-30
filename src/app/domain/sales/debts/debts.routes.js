@@ -12,9 +12,9 @@
           name: 'sales.cashing',
           url: '/cashing',
 
-          templateUrl: 'app/domain/sales/debts/Cashing.html',
-          controller: 'CashingController',
-          controllerAs: 'vm',
+          template: '<cashing-list></cashing-list>',
+          // controller: 'CashingController',
+          // controllerAs: 'vm',
 
           data: {
             title: 'Выручка',
