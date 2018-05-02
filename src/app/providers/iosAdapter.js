@@ -2,7 +2,10 @@
 
 (function () {
 
-  angular.module('webPage').service('IosAdapter', function ($window, $timeout, DSUtils, $log, IosParser, IOS) {
+  angular.module('webPage')
+    .service('IosAdapter', IosAdapterService);
+
+  function IosAdapterService($window, $timeout, DSUtils, $log, IosParser, IOS) {
 
     let ios = IOS.isIos ? IOS : undefined;
     const requests = {};
@@ -222,6 +225,6 @@
     //};
 
     return IosAdapter;
-  });
+  }
 
 })();
