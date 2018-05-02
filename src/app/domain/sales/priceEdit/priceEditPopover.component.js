@@ -245,14 +245,16 @@
         return;
       }
 
-      if (vm.priceDoc === vm.price && vm.target === '') {
-        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), 'Doc');
+      let otherTarget = vm.target ? '' : 'Doc';
+
+      if (vm.priceDoc === vm.price && vm.target !== null) {
+        let currentPercent = vm.stock.discountPercent(vm.discountScope, vm.target) || 0;
+        vm.stock.setDiscountScope(vm.discountScope, currentPercent, otherTarget);
       }
 
       setDiscount(newDiscount);
 
       if (vm.priceDoc < vm.price || vm.target === null) {
-        let otherTarget = vm.target ? '' : 'Doc';
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), otherTarget);
         setPriceEdit();
       }
