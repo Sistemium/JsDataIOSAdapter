@@ -20,7 +20,7 @@
 
     bindings: {
       uncashed: '=',
-      isPopoverOpen: '='
+      onSubmit: '&'
     },
 
     templateUrl: 'app/domain/sales/debts/uncashPopover/uncashingForm.html',
@@ -30,7 +30,8 @@
 
   });
 
-  function uncashingFormController(Schema, $scope, $q, localStorageService, Sockets, Auth, toastr) {
+  function uncashingFormController(Schema, $scope, $q,
+                                   localStorageService, Sockets, Auth, toastr) {
 
     let vm = this;
 
@@ -117,7 +118,7 @@
           }))
         })
         .then(() => {
-          vm.isPopoverOpen = false;
+          vm.onSubmit()();
           $scope.$emit('DebtOrCashingModified');
         });
     }
@@ -178,7 +179,8 @@
         .then(uncashing => uncashing.DSLoadRelations('UncashingPicture'))
         .then(uncashing => {
 
-          let uncashingPicture = uncashing.picture || UncashingPicture.createInstance({uncashingId: uncashing.id});
+          let uncashingPicture = uncashing.picture ||
+            UncashingPicture.createInstance({uncashingId: uncashing.id});
 
           _.assign(vm, {uncashingPicture, uncashing});
 
