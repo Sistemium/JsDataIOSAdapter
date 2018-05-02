@@ -43,7 +43,8 @@
     function $onInit() {
 
       let {priceGroupId} = vm.stock.article;
-      let hasPriceGroup = DomainOption.usePriceGroups() && priceGroupId || vm.stock.discountScope() === 'priceGroup';
+      let hasPriceGroup = DomainOption.usePriceGroups() && priceGroupId ||
+        vm.stock.discountScope() === 'priceGroup';
 
       _.assign(vm, {
 
@@ -258,7 +259,6 @@
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), otherTarget);
         setPriceEdit();
       }
-
 
     }
 
