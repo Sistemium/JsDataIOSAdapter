@@ -29,6 +29,8 @@
         uncashingId: null,
         wasModified: true,
 
+        $onInit,
+
         totalCashed,
         onStateChange,
         doUncashingClick,
@@ -57,25 +59,32 @@
     vm.onScope('rootClick', () => $state.go(rootState));
     vm.onScope('DebtOrCashingModified', () => vm.wasModified = true);
 
-    vm.watchScope('vm.uncashing', () => {
-
-      let uncashing = vm.uncashing;
-
-      let targetState = rootState + (uncashing ? '.uncashing' : '');
-
-      if (vm.uncashingId) return;
-
-      if ($state.current.name !== targetState) {
-        $state.go(targetState);
-      }
-
-    });
-
-    findUncashings();
 
     /*
      Functions
      */
+
+    function $onInit() {
+
+      findUncashings();
+
+      vm.watchScope('vm.uncashing', () => {
+
+        let uncashing = vm.uncashing;
+
+        let targetState = rootState + (uncashing ? '.uncashing' : '');
+
+        if (vm.uncashingId) return;
+
+        if ($state.current.name !== targetState) {
+          $state.go(targetState);
+        }
+
+      });
+
+      onStateChange($state.current.name, $state.params)
+
+    }
 
     function cancelCurrentUncashingClick() {
 
