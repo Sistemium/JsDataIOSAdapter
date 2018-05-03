@@ -352,7 +352,7 @@
       }
 
       searchQuery.isFavourite = !searchQuery.isFavourite;
-      searchQuery.lastUsed = moment().toDate();
+      searchQuery.lastUsed = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
 
       vm.currentSearchQuery = searchQuery;
 
@@ -407,7 +407,7 @@
     function saveQuery(searchQuery) {
 
       searchQuery.cnt = (searchQuery.cnt || 0) + 1;
-      searchQuery.lastUsed = moment().toDate();
+      searchQuery.lastUsed = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
       SearchQuery.create(searchQuery);
 
     }
