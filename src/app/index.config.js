@@ -21,6 +21,9 @@
     .config($animateProvider => {
       $animateProvider.classNameFilter(/animate/);
     })
+    .config(['$compileProvider', function ($compileProvider) {
+      $compileProvider.debugInfoEnabled(false);
+    }])
   ;
 
   function debugService(saDebug) {
