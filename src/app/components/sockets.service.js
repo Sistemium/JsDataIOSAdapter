@@ -147,6 +147,7 @@ angular.module('core.services')
   .service('Sockets', function (saSockets, $window, iosSockets, IOS) {
 
     if (IOS.isIos()) {
+      $window.io = null;
       return iosSockets;
     } else {
       $window.saSockets = saSockets;
