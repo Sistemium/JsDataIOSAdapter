@@ -1142,7 +1142,7 @@
     }
 
     function scrollArticlesTop() {
-      let scrollParent = saEtc.getElementById('scroll-articles');
+      let scrollParent = saEtc.getElementById('scroll-articles-parent');
       if (!scrollParent) return;
       scrollParent.scrollTop = 0;
     }
