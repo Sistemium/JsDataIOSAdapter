@@ -40,7 +40,7 @@
       $onInit,
       $onDestroy: saveDefaults,
 
-      onSubmit,
+      onSubmitClick,
       deletePhotoClick,
       totalSumm
 
@@ -87,7 +87,7 @@
     }
 
 
-    function onSubmit() {
+    function onSubmitClick() {
 
       let {uncashing} = vm;
       let uncashed = _.clone(vm.uncashed);

@@ -45,7 +45,7 @@ form.uncashingForm(name="uncashForm" cg-busy='{promise: vm.cgBusy, delay: 0}')
   input(type='hidden' ng-model='vm.uncashing.type' required)
 
   button.btn.btn-success(
-  ng-click='vm.onSubmit()'
+  ng-click='vm.onSubmitClick()'
   value='submit'
   ng-disabled='!uncashForm.$valid'
   )
