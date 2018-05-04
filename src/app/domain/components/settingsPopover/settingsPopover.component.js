@@ -16,7 +16,7 @@
 
   const items = {
     catalogue: [
-      {code: 'showFirstLevel', labelOff: 'Скрыть первый уровень', labelOn: 'Показать первый уровень'},
+      {code: 'hideFirstLevel', labelOff: 'Показать первый уровень', labelOn: 'Скрыть первый уровень'},
       {code: 'showImages', labelOff: 'Убрать фото', labelOn: 'Показать фото'},
       {code: 'hideBoxes', labelOff: 'Показать коробки', labelOn: 'Убрать коробки'},
       {code: 'showBarCodes', labelOff: 'Убрать штрих-коды', labelOn: 'Показать штрих-коды'},

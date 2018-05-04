@@ -16,7 +16,8 @@
       priceSlider: '=',
       clearFilters: '=',
       showSearchHistory: '=',
-      showSettings: '='
+      showSettings: '=',
+      showFirstLevel: '<'
 
     },
 
@@ -223,7 +224,7 @@
         return [_.first(ancestors)];
       }
 
-      if (vm.cvm.precedingGroups && vm.cvm.showFirstLevel) {
+      if (vm.cvm.precedingGroups && vm.showFirstLevel) {
         return _.slice(ancestors, 1);
       }
 

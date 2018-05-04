@@ -56,7 +56,7 @@
       saleOrderPositionByArticle: {},
       hideBoxes: localStorageService.get('hideBoxes') || false,
       showImages: localStorageService.get('showImages') || false,
-      showFirstLevel: localStorageService.get('showFirstLevel') || false,
+      showFirstLevel: !localStorageService.get('hideFirstLevel'),
       stockWithPicIndex: [],
       discountsBy: {},
       discounts: {article: {}, priceGroup: {}, saleOrder: {}},
@@ -77,7 +77,7 @@
 
       articleGroupAndCollapseClick,
       toggleShowImagesClick,
-      toggleShowFirstLevelClick,
+      toggleHideFirstLevelClick,
       toggleHideBoxesClick,
       onSaleOrderClick,
 
@@ -332,8 +332,8 @@
       $scope.$broadcast('bPlusButtonClick', stock.article, stock);
     }
 
-    function toggleShowFirstLevelClick() {
-      vm.showFirstLevel = !vm.showFirstLevel;
+    function toggleHideFirstLevelClick() {
+      // vm.showFirstLevel = !vm.showFirstLevel;
       setCurrentArticleGroup(vm.currentArticleGroup);
     }
 
