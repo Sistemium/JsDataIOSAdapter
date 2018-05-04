@@ -2,14 +2,14 @@
 ng-repeat='tagGroup in vm.articleTagGroups track by tagGroup.id'
 uib-accordion-group
 is-open='vm.tabsOpen[tagGroup.id]'
-ng-if='vm.showSettings || !vm.settingValue(tagGroup.id)'
+ng-if='vm.showSettings || vm.settingValue(tagGroup.id)'
 )
   uib-accordion-heading
 
     .settings(ng-if='vm.showSettings')
       a(href ng-click='vm.settingToggleClick(tagGroup.id, $event)')
         i.glyphicon.glyphicon-cog
-        strong {{ vm.settingValue(tagGroup.id) ? 'показать' : 'скрыть' }}
+        strong {{ vm.settingValue(tagGroup.id) ? 'скрыть' : 'показать' }}
 
     .title {{tagGroup.name}}
 

@@ -18,12 +18,12 @@
 
       include tabs/catalogueFilterTagGroups
 
-    .price-filter(ng-if='vm.showSettings || !vm.settingValue("price")')
+    .price-filter(ng-if='vm.showSettings || vm.settingValue("price")')
 
       .settings(ng-if='vm.showSettings')
         a(href ng-click='vm.settingToggleClick("price", $event)')
           i.glyphicon.glyphicon-cog
-          strong {{ vm.settingValue('price') ? 'показать' : 'скрыть' }}
+          strong {{ vm.settingValue('price') ? 'скрыть' : 'показать' }}
 
       rzslider(
       rz-slider-model="vm.priceSlider.min"

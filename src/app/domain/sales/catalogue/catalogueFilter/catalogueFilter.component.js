@@ -28,7 +28,7 @@
   });
 
   const LS_KEY = 'catalogueFilter.tabsOpen';
-  const LS_SETTINGS_KEY = 'catalogueFilter.settings';
+  const LS_SETTINGS_KEY = 'catalogueFilter.showFilters';
 
   function catalogueFilterController($scope, Schema, saControllerHelper,
                                      $state, localStorageService, saEtc,
