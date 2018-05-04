@@ -5,7 +5,7 @@
   function saApp($window, Schema, UUID) {
 
     const appIdKey = 'saAppId';
-    const VERSION = '0.18.22';
+    const VERSION = '0.18.23';
 
     let appId = $window.localStorage.getItem(appIdKey);
 
