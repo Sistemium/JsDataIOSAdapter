@@ -20,7 +20,7 @@
     var innRegexp = /^(\d{10}|\d{12}|^$)$/;
 
     return {
-      restrict: 'AC',
+      restrict: 'EA',
       require: 'ngModel',
 
       controller: function ($scope) {

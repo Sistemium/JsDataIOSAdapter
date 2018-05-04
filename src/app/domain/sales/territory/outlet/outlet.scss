@@ -130,7 +130,7 @@
 
   }
 
-  .ui-view {
+  ui-view, [ui-view] {
 
     @include responsive-only(gt-xxs) {
       min-height: 240px;

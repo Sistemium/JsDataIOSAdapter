@@ -130,7 +130,7 @@
   function volumePad () {
     return {
 
-      restrict: 'AC',
+      restrict: 'EA',
       templateUrl: 'app/domain/components/volumePad/volumePad.html',
       scope: {
         model: '=',

@@ -17,13 +17,13 @@
     })
     .config($compileProvider => {
       $compileProvider.preAssignBindingsEnabled(true);
+      $compileProvider.debugInfoEnabled(false);
+      $compileProvider.commentDirectivesEnabled(false);
+      $compileProvider.cssClassDirectivesEnabled(false);
     })
     .config($animateProvider => {
       $animateProvider.classNameFilter(/animate/);
     })
-    .config(['$compileProvider', function ($compileProvider) {
-      $compileProvider.debugInfoEnabled(false);
-    }])
   ;
 
   function debugService(saDebug) {

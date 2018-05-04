@@ -3,7 +3,7 @@ h3.clearfix(ng-show='vm.title') {{ vm.title }}
 
 section.sa-error-widget
 
-section.ui-view.scroll-y.picking-article-list(resize resize-offset-top='50')
+section.scroll-y.picking-article-list(resize resize-offset-top='50' ui-view)
   h4(ng-repeat-start='group in vm.groups track by group.name') {{ ::group.name }}
   ul.list-group(ng-repeat-end)
     li.list-group-item.display-flex.animate-show(

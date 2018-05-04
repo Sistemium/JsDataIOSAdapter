@@ -76,9 +76,11 @@ navbar h2 a.inherit-colors, .p-6, .hashes .btn-default {
   overflow-x: hidden;
 }
 
-.ui-view.partner, .ui-view.outlet {
-  > .scroll-y {
-    width: 100%;
+ui-view, [ui-view] {
+  &.partner, &.outlet {
+    > .scroll-y {
+      width: 100%;
+    }
   }
 }
 

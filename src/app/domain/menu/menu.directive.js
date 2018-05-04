@@ -8,7 +8,7 @@
   function menuDirective($rootScope) {
     return {
 
-      restrict: 'AC',
+      restrict: 'EA',
       templateUrl: 'app/domain/menu/menu.html',
       scope: {
         header: '=',

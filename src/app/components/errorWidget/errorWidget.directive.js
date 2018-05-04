@@ -7,7 +7,7 @@
 
       return {
 
-        restrict: 'AC',
+        restrict: 'EA',
         templateUrl: 'app/components/errorWidget/errorWidget.html',
         controllerAs: 'dm',
 

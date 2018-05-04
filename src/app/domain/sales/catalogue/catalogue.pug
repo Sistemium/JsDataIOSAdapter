@@ -3,7 +3,7 @@ cg-busy='vm.cgBusy'
 ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered, "catalogue-left": catalogueLeft}]'
 )
 
-  .ui-view
+  div(ui-view)
 
   ol.breadcrumb(
   ng-hide='!vm.isWideScreen && vm.saleOrder'

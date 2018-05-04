@@ -23,14 +23,14 @@ h4.text-right(ng-repeat='state in vm.states track by state.input')
 hr
 
 section(ng-switch='vm.step')
-  .volume-pad(
+  volume-pad(
     ng-switch-when='0'
     model='vm.states[0].value'
     box-rel='vm.position.Article.packageRel'
     datatype='boxPcs'
     export-model='vm.states[0].exportValue'
   )
-  .volume-pad(
+  volume-pad(
     ng-switch-when='1'
     model='vm.states[1].value'
     datatype='{{vm.states[1].datatype}}'
