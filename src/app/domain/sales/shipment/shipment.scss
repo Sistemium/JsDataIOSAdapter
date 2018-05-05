@@ -257,7 +257,7 @@
 
             .address {
               font-weight: normal;
-              color: gray;
+              color: $gray;
               display: block;
               @extend .ellipsis;
             }
@@ -321,7 +321,7 @@
 
               > * {
                 font-weight: $font-weight-normal;
-                color: gray;
+                color: $gray;
               }
 
               span.parenthese {

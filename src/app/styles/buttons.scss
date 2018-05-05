@@ -41,7 +41,7 @@ button {
 }
 
 a[disabled], [disabled] a {
-  color: gray;
+  color: $gray;
   pointer-events: none;
   cursor: not-allowed;
 }
