@@ -1,7 +1,7 @@
 @import "mixins";
 @import "flex";
 
-$primary-color: #2768b7;
+$primary-color: darken(#2768b7, 2%);
 $active-color: $primary-color;
 $sab-blue: $primary-color;
 
