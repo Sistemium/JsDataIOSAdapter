@@ -194,18 +194,27 @@
 
     function tagger(name) {
 
+      let foundPrimary = false;
+
       let res = _.map(tagRegs, cfg => {
 
         let [code, label, re, groupId] = cfg;
 
         if (re.test(name)) {
+
+          let primary = !foundPrimary && !/other|taste/.test(groupId);
+
+          foundPrimary = foundPrimary || primary;
+
           name = _.replace(name, re, '');
+
           return {
             code,
             label,
             groupId,
-            primary: !/other|taste/.test(groupId)
+            primary
           };
+
         }
       });
 
@@ -221,7 +230,11 @@
         res = _.replace(res, cfg[2], ' ');
       });
 
-      return _.trim(_.replace(res, /[ ]{2,}/g, ' '));
+      res = _.replace(res, /[ ]{2,}/g, ' ');
+
+      res = _.replace(res, '( ', '(');
+
+      return _.trim(res);
 
     }
 

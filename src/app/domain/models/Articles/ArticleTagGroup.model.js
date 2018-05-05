@@ -9,7 +9,8 @@
       ['age', 'Выдержка'],
       ['color', 'Цвет'],
       ['taste', 'Вкус'],
-      ['other', 'Прочее', true]
+      ['other', 'Прочее', true],
+      ['etc', '', true]
     ];
 
     const model = Schema.register({
