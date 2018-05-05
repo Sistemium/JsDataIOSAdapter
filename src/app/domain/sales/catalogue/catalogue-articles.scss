@@ -317,12 +317,15 @@
 
   .article-name .tag {
 
-    color: $primary-color;
+    a {
+      color: $primary-color;
+    }
 
     border: solid 1px $border-gray;
     padding: 0 5px;
     display: inline-block;
-    background: none;
+    background: lighten($gray, 67%);
+
     border-radius: 3px;
     margin-top: -1px;
 
