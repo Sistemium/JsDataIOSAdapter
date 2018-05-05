@@ -11,7 +11,7 @@ $sab-blue: $primary-color;
 $black: #333333;
 $blue: $sab-blue;
 $dark-blue: darken($blue, 10%);
-$gray: gray;
+$gray: darken(gray, 0%);
 $dark-gray: darken($gray, 20%);
 $red: red;
 $white: #fff;
