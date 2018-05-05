@@ -79,16 +79,22 @@
 
           event.preventDefault();
 
-          if (rolesPromise) {
-            rolesPromise.then(() => {
-              $state.go(next, nextParams);
-            });
+          // if (rolesPromise) {
+          //   rolesPromise.then(() => {
+          //     $state.go(next, nextParams);
+          //   });
+          //   return;
+          // }
+
+          if (!getAccessToken()) {
+            $state.go('auth');
             return;
           }
 
-          if (!getAccessToken()) {
-             $state.go('auth');
-          }
+          let un = $rootScope.$on('socket:authorized', () => {
+            un();
+            $state.go(next, nextParams);
+          });
 
         }
 

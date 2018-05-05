@@ -114,7 +114,6 @@
         Sockets.emit('authorization', {accessToken: accessToken}, ack => {
 
           DEBUG('Socket authorization:', ack);
-          $rootScope.$broadcast('socket:authorized');
 
           //Sockets.on('jsData:update', (data) => DEBUG('jsData:update', data));
 
@@ -123,11 +122,13 @@
             DEBUG('Injecting SalesmanAuth:', sAuth);
           }
 
-          if (lastState) {
-            console.warn('Restoring last state', lastState.name, lastState.params);
-            $state.go(lastState.name, lastState.params);
-            lastState = false;
-          }
+          $rootScope.$broadcast('socket:authorized');
+
+          // if (lastState) {
+          //   console.warn('Restoring last state', lastState.name, lastState.params);
+          //   $state.go(lastState.name, lastState.params);
+          //   lastState = false;
+          // }
 
         });
 
