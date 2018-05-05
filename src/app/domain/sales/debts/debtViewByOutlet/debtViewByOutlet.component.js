@@ -189,7 +189,7 @@
     }
 
     function textFromDebt(debt) {
-      return `${debt.ndoc} от ${dateFilter(debt.date)} (${numberFilter(debt.summOriginDoc, 2)} ₽)` +
+      return `${debt.ndoc} от ${dateFilter(debt.date)} (${numberFilter(debt.summOriginDoc||debt.summOrigin, 2)} ₽)` +
         ` остаток долга: ${numberFilter(debt.summ, 2)} ₽`;
     }
 

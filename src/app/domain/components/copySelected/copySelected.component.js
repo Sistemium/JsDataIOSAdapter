@@ -16,7 +16,7 @@
 
   });
 
-  function copySelectedController(IOS, toastr) {
+  function copySelectedController(IOS, toastr, $window) {
 
     const vm = _.assign(this, {
       triggerClick,
@@ -38,10 +38,28 @@
 
       let textToCopy = _.map(vm.selectedItems, vm.textFromItem).join('\n');
 
-      IOS.copyToClipboard(textToCopy)
-        .then(() => {
-          toastr.success('Выбранные долги скопированы в буфер обмена');
-        });
+      if (!IOS.isIos()) {
+        copyToClipboard(textToCopy);
+        success();
+      } else {
+        IOS.copyToClipboard(textToCopy)
+          .then(success);
+      }
+
+      function success() {
+        toastr.success('Выбранные долги скопированы в буфер обмена');
+      }
+
+    }
+
+    function copyToClipboard (str) {
+
+      const el = $window.document.createElement('textarea');
+      el.value = str;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
 
     }
 
