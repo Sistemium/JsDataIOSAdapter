@@ -407,7 +407,13 @@
 
     function saveQuery(searchQuery) {
 
-      searchQuery.cnt = (searchQuery.cnt || 0) + 1;
+      searchQuery.cnt = (parseInt(searchQuery.cnt) || 0) + 1;
+
+      // This is to fix overflow problem caused by iSistemiumCore json serializer bug
+      if (searchQuery.cnt > 100000) {
+        searchQuery.cnt = 1;
+      }
+
       searchQuery.lastUsed = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
       SearchQuery.create(searchQuery);
 
