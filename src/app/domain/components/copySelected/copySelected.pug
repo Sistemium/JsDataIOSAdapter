@@ -1,6 +1,6 @@
-.copy-selected(ng-if='vm.isIos')
+.copy-selected()
 
-  button.btn.btn-danger(
+  button.btn.btn-warning(
   ng-if='vm.inProgress'
   ng-click='vm.cancelClick($event)'
   ) Отмена
@@ -12,4 +12,6 @@
   )
     i.glyphicon.glyphicon-share(ng-if='!vm.inProgress')
     span(ng-if='vm.inProgress && !vm.isReady()') Выберите долги
-    span(ng-if='vm.inProgress && vm.isReady()') Готово, скопировать
+    span(ng-if='vm.inProgress && vm.isReady()')
+      span Cкопировать
+      currency-value(value='vm.total')

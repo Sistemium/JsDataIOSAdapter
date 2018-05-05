@@ -38,7 +38,8 @@
         trashUndebtedClick,
         totalCashedClick,
         debtClick,
-        textFromDebt
+        textFromDebt,
+        checkedDebtsTotal
 
       });
 
@@ -88,6 +89,10 @@
         vm.checkedDebts[debt.id] = debt;
       }
 
+    }
+
+    function checkedDebtsTotal() {
+      return _.sumBy(_.filter(vm.checkedDebts), 'summ');
     }
 
     function trashUndebtedClick(cashing) {

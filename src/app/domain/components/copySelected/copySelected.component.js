@@ -5,7 +5,8 @@
     bindings: {
       selectedItems: '=',
       inProgress: '=',
-      textFromItem: '<'
+      textFromItem: '<',
+      total: '<'
     },
 
     templateUrl: 'app/domain/components/copySelected/copySelected.html',
@@ -18,7 +19,6 @@
   function copySelectedController(IOS, toastr) {
 
     const vm = _.assign(this, {
-      isIos: IOS.isIos(),
       triggerClick,
       isReady,
       cancelClick
