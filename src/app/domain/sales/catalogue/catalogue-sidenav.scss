@@ -57,7 +57,7 @@
       &.active {
         color: $white;
       }
-      
+
     }
 
   }
@@ -106,7 +106,9 @@
   .active-filters {
 
     @include responsive-only(gt-xs) {
-      display: none;
+      .current-article-group {
+        display: none;
+      }
     }
 
     display: flex;

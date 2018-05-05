@@ -14,6 +14,34 @@
 
       include tabs/catalogueFilterQueries
 
+      .active-filters(
+      ng-if='vm.filters.length || vm.cvm.currentArticleGroup || vm.priceSlider.hasFilter()'
+      )
+
+        a.current-article-group(
+        href ng-click='vm.cvm.articleGroupClick()'
+        ng-if='vm.cvm.currentArticleGroup'
+        )
+          | {{ vm.cvm.currentArticleGroup.displayName }}
+
+        a.filter(
+        ng-repeat='filter in vm.filters track by $index'
+        href ng-click='vm.removeTagClick(filter)'
+        )
+          | {{ filter.label }}
+
+        a.price-min(
+        ng-if='vm.priceSlider.min'
+        href ng-click='vm.priceSlider.min = 0'
+        )
+          | Цена от {{ vm.priceSlider.min }} ₽
+
+        a.price-max(
+        ng-if='vm.priceSlider.max < vm.priceSlider.options.ceil'
+        href ng-click='vm.priceSlider.max = vm.priceSlider.options.ceil'
+        )
+          | Цена до {{ vm.priceSlider.max }} ₽
+
       include tabs/catalogueFilterArticleGroups
 
       include tabs/catalogueFilterTagGroups
