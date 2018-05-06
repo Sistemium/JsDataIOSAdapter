@@ -19,9 +19,17 @@
   function copySelectedController(IOS, toastr, $window) {
 
     const vm = _.assign(this, {
+
       triggerClick,
-      isReady,
-      cancelClick
+
+      cancelClick() {
+        vm.inProgress = false;
+      },
+
+      isReady() {
+        return vm.inProgress && !_.isEmpty(vm.selectedItems);
+      }
+
     });
 
     /*
@@ -63,17 +71,6 @@
 
     }
 
-    function isReady() {
-
-      return vm.inProgress && !_.isEmpty(vm.selectedItems);
-
-    }
-
-    function cancelClick() {
-
-      vm.inProgress = false;
-
-    }
 
   }
 
