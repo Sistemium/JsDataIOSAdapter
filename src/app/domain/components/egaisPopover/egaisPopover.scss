@@ -21,27 +21,36 @@ egais-popover {
       }
     }
 
+    .egais-popover-template {
+      > * + * {
+        margin-top: $margin-bottom-xs-minus;
+      }
+    }
+
     .popover-inner {
 
       min-width: 250px;
 
       span {
-        font-size: 75%;
+        //font-size: 75%;
       }
 
       .status {
+
         display: flex;
+
         .glyphicon {
           top: 0;
           margin-right: 5px;
         }
+
       }
 
-      .status-message {
-        &:not(:last-of-type) {
-          margin-bottom: 5px;
-        }
-      }
+      //.status-message {
+      //  &:not(:last-of-type) {
+      //    margin-bottom: 5px;
+      //  }
+      //}
 
     }
   }
