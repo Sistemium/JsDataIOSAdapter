@@ -319,6 +319,11 @@
       query = query.id ? query : getSearchQuery(query.query);
 
       query.isFavourite = _.get(query, 'isFavourite') !== true;
+
+      if (!query.isFavourite && !vm.searchText) {
+        vm.search = '';
+      }
+
       SearchQuery.create(query);
 
     }
