@@ -31,10 +31,6 @@ egais-popover {
 
       min-width: 250px;
 
-      span {
-        //font-size: 75%;
-      }
-
       .status {
 
         display: flex;
@@ -45,12 +41,6 @@ egais-popover {
         }
 
       }
-
-      //.status-message {
-      //  &:not(:last-of-type) {
-      //    margin-bottom: 5px;
-      //  }
-      //}
 
     }
   }
