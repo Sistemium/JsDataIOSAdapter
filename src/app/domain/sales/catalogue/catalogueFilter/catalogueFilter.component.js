@@ -466,9 +466,19 @@
 
     function articleGroupClick(articleGroup) {
 
+      let currentId = _.get(vm.cvm, 'currentArticleGroup.id');
+
+      if (articleGroup && articleGroup.id === currentId) {
+        articleGroup = articleGroup.articleGroup;
+      }
+
       vm.cvm.articleGroupClick(articleGroup);
 
-      if (articleGroup && !_.get(vm, 'cvm.articleGroups.length') || !articleGroup.children.length) {
+      if (!articleGroup) {
+        return;
+      }
+
+      if (!_.get(vm, 'cvm.articleGroups.length') || !articleGroup.children.length) {
         vm.fullScreen = false;
       }
 
