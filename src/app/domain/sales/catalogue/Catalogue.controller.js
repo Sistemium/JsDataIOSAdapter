@@ -56,7 +56,7 @@
       saleOrderPositionByArticle: {},
       hideBoxes: localStorageService.get('hideBoxes') || false,
       showImages: localStorageService.get('showImages') || false,
-      showFirstLevel: !localStorageService.get('hideFirstLevel'),
+      showFirstLevel: true,
       stockWithPicIndex: [],
       discountsBy: {},
       discounts: {article: {}, priceGroup: {}, saleOrder: {}},

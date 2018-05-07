@@ -16,8 +16,7 @@
       priceSlider: '=',
       clearFilters: '=',
       showSearchHistory: '=',
-      showSettings: '=',
-      showFirstLevel: '<'
+      showSettings: '='
 
     },
 
@@ -61,6 +60,7 @@
       settingToggleClick,
 
       search: $state.params.q || '',
+      showFirstLevel: true,
 
       tabsOpen: localStorageService.get(LS_KEY) || {categories: true},
       settings: localStorageService.get(LS_SETTINGS_KEY) || {},
