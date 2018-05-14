@@ -13,7 +13,7 @@
   });
 
   function ShipmentListController(Schema, Helpers, $scope, SalesmanAuth, $state,
-                                  saMedia, ShipmentModal) {
+                                  saMedia, ShipmentModal, Sockets) {
 
     const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
     const {saControllerHelper, ScrollHelper} = Helpers;
@@ -57,9 +57,67 @@
       $scope.$broadcast('vsRepeatTrigger');
     });
 
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['Shipment']));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJsData));
+
     /*
      Functions
      */
+
+    function onJsData(event) {
+
+      let {data, resource} = event;
+
+      if (resource !== 'Shipment') {
+        return;
+      }
+
+      if (!_.matches(SalesmanAuth.makeFilter())(data)) {
+        // console.info('ignore shipment', data);
+        return;
+      }
+
+      let shipment = Shipment.inject(data);
+
+      shipment.DSLoadRelations(['Outlet', 'Driver'])
+        .then(mergeViewData);
+
+    }
+
+    function mergeViewData(withData) {
+
+      withData = _.isArray(withData) ? withData : [withData];
+
+      let filteredData = _.filter(vm.data, item => !item.isFooter && item.cls !== 'date');
+
+      filteredData.push(...withData);
+
+      let dates = _.groupBy(filteredData, 'date');
+
+      dates = _.map(dates, (val, date) => {
+
+        return {
+          date,
+          id: date,
+          cls: 'date',
+          totalCost: () => _.sumBy(val, shipment => {
+            return shipment.totalCost && !shipment.isFooter && shipment.totalCost() || 0;
+          })
+        };
+
+      });
+
+      filteredData.push(...dates);
+
+      let data = _.orderBy(
+        _.uniqBy(filteredData, 'id'),
+        ['date', 'isFooter', 'ndoc'],
+        ['desc', 'desc', 'desc']
+      );
+
+      vm.data = calcTotals(data);
+
+    }
 
     function rowHeight() {
       return isWideScreen() ? 46 : 79;
@@ -172,34 +230,8 @@
             gotAllData = true;
           }
 
-          let dates = _.groupBy(res, 'date');
+          mergeViewData(res);
 
-          dates = _.map(dates, (val, date) => {
-
-            return {
-              date,
-              id: date,
-              cls: 'date',
-              totalCost: () => _.sumBy(val, shipment => {
-                return shipment.totalCost && !shipment.isFooter && shipment.totalCost() || 0;
-              })
-            };
-
-          });
-
-          dates.push(...res);
-
-          let filteredData = _.filter(vm.data, item => !item.isFooter);
-
-          dates.push(...filteredData);
-
-          let data = _.orderBy(
-            _.uniqBy(dates, 'id'),
-            ['date', 'isFooter', 'ndoc'],
-            ['desc', 'desc', 'desc']
-          );
-
-          vm.data = calcTotals(data);
           startPage++;
 
         });
