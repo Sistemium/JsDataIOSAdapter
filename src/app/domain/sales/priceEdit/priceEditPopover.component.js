@@ -102,7 +102,7 @@
       let field = `price${target}`;
 
       if (vm[field] === vm.priceOrigin) {
-        return  '';
+        return '';
       }
 
       let percent = -vm.stock.discountPercent(vm.discountScope, target);
@@ -275,7 +275,7 @@
 
     }
 
-    function setPrice(newPrice, target = vm.target || '') {
+    function setPrice(newPrice, target = vm.target) {
 
       let priceField = `priceEdit`;
 
@@ -294,12 +294,22 @@
 
       if (vm.mode === 'price') {
         vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), target);
+        if (target === null) {
+          vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), 'Doc');
+        }
       }
 
-      _.assign(vm, {
-        price: vm.stock.discountPrice(),
-        priceDoc: vm.stock.discountPrice('Doc')
-      });
+      price = vm.stock.discountPrice();
+      let priceDoc = vm.stock.discountPrice('Doc');
+
+      if (price > priceDoc) {
+        let otherTarget = vm.target ? '' : 'Doc';
+        vm.stock.setDiscountScope(vm.discountScope, signedDiscountPercent(), otherTarget);
+        price = vm.stock.discountPrice();
+        priceDoc = vm.stock.discountPrice('Doc');
+      }
+
+      _.assign(vm, {price, priceDoc});
 
     }
 
