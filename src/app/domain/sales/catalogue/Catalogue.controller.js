@@ -448,6 +448,10 @@
 
       currentArticleGroupId = params.articleGroupId;
 
+      if (currentArticleGroupId) {
+        currentArticleGroupId = _.replace(currentArticleGroupId, /etc-/, '');
+      }
+
       if (!vm.saleOrderId) {
         vm.showOnlyOrdered = false;
       }
@@ -1016,6 +1020,8 @@
 
       if (articleGroupOrId && !articleGroupOrId.id) {
         articleGroup = _.isObject(articleGroupOrId) ? null : ArticleGroup.get(articleGroupOrId);
+      } else if (articleGroupOrId && articleGroupOrId.etcId) {
+        // articleGroup = articleGroupOrId.etcId;
       }
 
       DEBUG('setCurrentArticleGroup');
@@ -1048,15 +1054,27 @@
         vm.currentArticleGroupParent = articleGroup;
         vm.articleGroups = children;
 
+        groupIds = articleGroupIds(ownStock);
+
+        if (groupIds[articleGroup.id]) {
+          vm.articleGroups.push(etcArticleGroup(articleGroup));
+        }
+
       } else if (articleGroup && articleGroup.articleGroup) {
 
-        ownStock = getStockByArticlesOfGroup(articleGroup.articleGroup);
+        let parent = articleGroup.articleGroup;
+
+        ownStock = getStockByArticlesOfGroup(parent);
         groupIds = articleGroupIds(ownStock);
 
         vm.articleGroups = _.filter(
-          articleGroup.articleGroup.children,
+          parent.children,
           hasArticlesOrGroupsInStock(groupIds)
         );
+
+        if (groupIds[parent.id]) {
+          vm.articleGroups.push(etcArticleGroup(parent));
+        }
 
         DEBUG('setCurrentArticleGroup', '!children.length');
 
@@ -1087,6 +1105,24 @@
 
     }
 
+    function etcArticleGroup(articleGroup) {
+
+      let {id} = articleGroup;
+
+      return {
+        articleGroup,
+        children: [],
+        articleGroupId: id,
+        displayName: `${articleGroup.displayName} (прочее)`,
+        etcId: id,
+        id: `etc-${id}`,
+        descendantsCache: [id],
+        ancestors: () => [articleGroup, ...articleGroup.ancestors()],
+        firstLevelAncestor: () => articleGroup.firstLevelAncestor()
+      };
+
+    }
+
     function setFirstLevelGroups(currentArticleGroup) {
 
       DEBUG('setFirstLevelGroups', 'start');
@@ -1114,9 +1150,9 @@
       }
 
       vm.precedingGroups = _.filter(vm.firstLevelGroups,
-          group => group.sortName < currentFirstLevelGroup.sortName);
+        group => group.sortName < currentFirstLevelGroup.sortName);
       vm.followingGroups = _.filter(vm.firstLevelGroups,
-          group => group.sortName > currentFirstLevelGroup.sortName);
+        group => group.sortName > currentFirstLevelGroup.sortName);
 
       DEBUG('setFirstLevelGroups', 'end');
 
