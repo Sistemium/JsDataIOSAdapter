@@ -133,7 +133,8 @@
 
         });
 
-        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'], () => $timeout(10).then(onContractChange));
+        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'],
+          () => $timeout(10).then(onContractChange));
 
         SalesmanAuth.watchCurrent($scope, salesman => {
 
@@ -554,8 +555,10 @@
             let {articleId} = pos;
             let price = vm.prices[articleId];
 
-            let posDiscount = pos.priceOrigin ? _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
-            let posDiscountDoc = pos.priceOrigin ? _.round((pos.priceOrigin - pos.priceDoc) / pos.priceOrigin * 100.0, 2) : 0;
+            let posDiscount = pos.priceOrigin ?
+              _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
+            let posDiscountDoc = pos.priceOrigin ?
+              _.round((pos.priceOrigin - pos.priceDoc) / pos.priceOrigin * 100.0, 2) : 0;
 
             if (!price) {
               price = vm.prices[articleId] = {price: pos.priceOrigin};
@@ -858,7 +861,8 @@
           'saleOrder';
       }
 
-      function setDiscountScope(discountScope, discountPercent = this.discountPercent(discountScope), target = '') {
+      function setDiscountScope(
+        discountScope, discountPercent = this.discountPercent(discountScope), target = '') {
 
         let path = 'saleOrder';
         let filter = {};
@@ -1109,8 +1113,10 @@
         currentFirstLevelGroup = currentArticleGroup;
       }
 
-      vm.precedingGroups = _.filter(vm.firstLevelGroups, group => group.sortName < currentFirstLevelGroup.sortName);
-      vm.followingGroups = _.filter(vm.firstLevelGroups, group => group.sortName > currentFirstLevelGroup.sortName);
+      vm.precedingGroups = _.filter(vm.firstLevelGroups,
+          group => group.sortName < currentFirstLevelGroup.sortName);
+      vm.followingGroups = _.filter(vm.firstLevelGroups,
+          group => group.sortName > currentFirstLevelGroup.sortName);
 
       DEBUG('setFirstLevelGroups', 'end');
 
