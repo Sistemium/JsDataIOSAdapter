@@ -60,7 +60,7 @@
 
     function setBoxPcs() {
 
-      let {box, pcs, full} = boxPcs();
+      let {box, pcs, full} = boxPcs() || {};
 
       _.assign(vm, {box, pcs, full});
 
