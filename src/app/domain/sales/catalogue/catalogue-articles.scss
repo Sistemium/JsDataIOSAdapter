@@ -211,6 +211,7 @@
 
     flex: 1;
     min-width: 0;
+    position: relative;
 
     > * {
       @include responsive-only(xxs) {
@@ -261,7 +262,7 @@
         color: $green;
       }
       @include responsive-only(gt-xs) {
-        min-width: 60px;
+        min-width: 25px;
       }
     }
 

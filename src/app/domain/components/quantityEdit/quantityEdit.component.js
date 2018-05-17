@@ -19,22 +19,13 @@
 
   };
 
-  function quantityEditController() {
+  function quantityEditController($scope) {
 
     let vm = this;
 
     _.assign(vm, {
 
-      boxPcs: () => {
-
-        let position = vm.position;
-        let article = vm.article || _.get(position, 'article');
-
-        if (!article || !position || !position.volume) return;
-
-        return article.boxPcs(position.volume, false).full;
-
-      }
+      $onInit
 
     });
 
@@ -46,9 +37,34 @@
      Listeners
      */
 
+    $scope.$watch('vm.position.volume', setBoxPcs);
+
     /*
      Functions
      */
+
+    function $onInit() {
+      setBoxPcs();
+    }
+
+    function boxPcs() {
+
+      let position = vm.position;
+      let article = vm.article || _.get(position, 'article');
+
+      if (!article || !position || !position.volume) return;
+
+      return article.boxPcs(position.volume, false);
+
+    }
+
+    function setBoxPcs() {
+
+      let {box, pcs, full} = boxPcs();
+
+      _.assign(vm, {box, pcs, full});
+
+    }
 
   }
 

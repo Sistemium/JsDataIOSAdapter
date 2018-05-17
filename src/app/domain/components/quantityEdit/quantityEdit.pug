@@ -8,7 +8,10 @@ strong.quantity-edit
   popover-append-to-body='true'
   popover-class='quantity-edit-popover'
   )
-    span.qty {{ vm.boxPcs() }}
-    span.caret
+    span.qty
+      // {{ vm.boxPcs().full }}
+      span.box(ng-show="vm.box") {{ vm.box }} K
+      span.pcs(ng-show="vm.pcs") {{ vm.pcs }} б
+    span.caret(ng-hide="vm.full")
 
 

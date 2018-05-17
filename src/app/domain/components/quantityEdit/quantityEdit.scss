@@ -73,12 +73,33 @@
 
 }
 
+quantity-edit {
+
+}
+
 .quantity-edit {
+
+  position: absolute;
+  top: 5px;
+  right: 2px;
+
+  min-height: 70px;
+
+  .pcs {
+    position: absolute;
+    bottom: 5px;
+  }
 
   a.trigger {
     min-width: 25px;
     text-align: right;
     display: inline-block;
+  }
+
+  .qty {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
   }
 
 }
