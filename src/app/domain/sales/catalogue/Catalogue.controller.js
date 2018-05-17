@@ -1054,9 +1054,8 @@
         vm.currentArticleGroupParent = articleGroup;
         vm.articleGroups = children;
 
-        groupIds = articleGroupIds(ownStock);
 
-        if (groupIds[articleGroup.id]) {
+        if (articleGroup && articleGroupIds(ownStock)[articleGroup.id]) {
           vm.articleGroups.push(etcArticleGroup(articleGroup));
         }
 
