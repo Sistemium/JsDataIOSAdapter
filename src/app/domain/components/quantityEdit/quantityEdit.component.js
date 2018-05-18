@@ -19,6 +19,7 @@
 
   };
 
+  /** @ngInject */
   function quantityEditController($scope) {
 
     let vm = this;
