@@ -51,6 +51,17 @@
 
 }
 
+.catalogue.hideSideNavPortrait {
+  #catalogue-main {
+    @include responsive-only(sm, portrait) {
+      flex-flow: column;
+      #scroll-articles {
+        width: 100%;
+      }
+    }
+  }
+}
+
 .catalogue, .sale-order-details {
 
   > .animate-show {

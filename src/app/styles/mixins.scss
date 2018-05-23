@@ -74,6 +74,9 @@ $screen-md-max:              ($screen-lg-min - 1) !default;
     @else if $media == lt-sm {
       @media (max-width: $screen-xs-max) and (orientation: $orientation) { @content; }
     }
+    @else if $media == sm {
+      @media (max-width: $screen-sm-max) and (min-width: $screen-sm-min) and (orientation: $orientation)  { @content; }
+    }
     @else if $media == gt-xs {
       @media (min-width: $screen-sm-min) and (orientation: $orientation) { @content; }
     }

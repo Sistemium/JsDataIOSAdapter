@@ -21,7 +21,8 @@
       {code: 'hideBoxes', labelOff: 'Показать коробки', labelOn: 'Убрать коробки'},
       {code: 'showBarCodes', labelOff: 'Убрать штрих-коды', labelOn: 'Показать штрих-коды'},
       {code: 'catalogueLeft', labelOff: 'Цены справа', labelOn: 'Цены слева'},
-      {code: 'hideSearchHistory', labelOff: 'Показывать подсказки поиска', labelOn: 'Скрыть подсказки поиска'}
+      {code: 'hideSearchHistory', labelOff: 'Показывать подсказки поиска', labelOn: 'Скрыть подсказки поиска'},
+      {code: 'hideSideNavPortrait', labelOff: 'Показывать фильтры в портрете', labelOn: 'Скрыть фильтры в портрете'},
     ],
     debts: []
   };
