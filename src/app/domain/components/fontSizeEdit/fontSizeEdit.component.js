@@ -45,7 +45,7 @@
     });
 
     function incrementClick() {
-      vm.fontSize = _.min([vm.fontSize + 1, 18])
+      vm.fontSize = _.min([vm.fontSize + 1, 20])
     }
 
     function decrementClick() {
