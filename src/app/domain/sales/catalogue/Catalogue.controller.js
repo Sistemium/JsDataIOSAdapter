@@ -646,7 +646,7 @@
     }
 
     function articleRowHeight() {
-      return isWideScreen() ? 80 : 74;
+      return isWideScreen() ? 88 : 74;
     }
 
     function findAll() {
