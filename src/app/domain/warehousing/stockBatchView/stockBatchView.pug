@@ -1,7 +1,11 @@
 .stock-batch-view
 
-  .title Партия
+  .title
+    .existing(ng-if='vm.stockBatch.id')
+      | Партия # {{ vm.stockBatch.id }}
+    .new(ng-if='!vm.stockBatch.id')
+      | Новая партия
   .properties
-    .id {{ vm.stockBatch.id || 'Новая партия' }}
+    pre {{ vm.stockBatch | json }}
   .barcodes
   .items

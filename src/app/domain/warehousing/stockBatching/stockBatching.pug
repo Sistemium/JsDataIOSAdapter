@@ -2,6 +2,9 @@
 
   barcode-scanner(ng-model='vm.barcode')
 
-  stock-batch-view(ng-model='vm.stockBatch')
-
   pre {{ vm.barcode | json }}
+
+  stock-batch-view(ng-if='vm.stockBatch' ng-model='vm.stockBatch')
+
+  button.btn.btn-primary(ng-click='vm.createClick()') Создать партию
+
