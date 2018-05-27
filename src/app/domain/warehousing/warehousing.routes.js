@@ -29,7 +29,7 @@
     name: 'stockBatching',
     url: '/stockBatching',
 
-    template: '<stock-batch-view></stock-batch-view>'
+    template: '<stock-batching></stock-batching>'
 
   };
 

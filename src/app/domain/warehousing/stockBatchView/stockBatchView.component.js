@@ -4,7 +4,7 @@
     .component('stockBatchView', {
 
       bindings:{
-        stockBatch: '<',
+        stockBatch: '<ngModel',
       },
 
       controller() {
