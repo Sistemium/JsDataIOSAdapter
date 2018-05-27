@@ -17,6 +17,7 @@
       'sistemiumBootstrap',
       'Models',
       'Sales',
+      'Warehousing',
       'cgBusy',
       'vs-repeat',
       'jsd',
