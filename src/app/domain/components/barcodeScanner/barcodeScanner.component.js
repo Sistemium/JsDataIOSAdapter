@@ -7,14 +7,32 @@
         barcode: '=ngModel',
       },
 
-      controller($scope) {
+      /** @ngInject */
+      controller($scope, DEBUG, Schema) {
 
-        const vm = this;
-        $scope.$watch('vm.input', onInput);
+        const vm = _.assign(this, {
+          $onInit() {
+            const { BarCodeType } = Schema.models();
+            BarCodeType.findAll();
+            BarCodeType.bindAll({}, $scope, 'vm.types');
+          },
+          enterPress() {
+            onScan(translateHIDScan(vm.input));
+          }
+        });
 
+        // $scope.$watch('vm.input', onInput);
+        $scope.$watch('vm.barcode', barcode => {
+          vm.input = '';
+          DEBUG('barcodeScanner:', barcode);
+        });
 
-        function onInput(code) {
-          vm.barcode = {code};
+        function onScan(code) {
+          vm.barcode = { code, type: detectType(code) };
+        }
+
+        function detectType(code) {
+          return _.find(vm.types, type => type.match(code));
         }
 
       },
@@ -23,5 +41,18 @@
       controllerAs: 'vm',
 
     });
+
+  const RU_LETTERS = 'фисвуапршолдьтщзйкыегмцчняФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ';
+  const ENG_LETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const RU_LETTERS_RE = new RegExp(`[${RU_LETTERS}]`, 'g');
+
+  function translateFn (c) {
+    const pos = RU_LETTERS.indexOf(c);
+    return pos >= 0 ? ENG_LETTERS[pos] : c;
+  }
+
+  function translateHIDScan(barcode) {
+    return barcode.replace(RU_LETTERS_RE, translateFn);
+  }
 
 })();

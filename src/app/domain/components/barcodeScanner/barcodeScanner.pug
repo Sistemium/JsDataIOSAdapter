@@ -2,4 +2,8 @@
 
   label Штрих-код
 
-  input(ng-model='vm.input')
+  input(
+  ng-model="vm.input"
+  sa-auto-focus="true"
+  sa-enter-key="vm.enterPress()"
+  )
