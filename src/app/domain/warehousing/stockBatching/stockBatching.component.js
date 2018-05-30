@@ -55,11 +55,15 @@
 
     });
 
-    function findArticle({ code }) {
+    function findArticle({ code, type }) {
 
-      if (!ArticleBarCode.meta.ean13.test(code)) {
-        // toastr.info('Неправильный штрих-код');
-        return
+      if (!code) {
+        return;
+      }
+
+      if (!type || type.type !== 'Article') {
+        toastr.error('Неправильный штрих-код');
+        return;
       }
 
       return ArticleBarCode.findAll({ code })
@@ -84,7 +88,6 @@
           BarCodeScan.create({ destinationXid: stockBatchId, code })
             .then(scan => vm.barcodes.push(scan))
             .then(() => StockBatchItem.create({ stockBatchId, volume: 1, barcode: code }))
-
         )
         .catch(e => toastr.error(angular.toJson(e), 'Ошибка!'));
 
