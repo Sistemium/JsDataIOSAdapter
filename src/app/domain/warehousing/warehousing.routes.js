@@ -20,14 +20,16 @@
 
         });
 
-      console.warn('init');
-
     });
 
   const stockBatching = {
 
     name: 'stockBatching',
     url: '/stockBatching',
+
+    data: {
+      title: 'Товарные партии',
+    },
 
     template: '<stock-batching></stock-batching>'
 

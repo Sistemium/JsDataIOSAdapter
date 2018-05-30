@@ -2,9 +2,21 @@
 
   barcode-scanner(ng-model='vm.barcode')
 
-  pre {{ vm.barcode | json }}
+  //pre {{ vm.barcode | json }}
+
+  .article(ng-if='vm.article')
+    h3 Товар
+    .code {{ vm.lastCode }}
+    .id {{ vm.article.id }}
+    .name {{ vm.article.name }}
 
   stock-batch-view(ng-if='vm.stockBatch' ng-model='vm.stockBatch')
 
   button.btn.btn-primary(ng-click='vm.createClick()') Создать партию
+
+  ul.barcodes
+    li(ng-repeat='item in vm.barcodes track by item.id')
+      span {{ ::item.code }}
+      = ' '
+      span ({{ ::item.deviceCts | amUtc | amLocal | amDateFormat:'DD.MM.YYYY HH:mm:ss' }})
 

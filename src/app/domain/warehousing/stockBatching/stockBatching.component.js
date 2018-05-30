@@ -12,54 +12,81 @@
 
     });
 
-  function StockBatchingController(Schema, saControllerHelper, $scope, toastr) {
+  /** @ngInject */
+  function StockBatchingController(Schema, saControllerHelper, $scope, toastr, $q) {
 
-    const { StockBatch, StockBatchBarCode, ArticleBarCode } = Schema.models();
+    const {
+      StockBatch,
+      // StockBatchBarCode,
+      ArticleBarCode,
+      BarCodeScan,
+      StockBatchItem,
+      // BarCodeType
+    } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope).use({
 
       $onInit() {
         vm.barcode = {};
-        vm.watchScope('vm.barcode.code', findArticle);
+        vm.setState('article');
       },
 
       createClick() {
-
         vm.stockBatch = StockBatch.createInstance({ site: 1, volume: 0 });
+        vm.setState('');
+        vm.barcodes = [];
+        // vm.rebindAll(BarCodeScan, {}, 'barcodes');
+      },
+
+      setState(name) {
+
+        vm.barcode = {};
+
+        return vm.watchScope('vm.barcode', (() => {
+          switch (name) {
+            case 'article':
+              return findArticle;
+            default:
+              return addBarcode;
+          }
+        })());
 
       },
 
     });
 
-    function findArticle(code) {
+    function findArticle({ code }) {
 
-      if (!code) return;
+      if (!ArticleBarCode.meta.ean13.test(code)) {
+        // toastr.info('Неправильный штрих-код');
+        return
+      }
 
-      ArticleBarCode.findAll({ code })
-        .then(res => _.first(res) || Promise.reject('Not found'))
+      return ArticleBarCode.findAll({ code })
+        .then(res => _.first(res) || $q.reject('Not found'))
         .then(ab => ab.DSLoadRelations())
-        .then(({ articleId }) => {
-          _.assign(vm.stockBatch, { articleId });
-          vm.barcode = {};
-          vm.watchScope('vm.barcode.code', addBarcode);
-        })
+        .then(({ article }) => _.assign(vm, {
+          article,
+          lastCode: vm.barcode.code,
+        }))
         .catch(() => toastr.info('Неизвестный штрих-код'));
 
     }
 
-    function addBarcode(code) {
+    function addBarcode({ code, type }) {
 
-      if (!code) return;
+      if (!type) return;
 
-      if (code.length < 6) {
-        console.info(code.length);
-        return;
-      }
+      const save = vm.stockBatch.id ? $q.resolve(vm.stockBatch) : StockBatch.create(vm.stockBatch);
 
-      vm.stockBatch.DSCreate()
+      return save
         .then(({ id: stockBatchId }) =>
-          StockBatchBarCode.create({ stockBatchId, code })
-        );
+          BarCodeScan.create({ destinationXid: stockBatchId, code })
+            .then(scan => vm.barcodes.push(scan))
+            .then(() => StockBatchItem.create({ stockBatchId, volume: 1, barcode: code }))
+
+        )
+        .catch(e => toastr.error(angular.toJson(e), 'Ошибка!'));
 
     }
 

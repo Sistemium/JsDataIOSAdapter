@@ -35,7 +35,7 @@
                 }
                 SB.loadRelations(sbs[0], 'StockBatchBarCode')
                   .then(sb => {
-                    resolve(sb.StockBatchBarCodes);
+                    resolve(sb.stockBatchBarCodes);
                   }, reject);
               }, reject);
 
