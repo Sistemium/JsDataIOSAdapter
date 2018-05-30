@@ -127,7 +127,7 @@
 
     function saleOrdersDisabled() {
       // return 'bs' === _.get(Auth.getAccount(), 'org') && !/jt|localhost/.test(siteInstance);
-      return !Auth.isAuthorized('salesman');
+      return !Auth.isAuthorized(['salesman', 'supervisor']);
     }
 
     function visitsDisabled() {
