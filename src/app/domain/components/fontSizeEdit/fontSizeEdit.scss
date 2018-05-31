@@ -4,7 +4,7 @@ font-size-edit {
 
   // FIXME: if always block then catalogue doesn't show filters after labelClick on iPhone
   @include responsive-only(gt-xs) {
-    //display: flex;
+    display: block;
   }
 
   .isShownSettings {
