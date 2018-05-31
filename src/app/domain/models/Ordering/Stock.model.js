@@ -64,6 +64,10 @@
 
       item.article = item.article || Article.get(articleId);
 
+      if (!item.article) {
+        meta.toIndexByArticleId[articleId] = item;
+      }
+
       return item;
 
     }
@@ -79,23 +83,28 @@
     function loadArticle(article) {
 
       const articleId = article.id;
+      const shortRes = meta.indexByArticleId[articleId];
 
-      if (meta.indexByArticleId[articleId]) {
-        return meta.indexByArticleId[articleId];
+      if (shortRes) {
+        delete meta.toIndexByArticleId[articleId];
+        shortRes.article = article;
+        return shortRes;
       }
 
       return Stock.findAll({articleId}, {afterFindAll, cacheResponse: false});
 
       function afterFindAll(options, data) {
 
-        let item = _.first(data) || {};
+        let item = _.first(data);
 
-        let {indexByArticleId} = meta;
+        if (item) {
+          let {indexByArticleId} = meta;
 
-        indexByArticleId[articleId] = item;
-        item.article = article;
+          indexByArticleId[articleId] = item;
+          item.article = article;
 
-        meta.data.push(item);
+          meta.data.push(item);
+        }
 
         return null;
 
@@ -122,6 +131,8 @@
         }
 
       });
+
+      return Object.keys(toIndexByArticleId);
 
     }
 
@@ -184,7 +195,7 @@
 
             indexByArticleId[articleId] = item;
 
-            let article = Article.get(articleId)
+            let article = Article.get(articleId);
 
             if (article) {
               item.article = article;
