@@ -26,7 +26,11 @@
       BarCodeType
     } = Schema.models();
 
-    const { BARCODE_TYPE_ARTICLE } = BarCodeType.meta.types;
+    const {
+      BARCODE_TYPE_ARTICLE,
+      BARCODE_TYPE_STOCK_BATCH,
+      BARCODE_TYPE_EXCISE_STAMP,
+    } = BarCodeType.meta.types;
 
     const vm = saControllerHelper.setup(this, $scope).use({
 
@@ -47,9 +51,9 @@
           switch (typeName) {
             case BARCODE_TYPE_ARTICLE:
               return findArticle;
-            case 'StockBatch':
+            case BARCODE_TYPE_STOCK_BATCH:
               return processStockBatchBarcode;
-            case 'ExciseStamp':
+            case BARCODE_TYPE_EXCISE_STAMP:
               return addBarcode;
             default:
               return ({ code, type }) => toastr.error(code, `Штрих-код "${type.type}"`);
@@ -107,7 +111,10 @@
       return StockBatchBarCode.findAll({ code })
         .then(checkOne)
         .then(({ stockBatchId }) => StockBatch.find(stockBatchId))
-        .then(stockBatch => vm.stockBatch = stockBatch)
+        .then(stockBatch => {
+          vm.stockBatch = stockBatch;
+          return stockBatch.DSLoadRelations(['StockBatchBarCode', 'Article']);
+        })
         .catch(e => {
           if (e === NOT_FOUND) {
             return saveDeep(vm.stockBatch)
@@ -134,7 +141,7 @@
           article,
           lastCode: vm.barcode.code,
         }))
-        .catch(() => toastr.info('Неизвестный штрих-код'));
+        .catch(() => toastr.error('Неизвестный штрих-код товара'));
 
     }
 

@@ -3,18 +3,25 @@
   h2.title
     .existing(ng-if='vm.stockBatch.id')
       | Партия
-      .gray {{ vm.stockBatch.id }}
     .new(ng-if='!vm.stockBatch.id')
       | Новая партия
 
   .properties
-    pre {{ vm.stockBatch | json }}
+    //.id(ng-if='vm.stockBatch.id')
+      label ИД:
+      strong {{ vm.stockBatch.id }}
+    .cts(ng-if='vm.stockBatch.cts')
+      label Дата создания:
+      strong {{ vm.stockBatch.cts | amUtc | amLocal | amDateFormat:'DD.MM.YYYY HH:mm' }}
+    .article(ng-if='vm.stockBatch.Article')
+      label Товар:
+      strong {{ vm.stockBatch.Article.name }}
 
-  ul.stock-batch-bar-codes
-    li(ng-repeat='item in vm.stockBatch.stockBatchBarCodes track by item.id')
-      | {{ ::item.code }} ({{ ::item.deviceCts | amUtc | amLocal }})
+  .stock-batch-bar-codes
+    h3 Наклейки:
+    .code(ng-repeat='item in vm.stockBatch.stockBatchBarCodes | orderBy:"code" track by item.id')
+      | {{ ::item.code }}
 
   ul.stock-batch-items
-    li(ng-repeat='item in vm.stockBatch.items track by item.id')
+    li(ng-repeat='item in vm.stockBatch.items | orderBy:"cts" track by item.id')
       | {{ ::item.barcode }} ({{ ::item.deviceCts | amUtc | amLocal }})
-
