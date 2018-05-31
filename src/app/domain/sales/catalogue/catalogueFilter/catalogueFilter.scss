@@ -79,8 +79,6 @@ catalogue-filter {
 
   .catalogue-filter {
 
-    overflow: hidden;
-
     > .price {
       * + span {
         margin-left: $padding;

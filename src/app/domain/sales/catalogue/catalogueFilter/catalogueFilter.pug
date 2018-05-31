@@ -1,4 +1,7 @@
-.catalogue-filter(ng-class='vm.fullScreen ? "full-screen" : "not-full-screen"')
+.catalogue-filter.scroll-y(
+ng-class='vm.fullScreen ? "full-screen" : "not-full-screen"'
+resize resize-offset-top='5'
+)
 
   .full-screen-controls(ng-if='vm.fullScreen')
     .title(ng-class='{"not-found": !vm.cvm.stock.length}')
