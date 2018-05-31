@@ -254,12 +254,12 @@
 
           let index = {};
 
-          _.each(res, item => index[item.id] = item);
+          // _.each(res, item => index[item.id] = );
 
           onJSDataFinished({
             model: Stock,
             index: index,
-            data: res
+            data: _.map(res, item => ({ data: item }))
           });
 
         });
@@ -377,11 +377,14 @@
 
         // FIXME: article won't appear if wasn't in stock
 
-        _.each(vm.stock, stock => {
-          let updated = event.index[stock.id];
-          if (!updated) return;
-          stock.volume = updated.volume;
-          stock.displayVolume = updated.displayVolume;
+        _.each(event.data, ({ data: { volume, displayVolume, id } }) => {
+
+          const stock = _.find(sortedStock, { id });
+
+          if (stock) {
+            _.assign(stock, { volume, displayVolume });
+          }
+
         });
 
         if (count) {
@@ -654,7 +657,7 @@
       let options = {limit: 10000};
       let volumeNotZero = {
         volume: {
-          '>': 0
+          '>=': 1
         }
       };
 
@@ -701,7 +704,7 @@
 
             Stock.meta.cachedFindAll({
               where: volumeNotZero
-            }, options),
+            }, _.assign({ mergeUpdates: true }, options)),
 
             Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options))
               .then(() => {

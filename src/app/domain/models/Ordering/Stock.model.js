@@ -138,13 +138,19 @@
         limit: 10000
       }, options);
 
-      if (!isIos) {
+      let where = {} || filter.where;
+
+      if (isIos) {
+        if (meta.lastOffset !== '*') {
+          where.lts = { '>=': meta.lastOffset };
+        }
+      } else {
         cacheOptions.offset = meta.lastOffset;
       }
 
       let result = [];
 
-      return Stock.findAll(filter, cacheOptions)
+      return Stock.findAll({ where }, cacheOptions)
         .then(() => result);
 
       function afterFindAll(options, data) {
@@ -159,6 +165,9 @@
           let maxTs = _.maxBy(data, 'ts');
           meta.lastOffset = `1-${moment(maxTs.ts).format('YYYYMMDDHHmmssSSS')}-0`;
           // console.warn('maxTs', maxTs, meta.lastOffset);
+        } else {
+          let maxTs = _.maxBy(data, 'lts');
+          meta.lastOffset = maxTs.lts;
         }
 
         let {indexByArticleId} = meta;
