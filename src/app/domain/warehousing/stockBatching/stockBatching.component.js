@@ -12,48 +12,109 @@
 
     });
 
+  const NOT_FOUND = 'NOT_FOUND';
+
   /** @ngInject */
   function StockBatchingController(Schema, saControllerHelper, $scope, toastr, $q) {
 
     const {
       StockBatch,
-      // StockBatchBarCode,
+      StockBatchBarCode,
       ArticleBarCode,
       BarCodeScan,
       StockBatchItem,
-      // BarCodeType
+      BarCodeType
     } = Schema.models();
+
+    const { BARCODE_TYPE_ARTICLE } = BarCodeType.meta.types;
 
     const vm = saControllerHelper.setup(this, $scope).use({
 
       $onInit() {
         vm.barcode = {};
-        vm.setState('article');
+        vm.waitForBarcodeOf(BARCODE_TYPE_ARTICLE);
       },
 
       createClick() {
-        vm.stockBatch = StockBatch.createInstance({ site: 1, volume: 0 });
-        vm.setState('');
-        vm.barcodes = [];
-        // vm.rebindAll(BarCodeScan, {}, 'barcodes');
+        createStockBatch();
       },
 
-      setState(name) {
+      waitForBarcodeOf(typeName) {
 
         vm.barcode = {};
 
-        return vm.watchScope('vm.barcode', (() => {
-          switch (name) {
-            case 'article':
+        const processor = (() => {
+          switch (typeName) {
+            case BARCODE_TYPE_ARTICLE:
               return findArticle;
-            default:
+            case 'StockBatch':
+              return processStockBatchBarcode;
+            case 'ExciseStamp':
               return addBarcode;
+            default:
+              return ({ code, type }) => toastr.error(code, `Штрих-код "${type.type}"`);
           }
-        })());
+        })();
+
+        vm.watchScope('vm.barcode', function ({ code, type }) {
+
+          if (!code) {
+            return;
+          }
+
+          if (!type) {
+            return toastr.error('Неизвестный тип штрих-кода', 'Ошибка');
+          }
+
+          if (typeName && type.type !== typeName) {
+            const msg = `Неожиданный тип штрих-кода ${type.type}, ожидается ${typeName}`;
+            return toastr.error(msg, 'Ошибка');
+          }
+
+          processor.apply(this, arguments);
+
+        });
 
       },
 
     });
+
+    /*
+    Functions
+     */
+
+    function checkOne(res) {
+      return _.first(res) || $q.reject(NOT_FOUND);
+    }
+
+    function saveDeep(stockBatch) {
+
+      if (!stockBatch.id) {
+        return $q.resolve();
+      }
+
+      return stockBatch.DSCreate();
+
+    }
+
+    function createStockBatch(code) {
+      vm.stockBatch = StockBatch.createInstance({ site: 1, volume: 0 });
+      vm.waitForBarcodeOf('StockBatch');
+      vm.barcodes = code ? StockBatchBarCode.createInstance({ code }) : [];
+    }
+
+    function processStockBatchBarcode({ code }) {
+      return StockBatchBarCode.findAll({ code })
+        .then(checkOne)
+        .then(({ stockBatchId }) => StockBatch.find(stockBatchId))
+        .then(stockBatch => vm.stockBatch = stockBatch)
+        .catch(e => {
+          if (e === NOT_FOUND) {
+            return saveDeep(vm.stockBatch)
+              .then(() => createStockBatch(code));
+          }
+        });
+    }
 
     function findArticle({ code, type }) {
 

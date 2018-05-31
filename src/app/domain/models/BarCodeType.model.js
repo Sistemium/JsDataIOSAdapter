@@ -12,6 +12,14 @@
       match(code) {
         return this.maskRe.test(code);
       }
+    },
+
+    meta: {
+      types: {
+        BARCODE_TYPE_ARTICLE: 'Article',
+        BARCODE_TYPE_STOCK_BATCH: 'StockBatch',
+        BARCODE_TYPE_EXCISE_STAMP: 'ExciseStamp',
+      }
     }
 
   }));
