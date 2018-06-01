@@ -13,10 +13,11 @@
           templateUrl: 'app/domain/ui-view.html',
 
           data: {
+            // TODO: warehousing auth service
             // auth: 'SalesmanAuth'
           },
 
-          children: [stockBatching]
+          children: [stockBatching, stockTaking]
 
         });
 
@@ -32,6 +33,19 @@
     },
 
     template: '<stock-batching></stock-batching>'
+
+  };
+
+  const stockTaking = {
+
+    name: 'stockTaking',
+    url: '/stockTaking',
+
+    data: {
+      title: 'Инвентаризация',
+    },
+
+    template: '<stock-taking></stock-taking>'
 
   };
 

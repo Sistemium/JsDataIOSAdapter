@@ -23,6 +23,11 @@
       state: 'wh.stockBatching',
       needRoles: PICKING_ROLES
     }, {
+      title: 'Инвентаризация',
+      state: 'wh.stockTaking',
+      // TODO: separate role
+      needRoles: PICKING_ROLES
+    }, {
       title: 'Каталог',
       state: 'sales.catalogue',
       needRoles: OUTLET_ROLES
