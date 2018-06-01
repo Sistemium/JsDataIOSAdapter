@@ -17,8 +17,8 @@
       label Товар:
       strong {{ vm.stockBatch.Article.name }}
 
+  h3 {{ vm.stockBatch.stockBatchBarCodes.length ? 'Наклейки:' : 'Просканируйте наклейку' }}
   .stock-batch-bar-codes
-    h3 Наклейки:
     .code(ng-repeat='item in vm.stockBatch.stockBatchBarCodes | orderBy:"code" track by item.id')
       | {{ ::item.code }}
 
