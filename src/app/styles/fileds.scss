@@ -1,0 +1,16 @@
+@import "variables";
+
+.field {
+
+  label {
+
+    color: $light-gray;
+    margin-right: $margin;
+
+    &:after {
+      content: ':';
+    }
+
+  }
+
+}
