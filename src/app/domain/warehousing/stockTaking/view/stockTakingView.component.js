@@ -22,7 +22,7 @@
 
 
   /** @ngInject */
-  function StockTakingViewController(Schema, saControllerHelper, $scope) {
+  function StockTakingViewController(Schema, saControllerHelper, $scope, $q) {
 
     const {
       ArticleBarCode,
@@ -64,7 +64,7 @@
       },
 
       deleteClick() {
-        vm.stockTaking.DSDestroy()
+        (vm.stockTakingId ? vm.stockTaking.DSDestroy() : $q.resolve())
           .then(() => $scope.$emit('stock-taking-view-destroy'));
       },
 

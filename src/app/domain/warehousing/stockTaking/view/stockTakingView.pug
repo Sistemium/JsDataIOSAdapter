@@ -1,8 +1,8 @@
 .stock-taking-view
 
   .buttons
-    confirmed-button(href on-confirm='vm.deleteClick()')
-      span Удалить
+    confirmed-button(href on-confirm="vm.deleteClick()" confirm="vm.stockTakingId")
+      span {{ vm.stockTakingId ? 'Удалить' : 'Отмена' }}
 
   .field.date
     label Начало

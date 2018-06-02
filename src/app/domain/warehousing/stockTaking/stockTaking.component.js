@@ -49,7 +49,9 @@
       refresh() {
         const orderBy = [['date', 'DESC']];
         vm.rebindAll(StockTaking, { orderBy }, 'vm.stockTakings');
-        StockTaking.findAll();
+        vm.setBusy([
+          StockTaking.findAll(),
+        ])
       },
 
       stockTakingClick(item) {
