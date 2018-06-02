@@ -2,4 +2,26 @@
 
 stock-taking {
 
+  .stock-taking {
+    > * {
+      margin-bottom: $margin-bottom-xs;
+    }
+  }
+
+  .buttons {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+    }
+
+    > button {
+      display: block;
+    }
+
+  }
+
 }

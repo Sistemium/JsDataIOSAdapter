@@ -45,7 +45,18 @@
       title: 'Инвентаризация',
     },
 
-    template: '<stock-taking></stock-taking>'
+    template: '<stock-taking></stock-taking>',
+
+    children: [{
+      name: 'view',
+      url: '/:stockTakingId',
+      template: '<stock-taking-view ng-model="vm.params.stockTakingId"></stock-taking-view>',
+      controller: 'StateController as vm',
+      data: {
+        rootState: 'wh.stockTaking',
+      },
+
+    }],
 
   };
 

@@ -1,0 +1,9 @@
+.stock-taking-list
+
+  .list-group
+    a.list-group-item(
+    href
+    ng-repeat='item in vm.stockTakings track by item.id'
+    ng-click="vm.stockTakingClick(item)"
+    )
+      span {{ item.date }}

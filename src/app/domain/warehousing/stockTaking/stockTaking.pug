@@ -1,3 +1,16 @@
 .stock-taking
 
-  h1 Инвентаризация магазина
+  .buttons(ng-show="vm.currentState==='stockTaking'")
+    button.btn.btn-primary(ng-click='vm.addClick()') Начать инвентаризацию
+
+  stock-taking-list(
+  ng-model="vm.stockTakings"
+  on-click="vm.stockTakingClick($item)"
+  ng-show="vm.currentState==='stockTaking'"
+  )
+
+  //stock-taking-choice(ng-model='vm.stockTakings')
+
+  ui-view
+
+

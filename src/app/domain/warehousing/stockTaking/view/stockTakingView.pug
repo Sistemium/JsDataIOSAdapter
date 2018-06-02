@@ -1,0 +1,12 @@
+.stock-taking-view
+
+  .field.date
+    label Начало
+    strong {{ vm.stockTaking.date | dateTime }}
+
+  barcode-scanner(on-scan='vm.onScan($barcode)')
+
+  .list-group
+    .list-group-item(ng-repeat='item in vm.stockTakingItems track by item.id')
+      .barcode {{ ::item.barcode }}
+      .volume {{ ::item.volume }}

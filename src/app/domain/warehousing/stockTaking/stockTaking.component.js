@@ -15,47 +15,45 @@
   // const NOT_FOUND = 'NOT_FOUND';
 
   /** @ngInject */
-  function StockTakingController(Schema, saControllerHelper, $scope) {
+  function StockTakingController(Schema, saControllerHelper, $scope, $state) {
 
     const {
-      ArticleBarCode,
-      BarCodeType,
+      // ArticleBarCode,
+      // BarCodeType,
+      // BarcodedArticle,
+      StockTaking,
+      // StockTakingItem,
     } = Schema.models();
-
-    const {
-      BARCODE_TYPE_ARTICLE,
-    } = BarCodeType.meta.types;
 
     const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
       $onInit() {
-        //
+        this.refresh();
       },
 
-      onScan({ code, type }) {
-
-        if (!type || !code || type.type !== BARCODE_TYPE_ARTICLE) {
-          return;
-        }
-
-        processBarcode(code);
-
+      addClick() {
+        StockTaking.create({
+          date: new Date(),
+        });
       },
+
+      refresh() {
+        const orderBy = [['date', 'DESC']];
+        vm.rebindAll(StockTaking, { orderBy }, 'vm.stockTakings');
+        StockTaking.findAll();
+      },
+
+      stockTakingClick(item) {
+        $state.go('.view', { stockTakingId: item.id })
+      }
 
     });
 
     /*
     Functions
      */
-
-    function processBarcode(code) {
-      ArticleBarCode.findAll({code})
-        .then(res => {
-          console.info('Found barcodes', res);
-        });
-    }
 
   }
 

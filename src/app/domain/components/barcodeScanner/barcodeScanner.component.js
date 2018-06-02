@@ -25,6 +25,7 @@
         // $scope.$watch('vm.input', onInput);
         $scope.$watch('vm.barcode', barcode => {
           vm.input = '';
+          if (!barcode) return;
           DEBUG('barcodeScanner:', barcode);
         });
 
