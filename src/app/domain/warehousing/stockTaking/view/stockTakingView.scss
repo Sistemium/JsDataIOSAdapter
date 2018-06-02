@@ -6,6 +6,12 @@ stock-taking-view {
 
     @extend %view;
 
+    .buttons {
+      display: block;
+      text-align: right;
+      float: right;
+    }
+
   }
 
 }

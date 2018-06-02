@@ -15,7 +15,8 @@
   // const NOT_FOUND = 'NOT_FOUND';
 
   /** @ngInject */
-  function StockTakingController(Schema, saControllerHelper, $scope, $state) {
+  function StockTakingController(Schema, saControllerHelper, $scope, $state,
+                                 stockTakingView) {
 
     const {
       // ArticleBarCode,
@@ -27,6 +28,14 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
+    $scope.$on(stockTakingView.destroyEventName, () => {
+      $state.go($state.current.data.rootState);
+    });
+
+    $scope.$on(stockTakingView.CREATED_EVENT, (event, item) => {
+      vm.stockTakingClick(item);
+    });
+
     vm.use({
 
       $onInit() {
@@ -34,9 +43,7 @@
       },
 
       addClick() {
-        StockTaking.create({
-          date: new Date(),
-        });
+        $state.go('.create');
       },
 
       refresh() {
@@ -46,7 +53,7 @@
       },
 
       stockTakingClick(item) {
-        $state.go('.view', { stockTakingId: item.id })
+        $state.go(`${$state.current.data.rootState ? '^' : ''}.view`, { stockTakingId: item.id });
       }
 
     });

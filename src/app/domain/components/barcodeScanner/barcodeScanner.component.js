@@ -6,10 +6,11 @@
       bindings: {
         barcode: '=?ngModel',
         scanHandler: '&onScan',
+        requiredType: '<',
       },
 
       /** @ngInject */
-      controller($scope, DEBUG, Schema) {
+      controller($scope, DEBUG, Schema, $timeout, toastr) {
 
         const vm = _.assign(this, {
           $onInit() {
@@ -19,6 +20,9 @@
           },
           enterPress() {
             onScan(translateHIDScan(vm.input));
+          },
+          onPaste() {
+            $timeout(this.enterPress);
           }
         });
 
@@ -30,8 +34,18 @@
         });
 
         function onScan(code) {
-          vm.barcode = { code, type: detectType(code) };
-          vm.scanHandler({ $barcode: vm.barcode });
+
+          const type = detectType(code);
+
+          const { requiredType, scanHandler } = vm;
+
+          if (requiredType && (!type || type.type !== requiredType)) {
+            vm.input = '';
+            return toastr.error(code, 'Неверный тип штрих-кода');
+          }
+
+          scanHandler({ $barcode: vm.barcode = { code, type }});
+
         }
 
         function detectType(code) {
@@ -49,7 +63,7 @@
   const ENG_LETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const RU_LETTERS_RE = new RegExp(`[${RU_LETTERS}]`, 'g');
 
-  function translateFn (c) {
+  function translateFn(c) {
     const pos = RU_LETTERS.indexOf(c);
     return pos >= 0 ? ENG_LETTERS[pos] : c;
   }

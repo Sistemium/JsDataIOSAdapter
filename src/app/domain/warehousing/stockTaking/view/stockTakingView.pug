@@ -1,10 +1,14 @@
 .stock-taking-view
 
+  .buttons
+    confirmed-button(href on-confirm='vm.deleteClick()')
+      span Удалить
+
   .field.date
     label Начало
     strong {{ vm.stockTaking.date | dateTime }}
 
-  barcode-scanner(on-scan='vm.onScan($barcode)')
+  barcode-scanner(on-scan='vm.onScan($barcode)' required-type='vm.BARCODE_TYPE')
 
   .list-group
     .list-group-item(ng-repeat='item in vm.stockTakingItems track by item.id')

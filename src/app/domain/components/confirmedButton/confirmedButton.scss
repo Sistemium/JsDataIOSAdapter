@@ -1,7 +1,7 @@
 @import "variables";
 
 .confirmed-button {
-  > a + a {
+  > a {
     margin-left: $margin-bottom-xs;
   }
   > a.confirmation {

@@ -6,4 +6,4 @@
     ng-repeat='item in vm.stockTakings track by item.id'
     ng-click="vm.stockTakingClick(item)"
     )
-      span {{ item.date }}
+      span {{ item.date | dateTime }}

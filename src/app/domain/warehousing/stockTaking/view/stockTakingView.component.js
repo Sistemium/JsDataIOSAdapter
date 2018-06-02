@@ -1,10 +1,16 @@
 (function () {
 
+  const CREATED_EVENT = 'stock-taking-created';
+
   angular.module('Warehousing')
+    .constant('stockTakingView', {
+      destroyEventName: 'stock-taking-view-destroy',
+      CREATED_EVENT,
+    })
     .component('stockTakingView', {
 
       bindings: {
-        stockTakingId: '=ngModel',
+        stockTakingId: '=?ngModel',
       },
 
       controller: StockTakingViewController,
@@ -14,7 +20,6 @@
 
     });
 
-  // const NOT_FOUND = 'NOT_FOUND';
 
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope) {
@@ -27,38 +32,40 @@
       StockTakingItem,
     } = Schema.models();
 
-    const {
-      BARCODE_TYPE_ARTICLE,
-    } = BarCodeType.meta.types;
-
     const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
 
+      BARCODE_TYPE: BarCodeType.meta.types.BARCODE_TYPE_ARTICLE,
+
       $onInit() {
 
         const { stockTakingId } = vm;
-        const orderBy = [['date', 'DESC']];
-
-        vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
-        vm.rebindAll(StockTakingItem, { stockTakingId, orderBy }, 'vm.stockTakingItems');
 
         if (stockTakingId) {
-          StockTakingItem.findAll({ stockTakingId })
+          const orderBy = [['date', 'DESC']];
+
+          vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
+          vm.rebindAll(StockTakingItem, { stockTakingId, orderBy }, 'vm.stockTakingItems');
+
+          return StockTakingItem.findAll({ stockTakingId })
         }
+
+        vm.stockTaking = StockTaking.createInstance({
+          date: new Date(),
+        });
 
       },
 
-      onScan({ code, type }) {
-
-        console.info('stockTaking', code, type);
-
-        if (!type || !code || type.type !== BARCODE_TYPE_ARTICLE) {
-          return;
-        }
+      onScan({ code }) {
 
         processBarcode(code);
 
+      },
+
+      deleteClick() {
+        vm.stockTaking.DSDestroy()
+          .then(() => $scope.$emit('stock-taking-view-destroy'));
       },
 
     });
@@ -68,17 +75,29 @@
      */
 
     function processBarcode(code) {
+
+      const {stockTakingId, stockTaking} = vm;
+
       ArticleBarCode.findAllWithRelations({ code })('Article')
         .then(res => {
           console.info('Found barcodes', res);
+          return res;
         })
         .then(() => {
-          StockTakingItem.create({
-            stockTakingId: vm.stockTakingId,
-            barcode: code,
-            volume: 1
-          });
+          if (!stockTakingId) {
+            return StockTaking.create(stockTaking);
+          }
+        })
+        .then(() => StockTakingItem.create({
+          stockTakingId: stockTaking.id,
+          barcode: code,
+          volume: 1
+        }))
+        .then(() => {
+          $scope.$emit(CREATED_EVENT, stockTaking);
+          vm.stockTakingId = stockTaking.id;
         });
+
     }
 
   }

@@ -49,14 +49,21 @@
 
     children: [{
       name: 'view',
-      url: '/:stockTakingId',
+      url: '/view/:stockTakingId',
       template: '<stock-taking-view ng-model="vm.params.stockTakingId"></stock-taking-view>',
       controller: 'StateController as vm',
       data: {
         rootState: 'wh.stockTaking',
       },
 
-    }],
+    },{
+      name: 'create',
+      url: '/create',
+      template: '<stock-taking-view></stock-taking-view>',
+      data: {
+        rootState: 'wh.stockTaking',
+      },
+    },],
 
   };
 
