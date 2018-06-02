@@ -1,18 +1,11 @@
-@import "variables";
+@import "view";
 
 stock-taking-view {
 
   .stock-taking-view {
 
-    > * {
-      display: block;
-      margin-bottom: $margin-bottom-xs;
-    }
+    @extend %view;
 
-    .list-group-item {
-      display: flex;
-      justify-content: space-between;
-    }
   }
 
 }

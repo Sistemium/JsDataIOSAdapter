@@ -1,0 +1,32 @@
+@import "variables";
+
+%view {
+
+  .buttons {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+    }
+
+    > button {
+      display: block;
+    }
+
+  }
+
+  > * {
+    display: block;
+    margin-bottom: $margin-bottom-xs;
+  }
+
+  .list-group-item {
+    display: flex;
+    justify-content: space-between;
+  }
+
+
+}
