@@ -4,7 +4,8 @@
     .component('barcodeScanner', {
 
       bindings: {
-        barcode: '=ngModel',
+        barcode: '=?ngModel',
+        scanHandler: '&onScan',
       },
 
       /** @ngInject */
@@ -29,6 +30,7 @@
 
         function onScan(code) {
           vm.barcode = { code, type: detectType(code) };
+          vm.scanHandler({ $barcode: vm.barcode });
         }
 
         function detectType(code) {
