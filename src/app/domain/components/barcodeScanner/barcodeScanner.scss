@@ -6,4 +6,8 @@ barcode-scanner {
     display: none;
   }
 
+  .form-control {
+    border-radius: $border-radius;
+  }
+
 }

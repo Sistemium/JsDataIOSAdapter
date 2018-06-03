@@ -1,32 +1,50 @@
 .stock-taking-view
 
-  .buttons
-    confirmed-button(href on-confirm="vm.deleteClick()" confirm="vm.stockTakingId")
-      span {{ vm.stockTakingId ? 'Удалить' : 'Отмена' }}
+  .details
 
-  .field.date
-    label Начало
-    strong {{ vm.stockTaking.date | dateTime }}
+    .buttons
+      confirmed-button(href on-confirm="vm.deleteClick()" confirm="vm.stockTakingId")
+        span {{ vm.stockTakingId ? 'Удалить' : 'Отмена' }}
+
+    .field.date
+      label Начало
+      strong {{ vm.stockTaking.date | dateTime }}
 
   barcode-scanner(on-scan='vm.onScan($barcode)' required-type='vm.BARCODE_TYPE')
 
-  .current-item(ng-if='vm.stockTakingItem')
+  .items
 
-    .id {{ vm.stockTakingItem.id }}
-    .barcode {{ vm.stockTakingItem.barcode }}
+    .current-item(ng-if='vm.stockTakingItem')
 
-  .list-group
-    .list-group-item(
-    ng-repeat='item in vm.stockTakingItems track by item.id'
+      .field.timestamp
+        label Сканирование
+        strong {{ vm.stockTakingItem.timestamp | dateTime:{seconds: true} }}
+
+      .field.barcode
+        label Штрих-код
+        strong {{ vm.stockTakingItem.barcode }}
+
+      .field.name
+        label Товар
+        strong {{ vm.stockTakingItem.name }}
+
+      .field.volume
+        label Количество
+        strong {{ vm.stockTakingItem.volume }} шт.
+
+    .list-group.scroll-y(resize resize-offset-top='10')
+
+      .list-group-item(
+      ng-repeat='item in vm.stockTakingItems track by item.id'
       ng-class='{active: vm.stockTakingItem === item}'
-    )
+      )
 
-      .title
-        a.name(href ng-click="vm.itemClick(item)") {{ ::item.name }}
-        .barcode
-          a.delete.red(href ng-click='item.DSDestroy()')
-            i.glyphicon.glyphicon-trash
-          span {{ ::item.barcode }}
-          span {{ item.timestamp | amDateFormat:'HH:mm' }}
+        .title
+          a.name(href ng-click="vm.itemClick(item)") {{ ::item.name }}
+          .barcode
+            a.delete.red(href ng-click='item.DSDestroy()')
+              i.glyphicon.glyphicon-trash
+            span {{ ::item.barcode }}
+            span {{ item.timestamp | amDateFormat:'HH:mm' }}
 
-      .volume {{ item.volume }}
+        .volume {{ item.volume }}

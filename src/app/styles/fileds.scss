@@ -1,5 +1,13 @@
 @import "variables";
 
+@mixin side-view-field {
+  display: flex;
+  justify-content: space-between;
+  strong {
+    text-align: right;
+  }
+}
+
 .field {
 
   label {
@@ -11,6 +19,14 @@
       content: ':';
     }
 
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  @include responsive-only(xxs) {
+    @include side-view-field();
   }
 
 }

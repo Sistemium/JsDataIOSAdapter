@@ -6,6 +6,14 @@ stock-taking {
 
     @extend %view;
 
+    ui-view {
+      margin-bottom: 0;
+    }
+
+    stock-taking-list.scroll-y, .list-group.scroll-y {
+      margin-bottom: 0;
+    }
+
   }
 
 }

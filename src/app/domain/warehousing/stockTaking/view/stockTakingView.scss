@@ -1,15 +1,77 @@
 @import "view";
+@import "fileds";
 
 stock-taking-view {
+
+  $right-panel-width: 320px;
 
   .stock-taking-view {
 
     @extend %view;
 
-    .buttons {
-      display: block;
-      text-align: right;
-      float: right;
+    .details {
+
+      .field {
+        justify-content: flex-start;
+      }
+
+      @include responsive-only(gt-xxs) {
+        display: flex;
+        align-items: center;
+        margin-top: $margin-bottom-xs;
+        .field {
+          margin-top: 3px;
+        }
+      }
+
+      .buttons {
+        order: 2;
+        @include responsive-only(xxs) {
+          text-align: right;
+          float: right;
+        }
+      }
+
+    }
+
+    barcode-scanner {
+      @include responsive-only(gt-xs) {
+        width: $right-panel-width;
+      }
+      @include responsive-only(gt-xxs) {
+        position: absolute;
+        top: -$margin-bottom-xs/2;
+        right: 0;
+        max-width: $right-panel-width;
+      }
+    }
+
+    .items {
+
+      .current-item {
+        margin-bottom: $margin-bottom-xs;
+      }
+
+      @include responsive-only(gt-xs) {
+
+        display: flex;
+        flex-direction: row;
+
+        .current-item {
+          order: 2;
+          margin-left: $margin-bottom-xs;
+          width: $right-panel-width;
+          .field {
+            @include side-view-field();
+          }
+        }
+
+        .list-group {
+          flex: 1;
+          order: 1;
+        }
+
+      }
     }
 
     a.delete {
@@ -17,6 +79,12 @@ stock-taking-view {
       i {
         top: 1px;
       }
+    }
+
+    .current-item {
+      border-radius: $border-radius;
+      border: solid 1px $gray-border-color;
+      padding: $margin-bottom-xs/2 $margin-bottom-xs;
     }
 
     .list-group-item {

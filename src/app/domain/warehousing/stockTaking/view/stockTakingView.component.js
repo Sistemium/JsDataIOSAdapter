@@ -104,6 +104,7 @@
           return _.get(vm.stockTakingItem, 'barcode') === code
             ? _.assign(vm.stockTakingItem, {
               volume: vm.stockTakingItem.volume + 1,
+              timestamp: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
             })
             : {
               stockTakingId: stockTaking.id,

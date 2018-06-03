@@ -24,6 +24,20 @@ a.list-group-item {
 
 }
 
+.list-group {
+
+  .list-group-item:first-child {
+    border-top-right-radius: $border-radius;
+    border-top-left-radius: $border-radius;
+  }
+
+  .list-group-item:last-child {
+    border-bottom-right-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+  }
+
+}
+
 .list-item {
 
   & + .list-item {

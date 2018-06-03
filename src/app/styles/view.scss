@@ -21,6 +21,9 @@
   > * {
     display: block;
     margin-bottom: $margin-bottom-xs;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .list-group-item {
