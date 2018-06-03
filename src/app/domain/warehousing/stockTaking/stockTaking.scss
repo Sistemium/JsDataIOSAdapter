@@ -16,4 +16,8 @@ stock-taking {
 
   }
 
+  a.list-group-item:hover:not(.active) {
+    background: $gray-background-color;
+  }
+
 }
