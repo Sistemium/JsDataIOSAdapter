@@ -29,7 +29,7 @@
       let re = /(\d*)(К|^)(\d*)/;
 
       return (str || '').replace(re, (match, box, k, pcs) => {
-        return (box ? box + ' к' : '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
+        return (box ? box + ' К' : '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
       });
 
     }
