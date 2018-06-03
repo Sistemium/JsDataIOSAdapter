@@ -69,6 +69,11 @@
 
       },
 
+      itemDeleteClick() {
+        vm.stockTakingItem && vm.stockTakingItem.DSDestroy()
+          .then(() => vm.stockTakingItem = null);
+      },
+
       deleteClick() {
         (vm.stockTakingId ? vm.stockTaking.DSDestroy() : $q.resolve())
           .then(() => $scope.$emit('stock-taking-view-destroy'));

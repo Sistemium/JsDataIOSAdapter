@@ -3,7 +3,7 @@
   .details
 
     .buttons
-      confirmed-button(href on-confirm="vm.deleteClick()" confirm="vm.stockTakingId")
+      confirmed-button(on-confirm="vm.deleteClick()" no-confirm="!vm.stockTakingId")
         span {{ vm.stockTakingId ? 'Удалить' : 'Отмена' }}
 
     .field.date
@@ -17,12 +17,17 @@
     .current-item(ng-if='vm.stockTakingItem')
 
       .field.timestamp
-        label Сканирование
+        label Время
         strong {{ vm.stockTakingItem.timestamp | dateTime:{seconds: true} }}
 
       .field.barcode
         label Штрих-код
-        strong {{ vm.stockTakingItem.barcode }}
+        strong
+          confirmed-button(on-confirm="vm.itemDeleteClick()")
+            i.glyphicon.glyphicon-trash
+            cancel
+              i.glyphicon.glyphicon-lock
+          span {{ vm.stockTakingItem.barcode }}
 
       .field.name
         label Товар
@@ -42,9 +47,7 @@
         .title
           a.name(href ng-click="vm.itemClick(item)") {{ ::item.name }}
           .barcode
-            a.delete.red(href ng-click='item.DSDestroy()')
-              i.glyphicon.glyphicon-trash
             span {{ ::item.barcode }}
-            span {{ item.timestamp | amDateFormat:'HH:mm' }}
+            span {{ item.timestamp | amDateFormat:'HH:mm:ss' }}
 
         .volume {{ item.volume }}

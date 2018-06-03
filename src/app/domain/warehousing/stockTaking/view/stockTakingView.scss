@@ -55,10 +55,17 @@ stock-taking-view {
 
     .items {
 
-      @include responsive-only(lt-sm) {
-        .current-item {
+      .current-item {
+
+        @include responsive-only(lt-sm) {
           margin-bottom: $margin-bottom-xs;
         }
+
+        .confirmed-button {
+          display: inline-block;
+          margin-right: $margin-bottom-xs;
+        }
+
       }
 
       @include responsive-only(gt-xs) {
@@ -117,7 +124,6 @@ stock-taking-view {
         .volume {
           background: $white;
           border: solid 1px $border-gray;
-          margin: -1px;
         }
       }
 
@@ -129,6 +135,7 @@ stock-taking-view {
         background: $gray-background-color;
         padding: $margin-bottom-xs/2 $margin-bottom-xs;
         border-radius: $border-radius;
+        border: solid 1px $border-gray;
       }
 
       .title {

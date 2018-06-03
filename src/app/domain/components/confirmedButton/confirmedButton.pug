@@ -7,8 +7,9 @@
   ng-transclude
   )
 
-  a(
+  a.cancel(
   href
   ng-if="vm.confirmation"
   ng-click="vm.cancelClick()"
+  ng-transclude="cancel"
   ) Отмена

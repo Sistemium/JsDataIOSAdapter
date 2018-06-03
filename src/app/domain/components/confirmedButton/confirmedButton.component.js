@@ -8,7 +8,7 @@
         confirmText: '@',
         buttonClass: '@',
         onConfirm: '&',
-        confirm: '<',
+        noConfirm: '<',
       },
 
       controller($timeout) {
@@ -16,7 +16,7 @@
         _.assign(this, {
 
           buttonClick: () => {
-            if (!this.confirm || this.confirmation) {
+            if (this.noConfirm || this.confirmation) {
               return this.onConfirm();
             }
             this.confirmation = $timeout(() => this.confirmation = false, 5000);
@@ -33,7 +33,10 @@
 
       },
 
-      transclude: true,
+      transclude: {
+        cancel: '?cancel',
+      },
+
       templateUrl: 'app/domain/components/confirmedButton/confirmedButton.html',
       controllerAs: 'vm',
 
