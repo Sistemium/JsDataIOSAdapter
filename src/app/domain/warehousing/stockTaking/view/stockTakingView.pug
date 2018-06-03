@@ -48,6 +48,6 @@
           a.name(href ng-click="vm.itemClick(item)") {{ ::item.name }}
           .barcode
             span {{ ::item.barcode }}
-            span {{ item.timestamp | amDateFormat:'HH:mm:ss' }}
+            span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
 
         .volume {{ item.volume }}

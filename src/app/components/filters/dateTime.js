@@ -1,15 +1,12 @@
 (function () {
 
   angular.module('sistemium')
-    .filter('dateTime', moment => {
+    .filter('dateTime', moment =>
+      function (dateTime, { seconds, date = true } = {}) {
 
-      return function (dateTime, { seconds } = {}) {
         return moment(dateTime)
-          .format(`DD.MM.YYг. в HH:mm${seconds ? ':ss' : ''}`);
-      }
+          .format(`${date ? 'DD.MM.YYг. ' : ''}в HH:mm${seconds ? ':ss' : ''}`);
 
-
-    });
-
+      });
 
 })();
