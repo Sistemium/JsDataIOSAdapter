@@ -60,4 +60,4 @@
             span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
             span(ng-if='item.packageRel') (фасовка {{ item.packageRel }})
 
-        .volume {{ item.volume }}
+        .volume {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
