@@ -36,8 +36,8 @@
 
     function importModel(num, boxRel) {
 
-      let box = Math.floor(1.0 * num / boxRel);
-      let pcs = num % boxRel;
+      let box = boxRel > 1 ? Math.floor(1.0 * num / boxRel) : 0;
+      let pcs = boxRel > 1 ? num % boxRel : num;
 
       return (box ? box + 'К' : '') + (pcs || '');
 
