@@ -110,6 +110,14 @@ stock-taking-view {
         padding-top: 7px;
         padding-bottom: 7px;
       }
+      .num-pad-button .btn {
+        font-size: 130%;
+      }
+      .volume.touched {
+        strong {
+          text-decoration: underline;
+        }
+      }
     }
 
     .list-group-item {

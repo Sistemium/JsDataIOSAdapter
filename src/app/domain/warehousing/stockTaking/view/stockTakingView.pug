@@ -33,9 +33,17 @@
         label Товар
         strong {{ vm.stockTakingItem.name }}
 
-      .field.volume
+      .field.volume(ng-class="{touched: vm.volumeViewTouched}")
         label Количество
-        strong {{ vm.stockTakingItem.volume }} шт.
+        strong {{ vm.volumeView }}
+
+      sa-keyboard(
+      datatype='boxPcs'
+      touched='vm.volumeViewTouched'
+      model='vm.volumeView'
+      export-model='vm.stockTakingItem.volume'
+      box-rel='12'
+      )
 
     .list-group.scroll-y(resize resize-offset-top='10')
 
