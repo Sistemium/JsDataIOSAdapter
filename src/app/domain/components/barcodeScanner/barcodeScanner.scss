@@ -8,6 +8,12 @@ barcode-scanner {
 
   .form-control {
     border-radius: $border-radius;
+    border: none;
+    padding: 3px 0;
+    &:focus, & {
+      box-shadow: none;
+    }
+
   }
 
 }

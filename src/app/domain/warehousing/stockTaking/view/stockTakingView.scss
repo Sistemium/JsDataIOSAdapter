@@ -11,6 +11,10 @@ stock-taking-view {
 
     .details {
 
+      @include responsive-only(xxs) {
+        margin-bottom: 0;
+      }
+
       .field {
         justify-content: flex-start;
       }
@@ -40,16 +44,21 @@ stock-taking-view {
       }
       @include responsive-only(gt-xxs) {
         position: absolute;
-        top: -$margin-bottom-xs/2;
+        top: -4px;
         right: 0;
         max-width: $right-panel-width;
+        input {
+          text-align: right;
+        }
       }
     }
 
     .items {
 
-      .current-item {
-        margin-bottom: $margin-bottom-xs;
+      @include responsive-only(lt-sm) {
+        .current-item {
+          margin-bottom: $margin-bottom-xs;
+        }
       }
 
       @include responsive-only(gt-xs) {
@@ -84,7 +93,16 @@ stock-taking-view {
     .current-item {
       border-radius: $border-radius;
       border: solid 1px $gray-border-color;
-      padding: $margin-bottom-xs/2 $margin-bottom-xs;
+      padding: $margin-bottom-xs;
+      @include responsive-only(gt-xs) {
+        > * {
+          margin-bottom: $margin-bottom-xs/2;
+        }
+      }
+      @include responsive-only(lt-sm) {
+        padding-top: 7px;
+        padding-bottom: 7px;
+      }
     }
 
     .list-group-item {
@@ -96,6 +114,11 @@ stock-taking-view {
       &.active {
         background: $gray-background-color;
         border-color: $gray-border-color;
+        .volume {
+          background: $white;
+          border: solid 1px $border-gray;
+          margin: -1px;
+        }
       }
 
       align-items: flex-start;
