@@ -12,6 +12,53 @@ stock-taking-view {
       float: right;
     }
 
+    a.delete {
+      margin-right: $margin-bottom-xs/2;
+      i {
+        top: 1px;
+      }
+    }
+
+    .list-group-item {
+
+      > * + * {
+        margin-left: $margin-bottom-xs;
+      }
+
+      &.active {
+        background: $gray-background-color;
+        border-color: $gray-border-color;
+      }
+
+      align-items: flex-start;
+
+      .volume {
+        font-weight: bold;
+        color: $green;
+        background: $gray-background-color;
+        padding: $margin-bottom-xs/2 $margin-bottom-xs;
+        border-radius: $border-radius;
+      }
+
+      .title {
+        flex: 1;
+      }
+
+      .name {
+        //font-weight: 500;
+      }
+
+      .barcode {
+        margin-top: $margin-bottom-xs;
+        > span + span {
+          margin-left: $margin-bottom-xs;
+        }
+        color: $light-gray;
+        font-size: 85%;
+      }
+
+    }
+
   }
 
 }

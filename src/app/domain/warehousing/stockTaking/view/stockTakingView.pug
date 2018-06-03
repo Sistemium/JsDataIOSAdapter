@@ -10,7 +10,23 @@
 
   barcode-scanner(on-scan='vm.onScan($barcode)' required-type='vm.BARCODE_TYPE')
 
+  .current-item(ng-if='vm.stockTakingItem')
+
+    .id {{ vm.stockTakingItem.id }}
+    .barcode {{ vm.stockTakingItem.barcode }}
+
   .list-group
-    .list-group-item(ng-repeat='item in vm.stockTakingItems track by item.id')
-      .barcode {{ ::item.barcode }}
-      .volume {{ ::item.volume }}
+    .list-group-item(
+    ng-repeat='item in vm.stockTakingItems track by item.id'
+      ng-class='{active: vm.stockTakingItem === item}'
+    )
+
+      .title
+        a.name(href ng-click="vm.itemClick(item)") {{ ::item.name }}
+        .barcode
+          a.delete.red(href ng-click='item.DSDestroy()')
+            i.glyphicon.glyphicon-trash
+          span {{ ::item.barcode }}
+          span {{ item.timestamp | amDateFormat:'HH:mm' }}
+
+      .volume {{ item.volume }}
