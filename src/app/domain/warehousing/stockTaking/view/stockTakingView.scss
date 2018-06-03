@@ -116,6 +116,7 @@ stock-taking-view {
       .volume.touched {
         strong {
           text-decoration: underline;
+          color: $green;
         }
       }
     }
@@ -157,7 +158,7 @@ stock-taking-view {
       .barcode {
         margin-top: $margin-bottom-xs;
         > span + span {
-          margin-left: $margin-bottom-xs;
+          margin-left: $margin-bottom-xs/2;
         }
         color: $light-gray;
         font-size: 85%;

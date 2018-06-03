@@ -42,7 +42,7 @@
       touched='vm.volumeViewTouched'
       model='vm.volumeView'
       export-model='vm.stockTakingItem.volume'
-      box-rel='12'
+      box-rel='vm.stockTakingItem.packageRel || 1'
       )
 
     .list-group.scroll-y(resize resize-offset-top='10')
@@ -53,9 +53,11 @@
       )
 
         .title
-          a.name(href ng-click="vm.itemClick(item)") {{ ::item.name }}
+          a.name(href ng-click="vm.itemClick(item)")
+            span {{ ::item.name }}
           .barcode
             span {{ ::item.barcode }}
             span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
+            span(ng-if='item.packageRel') (фасовка {{ item.packageRel }})
 
         .volume {{ item.volume }}

@@ -44,8 +44,8 @@
 
         const { stockTakingId } = vm;
 
-        vm.watchScope('vm.stockTakingItem.id', item => _.assign(vm, {
-          volumeView: _.get(item, 'volume'),
+        vm.watchScope('vm.stockTakingItem.id', () => _.assign(vm, {
+          // volumeView: _.get(item, 'volume'),
           volumeViewTouched: false,
         }));
 
@@ -100,7 +100,7 @@
     function processBarcode(code) {
 
       const { stockTakingId, stockTaking } = vm;
-      let name;
+      let barcodedArticle = {};
 
       ArticleBarCode.findAllWithRelations({ code })('Article')
 
@@ -108,7 +108,12 @@
 
         .then(res => {
           const articles = _.map(res, 'article');
-          name = ArticleBarCode.meta.commonName(articles);
+          const byPackageRel = _.groupBy(articles, 'packageRel');
+          const barcodedArticles = _.map(byPackageRel, (items, packageRel) => ({
+            packageRel,
+            name: ArticleBarCode.meta.commonName(items),
+          }));
+          barcodedArticle = _.first(barcodedArticles);
         })
 
         .then(() => !stockTakingId && StockTaking.create(stockTaking)
@@ -117,22 +122,19 @@
             vm.stockTakingId = stockTaking.id;
           }))
 
-        .then(() => {
-          return _.get(vm.stockTakingItem, 'barcode') === code
-            ? _.assign(vm.stockTakingItem, {
-              volume: vm.stockTakingItem.volume + 1,
-              timestamp: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
-            })
-            : {
-              stockTakingId: stockTaking.id,
-              name,
-              barcode: code,
-              volume: 1,
-              timestamp: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
-            };
-        })
+        .then(() => _.get(vm.stockTakingItem, 'barcode') === code
+          ? _.assign(vm.stockTakingItem, {
+            volume: vm.stockTakingItem.volume + 1,
+          })
+          : _.assign({
+            stockTakingId: stockTaking.id,
+            barcode: code,
+            volume: 1,
+          }, barcodedArticle))
 
-        .then(stockTakingItem => StockTakingItem.create(stockTakingItem))
+        .then(stockTakingItem => StockTakingItem.create(_.assign(stockTakingItem, {
+          timestamp: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
+        })))
 
         .then(stockTakingItem => _.assign(vm, { stockTakingItem }))
 
