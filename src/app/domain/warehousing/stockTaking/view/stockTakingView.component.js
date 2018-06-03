@@ -109,8 +109,8 @@
         .then(res => {
           const articles = _.map(res, 'article');
           const byPackageRel = _.groupBy(articles, 'packageRel');
-          const barcodedArticles = _.map(byPackageRel, (items, packageRel) => ({
-            packageRel,
+          const barcodedArticles = _.map(byPackageRel, (items, rel) => ({
+            packageRel: parseInt(rel),
             name: ArticleBarCode.meta.commonName(items),
           }));
           barcodedArticle = _.first(barcodedArticles);

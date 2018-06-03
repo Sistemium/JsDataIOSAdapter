@@ -42,7 +42,7 @@
         [{label: '1'}, {label: '2'}, {label: '3'}, {label: '4'}],
         [{label: '5'}, {label: '6'}, {label: '7'}, {label: '8'}],
         [{label: '9'}, {label: '0'}, {
-          label: _.isNumber(parseInt(vm.boxRel)) ? 'К' : (vm.boxRel || '')
+          label: _.isNumber(vm.boxRel) ? 'К' : (vm.boxRel || ''),
         }, {
           i: 'glyphicon glyphicon-remove',
           remove: true
