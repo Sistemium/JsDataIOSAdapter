@@ -1,11 +1,17 @@
 .barcode-scanner.field
 
-  label Штрих-код
+  a.toggle-enable(
+  href ng-click="vm.toggleEnableClick()"
+  ng-class="{ enabled: vm.isEnabled }"
+  )
+    span(ng-if='!vm.isEnabled') Включить сканер
+    i.glyphicon.glyphicon-barcode
 
   input.form-control(
   ng-model="vm.input"
+  ng-if="vm.isEnabled"
   sa-auto-focus="true"
   sa-enter-key="vm.enterPress()"
   ng-paste="vm.onPaste()"
-  placeholder="Сканируйте штрих-код"
+  placeholder="{{ vm.isEnabled ? 'Сканируйте штрих-код' : 'Сканер отключен' }}"
   )

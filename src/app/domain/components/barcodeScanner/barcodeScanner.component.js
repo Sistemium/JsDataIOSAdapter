@@ -7,6 +7,7 @@
         barcode: '=?ngModel',
         scanHandler: '&onScan',
         requiredType: '<',
+        isEnabled: '=?'
       },
 
       /** @ngInject */
@@ -23,7 +24,11 @@
           },
           onPaste() {
             $timeout(this.enterPress);
-          }
+          },
+          toggleEnableClick(){
+            vm.isEnabled = !vm.isEnabled;
+          },
+          isEnabled: true,
         });
 
         // $scope.$watch('vm.input', onInput);

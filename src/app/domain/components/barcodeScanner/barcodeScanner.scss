@@ -2,11 +2,49 @@
 
 barcode-scanner {
 
+  .barcode-scanner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
   label {
     display: none;
   }
 
-  .form-control {
+  a.toggle-enable {
+
+    order: 2;
+    margin-left: $margin-bottom-xs;
+    padding: 7px 10px;
+
+    border-radius: $border-radius;
+    border: solid 1px $border-gray;
+    background: none;
+
+    //border: solid 1px $state-warning-border;
+    //color: $state-warning-text;
+    //background: $state-warning-bg;
+
+    &:not(.enabled) {
+      //padding: 6px 10px;
+    }
+
+    > * + * {
+      margin-left: 5px;
+    }
+
+    i {
+      top: 3px;
+    }
+
+  }
+
+  input.form-control {
+
+    &[disabled] {
+      background: none;
+    }
 
     border-radius: $border-radius;
     border: none;
