@@ -23,7 +23,7 @@ barcode-scanner {
     background: none;
 
     > * + * {
-      margin-left: 5px;
+      margin-left: $margin-bottom-xs;
     }
 
     i {
