@@ -19,6 +19,7 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered, "
 
     font-size-edit#scroll-articles.animate-show(
     append-to='catalogueArticle'
+    font-size='vm.articlesFontSize'
     )
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
         .info Нет подходящих товаров

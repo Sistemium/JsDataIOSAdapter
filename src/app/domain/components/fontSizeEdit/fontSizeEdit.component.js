@@ -7,7 +7,8 @@
     transclude: true,
 
     bindings: {
-      appendTo: '@'
+      appendTo: '@',
+      fontSize: '=',
     },
 
     controller: fontSizeEditController,
@@ -20,6 +21,7 @@
   function fontSizeEditController($scope, localStorageService) {
 
     let lsKey = 'fontSizeEdit';
+
     const vm = _.assign(this, {
       $onInit,
       incrementClick,
@@ -27,7 +29,9 @@
     });
 
     function $onInit() {
+
       lsKey += `.${vm.appendTo}`;
+
       vm.fontSize = localStorageService.get(lsKey) || 13;
 
       $scope.$on('settingsPopoverOpen', (event, isPopoverOpen) => {

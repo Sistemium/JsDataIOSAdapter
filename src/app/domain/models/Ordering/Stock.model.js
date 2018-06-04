@@ -149,7 +149,7 @@
         limit: 10000
       }, options);
 
-      let where = {} || filter.where;
+      let where = filter.where || {};
 
       if (isIos) {
         if (meta.lastOffset !== '*') {
