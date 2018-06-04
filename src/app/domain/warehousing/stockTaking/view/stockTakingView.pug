@@ -14,38 +14,7 @@
 
   .items
 
-    .current-item(ng-if='vm.stockTakingItem')
-
-      .fields
-
-        .field.timestamp
-          label Время
-          strong {{ vm.stockTakingItem.timestamp | dateTime:{seconds: true} }}
-
-        .field.barcode
-          label Штрих-код
-          strong
-            confirmed-button(on-confirm="vm.itemDeleteClick()")
-              i.glyphicon.glyphicon-trash
-              cancel
-                i.glyphicon.glyphicon-lock
-            span {{ vm.stockTakingItem.barcode }}
-
-        .field.name
-          label Товар
-          strong {{ vm.stockTakingItem.name }}
-
-        .field.volume(ng-class="{touched: vm.volumeViewTouched}")
-          label Количество
-          strong {{ vm.volumeView }}
-
-      sa-keyboard(
-      datatype='boxPcs'
-      touched='vm.volumeViewTouched'
-      model='vm.volumeView'
-      export-model='vm.stockTakingItem.volume'
-      box-rel='vm.stockTakingItem.packageRel'
-      )
+    ui-view.current-item(ng-if='vm.itemId')
 
     .list-group.scroll-y(resize resize-offset-top='10')
 

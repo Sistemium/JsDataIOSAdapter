@@ -19,6 +19,7 @@
 
       templateUrl: 'app/domain/warehousing/stockTaking/view/stockTakingView.html',
       controllerAs: 'vm',
+      transclude: true
 
     });
 
@@ -44,18 +45,6 @@
       $onInit() {
 
         const { stockTakingId, itemId } = vm;
-
-        vm.watchScope('vm.stockTakingItem.id', () => _.assign(vm, {
-          // volumeView: _.get(item, 'volume'),
-          volumeViewTouched: false,
-        }));
-
-        vm.watchScope('vm.volumeViewTouched', touched => {
-          if (touched) {
-            $timeout.cancel(vm.touchedTimeout);
-            vm.touchedTimeout = $timeout(() => vm.volumeViewTouched = false, 4000);
-          }
-        });
 
         if (stockTakingId) {
 
