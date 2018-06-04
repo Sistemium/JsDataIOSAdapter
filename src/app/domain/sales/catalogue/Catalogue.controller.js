@@ -92,7 +92,7 @@
       onlyShippedClick,
 
       onStateChange,
-      // articleRowHeight,
+      articleRowHeight: articleRowHeight(),
       alertCheck,
       alertTriggers: _.groupBy(CatalogueAlert.getAll(), 'articleGroupId')
 
@@ -183,10 +183,8 @@
 
     $scope.$on('setSaleOrderId', setSaleOrderId);
 
-    vm.watchScope('vm.fontSize', fontSize => {
-      if (fontSize) {
-        localStorageService.set(FONT_SIZE_KEY, fontSize);
-      }
+    vm.watchScope('vm.articlesFontSize', () => {
+      vm.articleRowHeight = articleRowHeight();
     });
 
     vm.onScope(
@@ -669,7 +667,22 @@
     }
 
     function articleRowHeight() {
-      return isWideScreen() ? 88 : 74;
+
+      if (!isWideScreen()) {
+        return 74;
+      }
+
+      const { articlesFontSize } = vm;
+
+      if (articlesFontSize > 18) {
+        return 102
+      }
+
+      if (articlesFontSize > 16) {
+        return 94
+      }
+
+      return 88;
     }
 
     function findAll() {
@@ -677,7 +690,7 @@
       let options = {limit: 10000};
       let volumeNotZero = {
         volume: {
-          '>=': 1
+          '>': 0
         }
       };
 
