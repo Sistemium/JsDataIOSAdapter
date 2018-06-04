@@ -17,6 +17,12 @@
       });
     });
 
+    _.each($state.current.data.on, (handler, name) => {
+      $scope.$on(name, (event, value) => {
+        handler(value, $state);
+      });
+    });
+
   }
 
 })();
