@@ -98,22 +98,50 @@ stock-taking-view {
     }
 
     .current-item {
+
       border-radius: $border-radius;
       border: solid 1px $gray-border-color;
       padding: $margin-bottom-xs;
-      @include responsive-only(gt-xs) {
-        > * {
+
+      @include responsive-only(xs) {
+        display: flex;
+        justify-content: space-between;
+        sa-keyboard {
+          margin-left: $margin-bottom-xs;
+        }
+      }
+
+      @include responsive-only(gt-xxs) {
+        .fields > * {
           margin-bottom: $margin-bottom-xs/2;
         }
       }
+
       @include responsive-only(lt-sm) {
         padding-top: 7px;
         padding-bottom: 7px;
       }
-      .num-pad-button .btn {
-        font-size: 130%;
-        color: $gray;
+
+      sa-keyboard {
+
+        .num-pad-button .btn {
+          font-size: 120%;
+          background: $gray-background-color;
+          border: none;
+          &:hover {
+            box-shadow: 0 0 4px 2px $gray-background-color;
+            color: $primary-color;
+          }
+          @include responsive-only(xxs) {
+            padding: $margin-bottom-xs/2;
+          }
+          @include responsive-only(xs) {
+            padding: $margin-bottom-xs $margin-bottom-xs * 2;
+          }
+        }
+
       }
+
       .volume.touched {
         strong {
           text-decoration: underline;

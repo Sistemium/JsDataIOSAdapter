@@ -1,8 +1,12 @@
+@import "variables";
+
 .num-pad-button {
 
   padding: 2px;
 
   .btn {
+
+    border-radius: $border-radius;
 
     padding: 15px;
     font-size: x-large;

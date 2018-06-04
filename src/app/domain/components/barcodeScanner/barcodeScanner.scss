@@ -22,14 +22,6 @@ barcode-scanner {
     border: solid 1px $border-gray;
     background: none;
 
-    //border: solid 1px $state-warning-border;
-    //color: $state-warning-text;
-    //background: $state-warning-bg;
-
-    &:not(.enabled) {
-      //padding: 6px 10px;
-    }
-
     > * + * {
       margin-left: 5px;
     }

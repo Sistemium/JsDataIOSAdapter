@@ -16,26 +16,28 @@
 
     .current-item(ng-if='vm.stockTakingItem')
 
-      .field.timestamp
-        label Время
-        strong {{ vm.stockTakingItem.timestamp | dateTime:{seconds: true} }}
+      .fields
 
-      .field.barcode
-        label Штрих-код
-        strong
-          confirmed-button(on-confirm="vm.itemDeleteClick()")
-            i.glyphicon.glyphicon-trash
-            cancel
-              i.glyphicon.glyphicon-lock
-          span {{ vm.stockTakingItem.barcode }}
+        .field.timestamp
+          label Время
+          strong {{ vm.stockTakingItem.timestamp | dateTime:{seconds: true} }}
 
-      .field.name
-        label Товар
-        strong {{ vm.stockTakingItem.name }}
+        .field.barcode
+          label Штрих-код
+          strong
+            confirmed-button(on-confirm="vm.itemDeleteClick()")
+              i.glyphicon.glyphicon-trash
+              cancel
+                i.glyphicon.glyphicon-lock
+            span {{ vm.stockTakingItem.barcode }}
 
-      .field.volume(ng-class="{touched: vm.volumeViewTouched}")
-        label Количество
-        strong {{ vm.volumeView }}
+        .field.name
+          label Товар
+          strong {{ vm.stockTakingItem.name }}
+
+        .field.volume(ng-class="{touched: vm.volumeViewTouched}")
+          label Количество
+          strong {{ vm.volumeView }}
 
       sa-keyboard(
       datatype='boxPcs'
