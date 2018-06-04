@@ -59,7 +59,7 @@
         [{ label: '4' }, { label: '5' }, { label: '6' }],
         [{ label: '1' }, { label: '2' }, { label: '3' }],
         [
-          { label: vm.boxRel ? 'К' : (vm.boxRel || ''), },
+          { label: vm.boxRel ? 'К' : (vm.boxRel || ''), rel: true },
           { label: '0', },
           { i: 'glyphicon glyphicon-remove', remove: true }
         ]
@@ -75,7 +75,7 @@
           vm.symbols = str.slice(0, str.length - 1);
         }
       } else {
-        vm.symbols = (vm.symbols && vm.touched) ? vm.symbols + b.label : b.label;
+        vm.symbols = (vm.symbols && (vm.touched || b.rel)) ? vm.symbols + b.label : b.label;
       }
 
       vm.touched = true;

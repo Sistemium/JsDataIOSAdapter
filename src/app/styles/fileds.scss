@@ -30,3 +30,12 @@
   }
 
 }
+
+%important-strong {
+  font-weight: 500;
+  color: $green;
+  background: $gray-background-color;
+  padding: $margin-bottom-xs/2 $margin-bottom-xs;
+  border-radius: $border-radius;
+  border: solid 1px $border-gray;
+}

@@ -14,11 +14,12 @@
 
   function StockTakingItemViewController($scope, saControllerHelper, Schema, $timeout) {
 
-    const {StockTakingItem} = Schema.models();
+    const { StockTakingItem } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
     vm.use({
+
       $onInit() {
 
         const { stockTakingItemId } = vm;
@@ -28,13 +29,21 @@
         vm.watchScope('vm.volumeViewTouched', touched => {
           if (touched) {
             $timeout.cancel(vm.touchedTimeout);
-            vm.touchedTimeout = $timeout(() => vm.volumeViewTouched = false, 4000);
+            vm.touchedTimeout = $timeout(4000)
+              .then(() => {
+                vm.volumeViewTouched = false;
+              });
           }
         });
+
+        vm.watchScope('vm.stockTakingItem.volume', _.debounce(() => {
+          vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSCreate();
+        }, 1000));
 
         onItemIdChange(stockTakingItemId);
 
       }
+
     });
 
     /*

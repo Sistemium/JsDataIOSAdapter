@@ -9,6 +9,13 @@ stock-taking-view {
 
     @extend %view;
 
+    .unsaved {
+      .volume strong {
+        background: $state-warning-bg;
+        color: $state-warning-text;
+      }
+    }
+
     .details {
 
       @include responsive-only(xxs) {
@@ -120,7 +127,7 @@ stock-taking-view {
       &.active {
         background: $gray-background-color;
         border-color: $gray-border-color;
-        .volume {
+        .volume strong {
           background: $white;
           border: solid 1px $border-gray;
         }
@@ -128,13 +135,8 @@ stock-taking-view {
 
       align-items: flex-start;
 
-      .volume {
-        font-weight: bold;
-        color: $green;
-        background: $gray-background-color;
-        padding: $margin-bottom-xs/2 $margin-bottom-xs;
-        border-radius: $border-radius;
-        border: solid 1px $border-gray;
+      .volume strong {
+        @extend %important-strong;
       }
 
       .title {

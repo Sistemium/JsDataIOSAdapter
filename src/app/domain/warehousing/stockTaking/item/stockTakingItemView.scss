@@ -1,4 +1,4 @@
-@import "variables";
+@import "fileds";
 
 .stock-taking-item-view {
 
@@ -26,21 +26,27 @@
           box-shadow: 0 0 4px 2px $gray-background-color;
           color: $primary-color;
         }
-        @include responsive-only(xxs) {
-          padding: $margin-bottom-xs/2;
-        }
-        @include responsive-only(xs) {
-          padding: $margin-bottom-xs $margin-bottom-xs * 2;
+        @include responsive-only(lt-sm) {
+          padding: $margin-bottom-xs/2 $margin-bottom-xs * 2;
         }
       }
 
     }
 
-    .volume.touched {
+    .volume {
+
+      align-items: center;
       strong {
-        text-decoration: underline;
-        color: $green;
+        @extend %important-strong;
       }
+
+      &.touched {
+        strong {
+          text-decoration: underline;
+          color: $green;
+        }
+      }
+
     }
 
 

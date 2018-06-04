@@ -26,7 +26,7 @@
 
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
-                                     toastr, moment, $timeout) {
+                                     toastr, moment) {
 
     const {
       ArticleBarCode,
