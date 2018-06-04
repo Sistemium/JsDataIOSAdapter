@@ -38,4 +38,8 @@
   padding: $margin-bottom-xs/2 $margin-bottom-xs;
   border-radius: $border-radius;
   border: solid 1px $border-gray;
+  @include responsive-only(lt-sm) {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
 }

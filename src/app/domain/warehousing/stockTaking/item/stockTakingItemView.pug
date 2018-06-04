@@ -2,23 +2,22 @@
 
   .fields
 
+    .field.name
+      label Товар
+      strong {{ vm.stockTakingItem.name }}
+        confirmed-button(on-confirm="vm.itemDeleteClick()")
+          i.glyphicon.glyphicon-trash
+          cancel
+            i.glyphicon.glyphicon-lock
+
     .field.timestamp
-      label Время
+      label Время скана
       strong {{ vm.stockTakingItem.timestamp | dateTime:{seconds: true} }}
 
     .field.barcode
       label Штрих-код
       strong
-        confirmed-button(on-confirm="vm.itemDeleteClick()")
-          i.glyphicon.glyphicon-trash
-          cancel
-            i.glyphicon.glyphicon-lock
         span {{ vm.stockTakingItem.barcode }}
-
-    .field.name
-      label Товар
-      strong
-        | {{ vm.stockTakingItem.name }}
 
     .field.volume(
     ng-class="{touched: vm.volumeViewTouched}"

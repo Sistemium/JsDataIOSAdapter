@@ -18,6 +18,12 @@ stock-taking-view {
 
     .details {
 
+      @include responsive-only(gt-xxs) {
+        background: $gray-background-color;
+        padding: $margin-bottom-xs;
+        border-radius: $border-radius;
+      }
+
       @include responsive-only(xxs) {
         margin-bottom: 0;
       }
@@ -46,18 +52,24 @@ stock-taking-view {
     }
 
     barcode-scanner {
-      @include responsive-only(gt-xs) {
-        width: $right-panel-width;
-      }
+
       @include responsive-only(gt-xxs) {
+        input {
+          padding: 0 10px;
+        }
+        .toggle-enable {
+          background: $white;
+        }
+        padding: 6px;
         position: absolute;
-        top: -4px;
+        top: 0;
         right: 0;
         max-width: $right-panel-width;
         input {
           text-align: right;
         }
       }
+
     }
 
     .items {
