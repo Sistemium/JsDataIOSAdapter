@@ -32,8 +32,8 @@
       $state.go($state.current.data.rootState);
     });
 
-    $scope.$on(stockTakingView.CREATED_EVENT, (event, item) => {
-      vm.stockTakingClick(item);
+    $scope.$on(stockTakingView.CREATED_EVENT, (event, stockTaking, stockTakingItem) => {
+      vm.stockTakingClick(stockTaking, stockTakingItem);
     });
 
     vm.use({
@@ -54,8 +54,18 @@
         ])
       },
 
-      stockTakingClick(item) {
-        $state.go(`${$state.current.data.rootState ? '^' : ''}.view`, { stockTakingId: item.id });
+      stockTakingClick(stockTaking, stockTakingItem) {
+
+        const params = {
+          stockTakingId: stockTaking.id
+        };
+
+        if (stockTakingItem) {
+          params.stockTakingItemId = stockTakingItem.id;
+        }
+
+        $state.go(`${$state.current.data.rootState ? '^' : ''}.view`, params);
+
       }
 
     });

@@ -49,14 +49,22 @@
 
     children: [{
       name: 'view',
-      url: '/view/:stockTakingId',
-      template: '<stock-taking-view ng-model="vm.params.stockTakingId"></stock-taking-view>',
+      url: '/view/:stockTakingId?stockTakingItemId',
+      template: '<p>{{ vm.params.stockTakingItemId }}</p><stock-taking-view ' +
+      'ng-model="vm.params.stockTakingId" ' +
+      'item-id="vm.params.stockTakingItemId"' +
+      '></stock-taking-view>',
       controller: 'StateController as vm',
       data: {
         rootState: 'wh.stockTaking',
+        watch: {
+          ['vm.params.stockTakingItemId'](stockTakingItemId, $state) {
+            $state.go('.', { stockTakingItemId }, { notify: true, inherit: true })
+          }
+        },
       },
 
-    },{
+    }, {
       name: 'create',
       url: '/create',
       template: '<stock-taking-view></stock-taking-view>',

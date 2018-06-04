@@ -12,6 +12,7 @@
 
       bindings: {
         stockTakingId: '=?ngModel',
+        itemId: '=?',
       },
 
       controller: StockTakingViewController,
@@ -42,7 +43,7 @@
 
       $onInit() {
 
-        const { stockTakingId } = vm;
+        const { stockTakingId, itemId } = vm;
 
         vm.watchScope('vm.stockTakingItem.id', () => _.assign(vm, {
           // volumeView: _.get(item, 'volume'),
@@ -57,22 +58,32 @@
         });
 
         if (stockTakingId) {
+
           const orderBy = [['timestamp', 'DESC']];
 
           vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
           vm.rebindAll(StockTakingItem, { stockTakingId, orderBy }, 'vm.stockTakingItems');
 
           return StockTakingItem.findAll({ stockTakingId })
+            .then(() => {
+              if (itemId) {
+                vm.stockTakingItem = StockTakingItem.get(itemId);
+              }
+            })
+
+        } else {
+
+          vm.stockTaking = StockTaking.createInstance({
+            date: new Date(),
+          });
+
         }
 
-        vm.stockTaking = StockTaking.createInstance({
-          date: new Date(),
-        });
 
       },
 
-      itemClick(item) {
-        vm.stockTakingItem = item;
+      itemClick(stockTakingItem) {
+        _.assign(vm, { stockTakingItem, itemId: stockTakingItem.id });
       },
 
       onScan({ code }) {
@@ -101,6 +112,7 @@
 
       const { stockTakingId, stockTaking } = vm;
       let barcodedArticle = {};
+      let created;
 
       ArticleBarCode.findAllWithRelations({ code })('Article')
 
@@ -118,7 +130,7 @@
 
         .then(() => !stockTakingId && StockTaking.create(stockTaking)
           .then(() => {
-            $scope.$emit(CREATED_EVENT, stockTaking);
+            created = true;
             vm.stockTakingId = stockTaking.id;
           }))
 
@@ -136,7 +148,12 @@
           timestamp: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
         })))
 
-        .then(stockTakingItem => _.assign(vm, { stockTakingItem }))
+        .then(stockTakingItem => {
+          vm.itemClick(stockTakingItem);
+          if (created) {
+            $scope.$emit(CREATED_EVENT, stockTaking, stockTakingItem);
+          }
+        })
 
         .catch(e => {
           if (e === NOT_FOUND) {
