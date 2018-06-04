@@ -3,7 +3,7 @@
   const saKeyboard = {
     bindings: {
       model: '=',
-      boxRel: '=',
+      boxRel: '<',
       datatype: '@',
       exportModel: '=?',
       modelMax: '=',
@@ -23,7 +23,16 @@
 
       isDisabled,
       onClick,
-      $onInit
+
+      $onInit() {
+
+        onModelChange(vm.exportModel);
+        $scope.$watch('vm.exportModel', onModelChange);
+
+        setButtons();
+        $scope.$watch('vm.boxRel', setButtons);
+
+      }
 
     });
 
@@ -37,30 +46,26 @@
 
     const disableFn = vm.datatype && formatter.disableButton;
 
-    function $onInit() {
+    /*
+    Functions
+     */
+
+    function setButtons() {
+
+      vm.boxRel = vm.boxRel && parseInt(vm.boxRel) || 0;
 
       vm.buttons = [
         [{ label: '7' }, { label: '8' }, { label: '9' }],
         [{ label: '4' }, { label: '5' }, { label: '6' }],
         [{ label: '1' }, { label: '2' }, { label: '3' }],
-        [{
-          label: _.isNumber(vm.boxRel) ? 'К' : (vm.boxRel || ''),
-        }, {
-          label: '0',
-        }, {
-          i: 'glyphicon glyphicon-remove',
-          remove: true
-        }]
+        [
+          { label: vm.boxRel ? 'К' : (vm.boxRel || ''), },
+          { label: '0', },
+          { i: 'glyphicon glyphicon-remove', remove: true }
+        ]
       ];
 
-      onModelChange(vm.exportModel);
-      $scope.$watch('vm.exportModel', onModelChange);
-
     }
-
-    /*
-    Functions
-     */
 
     function onClick(b) {
 
