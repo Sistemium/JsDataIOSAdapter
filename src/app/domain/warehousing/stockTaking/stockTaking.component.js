@@ -28,7 +28,7 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    $scope.$on(stockTakingView.destroyEventName, () => {
+    $scope.$on(stockTakingView.DESTROY_EVENT, () => {
       $state.go($state.current.data.rootState);
     });
 

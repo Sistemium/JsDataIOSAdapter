@@ -1,11 +1,12 @@
 (function () {
 
   const CREATED_EVENT = 'stock-taking-created';
+  const DESTROY_EVENT = 'stock-taking-view-destroy';
   const NOT_FOUND = 'NOT_FOUND';
 
   angular.module('Warehousing')
     .constant('stockTakingView', {
-      destroyEventName: 'stock-taking-view-destroy',
+      DESTROY_EVENT,
       CREATED_EVENT,
     })
     .component('stockTakingView', {
@@ -81,14 +82,9 @@
 
       },
 
-      itemDeleteClick() {
-        vm.stockTakingItem && vm.stockTakingItem.DSDestroy()
-          .then(() => vm.stockTakingItem = null);
-      },
-
       deleteClick() {
         (vm.stockTakingId ? vm.stockTaking.DSDestroy() : $q.resolve())
-          .then(() => $scope.$emit('stock-taking-view-destroy'));
+          .then(() => $scope.$emit(DESTROY_EVENT));
       },
 
     });
@@ -123,7 +119,7 @@
             vm.stockTakingId = stockTaking.id;
           }))
 
-        .then(() => _.get(vm.stockTakingItem, 'barcode') === code
+        .then(() => (_.get(vm.stockTakingItem, 'barcode') === code && vm.itemId)
           ? _.assign(vm.stockTakingItem, {
             volume: vm.stockTakingItem.volume + 1,
           })

@@ -23,7 +23,7 @@
 
       .list-group-item(
       ng-repeat='item in vm.stockTakingItems track by item.id'
-      ng-class='{active: vm.stockTakingItem === item, unsaved: item.DSHasChanges()}'
+      ng-class='{active: vm.itemId === item.id, unsaved: item.DSHasChanges()}'
       )
 
         .title

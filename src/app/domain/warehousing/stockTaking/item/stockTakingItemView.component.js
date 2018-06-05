@@ -1,6 +1,9 @@
 (function () {
 
+  const DESTROY_EVENT = 'stock-taking-item-destroy';
+
   angular.module('Warehousing')
+    .constant('stockTakingItemView', { DESTROY_EVENT })
     .component('stockTakingItemView', {
       bindings: {
         stockTakingItemId: '=?ngModel'
@@ -37,12 +40,19 @@
         });
 
         vm.watchScope('vm.stockTakingItem.volume', _.debounce(() => {
-          vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSCreate();
+          if (_.get(vm.stockTakingItem, 'id')) {
+            vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSCreate();
+          }
         }, 1000));
 
         onItemIdChange(stockTakingItemId);
 
-      }
+      },
+
+      deleteClick() {
+        vm.stockTakingItem && vm.stockTakingItem.DSDestroy()
+          .then(() => $scope.$emit(DESTROY_EVENT, vm.stockTakingItem));
+      },
 
     });
 

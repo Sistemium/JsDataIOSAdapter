@@ -70,9 +70,16 @@
 
       children: [{
         name: 'item',
-        url:'/:stockTakingItemId',
+        url: '/:stockTakingItemId',
         controller: 'StateController as vm',
         template: '<stock-taking-item-view ng-model="vm.params.stockTakingItemId"></stock-taking-item-view>',
+        data: {
+          on: {
+            ['stock-taking-item-destroy'](stockTakingItem, $state) {
+              $state.go('^');
+            },
+          }
+        }
       }]
 
     }, {

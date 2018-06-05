@@ -5,10 +5,6 @@
     .field.name
       label Товар
       strong {{ vm.stockTakingItem.name }}
-        confirmed-button(on-confirm="vm.itemDeleteClick()")
-          i.glyphicon.glyphicon-trash
-          cancel
-            i.glyphicon.glyphicon-lock
 
     .field.timestamp
       label Время скана
@@ -17,6 +13,10 @@
     .field.barcode
       label Штрих-код
       strong
+        confirmed-button(on-confirm="vm.deleteClick()")
+          i.glyphicon.glyphicon-trash
+          cancel
+            i.glyphicon.glyphicon-lock
         span {{ vm.stockTakingItem.barcode }}
 
     .field.volume(
