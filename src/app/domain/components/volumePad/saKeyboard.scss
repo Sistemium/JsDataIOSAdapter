@@ -11,8 +11,13 @@ sa-keyboard {
     flex-direction: column;
 
     > .sa-keyboard-row {
+
       display: flex;
       align-items: center;
+
+      > * {
+        flex: 1;
+      }
 
       .btn[disabled] {
         opacity: 0.5;
