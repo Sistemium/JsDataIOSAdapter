@@ -104,7 +104,7 @@ stock-taking-view {
           }
         }
 
-        .list-group {
+        stock-taking-item-list {
           flex: 1;
           order: 1;
         }
@@ -133,45 +133,7 @@ stock-taking-view {
 
     }
 
-    .list-group-item {
 
-      > * + * {
-        margin-left: $margin-bottom-xs;
-      }
-
-      &.active {
-        background: $gray-background-color;
-        border-color: $gray-border-color;
-        .volume strong {
-          background: $white;
-          border: solid 1px $border-gray;
-        }
-      }
-
-      align-items: flex-start;
-
-      .volume strong {
-        @extend %important-strong;
-      }
-
-      .title {
-        flex: 1;
-      }
-
-      .name {
-        //font-weight: 500;
-      }
-
-      .barcode {
-        margin-top: $margin-bottom-xs;
-        > span + span {
-          margin-left: $margin-bottom-xs/2;
-        }
-        color: $light-gray;
-        font-size: 85%;
-      }
-
-    }
 
   }
 

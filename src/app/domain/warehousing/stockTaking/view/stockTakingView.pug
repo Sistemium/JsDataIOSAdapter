@@ -19,22 +19,9 @@
 
     ui-view.current-item(ng-if='vm.itemId')
 
-    .list-group.scroll-y(resize resize-offset-top='10')
-
-      .list-group-item(
-      ng-repeat='item in vm.stockTakingItems track by item.id'
-      ng-class='{active: vm.itemId === item.id, unsaved: item.DSHasChanges()}'
-      )
-
-        .title
-          a.name(href ng-click="vm.itemClick(item)")
-            span {{ ::item.name }}
-          .barcode
-            span {{ ::item.barcode }}
-            span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
-            span(ng-if='item.packageRel') (фасовка {{ item.packageRel }})
-
-        .volume
-          strong.animate(
-          sa-animate-on-change="item.volume" change-class="change-up"
-          ) {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
+    stock-taking-item-list.scroll-y(
+    resize resize-offset-top='10'
+    filter="{stockTakingId: vm.stockTakingId}"
+    on-click="vm.itemClick($item)"
+    active-id="vm.itemId"
+    )

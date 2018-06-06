@@ -18,6 +18,10 @@
 
     sa-keyboard {
 
+      @include responsive-only(xxs) {
+        margin-top: $margin-bottom-xs;
+      }
+
       .num-pad-button .btn {
         font-size: 120%;
         background: $gray-background-color;
@@ -28,6 +32,9 @@
         }
         @include responsive-only(lt-sm) {
           padding: $margin-bottom-xs/2 $margin-bottom-xs * 2;
+        }
+        @include responsive-only(xxs) {
+          padding: $margin-bottom-xs/4 $margin-bottom-xs * 2;
         }
       }
 

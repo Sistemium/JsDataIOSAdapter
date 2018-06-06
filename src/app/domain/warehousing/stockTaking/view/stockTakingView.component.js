@@ -49,10 +49,7 @@
 
         if (stockTakingId) {
 
-          const orderBy = [['timestamp', 'DESC']];
-
           vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
-          vm.rebindAll(StockTakingItem, { stockTakingId, orderBy }, 'vm.stockTakingItems');
 
           return StockTakingItem.findAll({ stockTakingId })
             .then(() => {
