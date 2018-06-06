@@ -32,6 +32,7 @@
         }
         @include responsive-only(lt-sm) {
           padding: $margin-bottom-xs/2 $margin-bottom-xs * 2;
+          min-width: 60px;
         }
         @include responsive-only(xxs) {
           padding: $margin-bottom-xs/4 $margin-bottom-xs * 2;
@@ -55,7 +56,5 @@
       }
 
     }
-
-
 
 }
