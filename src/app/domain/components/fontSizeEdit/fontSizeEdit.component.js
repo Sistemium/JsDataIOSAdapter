@@ -8,7 +8,7 @@
 
     bindings: {
       appendTo: '@',
-      fontSize: '=',
+      fontSize: '=?',
     },
 
     controller: fontSizeEditController,
