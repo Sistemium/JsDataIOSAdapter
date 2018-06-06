@@ -1,6 +1,10 @@
 section.catalogue-left(
 cg-busy='vm.cgBusy'
+<<<<<<< HEAD
 ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
+=======
+ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered, "catalogue-left": catalogueLeft, hideSideNavPortrait: hideSideNavPortrait}]'
+>>>>>>> sidenav-restyle1
 )
 
   div(ui-view)
@@ -19,6 +23,7 @@ ng-class='["catalogue", vm.currentState, {showOnlyOrdered: vm.showOnlyOrdered}]'
 
     font-size-edit#scroll-articles.animate-show(
     append-to='catalogueArticle'
+    font-size='vm.articlesFontSize'
     )
       .alert.alert-info.centered(ng-if='!vm.busy && !vm.stock.length')
         .info Нет подходящих товаров

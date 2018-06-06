@@ -64,6 +64,10 @@
 
       item.article = item.article || Article.get(articleId);
 
+      if (!item.article) {
+        meta.toIndexByArticleId[articleId] = item;
+      }
+
       return item;
 
     }
@@ -79,23 +83,28 @@
     function loadArticle(article) {
 
       const articleId = article.id;
+      const shortRes = meta.indexByArticleId[articleId];
 
-      if (meta.indexByArticleId[articleId]) {
-        return meta.indexByArticleId[articleId];
+      if (shortRes) {
+        delete meta.toIndexByArticleId[articleId];
+        shortRes.article = article;
+        return shortRes;
       }
 
       return Stock.findAll({articleId}, {afterFindAll, cacheResponse: false});
 
       function afterFindAll(options, data) {
 
-        let item = _.first(data) || {};
+        let item = _.first(data);
 
-        let {indexByArticleId} = meta;
+        if (item) {
+          let {indexByArticleId} = meta;
 
-        indexByArticleId[articleId] = item;
-        item.article = article;
+          indexByArticleId[articleId] = item;
+          item.article = article;
 
-        meta.data.push(item);
+          meta.data.push(item);
+        }
 
         return null;
 
@@ -123,6 +132,8 @@
 
       });
 
+      return Object.keys(toIndexByArticleId);
+
     }
 
     function cachedFindAll(filter, options = {}) {
@@ -138,13 +149,19 @@
         limit: 10000
       }, options);
 
-      if (!isIos) {
+      let where = filter.where || {};
+
+      if (isIos) {
+        if (meta.lastOffset !== '*') {
+          where.lts = { '>=': meta.lastOffset };
+        }
+      } else {
         cacheOptions.offset = meta.lastOffset;
       }
 
       let result = [];
 
-      return Stock.findAll(filter, cacheOptions)
+      return Stock.findAll({ where }, cacheOptions)
         .then(() => result);
 
       function afterFindAll(options, data) {
@@ -159,6 +176,9 @@
           let maxTs = _.maxBy(data, 'ts');
           meta.lastOffset = `1-${moment(maxTs.ts).format('YYYYMMDDHHmmssSSS')}-0`;
           // console.warn('maxTs', maxTs, meta.lastOffset);
+        } else {
+          let maxTs = _.maxBy(data, 'lts');
+          meta.lastOffset = maxTs.lts;
         }
 
         let {indexByArticleId} = meta;
@@ -175,7 +195,7 @@
 
             indexByArticleId[articleId] = item;
 
-            let article = Article.get(articleId)
+            let article = Article.get(articleId);
 
             if (article) {
               item.article = article;

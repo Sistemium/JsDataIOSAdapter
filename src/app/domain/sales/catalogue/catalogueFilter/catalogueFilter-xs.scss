@@ -1,6 +1,6 @@
 @import "variables";
 
-@include responsive-only(lt-sm) {
+@mixin hide-filters() {
 
   #catalogue-sidenav {
 
@@ -66,4 +66,26 @@
 
   }
 
+}
+
+@include responsive-only(lt-sm) {
+  @include hide-filters();
+}
+
+@include responsive-only(sm, portrait) {
+  .catalogue.hideSideNavPortrait {
+    @include hide-filters();
+
+    catalogue-filter .full-screen-controls {
+
+      display: flex;
+
+    }
+
+    #catalogue-sidenav .active-filters {
+      .current-article-group {
+        display: flex;
+      }
+    }
+  }
 }

@@ -19,6 +19,10 @@
       state: 'picker',
       needRoles: PICKING_ROLES
     }, {
+      title: 'Партии',
+      state: 'wh.stockBatching',
+      needRoles: PICKING_ROLES
+    }, {
       title: 'Каталог',
       state: 'sales.catalogue',
       needRoles: OUTLET_ROLES

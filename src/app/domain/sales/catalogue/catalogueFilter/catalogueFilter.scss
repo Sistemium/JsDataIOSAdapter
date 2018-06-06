@@ -1,5 +1,7 @@
 @import "variables";
 
+
+
 catalogue-filter {
 
   $border-radius: 10px;
@@ -76,8 +78,6 @@ catalogue-filter {
   }
 
   .catalogue-filter {
-
-    overflow: hidden;
 
     > .price {
       * + span {

@@ -92,7 +92,7 @@
       onlyShippedClick,
 
       onStateChange,
-      // articleRowHeight,
+      articleRowHeight: articleRowHeight(),
       alertCheck,
       alertTriggers: _.groupBy(CatalogueAlert.getAll(), 'articleGroupId')
 
@@ -183,10 +183,8 @@
 
     $scope.$on('setSaleOrderId', setSaleOrderId);
 
-    vm.watchScope('vm.fontSize', fontSize => {
-      if (fontSize) {
-        localStorageService.set(FONT_SIZE_KEY, fontSize);
-      }
+    vm.watchScope('vm.articlesFontSize', () => {
+      vm.articleRowHeight = articleRowHeight();
     });
 
     vm.onScope(
@@ -254,12 +252,12 @@
 
           let index = {};
 
-          _.each(res, item => index[item.id] = item);
+          // _.each(res, item => index[item.id] = );
 
           onJSDataFinished({
             model: Stock,
             index: index,
-            data: res
+            data: _.map(res, item => ({ data: item }))
           });
 
         });
@@ -374,17 +372,30 @@
         DEBUG('onJSDataFinished:reloadStock');
 
         let count = event.data.length;
+        let notFound = [];
 
-        // FIXME: article won't appear if wasn't in stock
+        // FIXME: article won't appear if there's no price
 
-        _.each(vm.stock, stock => {
-          let updated = event.index[stock.id];
-          if (!updated) return;
-          stock.volume = updated.volume;
-          stock.displayVolume = updated.displayVolume;
+        _.each(event.data, ({ data: { volume, displayVolume, articleId } }) => {
+
+          const stock = _.find(sortedStock, { articleId });
+
+          if (stock) {
+            _.assign(stock, { volume, displayVolume });
+          } else {
+            notFound.push(articleId);
+          }
+
         });
 
-        if (count) {
+        if (notFound.length) {
+          toastr.success(
+            `Новые товары на складе: ${notFound.length} ${SaleOrder.meta.positionsCountRu(notFound.length)}`,
+            'Обновление данных',
+            { timeOut: 5000 }
+          );
+          reloadMissing(notFound);
+        } else if (count) {
           toastr.info(
             `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
             'Обновление данных',
@@ -393,6 +404,16 @@
         }
 
       }
+
+      function reloadMissing(ids) {
+        $q.all(_.map(ids,
+          articleId => Article.find(articleId)
+            .then(Stock.meta.loadArticle)
+        ))
+          .then(reloadVisible)
+          .catch(error => console.error(error));
+      }
+
     }
 
     function reloadVisible() {
@@ -646,7 +667,22 @@
     }
 
     function articleRowHeight() {
-      return isWideScreen() ? 88 : 74;
+
+      if (!isWideScreen()) {
+        return 74;
+      }
+
+      const { articlesFontSize } = vm;
+
+      if (articlesFontSize > 18) {
+        return 102
+      }
+
+      if (articlesFontSize > 16) {
+        return 94
+      }
+
+      return 88;
     }
 
     function findAll() {
@@ -701,7 +737,7 @@
 
             Stock.meta.cachedFindAll({
               where: volumeNotZero
-            }, options),
+            }, _.assign({ mergeUpdates: true }, options)),
 
             Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options))
               .then(() => {
@@ -718,12 +754,14 @@
 
           DEBUG('findAll', 'finish');
 
-          Stock.meta.checkIndexes();
+          const toLoad = Stock.meta.checkIndexes();
 
-          filterStock();
-          setCurrentArticleGroup(currentArticleGroupId);
-
-          DEBUG('findAll', 'setCurrentArticleGroup');
+          return $q.all(_.map(toLoad, articleId =>
+            Article.find(articleId)
+              .then(Stock.meta.loadArticle)
+              .catch(() => false)
+          ))
+            .then(reloadVisible);
 
         });
     }
@@ -750,13 +788,10 @@
 
         if (!stock.article) return;
 
+        const { id, volume, displayVolume, article, articleId, priceAgent } = stock;
+
         stockCache.push({
-          id: stock.id,
-          volume: stock.volume,
-          displayVolume: stock.displayVolume,
-          article: stock.article,
-          articleId: stock.articleId,
-          priceAgent: stock.priceAgent,
+          id, volume, displayVolume, article, articleId, priceAgent,
           discountPercent,
           targetDiscountPercent,
           discountPrice,

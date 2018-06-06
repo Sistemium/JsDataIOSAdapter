@@ -27,6 +27,9 @@
         span на сумму
         strong {{ vm.shipment.totalCost() | number: 2 }}
         span ₽
+      .driver
+        span Водитель:
+        strong {{ vm.shipment.driver.name }}
 
   .animate-show.scroll-y(
   resize resize-offset-top='{{::vm.offsetTop}}'

@@ -2,7 +2,9 @@
 
 (function () {
 
-  function PickingOrderListController($scope, Schema, $state, Errors, BarCodeScanner, SoundSynth, Sockets, saAsync, DEBUG) {
+  function PickingOrderListController($scope, Schema, $state, Errors,
+                                      BarCodeScanner, SoundSynth, Sockets,
+                                      saAsync, DEBUG) {
 
     const picker = Schema.model('Picker').getCurrent();
 

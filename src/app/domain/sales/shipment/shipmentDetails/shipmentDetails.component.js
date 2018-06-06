@@ -57,7 +57,7 @@
       // TODO: subscribe to socket and do not bypassCache
 
       return Shipment.find(shipmentId, {bypassCache})
-        .then(item => item.DSLoadRelations('ShipmentPosition', {bypassCache}))
+        .then(item => item.DSLoadRelations(['ShipmentPosition', 'Driver'], {bypassCache}))
         .then(item => $q.all(_.map(item.positions, position => {
           return position.DSLoadRelations()
             .catch(_.noop);
