@@ -5,11 +5,7 @@
   function saApp($window, Schema, UUID) {
 
     const appIdKey = 'saAppId';
-<<<<<<< HEAD
-    const VERSION = '0.18.29';
-=======
     const VERSION = '0.18.33';
->>>>>>> sidenav-restyle1
 
     let appId = $window.localStorage.getItem(appIdKey);
 
