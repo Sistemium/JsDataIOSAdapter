@@ -580,10 +580,10 @@
             let {articleId} = pos;
             let price = vm.prices[articleId];
 
-            let posDiscount = pos.priceOrigin ?
-              _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) : 0;
-            let posDiscountDoc = pos.priceOrigin ?
-              _.round((pos.priceOrigin - pos.priceDoc) / pos.priceOrigin * 100.0, 2) : 0;
+            let posDiscount = pos.priceOrigin &&
+              _.round((pos.priceOrigin - pos.price) / pos.priceOrigin * 100.0, 2) || 0;
+            let posDiscountDoc = pos.priceOrigin &&
+              _.round((pos.priceOrigin - pos.priceDoc) / pos.priceOrigin * 100.0, 2) || 0;
 
             if (!price) {
               price = vm.prices[articleId] = {price: pos.priceOrigin};
@@ -592,8 +592,8 @@
 
             if (!pos.priceOrigin || pos.priceOrigin !== price.price) {
               pos.priceOrigin = price.price;
-              pos.price = _.round(price.priceOrigin * (1.0 - posDiscount / 100.0), 2);
-              pos.priceDoc = _.round(price.priceOrigin * (1.0 - posDiscountDoc / 100.0), 2);
+              pos.price = _.round(pos.priceOrigin * (1.0 - posDiscount / 100.0), 2);
+              pos.priceDoc = _.round(pos.priceOrigin * (1.0 - posDiscountDoc / 100.0), 2);
               pos.updateCost();
             }
 
