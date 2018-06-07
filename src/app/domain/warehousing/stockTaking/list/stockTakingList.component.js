@@ -6,6 +6,7 @@
       bindings: {
         stockTakings: '=ngModel',
         onClick: '&onClick',
+        scroll: '=',
       },
 
       controller: StockTakingListController,
@@ -28,7 +29,7 @@
 
       stockTakingClick($item) {
         vm.onClick({ $item });
-      }
+      },
 
     });
 

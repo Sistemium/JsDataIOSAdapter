@@ -84,6 +84,9 @@
           .then(() => $scope.$emit(DESTROY_EVENT));
       },
 
+      itemListScrollTo() {
+      },
+
     });
 
     /*
@@ -132,6 +135,7 @@
 
         .then(stockTakingItem => {
           vm.itemClick(stockTakingItem);
+          scrollTo(stockTakingItem);
           if (created) {
             $scope.$emit(CREATED_EVENT, stockTaking, stockTakingItem);
           }
@@ -145,6 +149,10 @@
           }
         });
 
+    }
+
+    function scrollTo(item) {
+      vm.itemListScrollTo(item);
     }
 
   }

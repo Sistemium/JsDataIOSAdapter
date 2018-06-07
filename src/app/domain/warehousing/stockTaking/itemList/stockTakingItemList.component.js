@@ -7,6 +7,7 @@
         filter: '<',
         activeId: '=',
         onClick: '&',
+        scroll: '=',
       },
 
       controller: StockTakingItemListController,
@@ -16,7 +17,7 @@
     });
 
 
-  function StockTakingItemListController($scope, saControllerHelper, Schema) {
+  function StockTakingItemListController($scope, saControllerHelper, Schema, $anchorScroll, $timeout) {
 
     const { StockTakingItem } = Schema.models();
 
@@ -34,7 +35,13 @@
 
       itemClick($item) {
         vm.onClick({ $item });
-      }
+      },
+
+      scroll(item) {
+        $timeout(250).then(() =>{
+          $anchorScroll(`id-${item.id}`);
+        });
+      },
 
     });
 

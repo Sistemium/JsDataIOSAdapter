@@ -1,6 +1,7 @@
 .stock-taking-item-list.list-group
 
   .list-group-item(
+  id='id-{{item.id}}'
   ng-repeat='item in vm.stockTakingItems track by item.id'
   ng-class='{active: vm.activeId === item.id, unsaved: item.DSHasChanges()}'
   )
