@@ -67,7 +67,15 @@ a.list-group-item {
 
 }
 
-.nav-tabs > li > a {
-  border-radius: $border-radius $border-radius 0 0;
+ul.nav.nav-tabs > li > a {
+  border-radius: $border-radius;
+}
+
+@include responsive-only(gt-xs) {
+  ul.nav.nav-tabs > li > a {
+
+    border-radius: $border-radius $border-radius 0 0;
+
+  }
 }
 
