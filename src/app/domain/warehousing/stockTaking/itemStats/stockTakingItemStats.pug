@@ -1,0 +1,18 @@
+.stock-taking-item-list.list-group
+
+  .list-group-item(
+  ng-repeat='item in vm.data track by item.id'
+  )
+
+    .title
+      a.name(href ng-click="vm.itemClick(item)")
+        span {{ ::item.articleName }}
+      .barcode
+        //span {{ ::item.barcode }}
+        //span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
+        span(ng-if='item.packageRel') (фасовка {{ item.packageRel }})
+
+    .volume
+      strong.animate(
+      sa-animate-on-change="item.volume" change-class="change-up"
+      ) {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
