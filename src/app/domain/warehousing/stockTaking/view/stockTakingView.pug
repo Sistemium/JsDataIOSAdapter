@@ -19,7 +19,7 @@
 
     ui-view.current-item(ng-if='vm.itemId')
 
-    uib-tabset(active="vm.activeTab" justified="true")
+    uib-tabset(active="vm.activeTabIndex" justified="true")
       uib-tab(index="0" heading="Сканирование")
         stock-taking-item-list.scroll-y(
         resize resize-offset-top="10"

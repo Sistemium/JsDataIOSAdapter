@@ -14,6 +14,7 @@
       bindings: {
         stockTakingId: '=?ngModel',
         itemId: '=?',
+        tab: '=?'
       },
 
       controller: StockTakingViewController,
@@ -46,6 +47,16 @@
       $onInit() {
 
         const { stockTakingId, itemId } = vm;
+
+        setActiveTabIndex();
+
+        vm.watchScope('vm.activeTabIndex', idx => {
+
+          if (!_.isNumber(idx)) return;
+
+          vm.tab = (idx === 1 ? 'stats' : 'log');
+
+        });
 
         if (stockTakingId) {
 
@@ -92,6 +103,10 @@
     /*
     Functions
      */
+
+    function setActiveTabIndex() {
+      vm.activeTabIndex = vm.tab === 'stats' ? 1 : 0;
+    }
 
     function processBarcode(code) {
 
