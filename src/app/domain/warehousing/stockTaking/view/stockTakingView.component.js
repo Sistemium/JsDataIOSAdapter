@@ -98,6 +98,9 @@
       itemListScrollTo() {
       },
 
+      itemStatsScrollTo() {
+      },
+
     });
 
     /*
@@ -167,7 +170,12 @@
     }
 
     function scrollTo(item) {
-      vm.itemListScrollTo(item);
+      switch (vm.activeTabIndex) {
+        case 0:
+          return vm.itemListScrollTo(item);
+        case 1:
+          return vm.itemStatsScrollTo(item);
+      }
     }
 
   }

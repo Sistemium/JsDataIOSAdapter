@@ -2,6 +2,7 @@
 
   .list-group-item(
   ng-repeat='stat in vm.data track by stat.id'
+  id="{{::vm.statAnchorId(stat.id)}}"
   )
 
     .title

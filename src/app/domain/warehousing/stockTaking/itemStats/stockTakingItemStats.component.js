@@ -35,6 +35,16 @@
         vm.onItemClick({ $item });
       },
 
+      scroll(item) {
+        $timeout(250).then(() => {
+          $anchorScroll(vm.statAnchorId(item.name));
+        });
+      },
+
+      statAnchorId(id) {
+        return `id-${_.replace(id, /[^a-zа-я0-9]/ig, '-')}`;
+      }
+
     });
 
     function setExpanded() {
