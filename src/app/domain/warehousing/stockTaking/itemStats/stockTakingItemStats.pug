@@ -8,13 +8,15 @@
       a.name(href ng-click="vm.expandItemId=stat.id")
         span {{ ::stat.articleName }}
       .barcode
-        //span {{ ::stat.barcode }}
+        span {{ stat.items.length | positionsCount }}
         //span {{ stat.timestamp | dateTime:{seconds: true, date: false} }}
         span(ng-if='stat.packageRel') (фасовка {{ stat.packageRel }})
 
       .stat-items.list-group(ng-if="vm.expandItemId===stat.id")
-        .list-group-item(
+        a.list-group-item(
+        href ng-click="vm.itemClick(item)"
         ng-repeat="item in stat.items | orderBy:'-timestamp' track by item.id"
+        ng-class="{active: item.id === vm.activeId}"
         )
           strong {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
           //span {{ item.barcode }}

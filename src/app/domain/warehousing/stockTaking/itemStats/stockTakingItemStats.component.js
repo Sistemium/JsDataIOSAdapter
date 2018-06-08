@@ -6,7 +6,7 @@
       bindings: {
         filter: '<',
         activeId: '=',
-        onClick: '&',
+        onItemClick: '&',
         scroll: '=',
       },
 
@@ -18,7 +18,7 @@
 
 
   function StockTakingItemStatsController($scope, saControllerHelper, $anchorScroll, $timeout,
-                                         Schema) {
+                                          Schema) {
 
     const { StockTakingItem } = Schema.models();
 
@@ -28,10 +28,19 @@
 
       $onInit() {
         vm.rebindAll(StockTakingItem, vm.filter, 'vm.stockTakingItems', setStatsData);
-      }
+        vm.watchScope('vm.activeId', setExpanded);
+      },
+
+      itemClick($item) {
+        vm.onItemClick({ $item });
+      },
 
     });
 
+    function setExpanded() {
+      const { activeId, expandItemId } = vm;
+      vm.expandItemId = activeId && _.get(StockTakingItem.get(activeId), 'name') || expandItemId;
+    }
 
     function setStatsData() {
 
@@ -46,6 +55,8 @@
       }));
 
       vm.data = _.orderBy(data, 'articleName');
+
+      setExpanded();
 
     }
 
