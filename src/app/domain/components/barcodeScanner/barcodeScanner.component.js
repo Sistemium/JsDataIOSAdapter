@@ -20,7 +20,7 @@
             BarCodeType.bindAll({}, $scope, 'vm.types');
           },
           enterPress() {
-            onScan(translateHIDScan(vm.input));
+            vm.input && onScan(translateHIDScan(vm.input));
           },
           onPaste() {
             $timeout(this.enterPress);
