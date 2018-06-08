@@ -37,11 +37,12 @@
 
       let data = _.groupBy(vm.stockTakingItems, 'name');
 
-      data = _.map(data, (articleData, articleName) => ({
+      data = _.map(data, (items, articleName) => ({
         id: articleName,
         articleName,
-        volume: _.sumBy(articleData, 'volume'),
-        packageRel: _.maxBy(articleData, 'packageRel').packageRel,
+        items,
+        volume: _.sumBy(items, 'volume'),
+        packageRel: _.get(_.maxBy(items, 'packageRel'), 'packageRel'),
       }));
 
       vm.data = _.orderBy(data, 'articleName');

@@ -7,7 +7,7 @@
         filter: '<',
         activeId: '=',
         onClick: '&',
-        scroll: '=',
+        scroll: '=?',
       },
 
       controller: StockTakingItemListController,
