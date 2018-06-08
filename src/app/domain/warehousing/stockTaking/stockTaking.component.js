@@ -60,11 +60,15 @@
           stockTakingId: stockTaking.id
         };
 
+
+        let viewState = `${$state.current.data.rootState ? '^' : ''}.view`;
+
         if (stockTakingItem) {
           params.stockTakingItemId = stockTakingItem.id;
+          viewState += '.item';
         }
 
-        $state.go(`${$state.current.data.rootState ? '^' : ''}.view`, params);
+        $state.go(viewState, params);
 
       }
 

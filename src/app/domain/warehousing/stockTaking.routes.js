@@ -78,10 +78,18 @@
 
       name: 'create',
       url: '/create',
-      template: '<stock-taking-view></stock-taking-view>',
+      template: '<stock-taking-view tab="vm.locals.tab"></stock-taking-view>',
+
+      controller: 'StateController as vm',
 
       data: {
+
         rootState: 'wh.stockTaking',
+
+        initLocals(locals, { localStorageService }) {
+          locals.tab = localStorageService.get(LS_KEY);
+        },
+
       },
 
     },],
