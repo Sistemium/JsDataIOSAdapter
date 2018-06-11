@@ -11,13 +11,26 @@
       },
 
       /** @ngInject */
-      controller($scope, DEBUG, Schema, $timeout, toastr) {
+      controller($scope, DEBUG, Schema, $timeout, toastr, IOS, BarCodeScanner) {
 
         const vm = _.assign(this, {
           $onInit() {
+
             const { BarCodeType } = Schema.models();
+
             BarCodeType.findAll();
             BarCodeType.bindAll({}, $scope, 'vm.types');
+
+            vm.iosMode = IOS.isIos();
+
+            if (vm.iosMode) {
+              BarCodeScanner.bind(onScan);
+              $scope.$watch(() => BarCodeScanner.state.status, status => {
+                console.warn('BarCodeScanner:', status);
+                vm.isEnabled = (status === 'connected')
+              });
+            }
+
           },
           enterPress() {
             vm.input && onScan(translateHIDScan(vm.input));
@@ -25,8 +38,16 @@
           onPaste() {
             $timeout(this.enterPress);
           },
-          toggleEnableClick(){
-            vm.isEnabled = !vm.isEnabled;
+          toggleEnableClick() {
+            if (vm.iosMode) {
+              if (vm.isEnabled) {
+                BarCodeScanner.unbind();
+              } else {
+                BarCodeScanner.bind(onScan);
+              }
+            } else {
+              vm.isEnabled = !vm.isEnabled;
+            }
           },
           isEnabled: true,
         });
@@ -49,7 +70,7 @@
             return toastr.error(code, 'Неверный тип штрих-кода');
           }
 
-          scanHandler({ $barcode: vm.barcode = { code, type }});
+          scanHandler({ $barcode: vm.barcode = { code, type } });
 
         }
 

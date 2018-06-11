@@ -9,7 +9,7 @@
 
   input.form-control(
   ng-model="vm.input"
-  ng-if="vm.isEnabled"
+  ng-if="vm.isEnabled && !vm.iosMode"
   sa-auto-focus="true"
   sa-enter-key="vm.enterPress()"
   ng-paste="vm.onPaste()"
