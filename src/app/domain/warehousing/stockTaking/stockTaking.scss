@@ -34,4 +34,21 @@ stock-taking {
     }
   }
 
+  @include responsive-only(xs) {
+    .nav-justified > .active, .nav-tabs.nav-justified > .active {
+      a {
+        border-bottom-color: $white;
+      }
+    }
+
+    .nav-justified > li, .nav-tabs.nav-justified > li {
+      display: table-cell;
+      width: 1%;
+      a {
+        margin-bottom: 0;
+        border-bottom: 1px solid #ddd;
+      }
+    }
+  }
+
 }

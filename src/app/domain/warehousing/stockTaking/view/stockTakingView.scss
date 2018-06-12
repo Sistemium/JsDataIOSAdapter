@@ -88,6 +88,9 @@ stock-taking-view {
         stock-taking-item-list {
         }
 
+      }
+
+      @include responsive-only(gt-xxs) {
         .tab-pane {
           > * > .list-group > .list-group-item:first-child {
             border-top-right-radius: 0;
@@ -95,7 +98,6 @@ stock-taking-view {
             margin-top: -1px;
           }
         }
-
       }
     }
 

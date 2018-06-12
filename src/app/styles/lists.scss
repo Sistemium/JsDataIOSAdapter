@@ -71,7 +71,7 @@ ul.nav.nav-tabs > li > a {
   border-radius: $border-radius;
 }
 
-@include responsive-only(gt-xs) {
+@include responsive-only(gt-xxs) {
   ul.nav.nav-tabs > li > a {
 
     border-radius: $border-radius $border-radius 0 0;
