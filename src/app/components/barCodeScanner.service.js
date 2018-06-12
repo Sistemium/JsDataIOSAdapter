@@ -5,6 +5,7 @@
   const BARCODE_SCANNER_FN = 'barCodeScannerFn';
   const BARCODE_SCANNER_POWER_FN = 'barCodeScannerPowerFn';
   const BARCODE_SCANNER_STATUS_FN = 'barCodeScannerStatusFn';
+  const BARCODE_SCAN_EVENT = 'barcode-scan-event';
 
   function BarCodeScannerService($window, IOS, $rootScope) {
 
@@ -13,6 +14,8 @@
     };
 
     return {
+
+      BARCODE_SCAN_EVENT,
 
       state,
 

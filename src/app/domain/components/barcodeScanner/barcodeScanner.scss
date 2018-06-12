@@ -1,5 +1,48 @@
 @import "variables";
 
+.root-navbar barcode-scanner {
+
+  font-weight: normal;
+  input {
+    text-align: right;
+  }
+
+  .toggle-enable {
+    &.enabled {
+      i {
+        color: $green;
+      }
+    }
+    i {
+      font-size: 19px;
+    }
+    @include responsive-only(gt-xxs) {
+      i {
+        top: 0;
+      }
+      span {
+        font-size: 16px;
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+    @include responsive-only(gt-xs) {
+      span {
+        margin-top: 8px;
+      }
+    }
+    @include responsive-only(xxs) {
+      span {
+        display: none;
+      }
+    }
+    padding: 0;
+    //line-height: 37px;
+    border: none;
+  }
+
+}
+
 barcode-scanner {
 
   .barcode-scanner {

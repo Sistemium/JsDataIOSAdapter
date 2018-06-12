@@ -11,7 +11,9 @@
       },
 
       /** @ngInject */
-      controller($scope, DEBUG, Schema, $timeout, toastr, IOS, BarCodeScanner) {
+      controller($scope, DEBUG, Schema, $timeout, toastr, IOS, BarCodeScanner, $rootScope) {
+
+        const { BARCODE_SCAN_EVENT } = BarCodeScanner;
 
         const vm = _.assign(this, {
           $onInit() {
@@ -26,7 +28,7 @@
             if (vm.iosMode) {
               BarCodeScanner.bind(onScan);
               $scope.$watch(() => BarCodeScanner.state.status, status => {
-                console.warn('BarCodeScanner:', status);
+                // console.warn('BarCodeScanner:', status);
                 vm.isEnabled = (status === 'connected')
               });
             }
@@ -71,6 +73,7 @@
           }
 
           scanHandler({ $barcode: vm.barcode = { code, type } });
+          $rootScope.$broadcast(BARCODE_SCAN_EVENT, { code, type });
 
         }
 

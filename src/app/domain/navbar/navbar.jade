@@ -21,6 +21,11 @@ h2.root-navbar(ng-hide='vm.hide' ng-class='{disabled: vm.hideNavs}')
 
   account-menu(ng-if='vm.isHomeState')
 
+  barcode-scanner(
+  ng-if='vm.state.data.barcodeScanner'
+  required-type="vm.state.data.barcodeScanner.type"
+  )
+
   // TODO: add component config option to unhardcode domain content
   .sales-navs(ng-if='vm.isSalesState')
 
