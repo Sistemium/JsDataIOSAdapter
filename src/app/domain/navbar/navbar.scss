@@ -77,84 +77,9 @@
     margin-right: 8px;
   }
 
-  a.sub-root-nav {
-    @include responsive-only(xxs) {
-      //display: none;
-    }
+  @include responsive-only(xxs) {
   }
 
-}
-
-@media (min-width: 768px) {
-
-  .navbar {
-    form.only {
-      display: block;
-      width: 100%;
-
-      .form-group, .form-group .form-control {
-        display: block;
-        width: 100%;
-      }
-
-    }
-  }
-
-}
-
-@media (min-width: 768px) {
-  .navbar.navbar-fixed-bottom {
-    .float-right {
-      margin-right: 5px;
-    }
-  }
-}
-
-@media (max-width: 767px) {
-
-  .navbar.navbar-fixed-bottom {
-    .nav.float-right {
-      margin-right: -5px;
-    }
-  }
-
-  .navbar {
-
-    .navbar-header:after {
-      clear: none;
-    }
-
-    .nav.float-right {
-      float: right;
-      margin-top: 5px;
-      margin-bottom: 5px;
-      margin-right: -15px;
-    }
-
-    .float-left {
-      float: left;
-    }
-
-    .nav.float-left {
-      float: left;
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
-
-    li.divider {
-      height: 1px;
-      margin: 9px 0;
-      overflow: hidden;
-      background-color: #e5e5e5
-    }
-
-    form.only {
-      padding-top: 0;
-      padding-bottom: 0;
-      border: none;
-    }
-
-  }
 }
 
 .root-navbar + hr {
