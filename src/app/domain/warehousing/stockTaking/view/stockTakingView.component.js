@@ -28,7 +28,7 @@
 
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
-                                     toastr, moment) {
+                                     toastr, moment, BarCodeScanner) {
 
     const {
       ArticleBarCode,
@@ -40,6 +40,8 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
+    const { BARCODE_SCAN_EVENT } = BarCodeScanner;
+
     vm.use({
 
       BARCODE_TYPE: BarCodeType.meta.types.BARCODE_TYPE_ARTICLE,
@@ -49,6 +51,8 @@
         const { stockTakingId, itemId } = vm;
 
         setActiveTabIndex();
+
+        $scope.$on(BARCODE_SCAN_EVENT, (e, { code }) => vm.onScan({ code }));
 
         vm.watchScope('vm.activeTabIndex', idx => {
 
@@ -76,7 +80,6 @@
           });
 
         }
-
 
       },
 

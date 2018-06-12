@@ -7,6 +7,10 @@
 
   const LS_KEY = 'stockTaking.tab';
 
+  const barcodeScanner = {
+    type: 'Article'
+  };
+
   const stockTaking = {
 
     name: 'wh.stockTaking',
@@ -33,6 +37,7 @@
 
       data: {
 
+        barcodeScanner,
         rootState: 'wh.stockTaking',
 
         watch: {
@@ -84,6 +89,7 @@
 
       data: {
 
+        barcodeScanner,
         rootState: 'wh.stockTaking',
 
         initLocals(locals, { localStorageService }) {

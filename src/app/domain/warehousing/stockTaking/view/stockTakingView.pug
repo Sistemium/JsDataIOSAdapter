@@ -13,7 +13,6 @@
         span.hidden-xs &nbsp;инвентаризации
       strong {{ vm.stockTaking.date | dateTime }}
 
-  barcode-scanner(on-scan='vm.onScan($barcode)' required-type='vm.BARCODE_TYPE')
 
   .items
 
