@@ -65,7 +65,16 @@
       notify: false,
 
       meta: {
-        words
+        words,
+        commonName(items) {
+
+          const words = _.map(items, item => {
+            return _.words(item.name, /[a-zA-Zа-яА-ЯёЁ\/]{2,}/g);
+          });
+
+          return _.intersection.apply(this, words).join(' ');
+
+        },
       },
 
       computed: {
