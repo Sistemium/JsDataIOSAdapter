@@ -23,6 +23,7 @@
       // BarCodeType,
       // BarcodedArticle,
       StockTaking,
+      Warehouse,
       // StockTakingItem,
     } = Schema.models();
 
@@ -51,6 +52,7 @@
         vm.rebindAll(StockTaking, { orderBy }, 'vm.stockTakings');
         vm.setBusy([
           StockTaking.findAll(),
+          Warehouse.findAll(),
         ])
       },
 

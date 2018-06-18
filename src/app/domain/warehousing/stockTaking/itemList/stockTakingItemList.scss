@@ -11,7 +11,7 @@ stock-taking-item-list, stock-taking-item-stats {
     }
 
     &.active {
-      background: $gray-background-color;
+      background: $active-background-color;
       border-color: $gray-border-color;
       .volume strong {
         background: $white;

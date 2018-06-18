@@ -17,7 +17,7 @@
             // auth: 'SalesmanAuth'
           },
 
-          children: [stockBatching]
+          children: [stockBatching, warehouses]
 
         });
 
@@ -33,6 +33,19 @@
     },
 
     template: '<stock-batching></stock-batching>'
+
+  };
+
+  const warehouses = {
+
+    name: 'warehouses',
+    url: '/warehouses',
+
+    data: {
+      title: 'Склады',
+    },
+
+    template: '<warehouse-list></warehouse-list>'
 
   };
 

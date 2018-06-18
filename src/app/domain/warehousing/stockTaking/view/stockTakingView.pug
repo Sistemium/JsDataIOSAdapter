@@ -4,17 +4,29 @@
 
     .buttons
       confirmed-button(on-confirm="vm.deleteClick()" no-confirm="!vm.stockTakingId")
-        i.glyphicon.glyphicon-trash
-        cancel
-          i.glyphicon.glyphicon-lock
+        span Удалить
+        cancel Отмена
 
-    .field.date
-      label Начало
-        span.hidden-xs &nbsp;инвентаризации
-      strong {{ vm.stockTaking.date | dateTime }}
+    .fields
 
+      .field.date
+        label Начало
+          span.hidden-xs &nbsp;инвентаризации
+        strong {{ vm.stockTaking.date | dateTime }}
 
-  .items
+      .field.warehouse
+        label Склад
+        sab-dropdown(
+        ng-disabled="vm.stockTaking.id"
+        items-data-source-name="Warehouse"
+        ng-model="vm.stockTaking.warehouseId"
+        append-to-body="true"
+        )
+
+  .alert.alert-info(ng-if="!vm.stockTaking.id && vm.stockTaking.isValid()")
+    | Просканируйте товар, чтобы начать инвентаризацию
+
+  .items(ng-if="vm.stockTaking.id")
 
     ui-view.current-item(ng-if='vm.itemId')
 
@@ -34,4 +46,8 @@
         on-item-click="vm.itemClick($item)"
         active-id="vm.itemId"
         scroll="vm.itemStatsScrollTo"
+        )
+      uib-tab(index="0" heading="Остатки")
+        warehouse-stock(
+        warehouse-id='vm.stockTaking.warehouseId'
         )

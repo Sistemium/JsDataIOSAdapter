@@ -31,7 +31,7 @@
                                      toastr, moment, BarCodeScanner) {
 
     const {
-      ArticleBarCode,
+      Article,
       BarCodeType,
       // BarcodedArticle,
       StockTaking,
@@ -117,19 +117,30 @@
     function processBarcode(code) {
 
       const { stockTakingId, stockTaking } = vm;
+
+      if (!stockTaking.isValid()) {
+        return toastr.info('Выберите "Склад" прежде чем начать сканирование');
+      }
+
       let barcodedArticle = {};
       let created;
 
-      ArticleBarCode.findAllWithRelations({ code })('Article')
+      const where = {
+        barcode: {
+          likei: `%"${code}"%`,
+        },
+      };
+
+      Article.findAll({ where })
 
         .then(res => res.length && res || $q.reject(NOT_FOUND))
 
-        .then(res => {
-          const articles = _.map(res, 'article');
+        .then(articles => {
+          // const articles = _.map(res, 'article');
           const byPackageRel = _.groupBy(articles, 'packageRel');
           const barcodedArticles = _.map(byPackageRel, (items, rel) => ({
             packageRel: parseInt(rel),
-            name: ArticleBarCode.meta.commonName(items),
+            name: Article.meta.commonName(items),
           }));
           barcodedArticle = _.first(barcodedArticles);
         })

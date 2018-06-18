@@ -1,0 +1,16 @@
+.warehouse-list(cg-busy='vm.cgBusy')
+
+  .alert.alert-info(ng-if='!vm.warehouses.length') Нет доступных вам складов
+
+  .list-group.scroll-y(resize resize-offset-top='5')
+    a.list-group-item.warehouse(
+    ng-repeat="item in vm.warehouses track by item.id"
+    href ng-click="vm.itemClick(item)"
+    )
+      .name {{ item.name }}
+      currency-value.stock(
+      label="Остаток:"
+      hide-empty="true"
+      value="vm.stockStats[item.id]['sum(volume)']"
+      currency="б." decimals="0"
+      )

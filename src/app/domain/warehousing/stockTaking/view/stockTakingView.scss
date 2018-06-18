@@ -9,6 +9,10 @@ stock-taking-view {
 
     @extend %view;
 
+    label {
+      margin-bottom: 0;
+    }
+
     .unsaved {
       .volume strong {
         background: $state-warning-bg;
@@ -30,23 +34,28 @@ stock-taking-view {
 
       .field {
         justify-content: flex-start;
+        display: flex;
+        align-items: center;
+        > *:last-child {
+          flex: 1;
+        }
+
+        a {
+          background: $white;
+        }
       }
 
       @include responsive-only(gt-xxs) {
-        display: flex;
-        align-items: center;
-        margin-top: $margin-bottom-xs;
         .field {
-          margin-top: 3px;
+          margin: $margin-bottom-xs 0;
         }
       }
 
       .buttons {
-        order: 2;
-        @include responsive-only(xxs) {
+        //@include responsive-only(xxs) {
           text-align: right;
           float: right;
-        }
+        //}
       }
 
     }

@@ -30,6 +30,8 @@ $short-duration: 0.5s;
 $gray-background-color: #f5f5f5;
 $gray-border-color: #DDD;
 
+$active-background-color: lighten(desaturate($primary-color, 25%), 50%);
+
 $article-nav-menu-text-color: #555;
 
 $border-radius: 10px;
