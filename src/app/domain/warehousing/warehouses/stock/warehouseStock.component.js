@@ -20,17 +20,27 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    const { WarehouseStock } = Schema.model();
+    const { WarehouseStock, Article } = Schema.models();
 
     vm.use({
 
       $onInit() {
+
         const { warehouseId } = vm;
+        const where = {
+          'ANY stocks': {
+            warehouseId: { '==': warehouseId },
+          },
+        };
+
         WarehouseStock.findAll({ warehouseId });
+        Article.findAll({ where, limit: 5000 });
+
         vm.rebindAll(WarehouseStock, { warehouseId }, 'vm.stocks');
+
       },
 
-      stockTakingClick($item) {
+      itemClick($item) {
         vm.onClick({ $item });
       },
 

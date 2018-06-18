@@ -13,6 +13,10 @@
             localField: 'warehouse',
             localKey: 'warehouseId',
           },
+          Article: {
+            localField: 'article',
+            localKey: 'articleId',
+          },
         },
       },
 

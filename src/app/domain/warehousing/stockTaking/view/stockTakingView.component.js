@@ -42,6 +42,8 @@
 
     const { BARCODE_SCAN_EVENT } = BarCodeScanner;
 
+    const tabs = ['scans', 'stats', 'stocks'];
+
     vm.use({
 
       BARCODE_TYPE: BarCodeType.meta.types.BARCODE_TYPE_ARTICLE,
@@ -58,7 +60,7 @@
 
           if (!_.isNumber(idx)) return;
 
-          vm.tab = (idx === 1 ? 'stats' : 'log');
+          vm.tab = tabs[idx||0];
 
         });
 
@@ -111,7 +113,8 @@
      */
 
     function setActiveTabIndex() {
-      vm.activeTabIndex = vm.tab === 'stats' ? 1 : 0;
+      const idx = tabs.indexOf(vm.tab);
+      vm.activeTabIndex =  idx >= 0 ? idx : 0;
     }
 
     function processBarcode(code) {
