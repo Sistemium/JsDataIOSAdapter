@@ -24,6 +24,11 @@
           span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
           //span.volume
     .volume
+      i.status.glyphicon(
+      ng-class="stat.volume === stat.targetVolume ? 'green glyphicon-ok' : 'red glyphicon-alert'"
+      )
       strong.animate(
       sa-animate-on-change="item.volume" change-class="change-up"
-      ) {{ stat.volume | boxesBottles:{boxRel: stat.packageRel} }}
+      )
+        span {{ stat.volume | boxesBottles:{boxRel: stat.packageRel} }}
+        span &nbsp;из {{ stat.targetVolume | boxesBottles:{boxRel: stat.packageRel} }}

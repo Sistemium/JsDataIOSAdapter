@@ -28,7 +28,7 @@
 
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
-                                     toastr, moment, BarCodeScanner) {
+                                     toastr, moment, BarCodeScanner, StockTakingData) {
 
     const {
       Article,
@@ -73,6 +73,7 @@
               if (itemId) {
                 vm.stockTakingItem = StockTakingItem.get(itemId);
               }
+              return StockTakingData({ stockTakingId }).promise;
             });
 
           return vm.setBusy(busy);

@@ -11,8 +11,14 @@ stock-taking-item-stats {
       &.active {
         background: $primary-color;
       }
+
     }
 
+
+  }
+
+  .volume .status {
+    margin-right: $margin-bottom-xs;
   }
 
 }

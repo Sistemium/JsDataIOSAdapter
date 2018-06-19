@@ -18,7 +18,7 @@
 
 
   function StockTakingItemStatsController($scope, saControllerHelper, $anchorScroll, $timeout,
-                                          Schema) {
+                                          Schema, StockTakingData) {
 
     const { StockTakingItem, Article } = Schema.models();
 
@@ -54,6 +54,8 @@
 
     function setStatsData() {
 
+      const stockTakingData = StockTakingData(vm.filter);
+
       let data = _.groupBy(vm.stockTakingItems, 'articleId');
 
       data = _.map(data, (items, articleId) => {
@@ -64,6 +66,7 @@
           items,
           volume: _.sumBy(items, 'volume'),
           packageRel: _.get(_.maxBy(items, 'packageRel'), 'packageRel'),
+          targetVolume: _.get(stockTakingData.stockByArticle(articleId), 'volume') || 0,
         };
 
         if (!res.article) {
