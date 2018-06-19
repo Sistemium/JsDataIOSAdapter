@@ -12,8 +12,10 @@
 
       let { warehouseId, stockTakingId } = filter;
 
-      if (!warehouseId) {
-        warehouseId = StockTaking.get(stockTakingId).warehouseId;
+      const stockTaking = stockTakingId && StockTaking.get(stockTakingId);
+
+      if (!warehouseId && stockTaking) {
+        warehouseId = stockTaking.warehouseId;
       }
 
       if (!warehouseId) {
@@ -22,7 +24,11 @@
 
       const cache = caches[warehouseId] || setupCache(warehouseId);
 
-      return { stockByArticle, promise: promise() };
+      return {
+        stockTaking: () => stockTaking,
+        stockByArticle,
+        promise: promise(),
+      };
 
       /*
        Functions
@@ -36,9 +42,7 @@
 
       function promise() {
         return $q.when(cache)
-          .then(cached => {
-            caches[warehouseId] = cached;
-          });
+          .then(cached => caches[warehouseId] = cached);
       }
 
     };
@@ -51,10 +55,10 @@
 
       const cache = {};
 
-      return WarehouseStock.findAll({ warehouseId })
-        .then(stock => _.assign(cache, {
-          stock,
-          articleIndex: _.keyBy(stock, 'articleId'),
+      return WarehouseStock.meta.stockByWarehouseId(warehouseId)
+        .then(stocks => _.assign(cache, {
+          stocks,
+          articleIndex: _.keyBy(stocks, 'articleId'),
         }));
 
     }

@@ -7,9 +7,19 @@
   )
     .article {{ item.article.name }}
 
-    currency-value.volume(
-    label="Остаток:"
-    hide-empty="true"
-    value="item.volume"
-    currency="б." decimals="0"
-    )
+    .stats
+
+      currency-value.volume(
+      label="Остаток:"
+      hide-empty="true"
+      value="item.volume"
+      currency="б." decimals="0"
+      )
+
+      currency-value.found-volume(
+      label="Найдено:"
+      hide-empty="true"
+      value="item.foundVolume"
+      currency="б." decimals="0"
+      )
+

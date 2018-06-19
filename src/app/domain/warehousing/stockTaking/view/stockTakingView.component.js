@@ -74,6 +74,12 @@
                 vm.stockTakingItem = StockTakingItem.get(itemId);
               }
               return StockTakingData({ stockTakingId }).promise;
+            })
+            .then(stockTakingData => {
+              $scope.$watch(() => StockTakingItem.lastModified(), () => {
+                makeStocks(stockTakingData);
+              });
+              makeStocks(stockTakingData);
             });
 
           return vm.setBusy(busy);
@@ -118,6 +124,30 @@
     function setActiveTabIndex() {
       const idx = tabs.indexOf(vm.tab);
       vm.activeTabIndex = idx >= 0 ? idx : 0;
+    }
+
+    function makeStocks(stockTakingData) {
+
+      let { stocks } = stockTakingData;
+
+      const stockTaking = StockTaking.get(vm.stockTakingId);
+
+      const fields = ['id', 'article', 'articleId', 'volume'];
+      const itemsByArticleId = _.groupBy(stockTaking.items, 'articleId');
+
+      stocks = _.map(stocks, stock => {
+        const res = _.pick(stock, fields);
+        const foundVolume = _.sumBy(itemsByArticleId[stock.articleId], 'volume') || 0;
+        return _.assign(res, {
+          foundVolume,
+          volumeRemains: stock.volume - foundVolume,
+        });
+      });
+
+      stocks = _.filter(stocks, 'volumeRemains');
+
+      vm.stocks = _.orderBy(stocks, 'article.name');
+
     }
 
     function processBarcode(code) {

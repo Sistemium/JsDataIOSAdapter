@@ -38,7 +38,7 @@
 
       return Article.findAll({ where, limit: 5000 })
         .then(() => {
-          return WarehouseStock.findAll({ warehouseId });
+          return WarehouseStock.findAll({ warehouseId }, { bypassCache: true });
         });
 
     }

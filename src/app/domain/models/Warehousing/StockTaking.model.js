@@ -16,7 +16,13 @@
             localField: 'warehouse',
             localKey: 'warehouseId',
           },
-        }
+        },
+        hasMany: {
+          StockTakingItem: {
+            localField: 'items',
+            foreignKey: 'stockTakingId',
+          },
+        },
       },
 
       methods: {
