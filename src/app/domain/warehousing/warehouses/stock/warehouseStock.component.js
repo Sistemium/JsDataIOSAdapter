@@ -34,12 +34,13 @@
         };
         const orderBy = [['article.name']];
 
-        WarehouseStock.findAll({ warehouseId });
-        Article.findAll({ where, limit: 5000 })
+        const busy = Article.findAll({ where, limit: 5000 })
           .then(() => {
             vm.rebindAll(WarehouseStock, { warehouseId, orderBy }, 'vm.stocks');
+            return WarehouseStock.findAll({ warehouseId });
           });
 
+        vm.setBusy(busy);
 
       },
 

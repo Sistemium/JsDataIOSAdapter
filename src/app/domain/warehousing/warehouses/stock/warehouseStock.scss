@@ -1,5 +1,26 @@
 @import "variables";
 
 warehouse-stock {
+
   display: block;
+
+  a.list-group-item {
+
+    display: flex;
+    flex-direction: column;
+
+    .article {
+      flex: 1;
+    }
+
+    .volume {
+      text-align: right;
+    }
+
+    label, .currency {
+      color: $light-gray;
+    }
+
+  }
+
 }

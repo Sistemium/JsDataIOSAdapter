@@ -7,7 +7,7 @@
 
     .title
       a.name(href ng-click="vm.expandItemId=stat.id")
-        span {{ ::stat.articleName }}
+        span {{ stat.article.name }}
       .barcode
         span {{ stat.items.length | positionsCount }}
         //span {{ stat.timestamp | dateTime:{seconds: true, date: false} }}

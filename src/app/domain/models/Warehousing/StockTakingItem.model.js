@@ -11,8 +11,12 @@
       relations: {
         belongsTo: {
           StockTaking: {
-            localKey: 'stockTakingId',
             localField: 'stockTaking',
+            localKey: 'stockTakingId',
+          },
+          Article: {
+            localField: 'article',
+            localKey: 'articleId',
           }
         }
       },

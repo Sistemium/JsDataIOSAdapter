@@ -1,8 +1,15 @@
 .warehouse-stock.list-group
+
   a.list-group-item(
   href
   ng-repeat='item in vm.stocks track by item.id'
   ng-click="vm.itemClick(item)"
   )
-    .warehouse {{ item.article.name }}
-    .volume {{ item.volume | number:0 }}
+    .article {{ item.article.name }}
+
+    currency-value.volume(
+    label="Остаток:"
+    hide-empty="true"
+    value="item.volume"
+    currency="б." decimals="0"
+    )

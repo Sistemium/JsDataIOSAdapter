@@ -20,7 +20,7 @@
   function StockTakingItemStatsController($scope, saControllerHelper, $anchorScroll, $timeout,
                                           Schema) {
 
-    const { StockTakingItem } = Schema.models();
+    const { StockTakingItem, Article } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -37,7 +37,7 @@
 
       scroll(item) {
         $timeout(250).then(() => {
-          $anchorScroll(vm.statAnchorId(item.name));
+          $anchorScroll(vm.statAnchorId(item.articleId));
         });
       },
 
@@ -49,22 +49,33 @@
 
     function setExpanded() {
       const { activeId, expandItemId } = vm;
-      vm.expandItemId = activeId && _.get(StockTakingItem.get(activeId), 'name') || expandItemId;
+      vm.expandItemId = activeId && _.get(StockTakingItem.get(activeId), 'articleId') || expandItemId;
     }
 
     function setStatsData() {
 
-      let data = _.groupBy(vm.stockTakingItems, 'name');
+      let data = _.groupBy(vm.stockTakingItems, 'articleId');
 
-      data = _.map(data, (items, articleName) => ({
-        id: articleName,
-        articleName,
-        items,
-        volume: _.sumBy(items, 'volume'),
-        packageRel: _.get(_.maxBy(items, 'packageRel'), 'packageRel'),
-      }));
+      data = _.map(data, (items, articleId) => {
 
-      vm.data = _.orderBy(data, 'articleName');
+        const res = {
+          id: articleId,
+          article: Article.get(articleId),
+          items,
+          volume: _.sumBy(items, 'volume'),
+          packageRel: _.get(_.maxBy(items, 'packageRel'), 'packageRel'),
+        };
+
+        if (!res.article) {
+          Article.find(articleId)
+            .then(article => res.article = article);
+        }
+
+        return res;
+
+      });
+
+      vm.data = _.orderBy(data, 'article.name');
 
       setExpanded();
 

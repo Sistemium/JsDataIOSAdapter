@@ -1,4 +1,4 @@
-.stock-taking-view
+.stock-taking-view(cg-busy='vm.cgBusy')
 
   .details
 
@@ -26,7 +26,7 @@
   .alert.alert-info(ng-if="!vm.stockTaking.id && vm.stockTaking.isValid()")
     | Просканируйте товар, чтобы начать инвентаризацию
 
-  .items(ng-if="vm.stockTaking.id")
+  .items(ng-if="vm.stockTaking.id && !vm.busy")
 
     ui-view.current-item(ng-if='vm.itemId')
 

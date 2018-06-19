@@ -8,7 +8,7 @@
 
     .title
       a.name(href ng-click="vm.itemClick(item)")
-        span {{ ::item.name }}
+        span {{ ::item.article.name }}
       .barcode
         span {{ ::item.barcode }}
         span {{ item.timestamp | dateTime:{seconds: true, date: false} }}

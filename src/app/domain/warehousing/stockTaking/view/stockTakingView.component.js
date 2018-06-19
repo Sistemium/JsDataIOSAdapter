@@ -60,7 +60,7 @@
 
           if (!_.isNumber(idx)) return;
 
-          vm.tab = tabs[idx||0];
+          vm.tab = tabs[idx || 0];
 
         });
 
@@ -68,12 +68,14 @@
 
           vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
 
-          return StockTakingItem.findAll({ stockTakingId })
+          const busy = StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
             .then(() => {
               if (itemId) {
                 vm.stockTakingItem = StockTakingItem.get(itemId);
               }
-            })
+            });
+
+          return vm.setBusy(busy);
 
         } else {
 
@@ -114,7 +116,7 @@
 
     function setActiveTabIndex() {
       const idx = tabs.indexOf(vm.tab);
-      vm.activeTabIndex =  idx >= 0 ? idx : 0;
+      vm.activeTabIndex = idx >= 0 ? idx : 0;
     }
 
     function processBarcode(code) {
@@ -139,13 +141,14 @@
         .then(res => res.length && res || $q.reject(NOT_FOUND))
 
         .then(articles => {
-          // const articles = _.map(res, 'article');
-          const byPackageRel = _.groupBy(articles, 'packageRel');
-          const barcodedArticles = _.map(byPackageRel, (items, rel) => ({
-            packageRel: parseInt(rel),
-            name: Article.meta.commonName(items),
-          }));
-          barcodedArticle = _.first(barcodedArticles);
+          if (articles.length > 1) {
+            return new Error(`Больше одного товара со штрих-кодом: [${code}]`);
+          }
+          return _.first(articles);
+        })
+
+        .then(article => {
+          barcodedArticle = { articleId: article.id, packageRel: article.packageRel };
         })
 
         .then(() => !stockTakingId && StockTaking.create(stockTaking)
