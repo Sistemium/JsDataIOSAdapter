@@ -8,7 +8,7 @@
 
       name: 'StockTaking',
 
-      adapter: 'localStorage',
+      // adapter: 'localStorage',
 
       relations: {
         belongsTo: {
@@ -43,7 +43,7 @@
 
     function refreshStats() {
       const { StockTakingItem } = Schema.models();
-      StockTakingItem.groupBy(['stockTakingId'])
+      StockTakingItem.groupBy({}, ['stockTakingId'])
         .then(res => stockTakingItemStats = res)
       // .then(res => console.warn('StockTaking refreshStats', res))
       ;

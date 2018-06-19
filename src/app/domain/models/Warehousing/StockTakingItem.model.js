@@ -6,7 +6,7 @@
 
       name: 'StockTakingItem',
 
-      adapter: 'localStorage',
+      // adapter: 'localStorage',
 
       relations: {
         belongsTo: {
