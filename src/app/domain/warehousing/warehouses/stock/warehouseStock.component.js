@@ -4,6 +4,7 @@
     .component('warehouseStock', {
 
       bindings: {
+        stocks: '=?',
         warehouseId: '<',
         onClick: '&onClick',
       },
@@ -20,27 +21,15 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    const { WarehouseStock, Article } = Schema.models();
+    const { WarehouseStock } = Schema.models();
 
     vm.use({
 
       $onInit() {
 
-        const { warehouseId } = vm;
-        const where = {
-          'ANY stocks': {
-            warehouseId: { '==': warehouseId },
-          },
-        };
-        const orderBy = [['article.name']];
-
-        const busy = Article.findAll({ where, limit: 5000 })
-          .then(() => {
-            vm.rebindAll(WarehouseStock, { warehouseId, orderBy }, 'vm.stocks');
-            return WarehouseStock.findAll({ warehouseId });
-          });
-
-        vm.setBusy(busy);
+        if (!vm.stocks && vm.warehouseId) {
+          vm.setBusy(refresh(vm.warehouseId));
+        }
 
       },
 
@@ -49,6 +38,16 @@
       },
 
     });
+
+    function refresh(warehouseId) {
+
+      return WarehouseStock.meta.stockByWarehouseId(warehouseId)
+        .then(() => {
+          const orderBy = [['article.name']];
+          vm.rebindAll(WarehouseStock, { warehouseId, orderBy }, 'vm.stocks');
+        });
+
+    }
 
   }
 

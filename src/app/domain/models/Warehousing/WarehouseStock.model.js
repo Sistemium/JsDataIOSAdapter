@@ -20,7 +20,28 @@
         },
       },
 
+      meta: {
+        stockByWarehouseId
+      }
+
     });
+
+    function stockByWarehouseId(warehouseId) {
+
+      const { Article, WarehouseStock } = Schema.models();
+
+      const where = {
+        'ANY stocks': {
+          warehouseId: { '==': warehouseId },
+        },
+      };
+
+      return Article.findAll({ where, limit: 5000 })
+        .then(() => {
+          return WarehouseStock.findAll({ warehouseId });
+        });
+
+    }
 
   });
 
