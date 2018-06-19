@@ -32,11 +32,14 @@
             warehouseId: { '==': warehouseId },
           },
         };
+        const orderBy = [['article.name']];
 
         WarehouseStock.findAll({ warehouseId });
-        Article.findAll({ where, limit: 5000 });
+        Article.findAll({ where, limit: 5000 })
+          .then(() => {
+            vm.rebindAll(WarehouseStock, { warehouseId, orderBy }, 'vm.stocks');
+          });
 
-        vm.rebindAll(WarehouseStock, { warehouseId }, 'vm.stocks');
 
       },
 
