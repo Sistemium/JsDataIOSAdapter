@@ -56,7 +56,7 @@
       // console.log('Auth', authorization);
 
       let org = _.get(authorization, 'account.org');
-      let isTestOrg = /^(dev|dr50p?)$/.test(org);
+      let isTestOrg = /^(dev|dr50p?|ae)$/.test(org);
 
       let appConfig =
         // InitService.localDevMode ? {} :
