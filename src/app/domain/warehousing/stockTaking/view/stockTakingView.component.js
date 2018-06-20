@@ -28,7 +28,8 @@
 
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
-                                     toastr, moment, BarCodeScanner, StockTakingData) {
+                                     toastr, moment, BarCodeScanner, StockTakingData,
+                                     SoundSynth, Language) {
 
     const {
       Article,
@@ -203,6 +204,7 @@
         })))
 
         .then(stockTakingItem => {
+          speakSuccess(stockTakingItem);
           vm.itemClick(stockTakingItem);
           scrollTo(stockTakingItem);
           if (created) {
@@ -213,6 +215,7 @@
         .catch(e => {
           if (e === NOT_FOUND) {
             toastr.error(code, 'Неизвестный штрих-код');
+            speakNotFound();
           } else {
             toastr.error(angular.toJson(e), 'Ошибка');
           }
@@ -227,6 +230,16 @@
         case 1:
           return vm.itemStatsScrollTo(item);
       }
+    }
+
+    function speakSuccess(stockTakingItem) {
+      const { volume, article } = stockTakingItem;
+      const say = Language.speakableBoxPcs(article.boxPcs(volume, true));
+      SoundSynth.say(`${volume === 1 ? article.firstName : ''} ${say}`);
+    }
+
+    function speakNotFound() {
+      SoundSynth.say(`Неизвестный штрих-код`);
     }
 
   }
