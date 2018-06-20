@@ -31,4 +31,5 @@
       sa-animate-on-change="item.volume" change-class="change-up"
       )
         span {{ stat.volume | boxesBottles:{boxRel: stat.packageRel} }}
-        span &nbsp;из {{ stat.targetVolume | boxesBottles:{boxRel: stat.packageRel} }}
+        span(ng-if='stat.targetVolume')
+          | &nbsp;из {{ stat.targetVolume | boxesBottles:{boxRel: stat.packageRel} }}
