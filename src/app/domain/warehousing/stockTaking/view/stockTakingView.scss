@@ -33,16 +33,31 @@ stock-taking-view {
       }
 
       .field {
-        justify-content: flex-start;
+
         display: flex;
         align-items: center;
+        justify-content: flex-start;
+
         > *:last-child {
           flex: 1;
+          text-align: left;
         }
 
         a {
           background: $white;
         }
+
+        @include responsive-only(xxs) {
+          label {
+            display: none;
+          }
+          //flex-direction: column;
+          //align-items: stretch;
+          //justify-content: stretch;
+          //
+          margin-bottom: $margin-bottom-xs/2;
+        }
+
       }
 
       @include responsive-only(gt-xxs) {
@@ -53,8 +68,8 @@ stock-taking-view {
 
       .buttons {
         //@include responsive-only(xxs) {
-          text-align: right;
-          float: right;
+        text-align: right;
+        float: right;
         //}
       }
 
@@ -99,15 +114,14 @@ stock-taking-view {
 
       }
 
-      @include responsive-only(gt-xxs) {
-        .tab-pane {
-          > * > .list-group > .list-group-item:first-child {
-            border-top-right-radius: 0;
-            border-top-left-radius: 0;
-            margin-top: -1px;
-          }
+      .tab-pane {
+        > * > .list-group > .list-group-item:first-child {
+          border-top-right-radius: 0;
+          border-top-left-radius: 0;
+          margin-top: -1px;
         }
       }
+
     }
 
     a.delete {

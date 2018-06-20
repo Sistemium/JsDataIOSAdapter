@@ -25,16 +25,18 @@ stock-taking {
   }
 
   @include responsive-only(xxs) {
-    .stock-taking-item-list > .list-group-item {
-      border-left: none;
-      border-right: none;
-      border-radius: 0 !important;
-      padding-left: 0;
-      padding-right: 0;
+    .stock-taking-item-list, .warehouse-stock {
+      > .list-group-item {
+        border-left: none;
+        border-right: none;
+        border-radius: 0 !important;
+        padding-left: 0;
+        padding-right: 0;
+      }
     }
   }
 
-  @include responsive-only(xs) {
+  @include responsive-only(lt-sm) {
     .nav-justified > .active, .nav-tabs.nav-justified > .active {
       a {
         border-bottom-color: $white;
