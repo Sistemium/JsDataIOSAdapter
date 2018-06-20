@@ -7,6 +7,7 @@
     const SALES_ROLES = ['salesman', 'supervisor'];
     const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
     const PICKING_ROLES = ['picker'];
+    const STOCK_TAKING_ROLES = ['stockTaking'];
     const ADMIN_ROLES = ['admin', 'tester'];
     const OUTLET_ROLES = _.union(['outlet'], SALES_ROLES);
     const CATALOGUE_ROLES = _.union(MARKETING_ROLES, SALES_ROLES, OUTLET_ROLES);
@@ -24,10 +25,13 @@
       state: 'wh.stockBatching',
       needRoles: PICKING_ROLES
     }, {
+      title: 'Склады',
+      state: 'wh.warehouses',
+      needRoles: STOCK_TAKING_ROLES
+    }, {
       title: 'Инвентаризация',
       state: 'wh.stockTaking',
-      // TODO: separate role
-      needRoles: PICKING_ROLES
+      needRoles: STOCK_TAKING_ROLES
     }, {
       title: 'Каталог',
       state: 'sales.catalogue',
