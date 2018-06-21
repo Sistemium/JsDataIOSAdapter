@@ -3,7 +3,7 @@
   angular.module('Warehousing')
     .service('StockTakingData', StockTakingData);
 
-  function StockTakingData(Schema, $q) {
+  function StockTakingData(Schema, $q, DEBUG) {
 
     const caches = {};
     const { WarehouseStock, StockTaking } = Schema.models();
@@ -28,11 +28,17 @@
         stockTaking: () => stockTaking,
         stockByArticle,
         promise: promise(),
+        clearCache,
       };
 
       /*
        Functions
        */
+
+      function clearCache() {
+        DEBUG('StockTakingData clearCache', warehouseId);
+        delete caches[warehouseId];
+      }
 
       function stockByArticle(articleId) {
 

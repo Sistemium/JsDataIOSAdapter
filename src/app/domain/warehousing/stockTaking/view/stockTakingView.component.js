@@ -73,7 +73,7 @@
 
           vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
 
-          const busy = StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
+          const busy = StockTakingItem.findAll({ stockTakingId }, { bypassCache: true })
             .then(() => {
               if (itemId) {
                 vm.stockTakingItem = StockTakingItem.get(itemId);
@@ -85,6 +85,10 @@
                 makeStocks(stockTakingData);
               });
               makeStocks(stockTakingData);
+              $scope.$on('$destroy', () => StockTakingData({ stockTakingId }).clearCache());
+            })
+            .then(() => {
+              return StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
             });
 
           return vm.setBusy(busy);
@@ -206,7 +210,7 @@
           }, barcodedArticle))
 
         .then(stockTakingItem => StockTakingItem.create(_.assign(stockTakingItem, {
-          timestamp: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
+          timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
         })))
 
         .then(stockTakingItem => {
