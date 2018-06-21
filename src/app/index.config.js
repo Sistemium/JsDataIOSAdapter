@@ -33,7 +33,7 @@
   /** @ngInject */
   function run($rootScope, Sockets, InitService, Auth, Picker, DEBUG, saApp, $state, phaService,
                IOS, PickerAuth, localStorageService, $injector,
-               appcache) {
+               appcache, Schema) {
 
     let lastState = localStorageService.get('lastState');
 
@@ -111,7 +111,7 @@
           })
         ));
 
-        Sockets.emit('authorization', {accessToken: accessToken}, ack => {
+        Sockets.emit('authorization', { accessToken: accessToken }, ack => {
 
           DEBUG('Socket authorization:', ack);
 
@@ -130,7 +130,44 @@
           //   lastState = false;
           // }
 
+          if (IOS.isIos()) {
+            Sockets.jsDataSubscribe(['RecordStatus']);
+          }
+
+          Sockets.onJsData('jsData:destroy', onJSDataDestroy);
+          Sockets.onJsData('jsData:update', onJSData);
+
         });
+
+        function onJSDataDestroy(event) {
+
+          DEBUG('onJSDataDestroy', event);
+
+          let id = _.get(event, 'data.id');
+
+          if (!id) return;
+
+          let model = Schema.model(event.resource);
+
+          if (!model) return;
+
+          model.eject(id);
+
+        }
+
+        function onJSData(event) {
+
+          if (event.resource !== 'RecordStatus') return;
+
+          try {
+            let { name, objectXid } = event.data;
+            Schema.model(name)
+              .eject(objectXid);
+          } catch (e) {
+            console.warn('onJSData error:', e);
+          }
+
+        }
 
       }
 
