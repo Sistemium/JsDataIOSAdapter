@@ -34,7 +34,7 @@
     ui-view.current-item(ng-if='vm.itemId')
 
     uib-tabset(active="vm.activeTabIndex" justified="true")
-      uib-tab(index="0" heading="Сканирование")
+      uib-tab(index="0" heading="Сканы")
         stock-taking-item-list.scroll-y(
         resize resize-offset-top="10"
         filter="{stockTakingId: vm.stockTakingId}"
@@ -50,7 +50,7 @@
         active-id="vm.itemId"
         scroll="vm.itemStatsScrollTo"
         )
-      uib-tab(index="2" heading="Остатки")
+      uib-tab(index="2" heading="Остатки ({{ vm.stocks.length }})")
         warehouse-stock.scroll-y(
         resize resize-offset-top="10"
         stocks="vm.stocks"

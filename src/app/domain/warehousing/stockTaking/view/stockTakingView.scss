@@ -5,6 +5,10 @@ stock-taking-view {
 
   $right-panel-width: 320px;
 
+  .nav-tabs .nav-item > a {
+    white-space: nowrap;
+  }
+
   .stock-taking-view {
 
     @extend %view;
