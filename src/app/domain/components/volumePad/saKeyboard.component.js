@@ -52,14 +52,14 @@
 
     function setButtons() {
 
-      vm.boxRel = vm.boxRel && parseInt(vm.boxRel) || 0;
+      let rel = vm.boxRel && parseInt(vm.boxRel) || 0;
 
       vm.buttons = [
         [{ label: '7' }, { label: '8' }, { label: '9' }],
         [{ label: '4' }, { label: '5' }, { label: '6' }],
         [{ label: '1' }, { label: '2' }, { label: '3' }],
         [
-          { label: vm.boxRel ? 'К' : (vm.boxRel || ''), rel: true },
+          { label: rel ? 'К' : vm.boxRel || '', rel },
           { label: '0', },
           { i: 'glyphicon glyphicon-remove', remove: true }
         ]
