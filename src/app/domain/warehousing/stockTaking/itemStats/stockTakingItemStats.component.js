@@ -67,6 +67,7 @@
           volume: _.sumBy(items, 'volume'),
           packageRel: _.get(_.maxBy(items, 'packageRel'), 'packageRel'),
           targetVolume: _.get(stockTakingData.stockByArticle(articleId), 'volume') || 0,
+          timestamp: _.get(_.maxBy(items, 'timestamp'), 'timestamp'),
         };
 
         if (!res.article) {
@@ -78,7 +79,7 @@
 
       });
 
-      vm.data = _.orderBy(data, 'article.name');
+      vm.data = _.orderBy(data, ['timestamp'], ['desc']);
 
       setExpanded();
 

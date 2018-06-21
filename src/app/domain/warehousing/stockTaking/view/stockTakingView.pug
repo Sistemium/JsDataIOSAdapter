@@ -4,7 +4,7 @@
 
     .buttons
       confirmed-button(on-confirm="vm.deleteClick()" no-confirm="!vm.stockTakingId")
-        span Удалить
+        span {{ vm.stockTakingId ? 'Удалить' : 'Отмена' }}
         cancel Отмена
 
     .fields
@@ -24,7 +24,10 @@
         )
 
   .alert.alert-info(ng-if="!vm.stockTaking.id && vm.stockTaking.isValid()")
-    | Просканируйте товар, чтобы начать инвентаризацию
+    p(ng-if="vm.stocksTs") Остатки обновлены:
+      strong &nbsp;{{ vm.stocksTs | dateTime }}
+    hr
+    p Просканируйте товар, чтобы начать инвентаризацию
 
   .items(ng-if="vm.stockTakingId && !vm.busy")
 

@@ -29,12 +29,12 @@
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
                                      toastr, moment, BarCodeScanner, StockTakingData,
-                                     SoundSynth, Language) {
+                                     SoundSynth, Language, Sockets, DEBUG) {
 
     const {
       Article,
       BarCodeType,
-      // BarcodedArticle,
+      WarehouseStock,
       StockTaking,
       StockTakingItem,
     } = Schema.models();
@@ -65,6 +65,10 @@
 
         });
 
+        $scope.$on('$destroy', Sockets.jsDataSubscribe(['StockTakingItem', 'Stock']));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+        $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
+
         if (stockTakingId) {
 
           vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
@@ -90,6 +94,8 @@
           vm.stockTaking = StockTaking.createInstance({
             date: new Date(),
           });
+
+          vm.watchScope('vm.stockTaking.warehouseId', onStockUpdate);
 
         }
 
@@ -240,6 +246,62 @@
 
     function speakNotFound() {
       SoundSynth.say(`Неизвестный штрих-код`);
+    }
+
+    function onJSDataCollection(event) {
+
+      DEBUG('stockTakingView onJSDataCollection', event);
+
+      switch (event.resource) {
+        // case 'StockTakingItem':
+        //   return onJSDataInject(event);
+        case 'Stock':
+          return onStockUpdate(event);
+      }
+
+    }
+
+    const debounceStockUpdate = _.debounce(onStockUpdate, 500);
+
+    function onJSData(event) {
+
+      // console.warn(event);
+
+      switch (event.resource) {
+        case 'StockTakingItem':
+          return onJSDataInject(event);
+        case 'Stock':
+          return debounceStockUpdate(event);
+      }
+
+    }
+
+    function onStockUpdate() {
+
+      DEBUG('stockTakingView onStockUpdate', event);
+
+      const { warehouseId } = vm.stockTaking;
+
+      if (!warehouseId) {
+        return;
+      }
+
+      WarehouseStock.groupBy({ warehouseId }, ['warehouseId'])
+        .then(_.first)
+        .then(res => {
+          vm.stocksTs = res ? (res['max(ts)'] || res['max(lts)']) : null;
+        });
+
+    }
+
+    function onJSDataInject({ resource, data }) {
+      let model = Schema.model(resource);
+
+      if (data.name) {
+        model.inject(data);
+      } else {
+        model.find(data.id, { bypassCache: true });
+      }
     }
 
   }
