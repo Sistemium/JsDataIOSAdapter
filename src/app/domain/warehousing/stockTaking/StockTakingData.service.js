@@ -27,18 +27,12 @@
       return {
         stockTaking: () => stockTaking,
         stockByArticle,
-        promise: promise(),
-        clearCache,
+        promise: promise()
       };
 
       /*
        Functions
        */
-
-      function clearCache() {
-        DEBUG('StockTakingData clearCache', warehouseId);
-        delete caches[warehouseId];
-      }
 
       function stockByArticle(articleId) {
 
@@ -61,11 +55,19 @@
 
       const cache = {};
 
+      DEBUG('StockTakingData setupCache', warehouseId);
+
       return WarehouseStock.meta.stockByWarehouseId(warehouseId)
         .then(stocks => _.assign(cache, {
+          clearCache,
           stocks,
           articleIndex: _.keyBy(stocks, 'articleId'),
         }));
+
+      function clearCache() {
+        DEBUG('StockTakingData clearCache', warehouseId);
+        delete caches[warehouseId];
+      }
 
     }
 

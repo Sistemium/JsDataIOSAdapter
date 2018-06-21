@@ -85,7 +85,7 @@
                 makeStocks(stockTakingData);
               });
               makeStocks(stockTakingData);
-              $scope.$on('$destroy', () => StockTakingData({ stockTakingId }).clearCache());
+              $scope.$on('$destroy', () => stockTakingData.clearCache());
             })
             .then(() => {
               return StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
