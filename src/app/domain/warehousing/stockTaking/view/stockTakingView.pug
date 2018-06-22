@@ -6,7 +6,10 @@
       confirmed-button(on-confirm="vm.deleteClick()" no-confirm="!vm.stockTakingId")
         span {{ vm.stockTakingId ? 'Удалить' : 'Отмена' }}
         cancel Отмена
-      a(href ng-click='vm.exportClick()') Выгрузить
+      a(
+      ng-if="vm.exportable"
+      href ng-click="vm.exportClick()"
+      ) Выгрузить
 
     .fields
 

@@ -30,7 +30,7 @@
       const { Article, WarehouseStock } = Schema.models();
 
       const where = {
-        'ANY stocks': {
+        'ANY warehouseStocks': {
           warehouseId: { '==': warehouseId },
         },
       };

@@ -29,7 +29,8 @@
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
                                      toastr, moment, BarCodeScanner, StockTakingData,
-                                     SoundSynth, Language, Sockets, DEBUG, StockTakingExport) {
+                                     SoundSynth, Language, Sockets, DEBUG, StockTakingExport,
+                                     IOS) {
 
     const {
       Article,
@@ -104,6 +105,8 @@
         }
 
       },
+
+      exportable: !IOS.isIos(),
 
       itemClick(stockTakingItem) {
         _.assign(vm, { stockTakingItem, itemId: stockTakingItem.id });
