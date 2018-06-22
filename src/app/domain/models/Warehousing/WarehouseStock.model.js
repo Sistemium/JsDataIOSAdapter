@@ -5,7 +5,6 @@
     Schema.register({
 
       name: 'WarehouseStock',
-      endpoint: 'Stock',
 
       relations: {
         belongsTo: {

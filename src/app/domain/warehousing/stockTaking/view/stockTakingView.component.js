@@ -65,7 +65,7 @@
 
         });
 
-        $scope.$on('$destroy', Sockets.jsDataSubscribe(['StockTakingItem', 'Stock']));
+        $scope.$on('$destroy', Sockets.jsDataSubscribe(['StockTakingItem', 'WarehouseStock']));
         $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
         $scope.$on('$destroy', Sockets.onJsData('jsData:updateCollection', onJSDataCollection));
 
@@ -259,7 +259,7 @@
       switch (event.resource) {
         // case 'StockTakingItem':
         //   return onJSDataInject(event);
-        case 'Stock':
+        case 'WarehouseStock':
           return onStockUpdate(event);
       }
 
@@ -274,7 +274,7 @@
       switch (event.resource) {
         case 'StockTakingItem':
           return onJSDataInject(event);
-        case 'Stock':
+        case 'WarehouseStock':
           return debounceStockUpdate(event);
       }
 
