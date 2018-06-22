@@ -29,7 +29,7 @@
   /** @ngInject */
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
                                      toastr, moment, BarCodeScanner, StockTakingData,
-                                     SoundSynth, Language, Sockets, DEBUG) {
+                                     SoundSynth, Language, Sockets, DEBUG, StockTakingExport) {
 
     const {
       Article,
@@ -126,6 +126,13 @@
       itemStatsScrollTo() {
       },
 
+      exportClick() {
+        StockTakingExport.asExcel({
+          stockTaking: vm.stockTaking,
+          stocks: vm.stockTakingData.stocks
+        });
+      }
+
     });
 
     /*
@@ -158,6 +165,7 @@
       stocks = _.filter(stocks, 'volumeRemains');
 
       vm.stocks = _.orderBy(stocks, 'article.name');
+      vm.stockTakingData = stockTakingData;
 
     }
 
