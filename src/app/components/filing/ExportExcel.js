@@ -66,7 +66,7 @@
 
           if (val === null || _.isUndefined(val) || val === '') return;
 
-          let isNumber = !isDate && (_.isNumber(val) || !notNumberRe.test(val));
+          let isNumber = !isDate && col.type !== 'string' && (_.isNumber(val) || !notNumberRe.test(val));
 
           if (isNumber && !_.isNumber(val)) {
             val = parseInt(val);
@@ -85,7 +85,7 @@
             cell.t = 'n';
             cell.s.numFmt = col.format || 'yyyy.mm.dd';
             cell.v = dateNum(val, true);
-          } else if (cell.t === 'n' && col.type !== 'number') {
+          } else if (cell.t === 'n' && col.type !== 'number' || col.type === 'string') {
             cell.s.numFmt = '@';
           }
 
