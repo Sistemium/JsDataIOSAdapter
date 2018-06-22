@@ -17,7 +17,7 @@
     });
 
   /** @ngInject */
-  function WarehouseListController(Schema, saControllerHelper, $scope) {
+  function WarehouseListController(Schema, saControllerHelper, $scope, $q) {
 
     const vm = saControllerHelper.setup(this, $scope);
     const { Warehouse, WarehouseStock } = Schema.models();
@@ -36,14 +36,24 @@
       refresh() {
         vm.setBusy([
           Warehouse.findAll(),
-          WarehouseStock.groupBy({}, ['warehouseId'])
-            .then(res => {
-              vm.stockStats = _.keyBy(res, 'warehouseId');
-            }),
+          stockStats(),
         ]);
       },
 
     });
+
+    function stockStats() {
+      return WarehouseStock.groupBy({}, ['warehouseId'])
+        .then(res => _.keyBy(res, 'warehouseId'))
+        .then(stockStats =>
+          $q.all(_.map(stockStats, ({ 'max(date)': date }, warehouseId) =>
+            WarehouseStock.groupBy({ warehouseId, date }, ['warehouseId'])
+              .then(_.first)
+              .then(({ 'sum(volume)': volume }) => ({ date, volume, warehouseId }))
+          ))
+        )
+        .then(res => vm.stockStats = _.keyBy(res, 'warehouseId'));
+    }
 
   }
 

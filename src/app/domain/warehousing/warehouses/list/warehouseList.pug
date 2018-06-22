@@ -7,10 +7,14 @@
     ng-repeat="item in vm.warehouses track by item.id"
     href ng-click="vm.itemClick(item)"
     )
+
       .name {{ item.name }}
+
       currency-value.stock(
       label="Остаток:"
       hide-empty="true"
-      value="vm.stockStats[item.id]['sum(volume)']"
+      value="vm.stockStats[item.id].volume"
       currency="б." decimals="0"
       )
+
+      .date {{ vm.stockStats[item.id].date | amDateFormat: 'DD.MM.YY' }}
