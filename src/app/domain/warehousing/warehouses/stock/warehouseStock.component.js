@@ -6,6 +6,7 @@
       bindings: {
         stocks: '=?',
         warehouseId: '<',
+        date: '<',
         onClick: '&onClick',
       },
 
@@ -28,7 +29,7 @@
       $onInit() {
 
         if (!vm.stocks && vm.warehouseId) {
-          vm.setBusy(refresh(vm.warehouseId));
+          vm.setBusy(refresh(vm.warehouseId, vm.date));
         }
 
       },
@@ -39,9 +40,9 @@
 
     });
 
-    function refresh(warehouseId) {
+    function refresh(warehouseId, date) {
 
-      return WarehouseStock.meta.stockByWarehouseId(warehouseId)
+      return WarehouseStock.meta.stockByWarehouseId(warehouseId, date)
         .then(() => {
           const orderBy = [['article.name']];
           vm.rebindAll(WarehouseStock, { warehouseId, orderBy }, 'vm.stocks');

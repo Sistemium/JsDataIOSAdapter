@@ -25,7 +25,7 @@
 
     });
 
-    function stockByWarehouseId(warehouseId) {
+    function stockByWarehouseId(warehouseId, date) {
 
       const { Article, WarehouseStock } = Schema.models();
 
@@ -37,7 +37,7 @@
 
       return Article.findAll({ where, limit: 5000 })
         .then(() => {
-          return WarehouseStock.findAll({ warehouseId }, { bypassCache: true });
+          return WarehouseStock.findAll({ warehouseId, date }, { bypassCache: true });
         });
 
     }

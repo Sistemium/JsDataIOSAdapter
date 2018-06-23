@@ -22,7 +22,16 @@
         throw new Error('no warehouseId in StockTakingData');
       }
 
-      const cache = caches[warehouseId] || setupCache(warehouseId);
+      let cache = caches[warehouseId];
+
+      if (!cache && stockTaking) {
+        const { date } = stockTaking;
+        cache = setupCache(warehouseId, date);
+      }
+
+      if (!cache) {
+        throw new Error('no cache in StockTakingData');
+      }
 
       return {
         stockTaking: () => stockTaking,
@@ -51,13 +60,13 @@
     Functions
      */
 
-    function setupCache(warehouseId) {
+    function setupCache(warehouseId, date) {
 
       const cache = {};
 
       DEBUG('StockTakingData setupCache', warehouseId);
 
-      return WarehouseStock.meta.stockByWarehouseId(warehouseId)
+      return WarehouseStock.meta.stockByWarehouseId(warehouseId, date)
         .then(stocks => _.assign(cache, {
           clearCache,
           stocks,
