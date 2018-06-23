@@ -5,7 +5,7 @@
   ng-repeat='item in vm.stocks track by item.id'
   ng-click="vm.itemClick(item)"
   )
-    .article {{ item.article.name }}
+    warehouse-article.article(ng-model="item.article")
 
     .stats
 
