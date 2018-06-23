@@ -13,28 +13,30 @@ resize resize-offset-top="10"
       a.name(href ng-click="vm.expandItemId= (vm.expandItemId===stat.id) ? null: stat.id")
         warehouse-article(ng-model="stat.article")
 
+    .footer
       .barcode
+
         span {{ stat.items.length | positionsCount }}
         //span {{ stat.timestamp | dateTime:{seconds: true, date: false} }}
         span(ng-if='stat.packageRel') (фасовка {{ stat.packageRel }})
 
-      .stat-items.list-group(ng-if="vm.expandItemId===stat.id")
-        a.list-group-item(
-        href ng-click="vm.itemClick(item)"
-        ng-repeat="item in stat.items | orderBy:'-timestamp' track by item.id"
-        ng-class="{active: item.id === vm.activeId}"
+      .volume
+        i.status.glyphicon(
+        ng-class="stat.volume === stat.targetVolume ? 'green glyphicon-ok' : 'red glyphicon-alert'"
         )
-          strong {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
-          //span {{ item.barcode }}
-          span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
+        strong.animate(
+        sa-animate-on-change="item.volume" change-class="change-up"
+        )
+          span {{ stat.volume | boxesBottles:{boxRel: stat.packageRel} }}
+          span(ng-if='stat.targetVolume')
+            | &nbsp;из {{ stat.targetVolume | boxesBottles:{boxRel: stat.packageRel} }}
 
-    .volume
-      i.status.glyphicon(
-      ng-class="stat.volume === stat.targetVolume ? 'green glyphicon-ok' : 'red glyphicon-alert'"
+    .stat-items.list-group(ng-if="vm.expandItemId===stat.id")
+      a.list-group-item(
+      href ng-click="vm.itemClick(item)"
+      ng-repeat="item in stat.items | orderBy:'-timestamp' track by item.id"
+      ng-class="{active: item.id === vm.activeId}"
       )
-      strong.animate(
-      sa-animate-on-change="item.volume" change-class="change-up"
-      )
-        span {{ stat.volume | boxesBottles:{boxRel: stat.packageRel} }}
-        span(ng-if='stat.targetVolume')
-          | &nbsp;из {{ stat.targetVolume | boxesBottles:{boxRel: stat.packageRel} }}
+        strong {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
+        //span {{ item.barcode }}
+        span {{ item.timestamp | dateTime:{seconds: true, date: false} }}

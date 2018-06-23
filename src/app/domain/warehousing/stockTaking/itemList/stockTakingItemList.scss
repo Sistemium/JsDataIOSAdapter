@@ -9,6 +9,19 @@ stock-taking-item-list, stock-taking-item-stats {
     text-decoration: none;
   }
 
+  .stock-taking-item-list > .list-group-item {
+
+    flex-direction: column;
+    align-items: stretch;
+
+    > .footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: $margin-bottom-xs;
+    }
+
+  }
+
   .list-group-item {
 
     > * + * {
@@ -35,12 +48,14 @@ stock-taking-item-list, stock-taking-item-stats {
     }
 
     .barcode {
-      margin-top: $margin-bottom-xs;
+
+      color: $light-gray;
+      font-size: 85%;
+
       > span + span {
         margin-left: $margin-bottom-xs/2;
       }
-      color: $light-gray;
-      font-size: 85%;
+
     }
 
   }
