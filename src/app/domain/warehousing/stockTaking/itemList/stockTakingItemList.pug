@@ -1,4 +1,7 @@
-.stock-taking-item-list.list-group
+.stock-taking-item-list.list-group.scroll-y(
+vs-repeat
+resize resize-offset-top="10"
+)
 
   .list-group-item(
   id='id-{{::item.id}}'

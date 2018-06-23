@@ -4,7 +4,7 @@
     .component('stockTakingItemList', {
 
       bindings: {
-        filter: '<',
+        stockTaking: '<ngModel',
         activeId: '=',
         onClick: '&',
         scroll: '=?',
@@ -28,8 +28,9 @@
       $onInit() {
 
         const orderBy = [['timestamp', 'DESC']];
+        const filter = { stockTakingId: vm.stockTaking.id, orderBy };
 
-        vm.rebindAll(StockTakingItem, _.assign({ orderBy }, vm.filter), 'vm.stockTakingItems');
+        vm.rebindAll(StockTakingItem, filter, 'vm.stockTakingItems');
 
       },
 
@@ -38,7 +39,7 @@
       },
 
       scroll(item) {
-        $timeout(250).then(() =>{
+        $timeout(250).then(() => {
           $anchorScroll(`id-${item.id}`);
         });
       },

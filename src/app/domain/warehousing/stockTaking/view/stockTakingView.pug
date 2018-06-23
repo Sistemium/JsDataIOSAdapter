@@ -39,22 +39,20 @@
 
     uib-tabset(active="vm.activeTabIndex" justified="true")
       uib-tab(index="0" heading="Сканы")
-        stock-taking-item-list.scroll-y(
-        resize resize-offset-top="10"
-        filter="{stockTakingId: vm.stockTakingId}"
+        stock-taking-item-list(
+        ng-model="vm.stockTaking"
         on-click="vm.itemClick($item)"
         active-id="vm.itemId"
         scroll="vm.itemListScrollTo"
         )
-      uib-tab(index="1" heading="Товары")
-        stock-taking-item-stats.scroll-y(
-        resize resize-offset-top="10"
+      //uib-tab(index="1" heading="Товары")
+        stock-taking-item-stats(
         filter="{stockTakingId: vm.stockTakingId}"
         on-item-click="vm.itemClick($item)"
         active-id="vm.itemId"
         scroll="vm.itemStatsScrollTo"
         )
-      uib-tab(index="2" heading="Остатки ({{ vm.stocks.length }})")
+      //uib-tab(index="2" heading="Остатки ({{ vm.stocks.length }})")
         warehouse-stock.scroll-y(
         resize resize-offset-top="10"
         stocks="vm.stocks"
