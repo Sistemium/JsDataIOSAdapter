@@ -19,7 +19,7 @@ stock-taking {
   .list-group-item:hover {
     background: $gray-background-color;
     &.active {
-      background: darken($gray-background-color, 10%);
+      background: darken($active-background-color, 10%);
       border-color: $border-gray;
     }
   }
