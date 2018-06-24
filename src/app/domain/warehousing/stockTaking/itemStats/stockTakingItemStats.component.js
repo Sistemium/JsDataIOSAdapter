@@ -5,6 +5,7 @@
 
       bindings: {
         filter: '<',
+        search: '<',
         activeId: '=',
         onItemClick: '&',
         scroll: '=',
@@ -26,9 +27,12 @@
 
     vm.use({
 
+      stockTakingItems: undefined,
+
       $onInit() {
         vm.rebindAll(StockTakingItem, vm.filter, 'vm.stockTakingItems', setStatsData);
         vm.watchScope('vm.activeId', setExpanded);
+        vm.watchScope('vm.search', () => onFilter())
       },
 
       itemClick($item) {
@@ -46,6 +50,19 @@
       }
 
     });
+
+    function onFilter(data = vm.data) {
+
+      const { search } = vm;
+
+      if (search) {
+        const re = new RegExp(`.*${_.escapeRegExp(search)}.*`, 'i');
+        data = _.filter(data, item => re.test(item.article.name));
+      }
+
+      vm.filteredData = data;
+
+    }
 
     function setExpanded() {
       const { activeId, expandItemId } = vm;
@@ -80,6 +97,8 @@
       });
 
       vm.data = _.orderBy(data, ['timestamp'], ['desc']);
+
+      onFilter();
 
       setExpanded();
 

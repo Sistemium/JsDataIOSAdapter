@@ -4,7 +4,7 @@ resize resize-offset-top="10"
 )
 
   .list-group-item(
-  ng-repeat='stat in vm.data track by stat.id'
+  ng-repeat='stat in vm.filteredData track by stat.id'
   id="{{::vm.statAnchorId(stat.id)}}"
   )
 

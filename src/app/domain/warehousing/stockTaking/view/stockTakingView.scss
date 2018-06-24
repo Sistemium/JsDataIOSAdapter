@@ -9,6 +9,14 @@ stock-taking-view {
     white-space: nowrap;
   }
 
+  .stm-searcher {
+    border: solid 1px $gray-border-color;
+    //padding: 2px;
+    &, > * {
+      border-radius: $border-radius;
+    }
+  }
+
   .stock-taking-view {
 
     @extend %view;
@@ -24,11 +32,28 @@ stock-taking-view {
       }
     }
 
+    sab-dropdown {
+
+      &[disabled] a {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        color: $black;
+        font-weight: 500;
+        background: none;
+      }
+
+      a {
+        background: $white;
+      }
+
+    }
+
     .details {
 
       @include responsive-only(gt-xxs) {
         background: $gray-background-color;
-        padding: $margin-bottom-xs;
+        padding: $margin-bottom-xs/2 $margin-bottom-xs 1px;
         border-radius: $border-radius;
       }
 
@@ -47,10 +72,6 @@ stock-taking-view {
           text-align: left;
         }
 
-        a {
-          background: $white;
-        }
-
         @include responsive-only(xxs) {
           label {
             display: none;
@@ -66,15 +87,16 @@ stock-taking-view {
 
       @include responsive-only(gt-xxs) {
         .field {
-          margin: $margin-bottom-xs 0;
+          margin: $margin-bottom-xs/2 0;
         }
       }
 
       .buttons {
-        //@include responsive-only(xxs) {
         text-align: right;
         float: right;
-        //}
+        @include responsive-only(gt-xxs) {
+          padding: $margin-bottom-xs-minus 0;
+        }
       }
 
     }
@@ -124,6 +146,10 @@ stock-taking-view {
           border-top-left-radius: 0;
           margin-top: -1px;
         }
+      }
+
+      .tabs {
+        margin-top: $margin-bottom-xs;
       }
 
     }

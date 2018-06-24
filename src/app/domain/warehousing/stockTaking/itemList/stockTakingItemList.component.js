@@ -6,6 +6,7 @@
       bindings: {
         stockTaking: '<ngModel',
         activeId: '=',
+        filter: '<',
         onClick: '&',
         scroll: '=?',
       },
@@ -23,14 +24,13 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
+    vm.watchScope('vm.filter', onFilter);
+
     vm.use({
 
       $onInit() {
 
-        const orderBy = [['timestamp', 'DESC']];
-        const filter = { stockTakingId: vm.stockTaking.id, orderBy };
-
-        vm.rebindAll(StockTakingItem, filter, 'vm.stockTakingItems');
+        onFilter();
 
       },
 
@@ -45,6 +45,19 @@
       },
 
     });
+
+    function onFilter(search) {
+
+      const orderBy = [['timestamp', 'DESC']];
+
+      const filter = _.assign(
+        { stockTakingId: vm.stockTaking.id, orderBy },
+        search ? { where: { 'article.name': { likei: `%${search}%` } } } : {}
+      );
+
+      vm.rebindAll(StockTakingItem, filter, 'vm.stockTakingItems');
+
+    }
 
   }
 
