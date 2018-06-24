@@ -1,14 +1,14 @@
 .stock-taking-item-view(ng-class="{unsaved: vm.stockTakingItem.DSHasChanges()}")
 
+
   .fields
+
 
     .field.name
       label Товар
       strong {{ vm.stockTakingItem.article.name }}
 
-    .field.timestamp
-      label Время скана
-      strong {{ vm.stockTakingItem.timestamp | dateTime:{seconds: true} }}
+    stock-taking-article-item-list(items="[vm.stockTakingItem]" active-id='vm.stockTakingItemId')
 
     .field.barcode
       label Штрих-код
@@ -19,6 +19,9 @@
             i.glyphicon.glyphicon-lock
         span {{ vm.stockTakingItem.barcode }}
 
+
+  .editing
+
     .field.volume(
     ng-class="{touched: vm.volumeViewTouched}"
     )
@@ -26,10 +29,10 @@
       strong.animate(sa-animate-on-change="vm.stockTakingItem.volume" change-class="change-up")
         | {{ vm.volumeView }}
 
-  sa-keyboard(
-  datatype='boxPcs'
-  touched='vm.volumeViewTouched'
-  model='vm.volumeView'
-  export-model='vm.stockTakingItem.volume'
-  box-rel='vm.stockTakingItem.packageRel'
-  )
+    sa-keyboard(
+    datatype='boxPcs'
+    touched='vm.volumeViewTouched'
+    model='vm.volumeView'
+    export-model='vm.stockTakingItem.volume'
+    box-rel='vm.stockTakingItem.packageRel'
+    )

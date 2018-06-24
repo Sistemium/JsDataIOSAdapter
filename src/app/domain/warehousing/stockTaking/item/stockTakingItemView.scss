@@ -5,7 +5,7 @@
     @include responsive-only(xs) {
       display: flex;
       justify-content: space-between;
-      sa-keyboard {
+      .editing {
         margin-left: $margin-bottom-xs;
       }
     }
@@ -16,11 +16,16 @@
       }
     }
 
+    stock-taking-article-item-list {
+      margin-top: $margin-bottom-xs-minus;
+      display: block;
+    }
+
     sa-keyboard {
 
-      @include responsive-only(xxs) {
+      //@include responsive-only(xxs) {
         margin-top: $margin-bottom-xs;
-      }
+      //}
 
       .num-pad-button .btn {
         font-size: 120%;

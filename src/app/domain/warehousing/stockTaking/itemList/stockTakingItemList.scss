@@ -24,10 +24,6 @@ stock-taking-item-list, stock-taking-item-stats {
 
   .list-group-item {
 
-    > * + * {
-      margin-left: $margin-bottom-xs;
-    }
-
     &.active {
       background: $active-background-color;
       border-color: $gray-border-color;

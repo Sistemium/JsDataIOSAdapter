@@ -38,7 +38,7 @@
 
     ui-view.current-item(ng-if='vm.itemId')
 
-    .items-view
+    .items-view(ng-class="{ 'has-active': vm.itemId }")
 
       .filters
         .stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')

@@ -1,0 +1,11 @@
+.volume
+
+  i.status.glyphicon(
+  ng-class="vm.data.volume === vm.data.targetVolume ? 'green glyphicon-ok' : 'red glyphicon-alert'"
+  )
+  strong.animate(
+  sa-animate-on-change="item.volume" change-class="change-up"
+  )
+    span {{ vm.data.volume | boxesBottles:{boxRel: vm.data.packageRel} }}
+    span(ng-if='vm.data.targetVolume')
+      | &nbsp;из {{ vm.data.targetVolume | boxesBottles:{boxRel: vm.data.packageRel} }}

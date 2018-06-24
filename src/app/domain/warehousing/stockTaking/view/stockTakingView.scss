@@ -1,6 +1,12 @@
 @import "view";
 @import "fileds";
 
+@mixin bordered() {
+  border-radius: $border-radius;
+  border: solid 1px $gray-border-color;
+  padding: $margin-bottom-xs;
+}
+
 stock-taking-view {
 
   $right-panel-width: 320px;
@@ -103,6 +109,12 @@ stock-taking-view {
 
     .items {
 
+      .items-view.has-active {
+        @include responsive-only(xxs) {
+          display: none;
+        }
+      }
+
       .current-item {
 
         @include responsive-only(lt-sm) {
@@ -164,11 +176,19 @@ stock-taking-view {
     .current-item {
 
       display: block;
-      border-radius: $border-radius;
-      border: solid 1px $gray-border-color;
-      padding: $margin-bottom-xs;
 
-      @include responsive-only(lt-sm) {
+      @include responsive-only(gt-xxs) {
+        @include bordered();
+      }
+
+      @include responsive-only(xxs) {
+        .editing {
+          margin-top: $margin-bottom-xs;
+          @include bordered();
+        }
+      }
+
+      @include responsive-only(xs) {
         padding-top: 7px;
         padding-bottom: 7px;
       }
