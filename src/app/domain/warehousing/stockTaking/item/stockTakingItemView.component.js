@@ -6,7 +6,7 @@
     .constant('stockTakingItemView', { DESTROY_EVENT })
     .component('stockTakingItemView', {
       bindings: {
-        stockTakingItemId: '=?ngModel'
+        stockTakingItemId: '=?ngModel',
       },
       controller: StockTakingItemViewController,
 
@@ -15,7 +15,8 @@
     });
 
 
-  function StockTakingItemViewController($scope, saControllerHelper, Schema, $timeout, StockTakingData) {
+  function StockTakingItemViewController($scope, saControllerHelper, Schema,
+                                         $timeout, StockTakingData) {
 
     const { StockTakingItem } = Schema.models();
 
@@ -54,6 +55,10 @@
           .then(() => $scope.$emit(DESTROY_EVENT, vm.stockTakingItem));
       },
 
+      itemClick($item) {
+        vm.stockTakingItemId = $item.id;
+      },
+
     });
 
     /*
@@ -75,6 +80,7 @@
       const stockTakingData = StockTakingData({ stockTakingId });
       const items = StockTakingItem.filter({ articleId, stockTakingId });
       vm.stockTakingArticle = stockTakingData.resultByArticle(items, articleId);
+      vm.stockTakingArticleItems = _.orderBy(items, ['timestamp'], ['desc']);
     }
 
   }

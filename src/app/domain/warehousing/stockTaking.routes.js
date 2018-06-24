@@ -70,6 +70,15 @@
         controller: 'StateController as vm',
 
         data: {
+          watch: {
+            ['vm.params.stockTakingItemId'](stockTakingItemId, { $state }) {
+              if (stockTakingItemId) {
+                $state.go('wh.stockTaking.view.item', { stockTakingItemId })
+              } else {
+                $state.go('wh.stockTaking.view')
+              }
+            },
+          },
           on: {
             ['stock-taking-item-destroy'](stockTakingItem, { $state }) {
               $state.go('^');

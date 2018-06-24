@@ -12,7 +12,11 @@
       label Результат
       stock-taking-article-volume(ng-model="vm.stockTakingArticle")
 
-    stock-taking-article-item-list(items="[vm.stockTakingItem]" active-id='vm.stockTakingItemId')
+    stock-taking-article-item-list(
+    items="vm.stockTakingArticleItems"
+    active-id="vm.stockTakingItemId"
+    on-click="vm.itemClick($item)"
+    )
 
     .field.barcode
       label Штрих-код

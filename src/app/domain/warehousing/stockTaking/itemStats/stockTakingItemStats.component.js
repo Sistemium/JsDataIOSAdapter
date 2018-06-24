@@ -8,6 +8,7 @@
         search: '<',
         activeId: '=',
         onItemClick: '&',
+        onArticleClick: '&',
         scroll: '=',
       },
 
@@ -39,6 +40,10 @@
         vm.onItemClick({ $item });
       },
 
+      statClick(stat) {
+        vm.onArticleClick({ $articleId: stat.article.id });
+      },
+
       scroll(item) {
         $timeout(250).then(() => {
           $anchorScroll(vm.statAnchorId(item.articleId));
@@ -65,8 +70,8 @@
     }
 
     function setExpanded() {
-      const { activeId, expandItemId } = vm;
-      vm.expandItemId = activeId && _.get(StockTakingItem.get(activeId), 'articleId') || expandItemId;
+      const { activeId } = vm;
+      vm.activeArticleId = activeId && _.get(StockTakingItem.get(activeId), 'articleId');
     }
 
     function setStatsData() {
@@ -96,7 +101,7 @@
 
       });
 
-      vm.data = _.orderBy(data, ['timestamp'], ['desc']);
+      vm.data = _.orderBy(data, ['article.name'], ['asc']);
 
       onFilter();
 

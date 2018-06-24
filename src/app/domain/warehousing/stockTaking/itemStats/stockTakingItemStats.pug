@@ -6,11 +6,12 @@ resize resize-offset-top="10"
   .list-group-item(
   ng-repeat='stat in vm.filteredData track by stat.id'
   id="{{::vm.statAnchorId(stat.id)}}"
+  ng-class="{ active: vm.activeArticleId === stat.id }"
   )
 
     .title
 
-      a.name(href ng-click="vm.expandItemId= (vm.expandItemId===stat.id) ? null: stat.id")
+      a.name(href ng-click="vm.statClick(stat)")
         warehouse-article(ng-model="stat.article")
 
     .footer
@@ -20,18 +21,9 @@ resize resize-offset-top="10"
         //span {{ stat.timestamp | dateTime:{seconds: true, date: false} }}
         span(ng-if='stat.packageRel') (фасовка {{ stat.packageRel }})
 
-      .volume
-        i.status.glyphicon(
-        ng-class="stat.volume === stat.targetVolume ? 'green glyphicon-ok' : 'red glyphicon-alert'"
-        )
-        strong.animate(
-        sa-animate-on-change="item.volume" change-class="change-up"
-        )
-          span {{ stat.volume | boxesBottles:{boxRel: stat.packageRel} }}
-          span(ng-if='stat.targetVolume')
-            | &nbsp;из {{ stat.targetVolume | boxesBottles:{boxRel: stat.packageRel} }}
+      stock-taking-article-volume(ng-model="stat")
 
-    .stat-items.list-group(ng-if="vm.expandItemId===stat.id")
+    //.stat-items.list-group(ng-if="vm.expandItemId===stat.id")
       a.list-group-item(
       href ng-click="vm.itemClick(item)"
       ng-repeat="item in stat.items | orderBy:'-timestamp' track by item.id"

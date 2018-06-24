@@ -112,6 +112,14 @@
         _.assign(vm, { stockTakingItem, itemId: stockTakingItem.id });
       },
 
+      articleClick(articleId) {
+        const { stockTakingId } = vm;
+        // const stockTakingData = StockTakingData({ stockTakingId });
+        const items = StockTakingItem.filter({ articleId, stockTakingId });
+        // vm.stockTakingArticle = stockTakingData.resultByArticle(items, articleId);
+        items.length && vm.itemClick(_.maxBy(items, 'timestamp'));
+      },
+
       onScan({ code }) {
 
         processBarcode(code);
