@@ -8,6 +8,10 @@
       label Товар
       strong {{ vm.stockTakingItem.article.name }}
 
+    .field.result
+      label Результат
+      stock-taking-article-volume(ng-model="vm.stockTakingArticle")
+
     stock-taking-article-item-list(items="[vm.stockTakingItem]" active-id='vm.stockTakingItemId')
 
     .field.barcode

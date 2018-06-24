@@ -36,12 +36,22 @@
       return {
         stockTaking: () => stockTaking,
         stockByArticle,
-        promise: promise()
+        promise: promise(),
+        resultByArticle,
       };
 
       /*
        Functions
        */
+
+      function resultByArticle(items, articleId) {
+
+        return {
+          volume: _.sumBy(items, 'volume'),
+          targetVolume: _.get(stockByArticle(articleId), 'volume') || 0,
+        };
+
+      }
 
       function stockByArticle(articleId) {
 

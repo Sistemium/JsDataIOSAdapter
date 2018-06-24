@@ -15,6 +15,10 @@ stock-taking-view {
     white-space: nowrap;
   }
 
+  .volume .status {
+    margin-right: $margin-bottom-xs;
+  }
+
   .stm-searcher {
     border: solid 1px $gray-border-color;
     //padding: 2px;

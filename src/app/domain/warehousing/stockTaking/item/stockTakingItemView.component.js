@@ -15,7 +15,7 @@
     });
 
 
-  function StockTakingItemViewController($scope, saControllerHelper, Schema, $timeout) {
+  function StockTakingItemViewController($scope, saControllerHelper, Schema, $timeout, StockTakingData) {
 
     const { StockTakingItem } = Schema.models();
 
@@ -65,8 +65,16 @@
         volumeViewTouched: false,
       });
       if (id) {
-        vm.rebindOne(StockTakingItem, id, 'vm.stockTakingItem');
+        vm.rebindOne(StockTakingItem, id, 'vm.stockTakingItem', onRebind);
       }
+    }
+
+    function onRebind() {
+      const { stockTakingItem } = vm;
+      const { stockTakingId, articleId } = stockTakingItem;
+      const stockTakingData = StockTakingData({ stockTakingId });
+      const items = StockTakingItem.filter({ articleId, stockTakingId });
+      vm.stockTakingArticle = stockTakingData.resultByArticle(items, articleId);
     }
 
   }
