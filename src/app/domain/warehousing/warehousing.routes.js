@@ -17,24 +17,12 @@
             // auth: 'SalesmanAuth'
           },
 
-          children: [stockBatching, warehouses]
+          children: [warehouses]
 
         });
 
     });
 
-  const stockBatching = {
-
-    name: 'stockBatching',
-    url: '/stockBatching',
-
-    data: {
-      title: 'Товарные партии',
-    },
-
-    template: '<stock-batching></stock-batching>'
-
-  };
 
   const warehouses = {
 
