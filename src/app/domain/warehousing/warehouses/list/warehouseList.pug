@@ -8,13 +8,17 @@
     href ng-click="vm.itemClick(item)"
     )
 
-      .name {{ item.name }}
+      .title
+        .name {{ item.name }}
 
-      currency-value.stock(
-      label="Остаток:"
-      hide-empty="true"
-      value="vm.stockStats[item.id].volume"
-      currency="б." decimals="0"
-      )
+      .footer
+        currency-value.stock(
+        label="Остаток:"
+        hide-empty="true"
+        value="vm.stockStats[item.id].volume"
+        currency="Б" decimals="0"
+        )
 
-      .date {{ vm.stockStats[item.id].date | amDateFormat: 'DD.MM.YY' }}
+        .date
+          label на
+          strong {{ vm.stockStats[item.id].date | amDateFormat: 'DD.MM.YY' }}

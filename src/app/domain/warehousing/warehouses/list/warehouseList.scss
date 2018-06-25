@@ -1,0 +1,17 @@
+@import "variables";
+
+.warehouse-list {
+
+  a.list-group-item.warehouse {
+    flex-direction: column;
+    align-items: stretch;
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+      > * + * {
+        margin-left: $margin-bottom-xs-minus;
+      }
+    }
+  }
+
+}

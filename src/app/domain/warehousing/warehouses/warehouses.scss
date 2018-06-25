@@ -25,7 +25,11 @@
     }
 
     .date {
-      font-weight: bold;
+      //font-weight: bold;
+      label {
+        font-weight: normal;
+        margin-right: $margin-bottom-xs-minus;
+      }
     }
 
     @include responsive-only(xxs) {
