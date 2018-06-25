@@ -14,9 +14,9 @@
     .fields
 
       .field.date
-        label Начало
+        label Дата
           span.hidden-xs &nbsp;инвентаризации
-        strong {{ vm.stockTaking.deviceCts | dateTime }}
+        strong {{ vm.stockTaking.date | dateTime }}
 
       .field.warehouse
         label Склад

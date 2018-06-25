@@ -3,8 +3,25 @@
 .stock-taking-list {
 
   > * > .list-group-item {
-    display: flex;
-    justify-content: space-between;
+
+    flex-direction: column;
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      > * + * {
+        margin-left: $margin-bottom-xs;
+      }
+    }
+
+    .footer {
+      margin-top: $margin-bottom-xs-minus;
+      currency-value {
+        //text-align: right;
+        min-width: 40px;
+      }
+    }
+
   }
 
 }

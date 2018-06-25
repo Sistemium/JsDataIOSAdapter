@@ -44,8 +44,8 @@
     function refreshStats() {
       const { StockTakingItem } = Schema.models();
       StockTakingItem.groupBy({}, ['stockTakingId'])
-        .then(res => stockTakingItemStats = res)
-      // .then(res => console.warn('StockTaking refreshStats', res))
+        .then(res => stockTakingItemStats = _.keyBy(res, 'stockTakingId'))
+        // .then(res => console.warn('StockTaking refreshStats', res))
       ;
     }
 
