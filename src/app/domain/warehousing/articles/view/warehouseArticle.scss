@@ -13,6 +13,7 @@
 
   .tags {
     display: flex;
+    align-items: center;
     .tag {
       font-size: 90%;
       background: $gray-background-color;
@@ -20,6 +21,7 @@
       border-radius: 6px;
       padding: 0 3px;
       margin-right: $margin-bottom-xs-minus;
+      white-space: nowrap;
       &.white {
         background-color: $white;
         color: $gray;
@@ -29,7 +31,7 @@
 
   .footer, .middle {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
 
 }
