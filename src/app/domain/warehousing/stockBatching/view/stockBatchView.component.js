@@ -11,7 +11,7 @@
 
       },
 
-      templateUrl: 'app/domain/warehousing/stockBatchView/stockBatchView.html',
+      templateUrl: 'app/domain/warehousing/stockBatching/view/stockBatchView.html',
       controllerAs: 'vm',
 
     });
