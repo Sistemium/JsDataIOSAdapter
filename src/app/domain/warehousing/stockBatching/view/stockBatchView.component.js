@@ -31,7 +31,13 @@
       StockBatchItem,
       ArticleBarCode,
       Article,
+      BarCodeType,
     } = Schema.models();
+    const {
+      BARCODE_TYPE_ARTICLE,
+      BARCODE_TYPE_STOCK_BATCH,
+      BARCODE_TYPE_EXCISE_STAMP,
+    } = BarCodeType.meta.types;
 
     vm.use({
 
@@ -89,15 +95,15 @@
 
       const { stockBatch } = vm;
 
-      if (type === 'StockBatch') {
+      if (type === BARCODE_TYPE_STOCK_BATCH) {
         return isCreating() && addStockBatchBarCode(code);
       }
 
-      if (type !== 'Article' && vm.readyToScanArticle()) {
+      if (type !== BARCODE_TYPE_ARTICLE && vm.readyToScanArticle()) {
         return toastr.error('Это не штрих-код товара', code);
       }
 
-      if (type === 'Article' && !stockBatch.id) {
+      if (type === BARCODE_TYPE_ARTICLE && !stockBatch.id) {
         return setArticleByBarcode(code)
           .then(article => {
             stockBatch.articleId = article.id;
@@ -114,7 +120,7 @@
           });
       }
 
-      if (type === 'ExciseStamp' && vm.readyToScanItem()) {
+      if (type === BARCODE_TYPE_EXCISE_STAMP && vm.readyToScanItem()) {
         return addItemByCode(code);
       }
 
