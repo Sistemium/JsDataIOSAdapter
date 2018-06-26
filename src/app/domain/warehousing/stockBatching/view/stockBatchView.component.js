@@ -70,7 +70,17 @@
         return stockBatch && stockBatch.articleId && stockBatchBarCodes.length
       },
 
+      setArticleClick: setArticle,
+
     });
+
+    function setArticle({ id } = {}) {
+      if (!id) {
+        return;
+      }
+      vm.articles = null;
+      vm.stockBatch.articleId = id;
+    }
 
     function isCreating() {
       return !_.get(vm, 'stockBatch.id');
@@ -105,15 +115,13 @@
 
       if (type === BARCODE_TYPE_ARTICLE && !stockBatch.id) {
         return setArticleByBarcode(code)
-          .then(article => {
-            stockBatch.articleId = article.id;
-          })
+          .then(setArticle)
           .catch(err => {
             switch (err) {
               case NOT_FOUND:
                 return toastr.error('Неизвестный товар', code);
               case NOT_UNIQUE:
-                return toastr.error('Товаров с таким штрих-кодом больше одного', code);
+                return toastr.info('Выберите товар', code);
               default:
                 return toastr.error(angular.toJson(err), code);
             }
@@ -179,7 +187,8 @@
           }
 
           if (res.length > 1) {
-            return $q.reject(NOT_UNIQUE);
+            return chooseArticle(res)
+              .then(() => $q.reject(NOT_UNIQUE));
           }
 
           const { articleId } = res[0];
@@ -188,6 +197,18 @@
 
         });
 
+    }
+
+    function chooseArticle(articleBarCodes) {
+
+      const where = {
+        id: {
+          in: _.uniq(articleBarCodes.map(item => item.articleId))
+        },
+      };
+
+      return Article.findAll({ where }, { bypassCache: true })
+        .then(res => vm.articles = res);
     }
 
     function addStockBatchBarCode(code) {

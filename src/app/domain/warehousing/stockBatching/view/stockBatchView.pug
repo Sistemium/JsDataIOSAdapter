@@ -1,8 +1,7 @@
 .stock-batch-view
 
   h2.title
-    .new(ng-if='!vm.stockBatch.id')
-      | Новая партия
+    .new(ng-if='!vm.stockBatch.id') Новая партия
 
   .alert.alert-success(ng-if="vm.readyToScanArticle()")
     | Просканируйте товар, чтобы создать партию c наклейкой
@@ -10,6 +9,17 @@
 
   .alert.alert-success(ng-if="!vm.stockBatch.id && vm.readyToScanItem()")
     | Просканируйте марку
+
+
+  .choose-article(ng-if='vm.articles')
+    .alert.alert-warning Выберите товар
+    .list-group
+      a.list-group-item(
+      ng-repeat="article in vm.articles track by article.id"
+      href ng-click="vm.setArticleClick(article)"
+      )
+        .title
+          warehouse-article(ng-model="article")
 
   .properties
 
