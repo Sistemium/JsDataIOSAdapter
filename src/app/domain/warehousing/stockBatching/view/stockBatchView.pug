@@ -6,22 +6,34 @@
     .new(ng-if='!vm.stockBatch.id')
       | Новая партия
 
+  .alert.alert-success(ng-if="vm.readyToScanArticle()")
+    | Просканируйте товар, чтобы создать партию c наклейкой
+    strong &nbsp;{{ vm.createCode }}
+
+  .alert.alert-success(ng-if="!vm.stockBatch.id && vm.readyToScanItem()")
+    | Просканируйте марку
+
   .properties
-    //.id(ng-if='vm.stockBatch.id')
-      label ИД:
-      strong {{ vm.stockBatch.id }}
-    .cts(ng-if='vm.stockBatch.cts')
-      label Дата создания:
-      strong {{ vm.stockBatch.cts | amUtc | amLocal | amDateFormat:'DD.MM.YYYY HH:mm' }}
-    .article(ng-if='vm.stockBatch.Article')
-      label Товар:
+
+    .field.cts(ng-if='vm.stockBatch.cts')
+      label Дата создания
+      strong {{ vm.stockBatch.cts | dateTime }}
+
+    .field.article(ng-if='vm.stockBatch.Article')
+      label Товар
       strong {{ vm.stockBatch.Article.name }}
 
-  h3 {{ vm.stockBatch.stockBatchBarCodes.length ? 'Наклейки:' : 'Просканируйте наклейку' }}
+  h3(ng-if="vm.stockBatchBarCodes.length") Наклейки
   .stock-batch-bar-codes
-    .code(ng-repeat='item in vm.stockBatch.stockBatchBarCodes | orderBy:"code" track by item.id')
+    .code(ng-repeat='item in vm.stockBatchBarCodes | orderBy:"code" track by item.code')
       | {{ ::item.code }}
 
-  ul.stock-batch-items
-    li(ng-repeat='item in vm.stockBatch.items | orderBy:"cts" track by item.id')
-      | {{ ::item.barcode }} ({{ ::item.deviceCts | amUtc | amLocal }})
+  h3(ng-if="vm.stockBatch.items.length") Марки
+  .list-group.stock-batch-items
+    .list-group-item(
+    ng-repeat='item in vm.stockBatch.items | orderBy:"-deviceCts" track by item.id'
+    )
+      .title
+        .barcode {{ ::item.barcode }}
+      .footer
+        .device-cts {{ ::item.deviceCts | dateTime }}

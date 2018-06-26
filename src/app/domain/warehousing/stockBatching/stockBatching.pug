@@ -1,20 +1,13 @@
 .stock-batching
 
-  barcode-scanner(ng-model='vm.barcode')
+  ui-view
+    .alert.alert-success Просканируйте наклейку, чтобы найти или создать партию
 
-  //pre {{ vm.barcode | json }}
+  //stock-batch-view(ng-if='vm.stockBatch' ng-model='vm.stockBatch')
 
-  .article(ng-if='vm.article')
-    h3 Товар
-    .code {{ vm.lastCode }}
-    .id {{ vm.article.id }}
-    .name {{ vm.article.name }}
+  //button.btn.btn-primary(ng-click='vm.createClick()') Создать партию
 
-  stock-batch-view(ng-if='vm.stockBatch' ng-model='vm.stockBatch')
-
-  button.btn.btn-primary(ng-click='vm.createClick()') Создать партию
-
-  ul.barcodes
+  //ul.barcodes
     li(ng-repeat='item in vm.barcodes track by item.id')
       span {{ ::item.code }}
       = ' '

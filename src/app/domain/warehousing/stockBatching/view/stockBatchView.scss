@@ -2,25 +2,34 @@
 
 stock-batch-view {
 
-  label {
-    color: $light-gray;
-  }
-  label + strong {
-    margin-left: 6px;
+  .field {
+    label, strong {
+      font-weight: normal;
+    }
   }
 
   .stock-batch-bar-codes {
+
     margin-right: -6px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+
     .code {
       display: inline-block;
       margin-right: 6px;
       border: solid 1px $border-gray;
-      padding: 2px 2px;
+      padding: 2px 4px;
       border-radius: $border-radius;
       margin-bottom: 6px;
     }
+
   }
+
+  .list-group-item {
+    .title .barcode {
+      @extend .ellipsis;
+    }
+  }
+
 }
