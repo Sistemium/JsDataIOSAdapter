@@ -1,8 +1,8 @@
-/* global XLSX:false */
+/* global window:false */
 
 (function () {
 
   angular.module('Filing', [])
-    .constant('XLSX', XLSX);
+    .constant('XLSX', window.XLSX || null);
 
 })();
