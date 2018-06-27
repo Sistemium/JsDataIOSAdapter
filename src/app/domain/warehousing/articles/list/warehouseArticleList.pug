@@ -1,0 +1,36 @@
+.warehouse-article-list
+
+  .stm-searcher.form-group.has-feedback(
+  ng-class="{'has-search': vm.search}"
+  ng-if="vm.showSearch"
+  )
+
+    label
+      i.glyphicon.glyphicon-search
+
+    input#search-input.form-control(
+    type='search'
+    placeholder='Поиск'
+    autocomplete='off'
+    select-on-focus
+    track-focused
+    aria-describedby='search-input'
+    ng-model='vm.search'
+    )
+
+    span.form-control-feedback(ng-hide='!vm.search')
+      a.clear-search(ng-click="vm.search=''" href)
+        i.glyphicon.glyphicon-remove
+
+  .list-group.scroll-y(
+  resize resize-offset-top="5"
+  vs-repeat="74"
+  )
+    a.list-group-item(
+    href
+    ng-repeat='item in vm.articlesFiltered track by item.id'
+    ng-click="vm.articleClick(item)"
+    )
+      .title
+        warehouse-article(ng-model="item")
+      //.footer

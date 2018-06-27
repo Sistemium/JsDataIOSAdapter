@@ -1,0 +1,32 @@
+@import "variables";
+
+warehouse-article-list {
+
+  display: block;
+
+  .list-group {
+    > .list-group-item {
+      display: block;
+      @include responsive-only(xxs) {
+        border-right: none;
+        border-left: none;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+    margin-top: $margin-bottom-xs;
+    margin-bottom: 0;
+  }
+
+  .stm-searcher {
+    border: solid 1px $gray-border-color;
+    &, > * {
+      border-radius: $border-radius;
+    }
+  }
+
+  a.list-group-item {
+    min-height: 74px;
+  }
+
+}

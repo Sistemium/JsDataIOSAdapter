@@ -25,6 +25,10 @@
       state: 'wh.stockBatching',
       needRoles: PICKING_ROLES
     }, {
+      title: 'Номенклатура',
+      state: 'wh.articling',
+      needRoles: PICKING_ROLES
+    }, {
       title: 'Склады',
       state: 'wh.warehouses',
       needRoles: STOCK_TAKING_ROLES
