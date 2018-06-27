@@ -31,6 +31,8 @@
                 // console.warn('BarCodeScanner:', status);
                 vm.isEnabled = (status === 'connected')
               });
+            } else {
+              vm.isEnabled = false;
             }
 
           },
