@@ -22,17 +22,28 @@
 
       $onInit() {
 
-        const orderBy = [['name']];
-        vm.rebindAll(Article, { orderBy }, 'vm.articles');
+        rebind();
         vm.setBusy(Article.findAll({}, {}));
 
         $scope.$on(BarCodeScanner.BARCODE_SCAN_EVENT, (e, { code }) => code && onScan(code));
 
       },
 
+      clearBarcodeClick() {
+        vm.barcode = null;
+        rebind();
+      },
+
     });
 
+    function rebind() {
+      const orderBy = [['name']];
+      vm.rebindAll(Article, { orderBy }, 'vm.articles');
+    }
+
     function onScan(code) {
+
+      vm.barcode = code;
 
       return ArticleBarCode.findAll({ code }, { bypassCache: true })
         .then(articleBarCodes => {

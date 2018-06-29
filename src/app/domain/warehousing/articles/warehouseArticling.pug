@@ -1,6 +1,12 @@
 .warehouse-articling(cg-busy="vm.cgBusy")
 
-  //h2 Складская номенклатура
+  .barcode-filter(ng-if='vm.barcode')
+    label
+      i.glyphicon.glyphicon-barcode
 
-  //ui-view
+    strong {{ vm.barcode }}
+
+    a.remove(href ng-click='vm.clearBarcodeClick()')
+      i.glyphicon.glyphicon-remove
+
   warehouse-article-list(articles="vm.articles" show-search="true")

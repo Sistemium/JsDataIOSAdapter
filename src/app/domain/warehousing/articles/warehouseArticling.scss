@@ -1,0 +1,23 @@
+@import "variables";
+
+warehouse-articling {
+
+  .barcode-filter {
+    border: solid 1px $border-gray;
+    border-radius: $border-radius;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    > * {
+      display: block;
+      margin-right: $margin-bottom-xs-minus;
+    }
+    margin-bottom: $margin-bottom-xs;
+  }
+
+  label {
+    margin-bottom: 0;
+    color: $dark-gray;
+  }
+
+}

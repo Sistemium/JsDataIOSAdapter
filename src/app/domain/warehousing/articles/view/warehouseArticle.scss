@@ -11,6 +11,13 @@
     margin-right: $margin-bottom-xs-minus;
   }
 
+  .piece-volume {
+    color: $primary-color;
+    background: $gray-background-color;
+    border-radius: 6px;
+    padding: 0 4px;
+  }
+
   .tags {
     display: flex;
     align-items: center;

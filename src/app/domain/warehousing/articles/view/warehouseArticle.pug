@@ -4,7 +4,7 @@
 
   .middle
     .first-name {{ ::vm.article.firstName }}
-    .piece-volume(ng-if="::vm.article.pieceVolume") {{ ::vm.article.pieceVolume }}
+    .piece-volume(ng-if="::vm.article.pieceVolume") {{ ::vm.article.pieceVolume | stnumber:1 }}
     .tags
       .tag(
       ng-repeat='tag in ::vm.article.tags track by tag.code'
