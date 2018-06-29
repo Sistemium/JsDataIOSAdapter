@@ -6,17 +6,23 @@
       bindings: {
         articles: '<',
         showSearch: '<',
+        onClick: '&',
       },
 
       controllerAs: 'vm',
       templateUrl: 'app/domain/warehousing/articles/list/warehouseArticleList.html',
 
+      /** @ngInject */
       controller($scope) {
 
         const vm = _.assign(this, {
 
           $onInit() {
             onSearch();
+          },
+
+          articleClick($item) {
+            vm.onClick({ $item });
           },
 
         });

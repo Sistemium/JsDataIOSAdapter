@@ -1,12 +1,17 @@
 .warehouse-articling(cg-busy="vm.cgBusy")
 
-  .barcode-filter(ng-if='vm.barcode')
-    label
-      i.glyphicon.glyphicon-barcode
+  ui-view
 
-    strong {{ vm.barcode }}
+    .barcode-filter(ng-if='vm.barcode')
+      label
+        i.glyphicon.glyphicon-barcode
 
-    a.remove(href ng-click='vm.clearBarcodeClick()')
-      i.glyphicon.glyphicon-remove
+      strong {{ vm.barcode }}
 
-  warehouse-article-list(articles="vm.articles" show-search="true")
+      a.remove(href ng-click='vm.clearBarcodeClick()')
+        i.glyphicon.glyphicon-remove
+
+    warehouse-article-list(
+    articles="vm.articles" show-search="true"
+    on-click="vm.articleClick($item)"
+    )

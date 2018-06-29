@@ -20,6 +20,7 @@
 
   .tags {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     .tag {
       font-size: 90%;
@@ -39,6 +40,13 @@
   .footer, .middle {
     display: flex;
     align-items: flex-start;
+  }
+
+  .footer {
+    > * {
+      color: $light-gray;
+      margin-right: $margin-bottom-xs-minus;
+    }
   }
 
 }

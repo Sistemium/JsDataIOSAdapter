@@ -12,7 +12,7 @@
     });
 
   function WarehouseArticlingController($scope, saControllerHelper, Schema,
-                                        BarCodeScanner) {
+                                        BarCodeScanner, $state) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -23,7 +23,7 @@
       $onInit() {
 
         rebind();
-        vm.setBusy(Article.findAll({}, {}));
+        vm.setBusy(Article.findAll({}, { limit: 10000 }));
 
         $scope.$on(BarCodeScanner.BARCODE_SCAN_EVENT, (e, { code }) => code && onScan(code));
 
@@ -32,6 +32,10 @@
       clearBarcodeClick() {
         vm.barcode = null;
         rebind();
+      },
+
+      articleClick(article) {
+        $state.go('wh.articling.view', { articleId: article.id });
       },
 
     });

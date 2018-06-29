@@ -19,7 +19,15 @@
 
     template: '<warehouse-articling></warehouse-articling>',
 
-    // children: []
+    children: [{
+      name: 'view',
+      url: '/view/:articleId',
+      data: {
+        // title: 'Номенклатура',
+      },
+      template: '<warehouse-article-view ng-model="vm.params.articleId"></warehouse-article-view>',
+      controller: 'StateController as vm',
+    }]
 
   };
 

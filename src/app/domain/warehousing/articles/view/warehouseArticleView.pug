@@ -1,0 +1,12 @@
+.warehouse-article-view
+
+  h3 Товар
+
+  warehouse-article(ng-model="vm.article")
+
+  h3 Штрих-коды
+
+  .list-group.barcodes
+    .list-group-item(ng-repeat="barcode in vm.barcodes track by barcode.id")
+      .title
+        .code {{ barcode.code }}
