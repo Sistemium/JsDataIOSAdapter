@@ -18,6 +18,10 @@
       title: 'Учет',
       property: 'stock',
       type: 'number',
+    }, {
+      title: 'Разница',
+      property: 'diff',
+      type: 'number',
     }
   ];
 
@@ -45,8 +49,13 @@
 
       const found = _.map(itemsByArticle, (itemsData, articleId) => {
 
-        return _.assign(exportItem(itemsData, articleId), {
-          stock: _.get(stockByArticle[articleId], 'volume')
+        const res = exportItem(itemsData, articleId);
+        const stock = _.get(stockByArticle[articleId], 'volume');
+        const diff = stock === res.volume ? null : (stock||0) - res.volume;
+
+        return _.assign(res, {
+          stock,
+          diff
         });
 
       });
@@ -56,6 +65,7 @@
       const res = _.union(found, _.map(notFound, ({ volume, article }) => ({
         article,
         stock: volume,
+        diff: volume
       })));
 
       return _.orderBy(res, 'article.name');
