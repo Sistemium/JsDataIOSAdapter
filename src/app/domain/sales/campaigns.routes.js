@@ -16,7 +16,8 @@
           controllerAs: 'vm',
 
           data: {
-            title: 'Акции'
+            title: 'Акции',
+            auth: null
           }
 
         });
