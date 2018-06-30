@@ -4,6 +4,10 @@ warehouse-stock {
 
   display: block;
 
+  .warehouse-stock > a {
+    display: block;
+  }
+  
   a.list-group-item {
 
     display: flex;

@@ -82,7 +82,6 @@
           )
 
         uib-tab(index="2" heading="Остатки ({{ vm.stocks.length }})")
-          warehouse-stock.scroll-y(
-          resize resize-offset-top="10"
+          warehouse-stock(
           stocks="vm.stocks"
           )
