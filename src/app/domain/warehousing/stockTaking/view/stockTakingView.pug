@@ -54,6 +54,7 @@
           track-focused
           aria-describedby='search-input'
           ng-model='vm.search'
+          ng-model-options="{debounce: 500}"
           )
 
           span.form-control-feedback(ng-hide='!vm.search')

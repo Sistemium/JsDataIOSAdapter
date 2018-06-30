@@ -60,7 +60,9 @@
 
       const { search } = vm;
 
-      if (search) {
+      if (search === '!') {
+        data = _.filter(data, item => item.volume !== item.targetVolume);
+      } else if (search) {
         const re = new RegExp(`.*${_.escapeRegExp(search)}.*`, 'i');
         data = _.filter(data, item => re.test(item.article.name));
       }
