@@ -35,7 +35,7 @@
       },
 
       itemClick($item) {
-        vm.onClick({ $item });
+        vm.onClick({ $articleId: $item.articleId });
       },
 
     });

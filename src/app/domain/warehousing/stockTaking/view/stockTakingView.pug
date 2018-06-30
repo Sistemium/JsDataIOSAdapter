@@ -85,4 +85,5 @@
         uib-tab(index="2" heading="Остатки ({{ vm.stocks.length }})")
           warehouse-stock(
           stocks="vm.stocks"
+          on-click="vm.articleClick($articleId)"
           )
