@@ -42,7 +42,7 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    const { BARCODE_SCAN_EVENT } = BarCodeScanner;
+    const { BARCODE_SCAN_EVENT, BARCODE_SCAN_INVALID } = BarCodeScanner;
 
     const tabs = ['scans', 'stats', 'stocks'];
 
@@ -57,6 +57,7 @@
         setActiveTabIndex();
 
         $scope.$on(BARCODE_SCAN_EVENT, (e, { code }) => vm.onScan({ code }));
+        $scope.$on(BARCODE_SCAN_INVALID, sayInvalid);
 
         vm.watchScope('vm.activeTabIndex', idx => {
 
@@ -300,6 +301,10 @@
       const { volume, article } = stockTakingItem;
       const say = (volume === 1) ? article.firstName : Language.speakableCountFemale(volume);
       SoundSynth.say(say);
+    }
+
+    function sayInvalid() {
+      SoundSynth.say(`Неправильный тип штрих-кода`);
     }
 
     function speakNotFound() {

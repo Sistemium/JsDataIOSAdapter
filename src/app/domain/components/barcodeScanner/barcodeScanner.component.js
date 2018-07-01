@@ -13,7 +13,7 @@
       /** @ngInject */
       controller($scope, DEBUG, Schema, $timeout, toastr, IOS, BarCodeScanner, $rootScope) {
 
-        const { BARCODE_SCAN_EVENT } = BarCodeScanner;
+        const { BARCODE_SCAN_EVENT, BARCODE_SCAN_INVALID } = BarCodeScanner;
 
         const vm = _.assign(this, {
           $onInit() {
@@ -71,6 +71,7 @@
 
           if (requiredType && (!type || type.type !== requiredType)) {
             vm.input = '';
+            $rootScope.$broadcast(BARCODE_SCAN_INVALID, { code, type });
             return toastr.error(code, 'Неверный тип штрих-кода');
           }
 
