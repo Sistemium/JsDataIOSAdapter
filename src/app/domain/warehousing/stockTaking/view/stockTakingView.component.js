@@ -263,8 +263,8 @@
 
     function speakSuccess(stockTakingItem) {
       const { volume, article } = stockTakingItem;
-      const say = Language.speakableBoxPcs(article.boxPcs(volume, true));
-      SoundSynth.say(`${volume === 1 ? article.firstName : ''} ${say}`);
+      const say = (volume === 1) ? article.firstName : Language.speakableCountFemale(volume);
+      SoundSynth.say(say);
     }
 
     function speakNotFound() {
