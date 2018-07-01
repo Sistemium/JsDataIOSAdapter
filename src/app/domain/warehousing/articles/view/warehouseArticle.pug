@@ -12,5 +12,6 @@
       ) {{ ::tag.label }}
 
   .footer
-    .package-rel (1&nbsp;x&nbsp;{{ ::vm.article.packageRel }})
+    .package-rel(ng-if="::vm.article.packageRel")
+      | (1&nbsp;x&nbsp;{{ ::vm.article.packageRel }})
     .last-name {{ ::vm.article.lastName }}
