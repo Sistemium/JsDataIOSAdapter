@@ -8,6 +8,7 @@
         warehouseId: '<',
         date: '<',
         onClick: '&onClick',
+        activeArticleId: '<',
       },
 
       controller: StockTakingListController,

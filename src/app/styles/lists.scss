@@ -57,6 +57,12 @@ a.list-group-item {
   }
 }
 
+.list-group-item {
+  a:hover {
+    text-decoration: none;
+  }
+}
+
 .list-group {
 
   margin-bottom: 0;

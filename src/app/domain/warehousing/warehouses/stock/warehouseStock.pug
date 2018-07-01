@@ -1,14 +1,17 @@
 .warehouse-stock.list-group.scroll-y(
 resize resize-offset-top="10"
-vs-repeat
+vs-repeat="93"
 )
 
-  a.list-group-item(
-  href
+  .list-group-item(
   ng-repeat='item in vm.stocks track by item.id'
-  ng-click="vm.itemClick(item)"
+  ng-class="{active: vm.activeArticleId === item.article.id}"
   )
-    warehouse-article.article(ng-model="item.article")
+    a.title(
+    href
+    ng-click="vm.itemClick(item)"
+    )
+      warehouse-article.article(ng-model="item.article")
 
     .stats
 

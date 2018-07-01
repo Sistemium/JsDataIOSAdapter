@@ -4,14 +4,11 @@ warehouse-stock {
 
   display: block;
 
-  .warehouse-stock > a {
-    display: block;
-  }
-  
-  a.list-group-item {
+  .list-group-item {
 
     display: flex;
     flex-direction: column;
+    align-items: stretch;
 
     .article {
       flex: 1;
