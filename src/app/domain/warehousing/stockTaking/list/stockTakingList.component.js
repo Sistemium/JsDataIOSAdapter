@@ -24,7 +24,7 @@
     vm.use({
 
       $onInit() {
-        //
+        Schema.model('StockTaking').meta.refreshStats();
       },
 
       stockTakingClick($item) {

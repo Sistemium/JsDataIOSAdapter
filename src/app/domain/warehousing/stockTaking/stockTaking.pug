@@ -1,17 +1,14 @@
 .stock-taking(cg-busy='vm.cgBusy')
 
-  .buttons(ng-show="vm.currentState==='stockTaking'")
-    button.btn.btn-primary(ng-click='vm.addClick()') Начать инвентаризацию
-
-  stock-taking-list.scroll-y(
-  resize resize-offset-top='5'
-  ng-model="vm.stockTakings"
-  on-click="vm.stockTakingClick($item)"
-  ng-show="vm.currentState==='stockTaking'"
-  )
-
-  //stock-taking-choice(ng-model='vm.stockTakings')
-
   ui-view
+
+    .buttons(ng-show="vm.currentState==='stockTaking'")
+      button.btn.btn-primary(ng-click='vm.addClick()') Начать инвентаризацию
+
+    stock-taking-list.scroll-y(
+    resize resize-offset-top='5'
+    ng-model="vm.stockTakings"
+    on-click="vm.stockTakingClick($item)"
+    )
 
 

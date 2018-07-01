@@ -38,6 +38,10 @@
 
       },
 
+      meta: {
+        refreshStats,
+      },
+
     }).on('DS.change', _.debounce(refreshStats, 100));
 
 
