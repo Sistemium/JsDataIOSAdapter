@@ -30,7 +30,7 @@
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
                                      toastr, moment, BarCodeScanner, StockTakingData,
                                      SoundSynth, Language, Sockets, DEBUG, StockTakingExport,
-                                     IOS) {
+                                     IOS, ConfirmModal) {
 
     const {
       Article,
@@ -73,6 +73,11 @@
         if (stockTakingId) {
 
           vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
+          // vm.watchScope('vm.itemId', (ev, itemId) => {
+          //   if (!itemId) {
+          //     vm.stockTakingItem = null;
+          //   }
+          // });
 
           const busy = StockTakingItem.findAll({ stockTakingId }, { bypassCache: true })
             .then(() => {
@@ -117,7 +122,11 @@
         // const stockTakingData = StockTakingData({ stockTakingId });
         const items = StockTakingItem.filter({ articleId, stockTakingId });
         // vm.stockTakingArticle = stockTakingData.resultByArticle(items, articleId);
-        items.length && vm.itemClick(_.maxBy(items, 'timestamp'));
+        if (items.length) {
+          vm.itemClick(_.maxBy(items, 'timestamp'));
+        } else {
+          addWithoutBarcode(articleId);
+        }
       },
 
       onScan({ code }) {
@@ -150,6 +159,23 @@
     Functions
      */
 
+    function addWithoutBarcode(articleId) {
+
+      const article = Article.get(articleId);
+
+      ConfirmModal.show({
+        text: `Добавить без штрих-кода товар '${article.name}'?`,
+      })
+        .then(() => createItem(article)
+          .DSCreate()
+          .then(stockTakingItem => {
+            vm.itemClick(stockTakingItem);
+            scrollTo(stockTakingItem);
+          })
+          .catch(err => toastr.error(angular.toJson(err))))
+        .catch(_.noop);
+    }
+
     function setActiveTabIndex() {
       const idx = tabs.indexOf(vm.tab);
       vm.activeTabIndex = idx >= 0 ? idx : 0;
@@ -180,6 +206,22 @@
 
     }
 
+    function createItem(article, barcode = null) {
+
+      const { stockTakingId } = vm;
+      const { id: articleId, packageRel } = article;
+
+      return StockTakingItem.createInstance({
+        stockTakingId,
+        barcode,
+        articleId,
+        packageRel,
+        volume: 1,
+        timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
+      });
+
+    }
+
     function processBarcode(code) {
 
       const { stockTakingId, stockTaking } = vm;
@@ -188,7 +230,7 @@
         return toastr.info('Выберите "Склад" прежде чем начать сканирование');
       }
 
-      let barcodedArticle = {};
+
       let created;
 
       const where = {
@@ -208,25 +250,18 @@
           return _.first(articles);
         })
 
-        .then(article => {
-          barcodedArticle = { articleId: article.id, packageRel: article.packageRel };
-        })
-
-        .then(() => !stockTakingId && StockTaking.create(stockTaking)
+        .then(article => stockTakingId ? article : StockTaking.create(stockTaking)
           .then(() => {
             created = true;
             vm.stockTakingId = stockTaking.id;
+            return article;
           }))
 
-        .then(() => (_.get(vm.stockTakingItem, 'barcode') === code && vm.itemId)
+        .then(article => (_.get(vm.stockTakingItem, 'barcode') === code && vm.itemId)
           ? _.assign(vm.stockTakingItem, {
             volume: vm.stockTakingItem.volume + 1,
           })
-          : _.assign({
-            stockTakingId: stockTaking.id,
-            barcode: code,
-            volume: 1,
-          }, barcodedArticle))
+          : createItem(article, code))
 
         .then(stockTakingItem => StockTakingItem.create(_.assign(stockTakingItem, {
           timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
