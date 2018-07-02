@@ -44,12 +44,14 @@
       $onInit() {
 
         const { stockBatchId, createCode } = vm;
+        const orderBy = [['deviceCts', 'DESC']];
 
         vm.lastBarcode = createCode;
 
         if (stockBatchId) {
           vm.rebindOne(StockBatch, vm.stockBatchId, 'vm.stockBatch');
           vm.rebindAll(StockBatchBarCode, { stockBatchId }, 'vm.stockBatchBarCodes');
+          vm.rebindAll(StockBatchItem, { stockBatchId, orderBy }, 'vm.stockBatchItems');
         } else {
           vm.stockBatch = newStockBatch(createCode);
         }
@@ -151,11 +153,18 @@
         });
     }
 
+    function now() {
+      return moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
+    }
+
     function addItemByCode(barcode) {
 
-      if (_.find(vm.stockBatchItems, { barcode })) {
+      const existing = _.find(vm.stockBatchItems, { barcode });
+
+      if (existing) {
+        existing.timestamp = now();
         toastr.info('Эта марка уже привязана к партии');
-        return $q.resolve(ALREADY_EXISTS);
+        return existing.DSCreate();
       }
 
       return StockBatchItem.findAll({ barcode })
@@ -167,7 +176,12 @@
 
           return saveStockBatch()
             .then(({ id: stockBatchId }) =>
-              StockBatchItem.create({ stockBatchId, barcode, volume: 1 })
+              StockBatchItem.create({
+                stockBatchId,
+                barcode,
+                volume: 1,
+                timestamp: now(),
+              })
             )
             .then(({ stockBatchId }) => {
               vm.stockBatchId = stockBatchId;

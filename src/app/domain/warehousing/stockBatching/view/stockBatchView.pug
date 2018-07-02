@@ -36,12 +36,15 @@
     .code(ng-repeat='item in vm.stockBatchBarCodes | orderBy:"code" track by item.code')
       | {{ ::item.code }}
 
-  h3(ng-if="vm.stockBatch.items.length") Марки
+  h3(ng-if="vm.stockBatchItems.length") Марки
+    .badge {{ vm.stockBatchItems.length }}
   .list-group.stock-batch-items
     .list-group-item(
-    ng-repeat='item in vm.stockBatch.items | orderBy:"-deviceCts" track by item.id'
+    ng-repeat='item in vm.stockBatchItems track by item.id'
     )
       .title
-        .barcode {{ ::item.barcode }}
+        .barcode {{ ::item.barcode | splitChunk:25 }}
       .footer
-        .device-cts {{ ::item.deviceCts | dateTime }}
+        .device-cts.animate(
+        sa-animate-on-change="item.timestamp" change-class="change-up"
+        ) {{ item.timestamp | dateTime:{seconds:true} }}

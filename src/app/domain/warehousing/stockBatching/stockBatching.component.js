@@ -74,14 +74,20 @@
 
     function onScan({ code, type = {} }) {
 
+      const barcodeType = type.type;
+
       if (stateName() === 'create') {
         return;
       }
 
       console.info(vm.currentState);
 
-      if (type.type !== BARCODE_TYPE_STOCK_BATCH) {
-        return toastr.error('Это не штрих-код наклейки', code);
+      if (barcodeType !== BARCODE_TYPE_STOCK_BATCH) {
+        if (stateName() === 'stockBatching') {
+          return toastr.error('Это не штрих-код наклейки', code);
+        } else {
+          return;
+        }
       }
 
       console.warn(code, type && type.code);

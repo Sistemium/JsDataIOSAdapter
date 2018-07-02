@@ -27,8 +27,10 @@ stock-batch-view {
   }
 
   .list-group-item {
-    .title .barcode {
-      @extend .ellipsis;
+    .footer {
+      text-align: right;
+      color: $light-gray;
+      font-size: 85%;
     }
   }
 
