@@ -44,7 +44,7 @@
       $onInit() {
 
         const { stockBatchId, createCode } = vm;
-        const orderBy = [['deviceCts', 'DESC']];
+        const orderBy = [['timestamp', 'DESC']];
 
         vm.lastBarcode = createCode;
 
@@ -141,7 +141,7 @@
       const { stockBatch } = vm;
 
       _.assign(stockBatch, {
-        volume: stockBatch.id ? stockBatch.items.length : 1,
+        volume: vm.stockBatchItems.length || 0,
       });
 
       return stockBatch.DSCreate()
@@ -167,7 +167,7 @@
         return existing.DSCreate();
       }
 
-      return StockBatchItem.findAll({ barcode })
+      return StockBatchItem.findAll({ barcode }, { bypassCache: true })
         .then(res => {
 
           if (res.length) {
@@ -193,7 +193,7 @@
 
     function setArticleByBarcode(code) {
 
-      return ArticleBarCode.findAll({ code })
+      return ArticleBarCode.findAll({ code }, { bypassCache: true })
         .then(res => {
 
           if (!res.length) {
@@ -236,7 +236,7 @@
         return $q.resolve(ALREADY_EXISTS);
       }
 
-      return StockBatchBarCode.findAll({ code })
+      return StockBatchBarCode.findAll({ code }, { bypassCache: true })
         .then(_.first)
         .then(({ stockBatchId }) => {
 
@@ -258,6 +258,7 @@
 
     function newStockBatch() {
 
+      vm.stockBatchItems = [];
       vm.stockBatchBarCodes = initStockBatchBarCodes();
 
       return StockBatch.createInstance();

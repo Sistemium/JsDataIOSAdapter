@@ -105,7 +105,7 @@
     }
 
     function findStockBatch(code) {
-      return StockBatchBarCode.findAll({ code })
+      return StockBatchBarCode.findAll({ code }, { bypassCache: true })
         .then(checkOne)
         .then(({ stockBatchId }) => loadStockBatch(stockBatchId));
     }
