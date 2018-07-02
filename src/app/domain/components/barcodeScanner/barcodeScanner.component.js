@@ -101,6 +101,7 @@
   }
 
   function translateHIDScan(barcode) {
+    barcode = _.replace(barcode, / /g, '');
     return barcode.replace(RU_LETTERS_RE, translateFn);
   }
 
