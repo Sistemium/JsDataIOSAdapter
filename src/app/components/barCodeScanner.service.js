@@ -29,7 +29,9 @@
       bind(scanFn, powerFn) {
 
         function scanProcessor(code, type, obj) {
-          scanFn(code, type, obj);
+          $rootScope.$applyAsync(() => {
+            scanFn(code, type, obj);
+          })
         }
 
         function barCodeScannerPowerFn() {
