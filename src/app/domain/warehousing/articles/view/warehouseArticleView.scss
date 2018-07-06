@@ -1,0 +1,38 @@
+@import "variables";
+
+.warehouse-article-view {
+
+  > .list-group > .list-group-item {
+
+    display: flex;
+    align-items: center;
+
+    .title {
+      flex: 1;
+    }
+
+    .actions {
+      a {
+        display: block;
+        padding: 2px 6px;
+        i {
+          top: 3px;
+        }
+      }
+    }
+
+    &.confirm {
+      .title {
+        text-decoration: line-through;
+      }
+      .remove {
+        color: $red;
+        &:after {
+          margin-left: 15px;
+          content: "?";
+        }
+      }
+    }
+  }
+
+}
