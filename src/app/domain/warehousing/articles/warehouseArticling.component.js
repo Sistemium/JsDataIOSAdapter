@@ -12,7 +12,7 @@
     });
 
   function WarehouseArticlingController($scope, saControllerHelper, Schema,
-                                        BarCodeScanner, $state, DEBUG, $q) {
+                                        BarCodeScanner, $state, DEBUG, $q, toastr) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -50,6 +50,27 @@
 
     })
       .watchScope('vm.search', rebind);
+
+    /*
+    Functions
+     */
+
+    function stateGo(id) {
+      return $state.go(`wh.articling${ id ? '.view' : ''}`, id ? { articleId: id } : {});
+    }
+
+    function stateName() {
+      const { currentState } = vm;
+
+      switch (currentState) {
+        case 'articling':
+          return 'root';
+        case 'create':
+        case 'view':
+          return currentState;
+
+      }
+    }
 
     function rebind(filterOrSearch = '') {
 
@@ -130,11 +151,33 @@
 
     }
 
-    function stateGo(id) {
-      return $state.go(`wh.articling${ id ? '.view' : ''}`, id ? { articleId: id } : {});
+    function addBarcode(barcode) {
+
+      const { articleId } = $state.params;
+
+      const article = Article.get(articleId);
+
+      if (!article) {
+        return;
+      }
+
+      const { barcodes } = article;
+
+      if (barcodes.indexOf(barcode) >= 0) {
+        return toastr.error(barcode, 'Штрих-код уже привязан к товару');
+      }
+
+      article.barcodes.push(barcode);
+
+      article.DSCreate();
+
     }
 
     function onArticleScan(barcode) {
+
+      if (stateName() === 'view') {
+        return addBarcode(barcode);
+      }
 
       rebind({ barcode })
         .then(articles => {
