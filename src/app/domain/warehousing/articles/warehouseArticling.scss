@@ -2,22 +2,23 @@
 
 warehouse-articling {
 
-  .barcode-filter {
-    border: solid 1px $border-gray;
-    border-radius: $border-radius;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    > * {
-      display: block;
-      margin-right: $margin-bottom-xs-minus;
+  .stm-searcher {
+    border: solid 1px $gray-border-color;
+    &, > * {
+      border-radius: $border-radius;
     }
-    margin-bottom: $margin-bottom-xs;
   }
 
   label {
     margin-bottom: 0;
     color: $dark-gray;
+  }
+
+  h3 {
+    background: $gray-background-color;
+    font-size: 85%;
+    padding: 4px;
+    color: $gray;
   }
 
 }

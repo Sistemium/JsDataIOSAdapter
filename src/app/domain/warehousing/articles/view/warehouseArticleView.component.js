@@ -17,7 +17,7 @@
   function warehouseArticleViewController($scope, Schema, saControllerHelper) {
 
     const vm = saControllerHelper.setup(this, $scope);
-    const { Article, ArticleBarCode } = Schema.models();
+    const { WarehouseArticle: Article } = Schema.models();
 
     vm.use({
       $onInit() {
@@ -27,10 +27,16 @@
 
     function onArticle() {
 
-      const { id: articleId } = vm.article;
+      if (!vm.article) {
+        return;
+      }
 
-      ArticleBarCode.findAll({ articleId }, { bypassCache: true });
-      vm.rebindAll(ArticleBarCode, { articleId }, 'vm.barcodes');
+      const { barcodes } = vm.article;
+
+      vm.barcodes = barcodes;
+
+      // ArticleBarCode.findAll({ articleId }, { bypassCache: true });
+      // vm.rebindAll(ArticleBarCode, { articleId }, 'vm.barcodes');
 
     }
 

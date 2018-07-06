@@ -3,7 +3,7 @@
 (function () {
 
   const barcodeScanner = {
-    type: 'Article'
+    // type: 'Article'
   };
 
   const articling = {

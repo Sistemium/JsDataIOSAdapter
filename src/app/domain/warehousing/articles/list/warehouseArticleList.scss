@@ -18,15 +18,12 @@ warehouse-article-list {
     margin-bottom: 0;
   }
 
-  .stm-searcher {
-    border: solid 1px $gray-border-color;
-    &, > * {
-      border-radius: $border-radius;
-    }
-  }
-
   a.list-group-item {
     min-height: 74px;
+
+    .first-name {
+      font-weight: normal;
+    }
   }
 
   warehouse-article {

@@ -522,7 +522,7 @@
         return $q.resolve();
       }
 
-      let priceTypeId = vm.currentPriceType.id;
+      let priceTypeId = vm.currentPriceType && vm.currentPriceType.id;
 
       if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId, saleOrderId})) {
         // console.warn('setDiscounts exit 2');

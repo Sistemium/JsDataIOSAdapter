@@ -5,7 +5,6 @@
 
       bindings: {
         articles: '<',
-        showSearch: '<',
         onClick: '&',
       },
 
