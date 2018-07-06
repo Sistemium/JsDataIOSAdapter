@@ -16,7 +16,7 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    const { WarehouseArticle: Article, ArticleBarCode, BarCodeType } = Schema.models();
+    const { WarehouseArticle: Article, Producer, BarCodeType } = Schema.models();
 
     const {
       BARCODE_TYPE_ARTICLE,
@@ -30,7 +30,10 @@
       $onInit() {
 
         rebind();
-        vm.setBusy(Article.findAll({}, { limit: 10000 }));
+        vm.setBusy([
+          Article.findAll({}, { limit: 10000 }),
+          Producer.findAll(),
+        ]);
 
         $scope.$on(BarCodeScanner.BARCODE_SCAN_EVENT, (e, { code, type }) => code && onScan(code, type));
 
