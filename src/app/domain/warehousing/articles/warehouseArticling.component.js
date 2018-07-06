@@ -12,7 +12,7 @@
     });
 
   function WarehouseArticlingController($scope, saControllerHelper, Schema,
-                                        BarCodeScanner, $state, DEBUG, $q, toastr) {
+                                        BarCodeScanner, $state, DEBUG, $q, toastr, ConfirmModal) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -164,7 +164,7 @@
       const { barcodes } = article;
 
       if (barcodes.indexOf(barcode) >= 0) {
-        return toastr.error(barcode, 'Штрих-код уже привязан к товару');
+        return toastr.error(barcode, 'Штрих-код уже привязан к этому товару');
       }
 
       article.barcodes.push(barcode);
@@ -173,10 +173,30 @@
 
     }
 
+    function checkBarcodeUnique(barcode) {
+
+      const where = { barcodes: { 'contains': barcode } };
+      const { articleId: id } = $state.params;
+
+      const articles = _.filter(Article.filter({ where: where }), a => a.id !== id);
+
+      if (articles.length) {
+        return ConfirmModal.show({
+          title: barcode,
+          text: `Штрих-код уже привязан к [${articles[0].name}], добавить дубликат?`,
+        });
+      }
+
+      return $q.resolve();
+
+    }
+
     function onArticleScan(barcode) {
 
       if (stateName() === 'view') {
-        return addBarcode(barcode);
+        return checkBarcodeUnique(barcode)
+          .then(() => addBarcode(barcode))
+          .catch(_.noop);
       }
 
       rebind({ barcode })
