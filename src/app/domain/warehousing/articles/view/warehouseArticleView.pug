@@ -4,7 +4,11 @@
 
   warehouse-article(ng-model="vm.article")
 
-  .producer {{ vm.article.producer.name }}
+  .producer.field
+    span {{ vm.article.producer.name }}
+  .code.field
+    label Код
+    span {{ vm.article.code }}
 
   h3 Штрих-коды
 

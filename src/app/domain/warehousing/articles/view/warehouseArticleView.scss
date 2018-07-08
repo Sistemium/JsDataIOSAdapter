@@ -2,6 +2,13 @@
 
 .warehouse-article-view {
 
+  .field {
+    margin-top: $margin-bottom-xs-minus;
+    label {
+      font-weight: normal;
+    }
+  }
+
   > .list-group > .list-group-item {
 
     display: flex;

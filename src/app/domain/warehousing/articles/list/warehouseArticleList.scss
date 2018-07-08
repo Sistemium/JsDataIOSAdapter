@@ -30,7 +30,7 @@ warehouse-article-list {
     display: block;
   }
 
-  .footer {
+  .warehouse-article-list > .list-group > .list-group-item > .footer {
     margin-top: $margin-bottom-xs-minus;
   }
 
