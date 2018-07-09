@@ -652,7 +652,7 @@
 
         maxPositionsAlertShown = true;
 
-        toastr.error('В заказе больше чем 50 позиций', 'Внимание!', {onHidden});
+        toastr.error(`В заказе больше чем ${maxPositions} позиций`, 'Внимание!', {onHidden});
 
       }
 
