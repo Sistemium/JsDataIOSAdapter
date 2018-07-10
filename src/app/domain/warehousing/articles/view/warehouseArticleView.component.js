@@ -14,7 +14,8 @@
     });
 
   /** @ngInject */
-  function warehouseArticleViewController($scope, Schema, saControllerHelper, $timeout) {
+  function warehouseArticleViewController($scope, Schema, saControllerHelper, $timeout,
+                                          SoundSynth) {
 
     const vm = saControllerHelper.setup(this, $scope);
     const { WarehouseArticle: Article } = Schema.models();
@@ -32,7 +33,7 @@
     function removeBarcodeClick(barcode) {
 
       if (vm.deleteConfirm === barcode) {
-        vm.article.barcodes = _.remove(vm.barcodes, barcode);
+        vm.article.barcodes = _.filter(vm.barcodes, x => x !== barcode);
         vm.deleteConfirm = false;
         vm.article.DSCreate();
       }
@@ -54,13 +55,33 @@
         return;
       }
 
-      const { barcodes } = vm.article;
+      const { barcodes = [], id: lastArticleId } = vm.article;
 
       vm.barcodes = barcodes;
+
+      if (vm.lastArticleId === lastArticleId) {
+        return;
+      }
+
+      vm.lastArticleId = lastArticleId;
+
+      if (barcodes.length) {
+        sayHasBarcode();
+      } else {
+        sayNeedBarcode();
+      }
 
       // ArticleBarCode.findAll({ articleId }, { bypassCache: true });
       // vm.rebindAll(ArticleBarCode, { articleId }, 'vm.barcodes');
 
+    }
+
+    function sayNeedBarcode() {
+      SoundSynth.say(`Нет штрих-кода, просканируйте`);
+    }
+
+    function sayHasBarcode() {
+      SoundSynth.say(`У товара есть штрих-код`);
     }
 
   }

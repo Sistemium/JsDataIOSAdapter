@@ -12,7 +12,8 @@
     });
 
   function WarehouseArticlingController($scope, saControllerHelper, Schema,
-                                        BarCodeScanner, $state, DEBUG, $q, toastr, ConfirmModal) {
+                                        BarCodeScanner, $state, DEBUG, $q, toastr, ConfirmModal,
+                                        SoundSynth) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -112,11 +113,11 @@
       DEBUG('WarehouseArticlingController', code, type);
 
       if (!type) {
-        return;
+        return sayInvalid();
       }
 
       if (BARCODE_TYPES.indexOf(type) === -1) {
-        return;
+        return sayInvalid();
       }
 
       if (type === BARCODE_TYPE_ARTICLE) {
@@ -161,15 +162,10 @@
         return;
       }
 
-      const { barcodes } = article;
-
-      if (barcodes.indexOf(barcode) >= 0) {
-        return toastr.error(barcode, 'Штрих-код уже привязан к этому товару');
-      }
-
       article.barcodes.push(barcode);
 
-      article.DSCreate();
+      article.DSCreate()
+        .then(sayAdded);
 
     }
 
@@ -177,13 +173,29 @@
 
       const where = { barcodes: { 'contains': barcode } };
       const { articleId: id } = $state.params;
+      const article = Article.get(id);
 
       const articles = _.filter(Article.filter({ where: where }), a => a.id !== id);
 
       if (articles.length) {
+        sayNotUnique();
         return ConfirmModal.show({
           title: barcode,
           text: `Штрих-код уже привязан к [${articles[0].name}], добавить дубликат?`,
+        });
+      }
+
+      const { barcodes = [] } = article;
+
+      if (barcodes.indexOf(barcode) >= 0) {
+        return $q.reject(sayBarcodeAlreadyBound());
+      }
+
+      if (barcodes.length) {
+        sayThereIsBarcode();
+        return ConfirmModal.show({
+          title: 'У товара уже есть штрих-код',
+          text: 'Добавить еще один?',
         });
       }
 
@@ -193,10 +205,16 @@
 
     function onArticleScan(barcode) {
 
+      if (vm.busy) {
+        return sayBusy();
+      }
+
       if (stateName() === 'view') {
+        vm.busy = true;
         return checkBarcodeUnique(barcode)
           .then(() => addBarcode(barcode))
-          .catch(_.noop);
+          .catch(_.noop)
+          .finally(() => vm.busy = false);
       }
 
       rebind({ barcode })
@@ -212,6 +230,30 @@
 
         });
 
+    }
+
+    function sayThereIsBarcode() {
+      SoundSynth.say('Уже есть штрих-код');
+    }
+
+    function sayAdded() {
+      SoundSynth.say('Добавлено');
+    }
+
+    function sayNotUnique() {
+      SoundSynth.say('Штрих-код назначен другому товару');
+    }
+
+    function sayBarcodeAlreadyBound() {
+      SoundSynth.say('Штрих-код уже привязан к этому товару');
+    }
+
+    function sayInvalid() {
+      SoundSynth.say('Непонятный штрих-код');
+    }
+
+    function sayBusy() {
+      SoundSynth.say('Выберите ответ на экране');
     }
 
   }
