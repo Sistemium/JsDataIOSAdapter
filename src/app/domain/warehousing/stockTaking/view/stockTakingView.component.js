@@ -87,15 +87,16 @@
               }
               return StockTakingData({ stockTakingId }).promise;
             })
+            .then(stockTakingData =>
+              StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
+                .then(() => stockTakingData)
+            )
             .then(stockTakingData => {
               $scope.$watch(() => StockTakingItem.lastModified(), () => {
                 makeStocks(stockTakingData);
               });
               makeStocks(stockTakingData);
               $scope.$on('$destroy', () => stockTakingData.clearCache());
-            })
-            .then(() => {
-              return StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
             });
 
           return vm.setBusy(busy);
@@ -184,25 +185,27 @@
 
     function makeStocks(stockTakingData) {
 
-      let { stocks } = stockTakingData;
+      // let { stocks } = stockTakingData;
 
       const stockTaking = StockTaking.get(vm.stockTakingId);
+      //
+      // const fields = ['id', 'article', 'articleId', 'volume'];
+      // const itemsByArticleId = _.groupBy(stockTaking.items, 'articleId');
+      //
+      // stocks = _.map(stocks, stock => {
+      //   const res = _.pick(stock, fields);
+      //   const foundVolume = _.sumBy(itemsByArticleId[stock.articleId], 'volume') || 0;
+      //   return _.assign(res, {
+      //     foundVolume,
+      //     volumeRemains: stock.volume - foundVolume,
+      //   });
+      // });
+      //
+      // stocks = _.filter(stocks, 'volumeRemains');
 
-      const fields = ['id', 'article', 'articleId', 'volume'];
-      const itemsByArticleId = _.groupBy(stockTaking.items, 'articleId');
+      const stocks = StockTakingExport.exportData(stockTaking.items, stockTakingData.stocks);
 
-      stocks = _.map(stocks, stock => {
-        const res = _.pick(stock, fields);
-        const foundVolume = _.sumBy(itemsByArticleId[stock.articleId], 'volume') || 0;
-        return _.assign(res, {
-          foundVolume,
-          volumeRemains: stock.volume - foundVolume,
-        });
-      });
-
-      stocks = _.filter(stocks, 'volumeRemains');
-
-      vm.stocks = _.orderBy(stocks, 'article.name');
+      vm.stocks = _.filter(stocks, 'diff');
       vm.stockTakingData = stockTakingData;
 
     }

@@ -12,7 +12,7 @@
       property: 'article.name',
     }, {
       title: 'Факт',
-      property: 'volume',
+      property: 'foundVolume',
       type: 'number',
     }, {
       title: 'Учет',
@@ -31,7 +31,7 @@
 
   function StockTakingExport(ExportExcel) {
 
-    return { asExcel };
+    return { asExcel, exportData };
 
     function asExcel({ stockTaking, stocks }) {
 
@@ -51,10 +51,13 @@
 
         const res = exportItem(itemsData, articleId);
         const stock = _.get(stockByArticle[articleId], 'volume');
-        const diff = stock === res.volume ? null : (stock||0) - res.volume;
+        const { foundVolume } = res;
+        const diff = stock === foundVolume ? null : (stock || 0) - foundVolume;
 
         return _.assign(res, {
+          id: articleId,
           stock,
+          volume: stock,
           diff
         });
 
@@ -63,9 +66,12 @@
       const notFound = _.filter(stocks, ({ articleId }) => !itemsByArticle[articleId]);
 
       const res = _.union(found, _.map(notFound, ({ volume, article }) => ({
+        id: article.id,
+        articleId: article.id,
         article,
+        volume,
         stock: volume,
-        diff: volume
+        diff: volume,
       })));
 
       return _.orderBy(res, 'article.name');
@@ -76,9 +82,10 @@
 
       const { article } = itemsData[0];
       return {
+        id: articleId,
         articleId,
         article,
-        volume: _.sumBy(itemsData, 'volume'),
+        foundVolume: _.sumBy(itemsData, 'volume'),
       };
 
     }
