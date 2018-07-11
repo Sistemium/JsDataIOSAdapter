@@ -49,7 +49,9 @@
           $q.all(_.map(stockStats, ({ 'max(date)': date }, warehouseId) =>
             WarehouseStock.groupBy({ warehouseId, date }, ['warehouseId'])
               .then(_.first)
-              .then(({ 'sum(volume)': volume }) => ({ date, volume, warehouseId }))
+              .then(({ 'sum(volume)': volume, 'count()': count }) => (
+                { date, volume, warehouseId, count }
+              ))
           ))
         )
         .then(res => vm.stockStats = _.keyBy(res, 'warehouseId'));

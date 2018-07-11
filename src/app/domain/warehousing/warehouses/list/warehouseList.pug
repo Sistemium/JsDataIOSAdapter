@@ -12,11 +12,19 @@
         .name {{ item.name }}
 
       .footer(ng-if='vm.stockStats[item.id]')
+
         currency-value.stock(
         label="Остаток:"
         hide-empty="true"
         value="vm.stockStats[item.id].volume"
         currency="Б" decimals="0"
+        )
+
+        currency-value.stock(
+        label=""
+        hide-empty="true"
+        value="vm.stockStats[item.id].count"
+        currency="П" decimals="0"
         )
 
         .date
