@@ -22,6 +22,8 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
+    const debouncedSave = _.debounce(saveItem, 3000);
+
     vm.use({
 
       $onInit() {
@@ -30,21 +32,10 @@
 
         vm.watchScope('vm.stockTakingItemId', onItemIdChange);
 
-        vm.watchScope('vm.volumeViewTouched', touched => {
-          if (touched) {
-            $timeout.cancel(vm.touchedTimeout);
-            vm.touchedTimeout = $timeout(4000)
-              .then(() => {
-                vm.volumeViewTouched = false;
-              });
-          }
+        vm.watchScope('vm.stockTakingItem.volume', () => {
+          setUntouched();
+          debouncedSave();
         });
-
-        vm.watchScope('vm.stockTakingItem.volume', _.debounce(() => {
-          if (_.get(vm.stockTakingItem, 'id')) {
-            vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSCreate();
-          }
-        }, 1000));
 
         onItemIdChange(stockTakingItemId);
 
@@ -64,6 +55,18 @@
     /*
     Functions
      */
+
+    function saveItem() {
+      if (_.get(vm.stockTakingItem, 'id')) {
+        vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSCreate();
+      }
+    }
+
+    function setUntouched() {
+      $timeout.cancel(vm.touchedTimeout);
+      vm.touchedTimeout = $timeout(4000);
+      vm.touchedTimeout.then(() => vm.volumeViewTouched = false, _.noop);
+    }
 
     function onItemIdChange(id) {
       _.assign(vm, {
