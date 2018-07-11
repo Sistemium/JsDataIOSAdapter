@@ -173,7 +173,9 @@
 
       DEBUG('setArticles', articles.length);
 
-      if (vm.articles.length === 1) {
+      if (!vm.articles.length) {
+        sayNotFound();
+      } else if (vm.articles.length === 1) {
         const { id } = vm.articles[0];
         if (id === $state.params.articleId) {
           return saySameArticle();
@@ -254,6 +256,10 @@
       rebind({ barcode })
         .then(setArticles);
 
+    }
+
+    function sayNotFound() {
+      SoundSynth.say('Товар не найден');
     }
 
     function saySameArticle() {
