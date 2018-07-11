@@ -138,17 +138,24 @@
       DEBUG('onExciseStampScan', articleCode);
 
       rebind({ code: articleCode })
-        .then(articles => {
+        .then(setArticles);
 
-          DEBUG('onExciseStampScan', articles.length);
+    }
 
-          if (vm.articles.length === 1) {
-            stateGo(vm.articles[0].id);
-          } else {
-            stateGo();
-          }
+    function setArticles(articles) {
 
-        });
+      DEBUG('setArticles', articles.length);
+
+      if (vm.articles.length === 1) {
+        const { id } = vm.articles[0];
+        if (id === $state.params.articleId) {
+          return saySameArticle();
+        }
+        stateGo(id);
+      } else {
+        sayChooseArticle();
+        stateGo();
+      }
 
     }
 
@@ -175,6 +182,12 @@
       const { articleId: id } = $state.params;
       const article = Article.get(id);
 
+      const { barcodes = [] } = article;
+
+      if (barcodes.indexOf(barcode) >= 0) {
+        return $q.reject(sayBarcodeAlreadyBound());
+      }
+
       const articles = _.filter(Article.filter({ where: where }), a => a.id !== id);
 
       if (articles.length) {
@@ -183,12 +196,6 @@
           title: barcode,
           text: `Штрих-код уже привязан к [${articles[0].name}], добавить дубликат?`,
         });
-      }
-
-      const { barcodes = [] } = article;
-
-      if (barcodes.indexOf(barcode) >= 0) {
-        return $q.reject(sayBarcodeAlreadyBound());
       }
 
       if (barcodes.length) {
@@ -218,18 +225,16 @@
       }
 
       rebind({ barcode })
-        .then(articles => {
+        .then(setArticles);
 
-          DEBUG('onBarcodeScan', articles.length);
+    }
 
-          if (vm.articles.length === 1) {
-            stateGo(vm.articles[0].id);
-          } else {
-            stateGo();
-          }
+    function saySameArticle() {
+      SoundSynth.say('Такой же товар');
+    }
 
-        });
-
+    function sayChooseArticle() {
+      SoundSynth.say('Выберите товар, подходит несколько');
     }
 
     function sayThereIsBarcode() {
