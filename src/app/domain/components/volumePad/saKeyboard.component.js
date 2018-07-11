@@ -7,7 +7,8 @@
       datatype: '@',
       exportModel: '=?',
       modelMax: '=',
-      touched: '=?'
+      touched: '=?',
+      disableDelete: '<',
     },
 
     templateUrl: 'app/domain/components/volumePad/saKeyboard.html',
@@ -92,6 +93,11 @@
     }
 
     function isDisabled(b) {
+      if (b.remove) {
+        if (vm.disableDelete && !vm.touched) {
+          return true;
+        }
+      }
       return angular.isFunction(disableFn) ? disableFn(b, vm.symbols, vm.modelMax, vm.touched) : false;
     }
 
