@@ -53,5 +53,5 @@ hr(ng-hide='vm.hideHashes')
           a.green(ng-if='o.locationId' href ng-click='vm.outletLocationClick(o)')
             i.glyphicon.glyphicon-map-marker
 
-          a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address }}
+          a.ml-5(href ng-click='vm.outletClick(o)') {{ ::o.address || 'Адрес не указан' }}
 
