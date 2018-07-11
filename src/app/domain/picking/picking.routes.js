@@ -127,6 +127,7 @@
       })
     ;
 
+    /** @ngInject */
     function PickingArticleController($scope, $state) {
 
       _.assign(this, {
