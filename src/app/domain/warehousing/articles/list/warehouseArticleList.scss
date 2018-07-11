@@ -24,6 +24,14 @@ warehouse-article-list {
     .first-name {
       font-weight: normal;
     }
+    .footer {
+      display: flex;
+      flex-direction: row;
+      i {
+        margin-right: $margin-bottom-xs;
+        color: $green;
+      }
+    }
   }
 
   warehouse-article {

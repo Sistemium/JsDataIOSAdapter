@@ -7,7 +7,9 @@
     )
 
       label
-        i.glyphicon.glyphicon-search
+        i.glyphicon.glyphicon-search(
+        ng-click="vm.onSearchClick()"
+        )
 
       input#search-input.form-control(
       type="search"

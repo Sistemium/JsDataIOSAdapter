@@ -3,6 +3,9 @@
 warehouse-articling {
 
   .stm-searcher {
+    i.glyphicon.glyphicon-search {
+      color: $primary-color;
+    }
     border: solid 1px $gray-border-color;
     &, > * {
       border-radius: $border-radius;

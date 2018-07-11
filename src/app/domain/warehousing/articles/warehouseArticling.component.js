@@ -49,12 +49,26 @@
         $state.go('wh.articling.view', { articleId: article.id });
       },
 
+      onSearchClick,
+
     })
       .watchScope('vm.search', rebind);
 
     /*
     Functions
      */
+
+    function onSearchClick() {
+
+      const { search } = vm;
+
+      if (hasBarcodeFilter.test(search)) {
+        vm.search = 'Нет штрих-кода';
+      } else {
+        vm.search = 'Есть штрих-код';
+      }
+
+    }
 
     function stateGo(id) {
       return $state.go(`wh.articling${ id ? '.view' : ''}`, id ? { articleId: id } : {});
@@ -73,6 +87,9 @@
       }
     }
 
+    const hasNoBarcodeFilter = /Нет штрих-кода/i;
+    const hasBarcodeFilter = /Есть штрих-код/i;
+
     function rebind(filterOrSearch = '') {
 
       const orderBy = [['name']];
@@ -86,7 +103,9 @@
         ? { name: { likei: `%${filterOrSearch}%` } }
         : {};
 
-      if (code) {
+      if (!filterOrSearch) {
+        where = {};
+      } else if (code) {
         vm.search = code;
         vm.barcode = code;
         where.code = { '==': code };
@@ -94,10 +113,18 @@
         vm.search = barcode;
         vm.barcode = barcode;
         where.barcodes = { 'contains': barcode };
-      }
-
-      if (!filterOrSearch) {
-        where = {};
+      } else if (hasBarcodeFilter.test(filterOrSearch)) {
+        where = {
+          'barcodes.length': {
+            '>': 0
+          },
+        };
+      } else if (hasNoBarcodeFilter.test(filterOrSearch)) {
+        where = {
+          'barcodes.length': {
+            '==': 0
+          },
+        };
       }
 
       const filter = _.assign({ orderBy }, { where });

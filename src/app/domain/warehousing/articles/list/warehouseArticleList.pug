@@ -13,4 +13,5 @@
         warehouse-article(ng-model="item")
         //.name {{ ::item.name }}
       .footer
+        i.has-barcode.glyphicon.glyphicon-barcode(ng-if="item.barcodes.length")
         .producer {{ item.producer.name }}
