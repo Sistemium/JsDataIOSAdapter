@@ -11,7 +11,7 @@
       .title
         .name {{ item.name }}
 
-      .footer
+      .footer(ng-if='vm.stockStats[item.id]')
         currency-value.stock(
         label="Остаток:"
         hide-empty="true"

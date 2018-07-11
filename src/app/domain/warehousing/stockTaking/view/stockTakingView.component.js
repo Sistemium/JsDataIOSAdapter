@@ -73,33 +73,9 @@
 
         if (stockTakingId) {
 
-          vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
-          // vm.watchScope('vm.itemId', (ev, itemId) => {
-          //   if (!itemId) {
-          //     vm.stockTakingItem = null;
-          //   }
-          // });
+          vm.watchScope('vm.search', () => vm.stockTakingData && makeStocks(vm.stockTakingData));
 
-          const busy = StockTakingItem.findAll({ stockTakingId }, { bypassCache: true })
-            .then(() => {
-              if (itemId) {
-                vm.stockTakingItem = StockTakingItem.get(itemId);
-              }
-              return StockTakingData({ stockTakingId }).promise;
-            })
-            .then(stockTakingData =>
-              StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
-                .then(() => stockTakingData)
-            )
-            .then(stockTakingData => {
-              $scope.$watch(() => StockTakingItem.lastModified(), () => {
-                makeStocks(stockTakingData);
-              });
-              makeStocks(stockTakingData);
-              $scope.$on('$destroy', () => stockTakingData.clearCache());
-            });
-
-          return vm.setBusy(busy);
+          return vm.setBusy(loadData(stockTakingId, itemId));
 
         } else {
 
@@ -161,6 +137,36 @@
     Functions
      */
 
+    function loadData(stockTakingId, itemId) {
+
+      vm.rebindOne(StockTaking, vm.stockTakingId, 'vm.stockTaking');
+      // vm.watchScope('vm.itemId', (ev, itemId) => {
+      //   if (!itemId) {
+      //     vm.stockTakingItem = null;
+      //   }
+      // });
+
+      return StockTakingItem.findAll({ stockTakingId }, { bypassCache: true })
+        .then(() => {
+          if (itemId) {
+            vm.stockTakingItem = StockTakingItem.get(itemId);
+          }
+          return StockTakingData({ stockTakingId }).promise;
+        })
+        .then(stockTakingData =>
+          StockTakingItem.findAllWithRelations({ stockTakingId })('Article')
+            .then(() => stockTakingData)
+        )
+        .then(stockTakingData => {
+          $scope.$watch(() => StockTakingItem.lastModified(), () => {
+            makeStocks(stockTakingData);
+          });
+          makeStocks(stockTakingData);
+          $scope.$on('$destroy', () => stockTakingData.clearCache());
+        });
+
+    }
+
     function addWithoutBarcode(articleId) {
 
       const article = Article.get(articleId);
@@ -185,25 +191,13 @@
 
     function makeStocks(stockTakingData) {
 
-      // let { stocks } = stockTakingData;
-
       const stockTaking = StockTaking.get(vm.stockTakingId);
-      //
-      // const fields = ['id', 'article', 'articleId', 'volume'];
-      // const itemsByArticleId = _.groupBy(stockTaking.items, 'articleId');
-      //
-      // stocks = _.map(stocks, stock => {
-      //   const res = _.pick(stock, fields);
-      //   const foundVolume = _.sumBy(itemsByArticleId[stock.articleId], 'volume') || 0;
-      //   return _.assign(res, {
-      //     foundVolume,
-      //     volumeRemains: stock.volume - foundVolume,
-      //   });
-      // });
-      //
-      // stocks = _.filter(stocks, 'volumeRemains');
+      let stocks = StockTakingExport.exportData(stockTaking.items, stockTakingData.stocks);
 
-      const stocks = StockTakingExport.exportData(stockTaking.items, stockTakingData.stocks);
+      if (vm.search) {
+        const re = new RegExp(_.escapeRegExp(vm.search), 'i');
+        stocks = _.filter(stocks, ({ article: { name } }) => re.test(name));
+      }
 
       vm.stocks = _.filter(stocks, 'diff');
       vm.stockTakingData = stockTakingData;
