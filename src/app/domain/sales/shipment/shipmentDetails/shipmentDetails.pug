@@ -25,8 +25,16 @@
         strong {{ vm.shipment.positions.length | number: 0 }}
         span {{ vm.shipment.positionsCountRu() }}
         span на сумму
-        strong {{ vm.shipment.totalCost() | number: 2 }}
-        span ₽
+        currency-value.total-cost(
+        label="{{ vm.showPriceDoc() ? 'Упр' : '' }}"
+        value="vm.shipment.totalCost()"
+        )
+        currency-value.total-cost-doc(
+        ng-if="vm.showPriceDoc()"
+        label="Бух"
+        value="vm.shipment.totalCostDoc()"
+        )
+
       .driver
         span Водитель:
         strong {{ vm.shipment.driver.name }}
@@ -44,8 +52,9 @@
           th.number
             .hidden-xs Количество
             .visible-xs Кол-во
-          th.number Цена
-          th.number.hidden-xs Стоимость
+          th.number {{ vm.showPriceDoc() ? 'Упр' : 'Цена' }}
+          th.number(ng-if="vm.showPriceDoc()") Бух
+          //th.number.hidden-xs Стоимость
       tbody
         tr(
         ng-repeat='item in vm.shipment.positions | orderBy:"article.name" track by item.id'
@@ -54,5 +63,10 @@
           td.number
             | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
           td.number
-            span {{ item.price | number:2 }}
-          td.number.hidden-xs {{ item.cost | number:2}}
+            currency-value(
+            value="item.price"
+            ng-if="item.priceDoc - item.price >= 0.01"
+            )
+          td.number(ng-if="vm.showPriceDoc()")
+            currency-value(value="item.priceDoc")
+          //td.number.hidden-xs {{ item.cost | number:2}}

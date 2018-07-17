@@ -38,6 +38,9 @@
     @include responsive-only(xxs) {
       font-size: 85%;
     }
+    currency-value strong {
+      font-weight: normal;
+    }
   }
 
   th {
@@ -315,6 +318,10 @@
               display: flex;
               flex-flow: row nowrap;
               height: 19px;
+            }
+
+            label {
+              color: $light-gray;
             }
 
             .diff {
