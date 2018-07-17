@@ -22,7 +22,7 @@
       needRoles: PICKING_ROLES
     }, {
       title: 'Партии',
-      state: 'wh.stockBatching',
+      state: 'wh.warehouseBoxing',
       needRoles: PICKING_ROLES
     }, {
       title: 'Номенклатура',

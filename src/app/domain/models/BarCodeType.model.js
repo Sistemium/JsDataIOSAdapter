@@ -19,6 +19,7 @@
         BARCODE_TYPE_ARTICLE: 'Article',
         BARCODE_TYPE_STOCK_BATCH: 'StockBatch',
         BARCODE_TYPE_EXCISE_STAMP: 'ExciseStamp',
+        BARCODE_TYPE_WAREHOUSE_BOX: 'WarehouseBox',
       }
     }
 
