@@ -16,9 +16,9 @@
     });
 
 
-  function shipmentDetailsController(Schema, $scope, saControllerHelper) {
+  function shipmentDetailsController(Schema, $scope, saControllerHelper, $q) {
 
-    const { Shipment, Article } = Schema.models();
+    const { Shipment } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -60,14 +60,18 @@
 
       return Shipment.find(shipmentId, { bypassCache })
         .then(item => item.DSLoadRelations(['ShipmentPosition', 'Driver'], { bypassCache }))
-        .then(item => _.map(item.positions, position => _.pick(position, ['articleId', 'article'])))
-        .then(itemArticles => {
-          const loadIds = _.filter(itemArticles, a => !a.article);
-          if (!loadIds.length) return;
-          return Article.findAll({
-            where: { id: { in: _.map(loadIds, 'articleId') } }
-          });
-        })
+        // .then(item => _.map(item.positions, position => _.pick(position, ['articleId', 'article'])))
+        // .then(itemArticles => {
+        //   const loadIds = _.filter(itemArticles, a => !a.article);
+        //   if (!loadIds.length) return;
+        //   return Article.findAll({
+        //     where: { id: { in: _.map(loadIds, 'articleId') } }
+        //   });
+        // })
+        .then(item => $q.all(_.map(item.positions, position => {
+          return position.DSLoadRelations()
+            .catch(_.noop);
+        })))
         .catch(e => {
           vm.error = e;
         });
