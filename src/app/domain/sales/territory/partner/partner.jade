@@ -53,6 +53,6 @@
           ng-click='vm.outletClick(outlet)'
           )
             td
-              a {{ outlet.address }}
+              a {{ outlet.address || 'Адрес не указан' }}
             td.number {{ outlet.visits.length | number: 0 }}
             td.number {{ vm.outletLastVisitDate[outlet.id] | amUtc | amLocal | amCalendar }}

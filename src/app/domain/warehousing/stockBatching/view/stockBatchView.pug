@@ -1,0 +1,50 @@
+.stock-batch-view
+
+  h2.title
+    .new(ng-if='!vm.stockBatch.id') Новая партия
+
+  .alert.alert-success(ng-if="vm.readyToScanArticle()")
+    | Просканируйте товар, чтобы создать партию c наклейкой
+    strong &nbsp;{{ vm.createCode }}
+
+  .alert.alert-success(ng-if="!vm.stockBatch.id && vm.readyToScanItem()")
+    | Просканируйте марку
+
+
+  .choose-article(ng-if='vm.articles')
+    .alert.alert-warning Выберите товар
+    .list-group
+      a.list-group-item(
+      ng-repeat="article in vm.articles track by article.id"
+      href ng-click="vm.setArticleClick(article)"
+      )
+        .title
+          warehouse-article(ng-model="article")
+
+  .properties
+
+    .field.cts(ng-if='vm.stockBatch.cts')
+      label Дата создания
+      strong {{ vm.stockBatch.cts | dateTime }}
+
+    .field.article(ng-if='vm.stockBatch.Article')
+      label Товар
+      strong {{ vm.stockBatch.Article.name }}
+
+  h3(ng-if="vm.stockBatchBarCodes.length") Наклейки
+  .stock-batch-bar-codes
+    .code(ng-repeat='item in vm.stockBatchBarCodes | orderBy:"code" track by item.code')
+      | {{ ::item.code }}
+
+  h3(ng-if="vm.stockBatchItems.length") Марки
+    .badge {{ vm.stockBatchItems.length }}
+  .list-group.stock-batch-items
+    .list-group-item(
+    ng-repeat='item in vm.stockBatchItems track by item.id'
+    )
+      .title
+        .barcode {{ ::item.barcode | splitChunk:25 }}
+      .footer
+        .device-cts.animate(
+        sa-animate-on-change="item.timestamp" change-class="change-up"
+        ) {{ item.timestamp | dateTime:{seconds:true} }}

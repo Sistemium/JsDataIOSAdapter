@@ -1,5 +1,5 @@
 (function () {
 
-  angular.module('Warehousing', []);
+  angular.module('Warehousing', ['Filing']);
 
 })();

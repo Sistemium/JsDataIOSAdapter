@@ -4,7 +4,7 @@
     | {{ vm.busy ? 'Загрузка ...' : 'Скидки в заказе не предоставлены' }}
 
   .scroll-y(
-  resize resize-offset-top='140'
+  resize resize-offset-top='160'
   )
 
     .sale-order-discount.list-item(
@@ -58,5 +58,12 @@
     value='vm.saleOrder.stmRatioCached()'
     decimals='1'
     currency='%'
+    )
+
+    currency-value.stm-ratio(
+    label='Условных коробок:'
+    value='vm.saleOrder.totalBoxesCached()'
+    decimals='1'
+    currency='К'
     )
 

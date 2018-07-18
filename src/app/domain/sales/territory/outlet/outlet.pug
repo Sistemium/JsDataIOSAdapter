@@ -36,7 +36,7 @@
           a.inherit-colors(
           href ng-click='vm.outletClick()'
           ng-class='vm.outletNavClass'
-          ) {{ vm.outlet.address }}
+          ) {{ vm.outlet.address || 'Адрес не указан' }}
 
 
     .outlet-avatar(ng-if='vm.isRootState')

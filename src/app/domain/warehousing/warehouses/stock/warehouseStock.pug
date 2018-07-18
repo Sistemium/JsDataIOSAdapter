@@ -1,0 +1,31 @@
+.warehouse-stock.list-group.scroll-y(
+resize resize-offset-top="10"
+vs-repeat="93"
+)
+
+  .list-group-item(
+  ng-repeat='item in vm.stocks track by item.id'
+  ng-class="{active: vm.activeArticleId === item.article.id}"
+  )
+    a.title(
+    href
+    ng-click="vm.itemClick(item)"
+    )
+      warehouse-article.article(ng-model="item.article")
+
+    .stats
+
+      currency-value.volume(
+      label="Остаток:"
+      hide-empty="true"
+      value="item.volume"
+      currency="б." decimals="0"
+      )
+
+      currency-value.found-volume(
+      label="Найдено:"
+      hide-empty="true"
+      value="item.foundVolume"
+      currency="б." decimals="0"
+      )
+

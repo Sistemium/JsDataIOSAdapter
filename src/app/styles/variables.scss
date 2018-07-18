@@ -11,11 +11,13 @@ $sab-blue: $primary-color;
 $black: #333333;
 $blue: $sab-blue;
 $dark-blue: darken($blue, 10%);
+$light-gray: darken(gray, 0%);
 $gray: darken(gray, 20%);
 $dark-gray: darken($gray, 0%);
 $red: red;
 $white: #fff;
 $green: green;
+$yellow: yellow;
 
 $navbar-padding-vertical: 15px;
 $margin: 15px;
@@ -27,6 +29,8 @@ $position-hover-color: #CFE1EE;
 $short-duration: 0.5s;
 $gray-background-color: #f5f5f5;
 $gray-border-color: #DDD;
+
+$active-background-color: lighten(desaturate($primary-color, 25%), 50%);
 
 $article-nav-menu-text-color: #555;
 

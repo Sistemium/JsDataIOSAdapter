@@ -3,11 +3,12 @@
   const saKeyboard = {
     bindings: {
       model: '=',
-      boxRel: '=',
+      boxRel: '<',
       datatype: '@',
       exportModel: '=?',
       modelMax: '=',
-      touched: '=?'
+      touched: '=?',
+      disableDelete: '<',
     },
 
     templateUrl: 'app/domain/components/volumePad/saKeyboard.html',
@@ -15,6 +16,7 @@
     controller: saKeyboardController
 
   };
+
   /** @ngInject */
   function saKeyboardController($scope, $injector) {
 
@@ -22,7 +24,16 @@
 
       isDisabled,
       onClick,
-      $onInit
+
+      $onInit() {
+
+        onModelChange(vm.exportModel);
+        $scope.$watch('vm.exportModel', onModelChange);
+
+        setButtons();
+        $scope.$watch('vm.boxRel', setButtons);
+
+      }
 
     });
 
@@ -36,27 +47,26 @@
 
     const disableFn = vm.datatype && formatter.disableButton;
 
-    function $onInit() {
-
-      vm.buttons = [
-        [{label: '1'}, {label: '2'}, {label: '3'}, {label: '4'}],
-        [{label: '5'}, {label: '6'}, {label: '7'}, {label: '8'}],
-        [{label: '9'}, {label: '0'}, {
-          label: _.isNumber(vm.boxRel) ? 'К' : (vm.boxRel || '')
-        }, {
-          i: 'glyphicon glyphicon-remove',
-          remove: true
-        }]
-      ];
-
-      onModelChange(vm.exportModel);
-      $scope.$watch('vm.exportModel', onModelChange);
-
-    }
-
     /*
     Functions
      */
+
+    function setButtons() {
+
+      let rel = vm.boxRel && parseInt(vm.boxRel) || 0;
+
+      vm.buttons = [
+        [{ label: '7' }, { label: '8' }, { label: '9' }],
+        [{ label: '4' }, { label: '5' }, { label: '6' }],
+        [{ label: '1' }, { label: '2' }, { label: '3' }],
+        [
+          { label: rel ? 'К' : vm.boxRel || '', rel },
+          { label: '0', },
+          { i: 'glyphicon glyphicon-remove', remove: true }
+        ]
+      ];
+
+    }
 
     function onClick(b) {
 
@@ -66,7 +76,7 @@
           vm.symbols = str.slice(0, str.length - 1);
         }
       } else {
-        vm.symbols = (vm.symbols && vm.touched) ? vm.symbols + b.label : b.label;
+        vm.symbols = (vm.symbols && (vm.touched || b.rel)) ? vm.symbols + b.label : b.label;
       }
 
       vm.touched = true;
@@ -83,6 +93,11 @@
     }
 
     function isDisabled(b) {
+      if (b.remove) {
+        if (vm.disableDelete && !vm.touched) {
+          return true;
+        }
+      }
       return angular.isFunction(disableFn) ? disableFn(b, vm.symbols, vm.modelMax, vm.touched) : false;
     }
 

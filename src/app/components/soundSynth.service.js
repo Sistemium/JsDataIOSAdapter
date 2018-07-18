@@ -2,14 +2,29 @@
 
 (function () {
 
-  angular.module('core.services').service('SoundSynth', function ($window, toastr, $q, IOS) {
+  angular.module('core.services')
+    .service('SoundSynth', SoundSynth);
 
-    var rate = 0.4;
-    var pitch = 1;
-    var lastSpeech = false;
-    var speakerCallBackFn = 'speakerCallBack';
-    var promises = {};
-    var id = 1;
+  function SoundSynth($window, toastr, $q, IOS) {
+
+    const rate = 0.4;
+    const pitch = 1;
+    const speakerCallBackFn = 'speakerCallBack';
+    const promises = {};
+
+    let lastSpeech = false;
+    let id = 1;
+
+    $window[speakerCallBackFn] = speakerCallBack;
+
+    return {
+      say,
+      repeat: () => say(lastSpeech)
+    };
+
+    /*
+    Functions
+     */
 
     function speakerCallBack() {
       _.each(promises, function (promise, id) {
@@ -18,27 +33,15 @@
       });
     }
 
-    $window[speakerCallBackFn] = speakerCallBack;
-
-    IOS.getDevicePlatform()
-      .then(devicePlatform => {
-        if (/iPhone/.test(devicePlatform)) {
-          // rate = 0.2;
-        }
-      })
-      .catch(()=>{
-        // We're not under ios
-      });
-
     function speaker(text) {
-      return $q(function (resolve) {
+      return $q((resolve) => {
 
         promises [id] = {
           resolve: resolve
         };
 
         IOS.handler('sound').postMessage({
-          text: text.replace(/[^а-я0-9,]/ig, ' '),
+          text: _.trim(text.replace(/[^а-яa-z0-9,]/ig, ' ')),
           rate: rate,
           pitch: pitch,
           callBack: speakerCallBackFn,
@@ -58,16 +61,11 @@
     }
 
     function say(text) {
-      var sp = IOS.isIos() ? speaker : mockSpeaker;
+      const sp = IOS.isIos() ? speaker : mockSpeaker;
       lastSpeech = text;
       return sp(text);
     }
 
-    return {
-      say,
-      repeat: () => say(lastSpeech)
-    };
-
-  });
+  }
 
 })();

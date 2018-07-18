@@ -101,7 +101,7 @@
       initPromise = Salesman.findAll()
         .then(data => {
 
-          isAuthorized = !!data.length;
+          isAuthorized = true; //!!data.length;
           service.hasOptions = data.length > 1;
 
           let salesmanId = localStorageService.get(LOCAL_STORAGE_KEY);
@@ -160,12 +160,11 @@
       InitService.then(SalesmanAuth.init)
         .then(salesmanAuth => {
 
-          if (IOS.isIos()) {
-            SUBSCRIPTIONS.push('RecordStatus');
-          }
+          // if (IOS.isIos()) {
+          //   SUBSCRIPTIONS.push('RecordStatus');
+          // }
 
           Sockets.onJsData('jsData:update', onJSData);
-          Sockets.onJsData('jsData:destroy', onJSDataDestroy);
 
           if (salesmanAuth.getCurrentUser() || salesmanAuth.hasOptions) {
             DEBUG('Sales module will jsDataSubscribe:', SUBSCRIPTIONS);
@@ -217,32 +216,6 @@
           }
 
         }
-
-        if (event.resource !== 'RecordStatus') return;
-
-        try {
-          let {name, objectXid} = event.data;
-          Schema.model(name)
-            .eject(objectXid);
-        } catch (e) {
-          console.warn('onJSData error:', e);
-        }
-
-      }
-
-      function onJSDataDestroy(event) {
-
-        DEBUG('onJSDataDestroy', event);
-
-        let id = _.get(event, 'data.id');
-
-        if (!id) return;
-
-        let model = Schema.model(event.resource);
-
-        if (!model) return;
-
-        model.eject(id);
 
       }
 

@@ -1,0 +1,45 @@
+@import "variables";
+
+warehouse-article-list {
+
+  display: block;
+
+  .list-group {
+    > a {
+      display: block;
+      @include responsive-only(xxs) {
+        border-right: none;
+        border-left: none;
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+    margin-top: $margin-bottom-xs;
+    margin-bottom: 0;
+  }
+
+  a.list-group-item {
+    min-height: 74px;
+
+    .first-name {
+      font-weight: normal;
+    }
+    .footer {
+      display: flex;
+      flex-direction: row;
+      i {
+        margin-right: $margin-bottom-xs;
+        color: $green;
+      }
+    }
+  }
+
+  warehouse-article {
+    display: block;
+  }
+
+  .warehouse-article-list > .list-group > .list-group-item > .footer {
+    margin-top: $margin-bottom-xs-minus;
+  }
+
+}

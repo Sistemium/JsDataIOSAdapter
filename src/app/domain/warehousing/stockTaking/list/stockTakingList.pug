@@ -1,0 +1,14 @@
+.stock-taking-list
+
+  .list-group
+    a.list-group-item(
+    href
+    ng-repeat='item in vm.stockTakings track by item.id'
+    ng-click="vm.stockTakingClick(item)"
+    )
+      .title
+        .warehouse {{ item.warehouse.name }}
+        .date {{ item.date | dateTime:{time:false} }}
+      .footer
+        currency-value(value="item.itemStats('count()')" currency="П" decimals="0")
+        currency-value(value="item.itemStats('sum(volume)')" currency="Б" decimals="0")

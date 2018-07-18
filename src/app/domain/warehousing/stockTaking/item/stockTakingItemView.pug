@@ -1,0 +1,47 @@
+.stock-taking-item-view(ng-class="{unsaved: vm.stockTakingItem.DSHasChanges()}")
+
+
+  .fields
+
+
+    .field.name
+      label Товар
+      strong {{ vm.stockTakingItem.article.name }}
+
+    .field.result
+      label Результат
+      stock-taking-article-volume(ng-model="vm.stockTakingArticle")
+
+    stock-taking-article-item-list(
+    items="vm.stockTakingArticleItems"
+    active-id="vm.stockTakingItemId"
+    on-click="vm.itemClick($item)"
+    )
+
+    .field.barcode
+      label Штрих-код
+      strong
+        confirmed-button(on-confirm="vm.deleteClick()")
+          i.glyphicon.glyphicon-trash
+          cancel
+            i.glyphicon.glyphicon-lock
+        span {{ vm.stockTakingItem.barcode || 'Без сканирования' }}
+
+
+  .editing
+
+    .field.volume(
+    ng-class="{touched: vm.volumeViewTouched}"
+    )
+      label Количество
+      strong.animate(sa-animate-on-change="vm.stockTakingItem.volume" change-class="change-up")
+        | {{ vm.volumeView }}
+
+    sa-keyboard(
+    datatype='boxPcs'
+    touched='vm.volumeViewTouched'
+    model='vm.volumeView'
+    export-model='vm.stockTakingItem.volume'
+    box-rel='vm.stockTakingItem.packageRel'
+    disable-delete="true"
+    )

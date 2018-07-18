@@ -25,7 +25,8 @@
       'angularMoment',
       'swipe',
       'ngFileUpload',
-      'ngPinchZoom'
+      'ngPinchZoom',
+      'io-barcode',
     ]);
 
   angular.module('Sales', ['sistemium', 'yaMap', 'rzModule']);

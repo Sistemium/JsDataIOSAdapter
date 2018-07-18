@@ -13,23 +13,27 @@
           templateUrl: 'app/domain/ui-view.html',
 
           data: {
+            // TODO: warehousing auth service
             // auth: 'SalesmanAuth'
           },
 
-          children: [stockBatching]
+          children: [warehouses]
 
         });
 
-      console.warn('init');
-
     });
 
-  const stockBatching = {
 
-    name: 'stockBatching',
-    url: '/stockBatching',
+  const warehouses = {
 
-    template: '<stock-batch-view></stock-batch-view>'
+    name: 'warehouses',
+    url: '/warehouses',
+
+    data: {
+      title: 'Склады',
+    },
+
+    template: '<warehouse-list></warehouse-list>'
 
   };
 

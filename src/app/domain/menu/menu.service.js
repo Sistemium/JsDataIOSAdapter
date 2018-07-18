@@ -7,8 +7,10 @@
     const SALES_ROLES = ['salesman', 'supervisor'];
     const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
     const PICKING_ROLES = ['picker'];
+    const STOCK_TAKING_ROLES = ['stockTaking'];
     const ADMIN_ROLES = ['admin', 'tester'];
     const OUTLET_ROLES = _.union(['outlet'], SALES_ROLES);
+    const CATALOGUE_ROLES = _.union(MARKETING_ROLES, SALES_ROLES, OUTLET_ROLES);
 
     const items = [{
       title: 'Сборка',
@@ -20,12 +22,24 @@
       needRoles: PICKING_ROLES
     }, {
       title: 'Партии',
-      state: 'wh.stockBatching',
+      state: 'wh.warehouseBoxing',
       needRoles: PICKING_ROLES
+    }, {
+      title: 'Номенклатура',
+      state: 'wh.articling',
+      needRoles: PICKING_ROLES
+    }, {
+      title: 'Склады',
+      state: 'wh.warehouses',
+      needRoles: STOCK_TAKING_ROLES
+    }, {
+      title: 'Инвентаризация',
+      state: 'wh.stockTaking',
+      needRoles: STOCK_TAKING_ROLES
     }, {
       title: 'Каталог',
       state: 'sales.catalogue',
-      needRoles: OUTLET_ROLES
+      needRoles: CATALOGUE_ROLES
     }, {
       title: 'Заказы',
       state: 'sales.saleOrders',

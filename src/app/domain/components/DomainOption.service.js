@@ -59,7 +59,7 @@
 
       switch (customerCode()) {
         case 'r50': {
-          return 50;
+          return 75;
         }
         case 'r50p': {
           return 40;
@@ -131,7 +131,7 @@
     }
 
     function visitsDisabled() {
-      return customerCode() !== 'r50';
+      return customerCode() === 'bs';
     }
 
     function hasMVZ() {

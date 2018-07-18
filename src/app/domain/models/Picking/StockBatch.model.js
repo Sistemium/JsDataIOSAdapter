@@ -18,8 +18,12 @@
           }
         },
         hasMany: {
+          StockBatchItem: {
+            localField: 'items',
+            foreignKey: 'stockBatchId'
+          },
           StockBatchBarCode: {
-            localField: 'StockBatchBarCodes',
+            localField: 'stockBatchBarCodes',
             foreignKey: 'stockBatchId'
           },
           PickingOrderPositionPicked: {

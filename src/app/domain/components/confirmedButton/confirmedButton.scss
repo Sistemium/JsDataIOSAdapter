@@ -1,0 +1,17 @@
+@import "variables";
+
+.confirmed-button {
+
+  > a {
+    margin-left: $margin-bottom-xs;
+  }
+
+  > a.confirmation {
+    color: $red;
+  }
+
+  a.cancel {
+    color: $green;
+  }
+
+}

@@ -1,0 +1,29 @@
+@import "variables";
+
+$change-up-color: $yellow;
+$change-up-duration: 2s;
+
+.change-up {
+  background-color: $change-up-color;
+}
+
+.change-up-add,.change-up-remove {
+  transition: all $change-up-duration ease-in-out;
+}
+
+.change-up-add {
+  background-color: inherit;
+}
+
+.change-up-add-active {
+  background-color: $change-up-color;
+}
+
+.change-up-remove {
+  background-color: $change-up-color;
+}
+
+.change-up-remove-active {
+  background-color: initial;
+}
+

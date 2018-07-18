@@ -1,36 +1,63 @@
-'use strict';
-
 (function () {
 
-    angular.module('core.services').service('BarCodeScanner', function ($window, IOS) {
+  angular.module('core.services').service('BarCodeScanner', BarCodeScannerService);
 
-      return {
+  const BARCODE_SCANNER_FN = 'barCodeScannerFn';
+  const BARCODE_SCANNER_POWER_FN = 'barCodeScannerPowerFn';
+  const BARCODE_SCANNER_STATUS_FN = 'barCodeScannerStatusFn';
+  const BARCODE_SCAN_EVENT = 'barcode-scan-event';
+  const BARCODE_SCAN_INVALID = 'barcode-scan-invalid';
 
-        bind: function (scanFn, powerFn) {
+  function BarCodeScannerService($window, IOS, $rootScope) {
 
-          function scanProcessor (code, type, obj) {
-            scanFn (code, type, obj);
-          }
+    const state = {
+      status: undefined
+    };
 
-          function barCodeScannerPowerFn () {
-            powerFn ();
-          }
+    return {
 
-          $window.barCodeScannerFn = scanProcessor;
-          $window.barCodeScannerPowerFn = barCodeScannerPowerFn;
+      BARCODE_SCAN_EVENT,
+      BARCODE_SCAN_INVALID,
 
-          if (IOS.isIos()) {
-            IOS.handler('barCodeScannerOn').postMessage({
-              scanCallback: 'barCodeScannerFn',
-              powerButtonCallback: 'barCodeScannerPowerFn'
-            });
-            return true;
-          }
+      state,
 
+      unbind() {
+        IOS.handler('barCodeScannerOff')
+          .postMessage({});
+      },
+
+      bind(scanFn, powerFn) {
+
+        function scanProcessor(code, type, obj) {
+          $rootScope.$applyAsync(() => {
+            scanFn(code, type, obj);
+          })
         }
 
-      };
+        function barCodeScannerPowerFn() {
+          powerFn();
+        }
 
-    });
+        $window[BARCODE_SCANNER_FN] = scanProcessor;
+        $window[BARCODE_SCANNER_POWER_FN] = barCodeScannerPowerFn;
+        $window[BARCODE_SCANNER_STATUS_FN] = onStatusChange;
+
+        if (IOS.isIos()) {
+          IOS.handler('barCodeScannerOn').postMessage({
+            scanCallback: BARCODE_SCANNER_FN,
+            powerButtonCallback: BARCODE_SCANNER_POWER_FN,
+            statusCallback: BARCODE_SCANNER_STATUS_FN
+          });
+        }
+
+      }
+
+    };
+
+    function onStatusChange(newStatus) {
+      $rootScope.$applyAsync(() => state.status = newStatus);
+    }
+
+  }
 
 })();

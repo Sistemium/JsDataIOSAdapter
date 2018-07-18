@@ -1,0 +1,15 @@
+.confirmed-button
+
+  a(
+  href
+  ng-class="{confirmation: vm.confirmation}"
+  ng-click="vm.buttonClick()"
+  ng-transclude
+  )
+
+  a.cancel(
+  href
+  ng-if="vm.confirmation"
+  ng-click="vm.cancelClick()"
+  ng-transclude="cancel"
+  ) Отмена

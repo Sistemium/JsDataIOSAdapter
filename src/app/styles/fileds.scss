@@ -1,0 +1,49 @@
+@import "variables";
+
+@mixin side-view-field {
+  display: flex;
+  justify-content: space-between;
+  strong {
+    text-align: right;
+  }
+}
+
+.field {
+
+  label {
+
+    color: $light-gray;
+    margin-right: $margin-bottom-xs;
+
+    &:after {
+      content: ':';
+    }
+
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  @include responsive-only(xxs) {
+    @include side-view-field();
+  }
+
+}
+
+%important-strong {
+  font-weight: 500;
+  color: $green;
+  background: $gray-background-color;
+  padding: $margin-bottom-xs/2 $margin-bottom-xs;
+  border-radius: $border-radius;
+  border: solid 1px $border-gray;
+  @include responsive-only(lt-sm) {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+}
+
+sab-dropdown .sab-dropdown > a {
+  border-radius: $border-radius;
+}

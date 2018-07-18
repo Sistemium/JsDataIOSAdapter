@@ -17,7 +17,7 @@
     function disableButton(button, data) {
       if (button.label === 'К') {
         // TODO: maybe need no g
-        if (/К/g.test(data)) {
+        if (!data || /К/g.test(data)) {
           return true;
         }
       }
@@ -29,15 +29,15 @@
       let re = /(\d*)(К|^)(\d*)/;
 
       return (str || '').replace(re, (match, box, k, pcs) => {
-        return (box ? box + ' к' : '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
+        return (box ? box + ' К' : '') + (box && pcs && ' ' || '') + (pcs ? pcs + ' б' : '');
       });
 
     }
 
     function importModel(num, boxRel) {
 
-      let box = Math.floor(1.0 * num / boxRel);
-      let pcs = num % boxRel;
+      let box = boxRel > 1 ? Math.floor(1.0 * num / boxRel) : 0;
+      let pcs = boxRel > 1 ? num % boxRel : num;
 
       return (box ? box + 'К' : '') + (pcs || '');
 

@@ -64,12 +64,15 @@ cg-busy='vm.cgBusy'
 
           .cost
             .cost-diff-price
-              currency-value(value='shipment.totalCost()')
+              currency-value(
+              label="{{ shipment.totalCostDoc() - shipment.totalCost() > 0.1 ? 'Упр' : '' }}"
+              value='shipment.totalCost()'
+              )
               .diff(ng-if='shipment.totalCostDoc() - shipment.totalCost() > 0.1')
-                span.parenthese (
-                span +
-                currency-value(value='shipment.totalCostDoc() - shipment.totalCost()')
-                span.parenthese )
+                currency-value(
+                label="Бух"
+                value="shipment.totalCostDoc()"
+                )
 
           .positions
             span {{ shipment.totalPositions() }}

@@ -131,7 +131,7 @@ before-tag-name='li'
 
     .right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
-    ng-disabled='vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
+    ng-disabled='hasInputInFocus || vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
     )
 
       button.btn.btn-default.plus-box(

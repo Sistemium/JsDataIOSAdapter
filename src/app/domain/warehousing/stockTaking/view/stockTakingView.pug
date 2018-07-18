@@ -1,0 +1,90 @@
+.stock-taking-view(cg-busy='vm.cgBusy')
+
+  .details
+
+    .buttons
+      confirmed-button(on-confirm="vm.deleteClick()" no-confirm="!vm.stockTakingId")
+        span {{ vm.stockTakingId ? 'Удалить' : 'Отмена' }}
+        cancel Отмена
+      a(
+      ng-if="vm.exportable"
+      href ng-click="vm.exportClick()"
+      ) Выгрузить
+
+    .fields
+
+      .field.date
+        label Дата
+          span.hidden-xs &nbsp;инвентаризации
+        strong {{ vm.stockTaking.date | dateTime }}
+
+      .field.warehouse
+        label Склад
+        sab-dropdown(
+        ng-disabled="vm.stockTaking.id"
+        items-data-source-name="Warehouse"
+        ng-model="vm.stockTaking.warehouseId"
+        append-to-body="true"
+        )
+
+  .alert.alert-info(ng-if="!vm.stockTaking.id && vm.stockTaking.isValid()")
+    p(ng-if="vm.stocksTs") Остатки обновлены:
+      strong &nbsp;{{ vm.stocksTs | dateTime }}
+    hr
+    p Просканируйте товар, чтобы начать инвентаризацию
+
+
+  .items(ng-if="vm.stockTakingId && !vm.busy")
+
+    ui-view.current-item(ng-if='vm.itemId')
+
+    .items-view(ng-class="{ 'has-active': vm.itemId }")
+
+      .filters
+        .stm-searcher.form-group.has-feedback(ng-class='{"has-search": vm.search}')
+
+          label
+            i.glyphicon.glyphicon-search
+
+          input#search-input.form-control(
+          type='search'
+          placeholder='Поиск'
+          autocomplete='off'
+          select-on-focus
+          track-focused
+          aria-describedby='search-input'
+          ng-model='vm.search'
+          ng-model-options="{debounce: 500}"
+          )
+
+          span.form-control-feedback(ng-hide='!vm.search')
+            a.clear-search(ng-click="vm.search=''" href)
+              i.glyphicon.glyphicon-remove
+
+      uib-tabset.tabs(active="vm.activeTabIndex" justified="true")
+
+        uib-tab(index="0" heading="Сканы")
+          stock-taking-item-list(
+          ng-model="vm.stockTaking"
+          filter="vm.search"
+          on-click="vm.itemClick($item)"
+          active-id="vm.itemId"
+          scroll="vm.itemListScrollTo"
+          )
+
+        uib-tab(index="1" heading="Товары")
+          stock-taking-item-stats(
+          search="vm.search"
+          filter="{stockTakingId: vm.stockTakingId}"
+          on-item-click="vm.itemClick($item)"
+          active-id="vm.itemId"
+          scroll="vm.itemStatsScrollTo"
+          on-article-click="vm.articleClick($articleId)"
+          )
+
+        uib-tab(index="2" heading="Остатки ({{ vm.stocks.length }})")
+          warehouse-stock(
+          stocks="vm.stocks"
+          on-click="vm.articleClick($articleId)"
+          active-article-id="vm.stockTakingItem.articleId"
+          )

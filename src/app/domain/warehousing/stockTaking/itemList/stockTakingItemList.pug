@@ -1,0 +1,27 @@
+.stock-taking-item-list.list-group.scroll-y(
+vs-repeat="101"
+resize resize-offset-top="10"
+)
+
+  .list-group-item(
+  id='id-{{::item.id}}'
+  ng-repeat='item in vm.stockTakingItems track by item.id'
+  ng-class='{active: vm.activeId === item.id}'
+  )
+
+    .title
+
+      a.name(href ng-click="vm.itemClick(item)")
+        warehouse-article(ng-model="item.article")
+
+    .footer
+
+      .barcode
+        span {{ ::item.barcode || 'Без сканирования' }}
+        span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
+        span(ng-if='item.packageRel') (фасовка {{ item.packageRel }})
+
+      .volume
+        strong.animate(
+        sa-animate-on-change="item.volume" change-class="change-up"
+        ) {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}

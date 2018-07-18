@@ -117,7 +117,7 @@
         outletId: {'==': outletId}
       }, responsibility);
 
-      return Debt.findAll({where})
+      return Debt.findAll({where}, { bypassCache: true })
         .then(data => vm.debts = _.filter(data, debt => debt.summ || debt.summDoc))
         .then(data => {
 
@@ -126,7 +126,7 @@
             return {date, items}
           });
 
-          return Cashing.findAll({outletId, isProcessed: false})
+          return Cashing.findAll({outletId, isProcessed: false}, { bypassCache: true })
             .then(() => {
               vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', updateCashingTotals);
             })

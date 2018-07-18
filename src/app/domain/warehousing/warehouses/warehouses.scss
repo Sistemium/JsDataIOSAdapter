@@ -1,0 +1,45 @@
+@import "variables";
+
+.warehouse-list {
+
+  .alert {
+    text-align: center;
+  }
+
+  .warehouse {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .name {
+      flex: 1;
+    }
+
+    > * + * {
+      margin-left: 1em;
+    }
+
+    .stock, .date {
+      text-align: right;
+    }
+
+    .date {
+      //font-weight: bold;
+      label {
+        font-weight: normal;
+        margin-right: $margin-bottom-xs-minus;
+      }
+    }
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+      align-items: stretch;
+      > * + * {
+        margin-top: 5px;
+      }
+    }
+
+  }
+
+}

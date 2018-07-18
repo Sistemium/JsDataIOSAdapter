@@ -1,3 +1,8 @@
 .bar-code(ng-repeat='barCode in stock.article.barCodesLazy() track by barCode.id')
-  //i.glyphicon.glyphicon-barcode
+
   span {{ ::barCode.code }}
+
+  io-barcode(
+  code="{{ ::barCode.code }}"
+  type="EAN"
+  )

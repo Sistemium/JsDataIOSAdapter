@@ -1,0 +1,17 @@
+.warehouse-article
+
+  .pre-name {{ ::vm.article.preName }}
+
+  .middle
+    .first-name {{ ::vm.article.firstName || vm.article.name }}
+    .piece-volume(ng-if="::vm.article.pieceVolume") {{ ::vm.article.pieceVolume | stnumber:1 }}
+    .tags
+      .tag(
+      ng-repeat='tag in ::vm.article.tags track by tag.code'
+      ng-class='::tag.code'
+      ) {{ ::tag.label }}
+
+  .footer
+    .package-rel(ng-if="::vm.article.packageRel")
+      | (1&nbsp;x&nbsp;{{ ::vm.article.packageRel }})
+    .last-name {{ ::vm.article.lastName }}

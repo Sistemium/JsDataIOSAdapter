@@ -1,0 +1,37 @@
+.warehouse-articling(cg-busy="vm.cgBusy")
+
+  ui-view
+
+    .stm-searcher.form-group.has-feedback(
+    ng-class="{'has-search': vm.search}"
+    )
+
+      label
+        i.glyphicon.glyphicon-search(
+        ng-click="vm.onSearchClick()"
+        )
+
+      input#search-input.form-control(
+      type="search"
+      placeholder="Поиск"
+      autocomplete="off"
+      select-on-focus
+      track-focused
+      aria-describedby="search-input"
+      ng-model="vm.search"
+      ng-model-options="{debounce: 500}"
+      )
+
+      span.form-control-feedback(ng-hide='!vm.search')
+        a.clear-search(
+        href ng-click="vm.clearSearchClick()"
+        )
+          i.glyphicon.glyphicon-remove
+
+    warehouse-article-list(
+    articles="vm.articles" show-search="true"
+    on-click="vm.articleClick($item)"
+    )
+
+    .alert.alert-warning(ng-if="!vm.articles.length")
+      p Нет подходящих товаров

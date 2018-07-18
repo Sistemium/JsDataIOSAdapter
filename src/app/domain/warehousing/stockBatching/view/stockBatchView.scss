@@ -1,0 +1,37 @@
+@import "variables";
+
+stock-batch-view {
+
+  .field {
+    label, strong {
+      font-weight: normal;
+    }
+  }
+
+  .stock-batch-bar-codes {
+
+    //margin-right: -6px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    .code {
+      display: inline-block;
+      margin-right: 6px;
+      border: solid 1px $border-gray;
+      padding: 2px 4px;
+      border-radius: $border-radius;
+      margin-bottom: 6px;
+    }
+
+  }
+
+  .list-group-item {
+    .footer {
+      text-align: right;
+      color: $light-gray;
+      font-size: 85%;
+    }
+  }
+
+}

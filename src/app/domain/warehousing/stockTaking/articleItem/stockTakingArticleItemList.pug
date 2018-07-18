@@ -1,0 +1,10 @@
+.stat-items.list-group
+
+  a.list-group-item(
+  href ng-click="vm.itemClick(item)"
+  ng-repeat="item in vm.items | orderBy:'-timestamp' track by item.id"
+  ng-class="{active: item.id === vm.activeId}"
+  )
+    strong {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
+    //span {{ item.barcode }}
+    span {{ item.timestamp | dateTime:{seconds: true, date: false} }}

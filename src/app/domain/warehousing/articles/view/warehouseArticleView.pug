@@ -1,0 +1,29 @@
+.warehouse-article-view
+
+  //h3 Товар
+
+  warehouse-article(ng-model="vm.article")
+
+  .producer.field
+    span {{ vm.article.producer.name }}
+  .code.field
+    label Код
+    span {{ vm.article.code }}
+
+  h3 Штрих-коды
+
+  .list-group.barcodes
+    .list-group-item(
+    ng-repeat="barcode in vm.barcodes track by barcode"
+    ng-class="{confirm: vm.deleteConfirm === barcode}"
+    )
+      .title
+        .code {{ barcode }}
+      .actions
+        a.remove(href ng-click="vm.removeBarcodeClick(barcode)")
+          i.glyphicon.glyphicon-trash
+
+  .alert.alert-warning(ng-if="!vm.barcodes.length")
+    p Не привязаны штрих-коды
+    hr
+    p Просканируйте, чтобы добавить

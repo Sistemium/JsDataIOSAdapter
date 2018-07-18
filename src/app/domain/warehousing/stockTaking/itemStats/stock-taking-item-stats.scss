@@ -1,0 +1,19 @@
+@import "variables";
+
+stock-taking-item-stats {
+
+  .stat-items {
+
+    margin-top: $margin-bottom-xs;
+
+    .list-group-item {
+      justify-content: flex-start;
+      &.active {
+        background: $primary-color;
+      }
+
+    }
+
+  }
+
+}
