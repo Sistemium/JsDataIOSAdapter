@@ -300,9 +300,7 @@
 
         > div {
           label {
-            @include responsive-only(gt-xs) {
-              display: none;
-            }
+            margin-left: $margin-bottom-xs;
           }
         }
 

@@ -16,7 +16,7 @@
     });
 
 
-  function shipmentDetailsController(Schema, $scope, saControllerHelper, $q) {
+  function shipmentDetailsController(Schema, $scope, saControllerHelper) {
 
     const { Shipment, Article } = Schema.models();
 
