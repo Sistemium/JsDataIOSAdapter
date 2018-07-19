@@ -62,11 +62,11 @@
           td {{ item.article.name || 'Товар не найден' }}
           td.number
             | {{ item.volume | number:0 }} {{ ::item.article.pcsLabel }}
-          td.number
+          td.number(ng-if="vm.showPriceDoc()")
             currency-value(
             value="item.price"
             ng-if="item.priceDoc - item.price >= 0.01"
             )
-          td.number(ng-if="vm.showPriceDoc()")
+          td.number
             currency-value(value="item.priceDoc")
           //td.number.hidden-xs {{ item.cost | number:2}}
