@@ -141,7 +141,7 @@
 
       vm.customFilter ? outletFilter = {id: vm.customFilter} : outletFilter = Outlet.meta.salesmanFilter(filter);
 
-      return Outlet.findAll(outletFilter)
+      return Outlet.findAll(outletFilter, { limit: 10000 })
         .then(outlets => {
 
           let outletById = _.groupBy(outlets, 'id');
