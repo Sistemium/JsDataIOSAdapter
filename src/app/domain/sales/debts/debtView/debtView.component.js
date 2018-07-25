@@ -137,9 +137,7 @@
 
     function getData(filter) {
 
-      let outletFilter;
-
-      vm.customFilter ? outletFilter = {id: vm.customFilter} : outletFilter = Outlet.meta.salesmanFilter(filter);
+      const outletFilter = vm.customFilter ? { id: vm.customFilter } : Outlet.meta.salesmanFilter(filter);
 
       return Outlet.findAll(outletFilter, { limit: 10000 })
         .then(outlets => {
