@@ -533,13 +533,17 @@
 
       const contractFilter = {
         contractId: {'==': contractId},
-        discount: {'!=': 0}
+        // discount: {'!=': 0}
       };
 
       const partnerFilter = {
         partnerId: {'==': partnerId},
-        discount: {'!=': 0}
+        // discount: {'!=': 0}
       };
+
+      function anyDiscountFiler({ discount, discountDoc }) {
+        return discount || discountDoc;
+      }
 
       $q.all([
         ContractArticle.uncachedFindAll({where: contractFilter}, {limit: 10000}),
@@ -559,13 +563,13 @@
 
           let discountModel = {
             article: _.keyBy([
-              ..._.filter(allData[2], 'discount'),
-              ..._.filter(allData[0], 'discount'),
+              ..._.filter(allData[2], anyDiscountFiler),
+              ..._.filter(allData[0], anyDiscountFiler),
               ..._.filter(discounts, 'articleId')
             ], 'articleId'),
             priceGroup: _.keyBy([
-              ..._.filter(allData[3], 'discount'),
-              ..._.filter(allData[1], 'discount'),
+              ..._.filter(allData[3], anyDiscountFiler),
+              ..._.filter(allData[1], anyDiscountFiler),
               ..._.filter(discounts, 'priceGroupId')
             ], 'priceGroupId'),
             saleOrder: saleOrderScopeDiscount || {}
