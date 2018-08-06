@@ -62,6 +62,13 @@
         workflowSaleOrderSupervisor: false
       },
 
+      beforeCreateInstance: function (model, props) {
+
+        props.authId = props.authId || Auth.authId();
+        return props;
+
+      },
+
       computed: {
 
         workflowStep: ['authId', 'processing', (authId, processing) => {
