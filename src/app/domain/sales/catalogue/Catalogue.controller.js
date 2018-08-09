@@ -839,6 +839,14 @@
 
       });
 
+      _.each(vm.currentPriceType.prices(), ({ price, articleId }) => {
+
+        if (price > 0) {
+          vm.prices[articleId] = {price};
+        }
+
+      });
+
       DEBUG('filterStock', 'vm.prices');
 
       sortedStock = _.filter(stockCache, stock => vm.prices[stock.articleId]);
