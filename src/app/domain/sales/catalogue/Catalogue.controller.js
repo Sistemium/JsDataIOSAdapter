@@ -1440,23 +1440,27 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.uncachedFindAll({}, {limit: 10000})
       ])
         .then(res => {
 
           let restrictionIds = _.uniq(_.union(_.map(res[0], 'restrictionId'), _.map(res[1], 'restrictionId')));
+          let where = {
+            restrictionId: { '==': restrictionIds },
+          };
 
-          let restrictionArticles = res[3];
-
-          _.map(restrictionArticles, ra => {
-            let restrictionId = ra.restrictionId;
-            if (restrictionIds.indexOf(restrictionId) === -1) return;
-            vm.restrictedArticles[ra.articleId] = Restriction.get(restrictionId);
-          });
-
-          if (restrictionIds.length) {
-            toastr.info(_.map(Restriction.getAll(restrictionIds), 'name').join(', '), 'Применены запреты');
+          if (!restrictionIds.length) {
+            return;
           }
+
+          return RestrictionArticle.uncachedFindAll({ where }, { limit: 10000 })
+            .then(restrictionArticles => {
+              _.map(restrictionArticles, ra => {
+                let restrictionId = ra.restrictionId;
+                if (restrictionIds.indexOf(restrictionId) === -1) return;
+                vm.restrictedArticles[ra.articleId] = Restriction.get(restrictionId);
+              });
+              toastr.info(_.map(Restriction.getAll(restrictionIds), 'name').join(', '), 'Применены запреты');
+            });
 
         })
         .catch(e => console.error(e));
