@@ -394,7 +394,7 @@
             'Обновление данных',
             { timeOut: 5000 }
           );
-          reloadMissing(notFound);
+          reloadMissing(notFound, false);
         } else if (count) {
           toastr.info(
             `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
@@ -416,9 +416,9 @@
 
     }
 
-    function reloadVisible() {
+    function reloadVisible(e, scroll = false) {
       filterStock();
-      return setCurrentArticleGroup(vm.currentArticleGroup);
+      return setCurrentArticleGroup(vm.currentArticleGroup, scroll);
     }
 
     function saleOrderTotalsClick(showOnlyOrdered) {
@@ -1057,7 +1057,7 @@
 
     }
 
-    function setCurrentArticleGroup(articleGroupOrId) {
+    function setCurrentArticleGroup(articleGroupOrId, scroll = true) {
 
       // console.log('setCurrentArticleGroup', articleGroupOrId);
 
@@ -1141,7 +1141,9 @@
       setAncestors(articleGroup);
       setFirstLevelGroups(articleGroup);
 
-      scrollArticlesTop();
+      if (scroll) {
+        scrollArticlesTop();
+      }
 
       DEBUG('setCurrentArticleGroup', 'end');
 
