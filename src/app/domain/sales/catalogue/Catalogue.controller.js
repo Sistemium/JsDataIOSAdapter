@@ -394,7 +394,7 @@
             'Обновление данных',
             { timeOut: 5000 }
           );
-          reloadMissing(notFound);
+          reloadMissing(notFound, false);
         } else if (count) {
           toastr.info(
             `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
@@ -416,9 +416,9 @@
 
     }
 
-    function reloadVisible() {
+    function reloadVisible(e, scroll = false) {
       filterStock();
-      return setCurrentArticleGroup(vm.currentArticleGroup);
+      return setCurrentArticleGroup(vm.currentArticleGroup, scroll);
     }
 
     function saleOrderTotalsClick(showOnlyOrdered) {
@@ -839,6 +839,16 @@
 
       });
 
+      if (vm.currentPriceType.parent) {
+        _.each(vm.currentPriceType.prices(), ({ price, articleId }) => {
+
+          if (price > 0) {
+            vm.prices[articleId] = {price};
+          }
+
+        });
+      }
+
       DEBUG('filterStock', 'vm.prices');
 
       sortedStock = _.filter(stockCache, stock => vm.prices[stock.articleId]);
@@ -1047,7 +1057,7 @@
 
     }
 
-    function setCurrentArticleGroup(articleGroupOrId) {
+    function setCurrentArticleGroup(articleGroupOrId, scroll = true) {
 
       // console.log('setCurrentArticleGroup', articleGroupOrId);
 
@@ -1131,7 +1141,9 @@
       setAncestors(articleGroup);
       setFirstLevelGroups(articleGroup);
 
-      scrollArticlesTop();
+      if (scroll) {
+        scrollArticlesTop();
+      }
 
       DEBUG('setCurrentArticleGroup', 'end');
 
@@ -1430,23 +1442,27 @@
         OutletRestriction.findAll({outletId}, {cacheResponse: false}),
         SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
         Restriction.findAll(),
-        RestrictionArticle.uncachedFindAll({}, {limit: 10000})
       ])
         .then(res => {
 
           let restrictionIds = _.uniq(_.union(_.map(res[0], 'restrictionId'), _.map(res[1], 'restrictionId')));
+          let where = {
+            restrictionId: { '==': restrictionIds },
+          };
 
-          let restrictionArticles = res[3];
-
-          _.map(restrictionArticles, ra => {
-            let restrictionId = ra.restrictionId;
-            if (restrictionIds.indexOf(restrictionId) === -1) return;
-            vm.restrictedArticles[ra.articleId] = Restriction.get(restrictionId);
-          });
-
-          if (restrictionIds.length) {
-            toastr.info(_.map(Restriction.getAll(restrictionIds), 'name').join(', '), 'Применены запреты');
+          if (!restrictionIds.length) {
+            return;
           }
+
+          return RestrictionArticle.uncachedFindAll({ where }, { limit: 10000 })
+            .then(restrictionArticles => {
+              _.map(restrictionArticles, ra => {
+                let restrictionId = ra.restrictionId;
+                if (restrictionIds.indexOf(restrictionId) === -1) return;
+                vm.restrictedArticles[ra.articleId] = Restriction.get(restrictionId);
+              });
+              toastr.info(_.map(Restriction.getAll(restrictionIds), 'name').join(', '), 'Применены запреты');
+            });
 
         })
         .catch(e => console.error(e));

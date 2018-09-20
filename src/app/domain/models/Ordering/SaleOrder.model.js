@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth, $rootScope) {
+  angular.module('Models').run(function (Schema, Language, $q, DEBUG, Auth, $rootScope, saAsync) {
 
     let caches = {};
     let minExpires = new Date();
@@ -60,6 +60,13 @@
         nextShipmentDate,
         workflowSaleOrder: false,
         workflowSaleOrderSupervisor: false
+      },
+
+      beforeCreateInstance: function (model, props) {
+
+        props.authId = props.authId || Auth.authId();
+        return props;
+
       },
 
       computed: {
@@ -124,7 +131,7 @@
 
           let lastModified = this.deviceTs;
 
-          return $q.all(_.map(positions, position => position.safeSave()))
+          return saAsync.chunkSerial(1, positions, position => position.safeSave())
             .then(() => {
 
               if (!SaleOrder.hasChanges(this)) return;

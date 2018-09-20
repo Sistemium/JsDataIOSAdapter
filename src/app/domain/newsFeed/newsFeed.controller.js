@@ -80,7 +80,9 @@
 
       let filter = NewsMessage.meta[`filter${vm.filter}`]({orderBy: [[cts, 'DESC']]});
 
-      vm.rebindAll(NewsMessage, filter, 'vm.newsMessages');
+      vm.rebindAll(NewsMessage, filter, 'vm.newsMessagesPre', () => {
+        vm.newsMessages = _.orderBy(vm.newsMessagesPre, [cts], ['desc']);
+      });
 
       const relations = ['UserNewsMessage', 'NewsMessagePicture'];
 

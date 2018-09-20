@@ -9,7 +9,9 @@ close='vm.saleOrder.processingMessage = null'
 
 .form-group
   .col-sm-12.sale-order-contract
+
     span.gray ТП {{ vm.saleOrder.salesman.tinyName }}
+
     outlet-salesman-contract-popover(
     ng-if='vm.saleOrder.salesmanId && vm.saleOrder.outletId'
     sale-order='vm.saleOrder'
