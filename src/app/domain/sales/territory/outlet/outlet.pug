@@ -79,37 +79,37 @@
 
       contract-view(contracts='vm.outletSalesmanContracts')
 
-        .outlet-additional-fields
+      .outlet-additional-fields
 
-          .license-info(ng-if='vm.outlet.licenseInfo')
-            label Лицензия
-            span {{ vm.outlet.licenseInfo }}
+        .license-info(ng-if='vm.outlet.licenseInfo')
+          label Лицензия
+          span {{ vm.outlet.licenseInfo }}
 
-          .egais-code(ng-if='vm.outlet.egaisCode')
-            label ЕГАИС ИД
-            span {{ vm.outlet.egaisCode }}
+        .egais-code(ng-if='vm.outlet.egaisCode')
+          label ЕГАИС ИД
+          span {{ vm.outlet.egaisCode }}
 
-          .comment-text(ng-if='vm.outlet.commentText')
-            label Комментарий
-            strong {{ vm.outlet.commentText }}
+        .comment-text(ng-if='vm.outlet.commentText')
+          label Комментарий
+          strong {{ vm.outlet.commentText }}
 
-        .outlet-partner-limitation(ng-if='vm.outlet.partner.hasExclusions()')
+      .outlet-partner-limitation(ng-if='vm.outlet.partner.hasExclusions()')
 
-          label Исключения из правил:
+        label Исключения из правил:
 
-          .limitations
-            ul
-              li.allow-any-total(ng-if='vm.outlet.partner.allowLowTotal || vm.outlet.partner.allowAnyTotal')
-                span(ng-if='vm.outlet.partner.allowAnyTotal')
-                  | Нет минимальной суммы заказа
-                span(ng-if='vm.outlet.partner.allowLowTotal || !vm.outlet.partner.allowAnyTotal')
-                  | Пониженная минимальная сумма заказа
+        .limitations
+          ul
+            li.allow-any-total(ng-if='vm.outlet.partner.allowLowTotal || vm.outlet.partner.allowAnyTotal')
+              span(ng-if='vm.outlet.partner.allowAnyTotal')
+                | Нет минимальной суммы заказа
+              span(ng-if='vm.outlet.partner.allowLowTotal || !vm.outlet.partner.allowAnyTotal')
+                | Пониженная минимальная сумма заказа
 
-              li.allow-any-volume(ng-if='vm.outlet.partner.allowAnyVolume')
-                span Не применять кратность
+            li.allow-any-volume(ng-if='vm.outlet.partner.allowAnyVolume')
+              span Не применять кратность
 
-              li.allow-no-charges(ng-if='vm.outlet.partner.allowNoCharges')
-                span Не требуется нагрузка
+            li.allow-no-charges(ng-if='vm.outlet.partner.allowNoCharges')
+              span Не требуется нагрузка
 
-              li.allow-no-doc-discounts(ng-if='vm.outlet.partner.allowNoDocDiscounts')
-                span Разрешены скидки в откат
+            li.allow-no-doc-discounts(ng-if='vm.outlet.partner.allowNoDocDiscounts')
+              span Разрешены скидки в откат
