@@ -10,6 +10,11 @@ egais-popover {
     border-radius: 3px;
     background-color: $state-info-bg;
 
+    label {
+      color: $light-gray;
+      margin-right: $margin-bottom-xs;
+    }
+
     a {
       padding: 2px 4px;
       display: block;

@@ -14,3 +14,11 @@
 
   .status-message(ng-if='vm.egais.egaisActStatus')
     span {{ vm.egais.egaisActStatus }}
+
+  .status-message
+    label Отправитель:
+    span {{ vm.egais.egaisSender }}
+
+  .status-message
+    label Получатель:
+    span {{ vm.egais.egaisReceiver }}
