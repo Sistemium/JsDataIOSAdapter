@@ -15,10 +15,10 @@
   .status-message(ng-if='vm.egais.egaisActStatus')
     span {{ vm.egais.egaisActStatus }}
 
-  .status-message
+  .status-message(ng-if="vm.egais.egaisSender")
     label Отправитель:
     span {{ vm.egais.egaisSender }}
 
-  .status-message
+  .status-message(ng-if="vm.egais.egaisReceiver")
     label Получатель:
     span {{ vm.egais.egaisReceiver }}
