@@ -237,6 +237,10 @@
         },
       };
 
+      if (vm.stockTakingItem && vm.stockTakingItem.DSHasChanges()) {
+        return sayBusy();
+      }
+
       Article.findAll({ where })
 
         .then(res => res.length && res || $q.reject(NOT_FOUND))
@@ -298,6 +302,10 @@
       const { volume, article } = stockTakingItem;
       const say = (volume === 1) ? article.firstName : Language.speakableCountFemale(volume);
       SoundSynth.say(say);
+    }
+
+    function sayBusy() {
+      SoundSynth.say(`Завершите редактирование, прежде чем сканировать дальше`);
     }
 
     function sayInvalid() {
