@@ -60,11 +60,23 @@
 
     &.touched {
       strong {
-        text-decoration: underline;
+        //text-decoration: underline;
         color: $green;
       }
     }
 
+  }
+
+  .editing .buttons {
+    margin-top: $margin-bottom-xs;
+    display: flex;
+    flex-direction: row;
+    button {
+      &:first-child {
+        margin-left: 0;
+      }
+      flex: 1;
+    }
   }
 
 }

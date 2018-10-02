@@ -35,7 +35,7 @@
     )
       label Количество
       strong.animate(sa-animate-on-change="vm.stockTakingItem.volume" change-class="change-up")
-        | {{ vm.volumeView }}
+        | {{ vm.volumeView || '⚠️ Укажите' }}
 
     sa-keyboard(
     datatype='boxPcs'
@@ -45,3 +45,7 @@
     box-rel='vm.stockTakingItem.packageRel'
     disable-delete="true"
     )
+
+    .buttons(ng-if="vm.volumeViewTouched")
+      button.btn.btn-danger(ng-click="vm.cancelClick()") Отменить
+      button.btn.btn-primary(ng-click="vm.saveClick()") Готово

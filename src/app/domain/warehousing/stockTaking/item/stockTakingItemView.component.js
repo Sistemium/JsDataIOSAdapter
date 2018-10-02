@@ -22,7 +22,7 @@
 
     const vm = saControllerHelper.setup(this, $scope);
 
-    const debouncedSave = _.debounce(saveItem, 3000);
+    // const debouncedSave = _.debounce(saveItem, 3000);
 
     vm.use({
 
@@ -31,11 +31,6 @@
         const { stockTakingItemId } = vm;
 
         vm.watchScope('vm.stockTakingItemId', onItemIdChange);
-
-        vm.watchScope('vm.stockTakingItem.volume', () => {
-          setUntouched();
-          debouncedSave();
-        });
 
         onItemIdChange(stockTakingItemId);
 
@@ -50,6 +45,15 @@
         vm.stockTakingItemId = $item.id;
       },
 
+      saveClick() {
+        saveItem();
+      },
+
+      cancelClick() {
+        vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSRevert();
+        setUntouched();
+      },
+
     });
 
     /*
@@ -58,14 +62,12 @@
 
     function saveItem() {
       if (_.get(vm.stockTakingItem, 'id')) {
-        vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSCreate();
+        vm.stockTakingItem.DSHasChanges() && vm.stockTakingItem.DSCreate().then(setUntouched);
       }
     }
 
     function setUntouched() {
-      $timeout.cancel(vm.touchedTimeout);
-      vm.touchedTimeout = $timeout(4000);
-      vm.touchedTimeout.then(() => vm.volumeViewTouched = false, _.noop);
+      vm.volumeViewTouched = false;
     }
 
     function onItemIdChange(id) {
