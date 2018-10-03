@@ -62,7 +62,7 @@
         [
           { label: rel ? 'К' : vm.boxRel || '', rel },
           { label: '0', },
-          { i: 'glyphicon glyphicon-remove', remove: true }
+          { label: '⌫', remove: true }
         ]
       ];
 
