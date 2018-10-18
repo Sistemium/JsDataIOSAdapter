@@ -2,7 +2,7 @@
 
 (function () {
 
-  const REQUIRED_ACCURACY = 150;
+  const REQUIRED_ACCURACY = 500;
 
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, geolib, Helpers, mapsHelper) {
 
