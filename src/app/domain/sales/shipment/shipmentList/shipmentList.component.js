@@ -15,8 +15,8 @@
   function ShipmentListController(Schema, Helpers, $scope, SalesmanAuth, $state,
                                   saMedia, ShipmentModal) {
 
-    const {Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais} = Schema.models();
-    const {saControllerHelper, ScrollHelper} = Helpers;
+    const { Shipment, ShipmentPosition, Outlet, Driver, ShipmentEgais } = Schema.models();
+    const { saControllerHelper, ScrollHelper } = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -117,7 +117,7 @@
           })
         };
 
-        let lastShipmentIdx = _.findLastIndex(data, {date});
+        let lastShipmentIdx = _.findLastIndex(data, { date });
         data.splice(lastShipmentIdx + 1, 0, footer);
 
       });
@@ -132,7 +132,7 @@
       if ($event.defaultPrevented || driverPopoverOpen) return;
 
       if ($state.is('sales.shipmentList')) {
-        $state.go('.item', {id: item.id})
+        $state.go('.item', { id: item.id })
       } else {
         ShipmentModal.show(item.id);
       }
@@ -145,6 +145,23 @@
       ShipmentEgais.ejectAll();
     }
 
+    function loadShipmentRelations(shipments) {
+
+      const ids = _.filter(_.map(shipments, shipment => {
+        return shipment.outlet ? null : shipment.id;
+      }));
+
+      if (!ids.length) {
+        return shipments;
+      }
+
+      const where = { id: { '==': ids } };
+
+      return Outlet.findAll(where)
+        .then(() => _.filter(shipments, 'outlet'));
+
+    }
+
     let busyGettingData;
 
     function getData() {
@@ -155,7 +172,7 @@
         return;
       }
 
-      let filter = SalesmanAuth.makeFilter({'x-order-by:': '-date,-ndoc'});
+      let filter = SalesmanAuth.makeFilter({ 'x-order-by:': '-date,-ndoc' });
 
       let options = {
         pageSize: pageSize,
@@ -165,7 +182,8 @@
 
       _.assign(filter, vm.filter);
 
-      busyGettingData = Shipment.findAllWithRelations(filter, options)(['Outlet', 'Driver'])
+      busyGettingData = Shipment.findAllWithRelations(filter, options)(['Driver'])
+        .then(loadShipmentRelations)
         .then(res => {
 
           if (!res.length) {
