@@ -157,7 +157,7 @@
 
       const where = { id: { '==': ids } };
 
-      return Outlet.findAll(where)
+      return Outlet.findAll({ where })
         .then(() => _.filter(shipments, 'outlet'));
 
     }
