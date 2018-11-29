@@ -148,7 +148,7 @@
     function loadShipmentRelations(shipments) {
 
       const ids = _.filter(_.map(shipments, shipment => {
-        return shipment.outlet ? null : shipment.id;
+        return shipment.outlet ? null : shipment.outletId;
       }));
 
       if (!ids.length) {
