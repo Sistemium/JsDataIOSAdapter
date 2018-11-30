@@ -36,7 +36,7 @@
 
   .items(ng-if="vm.stockTakingId && !vm.busy")
 
-    ui-view.current-item(ng-if='vm.itemId')
+    ui-view.current-item.scroll-y(ng-if='vm.itemId' resize resize-offset-top='5')
 
     .items-view(ng-class="{ 'has-active': vm.itemId }")
 
