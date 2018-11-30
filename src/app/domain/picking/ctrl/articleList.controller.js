@@ -189,10 +189,14 @@
 
       if (vm.mode === 'picked'){
 
-        vm.groups = [{
-          name: '',
-          articles: filtered
-        }];
+        vm.groups = [];
+
+        if (filtered.length) {
+          vm.groups.push({
+            name: '',
+            articles: filtered
+          });
+        }
 
       } else if (vm.mode === 'articleList') {
 
