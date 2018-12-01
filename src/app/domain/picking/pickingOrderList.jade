@@ -34,7 +34,10 @@ section.has-navbar-fixed-bottom(ui-view)
 
 nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBottomBar')
   .container
-    form.navbar-form.navbar-left.float-left.flat-on-small.hidden-xs(role='search' ng-submit="vm.onBarCode()" ng-if="vm.onBarCode")
+    form.navbar-form.navbar-left.float-left.flat-on-small#picking-search(
+    role='search' ng-submit="vm.onBarCode()"
+    ng-if="vm.onBarCode"
+    )
       .form-group
         input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')
 
