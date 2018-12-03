@@ -2,6 +2,9 @@
 
 (function () {
 
+  const WAREHOUSE_BOX_SCAN_EVENT = 'warehouseBoxBarCodeScan';
+  const STOCK_BATCH_SCAN_EVENT = 'stockBatchBarCodeScan';
+
   function PickingOrderListController($scope, Schema, $state, Errors,
                                       BarCodeScanner, SoundSynth, Sockets,
                                       saAsync, DEBUG) {
@@ -299,7 +302,7 @@
       const codeType = scanType(code);
 
       if (codeType === BARCODE_TYPE_WAREHOUSE_BOX) {
-        $scope.$broadcast('warehouseBoxBarCodeScan', { code });
+        $scope.$broadcast(WAREHOUSE_BOX_SCAN_EVENT, { code });
         return;
       }
 
@@ -323,7 +326,7 @@
           return SoundSynth.say(notFound);
         }
 
-        $scope.$broadcast('stockBatchBarCodeScan', { stockBatch, code });
+        $scope.$broadcast(STOCK_BATCH_SCAN_EVENT, { stockBatch, code });
 
       })
         .catch(() => SoundSynth.say(notFound));
