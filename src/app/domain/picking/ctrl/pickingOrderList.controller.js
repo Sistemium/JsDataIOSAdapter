@@ -15,6 +15,13 @@
     const PS = Schema.model('PickingSession');
     const POS = Schema.model('PickingOrderSession');
 
+    const { BarCodeType } = Schema.models();
+
+    const {
+      BARCODE_TYPE_STOCK_BATCH,
+      BARCODE_TYPE_WAREHOUSE_BOX,
+    } = BarCodeType.meta.types;
+
     if (!picker) {
       return $state.go('login');
     }
@@ -110,7 +117,7 @@
         pickerId: picker.id,
         siteId: picker.siteId,
         processing: 'picking'
-      }, {bypassCache: true})
+      }, { bypassCache: true })
         .then(pss => {
 
           let ps = _.first(pss);
@@ -118,12 +125,12 @@
           if (!ps) {
 
             if ($state.current.name !== 'picking.orderList') {
-              $state.go('picking.orderList', {state: 'notdone'}, {reload: true});
+              $state.go('picking.orderList', { state: 'notdone' }, { reload: true });
             }
             return;
           }
 
-          POS.findAll({pickingSessionId: ps.id})
+          POS.findAll({ pickingSessionId: ps.id })
             .then(pickingOrderSessions => {
 
               let poIds = _.uniq(_.map(pickingOrderSessions, 'pickingOrderId'));
@@ -131,7 +138,7 @@
               PO.findAll({
                 pickerId: picker.id,
                 date: date
-              }, {bypassCache: true, cacheResponse: false})
+              }, { bypassCache: true, cacheResponse: false })
                 .then(() => {
 
                   vm.selectedItems = PO.getAll(poIds);
@@ -147,7 +154,7 @@
                       // $state.go('^');
                     }
                   } else {
-                    $state.go('picking.orderList', {state: 'notdone'});
+                    $state.go('picking.orderList', { state: 'notdone' });
                   }
 
                 });
@@ -164,7 +171,7 @@
 
       if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
         PO.inject(i);
-        return POP.findAllWithRelations({pickingOrderId: i.id})('Article')
+        return POP.findAllWithRelations({ pickingOrderId: i.id })('Article')
       } else {
         PO.eject(i.id);
         return false;
@@ -182,7 +189,7 @@
 
       if (event.resource === 'PickingOrder') {
 
-        PO.find(id, {bypassCache: true, cacheResponse: false})
+        PO.find(id, { bypassCache: true, cacheResponse: false })
           .then(onFindPO)
           .catch(err => {
             if (err.error === 404) {
@@ -193,7 +200,7 @@
 
       } else if (event.resource === 'PickingOrderPosition') {
 
-        POP.find(id, {cacheResponse: false})
+        POP.find(id, { cacheResponse: false })
           .then(pos => {
             if (PO.get(pos.pickingOrderId)) {
               POP.inject(pos);
@@ -220,7 +227,7 @@
       vm.busy = PO.findAll({
         pickerId: picker.id,
         date: date
-      }, {bypassCache: true, cacheResponse: false})
+      }, { bypassCache: true, cacheResponse: false })
         .then(res => {
 
           let progress = {
@@ -270,12 +277,31 @@
         });
     }
 
+    function scanType({ length }) {
+
+      if (length === 8) {
+        return BARCODE_TYPE_STOCK_BATCH;
+      } else if (length === 26) {
+        return BARCODE_TYPE_WAREHOUSE_BOX;
+      }
+
+      return undefined;
+
+    }
+
     function scanFn(code, type, object) {
 
       const notFound = 'Неизвестный штрих-код';
 
       Errors.clear();
       code = code || vm.barCodeInput;
+
+      const codeType = scanType(code);
+
+      if (codeType === BARCODE_TYPE_WAREHOUSE_BOX) {
+        $scope.$broadcast('warehouseBoxBarCodeScan', { code });
+        return;
+      }
 
       let q;
 
@@ -291,16 +317,13 @@
         return SoundSynth.say(notFound);
       }
 
-      q.then(sb => {
+      q.then(stockBatch => {
 
-        if (!sb) {
+        if (!stockBatch) {
           return SoundSynth.say(notFound);
         }
 
-        $scope.$broadcast('stockBatchBarCodeScan', {
-          stockBatch: sb,
-          code: code
-        });
+        $scope.$broadcast('stockBatchBarCodeScan', { stockBatch, code });
 
       })
         .catch(() => SoundSynth.say(notFound));
