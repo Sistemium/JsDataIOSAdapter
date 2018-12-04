@@ -113,6 +113,10 @@ stock-taking-view {
 
     .items {
 
+      .items-view {
+        flex: 1;
+      }
+
       .items-view.has-active {
         @include responsive-only(xxs) {
           display: none;
@@ -141,6 +145,7 @@ stock-taking-view {
           order: 2;
           margin-left: $margin-bottom-xs;
           width: $right-panel-width;
+
           .field {
             @include side-view-field();
           }
@@ -172,6 +177,7 @@ stock-taking-view {
 
     a.delete {
       margin-right: $margin-bottom-xs/2;
+
       i {
         top: 1px;
       }
