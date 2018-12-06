@@ -10,6 +10,10 @@
 
       relations: {
         belongsTo: {
+          Article: {
+            localField: 'article',
+            localKey: 'articleId'
+          },
           WarehouseArticle: {
             localField: 'warehouseArticle',
             localKey: 'warehouseArticleId'
