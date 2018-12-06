@@ -4,7 +4,7 @@
 
     angular.module('Models').run(function (Schema) {
 
-      const POPP = Schema.models().PickingOrderPositionPicked;
+      const { PickingOrderPositionPicked } = Schema.models();
       let totalVolume = Schema.aggregate('volume').sum;
       let totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
 
@@ -21,9 +21,9 @@
       function maxTs (positions) {
         return _.reduce (positions, (res, pos) => {
           const lastPos = _.maxBy (pos.pickedPositions, pp => {
-            return POPP.lastModified (pp.id);
+            return PickingOrderPositionPicked.lastModified (pp.id);
           });
-          return Math.max (lastPos && POPP.lastModified (lastPos) || 0, res);
+          return Math.max (lastPos && PickingOrderPositionPicked.lastModified (lastPos) || 0, res);
         },0);
       }
 
@@ -69,7 +69,7 @@
 
           linkStockBatch: function (sb, code, volume) {
 
-            return POPP.create({
+            return PickingOrderPositionPicked.create({
               stockBatchId: sb.id,
               pickingOrderPositionId: this.id,
               volume: volume || this.volume,
