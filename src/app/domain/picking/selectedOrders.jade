@@ -13,14 +13,20 @@ h3.clearfix
     label {{ vm.totals.totalVolume () | number:0 }}
 
 section#scrollable-container.scroll-y(cg-busy='vm.busy' resize resize-offset-top='60')
-  .progress-striped(ng-if='vm.progress' uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger")
+  .progress-striped(
+  ng-if='vm.progress'
+  uib-progressbar max="vm.progress.max" value="vm.progress.value" type="danger"
+  )
     i {{ vm.progress.value }} / {{ vm.progress.max }}
 
   ul.list-group(
   as-sortable="vm.sortableOptions"
   ng-model='vm.selectedItems'
   )
-    li.list-group-item.display-flex(ng-repeat='item in vm.selectedItems track by item.id' as-sortable-item)
+    li.list-group-item.display-flex(
+    ng-repeat='item in vm.selectedItems track by item.id'
+    as-sortable-item
+    )
       .sorter-handle.gray(as-sortable-item-handle) {{ $index + 1 }}
       .flex-1
         h4.list-group-item-heading.display-flex
