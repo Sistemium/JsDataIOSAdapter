@@ -30,7 +30,8 @@
 
         methods: {
           boxPcs: function () {
-            return this.parent && this.parent.Article && this.parent.Article.boxPcs(this.volume, true) || {};
+            const { parent } = this;
+            return parent && parent.Article && parent.Article.boxPcs(this.volume, true) || {};
           },
           codeLabel: function () {
             const res = (this.code||'').match (/\d[0]*(.*)/) || [];
