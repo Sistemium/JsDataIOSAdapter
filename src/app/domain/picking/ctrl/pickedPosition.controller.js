@@ -5,15 +5,16 @@
 
   function PickedPositionController($scope, $state, models) {
 
-    let vm = this;
-    const POPP = models.PickingOrderPositionPicked;
-    const POP = models.PickingOrderPosition;
+    const vm = this;
+    const { PickingOrderPosition, PickingOrderPositionPicked } = models;
 
     const mode = $state.params.positionId ? 'pick' : 'picked';
 
-    let pickedPosition = mode === 'picked' && POPP.get ($state.params.pickedPositionId);
+    let pickedPosition = mode === 'picked'
+      && PickingOrderPositionPicked.get($state.params.pickedPositionId);
 
-    const position = pickedPosition && pickedPosition.parent || POP.get ($state.params.positionId);
+    const position = pickedPosition && pickedPosition.parent
+      || PickingOrderPosition.get($state.params.positionId);
 
     let initVolume, initExport;
 
@@ -29,7 +30,7 @@
       unPickedVolume = position.unPickedVolume();
     }
 
-    let states = [
+    const states = [
       {
         input: 'volume',
         label: 'Собрано',
@@ -111,7 +112,7 @@
       save: () => {
 
         if (!pickedPosition) {
-          POPP.create ({
+          PickingOrderPositionPicked.create ({
             pickingOrderPositionId: position.id,
             volume: states[0].exportValue,
             productionInfo: states.length > 1 ? states[1].value : null,
@@ -122,7 +123,7 @@
         } else {
           pickedPosition.volume = states[0].exportValue;
           pickedPosition.productionInfo = states.length > 1 ? states[1].value : null;
-          POPP.save(pickedPosition.id).then (() => {
+          PickingOrderPositionPicked.save(pickedPosition.id).then (() => {
             $state.go('^');
           });
         }
@@ -130,7 +131,7 @@
       },
 
       remove: () => {
-        POPP.destroy (pickedPosition).then(() => {
+        PickingOrderPositionPicked.destroy (pickedPosition).then(() => {
           $state.go('^');
         });
       }
