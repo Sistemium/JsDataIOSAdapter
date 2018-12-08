@@ -2,150 +2,154 @@
 
 (function () {
 
-    angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, moment, $q) {
 
-      const { PickingOrderPositionPicked } = Schema.models();
-      let totalVolume = Schema.aggregate('volume').sum;
-      let totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
+    const {
+      PickingOrderPositionPicked,
+      WarehouseItemOperation,
+    } = Schema.models();
 
-      function isPicked (positions) {
-        return !totalUnPickedVolume (positions);
-      }
+    let totalVolume = Schema.aggregate('volume').sum;
+    let totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
 
-      function hasPicked (positions) {
-        return !!_.filter(positions, pos => {
-          return !!pos.pickedPositions.length;
-        }).length;
-      }
+    function isPicked(positions) {
+      return !totalUnPickedVolume(positions);
+    }
 
-      function maxTs (positions) {
-        return _.reduce (positions, (res, pos) => {
-          const lastPos = _.maxBy (pos.pickedPositions, pp => {
-            return PickingOrderPositionPicked.lastModified (pp.id);
+    function hasPicked(positions) {
+      return !!_.filter(positions, pos => {
+        return !!pos.pickedPositions.length;
+      }).length;
+    }
+
+    function maxTs(positions) {
+      return _.reduce(positions, (res, pos) => {
+        const lastPos = _.maxBy(pos.pickedPositions, pp => {
+          return PickingOrderPositionPicked.lastModified(pp.id);
+        });
+        return Math.max(lastPos && PickingOrderPositionPicked.lastModified(lastPos) || 0, res);
+      }, 0);
+    }
+
+    Schema.register({
+
+      name: 'PickingOrderPosition',
+
+      relations: {
+        belongsTo: {
+          PickingOrder: {
+            localField: 'PickingOrder',
+            localKey: 'pickingOrderId'
+          }
+        },
+        hasOne: {
+          Article: {
+            localField: 'Article',
+            localKey: 'articleId'
+          }
+        },
+        hasMany: {
+          PickingOrderPositionPicked: {
+            localField: 'pickedPositions',
+            foreignKey: 'pickingOrderPositionId'
+          }
+        }
+      },
+
+      // fieldTypes: {
+      // volume: 'int',
+      // ord: 'int'
+      // },
+
+      methods: {
+
+        boxVolume: function () {
+          return this.Article && this.Article.boxVolume(this.volume) || 0;
+        },
+
+        boxPcs: function (volume) {
+          return this.Article && this.Article.boxPcs(angular.isUndefined(volume) ? this.volume : volume, true) || {};
+        },
+
+        linkStockBatch({ articleId, stockBatchId }, code, volume) {
+
+          return PickingOrderPositionPicked.create({
+            pickingOrderPositionId: this.id,
+            volume: volume || this.volume,
+            stockBatchId,
+            articleId,
+            code
           });
-          return Math.max (lastPos && PickingOrderPositionPicked.lastModified (lastPos) || 0, res);
-        },0);
-      }
-
-      Schema.register ({
-
-        name: 'PickingOrderPosition',
-
-        relations: {
-          belongsTo: {
-            PickingOrder: {
-              localField: 'PickingOrder',
-              localKey: 'pickingOrderId'
-            }
-          },
-          hasOne: {
-            Article: {
-              localField: 'Article',
-              localKey: 'articleId'
-            }
-          },
-          hasMany: {
-            PickingOrderPositionPicked: {
-              localField: 'pickedPositions',
-              foreignKey: 'pickingOrderPositionId'
-            }
-          }
-        },
-
-        // fieldTypes: {
-          // volume: 'int',
-          // ord: 'int'
-        // },
-
-        methods: {
-
-          boxVolume: function () {
-            return this.Article && this.Article.boxVolume (this.volume) || 0;
-          },
-
-          boxPcs: function (volume) {
-            return this.Article && this.Article.boxPcs(angular.isUndefined(volume) ? this.volume : volume, true) || {};
-          },
-
-          linkStockBatch: function (sb, code, volume) {
-
-            return PickingOrderPositionPicked.create({
-              stockBatchId: sb.id,
-              pickingOrderPositionId: this.id,
-              volume: volume || this.volume,
-              articleId: sb.articleId,
-              code: code
-            });
-
-          },
-
-          unPickedBoxVolume: function () {
-            return this.Article && this.Article.boxVolume (this.unPickedVolume()) || 0;
-          },
-
-          unPickedVolume: function () {
-            return this.volume - (totalVolume (this.pickedPositions) || 0);
-          },
-
-          unPickedBoxPcs: function () {
-            return this.boxPcs(this.unPickedVolume(), true);
-          }
 
         },
 
-        etc: {
+        unPickedBoxVolume: function () {
+          return this.Article && this.Article.boxVolume(this.unPickedVolume()) || 0;
+        },
 
-          pivotPositionsByArticle:  function (articleIndex) {
-            return _.orderBy(_.map(articleIndex, function (positions, key) {
+        unPickedVolume: function () {
+          return this.volume - (totalVolume(this.pickedPositions) || 0);
+        },
 
-              const totalVolume = _.reduce(positions, (sum, pos) => {
-                return sum + pos.volume;
-              }, 0);
+        unPickedBoxPcs: function () {
+          return this.boxPcs(this.unPickedVolume(), true);
+        }
 
-              const article = positions[0].Article;
-              const boxPcs = article && article.boxPcs(totalVolume, true);
-              const picked = isPicked(positions);
-              const totalUnPicked = totalUnPickedVolume (positions);
+      },
 
-              return {
+      etc: {
 
-                id: key,
-                sameId: article.sameId,
-                article,
-                positions,
-                volume: boxPcs,
-                totalVolume,
-                isPicked: picked,
-                hasPicked: hasPicked(positions),
-                totalUnPickedVolume: totalUnPicked,
-                ts: maxTs(positions),
+        pivotPositionsByArticle: function (articleIndex) {
+          return _.orderBy(_.map(articleIndex, function (positions, key) {
 
-                orderVolume: order => {
-                  const p = _.find(positions, {pickingOrderId : order.id});
-                  return article.boxPcs(p && p.volume || 0);
-                },
+            const totalVolume = _.reduce(positions, (sum, pos) => {
+              return sum + pos.volume;
+            }, 0);
 
-                position: order => {
-                  return _.find(positions, {pickingOrderId : order.id});
-                },
+            const article = positions[0].Article;
+            const boxPcs = article && article.boxPcs(totalVolume, true);
+            const picked = isPicked(positions);
+            const totalUnPicked = totalUnPickedVolume(positions);
 
-                updatePicked: function () {
-                  this.isPicked = isPicked(positions);
-                  this.ts = maxTs(positions);
-                  this.totalUnPickedVolume = totalUnPickedVolume(positions);
-                  this.hasPicked = hasPicked(positions);
-                }
+            return {
 
+              id: key,
+              sameId: article.sameId,
+              article,
+              positions,
+              volume: boxPcs,
+              totalVolume,
+              isPicked: picked,
+              hasPicked: hasPicked(positions),
+              totalUnPickedVolume: totalUnPicked,
+              ts: maxTs(positions),
+
+              orderVolume: order => {
+                const p = _.find(positions, { pickingOrderId: order.id });
+                return article.boxPcs(p && p.volume || 0);
+              },
+
+              position: order => {
+                return _.find(positions, { pickingOrderId: order.id });
+              },
+
+              updatePicked: function () {
+                this.isPicked = isPicked(positions);
+                this.ts = maxTs(positions);
+                this.totalUnPickedVolume = totalUnPickedVolume(positions);
+                this.hasPicked = hasPicked(positions);
               }
 
-            }), 'article.name');
+            }
 
-          }
+          }), 'article.name');
 
         }
 
-      });
+      }
 
     });
+
+  });
 
 })();
