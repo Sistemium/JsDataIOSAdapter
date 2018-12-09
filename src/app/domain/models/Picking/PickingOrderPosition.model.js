@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, moment, $q) {
+  angular.module('Models').run(function (Schema) {
 
     const {
       PickingOrderPositionPicked,
@@ -81,6 +81,29 @@
             code
           });
 
+        },
+
+        linkPickedBoxItems(warehouseBox, warehouseItems) {
+
+          return PickingOrderPositionPicked.create({
+            pickingOrderPositionId: this.id,
+            volume: warehouseItems.length,
+            warehouseBoxId: warehouseBox.id,
+          })
+            .then(p => WarehouseItemOperation.meta.createForOwner({
+              source: 'PickingOrderPositionPicked',
+              ownerXid: p.id,
+              warehouseBox,
+              warehouseItems,
+            }))
+            .then(() => {
+              if (warehouseBox.ownerXid === this.pickingOrderId) {
+                return;
+              }
+              warehouseBox.processing = 'picked';
+              warehouseBox.ownerXid = this.pickingOrderId;
+              return warehouseBox.DSCreate();
+            });
         },
 
         unPickedBoxVolume: function () {

@@ -130,11 +130,13 @@
 
       },
 
-      remove: () => {
-        PickingOrderPositionPicked.destroy(pickedPosition).then(() => {
-          $state.go('^');
-        });
-      }
+      remove() {
+        pickedPosition.unlinkWarehouseBox()
+          .then(() => PickingOrderPositionPicked.destroy(pickedPosition))
+          .then(() => {
+            $state.go('^');
+          });
+      },
 
     });
 

@@ -11,14 +11,19 @@
   function ArticleListController($scope, $filter, $state, toastr, Schema,
                                  $timeout, SoundSynth, Language, $q) {
 
-    const { Article, PickingOrderPosition: POP } = Schema.models();
+    const {
+      Article,
+      PickingOrderPosition,
+      WarehouseBox,
+      WarehouseItem,
+    } = Schema.models();
 
     const orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
     const { name: stateName } = $state.$current;
 
     let lockScanProcessor;
 
-    const positions = POP.filter({
+    const positions = PickingOrderPosition.filter({
       where: {
         pickingOrderId: { 'in': _.map(orders, 'id') }
       }
@@ -27,14 +32,14 @@
     const vm = angular.extend(this, {
 
       articleIndex: _.groupBy(positions, 'articleId'),
-      orders: orders,
+      orders,
       pickedIndex: {},
       barCodeInput: '',
       title: ''
 
     });
 
-    vm.articles = POP.etc.pivotPositionsByArticle(vm.articleIndex);
+    vm.articles = PickingOrderPosition.etc.pivotPositionsByArticle(vm.articleIndex);
     vm.currentFilter = stateName.match(/picked$/) ? { hasPicked: 'true' } : { isPicked: '!true' };
     vm.orderBy = stateName.match(/picked$/) ? '-ts' : 'article.name';
 
@@ -46,12 +51,108 @@
     setGroups(vm.articles);
 
     /*
+    Speaking
+     */
+
+    function replyNotFound() {
+      SoundSynth.say('Неизвестный штрих-код');
+    }
+
+    function replyNotRequested() {
+      SoundSynth.say('Этого товара нет в требовании');
+    }
+
+    function replyAlreadyPicked() {
+      SoundSynth.say('Товар уже собран');
+    }
+
+    function replyTakeAll(num) {
+      SoundSynth.say(`Забрать целиком ${num}`);
+    }
+
+    function replyTakeSome(pcs, num) {
+      SoundSynth.say(`Забрать ${Language.speakableBoxPcs({ pcs })} ${num}`);
+    }
+
+    /*
     Functions
      */
 
     function onWarehouseBoxScan(e, options) {
       console.info(options);
+      const { code: barcode } = options;
+      WarehouseBox.findAll({ barcode })
+        .then(res => res.length ? onWarehouseBox(res[0]) : replyNotFound);
     }
+
+    function onWarehouseBox(box) {
+
+      if (box.processing === 'picked') {
+        return replyAlreadyPicked();
+      }
+
+      return WarehouseItem.findAllWithRelations(
+        { currentBoxId: box.id },
+        { cacheResponse: false })(['Article'])
+        .then(items => findMatchingItems(items, box));
+    }
+
+    function findMatchingItems(warehouseItems, box) {
+      console.log(_.map(warehouseItems, 'article'));
+
+      const matching = _.filter(warehouseItems, ({ article }) => {
+        return !article || _.find(vm.articles, { sameId: article.sameId });
+      });
+
+      if (!matching.length) {
+        return replyNotRequested();
+      }
+
+      const unpicked = _.find(vm.articles, a => {
+        return a.totalUnPickedVolume > 0 && _.find(matching, ({ article }) => {
+          return a.sameId === article.sameId;
+        });
+      });
+
+      if (!unpicked) {
+        return replyAlreadyPicked();
+      }
+
+      const { sameId } = unpicked;
+
+      const unpickedItems = _.filter(matching, ({ article }) => article.sameId === sameId);
+
+      const unpickedPos = _.find(unpicked.positions, pop => volumeToTake(pop) > 0);
+
+      if (!unpickedPos) {
+        return replyAlreadyPicked();
+      }
+
+      const toTakeVol = volumeToTake(unpickedPos);
+
+      const { orders } = $scope.vm;
+
+      const orderNum = orders.indexOf(unpickedPos.PickingOrder) + 1;
+      const num = orders.length > 1
+        ? (orderNum === 2 ? ' во ' : ' в ') + Language.orderRu(orderNum) : '';
+
+      if (toTakeVol >= warehouseItems.length) {
+
+        return unpickedPos.linkPickedBoxItems(box, warehouseItems)
+          .then(() => replyTakeAll(num));
+
+      } else {
+
+        return replyTakeSome(toTakeVol, num);
+
+      }
+
+      function volumeToTake(pop) {
+        return _.min([pop.unPickedVolume(), unpickedItems.length]);
+      }
+
+    }
+
 
     function onStockBatchScan(e, options) {
 
@@ -80,7 +181,7 @@
             SoundSynth.say(found.speakable);
           }
         } else {
-          SoundSynth.say('Этого товара нет в требовании');
+          replyNotRequested();
         }
 
         lockScanProcessor = false;

@@ -1,8 +1,8 @@
 (function () {
 
-  angular.module('Models').run(Schema => {
+  angular.module('Models').run((Schema, $q, moment) => {
 
-    Schema.register({
+    const WarehouseItemOperation = Schema.register({
 
       name: 'WarehouseItemOperation',
 
@@ -26,6 +26,39 @@
           }],
         }
       },
+
+      methods: {
+
+        cancelOperation() {
+          return WarehouseItemOperation.create({
+            ownerXid: null,
+            source: 'cancel',
+            timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
+            boxToId: this.boxFromId,
+            boxFromId: this.boxToId,
+            warehouseItemId: this.warehouseItemId,
+          })
+        },
+
+      },
+
+      meta: {
+
+        createForOwner({ownerXid, warehouseBox, warehouseItems, source}) {
+
+          return $q.all(_.map(warehouseItems, item => WarehouseItemOperation.create({
+            ownerXid,
+            source,
+            warehouseItemId: item.id,
+            code: warehouseBox.barcode,
+            boxToId: warehouseBox.id,
+            boxFromId: warehouseBox.id,
+            timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
+          })))
+
+        },
+
+      }
 
     });
 
