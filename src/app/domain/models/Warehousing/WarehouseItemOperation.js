@@ -2,6 +2,8 @@
 
   angular.module('Models').run((Schema, $q, moment) => {
 
+    const { WarehouseItem } = Schema.models();
+
     const WarehouseItemOperation = Schema.register({
 
       name: 'WarehouseItemOperation',
@@ -30,21 +32,31 @@
       methods: {
 
         cancelOperation() {
+          const { boxFromId, boxToId, warehouseItemId } = this;
           return WarehouseItemOperation.create({
             ownerXid: null,
             source: 'cancel',
             timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
-            boxToId: this.boxFromId,
-            boxFromId: this.boxToId,
-            warehouseItemId: this.warehouseItemId,
+            boxToId: boxFromId,
+            boxFromId: boxToId,
+            warehouseItemId,
           })
+            .then(() => {
+              if (boxFromId !== boxToId) {
+                return WarehouseItem.find(warehouseItemId, { cacheResponse: false })
+                  .then(warehouseItem => {
+                    warehouseItem.currentBoxId = boxFromId;
+                    return warehouseItem.DSCreate();
+                  });
+              }
+            });
         },
 
       },
 
       meta: {
 
-        createForOwner({ownerXid, warehouseBox, warehouseItems, source}) {
+        createForOwner({ ownerXid, warehouseBox, warehouseItems, source }) {
 
           return $q.all(_.map(warehouseItems, item => WarehouseItemOperation.create({
             ownerXid,

@@ -55,22 +55,18 @@
             return $q.resolve();
           }
 
-          return WarehouseBox.find(warehouseBoxId, { cacheResponse: false })
-            .then(warehouseBox => {
+          return WarehouseItemOperation.findAll({ ownerXid: this.id }, { cacheResponse: false })
+            .then(operations => $q.all(_.map(operations, o => o.cancelOperation())))
+            .then(() => {
+              return WarehouseBox.find(warehouseBoxId, { cacheResponse: false })
+                .then(warehouseBox => {
 
-              // if (warehouseBox.ownerXid !== this.pickingOrderId) {
-              //   return;
-              // }
+                  warehouseBox.processing = 'stock';
+                  warehouseBox.ownerXid = null;
 
-              warehouseBox.processing = 'stock';
-              warehouseBox.ownerXid = null;
+                  return warehouseBox.DSCreate();
 
-              return WarehouseItemOperation.findAll({
-                ownerXid: this.id,
-              }, { cacheResponse: false })
-                .then(operations => $q.all(_.map(operations, o => o.cancelOperation())))
-                .then(() => warehouseBox.DSCreate());
-
+                });
             });
 
         },
