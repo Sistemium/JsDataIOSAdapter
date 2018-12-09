@@ -86,6 +86,7 @@
         linkPickedBoxItems(warehouseBox, warehouseItems) {
 
           return PickingOrderPositionPicked.create({
+            code: warehouseBox.barcode,
             pickingOrderPositionId: this.id,
             volume: warehouseItems.length,
             warehouseBoxId: warehouseBox.id,

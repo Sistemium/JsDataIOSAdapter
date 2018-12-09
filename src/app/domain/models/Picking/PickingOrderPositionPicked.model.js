@@ -39,9 +39,12 @@
           return parent && parent.Article && parent.Article.boxPcs(this.volume, true) || {};
         },
         codeLabel: function () {
-          const res = (this.code || '').match(/\d[0]*(.*)/) || [];
-
-          return res.length > 1 ? res [1] : this.code;
+          const { code = '' } = this;
+          if (code.length > 8) {
+            return `…${code.substring(code.length - 4)}`;
+          }
+          const res = code.match(/\d[0]*(.*)/) || [];
+          return res.length > 1 ? res [1] : code;
         },
 
         unlinkWarehouseBox() {
