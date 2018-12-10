@@ -2,8 +2,6 @@
 
   angular.module('Models').run((Schema, $q, moment) => {
 
-    const { WarehouseItem } = Schema.models();
-
     const WarehouseItemOperation = Schema.register({
 
       name: 'WarehouseItemOperation',
@@ -32,7 +30,10 @@
       methods: {
 
         cancelOperation() {
+
+          const { WarehouseItem } = Schema.models();
           const { boxFromId, boxToId, warehouseItemId } = this;
+
           return WarehouseItemOperation.create({
             ownerXid: null,
             source: 'cancel',
@@ -41,15 +42,14 @@
             boxFromId: boxToId,
             warehouseItemId,
           })
-            .then(() => {
-              if (boxFromId !== boxToId) {
-                return WarehouseItem.find(warehouseItemId, { cacheResponse: false })
-                  .then(warehouseItem => {
-                    warehouseItem.currentBoxId = boxFromId;
-                    return warehouseItem.DSCreate();
-                  });
-              }
-            });
+            .then(() =>
+              WarehouseItem.find(warehouseItemId, { cacheResponse: false })
+                .then(warehouseItem => {
+                  warehouseItem.processing = 'stock';
+                  warehouseItem.currentBoxId = boxFromId;
+                  return warehouseItem.DSCreate();
+                })
+            );
         },
 
       },
@@ -66,7 +66,10 @@
             boxToId: warehouseBox.id,
             boxFromId: warehouseBox.id,
             timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
-          })))
+          }).then(() => {
+            item.processing = 'picked';
+            return item.DSCreate();
+          })));
 
         },
 
