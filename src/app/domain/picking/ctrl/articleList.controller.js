@@ -6,6 +6,7 @@
     .controller('ArticleListController', ArticleListController);
 
   const WAREHOUSE_BOX_SCAN_EVENT = 'warehouseBoxBarCodeScan';
+  const WAREHOUSE_ITEM_SCAN_EVENT = 'warehouseItemBarCodeScan';
   const STOCK_BATCH_SCAN_EVENT = 'stockBatchBarCodeScan';
 
   function ArticleListController($scope, $filter, $state, toastr, Schema,
@@ -35,7 +36,8 @@
       orders,
       pickedIndex: {},
       barCodeInput: '',
-      title: ''
+      title: '',
+      scannedItems: [],
 
     });
 
@@ -47,6 +49,7 @@
 
     $scope.$on(STOCK_BATCH_SCAN_EVENT, onStockBatchScan);
     $scope.$on(WAREHOUSE_BOX_SCAN_EVENT, onWarehouseBoxScan);
+    $scope.$on(WAREHOUSE_ITEM_SCAN_EVENT, onWarehouseItemScan);
 
     setGroups(vm.articles);
 
@@ -81,8 +84,32 @@
     function onWarehouseBoxScan(e, options) {
       console.info(options);
       const { code: barcode } = options;
-      WarehouseBox.findAll({ barcode })
+      WarehouseBox.findAll({ barcode }, { cacheResponse: false })
         .then(res => res.length ? onWarehouseBox(res[0]) : replyNotFound);
+    }
+
+    function onWarehouseItemScan(e, options) {
+      console.info(options);
+      const { code: barcode } = options;
+      WarehouseItem.findAllWithRelations(
+        { barcode },
+        { cacheResponse: false })(['Article'])
+        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound);
+    }
+
+    function onWarehouseItem(warehouseItem) {
+
+      if (warehouseItem.processing === 'picked') {
+        // TODO: implement item removing from the picking order
+        return replyAlreadyPicked();
+      }
+
+      const toTake = findMatchingItems([warehouseItem]);
+
+      if (toTake && toTake.unpickedPos) {
+        vm.scannedItems.push(warehouseItem);
+      }
+
     }
 
     function onWarehouseBox(box) {
@@ -137,6 +164,10 @@
         ? (orderNum === 2 ? ' во ' : ' в ') + Language.orderRu(orderNum) : '';
 
       if (toTakeVol >= warehouseItems.length) {
+
+        if (!box) {
+          return { toTakeVol, unpickedPos, num };
+        }
 
         return unpickedPos.linkPickedBoxItems(box, warehouseItems)
           .then(() => replyTakeAll(num));
