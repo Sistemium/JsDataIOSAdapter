@@ -39,7 +39,10 @@
           return parent && parent.Article && parent.Article.boxPcs(this.volume, true) || {};
         },
         codeLabel: function () {
-          const { code = '' } = this;
+          const { code } = this;
+          if (!code) {
+            return code;
+          }
           if (code.length > 8) {
             return `…${code.substring(code.length - 4)}`;
           }
