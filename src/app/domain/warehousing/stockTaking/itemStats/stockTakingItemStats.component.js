@@ -21,7 +21,7 @@
 
 
   function StockTakingItemStatsController($scope, saControllerHelper, $anchorScroll, $timeout,
-                                          Schema, StockTakingData) {
+                                          Schema) {
 
     const { StockTakingItem, Article } = Schema.models();
 
