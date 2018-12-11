@@ -74,12 +74,14 @@
 
         uib-tab(index="1" heading="Товары")
           stock-taking-item-stats(
+          ng-if="vm.stockTakingData"
           search="vm.search"
           filter="{stockTakingId: vm.stockTakingId}"
           on-item-click="vm.itemClick($item)"
           active-id="vm.itemId"
           scroll="vm.itemStatsScrollTo"
           on-article-click="vm.articleClick($articleId)"
+          stock-taking-data="vm.stockTakingData"
           )
 
         uib-tab(index="2" heading="Остатки ({{ vm.stocks.length }})")

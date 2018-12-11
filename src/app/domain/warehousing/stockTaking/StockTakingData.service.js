@@ -22,7 +22,7 @@
         throw new Error('no warehouseId in StockTakingData');
       }
 
-      let cache = caches[warehouseId];
+      let cache; // = caches[warehouseId];
 
       if (!cache && stockTaking) {
         const { date } = stockTaking;
@@ -36,7 +36,7 @@
       return {
         stockTaking: () => stockTaking,
         stockByArticle,
-        promise: promise(),
+        promise: promise(cache),
         resultByArticle,
       };
 
@@ -59,8 +59,8 @@
 
       }
 
-      function promise() {
-        return $q.when(cache)
+      function promise(cacheOrPromise) {
+        return $q.when(cacheOrPromise)
           .then(cached => caches[warehouseId] = cached);
       }
 

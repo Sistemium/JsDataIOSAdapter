@@ -158,9 +158,7 @@
             .then(() => stockTakingData)
         )
         .then(stockTakingData => {
-          $scope.$watch(() => StockTakingItem.lastModified(), () => {
-            makeStocks(stockTakingData);
-          });
+          $scope.$watch(() => StockTakingItem.lastModified(), () => makeStocks(stockTakingData));
           makeStocks(stockTakingData);
           $scope.$on('$destroy', () => stockTakingData.clearCache());
         });
@@ -346,7 +344,7 @@
 
     function onStockUpdate() {
 
-      DEBUG('stockTakingView onStockUpdate', event);
+      DEBUG('stockTakingView onStockUpdate');
 
       const { warehouseId } = vm.stockTaking;
 

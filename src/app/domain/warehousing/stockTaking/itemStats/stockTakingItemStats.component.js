@@ -9,6 +9,7 @@
         activeId: '=',
         onItemClick: '&',
         onArticleClick: '&',
+        stockTakingData: '<',
         scroll: '=',
       },
 
@@ -78,7 +79,7 @@
 
     function setStatsData() {
 
-      const stockTakingData = StockTakingData(vm.filter);
+      const { stockTakingData } = vm;
 
       let data = _.groupBy(vm.stockTakingItems, 'articleId');
 
@@ -90,7 +91,7 @@
           items,
           volume: _.sumBy(items, 'volume'),
           packageRel: _.get(_.maxBy(items, 'packageRel'), 'packageRel'),
-          targetVolume: _.get(stockTakingData.stockByArticle(articleId), 'volume') || 0,
+          targetVolume: _.get(stockTakingData.articleIndex[articleId], 'volume') || 0,
           timestamp: _.get(_.maxBy(items, 'timestamp'), 'timestamp'),
         };
 
