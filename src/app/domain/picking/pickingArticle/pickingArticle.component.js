@@ -35,7 +35,7 @@
 
     function $onInit() {
 
-      const {picking, orders} = vm;
+      const { picking, orders } = vm;
 
       _.assign(vm, {
         article: _.get(picking, 'article'),

@@ -18,12 +18,22 @@ section(ui-view)
     = ' '
     span.gray ({{ vm.picking.totalVolume | bottles }})
 
+  h4(ng-if="vm.picking.totalUnPickedVolume")
+    span.gray Осталось собрать:
+    = ' '
+    label {{ vm.picking.article.boxPcs(vm.picking.totalUnPickedVolume).full }}
+
   ul.list-group
-    li.list-group-item.display-flex(ng-repeat='order in vm.ordered track by order.id' ng-class='{ gray: !order.volume.full}')
+
+    li.list-group-item.display-flex(
+    ng-repeat='order in vm.ordered track by order.id' ng-class='{ gray: !order.volume.full}'
+    )
       .flex-1
         h4(ng-if='order.volume.full') {{ order.volume.full }}
+
         div
           span.gray № {{ order.ndoc }}
+
       button.btn.btn-default(
         ng-repeat='picked in order.position.pickedPositions track by picked.id'
         ui-sref='.pickedPosition({ pickedPositionId: picked.id })'
@@ -32,6 +42,7 @@ section(ui-view)
           strong {{ picked.boxPcs().full }}
         small {{ picked.productionInfo }}
         small {{ picked.codeLabel() }}
+
       button.flex-right.btn.btn-default(
         ng-if='order.volume.full'
         ng-disabled='!order.position.unPickedVolume()'
