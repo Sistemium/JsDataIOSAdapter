@@ -80,7 +80,7 @@
         } else {
 
           vm.stockTaking = StockTaking.createInstance({
-            date: new Date(),
+            date: moment().format(),
           });
 
           vm.watchScope('vm.stockTaking.warehouseId', onStockUpdate);

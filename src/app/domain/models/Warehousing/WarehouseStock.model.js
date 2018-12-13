@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('Warehousing').run((Schema) => {
+  angular.module('Warehousing').run((Schema, moment) => {
 
     Schema.register({
 
@@ -37,7 +37,10 @@
 
       return Article.findAll({ where, limit: 5000 })
         .then(() => {
-          return WarehouseStock.findAll({ warehouseId, date }, { bypassCache: true });
+          return WarehouseStock.findAll({
+            warehouseId,
+            date: moment(date).format(),
+          }, { bypassCache: true });
         });
 
     }
