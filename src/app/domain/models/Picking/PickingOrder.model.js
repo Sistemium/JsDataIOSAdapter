@@ -58,6 +58,14 @@
 
       methods: {
 
+        boxPositions(warehouseBox) {
+
+          return _.filter(this.positions, ({ pickedPositions }) => {
+            return _.find(pickedPositions, { warehouseBoxId: warehouseBox.id });
+          });
+
+        },
+
         totalVolume: function () {
           return Schema.aggregate('volume').sum(this.positions);
         },
@@ -79,13 +87,13 @@
         },
 
         totalUnPickedPositionsCount: function () {
-          return Schema.aggregate('unPickedVolume').custom(this.positions, (sum,unPickedVolume) => {
+          return Schema.aggregate('unPickedVolume').custom(this.positions, (sum, unPickedVolume) => {
             return sum + (unPickedVolume ? 1 : 0);
-          },0);
+          }, 0);
         },
 
         totalPickedPercent: function () {
-          return Math.floor(this.totalUnPickedVolume() / (this.totalVolume()||1) * 100);
+          return Math.floor(this.totalUnPickedVolume() / (this.totalVolume() || 1) * 100);
         }
 
       }

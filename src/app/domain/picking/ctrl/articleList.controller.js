@@ -98,6 +98,10 @@
       SoundSynth.say(text || 'Ошибка');
     }
 
+    function replySuccess(text) {
+      SoundSynth.say(text || 'Готово');
+    }
+
     /*
     Functions
      */
@@ -224,6 +228,7 @@
             .then(() => {
               updatePickedByPos(unpickedPos);
               vm.scanned = {};
+              replySuccess(`Добавлено в заказ ${items.length}`);
             });
 
         })
@@ -259,7 +264,33 @@
     function onWarehouseBox(box) {
 
       if (box.processing === 'picked') {
-        return replyAlreadyPicked();
+
+        const orderWithBox = _.find(orders, ({ id }) => id === box.ownerXid);
+
+        if (!orderWithBox) {
+          return replyAlreadyPicked();
+        }
+
+        const boxPositions = orderWithBox.boxPositions(box);
+
+        if (boxPositions.length > 1) {
+          return replyAlreadyPicked();
+        } else if (!boxPositions.length) {
+          return replyError('Коробка в заказе с ошибкой');
+        }
+
+        const position = boxPositions[0];
+        const { Article: article } = position;
+        const unPickedVolume = position.unPickedVolume();
+
+        if (!unPickedVolume) {
+          return replyEnoughOfThat();
+        }
+
+        const reply = article.boxPcs(unPickedVolume);
+
+        return replyError(`В заказ еще нужно ${Language.speakableBoxPcs(reply)}`);
+
       }
 
       return box.boxItems()
