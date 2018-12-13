@@ -64,10 +64,11 @@
             warehouseItemId: item.id,
             code: warehouseBox.barcode,
             boxToId: warehouseBox.id,
-            boxFromId: warehouseBox.id,
+            boxFromId: item.currentBoxId,
             timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
           }).then(() => {
             item.processing = 'picked';
+            item.currentBoxId = warehouseBox.id;
             return item.DSCreate();
           })));
 

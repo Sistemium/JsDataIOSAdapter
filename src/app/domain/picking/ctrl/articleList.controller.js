@@ -37,7 +37,8 @@
       pickedIndex: {},
       barCodeInput: '',
       title: '',
-      scannedItems: [],
+      scanned: {},
+      lastBoxBarcode: '',
 
     });
 
@@ -66,15 +67,35 @@
     }
 
     function replyAlreadyPicked() {
-      SoundSynth.say('Товар уже собран');
+      SoundSynth.say('Товар уже в заказе');
     }
 
-    function replyTakeAll(num) {
-      SoundSynth.say(`Забрать целиком ${num}`);
+    function replyEnoughOfThat() {
+      SoundSynth.say('Этого больше не нужно');
+    }
+
+    function replyTakeAll(num, after) {
+      SoundSynth.say(`${num || 'Бери'} ${after}`);
+    }
+
+    function replyTaken(num) {
+      SoundSynth.say(`Это номер ${num}`);
     }
 
     function replyTakeSome(pcs, num) {
       SoundSynth.say(`Забрать ${Language.speakableBoxPcs({ pcs })} ${num}`);
+    }
+
+    function repeatToConfirm() {
+      SoundSynth.say('Повторите чтобы подтвердить');
+    }
+
+    function replyNotTheSameOrder() {
+      SoundSynth.say('Эта коробка из другого заказа');
+    }
+
+    function replyError(text) {
+      SoundSynth.say(text || 'Ошибка');
     }
 
     /*
@@ -82,10 +103,23 @@
      */
 
     function onWarehouseBoxScan(e, options) {
-      console.info(options);
+      // console.info(options);
+
       const { code: barcode } = options;
+
       WarehouseBox.findAll({ barcode }, { cacheResponse: false })
-        .then(res => res.length ? onWarehouseBox(res[0]) : replyNotFound);
+        .then(res => {
+
+          const found = _.first(res);
+
+          if (_.get(vm.scanned, 'items.length')) {
+            const box = found || { barcode, processing: 'picked' };
+            return onWarehouseBoxToPack(box);
+          }
+
+          return found ? onWarehouseBox(found) : replyNotFound;
+
+        });
     }
 
     function onWarehouseItemScan(e, options) {
@@ -106,8 +140,118 @@
 
       const toTake = findMatchingItems([warehouseItem]);
 
-      if (toTake && toTake.unpickedPos) {
-        vm.scannedItems.push(warehouseItem);
+      if (!toTake || !toTake.unpickedPos) {
+        return;
+      }
+
+      let { items, position } = vm.scanned;
+
+      if (!position || position.id !== toTake.unpickedPos.id) {
+        position = toTake.unpickedPos;
+        items = [];
+      }
+
+      const scannedIndex = _.findIndex(items, warehouseItem) + 1;
+
+      if (scannedIndex) {
+        return replyTaken(scannedIndex);
+      }
+
+      items.push(warehouseItem);
+
+      vm.scanned = { position, items };
+
+      replyTaken(items.length);
+
+    }
+
+    function onWarehouseBoxToPack(box) {
+
+      const { barcode } = box;
+      const { position: unpickedPos, items } = vm.scanned;
+
+      if (!unpickedPos || !items) {
+        return replyError();
+      }
+
+      if (vm.lastBoxBarcode !== barcode) {
+        repeatToConfirm();
+        vm.lastBoxBarcode = barcode;
+        return;
+      }
+
+      return $q.when(box.id ? box : WarehouseBox.create(box))
+        .then(warehouseBox => {
+
+          switch (warehouseBox.processing) {
+
+            case 'picked': {
+              // check if the same order as unpickedPos
+              const { ownerXid } = warehouseBox;
+              if (ownerXid && ownerXid !== unpickedPos.pickingOrderId) {
+                return replyNotTheSameOrder();
+              }
+              return warehouseBox;
+            }
+
+            case 'draft':
+            case 'stock': {
+              return warehouseBox.boxItems()
+                .then(boxItems => {
+                  if (!boxItems.length) {
+                    return warehouseBox;
+                  } else {
+                    const toReturn = _.filter(boxItems, boxHasItems);
+                    if (toReturn.length) {
+                      return returnItems(toReturn);
+                    }
+                    return $q.reject(new Error('Коробка не пустая'));
+                  }
+                });
+            }
+
+          }
+
+        })
+        .then(warehouseBox => {
+
+          if (!warehouseBox) {
+            return replyError();
+          }
+
+          return unpickedPos.linkPickedBoxItems(warehouseBox, items)
+          // .then(() => replyTakeAll(orderNumber(unpickedPos)))
+            .then(() => {
+              updatePickedByPos(unpickedPos);
+              vm.scanned = {};
+            });
+
+        })
+        .catch(({ message }) => {
+          replyError(message);
+        });
+
+      function boxHasItems(box) {
+        return _.find(items, ({ id }) => id === box.id);
+      }
+
+      function returnItems(toReturnItems) {
+        vm.scanned.items = _.remove(items, toReturnItems);
+        const say = `Отмена ${Language.speakableCountFemale(toReturnItems.length)}`;
+        return $q.reject(new Error(say));
+      }
+
+    }
+
+    function updatePickedByPos(pickingOrderPosition) {
+
+      const article = _.find(vm.articles, ({ positions }) => {
+        return _.find(positions, ({ id }) => id === pickingOrderPosition.id);
+      });
+
+      if (article) {
+        article.updatePicked();
+        setGroups(vm.articles);
       }
 
     }
@@ -118,14 +262,12 @@
         return replyAlreadyPicked();
       }
 
-      return WarehouseItem.findAllWithRelations(
-        { currentBoxId: box.id },
-        { cacheResponse: false })(['Article'])
+      return box.boxItems()
         .then(items => findMatchingItems(items, box));
     }
 
     function findMatchingItems(warehouseItems, box) {
-      console.log(_.map(warehouseItems, 'article'));
+      // console.log(_.map(warehouseItems, 'article'));
 
       const matching = _.filter(warehouseItems, ({ article }) => {
         return !article || _.find(vm.articles, { sameId: article.sameId });
@@ -142,7 +284,7 @@
       });
 
       if (!unpicked) {
-        return replyAlreadyPicked();
+        return replyEnoughOfThat();
       }
 
       const { sameId } = unpicked;
@@ -152,16 +294,12 @@
       const unpickedPos = _.find(unpicked.positions, pop => volumeToTake(pop) > 0);
 
       if (!unpickedPos) {
-        return replyAlreadyPicked();
+        return replyEnoughOfThat();
       }
 
       const toTakeVol = volumeToTake(unpickedPos);
 
-      const { orders } = $scope.vm;
-
-      const orderNum = orders.indexOf(unpickedPos.PickingOrder) + 1;
-      const num = orders.length > 1
-        ? (orderNum === 2 ? ' во ' : ' в ') + Language.orderRu(orderNum) : '';
+      const num = orderNumber(unpickedPos);
 
       if (toTakeVol >= warehouseItems.length) {
 
@@ -170,13 +308,14 @@
         }
 
         return unpickedPos.linkPickedBoxItems(box, warehouseItems)
-          .then(() => replyTakeAll(num));
-
-      } else {
-
-        return replyTakeSome(toTakeVol, num);
+          .then(() => replyTakeAll(num))
+          .then(() => {
+            updatePickedByPos(unpickedPos);
+          });
 
       }
+
+      return replyTakeSome(toTakeVol, num);
 
       function volumeToTake(pop) {
         return _.min([pop.unPickedVolume(), unpickedItems.length]);
@@ -184,6 +323,15 @@
 
     }
 
+    function orderNumber(unpickedPos) {
+
+      const { orders } = $scope.vm;
+      const orderNum = orders.indexOf(unpickedPos.PickingOrder) + 1;
+
+      return orders.length > 1
+        ? (orderNum === 2 ? ' во ' : ' в ') + Language.orderRu(orderNum) : '';
+
+    }
 
     function onStockBatchScan(e, options) {
 
@@ -221,12 +369,19 @@
 
     }
 
-    function onStateChange(e, to) {
+    function onStateChange(e, to, toParams, from, fromParams) {
 
       vm.mode = to.name.match(/[^.]*$/)[0];
 
       vm.title = (vm.mode === 'picked' && 'Собранные товары')
         || (vm.mode === 'articleList' && 'Товары для сборки');
+
+      if (fromParams.id) {
+        const article = _.find(vm.articles, { id: fromParams.id });
+        if (article) {
+          article.updatePicked();
+        }
+      }
 
       if (/^(picked|articleList)$/.test(vm.mode)) {
         setGroups(vm.articles);

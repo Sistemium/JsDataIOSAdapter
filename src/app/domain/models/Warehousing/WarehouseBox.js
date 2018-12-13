@@ -24,6 +24,17 @@
         },
       },
 
+      methods: {
+
+        boxItems() {
+          const { WarehouseItem } = Schema.models();
+          return WarehouseItem.findAllWithRelations(
+            { currentBoxId: this.id },
+            { cacheResponse: false })(['Article'])
+        },
+
+      },
+
     });
 
   });
