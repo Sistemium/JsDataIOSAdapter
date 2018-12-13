@@ -36,7 +36,7 @@ nav.navbar.navbar-default.navbar-fixed-bottom.animate-show(ng-hide='vm.hideBotto
   .container
     form.navbar-form.navbar-left.float-left.flat-on-small#picking-search(
     role='search' ng-submit="vm.onBarCode()"
-    ng-if="vm.onBarCode"
+    ng-if="vm.onBarCode && !vm.isIos"
     )
       .form-group
         input.form-control(type="text" placeholder="Штрих-код" ng-model='vm.barCodeInput')

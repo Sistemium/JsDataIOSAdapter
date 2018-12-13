@@ -8,7 +8,7 @@
 
   function PickingOrderListController($scope, Schema, $state, Errors,
                                       BarCodeScanner, SoundSynth, Sockets,
-                                      saAsync, DEBUG) {
+                                      saAsync, DEBUG, IOS) {
 
     const picker = Schema.model('Picker').getCurrent();
 
@@ -60,6 +60,7 @@
         return (order.selected ? 'active ' : '') + order.cls;
       },
 
+      isIos: IOS.isIos(),
       totals: PO.agg(vm, 'pickingOrders'),
       selectedTotals: PO.agg(vm, 'selectedItems'),
       hasSelected: false,
