@@ -75,7 +75,7 @@
     }
 
     function replyTakeAll(num, after) {
-      SoundSynth.say(`${num || 'Бери'} ${after}`);
+      SoundSynth.say(`${num || 'Бери'} ${after || ''}`);
     }
 
     function replyTaken(num) {

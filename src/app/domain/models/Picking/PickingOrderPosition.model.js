@@ -71,7 +71,7 @@
           return this.Article && this.Article.boxPcs(angular.isUndefined(volume) ? this.volume : volume, true) || {};
         },
 
-        linkStockBatch({ articleId, stockBatchId }, code, volume) {
+        linkStockBatch({ articleId, id: stockBatchId }, code, volume) {
 
           return PickingOrderPositionPicked.create({
             pickingOrderPositionId: this.id,
