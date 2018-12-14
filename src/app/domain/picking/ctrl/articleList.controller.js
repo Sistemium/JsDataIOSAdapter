@@ -109,6 +109,13 @@
     function onWarehouseBoxScan(e, options) {
       // console.info(options);
 
+      if (lockScanProcessor) {
+        console.warn('Ignore scan with lockScanProcessor');
+        return;
+      }
+
+      lockScanProcessor = true;
+
       const { code: barcode } = options;
 
       WarehouseBox.findAll({ barcode }, { cacheResponse: false })
@@ -123,16 +130,31 @@
 
           return found ? onWarehouseBox(found) : replyNotFound;
 
+        })
+        .finally(() => {
+          lockScanProcessor = false;
         });
     }
 
     function onWarehouseItemScan(e, options) {
-      console.info(options);
+      // console.info(options);
+
+      if (lockScanProcessor) {
+        console.warn('Ignore scan with lockScanProcessor');
+        return;
+      }
+
+      lockScanProcessor = true;
+
       const { code: barcode } = options;
+
       WarehouseItem.findAllWithRelations(
         { barcode },
         { cacheResponse: false })(['Article'])
-        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound);
+        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound)
+        .finally(() => {
+          lockScanProcessor = false;
+        });
     }
 
     function onWarehouseItem(warehouseItem) {
