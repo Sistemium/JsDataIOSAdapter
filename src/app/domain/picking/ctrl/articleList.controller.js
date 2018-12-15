@@ -75,7 +75,7 @@
     }
 
     function replyTakeAll(num, after) {
-      SoundSynth.say(`${num || 'Бери'} ${after || ''}`);
+      SoundSynth.say(`${num || 'Коробка'} ${after || ''}`);
     }
 
     function replyTaken(num) {
@@ -277,8 +277,9 @@
       });
 
       if (article) {
-        article.updatePicked();
+        const res = article.updatePicked();
         setGroups(vm.articles);
+        return res;
       }
 
     }
@@ -311,7 +312,7 @@
 
         const reply = article.boxPcs(unPickedVolume);
 
-        return replyError(`В заказ еще нужно ${Language.speakableBoxPcs(reply)}`);
+        return replyError(`Еще нужно ${Language.speakableBoxPcs(reply)}`);
 
       }
 
@@ -364,6 +365,10 @@
           .then(() => replyTakeAll(num))
           .then(() => {
             updatePickedByPos(unpickedPos);
+            if (!unpicked.totalUnPickedVolume) {
+              return $timeout(1500)
+                .then(() => replyEnoughOfThat());
+            }
           });
 
       }

@@ -162,6 +162,7 @@
                 this.ts = maxTs(positions);
                 this.totalUnPickedVolume = totalUnPickedVolume(positions);
                 this.hasPicked = hasPicked(positions);
+                return this.totalUnPickedVolume;
               }
 
             }
