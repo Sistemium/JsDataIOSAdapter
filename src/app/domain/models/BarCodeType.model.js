@@ -20,6 +20,7 @@
         BARCODE_TYPE_STOCK_BATCH: 'StockBatch',
         BARCODE_TYPE_EXCISE_STAMP: 'ExciseStamp',
         BARCODE_TYPE_WAREHOUSE_BOX: 'WarehouseBox',
+        BARCODE_TYPE_WAREHOUSE_PALETTE: 'WarehousePalette',
       }
     }
 

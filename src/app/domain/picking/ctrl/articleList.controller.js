@@ -7,6 +7,7 @@
 
   const WAREHOUSE_BOX_SCAN_EVENT = 'warehouseBoxBarCodeScan';
   const WAREHOUSE_ITEM_SCAN_EVENT = 'warehouseItemBarCodeScan';
+  const WAREHOUSE_PALETTE_SCAN_EVENT = 'warehousePaletteBarCodeScan';
   const STOCK_BATCH_SCAN_EVENT = 'stockBatchBarCodeScan';
 
   function ArticleListController($scope, $filter, $state, toastr, Schema,
@@ -17,6 +18,7 @@
       PickingOrderPosition,
       WarehouseBox,
       WarehouseItem,
+      WarehousePalette,
     } = Schema.models();
 
     const orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
@@ -49,8 +51,9 @@
     $scope.$on('$stateChangeSuccess', onStateChange);
 
     $scope.$on(STOCK_BATCH_SCAN_EVENT, onStockBatchScan);
-    $scope.$on(WAREHOUSE_BOX_SCAN_EVENT, onWarehouseBoxScan);
-    $scope.$on(WAREHOUSE_ITEM_SCAN_EVENT, onWarehouseItemScan);
+    $scope.$on(WAREHOUSE_BOX_SCAN_EVENT, onScan);
+    $scope.$on(WAREHOUSE_ITEM_SCAN_EVENT, onScan);
+    $scope.$on(WAREHOUSE_PALETTE_SCAN_EVENT, onScan);
 
     setGroups(vm.articles);
 
@@ -103,11 +106,12 @@
     }
 
     /*
-    Functions
+    Scan handlers
      */
 
-    function onWarehouseBoxScan(e, options) {
-      // console.info(options);
+    function onScan(e, options) {
+
+      console.info(e, options);
 
       if (lockScanProcessor) {
         console.warn('Ignore scan with lockScanProcessor');
@@ -116,9 +120,40 @@
 
       lockScanProcessor = true;
 
-      const { code: barcode } = options;
+      scarRouter(options)
+        .finally(() => {
+          lockScanProcessor = false;
+        });
 
-      WarehouseBox.findAll({ barcode }, { cacheResponse: false })
+      function scarRouter({ code: barcode }) {
+        switch (e.name) {
+          case WAREHOUSE_BOX_SCAN_EVENT:
+            return onWarehouseBoxScan(barcode);
+          case WAREHOUSE_ITEM_SCAN_EVENT:
+            return onWarehouseItemScan(barcode);
+          case WAREHOUSE_PALETTE_SCAN_EVENT:
+            return onWarehousePaletteScan(barcode);
+          default:
+            return $q.reject(new Error('unsupported scan event'));
+        }
+      }
+
+    }
+
+    function onWarehousePaletteScan(barcode) {
+      return WarehousePalette.findAll({ barcode }, { cacheResponse: false })
+        .then(res => {
+
+          const found = _.first(res);
+
+          return found ? onWarehousePalette(found) : replyNotFound;
+
+        });
+    }
+
+    function onWarehouseBoxScan(barcode) {
+
+      return WarehouseBox.findAll({ barcode }, { cacheResponse: false })
         .then(res => {
 
           const found = _.first(res);
@@ -130,32 +165,20 @@
 
           return found ? onWarehouseBox(found) : replyNotFound;
 
-        })
-        .finally(() => {
-          lockScanProcessor = false;
         });
     }
 
-    function onWarehouseItemScan(e, options) {
-      // console.info(options);
-
-      if (lockScanProcessor) {
-        console.warn('Ignore scan with lockScanProcessor');
-        return;
-      }
-
-      lockScanProcessor = true;
-
-      const { code: barcode } = options;
-
-      WarehouseItem.findAllWithRelations(
+    function onWarehouseItemScan(barcode) {
+      return WarehouseItem.findAllWithRelations(
         { barcode },
         { cacheResponse: false })(['Article'])
-        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound)
-        .finally(() => {
-          lockScanProcessor = false;
-        });
+        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound);
     }
+
+
+    /*
+    Warehouse object processors
+     */
 
     function onWarehouseItem(warehouseItem) {
 
@@ -282,6 +305,13 @@
         return res;
       }
 
+    }
+
+    function onWarehousePalette(palette) {
+      if (palette.processing === 'picked') {
+        return replyAlreadyPicked();
+      }
+      return replyError('Сборка палет пока не реализована');
     }
 
     function onWarehouseBox(box) {

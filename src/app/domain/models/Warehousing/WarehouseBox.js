@@ -10,11 +10,11 @@
 
       relations: {
         belongsTo: {
-          WarehouseArticle: {
-            // optional
-            localField: 'warehouseArticle',
-            localKey: 'warehouseArticleId'
-          }
+          // WarehouseArticle: {
+          //   // optional
+          //   localField: 'warehouseArticle',
+          //   localKey: 'warehouseArticleId'
+          // }
         },
         hasMany: {
           WarehouseItem: {

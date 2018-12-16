@@ -3,6 +3,7 @@
 (function () {
 
   const WAREHOUSE_BOX_SCAN_EVENT = 'warehouseBoxBarCodeScan';
+  const WAREHOUSE_PALETTE_SCAN_EVENT = 'warehousePaletteBarCodeScan';
   const WAREHOUSE_ITEM_SCAN_EVENT = 'warehouseItemBarCodeScan';
   const STOCK_BATCH_SCAN_EVENT = 'stockBatchBarCodeScan';
 
@@ -25,6 +26,7 @@
       BARCODE_TYPE_STOCK_BATCH,
       BARCODE_TYPE_WAREHOUSE_BOX,
       BARCODE_TYPE_EXCISE_STAMP,
+      BARCODE_TYPE_WAREHOUSE_PALETTE,
     } = BarCodeType.meta.types;
 
     if (!picker) {
@@ -283,11 +285,20 @@
         });
     }
 
-    function scanType({ length }) {
+    const paletteRe = /\d{12}[24]\d{13}/;
+
+    function scanType(code) {
+
+      const { length } = code;
 
       if (length === 8) {
         return BARCODE_TYPE_STOCK_BATCH;
+      } else if (length === 18) {
+        return BARCODE_TYPE_WAREHOUSE_PALETTE;
       } else if (length === 26) {
+        if (paletteRe.test(code)) {
+          return BARCODE_TYPE_WAREHOUSE_PALETTE;
+        }
         return BARCODE_TYPE_WAREHOUSE_BOX;
       } else if (length === 150 || length === 68) {
         return BARCODE_TYPE_EXCISE_STAMP;
@@ -311,6 +322,9 @@
         return;
       } else if (codeType === BARCODE_TYPE_EXCISE_STAMP) {
         $scope.$broadcast(WAREHOUSE_ITEM_SCAN_EVENT, { code });
+        return;
+      } else if (codeType === BARCODE_TYPE_WAREHOUSE_PALETTE) {
+        $scope.$broadcast(WAREHOUSE_PALETTE_SCAN_EVENT, { code });
         return;
       }
 
