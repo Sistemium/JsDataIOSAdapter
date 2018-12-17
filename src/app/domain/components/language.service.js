@@ -26,6 +26,34 @@
 
   }
 
+  function speakableCount (count) {
+
+    function getLast (count) {
+
+      const lastDigit = count % 10;
+
+      if (lastDigit === 1) {
+        return 'один';
+      } else if (lastDigit === 2) {
+        return 'два';
+      }
+
+      return '';
+
+    }
+
+    const str = parseInt(count).toFixed(0);
+
+    if (count % 100 >= 10 && count % 100 <= 20) {
+      return str;
+    }
+
+    const last = getLast (count);
+
+    return last ? (str.length > 1 ? str.slice (0,str.length - 1) + '0 ' : '') + last : str;
+
+  }
+
   function speakableCountFemale (count) {
 
     function getLast (count) {
@@ -100,9 +128,10 @@
   angular.module('core.services').service('Language', function () {
 
     return {
-      countableState: countableState,
-      speakableCountFemale: speakableCountFemale,
-      speakableBoxPcs: speakableBoxPcs,
+      countableState,
+      speakableCountFemale,
+      speakableCount,
+      speakableBoxPcs,
       orderRu: orderRu
     }
 

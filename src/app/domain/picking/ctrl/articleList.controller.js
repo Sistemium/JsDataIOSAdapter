@@ -15,6 +15,7 @@
 
     const {
       Article,
+      PickingOrder,
       PickingOrderPosition,
       WarehouseBox,
       WarehouseItem,
@@ -69,8 +70,13 @@
       SoundSynth.say('Этого товара нет в требовании');
     }
 
-    function replyAlreadyPicked() {
-      SoundSynth.say('Товар уже в заказе');
+    function replyAlreadyPicked(ext) {
+      SoundSynth.say(`Товар уже в заказе ${ext || ''}`);
+    }
+
+    function replyAlreadyPickedOrder(ownerXid) {
+      PickingOrder.find(ownerXid, { cacheResponse: false })
+        .then(({ ndoc }) => replyAlreadyPicked(Language.speakableCount(ndoc)));
     }
 
     function replyEnoughOfThat() {
@@ -410,7 +416,7 @@
         const orderWithBox = _.find(orders, ({ id }) => id === box.ownerXid);
 
         if (!orderWithBox) {
-          return replyAlreadyPicked();
+          return replyAlreadyPickedOrder(box.ownerXid);
         }
 
         const boxPositions = orderWithBox.boxPositions(box);
