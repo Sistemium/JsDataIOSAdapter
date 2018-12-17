@@ -132,12 +132,12 @@
 
       lockScanProcessor = true;
 
-      scarRouter(options)
+      scanRouter(options)
         .finally(() => {
           lockScanProcessor = false;
         });
 
-      function scarRouter({ code: barcode }) {
+      function scanRouter({ code: barcode }) {
         switch (e.name) {
           case WAREHOUSE_BOX_SCAN_EVENT:
             return onWarehouseBoxScan(barcode);
@@ -199,16 +199,18 @@
         return replyAlreadyPicked();
       }
 
-      const toTake = findMatchingItems([warehouseItem]);
+      const toTake = findMatchingItems([warehouseItem]) || {};
 
-      if (!toTake || !toTake.unpickedPos) {
-        return;
+      const { unpickedPos } = toTake;
+
+      if (!unpickedPos) {
+        return replyAlreadyPicked();
       }
 
       let { items, position } = vm.scanned;
 
-      if (!position || position.id !== toTake.unpickedPos.id) {
-        position = toTake.unpickedPos;
+      if (!position || position.id !== unpickedPos.id) {
+        position = unpickedPos;
         items = [];
       }
 
@@ -218,11 +220,15 @@
         return replyTaken(scannedIndex);
       }
 
-      items.push(warehouseItem);
+      if (items.length < unpickedPos.unPickedVolume()) {
+        items.push(warehouseItem);
+        vm.scanned = { position, items };
+        replyTaken(items.length);
+      }
 
-      vm.scanned = { position, items };
-
-      replyTaken(items.length);
+      if (items.length === unpickedPos.unPickedVolume()) {
+        replySuccess('Хватит этого теперь просканируйте коробку');
+      }
 
     }
 

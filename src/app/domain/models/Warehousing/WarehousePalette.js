@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('Models').run((Schema, $q) => {
+  angular.module('Models').run((Schema) => {
 
     Schema.register({
 
