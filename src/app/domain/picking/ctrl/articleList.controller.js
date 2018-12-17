@@ -81,12 +81,24 @@
       SoundSynth.say(`${num || 'Коробка'} ${after || ''}`);
     }
 
+    function replyTakePalette(after) {
+      SoundSynth.say(`Палета целиком ${after || ''}`);
+    }
+
     function replyTaken(num) {
       SoundSynth.say(`Это номер ${num}`);
     }
 
     function replyTakeSome(pcs, num) {
-      SoundSynth.say(`Забрать ${Language.speakableBoxPcs({ pcs })} ${num}`);
+      replyTakeSomeBoxPcs({ pcs }, num);
+    }
+
+    function replyTakeSomeBoxPcs(boxPcs, num) {
+      SoundSynth.say(`Забрать ${Language.speakableBoxPcs(boxPcs)} ${num}`);
+    }
+
+    function unloadSomeBoxPcs(boxPcs) {
+      SoundSynth.say(`Нужно убрать с палеты ${Language.speakableBoxPcs(boxPcs)}`);
     }
 
     function repeatToConfirm() {
@@ -146,7 +158,7 @@
 
           const found = _.first(res);
 
-          return found ? onWarehousePalette(found) : replyNotFound;
+          return found ? onWarehousePalette(found) : replyNotFound();
 
         });
     }
@@ -163,7 +175,7 @@
             return onWarehouseBoxToPack(box);
           }
 
-          return found ? onWarehouseBox(found) : replyNotFound;
+          return found ? onWarehouseBox(found) : replyNotFound();
 
         });
     }
@@ -308,10 +320,81 @@
     }
 
     function onWarehousePalette(palette) {
+
       if (palette.processing === 'picked') {
         return replyAlreadyPicked();
       }
-      return replyError('Сборка палет пока не реализована');
+
+      return palette.paletteItems()
+        .then(boxedItems => {
+          const articles = palette.paletteArticles(boxedItems);
+
+          if (articles.length > 1) {
+            return replyError('Сборные палеты пока нельзя');
+          } else if (!articles.length) {
+            return replyError('Палета пустая');
+          }
+
+          return matchingBoxes(palette, boxedItems, articles[0]);
+
+        });
+
+    }
+
+    function matchingBoxes(palette, boxedItems, article) {
+
+      const matchingArticles = _.filter(vm.articles, { sameId: article.sameId });
+
+      if (!matchingArticles.length) {
+        return replyNotRequested();
+      }
+
+      const unpicked = _.find(matchingArticles, a => {
+        return a.totalUnPickedVolume > 0;
+      });
+
+      if (!unpicked) {
+        return replyEnoughOfThat();
+      }
+
+      const paletteVol = _.sumBy(boxedItems, ({ items }) => items.length);
+
+      const unpickedPos = _.find(unpicked.positions, pop => volumeToTake(pop) > 0);
+
+      if (!unpickedPos) {
+        return replyEnoughOfThat();
+      }
+
+      const toTakeVol = volumeToTake(unpickedPos);
+      const num = orderNumber(unpickedPos);
+      const { packageRel } = article;
+
+      if (toTakeVol >= paletteVol) {
+
+        return unpickedPos.linkPickedPaletteBoxes(palette, boxedItems)
+          .then(() => replyTakePalette(num))
+          .then(() => {
+            updatePickedByPos(unpickedPos);
+            if (!unpicked.totalUnPickedVolume) {
+              return $timeout(1500)
+                .then(() => replyEnoughOfThat());
+            }
+          });
+
+      } else if (toTakeVol * 2 > paletteVol) {
+        const boxUnload = Math.ceil((paletteVol - toTakeVol) / packageRel);
+        return unloadSomeBoxPcs({ box: boxUnload });
+      } else {
+        // easier to scan what to take
+        const box = Math.floor(toTakeVol / packageRel);
+        const pcs = toTakeVol - (packageRel * box);
+        return replyTakeSomeBoxPcs({ box, pcs }, num);
+      }
+
+      function volumeToTake(pop) {
+        return _.min([pop.unPickedVolume(), paletteVol]);
+      }
+
     }
 
     function onWarehouseBox(box) {

@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema) {
+  angular.module('Models').run(function (Schema, $q) {
 
     const {
       PickingOrderPositionPicked,
@@ -63,12 +63,22 @@
 
       methods: {
 
+        setPicked(boxOrPalette) {
+          if (boxOrPalette.ownerXid === this.pickingOrderId) {
+            return;
+          }
+          boxOrPalette.processing = 'picked';
+          boxOrPalette.ownerXid = this.pickingOrderId;
+          return boxOrPalette.DSCreate();
+        },
+
         boxVolume: function () {
           return this.Article && this.Article.boxVolume(this.volume) || 0;
         },
 
         boxPcs: function (volume) {
-          return this.Article && this.Article.boxPcs(angular.isUndefined(volume) ? this.volume : volume, true) || {};
+          return this.Article && this.Article.boxPcs(angular.isUndefined(volume)
+            ? this.volume : volume, true) || {};
         },
 
         linkStockBatch({ articleId, id: stockBatchId }, code, volume) {
@@ -80,6 +90,15 @@
             articleId,
             code
           });
+
+        },
+
+        linkPickedPaletteBoxes(palette, boxedItems) {
+
+          return $q.all(_.map(boxedItems, ({ warehouseBox, items }) => {
+            return this.linkPickedBoxItems(warehouseBox, items);
+          }))
+            .then(() => this.setPicked(palette));
 
         },
 
@@ -97,14 +116,7 @@
               warehouseBox,
               warehouseItems,
             }))
-            .then(() => {
-              if (warehouseBox.ownerXid === this.pickingOrderId) {
-                return;
-              }
-              warehouseBox.processing = 'picked';
-              warehouseBox.ownerXid = this.pickingOrderId;
-              return warehouseBox.DSCreate();
-            });
+            .then(() => this.setPicked(warehouseBox));
         },
 
         unPickedBoxVolume: function () {

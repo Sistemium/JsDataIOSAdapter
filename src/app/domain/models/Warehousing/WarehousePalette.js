@@ -22,17 +22,43 @@
 
         paletteItems() {
 
-          const { WarehouseBox } = Schema.models();
+          const { WarehouseBox, WarehouseItem } = Schema.models();
 
           return WarehouseBox.findAll({ currentPaletteId: this.id }, { cacheResponse: false })
-            .then(boxes => $q.all(_.map(boxes, paletteBoxItems)));
+            .then(boxes => {
 
-          function paletteBoxItems(warehouseBox) {
-            return warehouseBox.boxItems()
-              .then(items => ({ warehouseBox, items }));
-          }
+              const boxIds = _.map(boxes, 'id');
+              const where = {
+                currentBoxId: {
+                  '==': boxIds,
+                },
+              };
+
+              return WarehouseItem.findAll({ where }, { cacheResponse: false })
+                .then(allItems => {
+                  const byId = _.groupBy(allItems, 'currentBoxId');
+                  return _.map(boxes, warehouseBox => ({
+                    warehouseBox,
+                    items: byId[warehouseBox.id],
+                  }));
+                });
+
+            });
+
+          // function paletteBoxItems(warehouseBox) {
+          //   return warehouseBox.boxItems()
+          //     .then(items => ({ warehouseBox, items }));
+          // }
 
         },
+
+        paletteArticles(boxedItems) {
+
+          return _.uniqBy(_.flatMap(boxedItems, ({ items }) => {
+            return _.uniqBy(_.map(items, 'article'), 'id');
+          }), 'id');
+
+        }
 
       },
 
