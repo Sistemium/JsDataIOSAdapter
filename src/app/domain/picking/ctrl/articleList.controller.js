@@ -73,12 +73,12 @@
     }
 
     function replyAlreadyPicked(ext) {
-      SoundSynth.say(`Товар уже в заказе ${ext || ''}`);
+      SoundSynth.say(`Товар в заказе ${ext || ''}`);
     }
 
     function replyAlreadyPickedOrder(ownerXid) {
       PickingOrder.find(ownerXid, { cacheResponse: false })
-        .then(({ ndoc }) => replyAlreadyPicked(Language.speakableCount(ndoc)));
+        .then(found => replyAlreadyPicked(Language.speakableCount(found && found.ndoc)))
     }
 
     function replyEnoughOfThat() {
@@ -204,11 +204,19 @@
     Warehouse object processors
      */
 
+    function reportPickedItemLocation(warehouseItem) {
+      return warehouseItem.itemBox()
+        .then(({ ownerXid }) => {
+          replyAlreadyPickedOrder(ownerXid)
+        })
+        .catch(() => replyError());
+    }
+
     function onWarehouseItem(warehouseItem) {
 
       if (warehouseItem.processing === 'picked') {
         // TODO: implement item removing from the picking order
-        return replyAlreadyPicked();
+        return reportPickedItemLocation(warehouseItem);
       }
 
       const toTake = findMatchingItems([warehouseItem]) || {};
@@ -444,7 +452,8 @@
 
         return ConfirmModal.show({ text })
           .then(() => {
-            vm.paletteUnloading = { palette, boxes: [] };
+            vm.paletteUnloading = { palette, boxes: [], toTakeBoxPcs };
+            replySuccess('Сканируйте коробки');
             onWarehouseBoxUnloadingPalette();
           })
           .catch(_.noop);
@@ -455,7 +464,7 @@
 
     function onWarehouseBoxUnloadingPalette(box) {
 
-      const { boxes, palette } = vm.paletteUnloading || {};
+      const { boxes, palette, toTakeBoxPcs } = vm.paletteUnloading || {};
 
       if (box) {
         if (box.currentPaletteId !== palette.id) {
@@ -489,9 +498,13 @@
         }
       ];
 
-      ConfirmModal.show({ text: `Снято ${boxes.length} коробок, закончить?`, resolve, buttons })
+      ConfirmModal.show({
+        text: `Снято ${boxes.length} коробок из ${toTakeBoxPcs.box}, закончить?`,
+        resolve,
+        buttons,
+      })
         .then(() => {
-          const promise =  palette.unloadBoxes(vm.paletteUnloading.boxes)
+          const promise = palette.unloadBoxes(vm.paletteUnloading.boxes)
             .then(() => {
               vm.paletteUnloading = false;
               replySuccess();
@@ -502,7 +515,7 @@
             message: 'Сохранение данных',
           };
         })
-        .catch(buttonId =>{
+        .catch(buttonId => {
           if (buttonId === 'cancel') {
             vm.paletteUnloading = false;
           }
