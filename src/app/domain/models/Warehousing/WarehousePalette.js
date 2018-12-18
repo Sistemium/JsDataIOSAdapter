@@ -34,7 +34,7 @@
                 },
               };
 
-              return WarehouseItem.findAll({ where }, { cacheResponse: false })
+              return WarehouseItem.findAll({ where }, { cacheResponse: false, limit: 15000 })
                 .then(allItems => {
                   const byId = _.groupBy(allItems, 'currentBoxId');
                   return _.map(boxes, warehouseBox => ({

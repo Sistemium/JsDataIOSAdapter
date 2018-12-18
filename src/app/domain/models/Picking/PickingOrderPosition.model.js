@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, $q) {
+  angular.module('Models').run(function (Schema, $q, saAsync) {
 
     const {
       PickingOrderPositionPicked,
@@ -95,9 +95,22 @@
 
         linkPickedPaletteBoxes(palette, boxedItems) {
 
-          return $q.all(_.map(boxedItems, ({ warehouseBox, items }) => {
-            return this.linkPickedBoxItems(warehouseBox, items);
-          }))
+          return $q((resolve, reject) => {
+
+            const tasks = _.map(boxedItems, ({ warehouseBox, items }) =>
+              done => this.linkPickedBoxItems(warehouseBox, items)
+                .then(() => done(), done)
+            );
+
+            saAsync.series(tasks, err => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve();
+              }
+            });
+
+          })
             .then(() => this.setPicked(palette));
 
         },
