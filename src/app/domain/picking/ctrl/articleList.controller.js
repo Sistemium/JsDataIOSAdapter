@@ -10,6 +10,8 @@
   const WAREHOUSE_PALETTE_SCAN_EVENT = 'warehousePaletteBarCodeScan';
   const STOCK_BATCH_SCAN_EVENT = 'stockBatchBarCodeScan';
 
+  const PHRASE_PAUSE = 1000;
+
   function ArticleListController($scope, $filter, $state, toastr, Schema,
                                  $timeout, SoundSynth, Language, $q) {
 
@@ -92,7 +94,7 @@
     }
 
     function replyTaken(num) {
-      SoundSynth.say(`Это номер ${num}`);
+      SoundSynth.say(`${Language.speakableCountFemale(num)}`);
     }
 
     function replyTakeSome(pcs, num) {
@@ -383,12 +385,16 @@
 
       if (toTakeVol >= paletteVol) {
 
+        replyTakePalette(num);
+
+        replySuccess('Подождите');
+
         return unpickedPos.linkPickedPaletteBoxes(palette, boxedItems)
-          .then(() => replyTakePalette(num))
+          .then(() => replySuccess('Готово'))
           .then(() => {
             updatePickedByPos(unpickedPos);
             if (!unpicked.totalUnPickedVolume) {
-              return $timeout(1500)
+              return $timeout(PHRASE_PAUSE)
                 .then(() => replyEnoughOfThat());
             }
           });
@@ -491,7 +497,7 @@
           .then(() => {
             updatePickedByPos(unpickedPos);
             if (!unpicked.totalUnPickedVolume) {
-              return $timeout(1500)
+              return $timeout(PHRASE_PAUSE)
                 .then(() => replyEnoughOfThat());
             }
           });
