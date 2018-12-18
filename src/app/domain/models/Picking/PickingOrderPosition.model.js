@@ -93,13 +93,16 @@
 
         },
 
-        linkPickedPaletteBoxes(palette, boxedItems) {
+        linkPickedPaletteBoxes(palette, boxedItems, onBoxProgress = _.noop) {
 
           return $q((resolve, reject) => {
 
-            const tasks = _.map(boxedItems, ({ warehouseBox, items }) =>
+            const tasks = _.map(boxedItems, ({ warehouseBox, items }, idx) =>
               done => this.linkPickedBoxItems(warehouseBox, items)
-                .then(() => done(), done)
+                .then(() => {
+                  done();
+                  onBoxProgress(idx + 1, boxedItems.length);
+                }, done)
             );
 
             saAsync.series(tasks, err => {

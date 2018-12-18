@@ -13,7 +13,7 @@
   const PHRASE_PAUSE = 1000;
 
   function ArticleListController($scope, $filter, $state, toastr, Schema,
-                                 $timeout, SoundSynth, Language, $q) {
+                                 $timeout, SoundSynth, Language, $q, ConfirmModal) {
 
     const {
       Article,
@@ -387,17 +387,38 @@
 
         replyTakePalette(num);
 
-        replySuccess('Подождите');
+        replySuccess('Вопрос на экране');
 
-        return unpickedPos.linkPickedPaletteBoxes(palette, boxedItems)
-          .then(() => replySuccess('Готово'))
+        const text = [
+          `Добавить в заказ ${article.boxPcs(paletteVol, true).full}`,
+          `на палете ${palette.barcode}?`].join(' ');
+
+        return ConfirmModal.show({ text })
           .then(() => {
-            updatePickedByPos(unpickedPos);
-            if (!unpicked.totalUnPickedVolume) {
-              return $timeout(PHRASE_PAUSE)
-                .then(() => replyEnoughOfThat());
+
+            const busy = unpickedPos.linkPickedPaletteBoxes(palette, boxedItems, onBoxProgress)
+              .then(() => replySuccess('Готово'))
+              .then(() => {
+                updatePickedByPos(unpickedPos);
+                if (!unpicked.totalUnPickedVolume) {
+                  return $timeout(PHRASE_PAUSE)
+                    .then(() => replyEnoughOfThat());
+                }
+              });
+
+            vm.cgBusy = {
+              promise: busy,
+              message: 'Сохранение данных',
+            };
+
+            return busy;
+
+            function onBoxProgress(boxNumber, totalBoxes) {
+              vm.cgBusy.message = `Коробка ${boxNumber} из ${totalBoxes}`;
             }
-          });
+
+          })
+          .catch(_.noop);
 
       } else if (toTakeVol * 2 > paletteVol) {
         const boxUnload = Math.ceil((paletteVol - toTakeVol) / packageRel);

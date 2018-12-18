@@ -3,7 +3,10 @@ h3.clearfix(ng-show='vm.title') {{ vm.title }}
 
 section.sa-error-widget
 
-section.scroll-y.picking-article-list(resize resize-offset-top='50' ui-view)
+section.scroll-y.picking-article-list(
+resize resize-offset-top='50' ui-view
+cg-busy="vm.cgBusy"
+)
 
   .alert.alert-info(ng-if="!vm.groups.length") Список товров пуст
 
