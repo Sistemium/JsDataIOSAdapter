@@ -94,7 +94,7 @@
     }
 
     function replyTaken(num) {
-      SoundSynth.say(`${Language.speakableCountFemale(num)}`);
+      SoundSynth.say(`Это ${Language.speakableCountFemale(num)}`);
     }
 
     function replyTakeSome(pcs, num) {
@@ -107,6 +107,10 @@
 
     function unloadSomeBoxPcs(boxPcs) {
       SoundSynth.say(`Нужно убрать с палеты ${Language.speakableBoxPcs(boxPcs)}`);
+    }
+
+    function replyLookAtScreen() {
+      replySuccess('Вопрос на экране');
     }
 
     function repeatToConfirm() {
@@ -381,13 +385,12 @@
 
       const toTakeVol = volumeToTake(unpickedPos);
       const num = orderNumber(unpickedPos);
-      const { packageRel } = article;
 
       if (toTakeVol >= paletteVol) {
 
         replyTakePalette(num);
 
-        replySuccess('Вопрос на экране');
+        replyLookAtScreen();
 
         const text = [
           `Добавить в заказ ${article.boxPcs(paletteVol, true).full}`,
@@ -421,22 +424,106 @@
           .catch(_.noop);
 
       } else if (toTakeVol * 2 > paletteVol) {
-        const boxUnload = Math.ceil((paletteVol - toTakeVol) / packageRel);
-        return unloadSomeBoxPcs({ box: boxUnload });
+        return unloadConfirm();
       } else {
-        // easier to scan what to take
-        const box = Math.floor(toTakeVol / packageRel);
-        const pcs = toTakeVol - (packageRel * box);
-        return replyTakeSomeBoxPcs({ box, pcs }, num);
+        return replyTakeSomeBoxPcs(article.boxPcs(toTakeVol), num);
       }
 
       function volumeToTake(pop) {
         return _.min([pop.unPickedVolume(), paletteVol]);
       }
 
+      function unloadConfirm() {
+
+        const toTakeBoxPcs = article.boxPcs(paletteVol - toTakeVol);
+
+        unloadSomeBoxPcs(toTakeBoxPcs);
+        replyLookAtScreen();
+
+        const text = `Убрать ${toTakeBoxPcs.full} с палеты ${palette.barcode}`;
+
+        return ConfirmModal.show({ text })
+          .then(() => {
+            vm.paletteUnloading = { palette, boxes: [] };
+            onWarehouseBoxUnloadingPalette();
+          })
+          .catch(_.noop);
+
+      }
+
+    }
+
+    function onWarehouseBoxUnloadingPalette(box) {
+
+      const { boxes, palette } = vm.paletteUnloading || {};
+
+      if (box) {
+        if (box.currentPaletteId !== palette.id) {
+          return replyError('Это коробка с другой палеты');
+        }
+
+        const taken = _.findIndex(boxes, ({ id }) => id === box.id) + 1;
+
+        if (taken) {
+          replyTaken(taken);
+        } else {
+          boxes.push(box);
+          replyTaken(boxes.length);
+        }
+      }
+
+      if (vm.paletteUnloading.modal) {
+        vm.paletteUnloading.modal.cancel();
+      }
+
+      const buttons = [
+        {
+          title: 'Закочить и сохранить',
+          id: 'yes',
+          type: 'submit'
+        },
+        {
+          title: 'Отмена',
+          id: 'cancel',
+          type: 'cancel'
+        }
+      ];
+
+      ConfirmModal.show({ text: `Снято ${boxes.length} коробок, закончить?`, resolve, buttons })
+        .then(() => {
+          const promise =  palette.unloadBoxes(vm.paletteUnloading.boxes)
+            .then(() => {
+              vm.paletteUnloading = false;
+              replySuccess();
+            })
+            .catch(() => replyError());
+          vm.cgBusy = {
+            promise,
+            message: 'Сохранение данных',
+          };
+        })
+        .catch(buttonId =>{
+          if (buttonId === 'cancel') {
+            vm.paletteUnloading = false;
+          }
+        })
+        .finally(() => {
+          delete vm.paletteUnloading.modal;
+        });
+
+      function resolve(modal) {
+        vm.paletteUnloading.modal = modal;
+      }
+
     }
 
     function onWarehouseBox(box) {
+
+      if (vm.paletteUnloading) {
+
+        return onWarehouseBoxUnloadingPalette(box);
+
+      }
 
       if (box.processing === 'picked') {
 

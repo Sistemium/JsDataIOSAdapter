@@ -63,9 +63,12 @@
 
       methods: {
 
-        setPicked(boxOrPalette) {
+        setPicked(boxOrPalette, warehousePaletteId) {
           if (boxOrPalette.ownerXid === this.pickingOrderId) {
             return;
+          }
+          if (boxOrPalette.currentPaletteId) {
+            boxOrPalette.currentPaletteId = warehousePaletteId;
           }
           boxOrPalette.processing = 'picked';
           boxOrPalette.ownerXid = this.pickingOrderId;
@@ -98,7 +101,7 @@
           return $q((resolve, reject) => {
 
             const tasks = _.map(boxedItems, ({ warehouseBox, items }, idx) =>
-              done => this.linkPickedBoxItems(warehouseBox, items)
+              done => this.linkPickedBoxItems(warehouseBox, items, palette.id)
                 .then(() => {
                   done();
                   onBoxProgress(idx + 1, boxedItems.length);
@@ -118,7 +121,7 @@
 
         },
 
-        linkPickedBoxItems(warehouseBox, warehouseItems) {
+        linkPickedBoxItems(warehouseBox, warehouseItems, warehousePaletteId = null) {
 
           return PickingOrderPositionPicked.create({
             code: warehouseBox.barcode,
@@ -132,7 +135,7 @@
               warehouseBox,
               warehouseItems,
             }))
-            .then(() => this.setPicked(warehouseBox));
+            .then(() => this.setPicked(warehouseBox, warehousePaletteId));
         },
 
         unPickedBoxVolume: function () {

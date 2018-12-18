@@ -58,14 +58,16 @@
 
         createForOwner({ ownerXid, warehouseBox, warehouseItems, source }) {
 
+          const timestamp = moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
+
           return $q.all(_.map(warehouseItems, item => WarehouseItemOperation.create({
             ownerXid,
             source,
+            timestamp,
             warehouseItemId: item.id,
             code: warehouseBox.barcode,
             boxToId: warehouseBox.id,
             boxFromId: item.currentBoxId,
-            timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
           }).then(() => {
             item.processing = 'picked';
             item.currentBoxId = warehouseBox.id;

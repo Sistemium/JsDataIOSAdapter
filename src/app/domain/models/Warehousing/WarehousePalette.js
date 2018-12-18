@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('Models').run((Schema) => {
+  angular.module('Models').run((Schema, $q, moment) => {
 
     Schema.register({
 
@@ -20,11 +20,35 @@
 
       methods: {
 
+        unloadBoxes(boxes) {
+
+          const timestamp = moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
+          const { WarehouseBoxOperation } = Schema.models();
+
+          return $q.all(_.map(boxes, warehouseBox =>
+            WarehouseBoxOperation.create({
+              timestamp,
+              source: 'unloadBoxes',
+              warehouseBoxId: warehouseBox.id,
+              paletteFromId: this.id,
+              paletteToId: null,
+            }).then(() => {
+              warehouseBox.currentPaletteId = null;
+              return warehouseBox.DSCreate();
+            })
+          ));
+
+        },
+
         paletteItems() {
 
           const { WarehouseBox, WarehouseItem } = Schema.models();
 
-          return WarehouseBox.findAll({ currentPaletteId: this.id }, { cacheResponse: false })
+          return WarehouseBox.findAll({
+            currentPaletteId: this.id,
+            processing: 'stock',
+            ownerXid: null,
+          }, { cacheResponse: false })
             .then(boxes => {
 
               const boxIds = _.map(boxes, 'id');
