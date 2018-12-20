@@ -4,10 +4,7 @@
 
   angular.module('Models').run(function (Schema, $q, saAsync) {
 
-    const {
-      PickingOrderPositionPicked,
-      WarehouseItemOperation,
-    } = Schema.models();
+    const { PickingOrderPositionPicked } = Schema.models();
 
     let totalVolume = Schema.aggregate('volume').sum;
     let totalUnPickedVolume = Schema.aggregate('unPickedVolume').sumFn;
@@ -122,6 +119,8 @@
         },
 
         linkPickedBoxItems(warehouseBox, warehouseItems, warehousePaletteId = null) {
+
+          const { WarehouseItemOperation } = Schema.models();
 
           return PickingOrderPositionPicked.create({
             code: warehouseBox.barcode,

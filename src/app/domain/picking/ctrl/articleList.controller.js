@@ -85,8 +85,9 @@
       SoundSynth.say('Этого больше не нужно');
     }
 
-    function replyTakeAll(num, after) {
-      SoundSynth.say(`${num || 'Коробка'} ${after || ''}`);
+    function replyTakeAll(num, vol, packageRel) {
+      const isFull = packageRel === vol;
+      SoundSynth.say(`${isFull ? '' : 'неполная'} коробка ${num || ''}`);
     }
 
     function replyTakePalette(after) {
@@ -311,7 +312,6 @@
           }
 
           return unpickedPos.linkPickedBoxItems(warehouseBox, items)
-          // .then(() => replyTakeAll(orderNumber(unpickedPos)))
             .then(() => {
               updatePickedByPos(unpickedPos);
               vm.scanned = {};
@@ -621,8 +621,9 @@
           return { toTakeVol, unpickedPos, num };
         }
 
+        replyTakeAll(num, warehouseItems.length, _.first(warehouseItems).article.packageRel);
+
         return unpickedPos.linkPickedBoxItems(box, warehouseItems)
-          .then(() => replyTakeAll(num))
           .then(() => {
             updatePickedByPos(unpickedPos);
             if (!unpicked.totalUnPickedVolume) {
