@@ -219,7 +219,11 @@
         return reportPickedItemLocation(warehouseItem);
       }
 
-      const toTake = findMatchingItems([warehouseItem]) || {};
+      const toTake = findMatchingItems([warehouseItem]);
+
+      if (!toTake) {
+        return;
+      }
 
       const { unpickedPos } = toTake;
 
@@ -601,6 +605,10 @@
 
       if (!unpickedPos) {
         return replyEnoughOfThat();
+      }
+
+      if (unpickedPos.target === 'strict') {
+        return replyError(`Новые марки запрещены в этом заказе`);
       }
 
       const toTakeVol = volumeToTake(unpickedPos);
