@@ -573,7 +573,13 @@
       }
 
       return box.boxItems()
-        .then(items => findMatchingItems(items, box));
+        .then(items => {
+          if (!items.length) {
+            replyError('Пустая коробка');
+            return;
+          }
+          return findMatchingItems(items, box);
+        });
     }
 
     function findMatchingItems(warehouseItems, box) {
