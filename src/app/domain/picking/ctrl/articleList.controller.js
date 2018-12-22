@@ -197,7 +197,7 @@
       return WarehouseItem.findAllWithRelations(
         { barcode },
         { cacheResponse: false })(['Article'])
-        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound);
+        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound());
     }
 
 
