@@ -97,8 +97,8 @@
         primaryTag: ['tags', primaryTagFn],
         secondName: ['primaryTag', secondNameFn],
 
-        sameId: ['articleSame', 'id', function (articleSame, id) {
-          return articleSame || id;
+        sameId: ['articleSameId', 'id', function (articleSameId, id) {
+          return articleSameId || id;
         }],
 
         pcsLabel: ['pieceVolume', function (pieceVolume) {
