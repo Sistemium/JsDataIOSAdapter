@@ -77,8 +77,13 @@
     }
 
     function replyAlreadyPickedOrder(ownerXid) {
-      PickingOrder.find(ownerXid, { cacheResponse: false })
-        .then(found => replyAlreadyPicked(Language.speakableCount(found && found.ndoc)))
+      return PickingOrder.find(ownerXid, { cacheResponse: false })
+        .then(found => {
+          replyAlreadyPicked(Language.speakableCount(found.ndoc));
+        })
+        .catch(() => {
+          replyAlreadyPicked('с неизвестным номером');
+        });
     }
 
     function replyEnoughOfThat() {
@@ -208,7 +213,7 @@
     function reportPickedItemLocation(warehouseItem) {
       return warehouseItem.itemBox()
         .then(({ ownerXid }) => {
-          replyAlreadyPickedOrder(ownerXid)
+          return replyAlreadyPickedOrder(ownerXid);
         })
         .catch(() => replyError());
     }
