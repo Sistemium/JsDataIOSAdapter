@@ -131,8 +131,8 @@
       },
 
       remove() {
-        pickedPosition.unlinkWarehouseBox()
-          .then(() => PickingOrderPositionPicked.destroy(pickedPosition))
+        pickedPosition.DSDestroy()
+          .then(() => pickedPosition.unlinkWarehouseBox())
           .then(() => {
             $state.go('^');
           });

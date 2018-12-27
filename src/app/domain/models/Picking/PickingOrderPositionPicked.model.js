@@ -9,7 +9,7 @@
       WarehouseBox,
     } = Schema.models();
 
-    Schema.register({
+    const PickingOrderPositionPicked = Schema.register({
 
       name: 'PickingOrderPositionPicked',
 
@@ -58,10 +58,19 @@
             return $q.resolve();
           }
 
-          return WarehouseItemOperation.findAll({ ownerXid: this.id }, { cacheResponse: false })
+          const noCache = { cacheResponse: false };
+
+          return WarehouseItemOperation.findAll({ ownerXid: this.id }, noCache)
             .then(operations => $q.all(_.map(operations, o => o.cancelOperation())))
-            .then(() => {
-              return WarehouseBox.find(warehouseBoxId, { cacheResponse: false })
+
+            .then(() => PickingOrderPositionPicked.findAll({ warehouseBoxId }, noCache))
+            .then(res => {
+
+              if (res.length) {
+                return;
+              }
+
+              return WarehouseBox.find(warehouseBoxId, noCache)
                 .then(warehouseBox => {
 
                   warehouseBox.processing = 'stock';
