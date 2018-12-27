@@ -99,8 +99,8 @@
       SoundSynth.say(`Палета целиком ${after || ''}`);
     }
 
-    function replyTaken(num) {
-      SoundSynth.say(`Это ${Language.speakableCountFemale(num)}`);
+    function replyTaken(num, ord) {
+      SoundSynth.say(`Это ${Language.speakableCountFemale(num)} ${ord || ''}`);
     }
 
     function replyTakeSome(pcs, num) {
@@ -247,7 +247,7 @@
       const scannedIndex = _.findIndex(items, warehouseItem) + 1;
 
       if (scannedIndex) {
-        return replyTaken(scannedIndex);
+        return replyTaken(scannedIndex, orderNumber(unpickedPos));
       }
 
       if (items.length < unpickedPos.unPickedVolume()) {
@@ -257,7 +257,8 @@
       }
 
       if (items.length === unpickedPos.unPickedVolume()) {
-        replySuccess('Хватит этого теперь просканируйте коробку');
+        const msg = `${orderNumber(unpickedPos)} хватит этого теперь просканируйте коробку`;
+        replySuccess(msg);
       }
 
     }
@@ -320,7 +321,8 @@
             .then(() => {
               updatePickedByPos(unpickedPos);
               vm.scanned = {};
-              replySuccess(`Добавлено в заказ ${items.length}`);
+              const ordNum = orderNumber(unpickedPos) || 'в заказ';
+              replySuccess(`Добавлено ${ordNum} ${items.length}`);
             });
 
         })
