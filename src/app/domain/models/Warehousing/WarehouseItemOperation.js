@@ -41,13 +41,13 @@
             boxToId: boxFromId,
             boxFromId: boxToId,
             warehouseItemId,
-          })
+          }, { cacheResponse: false })
             .then(() =>
               WarehouseItem.find(warehouseItemId, { cacheResponse: false })
                 .then(warehouseItem => {
                   warehouseItem.processing = 'stock';
                   warehouseItem.currentBoxId = boxFromId;
-                  return warehouseItem.DSCreate();
+                  return warehouseItem.DSCreate({ cacheResponse: false });
                 })
             );
         },
@@ -68,10 +68,10 @@
             code: warehouseBox.barcode,
             boxToId: warehouseBox.id,
             boxFromId: item.currentBoxId,
-          }).then(() => {
+          }, { cacheResponse: false }).then(() => {
             item.processing = 'picked';
             item.currentBoxId = warehouseBox.id;
-            return item.DSCreate();
+            return item.DSCreate({ cacheResponse: false });
           })));
 
         },

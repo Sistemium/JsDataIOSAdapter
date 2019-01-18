@@ -76,7 +76,7 @@
                   warehouseBox.processing = 'stock';
                   warehouseBox.ownerXid = null;
 
-                  return warehouseBox.DSCreate();
+                  return warehouseBox.DSCreate({ cacheResponse: false });
 
                 });
             });

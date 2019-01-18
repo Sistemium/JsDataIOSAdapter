@@ -69,7 +69,7 @@
           }
           boxOrPalette.processing = 'picked';
           boxOrPalette.ownerXid = this.pickingOrderId;
-          return boxOrPalette.DSCreate();
+          return boxOrPalette.DSCreate({ cacheResponse: false });
         },
 
         boxVolume: function () {
