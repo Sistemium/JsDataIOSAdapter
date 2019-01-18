@@ -125,6 +125,7 @@
     }
 
     const STAPI_OPTION_ORDER_BY = 'x-order-by:';
+    const STAPI_OPTION_SOCKET_SOURCE = 'socketSource';
 
     function paramsToOptions(params) {
 
@@ -172,6 +173,10 @@
           parsed.direction = 'DESC';
         }
         delete params[STAPI_OPTION_ORDER_BY];
+      }
+
+      if (params[STAPI_OPTION_SOCKET_SOURCE]) {
+        parsed[STAPI_OPTION_SOCKET_SOURCE] = true;
       }
 
       delete params.limit;
