@@ -155,11 +155,9 @@
 
       const visitRelations = ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto'];
 
-      let dateFilter = {date: dateFormatted(vm.selectedDate)};
+      let dateFilter = { date: dateFormatted(vm.selectedDate) };
 
-      let filter;
-
-      vm.customFilter ? filter = vm.customFilter : filter = salesmanFilter(dateFilter);
+      const filter = vm.customFilter || salesmanFilter(dateFilter);
 
       let q = Visit.findAllWithRelations(filter, {bypassCache: true})(visitRelations)
         .then(() => {
