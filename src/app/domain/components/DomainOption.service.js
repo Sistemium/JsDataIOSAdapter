@@ -52,7 +52,7 @@
     function allowDiscounts() {
       return customerCode() === 'bs' ||
         _.get(Auth.getAccount(), 'org') === 'dr50' ||
-        (customerCode() === 'r50p' && /isd|localhost/.test(siteInstance));
+        (customerCode() === 'r50p' && /localhost/.test(siteInstance));
     }
 
     function saleOrderMaxPositions() {
