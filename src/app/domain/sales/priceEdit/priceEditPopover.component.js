@@ -48,6 +48,7 @@
 
       _.assign(vm, {
 
+        maxDiscount: DomainOption.maxDiscount(),
         editable: DomainOption.allowDiscounts(),
         discountScope: vm.stock.discountScope(),
         discountPercent: Math.abs(vm.stock.discountPercent()),
@@ -58,7 +59,6 @@
         priceGroup: hasPriceGroup && PriceGroup.get(priceGroupId),
         priceAgent: DomainOption.hasPriceAgent() && vm.stock.priceAgent,
 
-        maxDiscount: 50,
         maxPrice: vm.stock.priceOrigin() * 1.5,
         minPrice: vm.stock.priceOrigin() * 0.5
 
@@ -158,8 +158,8 @@
 
     function normalizeDiscount(discountPercent = vm.discountPercent) {
 
-      if (discountPercent > 30) {
-        discountPercent = 30;
+      if (discountPercent > vm.maxDiscount) {
+        discountPercent = vm.maxDiscount;
       } else if (discountPercent < 0) {
         discountPercent = 0;
       }

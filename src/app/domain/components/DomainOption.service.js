@@ -23,10 +23,15 @@
       hasArticleFactors,
       saleOrderMaxPositions,
       allowDiscounts,
+      maxDiscount,
       usePriceGroups,
       hasPriceAgent,
       stmArticleGroupId
     };
+
+    function maxDiscount() {
+      return 50;
+    }
 
     function stmArticleGroupId() {
       switch (customerCode()) {
