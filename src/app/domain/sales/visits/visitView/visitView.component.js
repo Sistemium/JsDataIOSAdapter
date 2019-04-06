@@ -16,9 +16,10 @@
 
   });
 
-  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper, $filter, geolib, Sockets) {
+  function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper,
+                            $filter, geolib, Sockets) {
 
-    const {Visit, Outlet} = Schema.models();
+    const { Visit, Outlet } = Schema.models();
     const numberFilter = $filter('number');
 
     let events;
@@ -63,17 +64,7 @@
 
     $scope.$watch('vm.selectedDate', _.debounce(setDate, 500));
 
-    $scope.$watch(() => new Date().setHours(0, 0, 0, 0), (todayTime, oldValue) => {
-
-      if (todayTime != oldValue) {
-
-        today = todayFn();
-        vm.selectedDate = today;
-        vm.initDate = today;
-
-      }
-
-    });
+    $scope.$watch(() => new Date().setHours(0, 0, 0, 0), onDayChange);
 
     // Sockets.jsDataSubscribe(SUBSCRIPTIONS);
     Sockets.onJsData('jsData:update', onJSData);
@@ -81,6 +72,18 @@
     /*
      Functions
      */
+
+    function onDayChange(todayTime, oldValue) {
+
+      if (todayTime === oldValue) {
+        return;
+      }
+
+      today = todayFn();
+      vm.selectedDate = today;
+      vm.initDate = today;
+
+    }
 
     function onJSData(event) {
 
@@ -122,7 +125,7 @@
 
       filterVisitsBySelectedDate();
 
-      $state.go('.', {date: dateFormatted(vm.selectedDate)}, {notify: false});
+      $state.go('.', { date: dateFormatted(vm.selectedDate) }, { notify: false });
 
     }
 
@@ -144,12 +147,16 @@
     function eventsWithVisitDays(visitDays) {
 
       events = _.keyBy(visitDays, 'date');
-      events [dateFormatted(vm.maxDate)] = {status: 'today'};
+      events [dateFormatted(vm.maxDate)] = { status: 'today' };
       vm.minDate = moment(_.min(_.map(visitDays, 'date'))).format();
 
     }
 
     function filterVisitsBySelectedDate() {
+
+      if (!vm.selectedDate) {
+        return;
+      }
 
       vm.busy = true;
 
@@ -159,7 +166,7 @@
 
       const filter = vm.customFilter || salesmanFilter(dateFilter);
 
-      let q = Visit.findAllWithRelations(filter, {bypassCache: true})(visitRelations)
+      let q = Visit.findAllWithRelations(filter, { bypassCache: true })(visitRelations)
         .then(() => {
           vm.rebindAll(Visit, filter, 'vm.selectedDayVisits', loadOutletLocations);
           vm.busy = false;
@@ -183,7 +190,7 @@
 
     function getDayClass(data) {
 
-      let {date, mode} = data;
+      let { date, mode } = data;
 
       if (mode === 'day') {
 
@@ -205,7 +212,10 @@
 
       let isOutletView = $state.current.name.match(/\.outlet$/);
 
-      $state.go(`${isOutletView ? '' : '.outlet'}.visit${creating ? 'Create' : ''}`, {visitId: visit.id, id: visit.outlet.id});
+      const visitState = `${isOutletView ? '' : '.outlet'}.visit${creating ? 'Create' : ''}`;
+
+      $state.go(visitState, { visitId: visit.id, id: visit.outlet.id });
+
     }
 
     function newVisitClick() {
