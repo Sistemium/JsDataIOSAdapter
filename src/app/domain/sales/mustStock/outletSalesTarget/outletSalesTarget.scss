@@ -1,0 +1,59 @@
+@import "variables";
+
+.outlet-sales-target {
+
+  .header {
+
+    display: flex;
+    font-weight: bold;
+
+    .article {
+      flex: 1;
+    }
+
+    > * {
+      min-width: 50px;
+      text-align: center;
+    }
+
+  }
+
+  .target-group h3 {
+    margin: 0;
+    padding: $margin-bottom-xs-minus;
+    background: $gray-background-color;
+  }
+
+  .targets .target {
+
+    display: flex;
+
+    border-top: solid 1px $border-gray;
+
+    > * {
+      padding: $margin-bottom-xs 0;
+    }
+
+    .articles {
+      flex: 1;
+      .status {
+        display: inline-block;
+        margin-right: $margin-bottom-xs;
+        color: $green;
+        min-width: 15px;
+      }
+    }
+
+    .articles, .target-cnt {
+      border-right: solid 1px $border-gray;
+    }
+
+    .target-cnt, .fact-cnt {
+      min-width: 50px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+  }
+
+}

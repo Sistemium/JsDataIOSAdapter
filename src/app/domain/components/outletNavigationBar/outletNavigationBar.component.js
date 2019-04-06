@@ -24,7 +24,8 @@
         saleOrder: 'Заказы',
         shipments: 'Отгрузки',
         debt: 'Долги',
-        visit: 'Визиты'
+        visit: 'Визиты',
+        targets: 'Задачи',
       },
 
       $onInit,
@@ -37,6 +38,10 @@
 
     if (DomainOption.visitsDisabled()) {
       delete vm.tabs.visit;
+    }
+
+    if (!DomainOption.salesTargets()) {
+      delete vm.tabs.targets;
     }
 
     const tabCount = Object.keys(vm.tabs).length;
@@ -76,7 +81,7 @@
 
     function $onInit() {
 
-      vm.currentTab = 'miscellaneous';
+      vm.currentTab = vm.tabs.targets ? 'targets' : 'miscellaneous';
 
       $timeout(10).then(() => {
         defineChevron();

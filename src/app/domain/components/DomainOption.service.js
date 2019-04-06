@@ -26,8 +26,13 @@
       maxDiscount,
       usePriceGroups,
       hasPriceAgent,
-      stmArticleGroupId
+      stmArticleGroupId,
+      salesTargets,
     };
+
+    function salesTargets() {
+      return customerCode() === 'r50';
+    }
 
     function maxDiscount() {
       return 50;

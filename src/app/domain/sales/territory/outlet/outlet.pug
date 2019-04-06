@@ -51,6 +51,16 @@
 
   div(ui-view ng-switch='vm.currentTab')
 
+    .outlet-targets(ng-switch-when='targets')
+      .scroll-y(
+      resize
+      resize-offset-top='10'
+      )
+        outlet-sales-target(
+        outlet-id='vm.debtFilter'
+        ng-if='vm.debtFilter'
+        )
+
     .outlet-saleOrder(ng-switch-when='saleOrder')
       sale-order-view(
       custom-filter='vm.saleOrderFilter'
