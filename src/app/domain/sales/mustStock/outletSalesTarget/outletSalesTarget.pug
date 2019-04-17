@@ -1,25 +1,28 @@
 .outlet-sales-target(cg-busy="vm.cgBusy")
 
-  .targets
+  .article-group(ng-repeat="ag in vm.data track by ag.id")
 
-    .target-group(ng-repeat="grp in vm.data track by grp.id")
-
-      h3 {{ grp.targetGroup.name }}
+    .targets
 
       .header
-        .article Товар
+        .article {{ ag.articleGroup.name }}
         .cnt План
         .fact Факт
 
-      .target(
-      ng-repeat="target in grp.targets track by target.id"
-      )
-        .articles
-          .article(
-          ng-repeat="article in target.articles track by article.id"
-          )
-            span.status
-              i.glyphicon.glyphicon-ok(ng-if="target.facts[article.id]")
-            span.name {{ article.name }}
-        .target-cnt {{ target.targetCnt }}
-        .fact-cnt {{ target.factCnt }}
+      .target-group(ng-repeat="grp in ag.targets track by grp.id")
+
+        .name {{ grp.targetGroup.name }}
+
+        .target(
+        ng-repeat="target in grp.targets track by target.id"
+        ng-class="{ attention: target.factCnt < target.targetCnt }"
+        )
+          .articles
+            .article(
+            ng-repeat="article in target.articles track by article.id"
+            )
+              span.status
+                i.glyphicon.glyphicon-ok(ng-if="target.facts[article.id]")
+              span.name {{ article.name }}
+          .target-cnt {{ target.targetCnt }}
+          .fact-cnt {{ target.factCnt }}

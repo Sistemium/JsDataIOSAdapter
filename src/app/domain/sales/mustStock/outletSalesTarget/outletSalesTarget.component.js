@@ -14,10 +14,10 @@
   });
 
 
-  function outletSalesTargetController($scope, Helpers, Schema, $q) {
+  function outletSalesTargetController($scope, Helpers, Schema, SalesTargetingService) {
 
-    const { Shipment, ShipmentPosition, SalesTarget, SalesTargetGroup } = Schema.models();
-    const { Article } = Schema.models();
+    const { SalesTarget, SalesTargetGroup } = Schema.models();
+    const { Article, ArticleGroup } = Schema.models();
     const { saControllerHelper } = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope);
@@ -34,19 +34,16 @@
 
       const { outletId } = vm;
 
-      const where = {
-        outletId: { '==': outletId },
-        date: { '>=': '2019-01-01' },
-      };
-
-      return refreshTargeting()
-        .then(() => Shipment.findAll({ where }, { cacheResponse: false }))
-        .then(shipments => {
-          const filter = { shipmentId: _.map(shipments, 'id') };
-          return ShipmentPosition.groupBy(filter, ['articleId']);
-        })
+      return SalesTargetingService.refreshTargeting()
+        .then(() => SalesTargetingService.shipmentsData(outletId))
         .then(data => {
-          vm.data = makeData(data);
+          vm.data = _.map(
+            _.groupBy(makeData(data), 'targetGroup.articleGroupId'),
+            (targets, id) => ({
+              id,
+              targets,
+              articleGroup: ArticleGroup.get(id),
+            }));
         });
 
     }
@@ -57,11 +54,11 @@
 
       const targets = SalesTarget.getAll();
 
-      const targetsData = _.map(targets, makeTarget);
+      const targetsData = _.groupBy(targets.map(makeTarget), 'targetGroup.id');
 
-      return _.orderBy(_.map(_.groupBy(targetsData, 'targetGroup.id'), (targets, id) => ({
+      return _.orderBy(_.map(targetsData, (targets, id) => ({
         id, targets, targetGroup: SalesTargetGroup.get(id),
-      })), 'targetGroup.name');
+      })), ['targetGroup.articleGroup.name', 'targetGroup.name']);
 
       function makeTarget({ id, targetGroup, articleIds, cnt }) {
 
@@ -83,19 +80,6 @@
 
     }
 
-    function refreshTargeting() {
-      return $q.all([
-        SalesTargetGroup.findAll(),
-        SalesTarget.findAll()
-          .then(data => $q.all(_.map(data, ({ articleIds }) => {
-              const toLoad = _.filter(_.map(articleIds, id => Article.get(id) ? null : id));
-              if (toLoad.length) {
-                return Article.findAll({ id: toLoad });
-              }
-            }))
-          ),
-      ]);
-    }
 
   }
 

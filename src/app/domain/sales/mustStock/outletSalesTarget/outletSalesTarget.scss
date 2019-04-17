@@ -1,6 +1,10 @@
 @import "variables";
 
-.outlet-sales-target {
+.outlet-sales-target, .sales-targets-report {
+
+  min-height: 80px;
+
+  $col-width: 60px;
 
   .header {
 
@@ -9,19 +13,42 @@
 
     .article {
       flex: 1;
+      //visibility: hidden;
+      text-align: left;
+      max-width: unset;
     }
 
     > * {
-      min-width: 50px;
+      min-width: $col-width;
+      max-width: $col-width;
       text-align: center;
+      padding: 0 $margin-bottom-xs-minus;
+      word-break: normal;
+    }
+
+    .name {
+      color: $black;
     }
 
   }
 
-  .target-group h3 {
-    margin: 0;
-    padding: $margin-bottom-xs-minus;
-    background: $gray-background-color;
+  .target-group {
+
+    > .name {
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: $margin-bottom-xs;
+    }
+
+    margin-bottom: $margin-bottom-xs;
+
+  }
+
+  .header {
+    //margin: 0;
+    padding: $margin-bottom-xs-minus 0;
+    //background: $gray-background-color;
+    color: $light-gray;
   }
 
   .targets .target {
@@ -30,12 +57,21 @@
 
     border-top: solid 1px $border-gray;
 
+    &:last-child {
+      border-bottom: solid 1px $border-gray;
+    }
+
     > * {
       padding: $margin-bottom-xs 0;
     }
 
-    .articles {
+    .name {
+      padding-left: $margin-bottom-xs;
+    }
+
+    .articles, .name {
       flex: 1;
+
       .status {
         display: inline-block;
         margin-right: $margin-bottom-xs;
@@ -44,16 +80,27 @@
       }
     }
 
-    .articles, .target-cnt {
-      border-right: solid 1px $border-gray;
+    > * + * {
+      border-left: solid 1px $border-gray;
     }
 
-    .target-cnt, .fact-cnt {
-      min-width: 50px;
+    .target-cnt, .fact-cnt, .done-cnt {
+      min-width: $col-width;
       text-align: center;
       font-weight: bold;
     }
 
+    &.attention .fact-cnt {
+      color: white;
+      background: lighten(red, 20%);
+    }
+
+  }
+
+  h4.article {
+    position: sticky;
+    top: 0;
+    background: $white;
   }
 
 }
