@@ -87,6 +87,10 @@
       title: 'Тесты',
       state: 'playground',
       needRoles: ADMIN_ROLES
+    }, {
+      title: 'Цели по SKU',
+      state: 'sales.targets',
+      needRoles: SALES_ROLES
     }];
 
 
