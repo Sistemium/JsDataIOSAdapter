@@ -1,0 +1,20 @@
+@media print {
+  .scroll-y {
+    overflow: visible;
+    max-height: none !important;
+  }
+
+  .root-navbar a.home, .last-digest, .caret {
+    display: none !important;
+  }
+
+  .sales-navs .salesman-menu {
+    font-size: 20px !important;
+    font-weight: bold;
+  }
+
+  .root-navbar a.home + a {
+    margin-left: 0;
+  }
+
+}

@@ -1,36 +1,37 @@
 .sales-targets-report.scroll-y(cg-busy="vm.cgBusy" resize resize-offset-top="15")
 
   .field
-    label Всего АКБ
+    label Всего АКБ за период
     strong {{ vm.outletsCnt }}
 
   .article-group(ng-repeat="ag in vm.data track by ag.id")
 
-    .targets
+    h4.header
+      .name {{ ag.articleGroup.name }}
+      .cnt План SKU
+      .fact ТТ готово
 
-      h4.article {{ ag.articleGroup.name }}
+    .group-targets
 
       .target-group(ng-repeat="grp in ag.targets track by grp.id")
 
-        .header
-          .cnt План SKU
-          .fact ТТ готово
-          .name {{ grp.targetGroup.name }}
+        .name {{ grp.targetGroup.name }}
 
-        //pre {{ grp.targets | json }}
-        .target(
-        ng-repeat="target in grp.targets track by target.id"
-        ng-class="{ attention: target.factCnt < target.targetCnt }"
-        )
-          //.articles
-            .article(
-            ng-repeat="article in target.articles track by article.id"
-            )
-              span.status
-                i.glyphicon.glyphicon-ok(ng-if="target.facts[article.id]")
-              span.name {{ article.name }}
-          //pre {{ target | json }}
-          .target-cnt {{ target.targetCnt }}
-          .done-cnt {{ target.factCnt }}
-          .name {{ target.name }}
+        .group-targets
+
+          .target(
+          ng-repeat="target in grp.targets track by target.id"
+          ng-class="{ attention: target.factCnt < target.targetCnt }"
+          )
+            //.articles
+              .article(
+              ng-repeat="article in target.articles track by article.id"
+              )
+                span.status
+                  i.glyphicon.glyphicon-ok(ng-if="target.facts[article.id]")
+                span.name {{ article.name }}
+            //pre {{ target | json }}
+            .name {{ target.name }}
+            .cnt {{ target.targetCnt }}
+            .cnt {{ target.factCnt }}
 

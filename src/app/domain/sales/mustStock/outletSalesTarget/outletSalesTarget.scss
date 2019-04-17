@@ -1,6 +1,6 @@
 @import "variables";
 
-.outlet-sales-target, .sales-targets-report {
+.outlet-sales-target {
 
   min-height: 80px;
 
@@ -103,4 +103,11 @@
     background: $white;
   }
 
+}
+
+
+@media print {
+  .outlet-sales-target .targets .target.attention .fact-cnt {
+    background: #CCC !important;
+  }
 }

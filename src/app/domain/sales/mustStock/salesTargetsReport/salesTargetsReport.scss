@@ -2,8 +2,45 @@
 
 .sales-targets-report {
 
-  .header {
+  min-height: 80px;
+  $border: solid 1px $border-gray;
+  $col-width: 90px;
 
+  .header {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: $white;
+    > * + * {
+      padding: $margin-bottom-xs;
+      font-size: 80%;
+      min-width: $col-width;
+    }
+    .name {
+      min-width: 300px;
+    }
+    border-bottom: $border;
+  }
+
+  .target-group , .target {
+    display: flex;
+    padding: 3px 0;
+  }
+
+  .target-group + .target-group, .target + .target {
+    border-top: $border;
+  }
+
+  .name {
+    min-width: 150px;
+    max-width: 150px;
+  }
+
+  .cnt {
+    padding: 0 $margin-bottom-xs;
+    text-align: center;
+    min-width: $col-width;
   }
 
 }
