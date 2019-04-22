@@ -32,7 +32,8 @@
       notify: false,
 
       meta: {
-        stmRoot
+        stmRoot,
+        label: { accusative: 'Группу товаров' },
       },
 
       computed: {
@@ -72,7 +73,7 @@
     }
 
     function firstLevelAncestor() {
-      let id = _.find(this.ancestors(), {articleGroupId: null});
+      let id = _.find(this.ancestors(), { articleGroupId: null });
       return id || null;
     }
 
@@ -143,7 +144,7 @@
       _.each(this.descendantsCache, id => hash[id] = true);
 
       return _.filter(positions, position => {
-        let {article = position} = position;
+        let { article = position } = position;
         return article && hash[article.articleGroupId];
       });
 

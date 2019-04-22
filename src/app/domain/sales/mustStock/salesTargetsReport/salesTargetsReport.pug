@@ -1,37 +1,57 @@
 .sales-targets-report.scroll-y(cg-busy="vm.cgBusy" resize resize-offset-top="15")
 
-  .field
-    label Всего АКБ за период
-    strong {{ vm.outletsCnt }}
+  .filters
 
-  .article-group(ng-repeat="ag in vm.data track by ag.id")
+    .sale-type МВЗ
 
-    h4.header
-      .name {{ ag.articleGroup.name }}
-      .cnt План SKU
-      .fact ТТ готово
+    sab-dropdown.period(
+    ng-model="vm.datePeriod"
+    items-data-source-name="Quarter"
+    items-data="vm.datePeriods"
+    options="{doNotFind: true}"
+    )
 
-    .group-targets
+    sab-dropdown.article-group(
+    ng-model='vm.articleGroupId'
+    items-data-source-name="ArticleGroup"
+    items-data="vm.articleGroups"
+    allow-clear="true"
+    )
 
-      .target-group(ng-repeat="grp in ag.targets track by grp.id")
+  .report-body(ui-view)
 
-        .name {{ grp.targetGroup.name }}
+    .field
+      label Всего АКБ за период
+      strong {{ vm.outletsCnt }}
 
-        .group-targets
+    .article-group(ng-repeat="ag in vm.data track by ag.id")
 
-          .target(
-          ng-repeat="target in grp.targets track by target.id"
-          ng-class="{ attention: target.factCnt < target.targetCnt }"
-          )
-            //.articles
-              .article(
-              ng-repeat="article in target.articles track by article.id"
-              )
-                span.status
-                  i.glyphicon.glyphicon-ok(ng-if="target.facts[article.id]")
-                span.name {{ article.name }}
-            //pre {{ target | json }}
-            .name {{ target.name }}
-            .cnt {{ target.targetCnt }}
-            .cnt {{ target.factCnt }}
+      h4.header
+        .name {{ ag.articleGroup.name }}
+        .cnt План SKU
+        .fact ТТ готово
+
+      .group-targets
+
+        .target-group(ng-repeat="grp in ag.targets track by grp.id")
+
+          .name {{ grp.targetGroup.name }}
+
+          .group-targets
+
+            .target(
+            ng-repeat="target in grp.targets track by target.id"
+            ng-class="{ attention: target.factCnt < target.targetCnt }"
+            )
+              //.articles
+                .article(
+                ng-repeat="article in target.articles track by article.id"
+                )
+                  span.status
+                    i.glyphicon.glyphicon-ok(ng-if="target.facts[article.id]")
+                  span.name {{ article.name }}
+              //pre {{ target | json }}
+              .name {{ target.name }}
+              .cnt {{ target.targetCnt }}
+              .cnt {{ target.factCnt }}
 

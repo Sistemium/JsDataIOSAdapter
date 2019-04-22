@@ -2,14 +2,14 @@
 
   function OutletArticles(Schema, IOS) {
 
-    const {ShipmentPosition} = Schema.models();
+    const { ShipmentPosition } = Schema.models();
 
     function groupByArticleId(outletId) {
 
-      let filter = {outletId};
+      let filter = { outletId };
 
       if (IOS.isIos()) {
-        filter = {where: {'ANY shipment': {'outletId': {'==': outletId}}}};
+        filter = { where: { 'ANY shipment': { 'outletId': { '==': outletId } } } };
       }
 
       return ShipmentPosition.groupBy(filter, ['articleId'])

@@ -23,10 +23,13 @@
 
       methods: {
         isFulfilled(shipments) {
-          const { articleIds = [], cnt: targetCnt } = this;
+          return this.cnt <= this.matches(shipments);
+        },
+        matches(shipments) {
+          const { articleIds = [] } = this;
           const byArticleId = _.groupBy(shipments, 'articleId');
           const matching = _.filter(articleIds, articleId => byArticleId[articleId]);
-          return targetCnt <= matching.length;
+          return matching.length;
         },
       },
 

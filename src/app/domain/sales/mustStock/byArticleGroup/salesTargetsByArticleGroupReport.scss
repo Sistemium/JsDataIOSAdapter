@@ -1,0 +1,110 @@
+@import "variables";
+
+sales-targets-by-article-group-report {
+
+  display: block;
+
+  $col-width: 50px;
+  $name-width: 300px;
+  $border: solid 1px $border-gray;
+
+  .headers {
+
+    display: flex;
+    //align-items: center;
+    //justify-content: center;
+    color: $light-gray;
+    font-weight: 500;
+
+    .target-group {
+      display: block;
+    }
+
+    .outlet-name, .name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: $border;
+    }
+
+    .sales-target-group {
+      > .name {
+        display: none;
+        margin-bottom: $col-width;
+      }
+    }
+
+    .targets {
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .name {
+        padding: $margin-bottom-xs 0;
+        //display: inline-block;
+        font-weight: 500;
+        max-width: $col-width;
+        min-width: $col-width;
+        max-height: $col-width * 3;
+        height: 100%;
+        border-right: $border;
+        border-top: $border;
+        writing-mode: vertical-rl;
+        //text-orientation: upright;
+        overflow: visible;
+        //white-space: nowrap;
+      }
+    }
+
+  }
+
+  .outlet {
+    display: flex;
+
+    span.cnt {
+      max-width: $col-width;
+      min-width: $col-width;
+      display: block;
+      text-align: center;
+      vertical-align: middle;
+      border-right: $border;
+      line-height: 250%;
+      border-bottom: $border;
+      padding: 3px;
+    }
+
+    .outlet-target-group {
+      display: flex;
+      &:last-child {
+        //border-right: solid 1px $border-gray;
+      }
+    }
+
+    .gray {
+      color: $gray;
+    }
+
+    .title {
+      font-weight: 500;
+    }
+
+    .outlet-name {
+      border-bottom: $border;
+    }
+
+  }
+
+  .target-groups {
+    display: flex;
+  }
+
+  .outlet-name {
+    padding: 3px;
+    min-width: $name-width;
+    max-width: $name-width;
+    border-right: $border;
+  }
+
+}

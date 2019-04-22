@@ -17,6 +17,13 @@
           }
         },
 
+        hasMany: {
+          SalesTarget: {
+            localField: 'targets',
+            foreignKey: 'targetGroupId',
+          },
+        },
+
       },
 
       meta: {}

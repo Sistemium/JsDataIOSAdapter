@@ -11,22 +11,43 @@
       Article,
       ArticleGroup,
       SalesTarget,
-      SalesTargetGroup
+      SalesTargetGroup,
+      Outlet,
+      Quarter,
     } = Schema.models();
-
-    const dateB = '2019-02-01';
-    const dateE = '2019-04-30';
 
     return {
       refreshTargeting,
       shipmentsData,
       salesmanShipmentsData,
       salesmanTargetsReport,
+      targetingArticleGroups,
+      salesmanArticleGroupReport,
+      targetsByArticleGroup,
+      datePeriods,
+      defaultPeriod,
     };
 
     /*
     Functions
      */
+
+    function datePeriods() {
+      return Quarter.getAll();
+    }
+
+    function defaultPeriod() {
+      return Quarter.meta.getCurrent();
+    }
+
+    function targetsByArticleGroup(articleGroupId) {
+      return SalesTargetGroup.filter({ articleGroupId });
+    }
+
+    function targetingArticleGroups() {
+      const ids = _.map(SalesTargetGroup.getAll(), 'articleGroupId');
+      return ArticleGroup.getAll(_.uniq(ids));
+    }
 
     function refreshTargeting() {
       return $q.all([
@@ -49,7 +70,7 @@
       ]);
     }
 
-    function shipmentsData(outletId, salesmanId) {
+    function shipmentsData(outletId, salesmanId, dateB, dateE) {
 
       const where = {
         outletId: { '==': outletId },
@@ -72,15 +93,13 @@
           return $q.all(_.map(chunks, shipmentId => {
             return ShipmentPosition.groupBy({ shipmentId }, ['articleId']);
           }))
-            .then(arrayOfGroups => {
-              return _.flatten(arrayOfGroups);
-            });
+            .then(arrayOfGroups => _.flatten(arrayOfGroups));
 
         });
 
     }
 
-    function salesmanShipmentsData(salesmanId) {
+    function salesmanShipmentsData(salesmanId, dateB, dateE) {
 
       const where = {
         salesmanId: { '==': salesmanId },
@@ -97,7 +116,7 @@
           const res = {};
 
           const tasks = _.map(shipments, ({ outletId }) =>
-            done => shipmentsData(outletId, salesmanId)
+            done => shipmentsData(outletId, salesmanId, dateB, dateE)
               .then(data => {
                 res[outletId] = data;
                 done();
@@ -116,6 +135,48 @@
           });
 
         });
+
+    }
+
+
+    function salesmanArticleGroupReport(positionsByOutletId) {
+
+      const allGroups = SalesTargetGroup.getAll();
+
+      return _.mapValues(_.groupBy(allGroups, 'articleGroupId'), groups => {
+
+        const targets = _.flatten(_.map(groups, group => group.targets));
+
+        const byOutletId = _.mapValues(positionsByOutletId, (outletPositions, outletId) => {
+          return outletTargets(targets, outletId, outletPositions);
+        });
+
+        const res = _.map(byOutletId, (targets, outletId) => ({
+          outletId,
+          outlet: Outlet.get(outletId),
+          targets,
+        }));
+
+        return _.orderBy(_.filter(res, 'targets'), ['outlet.name', 'outlet.address']);
+
+      });
+
+      function outletTargets(targets, outletId, positions) {
+
+        const map = _.filter(_.map(targets, target => {
+
+          const matches = target.matches(positions);
+
+          return matches && {
+            id: target.id,
+            matches,
+          };
+
+        }));
+
+        return map.length && _.mapValues(_.keyBy(map, 'id'), ({ matches }) => matches);
+
+      }
 
     }
 

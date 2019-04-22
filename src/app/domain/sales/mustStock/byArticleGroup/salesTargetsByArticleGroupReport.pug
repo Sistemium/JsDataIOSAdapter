@@ -1,0 +1,17 @@
+.sales-targets-by-article-group-report
+
+  .headers
+    .outlet-name Торговая точка
+    .sales-target-group(ng-repeat="tg in vm.targetGroups track by tg.id")
+      .name {{ tg.name }}
+      .targets
+        .name(ng-repeat="trg in tg.targets track by trg.id") {{ trg.name }}
+  .scroll-y(resize resize-offset-top="15")
+    .outlet(ng-repeat="item in vm.reportData")
+      .outlet-name
+        .title {{ item.outlet.name }}
+        .gray
+          small {{ item.outlet.address }}
+      .target-groups
+        span.outlet-target-group(ng-repeat="tg in vm.targetGroups track by tg.id")
+          span.cnt(ng-repeat="trg in tg.targets track by trg.id") {{ item.targets[trg.id] }}

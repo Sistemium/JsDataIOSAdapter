@@ -45,7 +45,7 @@
             return loadPaged(
               resource,
               filter,
-              _.assign(options, {startPage: options.startPage + 1})
+              _.assign(options, { startPage: options.startPage + 1 })
             ).then(res2 => {
               Array.prototype.push.apply(res, res2);
               return res;
@@ -61,7 +61,7 @@
     function getCount(resource, params) {
 
       let url = `${basePath}/${resource.endpoint}`;
-      let qs = {params: _.assign({'agg:': 'count'}, params || {})};
+      let qs = { params: _.assign({ 'agg:': 'count' }, params || {}) };
 
       return $http.get(url, qs)
         .then(res => parseInt(res.headers('x-aggregate-count')));
@@ -70,7 +70,7 @@
 
     function uncachedFindAll(filter, options) {
 
-      options = _.defaults({afterFindAll, cacheResponse: false}, options);
+      options = _.defaults({ afterFindAll, cacheResponse: false }, options);
 
       let res = [];
 
@@ -94,7 +94,7 @@
         return $q.resolve(resource.filter(filter));
       }
 
-      return resource.findAll(filter, _.defaults({cacheResponse: false}, options))
+      return resource.findAll(filter, _.defaults({ cacheResponse: false }, options))
         .then(res => {
 
           // TODO: check if it's all correct
@@ -110,7 +110,7 @@
           });
 
           if (!_.get(options, 'bypassCache')) {
-            store.queryData[queryHash] = {$$injected: true};
+            store.queryData[queryHash] = { $$injected: true };
           }
 
           return res;
@@ -128,7 +128,7 @@
         return (options.keepChanges || []).indexOf(key) >= 0;
       }
 
-      return definition.save(id, _.assign({cacheResponse: false}, options))
+      return definition.save(id, _.assign({ cacheResponse: false }, options))
         .then(serverItem => {
 
           let localItem = resource.index[id];
@@ -156,12 +156,25 @@
         };
 
         // fix for js-data bug
-        let groupByParams = _.assign({_: true}, params);
+        let groupByParams = _.assign({ _: true }, params);
 
         this.findAll(groupByParams, options)
           .catch(reject);
 
       });
+
+    }
+
+    function findByMany(ids, options) {
+
+      const { chunk = 20 } = options || {};
+
+      const chunks = _.chunk(_.uniq(ids), chunk);
+
+      return $q.all(_.map(chunks, chunkIds =>
+        this.findAll({ id: chunkIds }, options)
+      ))
+        .then(_.flatten);
 
     }
 
@@ -171,6 +184,7 @@
       groupBy,
       copyInstance,
       uncachedFindAll,
+      findByMany,
 
       loadPaged: function (filter, options) {
         return loadPaged(this, filter, options)
@@ -229,14 +243,14 @@
 
     if (IOS.isIos()) {
       const iosAdapter = new IosAdapter(Schema);
-      DS.registerAdapter('ios', iosAdapter, {default: true});
+      DS.registerAdapter('ios', iosAdapter, { default: true });
     } else {
       InitService.then(app => {
-        DS.registerAdapter('socket', new SocketAdapter({pool: app.org}), {default: true});
+        DS.registerAdapter('socket', new SocketAdapter({ pool: app.org }), { default: true });
       });
     }
 
-    let lsAdapter = new $window.DSLocalStorageAdapter({basePath: 'stg'});
+    let lsAdapter = new $window.DSLocalStorageAdapter({ basePath: 'stg' });
     DS.registerAdapter('localStorage', lsAdapter);
 
     $window.saDS = DS;

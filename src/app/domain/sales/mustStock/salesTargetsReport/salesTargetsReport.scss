@@ -1,10 +1,37 @@
 @import "variables";
 
-.sales-targets-report {
+sales-targets-report {
 
-  min-height: 80px;
+  display: block;
+
+  min-height: 580px;
   $border: solid 1px $border-gray;
   $col-width: 90px;
+
+  .filters {
+    display: flex;
+    align-items: center;
+
+    > * + * {
+      margin-left: $margin-bottom-xs;
+    }
+
+    .sale-type {
+      padding: 6px;
+      border: solid 1px $border-gray;
+      border-radius: $border-radius;
+    }
+
+  }
+
+  .report-body {
+    margin-top: $margin-bottom-xs;
+  }
+
+  .field, .sale-type, .period {
+    font-size: 16px;
+    font-weight: bold;
+  }
 
   .header {
     display: flex;
@@ -12,18 +39,21 @@
     position: sticky;
     top: 0;
     background: $white;
+
     > * + * {
       padding: $margin-bottom-xs;
       font-size: 80%;
       min-width: $col-width;
     }
+
     .name {
       min-width: 300px;
     }
+
     border-bottom: $border;
   }
 
-  .target-group , .target {
+  .target-group, .target {
     display: flex;
     padding: 3px 0;
   }
@@ -32,7 +62,7 @@
     border-top: $border;
   }
 
-  .name {
+  .target-group .name {
     min-width: 150px;
     max-width: 150px;
   }
