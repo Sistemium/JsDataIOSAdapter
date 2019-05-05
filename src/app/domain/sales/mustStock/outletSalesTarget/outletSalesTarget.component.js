@@ -34,8 +34,16 @@
 
       const { outletId } = vm;
 
+      const period = SalesTargetingService.defaultPeriod();
+
+      if (!period) {
+        return;
+      }
+
+      const { dateB, dateE } = period;
+
       return SalesTargetingService.refreshTargeting()
-        .then(() => SalesTargetingService.shipmentsData(outletId))
+        .then(() => SalesTargetingService.shipmentsData(outletId, null, dateB, dateE))
         .then(data => {
           vm.data = _.map(
             _.groupBy(makeData(data), 'targetGroup.articleGroupId'),
