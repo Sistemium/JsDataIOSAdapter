@@ -33,6 +33,18 @@
             { cacheResponse: false })(['Article'])
         },
 
+        statusLabel() {
+          switch (this.processing) {
+            case 'picked':
+              return 'В заказе';
+            case 'stock':
+            case 'draft':
+              return 'На складе';
+            default:
+              return 'Прочее';
+          }
+        },
+
       },
 
     });
