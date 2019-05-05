@@ -92,9 +92,9 @@
         if (barcodeType !== BARCODE_TYPE_WAREHOUSE_BOX) {
           return toastr.error('Это не штрих-код наклейки', code);
         }
-
-        return onWarehouseBoxScan(code);
       }
+
+      return onWarehouseBoxScan(code);
 
     }
 

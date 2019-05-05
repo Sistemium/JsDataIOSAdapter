@@ -1,0 +1,64 @@
+@import "variables";
+
+warehouse-box-info {
+
+  display: block;
+
+  .items {
+    margin-top: $margin-bottom-xs;
+    clear: both;
+  }
+
+  .title {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .barcode {
+      text-align: left;
+    }
+
+    .status {
+      display: inline-block;
+      text-align: right;
+      background: $light-gray;
+      border-radius: $border-radius;
+      color: $white;
+      padding: 1px 6px;
+    }
+
+  }
+
+
+  .list-group-item.article {
+
+    display: flex;
+
+    > .count {
+
+      min-width: 40px;
+      //border-left: solid 1px $border-gray;
+      text-align: center;
+      font-weight: bold;
+
+      &:after {
+        content: "б.";
+        font-weight: normal;
+        color: $gray;
+        margin-left: 3px;
+      }
+
+    }
+
+    warehouse-article {
+      flex: 1;
+
+      .middle {
+        flex-wrap: wrap;
+      }
+    }
+
+  }
+
+}

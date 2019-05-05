@@ -21,7 +21,7 @@
       },
     },
 
-    template: '<warehouse-box-view warehouse-box-id="vm.params.warehouseBoxId"></warehouse-box-view>',
+    template: '<warehouse-box-info warehouse-box-id="vm.params.warehouseBoxId"></warehouse-box-info>',
     controller: 'StateController as vm',
 
   };

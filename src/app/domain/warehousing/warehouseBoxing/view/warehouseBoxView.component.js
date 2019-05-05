@@ -45,12 +45,13 @@
 
         const { warehouseBoxId, createCode } = vm;
         const orderBy = [['timestamp', 'DESC']];
+        const filter = { currentBoxId: warehouseBoxId, orderBy };
 
         vm.lastBarcode = createCode;
 
         if (warehouseBoxId) {
           vm.rebindOne(WarehouseBox, warehouseBoxId, 'vm.stockBatch');
-          vm.rebindAll(WarehouseItem, { currentBoxId: warehouseBoxId, orderBy }, 'vm.stockBatchItems');
+          vm.rebindAll(WarehouseItem, filter, 'vm.stockBatchItems');
         } else {
           vm.stockBatch = newStockBatch(createCode);
         }
