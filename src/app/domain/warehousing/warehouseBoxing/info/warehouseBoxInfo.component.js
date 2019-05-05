@@ -37,11 +37,18 @@
       return WarehouseBoxing.findBoxById(warehouseBoxId)
         .then(warehouseBox => {
           vm.warehouseBox = warehouseBox;
-          return WarehouseBoxing.findBoxItems(warehouseBoxId);
+          return WarehouseBoxing.findBoxItems(warehouseBoxId)
+            .then(items => {
+              vm.items = items;
+              setArticles(items);
+              return warehouseBox;
+            });
         })
-        .then(items => {
-          vm.items = items;
-          return setArticles(items);
+        .then(warehouseBox => {
+          return WarehouseBoxing.findBoxPickingOwner(warehouseBox)
+            .then(pickingOrder => {
+              vm.pickingOrder = pickingOrder;
+            });
         });
 
     }

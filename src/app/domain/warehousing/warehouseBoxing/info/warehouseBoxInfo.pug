@@ -4,6 +4,10 @@
     .barcode 📦 {{ vm.warehouseBox.barcode }}
     .status {{ vm.warehouseBox.statusLabel() }}
 
+  .picking-order(ng-if="vm.pickingOrder")
+    .date {{ vm.pickingOrder.date | amUtc | amLocal | amDateFormat: 'DD.MM.YY' }}
+    .ndoc {{ vm.pickingOrder.ndoc }}
+
   .items
     .articles.list-group.stock-batch-items
       .list-group-item.article(ng-repeat="a in vm.articles track by a.id")

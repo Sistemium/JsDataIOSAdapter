@@ -6,6 +6,8 @@
   function WarehouseBoxing(Schema) {
 
     const { WarehouseBox, WarehouseItem, Article } = Schema.models();
+    const { PickingOrder } = Schema.models();
+
     const NOCACHE = { bypassCache: true, cacheResponse: false };
 
     return {
@@ -25,6 +27,13 @@
 
           });
       },
+
+      findBoxPickingOwner({ ownerXid: id }) {
+        if (!id) {
+          return;
+        }
+        return PickingOrder.find(id, NOCACHE);
+      }
 
     };
 
