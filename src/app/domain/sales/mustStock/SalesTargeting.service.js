@@ -157,7 +157,7 @@
           targets,
         }));
 
-        return _.orderBy(_.filter(res, 'targets'), ['outlet.name', 'outlet.address']);
+        return _.orderBy(res, ['outlet.name', 'outlet.address']);
 
       });
 
