@@ -3,7 +3,7 @@
   angular.module('Warehousing')
     .service('WarehouseBoxing', WarehouseBoxing);
 
-  function WarehouseBoxing(Schema, $q, SoundSynth) {
+  function WarehouseBoxing(Schema, $q, SoundSynth, Language) {
 
     const { WarehouseBox, WarehouseItem, Article } = Schema.models();
     const { PickingOrder } = Schema.models();
@@ -63,8 +63,23 @@
         SoundSynth.say('Неизвестный тип штрих-кода');
       },
 
-      replyBoxInfo(warehouseBox) {
-        SoundSynth.say(`Коробка ${warehouseBox.statusLabel()}`);
+      replyBoxInfo(warehouseBox, items) {
+
+        const pcs = items.length;
+        const byArticle = _.uniqBy(items, 'articleId');
+
+        const texts = [
+          byArticle.length > 1 ? 'Сборная ' : '',
+          `коробка ${_.lowerCase(warehouseBox.statusLabel())} `,
+          pcs ? `${Language.speakableBoxPcs({ pcs })}` : 'пустая',
+        ];
+
+        SoundSynth.say(texts.join(''));
+
+      },
+
+      replyNotConnected() {
+        SoundSynth.say('Ошибка связи');
       },
 
     };

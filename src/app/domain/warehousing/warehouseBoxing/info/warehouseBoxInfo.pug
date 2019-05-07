@@ -2,6 +2,7 @@
 
   .title
     .barcode 📦 {{ vm.warehouseBox.barcode }}
+    .count {{ vm.items.length | number }}
 
   .status
 
@@ -18,7 +19,8 @@
         .count {{ a.items.length }}
 
   .buttons
+
     button.btn.btn-warning.return(
       ng-click="vm.withdrawClick()"
-      ng-if="vm.warehouseBox.processing==='picked'"
+      ng-if="vm.warehouseBox.processing==='picked' && vm.items.length"
     ) Вернуть на склад

@@ -109,6 +109,10 @@
             return WarehouseBoxing.replyNotFound();
           }
 
+        })
+        .catch(e => {
+          console.error(e);
+          WarehouseBoxing.replyNotConnected();
         });
 
     }

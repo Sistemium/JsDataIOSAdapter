@@ -31,7 +31,7 @@
 
       withdrawClick() {
 
-        const text = `Вернуть на склад коробку ${vm.warehouseBox.barcode}?`;
+        const text = `Вернуть на склад ${vm.items.length}б. в коробке ${vm.warehouseBox.barcode}?`;
 
         ConfirmModal.show({ text })
           .then(() => {
@@ -54,6 +54,7 @@
             .then(items => {
               vm.items = items;
               setArticles(items);
+              WarehouseBoxing.replyBoxInfo(warehouseBox, items);
               return warehouseBox;
             });
         })
@@ -61,8 +62,11 @@
           return WarehouseBoxing.findBoxPickingOwner(warehouseBox)
             .then(pickingOrder => {
               vm.pickingOrder = pickingOrder;
-              return WarehouseBoxing.replyBoxInfo(warehouseBox);
             });
+        })
+        .catch(e => {
+          console.error(e);
+          WarehouseBoxing.replyNotConnected();
         });
 
     }
