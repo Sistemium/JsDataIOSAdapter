@@ -48,7 +48,13 @@
 
       function iosParser(data, entity) {
 
-        IosParser.parseArray(data, schema.model(entity))
+        const model = schema.model(entity);
+
+        if (_.isArray(data)) {
+          IosParser.parseArray(data, model)
+        } else {
+          IosParser.parseObject(data, model)
+        }
 
       }
 
@@ -118,7 +124,7 @@
       };
 
       ios = {
-        handler(){
+        handler() {
           return mock;
         }
       }
@@ -203,7 +209,7 @@
       return requestFromIOS('find',
         resource.endpoint,
         angular.isObject(id) && id.id || id,
-        angular.extend(options || {}, {oneObject: true})
+        angular.extend(options || {}, { oneObject: true })
       );
     };
 

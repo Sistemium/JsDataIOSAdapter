@@ -19,6 +19,8 @@
 
       const fieldTypes = model && model.fieldTypes;
 
+      if (!fieldTypes) return row;
+
       _.each(fieldTypes, (parser, field) => {
 
         let value = row[field];
