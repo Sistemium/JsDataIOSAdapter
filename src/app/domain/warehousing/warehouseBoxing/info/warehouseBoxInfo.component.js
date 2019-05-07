@@ -15,7 +15,7 @@
     });
 
 
-  function warehouseBoxInfoController(saControllerHelper, $scope, WarehouseBoxing) {
+  function warehouseBoxInfoController(saControllerHelper, $scope, WarehouseBoxing, ConfirmModal) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -27,6 +27,19 @@
 
         vm.setBusy(getData(warehouseBoxId))
 
+      },
+
+      withdrawClick() {
+
+        const text = `Вернуть на склад коробку ${vm.warehouseBox.barcode}?`;
+
+        ConfirmModal.show({ text })
+          .then(() => {
+            return WarehouseBoxing.moveBoxToStock(vm.warehouseBox, vm.items)
+              .then(() => vm.pickingOrder = null)
+              .catch(e => console.error(e));
+          })
+          .catch(_.noop);
       },
 
     });
@@ -48,6 +61,7 @@
           return WarehouseBoxing.findBoxPickingOwner(warehouseBox)
             .then(pickingOrder => {
               vm.pickingOrder = pickingOrder;
+              return WarehouseBoxing.replyBoxInfo(warehouseBox);
             });
         });
 

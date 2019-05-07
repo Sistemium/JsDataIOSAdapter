@@ -4,6 +4,12 @@ warehouse-box-info {
 
   display: block;
 
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .items {
     margin-top: $margin-bottom-xs;
     clear: both;
@@ -11,9 +17,9 @@ warehouse-box-info {
 
   .picking-order {
 
-    margin-top: $margin-bottom-xs;
     display: flex;
     justify-content: flex-end;
+    margin-left: $margin-bottom-xs;
 
     > * + * {
       margin-left: $margin-bottom-xs;
@@ -21,6 +27,11 @@ warehouse-box-info {
 
     .ndoc:before {
       content: "№";
+    }
+
+    .date:before {
+      content: "от";
+      margin-right: $margin-bottom-xs;
     }
 
   }
@@ -35,9 +46,17 @@ warehouse-box-info {
       text-align: left;
     }
 
-    .status {
+  }
+
+  .status {
+
+    margin-top: 3px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .processing {
       display: inline-block;
-      text-align: right;
       background: $light-gray;
       border-radius: $border-radius;
       color: $white;

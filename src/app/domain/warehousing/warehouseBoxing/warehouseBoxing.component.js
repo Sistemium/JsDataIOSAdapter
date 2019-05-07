@@ -15,11 +15,10 @@
   // const NOT_FOUND = 'NOT_FOUND';
 
   /** @ngInject */
-  function warehouseBoxingController(Schema, saControllerHelper, $scope,
-                                     toastr, $state, $q, BarCodeScanner, DEBUG) {
+  function warehouseBoxingController(Schema, saControllerHelper, $scope, WarehouseBoxing,
+                                     $state, $q, BarCodeScanner, DEBUG) {
 
     const {
-      WarehouseBox,
       BarCodeType
     } = Schema.models();
 
@@ -40,7 +39,7 @@
         if (warehouseBoxId) {
           loadBox((warehouseBoxId))
             .catch(() => {
-              toastr.error('Этой партии не существует', warehouseBoxId);
+              WarehouseBoxing.replyNotFound();
               goState();
             });
         }
@@ -90,7 +89,7 @@
 
       if (rootState()) {
         if (barcodeType !== BARCODE_TYPE_WAREHOUSE_BOX) {
-          return toastr.error('Это не штрих-код наклейки', code);
+          return WarehouseBoxing.replyInvalidType();
         }
       }
 
@@ -100,17 +99,14 @@
 
     function onWarehouseBoxScan(barcode) {
 
-      return WarehouseBox.findAll({ barcode }, { bypassCache: true })
-        .then(_.first)
+      return WarehouseBoxing.findBoxByBarcode(barcode)
         .then(box => {
 
           if (box) {
-            return loadBox(box.id)
-              .then(() => {
-                goState('.view', { warehouseBoxId: box.id });
-              })
+            return goState('.view', { warehouseBoxId: box.id });
           } else {
-            return goState('.create', { barcode });
+            // return goState('.create', { barcode });
+            return WarehouseBoxing.replyNotFound();
           }
 
         });
@@ -119,8 +115,7 @@
 
     function loadBox(id) {
 
-      return WarehouseBox.find(id)
-        .then(box => box.DSLoadRelations(['warehouseArticle', 'currentItems']));
+      return WarehouseBoxing.findBoxById(id);
 
     }
 

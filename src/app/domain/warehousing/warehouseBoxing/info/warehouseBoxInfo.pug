@@ -1,15 +1,24 @@
-.warehouse-box-info
+.warehouse-box-info(cg-busy="vm.cgBusy")
 
   .title
     .barcode 📦 {{ vm.warehouseBox.barcode }}
-    .status {{ vm.warehouseBox.statusLabel() }}
 
-  .picking-order(ng-if="vm.pickingOrder")
-    .date {{ vm.pickingOrder.date | amUtc | amLocal | amDateFormat: 'DD.MM.YY' }}
-    .ndoc {{ vm.pickingOrder.ndoc }}
+  .status
+
+    .processing {{ vm.warehouseBox.statusLabel() }}
+
+    .picking-order(ng-if="vm.pickingOrder")
+      .ndoc {{ vm.pickingOrder.ndoc }}
+      .date {{ vm.pickingOrder.date | amUtc | amLocal | amDateFormat: 'DD.MM.YY' }}
 
   .items
     .articles.list-group.stock-batch-items
       .list-group-item.article(ng-repeat="a in vm.articles track by a.id")
         warehouse-article(ng-model="a.article")
         .count {{ a.items.length }}
+
+  .buttons
+    button.btn.btn-warning.return(
+      ng-click="vm.withdrawClick()"
+      ng-if="vm.warehouseBox.processing==='picked'"
+    ) Вернуть на склад
