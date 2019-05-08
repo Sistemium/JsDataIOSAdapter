@@ -8,7 +8,12 @@
     const { WarehouseBox, WarehouseItem, Article } = Schema.models();
     const { PickingOrder } = Schema.models();
 
-    const NOCACHE = { bypassCache: true, cacheResponse: false, socketSource: 1 };
+    const NOCACHE = {
+      bypassCache: true,
+      cacheResponse: false,
+      socketSource: 1,
+      limit: 500,
+    };
 
     return {
 
