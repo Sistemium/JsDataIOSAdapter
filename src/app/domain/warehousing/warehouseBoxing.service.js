@@ -18,12 +18,23 @@
     return {
 
       findBoxById(id) {
+        const cached = WarehouseBox.get(id);
+        if (cached) {
+          WarehouseBox.eject(id);
+          return $q.resolve(cached);
+        }
         return WarehouseBox.find(id, NOCACHE);
       },
 
       findBoxByBarcode(barcode) {
         return WarehouseBox.findAll({ barcode }, NOCACHE)
-          .then(_.first);
+          .then(_.first)
+          .then(box => {
+            if (box) {
+              WarehouseBox.inject(box);
+            }
+            return box;
+          });
       },
 
       findItemByBarcode(barcode) {
@@ -32,6 +43,14 @@
       },
 
       findBoxItems(currentBoxId) {
+
+        const cached = WarehouseItem.filter({ currentBoxId });
+
+        if (cached.length) {
+          _.each(cached, item => WarehouseItem.eject(item));
+          return $q.resolve(cached);
+        }
+
         return WarehouseItem.findAll({ currentBoxId }, NOCACHE)
           .then(items => {
 
@@ -75,7 +94,9 @@
               warehouseItems,
               source: 'BoxCreator',
             })
-              .then(() => {
+              .then(operations => {
+
+                _.each(operations, o => WarehouseItemOperation.eject(o));
 
                 const ops = _.map(warehouseItems, item => {
                   _.assign(item, {
@@ -107,6 +128,12 @@
 
       goState(name, params) {
         return $state.go(`wh.warehouseBoxing${name || ''}`, params);
+      },
+
+      clearCache() {
+        WarehouseBox.ejectAll();
+        WarehouseItem.ejectAll();
+        WarehouseItemOperation.ejectAll();
       },
 
       /*

@@ -47,6 +47,10 @@
         $scope.$on(BARCODE_SCAN_EVENT, (e, { code, type }) => code && onScan(code, type));
       },
 
+      $onDestroy() {
+        WarehouseBoxing.clearCache();
+      },
+
       onScan,
 
     });
