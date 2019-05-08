@@ -175,6 +175,10 @@
         SoundSynth.say('Подождите');
       },
 
+      replyDone() {
+        SoundSynth.say('Готово');
+      },
+
       replyItemScan(num) {
         SoundSynth.say(`Это ${Language.speakableCountFemale(num)}`);
       },

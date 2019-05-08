@@ -35,9 +35,19 @@
 
         ConfirmModal.show({ text })
           .then(() => {
-            return WarehouseBoxing.moveBoxToStock(vm.warehouseBox, vm.items)
-              .then(() => vm.pickingOrder = null)
-              .catch(e => console.error(e));
+
+            const busy = WarehouseBoxing.moveBoxToStock(vm.warehouseBox, vm.items)
+              .then(() => {
+                vm.pickingOrder = null;
+                WarehouseBoxing.replyDone();
+              })
+              .catch(e => {
+                console.error(e);
+                WarehouseBoxing.replyNotConnected();
+              });
+
+            vm.setBusy(busy);
+
           })
           .catch(_.noop);
       },
