@@ -41,9 +41,9 @@
       },
     },
 
-    template: '<warehouse-box-view ' +
+    template: '<warehouse-box-create ' +
     'barcode="vm.params.barcode" warehouse-box-id="vm.warehouseBoxId">' +
-    '</warehouse-box-view>',
+    '</warehouse-box-create>',
     controller: 'StateController as vm',
 
   };

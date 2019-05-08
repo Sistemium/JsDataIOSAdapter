@@ -1,0 +1,25 @@
+.warehouse-box-create(cg-busy="vm.cgBusy")
+
+  .title
+    .barcode 📦 {{ vm.barcode }}
+    .count {{ vm.items.length | number }}
+
+  .items.list-group
+    .list-group-item(ng-repeat="a in vm.articles track by a.id")
+      warehouse-article(ng-model="a.article")
+      .count {{ a.items.length }}
+
+  .alert.alert-success(ng-if="!vm.items.length")
+    | Просканируйте товар, чтобы создать партию c наклейкой
+    strong &nbsp;{{ vm.barcode }}
+
+  .action-buttons
+
+    button.btn.btn-primary(
+      ng-click="vm.saveClick()"
+      ng-if="vm.items.length"
+    ) Сохранить
+
+    button.btn.btn-default(
+      ng-click="vm.cancelClick()"
+    ) Отмена

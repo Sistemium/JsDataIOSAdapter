@@ -3,10 +3,10 @@
   angular.module('Warehousing')
     .service('WarehouseBoxing', WarehouseBoxing);
 
-  function WarehouseBoxing(Schema, $q, SoundSynth, Language) {
+  function WarehouseBoxing(Schema, $q, SoundSynth, Language, $state) {
 
     const { WarehouseBox, WarehouseItem, Article } = Schema.models();
-    const { PickingOrder } = Schema.models();
+    const { PickingOrder, WarehouseItemOperation } = Schema.models();
 
     const NOCACHE = {
       bypassCache: true,
@@ -23,6 +23,11 @@
 
       findBoxByBarcode(barcode) {
         return WarehouseBox.findAll({ barcode }, NOCACHE)
+          .then(_.first);
+      },
+
+      findItemByBarcode(barcode) {
+        return WarehouseItem.findAllWithRelations({ barcode }, NOCACHE)('Article')
           .then(_.first);
       },
 
@@ -60,6 +65,58 @@
 
       },
 
+      createBoxWithItems(barcode, warehouseItems) {
+
+        return WarehouseBox.create({ barcode, processing: 'stock' })
+          .then(warehouseBox => {
+            return WarehouseItemOperation.meta.createForOwner({
+              ownerXid: null,
+              warehouseBox,
+              warehouseItems,
+              source: 'BoxCreator',
+            })
+              .then(() => {
+
+                const ops = _.map(warehouseItems, item => {
+                  _.assign(item, {
+                    currentBoxId: warehouseBox.id,
+                    processing: 'stock',
+                  });
+                  return item.DSCreate();
+                });
+
+                return $q.all(ops)
+                  .then(() => warehouseBox);
+
+              });
+          });
+
+      },
+
+      /*
+      Etc
+       */
+
+      goRootState() {
+        $state.go('wh.warehouseBoxing');
+      },
+
+      goBoxInfo(box) {
+        return this.goState('.view', { warehouseBoxId: box.id });
+      },
+
+      goState(name, params) {
+        return $state.go(`wh.warehouseBoxing${name || ''}`, params);
+      },
+
+      /*
+      Sounds
+       */
+
+      replyNewBox() {
+        SoundSynth.say('Новая коробка');
+      },
+
       replyNotFound() {
         SoundSynth.say('Неизвестный штрих-код');
       },
@@ -89,6 +146,14 @@
 
       replyBusy() {
         SoundSynth.say('Подождите');
+      },
+
+      replyItemScan(num) {
+        SoundSynth.say(`Это ${Language.speakableCountFemale(num)}`);
+      },
+
+      replyItemAgain(num) {
+        SoundSynth.say(`Это снова ${Language.speakableCountFemale(num)}`);
       },
 
     };

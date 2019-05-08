@@ -1,13 +1,18 @@
 @import "variables";
 
-warehouse-box-info {
+warehouse-box-info, warehouse-box-create {
 
   display: block;
 
-  .buttons {
+  min-height: 150px;
+
+  .action-buttons {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    button + button {
+      margin-top: $margin-bottom-xs;
+    }
   }
 
   .items {
@@ -81,7 +86,7 @@ warehouse-box-info {
 
   }
 
-  .list-group-item.article {
+  .list-group-item {
 
     display: flex;
 

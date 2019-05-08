@@ -25,7 +25,7 @@
     const {
       // BARCODE_TYPE_ARTICLE,
       BARCODE_TYPE_WAREHOUSE_BOX,
-      // BARCODE_TYPE_EXCISE_STAMP,
+      BARCODE_TYPE_EXCISE_STAMP,
     } = BarCodeType.meta.types;
 
     const { BARCODE_SCAN_EVENT } = BarCodeScanner;
@@ -40,7 +40,7 @@
           loadBox((warehouseBoxId))
             .catch(() => {
               WarehouseBoxing.replyNotFound();
-              goState();
+              WarehouseBoxing.goState();
             });
         }
 
@@ -70,17 +70,6 @@
 
     }
 
-    function rootState() {
-      return stateName() === 'root';
-    }
-
-
-    function goState(name, params) {
-
-      return $state.go(`wh.warehouseBoxing${name || ''}`, params);
-
-    }
-
     let scanBusy = false;
 
     function onScan(code, type = {}) {
@@ -89,22 +78,26 @@
         return WarehouseBoxing.replyBusy();
       }
 
-      scanBusy = true;
-
       const barcodeType = type.type;
 
       DEBUG('onScan', code, barcodeType);
 
-      if (rootState()) {
-        if (barcodeType !== BARCODE_TYPE_WAREHOUSE_BOX) {
-          return WarehouseBoxing.replyInvalidType();
-        }
+      if (stateName() === 'create' && barcodeType === BARCODE_TYPE_EXCISE_STAMP) {
+        return $scope.$broadcast('WarehouseBoxing.create.scan.stamp', code);
       }
 
-      return onWarehouseBoxScan(code)
-        .finally(() => {
-          scanBusy = false;
-        });
+      if (barcodeType === BARCODE_TYPE_WAREHOUSE_BOX) {
+
+        scanBusy = true;
+
+        return onWarehouseBoxScan(code)
+          .finally(() => {
+            scanBusy = false;
+          });
+
+      }
+
+      return WarehouseBoxing.replyInvalidType();
 
     }
 
@@ -114,10 +107,10 @@
         .then(box => {
 
           if (box) {
-            return goState('.view', { warehouseBoxId: box.id });
+            return WarehouseBoxing.goBoxInfo(box);
           } else {
-            // return goState('.create', { barcode });
-            return WarehouseBoxing.replyNotFound();
+            return WarehouseBoxing.goState('.create', { barcode });
+            // return WarehouseBoxing.replyNotFound();
           }
 
         })
