@@ -26,7 +26,7 @@
       $onInit() {
 
         WarehouseBoxing.replyNewBox();
-        $scope.$on('WarehouseBoxing.create.scan.stamp', (e, code) => onStampScan(code));
+        $scope.$on('WarehouseBoxing.scan.warehouseItem', (e, item) => onStampScan(item));
 
       },
 
@@ -49,43 +49,23 @@
 
     });
 
-    let scanBusy = false;
+    function onStampScan(warehouseItem) {
 
-    function onStampScan(barcode) {
-
-      const existing = _.findIndex(vm.items, { barcode }) + 1;
+      const existing = _.findIndex(vm.items, { id: warehouseItem.id }) + 1;
 
       if (existing) {
         return WarehouseBoxing.replyItemAgain(existing);
       }
 
-      if (scanBusy) {
-        return WarehouseBoxing.replyBusy();
+      if (vm.items.length && vm.items[0].articleId !== warehouseItem.articleId) {
+        return WarehouseBoxing.replyNotTheSameArticle();
       }
 
-      scanBusy = true;
+      vm.items.push(warehouseItem);
 
-      WarehouseBoxing.findItemByBarcode(barcode)
-        .then(warehouseItem => {
+      setArticles(vm.items);
 
-          if (!warehouseItem) {
-            return WarehouseBoxing.replyNotFound();
-          }
-
-          if (vm.items.length && vm.items[0].articleId !== warehouseItem.articleId) {
-            return WarehouseBoxing.replyNotTheSameArticle();
-          }
-
-          vm.items.push(warehouseItem);
-
-          setArticles(vm.items);
-
-          WarehouseBoxing.replyItemScan(vm.items.length);
-
-        })
-        .finally(() => {
-          scanBusy = false;
-        });
+      WarehouseBoxing.replyItemScan(vm.items.length);
 
     }
 

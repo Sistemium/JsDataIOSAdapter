@@ -69,13 +69,29 @@
         return PickingOrder.find(id, NOCACHE);
       },
 
+      removeItemsFromBox(warehouseBox, items) {
+
+        const moveItems = _.map(items, warehouseItem => {
+          _.assign(warehouseItem, {
+            currentBoxId: null,
+          });
+          return warehouseItem.DSCreate();
+        });
+
+        return $q.all(moveItems)
+
+      },
+
       moveBoxToStock(warehouseBox, items) {
 
         warehouseBox.processing = 'stock';
         warehouseBox.ownerXid = null;
 
         const moveItems = _.map(items, warehouseItem => {
-          warehouseItem.processing = 'stock';
+          _.assign(warehouseItem, {
+            processing: 'stock',
+            currentBoxId: warehouseBox.id,
+          });
           return warehouseItem.DSCreate();
         });
 

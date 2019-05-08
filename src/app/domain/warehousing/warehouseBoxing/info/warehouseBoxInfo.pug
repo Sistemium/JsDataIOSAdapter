@@ -16,11 +16,25 @@
     .articles.list-group.stock-batch-items
       .list-group-item.article(ng-repeat="a in vm.articles track by a.id")
         warehouse-article(ng-model="a.article")
-        .count {{ a.items.length }}
+        .totals
+          .confirmed(ng-if="a.confirmedItems.length") {{ a.confirmedItems.length }} из
+          .count {{ a.items.length | number:0 }}
+          .status(ng-if="vm.confirmedItems.length") {{ a.confirmationStatus }}
 
   .action-buttons
 
     button.btn.btn-warning.return(
       ng-click="vm.withdrawClick()"
+      ng-hide="vm.confirmedItems.length"
       ng-if="vm.warehouseBox.processing==='picked' && vm.items.length"
+    ) Вернуть на склад
+
+    button.btn.btn-default.return(
+      ng-click="vm.rescanClick()"
+      ng-if="vm.confirmedItems.length"
+    ) Отмена пересчета
+
+    button.btn.btn-warning.return(
+      ng-click="vm.confirmClick()"
+      ng-if="vm.confirmedItems.length"
     ) Вернуть на склад

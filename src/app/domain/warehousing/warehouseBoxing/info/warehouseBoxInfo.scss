@@ -10,8 +10,9 @@ warehouse-box-info, warehouse-box-create {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+
     button + button {
-      margin-top: $margin-bottom-xs;
+      margin-top: $margin-bottom-xs * 2;
     }
   }
 
@@ -72,9 +73,8 @@ warehouse-box-info, warehouse-box-create {
 
   .count {
 
-    min-width: 40px;
+    //min-width: 40px;
     //border-left: solid 1px $border-gray;
-    text-align: center;
     font-weight: bold;
 
     &:after {
@@ -90,9 +90,10 @@ warehouse-box-info, warehouse-box-create {
 
     display: flex;
 
-    > .count {
+    > .totals {
 
-      min-width: 40px;
+      text-align: center;
+      //min-width: 40px;
 
     }
 

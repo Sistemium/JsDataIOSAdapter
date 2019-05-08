@@ -86,22 +86,17 @@
 
       DEBUG('onScan', code, barcodeType);
 
-      if (stateName() === 'create' && barcodeType === BARCODE_TYPE_EXCISE_STAMP) {
-        return $scope.$broadcast('WarehouseBoxing.create.scan.stamp', code);
+      if (/create|view/.test(stateName()) && barcodeType === BARCODE_TYPE_EXCISE_STAMP) {
+        scanBusy = onStampScan(code);
+      } else if (barcodeType === BARCODE_TYPE_WAREHOUSE_BOX) {
+        scanBusy = onWarehouseBoxScan(code);
       }
 
-      if (barcodeType === BARCODE_TYPE_WAREHOUSE_BOX) {
-
-        scanBusy = true;
-
-        return onWarehouseBoxScan(code)
-          .finally(() => {
-            scanBusy = false;
-          });
-
+      if (!scanBusy) {
+        return WarehouseBoxing.replyInvalidType();
       }
 
-      return WarehouseBoxing.replyInvalidType();
+      return vm.setBusy(scanBusy.finally(() => scanBusy = false));
 
     }
 
@@ -114,13 +109,27 @@
             return WarehouseBoxing.goBoxInfo(box);
           } else {
             return WarehouseBoxing.goState('.create', { barcode });
-            // return WarehouseBoxing.replyNotFound();
           }
 
         })
         .catch(e => {
           console.error(e);
           WarehouseBoxing.replyNotConnected();
+        });
+
+    }
+
+    function onStampScan(barcode) {
+
+      return WarehouseBoxing.findItemByBarcode(barcode)
+        .then(warehouseItem => {
+
+          if (!warehouseItem) {
+            return WarehouseBoxing.replyNotFound();
+          }
+
+          $scope.$broadcast('WarehouseBoxing.scan.warehouseItem', warehouseItem);
+
         });
 
     }
