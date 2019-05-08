@@ -72,6 +72,10 @@
             return WarehouseBoxing.replyNotFound();
           }
 
+          if (vm.items.length && vm.items[0].articleId !== warehouseItem.articleId) {
+            return WarehouseBoxing.replyNotTheSameArticle();
+          }
+
           vm.items.push(warehouseItem);
 
           setArticles(vm.items);

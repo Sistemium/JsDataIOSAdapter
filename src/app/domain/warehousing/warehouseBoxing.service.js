@@ -152,6 +152,10 @@
         SoundSynth.say('Неизвестный тип штрих-кода');
       },
 
+      replyNotTheSameArticle() {
+        SoundSynth.say('Это другой товар');
+      },
+
       replyBoxInfo(warehouseBox, items) {
 
         const pcs = items.length;
