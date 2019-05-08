@@ -81,7 +81,15 @@
 
     }
 
+    let scanBusy = false;
+
     function onScan(code, type = {}) {
+
+      if (scanBusy) {
+        return WarehouseBoxing.replyBusy();
+      }
+
+      scanBusy = true;
 
       const barcodeType = type.type;
 
@@ -93,7 +101,10 @@
         }
       }
 
-      return onWarehouseBoxScan(code);
+      return onWarehouseBoxScan(code)
+        .finally(() => {
+          scanBusy = false;
+        });
 
     }
 

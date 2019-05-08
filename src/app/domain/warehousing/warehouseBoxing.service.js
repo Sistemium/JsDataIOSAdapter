@@ -87,6 +87,10 @@
         SoundSynth.say('Ошибка связи');
       },
 
+      replyBusy() {
+        SoundSynth.say('Подождите');
+      },
+
     };
 
   }
