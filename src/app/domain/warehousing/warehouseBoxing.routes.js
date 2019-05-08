@@ -11,7 +11,7 @@
     url: '/view/:warehouseBoxId',
 
     data: {
-      title: 'Товарная партия',
+      title: 'Коробка',
       watch: {
         ['vm.params.warehouseBoxId'](warehouseBoxId, { $state }) {
           if (warehouseBoxId) {
@@ -31,7 +31,7 @@
     url: '/create?barcode',
 
     data: {
-      title: 'Новая партия',
+      title: 'Новая коробка',
       watch: {
         ['vm.warehouseBoxId'](warehouseBoxId, { $state }) {
           if (warehouseBoxId) {
@@ -55,7 +55,7 @@
 
     data: {
       rootState: 'wh.warehouseBoxing',
-      title: 'Товарные партии',
+      title: 'Коробки',
       barcodeScanner,
     },
 
