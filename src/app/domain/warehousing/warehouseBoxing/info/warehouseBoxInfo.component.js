@@ -25,9 +25,9 @@
 
       $onInit() {
 
-        const { warehouseBoxId } = vm;
+        const { warehouseBoxId } = this;
 
-        vm.setBusy(getData(warehouseBoxId)
+        this.setBusy(getData(warehouseBoxId)
           .then(() => {
             $scope.$on('WarehouseBoxing.scan.warehouseItem', (e, item) => onStampScan(item));
           }));
@@ -35,60 +35,62 @@
       },
 
       withdrawClick() {
-
-        const text = `Вернуть на склад ${vm.items.length}б. в коробке ${vm.warehouseBox.barcode}?`;
-
-        ConfirmModal.show({ text })
-          .then(() => {
-
-            const busy = WarehouseBoxing.moveBoxToStock(vm.warehouseBox, vm.items)
-              .then(() => {
-                vm.pickingOrder = null;
-                WarehouseBoxing.replyDone();
-              })
-              .catch(e => {
-                console.error(e);
-                WarehouseBoxing.replyNotConnected();
-              });
-
-            vm.setBusy(busy);
-
-          })
-          .catch(_.noop);
+        askAndSaveBox(this.items);
       },
 
       rescanClick() {
-        vm.setBusy(getData(vm.warehouseBox.id));
+        vm.setBusy(getData(this.warehouseBox.id));
       },
 
       confirmClick() {
-
-        const text = [
-          `Подтвердить наличие на складе ${vm.confirmedItems.length}б.`,
-          `в коробке ${vm.warehouseBox.barcode}?`
-        ].join(' ');
-
-        ConfirmModal.show({ text })
-          .then(() => {
-
-            const busy = WarehouseBoxing.moveBoxToStock(vm.warehouseBox, vm.confirmedItems)
-              .then(() => WarehouseBoxing.removeItemsFromBox(vm.warehouseBox, vm.items))
-              .then(() => {
-                WarehouseBoxing.replyDone();
-                return getData(vm.warehouseBox.id);
-              })
-              .catch(e => {
-                console.error(e);
-                WarehouseBoxing.replyNotConnected();
-              });
-
-            vm.setBusy(busy);
-
-          })
-          .catch(_.noop);
+        askAndSaveBox(this.confirmedItems, this.items);
       },
 
     });
+
+    function askAndSaveBox(boxItems, removedItems = []) {
+
+      const { warehouseBox } = vm;
+
+      const verb = warehouseBox.processing === 'picked'
+        ? 'Вернуть на склад' : 'Подтвердить наличие на складе';
+
+      const text = _.filter([
+        `${verb} ${boxItems.length}б.`,
+        removedItems.length ? `и удалить ${removedItems.length}б.` : '',
+        `в коробке ${warehouseBox.barcode}?`
+      ]).join(' ');
+
+      ConfirmModal.show({ text })
+        .then(() => {
+
+          const busy = saveBox(boxItems, removedItems)
+            .then(() => {
+              WarehouseBoxing.replyDone();
+              return getData(warehouseBox.id);
+            })
+            .catch(e => {
+              console.error(e);
+              WarehouseBoxing.replyNotConnected();
+            });
+
+          vm.setBusy(busy);
+
+        })
+        .catch(_.noop);
+
+    }
+
+    function saveBox(boxItems, removedItems = []) {
+
+      return WarehouseBoxing.moveBoxToStock(vm.warehouseBox, boxItems)
+        .then(() => {
+          if (removedItems.length) {
+            return WarehouseBoxing.removeItemsFromBox(vm.warehouseBox, removedItems);
+          }
+        });
+
+    }
 
     function onStampScan(warehouseItem) {
 

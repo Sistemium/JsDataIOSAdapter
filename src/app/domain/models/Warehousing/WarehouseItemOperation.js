@@ -69,7 +69,7 @@
             boxToId: warehouseBox.id,
             boxFromId: item.currentBoxId,
           }, { cacheResponse: false }).then(() => {
-            item.processing = 'picked';
+            item.processing = ownerXid ? 'picked' : 'stock';
             item.currentBoxId = warehouseBox.id;
             return item.DSCreate({ cacheResponse: false });
           })));

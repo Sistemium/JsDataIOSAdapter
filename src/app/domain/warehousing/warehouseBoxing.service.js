@@ -87,46 +87,31 @@
         warehouseBox.processing = 'stock';
         warehouseBox.ownerXid = null;
 
-        const moveItems = _.map(items, warehouseItem => {
-          _.assign(warehouseItem, {
-            processing: 'stock',
-            currentBoxId: warehouseBox.id,
-          });
-          return warehouseItem.DSCreate();
-        });
-
-        return $q.all(moveItems)
-          .then(() => warehouseBox.DSCreate());
+        return this.saveBoxWithItems(warehouseBox, items);
 
       },
 
       createBoxWithItems(barcode, warehouseItems) {
 
-        return WarehouseBox.create({ barcode, processing: 'stock' })
-          .then(warehouseBox => {
-            return WarehouseItemOperation.meta.createForOwner({
-              ownerXid: null,
-              warehouseBox,
-              warehouseItems,
-              source: 'BoxCreator',
-            })
-              .then(operations => {
+        const box = WarehouseBox.createInstance({
+          barcode,
+          processing: 'stock'
+        });
 
-                _.each(operations, o => WarehouseItemOperation.eject(o));
+        return this.saveBoxWithItems(box, warehouseItems);
 
-                const ops = _.map(warehouseItems, item => {
-                  _.assign(item, {
-                    currentBoxId: warehouseBox.id,
-                    processing: 'stock',
-                  });
-                  return item.DSCreate();
-                });
+      },
 
-                return $q.all(ops)
-                  .then(() => warehouseBox);
+      saveBoxWithItems(warehouseBox, warehouseItems) {
 
-              });
-          });
+        return warehouseBox.DSCreate()
+          .then(() => WarehouseItemOperation.meta.createForOwner({
+            ownerXid: null,
+            warehouseBox,
+            warehouseItems,
+            source: 'BoxCreator',
+          }))
+          .then(() => warehouseBox);
 
       },
 
