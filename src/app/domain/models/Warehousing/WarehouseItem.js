@@ -2,6 +2,8 @@
 
   angular.module('Models').run((Schema, $q) => {
 
+    const LABEL_RE = /.{3}(\d{3})(\d{8}).*/;
+
     Schema.register({
 
       name: 'WarehouseItem',
@@ -40,6 +42,13 @@
 
           return WarehouseBox.find(currentBoxId, options);
 
+        },
+
+        label() {
+          const { barcode } = this;
+          if (!barcode) return '';
+          const [, l1, l2] = barcode.match(LABEL_RE) || [];
+          return `${l1}-${l2}`;
         },
 
       },
