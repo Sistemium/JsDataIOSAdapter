@@ -11,14 +11,27 @@ warehouse-box-info, warehouse-box-create {
     flex-direction: column;
     align-items: stretch;
 
-    button + button {
-      margin-top: $margin-bottom-xs * 2;
+    button {
+      margin-top: $margin-bottom-xs;
     }
   }
 
   .items {
     margin-top: $margin-bottom-xs;
     clear: both;
+    .list-group {
+      margin-bottom: 0;
+    }
+  }
+
+  .item-info {
+    margin-top: $margin-bottom-xs;
+    border: solid 1px $border-gray;
+    border-radius: $border-radius;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .picking-order {

@@ -22,6 +22,7 @@
 
       articles: [],
       items: [],
+      currentItem: null,
 
       $onInit() {
 
@@ -47,11 +48,20 @@
 
       },
 
+      removeItemClick() {
+        const { currentItem, items } = this;
+        _.remove(items, { id: currentItem.id });
+        this.currentItem = null;
+        setArticles(items);
+      },
+
     });
 
     function onStampScan(warehouseItem) {
 
       const existing = _.findIndex(vm.items, { id: warehouseItem.id }) + 1;
+
+      vm.currentItem = warehouseItem;
 
       if (existing) {
         return WarehouseBoxing.replyItemAgain(existing);

@@ -12,6 +12,10 @@
       .ndoc {{ vm.pickingOrder.ndoc }}
       .date {{ vm.pickingOrder.date | amUtc | amLocal | amDateFormat: 'DD.MM.YY' }}
 
+  .item-info(ng-if="vm.currentItem")
+    warehouse-item-info(warehouse-item="vm.currentItem")
+    a(href ng-click="vm.removeItemClick()") Убрать
+
   .items
     .articles.list-group.stock-batch-items
       .list-group-item.article(ng-repeat="a in vm.articles track by a.id")

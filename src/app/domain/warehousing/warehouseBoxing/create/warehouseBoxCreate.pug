@@ -4,6 +4,10 @@
     .barcode 📦 {{ vm.barcode }}
     .count {{ vm.items.length | number }}
 
+  .item-info(ng-if="vm.currentItem")
+    warehouse-item-info(warehouse-item="vm.currentItem")
+    a(href ng-click="vm.removeItemClick()") Убрать
+
   .items.list-group
     .list-group-item(ng-repeat="a in vm.articles track by a.id")
       warehouse-article(ng-model="a.article")

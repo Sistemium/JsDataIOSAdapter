@@ -22,6 +22,7 @@
     vm.use({
 
       confirmedItems: [],
+      currentItem: null,
 
       $onInit() {
 
@@ -45,6 +46,16 @@
 
       confirmClick() {
         askAndSaveBox(this.confirmedItems, this.items);
+      },
+
+      removeItemClick() {
+        const { currentItem, items, confirmedItems } = this;
+        _.remove(confirmedItems, { id: currentItem.id });
+        if (currentItem.currentBoxId === this.warehouseBoxId) {
+          items.push(currentItem);
+        }
+        this.currentItem = null;
+        setArticles(items, confirmedItems);
       },
 
     });
@@ -94,6 +105,8 @@
     }
 
     function onStampScan(warehouseItem) {
+
+      vm.currentItem = warehouseItem;
 
       const existing = _.findIndex(vm.confirmedItems, { id: warehouseItem.id }) + 1;
 
