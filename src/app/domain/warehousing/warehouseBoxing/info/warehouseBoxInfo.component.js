@@ -27,10 +27,10 @@
 
         const { warehouseBoxId } = this;
 
-        this.setBusy(getData(warehouseBoxId)
+        this.setBusy(getData(warehouseBoxId))
           .then(() => {
-            $scope.$on('WarehouseBoxing.scan.warehouseItem', (e, item) => onStampScan(item));
-          }));
+            $scope.$watch(WarehouseBoxing.popWarehouseItem, item => item && onStampScan(item));
+          });
 
       },
 
@@ -39,6 +39,7 @@
       },
 
       rescanClick() {
+        vm.confirmedItems = [];
         vm.setBusy(getData(this.warehouseBox.id));
       },
 
@@ -116,7 +117,6 @@
           return WarehouseBoxing.findBoxItems(warehouseBoxId)
             .then(items => {
               vm.items = items;
-              vm.confirmedItems = [];
               setArticles(items);
               WarehouseBoxing.replyBoxInfo(warehouseBox, items);
               return warehouseBox;

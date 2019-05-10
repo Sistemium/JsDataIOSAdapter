@@ -15,6 +15,8 @@
       limit: 500,
     };
 
+    let warehouseItem;
+
     return {
 
       findBoxById(id) {
@@ -137,9 +139,23 @@
         WarehouseItemOperation.ejectAll();
       },
 
+      pushWarehouseItem(item) {
+        warehouseItem = item;
+      },
+
+      popWarehouseItem() {
+        const res = warehouseItem;
+        warehouseItem = null;
+        return res;
+      },
+
       /*
       Sounds
        */
+
+      replyNoBox() {
+        SoundSynth.say('Эта марка без коробки');
+      },
 
       replyNewBox() {
         SoundSynth.say('Новая коробка');

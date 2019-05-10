@@ -26,7 +26,7 @@
       $onInit() {
 
         WarehouseBoxing.replyNewBox();
-        $scope.$on('WarehouseBoxing.scan.warehouseItem', (e, item) => onStampScan(item));
+        $scope.$watch(WarehouseBoxing.popWarehouseItem, item => item && onStampScan(item));
 
       },
 

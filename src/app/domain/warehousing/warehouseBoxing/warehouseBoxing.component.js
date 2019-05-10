@@ -37,7 +37,7 @@
         const { warehouseBoxId } = $state.params;
 
         if (warehouseBoxId) {
-          loadBox((warehouseBoxId))
+          WarehouseBoxing.findBoxById(warehouseBoxId)
             .catch(() => {
               WarehouseBoxing.replyNotFound();
               WarehouseBoxing.goState();
@@ -86,14 +86,15 @@
 
       DEBUG('onScan', code, barcodeType);
 
-      if (/create|view/.test(stateName()) && barcodeType === BARCODE_TYPE_EXCISE_STAMP) {
-        scanBusy = onStampScan(code);
-      } else if (barcodeType === BARCODE_TYPE_WAREHOUSE_BOX) {
-        scanBusy = onWarehouseBoxScan(code);
-      }
-
-      if (!scanBusy) {
-        return WarehouseBoxing.replyInvalidType();
+      switch (barcodeType) {
+        case BARCODE_TYPE_EXCISE_STAMP:
+          scanBusy = onStampScan(code);
+          break;
+        case BARCODE_TYPE_WAREHOUSE_BOX:
+          scanBusy = onWarehouseBoxScan(code);
+          break;
+        default:
+          return WarehouseBoxing.replyInvalidType();
       }
 
       return vm.setBusy(scanBusy.finally(() => scanBusy = false));
@@ -128,15 +129,22 @@
             return WarehouseBoxing.replyNotFound();
           }
 
-          $scope.$broadcast('WarehouseBoxing.scan.warehouseItem', warehouseItem);
+          if (stateName() === 'root') {
+
+            const { currentBoxId } = warehouseItem;
+
+            if (!currentBoxId) {
+              return WarehouseBoxing.replyNoBox();
+            }
+
+            return WarehouseBoxing.goBoxInfo({ id: currentBoxId })
+              .then(() => WarehouseBoxing.pushWarehouseItem(warehouseItem));
+
+          }
+
+          return WarehouseBoxing.pushWarehouseItem(warehouseItem);
 
         });
-
-    }
-
-    function loadBox(id) {
-
-      return WarehouseBoxing.findBoxById(id);
 
     }
 
