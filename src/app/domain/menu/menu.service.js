@@ -21,7 +21,7 @@
       state: 'picker',
       needRoles: PICKING_ROLES
     }, {
-      title: 'Партии',
+      title: 'Коробки',
       state: 'wh.warehouseBoxing',
       needRoles: PICKING_ROLES
     }, {
