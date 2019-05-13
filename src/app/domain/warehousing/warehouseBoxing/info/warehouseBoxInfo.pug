@@ -41,4 +41,4 @@
     button.btn.btn-warning.return(
       ng-click="vm.confirmClick()"
       ng-if="vm.confirmedItems.length"
-    ) Вернуть на склад
+    ) {{ vm.confirmLabel() }}

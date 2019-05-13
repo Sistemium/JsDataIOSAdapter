@@ -23,6 +23,7 @@
 
       confirmedItems: [],
       currentItem: null,
+      erroredItems: [],
 
       $onInit() {
 
@@ -57,6 +58,14 @@
         this.currentItem = null;
         setArticles(items, confirmedItems);
       },
+
+      confirmLabel() {
+        return this.boxOnStock() ? 'Подтвердить на складе' : 'Вернуть на склад';
+      },
+
+      boxOnStock() {
+        return vm.warehouseBox.processing === 'stock';
+      }
 
     });
 
@@ -168,6 +177,12 @@
           article: articleItems[0].article,
           confirmationStatus: confirmed ? '✅' : '⚠️',
         };
+      });
+
+      const { processing } = vm.warehouseBox;
+
+      vm.erroredItems = _.filter(items, item => {
+        return processing === 'picked' && item.processing !== 'picked';
       });
 
     }

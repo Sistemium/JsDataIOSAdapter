@@ -113,7 +113,10 @@
             warehouseItems,
             source: 'BoxCreator',
           }))
-          .then(() => warehouseBox);
+          .then(items => {
+            WarehouseItem.inject(items);
+            return warehouseBox;
+          });
 
       },
 
