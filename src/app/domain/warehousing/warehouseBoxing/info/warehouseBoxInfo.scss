@@ -24,6 +24,23 @@ warehouse-box-info, warehouse-box-create {
     }
   }
 
+  .errored-items {
+
+    margin-top: $margin-bottom-xs;
+
+    label {
+      margin: 0 $margin-bottom-xs-minus 0 0;
+      font-weight: normal;
+      &:before {
+        content: "⚠️";
+        margin-right: $margin-bottom-xs-minus;
+      }
+      &:after {
+        content: ":";
+      }
+    }
+  }
+
   .item-info {
     margin-top: $margin-bottom-xs;
     border: solid 1px $border-gray;

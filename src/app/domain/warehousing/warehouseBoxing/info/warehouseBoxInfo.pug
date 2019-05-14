@@ -14,7 +14,11 @@
 
   .item-info(ng-if="vm.currentItem")
     warehouse-item-info(warehouse-item="vm.currentItem")
-    a(href ng-click="vm.removeItemClick()") Убрать
+    a(href ng-click="vm.removeItemClick()") Отмена
+
+  .errored-items(ng-if="vm.erroredItems.length")
+    label Ошибки в марках
+    strong {{ vm.erroredItems.length }}
 
   .items
     .articles.list-group.stock-batch-items
@@ -39,6 +43,12 @@
     ) Отмена пересчета
 
     button.btn.btn-warning.return(
-      ng-click="vm.confirmClick()"
+      ng-click="vm.confirmWithdrawClick()"
       ng-if="vm.confirmedItems.length"
     ) {{ vm.confirmLabel() }}
+
+    button.btn.btn-primary.return(
+      ng-click="vm.confirmClick()"
+      ng-if="vm.boxIsPicked()"
+      ng-show="vm.confirmedItems.length"
+    ) Подтвердить в заказе

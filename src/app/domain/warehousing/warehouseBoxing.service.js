@@ -84,10 +84,13 @@
 
       },
 
-      moveBoxToStock(warehouseBox, items) {
+      moveBoxToStock(warehouseBox, items, processing = 'stock') {
 
-        warehouseBox.processing = 'stock';
-        warehouseBox.ownerXid = null;
+        warehouseBox.processing = processing;
+
+        if (processing === 'stock') {
+          warehouseBox.ownerXid = null;
+        }
 
         return this.saveBoxWithItems(warehouseBox, items);
 
@@ -97,7 +100,8 @@
 
         const box = WarehouseBox.createInstance({
           barcode,
-          processing: 'stock'
+          processing: 'stock',
+          ownerXid: null,
         });
 
         return this.saveBoxWithItems(box, warehouseItems);
@@ -107,16 +111,16 @@
       saveBoxWithItems(warehouseBox, warehouseItems) {
 
         return warehouseBox.DSCreate()
-          .then(() => WarehouseItemOperation.meta.createForOwner({
-            ownerXid: null,
-            warehouseBox,
+          .then(wb => WarehouseItemOperation.meta.createForOwner({
+            ownerXid: wb.ownerXid,
+            warehouseBox: wb,
             warehouseItems,
             source: 'BoxCreator',
-          }))
-          .then(items => {
-            WarehouseItem.inject(items);
-            return warehouseBox;
-          });
+          })
+            .then(items => {
+              WarehouseItem.inject(items);
+              return wb;
+            }));
 
       },
 

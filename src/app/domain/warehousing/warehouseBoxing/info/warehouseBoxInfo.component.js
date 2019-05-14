@@ -45,8 +45,12 @@
         vm.setBusy(getData(this.warehouseBox.id));
       },
 
-      confirmClick() {
+      confirmWithdrawClick() {
         askAndSaveBox(this.confirmedItems, this.items);
+      },
+
+      confirmClick() {
+        askAndSaveBox(this.confirmedItems, this.items, vm.warehouseBox.processing);
       },
 
       removeItemClick() {
@@ -64,17 +68,22 @@
       },
 
       boxOnStock() {
-        return vm.warehouseBox.processing === 'stock';
-      }
+        return vm.warehouseBox && vm.warehouseBox.processing === 'stock';
+      },
+
+      boxIsPicked() {
+        return vm.warehouseBox && vm.warehouseBox.processing === 'picked';
+      },
 
     });
 
-    function askAndSaveBox(boxItems, removedItems = []) {
+    function askAndSaveBox(boxItems, removedItems = [], processing = 'stock') {
 
       const { warehouseBox } = vm;
+      const targetStateLabel = processing === 'stock' ? 'наличие на складе' : 'в заказе';
 
-      const verb = warehouseBox.processing === 'picked'
-        ? 'Вернуть на склад' : 'Подтвердить наличие на складе';
+      const verb = warehouseBox.processing === processing
+        ? `Подтвердить ${targetStateLabel}` : 'Вернуть на склад';
 
       const text = _.filter([
         `${verb} ${boxItems.length}б.`,
@@ -85,7 +94,7 @@
       ConfirmModal.show({ text })
         .then(() => {
 
-          const busy = saveBox(boxItems, removedItems)
+          const busy = saveBox()
             .then(() => {
               WarehouseBoxing.replyDone();
               return getData(warehouseBox.id);
@@ -100,18 +109,19 @@
         })
         .catch(_.noop);
 
+      function saveBox() {
+
+        return WarehouseBoxing.moveBoxToStock(vm.warehouseBox, boxItems, processing)
+          .then(() => {
+            if (removedItems.length) {
+              return WarehouseBoxing.removeItemsFromBox(vm.warehouseBox, removedItems);
+            }
+          });
+
+      }
+
     }
 
-    function saveBox(boxItems, removedItems = []) {
-
-      return WarehouseBoxing.moveBoxToStock(vm.warehouseBox, boxItems)
-        .then(() => {
-          if (removedItems.length) {
-            return WarehouseBoxing.removeItemsFromBox(vm.warehouseBox, removedItems);
-          }
-        });
-
-    }
 
     function onStampScan(warehouseItem) {
 
@@ -135,7 +145,11 @@
 
       return WarehouseBoxing.findBoxById(warehouseBoxId)
         .then(warehouseBox => {
+
           vm.warehouseBox = warehouseBox;
+          vm.currentItem = null;
+          vm.confirmedItems = [];
+
           return WarehouseBoxing.findBoxItems(warehouseBoxId)
             .then(items => {
               vm.items = items;
@@ -143,6 +157,7 @@
               WarehouseBoxing.replyBoxInfo(warehouseBox, items);
               return warehouseBox;
             });
+
         })
         .then(warehouseBox => {
           return WarehouseBoxing.findBoxPickingOwner(warehouseBox)
