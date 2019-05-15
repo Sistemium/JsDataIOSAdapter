@@ -245,7 +245,7 @@
 
         .then(articles => {
           if (articles.length > 1) {
-            return new Error(`Больше одного товара со штрих-кодом: [${code}]`);
+            return $q.reject(new Error(`Больше одного товара со штрих-кодом: [${code}]`));
           }
           return _.first(articles);
         })
