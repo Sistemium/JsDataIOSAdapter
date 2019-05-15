@@ -51,11 +51,22 @@ warehouse-box-info, warehouse-box-create {
     justify-content: space-between;
   }
 
+  .status .picking-order {
+    margin-left: $margin-bottom-xs;
+  }
+
+  .box-orders {
+    margin-top: $margin-bottom-xs;
+    .actions {
+      flex: 1;
+      text-align: right;
+    }
+  }
+
   .picking-order {
 
     display: flex;
-    justify-content: flex-end;
-    margin-left: $margin-bottom-xs;
+    justify-content: flex-start;
 
     > * + * {
       margin-left: $margin-bottom-xs;
@@ -88,7 +99,7 @@ warehouse-box-info, warehouse-box-create {
 
     margin-top: 3px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
 
     .processing {

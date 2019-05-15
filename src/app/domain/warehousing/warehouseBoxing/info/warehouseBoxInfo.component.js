@@ -15,7 +15,8 @@
     });
 
 
-  function warehouseBoxInfoController(saControllerHelper, $scope, WarehouseBoxing, ConfirmModal) {
+  function warehouseBoxInfoController(saControllerHelper, $scope, WarehouseBoxing, ConfirmModal,
+                                      moment) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -61,6 +62,29 @@
         }
         this.currentItem = null;
         setArticles(items, confirmedItems);
+      },
+
+      boxOrderClick(pickingOrder) {
+
+        const { barcode } = this.warehouseBox;
+        const { date, ndoc } = pickingOrder;
+
+        const text = [
+          `Подтвердить наличие коробки ${barcode}`,
+          `в требовании №${ndoc} от ${date}`,
+        ].join(' ');
+
+        ConfirmModal.show({ text })
+          .then(() => {
+            this.warehouseBox.ownerXid = pickingOrder.id;
+            return WarehouseBoxing.moveBoxToStock(this.warehouseBox, [], 'picked');
+          })
+          .then(setPickingOrder)
+          .then(() => {
+            WarehouseBoxing.replyDone();
+            setArticles(vm.items);
+          })
+          .catch(_.noop);
       },
 
       confirmLabel() {
@@ -159,15 +183,30 @@
             });
 
         })
-        .then(warehouseBox => {
-          return WarehouseBoxing.findBoxPickingOwner(warehouseBox)
-            .then(pickingOrder => {
-              vm.pickingOrder = pickingOrder;
-            });
-        })
+        .then(setPickingOrder)
         .catch(e => {
           console.error(e);
           WarehouseBoxing.replyNotConnected();
+        });
+
+    }
+
+    function setPickingOrder(warehouseBox) {
+
+      return WarehouseBoxing.findBoxPickingOwner(warehouseBox)
+        .then(pickingOrder => {
+
+          vm.boxOrders = [];
+          vm.pickingOrder = pickingOrder;
+
+          if (!vm.pickingOrder) {
+            return WarehouseBoxing.findBoxOrders(warehouseBox)
+              .then(boxOrders => {
+                const today = moment().format();
+                vm.boxOrders = _.filter(boxOrders, ({ date }) => date >= today);
+              });
+          }
+
         });
 
     }

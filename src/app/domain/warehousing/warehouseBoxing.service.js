@@ -7,6 +7,7 @@
 
     const { WarehouseBox, WarehouseItem, Article } = Schema.models();
     const { PickingOrder, WarehouseItemOperation } = Schema.models();
+    const { PickingOrderPosition, PickingOrderPositionPicked } = Schema.models();
 
     const NOCACHE = {
       bypassCache: true,
@@ -69,6 +70,22 @@
           return $q.resolve(null);
         }
         return PickingOrder.find(id, NOCACHE);
+      },
+
+      findBoxOrders(warehouseBox) {
+        const { id: warehouseBoxId } = warehouseBox;
+        if (!warehouseBoxId) {
+          return $q.resolve([]);
+        }
+        return PickingOrderPositionPicked.findAll({ warehouseBoxId }, NOCACHE)
+          .then(picked => {
+            const ids = _.map(picked, 'pickingOrderPositionId');
+            return PickingOrderPosition.findByMany(ids, NOCACHE);
+          })
+          .then(positions => {
+            const ids = _.map(positions, 'pickingOrderId');
+            return PickingOrder.findByMany(ids, NOCACHE);
+          });
       },
 
       removeItemsFromBox(warehouseBox, items) {

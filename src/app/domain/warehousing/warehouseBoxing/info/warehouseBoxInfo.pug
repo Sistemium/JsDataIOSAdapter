@@ -10,7 +10,7 @@
 
     .picking-order(ng-if="vm.pickingOrder")
       .ndoc {{ vm.pickingOrder.ndoc }}
-      .date {{ vm.pickingOrder.date | amUtc | amLocal | amDateFormat: 'DD.MM.YY' }}
+      .date {{ vm.pickingOrder.date | amDateFormat: 'DD.MM.YY' }}
 
   .item-info(ng-if="vm.currentItem")
     warehouse-item-info(warehouse-item="vm.currentItem")
@@ -19,6 +19,15 @@
   .errored-items(ng-if="vm.erroredItems.length")
     label Ошибки в марках
     strong {{ vm.erroredItems.length }}
+
+  .box-orders.list-group(ng-if="vm.boxOrders.length")
+    .list-group-item.list-group-item-warning
+      strong Требования с ошибкой
+    .list-group-item.picking-order(ng-repeat="order in vm.boxOrders track by order.id")
+      .ndoc {{ order.ndoc }}
+      .date {{ order.date | amDateFormat: 'DD.MM.YY' }}
+      .actions
+        a(href ng-click="vm.boxOrderClick(order)") Исправить
 
   .items
     .articles.list-group.stock-batch-items
