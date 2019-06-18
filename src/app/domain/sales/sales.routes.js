@@ -157,7 +157,7 @@
         name: 'visits',
         url: '/visits?date',
 
-        templateUrl: 'app/domain/sales/visits/visits.html',
+        template: '<section ui-view><visit-view disable-elements="false"></visit-view></section>',
 
         data: {
           title: 'Визиты'

@@ -6,10 +6,10 @@
 
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, geolib, Helpers, mapsHelper) {
 
-    const {ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper} = Helpers;
-    const {yLatLng} = mapsHelper;
+    const { ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper } = Helpers;
+    const { yLatLng } = mapsHelper;
 
-    const {Visit, Location} = Schema.models();
+    const { Visit, Location } = Schema.models();
     const VQS = Schema.model('VisitQuestionSet');
     const VQ = Schema.model('VisitQuestion');
     const VA = Schema.model('VisitAnswer');
@@ -39,7 +39,11 @@
       changeAnswer,
       save,
       mapClick: () => vm.visitMapPopoverOpen = false,
-      deleteVisit
+      deleteVisit,
+
+      importData(name) {
+        return (data) => (vm[name] = data);
+      },
 
     });
 
@@ -52,9 +56,9 @@
 
     let answersByQuestion = {};
 
-    let filterByOutletId = {outletId: outletId};
+    let filterByOutletId = { outletId: outletId };
 
-    vm.saleOrderFilter = _.assign({'x-order-by:': '-date'}, filterByOutletId);
+    vm.saleOrderFilter = _.assign({ 'x-order-by:': '-date' }, filterByOutletId);
 
     /*
      Init
@@ -80,16 +84,10 @@
 
     }
 
-    vm.importData = function (name) {
-      return function (data) {
-        return (vm[name] = data);
-      };
-    };
-
     if (visitId) {
 
       vm.busy = $q.all([
-        VQS.findAllWithRelations({isEnabled: true})('VisitQuestionGroup')
+        VQS.findAllWithRelations({ isEnabled: true })('VisitQuestionGroup')
           .then(vm.importData('questionSets')),
         VQ.findAllWithRelations()('VisitQuestionDataType')
       ]).then(() => {
@@ -113,57 +111,59 @@
 
     } else {
 
-      SalesmanAuth.watchCurrent($scope, salesman => {
-
-        if (!salesman) return;
-
-        vm.visit = Visit.inject({
-          date: date,
-          outletId: outletId,
-          salesmanId: salesman.id
-        });
-
-        vm.busy = getLocation()
-          .then(res => {
-
-            // If use went out to another state before the promise is resolved
-            if ($scope['$$destroyed']) return;
-
-            vm.visit.checkInLocationId = res.id;
-
-            let outletLocation = _.get(vm.visit, 'outlet.location');
-
-            if (outletLocation) {
-              let distance = geolib.getDistance(outletLocation, res);
-              toastr.success(
-                `Расстояние до точки ${Math.round(distance)} м.`,
-                'Успешное начало визита',
-                {timeOut: 10000}
-              );
-            }
-
-            return Visit.save(vm.visit)
-              .then(visit => {
-                $state.go('.', {visitId: visit.id})
-              });
-
-          })
-          .catch(err => {
-
-            if ($scope['$$destroyed']) return;
-
-            console.error(err);
-            toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
-            $state.go('sales.visits');
-
-          });
-      })
+      SalesmanAuth.watchCurrent($scope, onSalesman)
 
     }
 
     /*
      Listeners
      */
+
+    function onSalesman(salesman) {
+
+      if (!salesman) return;
+
+      vm.visit = Visit.inject({
+        date: date,
+        outletId: outletId,
+        salesmanId: salesman.id
+      });
+
+      vm.busy = getLocation()
+        .then(res => {
+
+          // If use went out to another state before the promise is resolved
+          if ($scope['$$destroyed']) return;
+
+          vm.visit.checkInLocationId = res.id;
+
+          let outletLocation = _.get(vm.visit, 'outlet.location');
+
+          if (outletLocation) {
+            let distance = geolib.getDistance(outletLocation, res);
+            toastr.success(
+              `Расстояние до точки ${Math.round(distance)} м.`,
+              'Успешное начало визита',
+              { timeOut: 10000 }
+            );
+          }
+
+          return Visit.save(vm.visit)
+            .then(visit => {
+              $state.go('.', { visitId: visit.id })
+            });
+
+        })
+        .catch(err => {
+
+          if ($scope['$$destroyed']) return;
+
+          console.error(err);
+          toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
+          $state.go('sales.visits');
+
+        });
+    }
 
     $scope.$on('$destroy', function () {
 
@@ -183,7 +183,7 @@
      */
 
     function takePhoto() {
-      return PhotoHelper.takePhoto('VisitPhoto', {visitId: vm.visit.id}, vm.thumbnails);
+      return PhotoHelper.takePhoto('VisitPhoto', { visitId: vm.visit.id }, vm.thumbnails);
     }
 
     function importThumbnail(picture) {
@@ -266,7 +266,7 @@
 
     function changeAnswer(qst, data) {
 
-      let ans = answersByQuestion[qst.id] || VA.inject({visitId: vm.visit.id, questionId: qst.id});
+      let ans = answersByQuestion[qst.id] || VA.inject({ visitId: vm.visit.id, questionId: qst.id });
 
       if (qst.dataType.code === 'boolean') {
         ans.data = data && '1' || '0';
