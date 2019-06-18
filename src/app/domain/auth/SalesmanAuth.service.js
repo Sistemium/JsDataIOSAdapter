@@ -2,13 +2,14 @@
 
 (function () {
 
-  function SalesmanAuth($rootScope, $state, Schema, localStorageService, InitService, Sockets, IOS, DEBUG, Menu, Auth, DomainOption) {
+  function SalesmanAuth($rootScope, $state, Schema, localStorageService,
+                        InitService, Sockets, IOS, DEBUG, Menu, Auth, DomainOption) {
 
     const LOGIN_EVENT = 'salesman-login';
     const LOGOUT_EVENT = 'salesman-logout';
     const LOCAL_STORAGE_KEY = 'currentSalesmanId';
 
-    const {Salesman, Responsibility} = Schema.models();
+    const { Salesman, Responsibility } = Schema.models();
 
     let currentSalesman;
     let redirectTo;
@@ -36,7 +37,7 @@
 
     const SalesmanAuth = service;
 
-    $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', function (event, next, nextParams) {
+    $rootScope.$on('$destroy', $rootScope.$on('$stateChangeStart', (event, next, nextParams) => {
 
       let needRoles = _.get(next, 'data.auth');
 
@@ -105,7 +106,7 @@
           service.hasOptions = data.length > 1;
 
           let salesmanId = localStorageService.get(LOCAL_STORAGE_KEY);
-          let res = salesmanId && _.find(data, {id: salesmanId});
+          let res = salesmanId && _.find(data, { id: salesmanId });
 
           login(res || data.length === 1 && _.first(data));
 
@@ -153,7 +154,7 @@
         'Stock', 'SaleOrder', 'SaleOrderPosition', 'Outlet', 'Visit', 'Partner', 'Contract'
       ];
 
-      const {Workflow, SaleOrder, NewsMessage, ArticleGroup} = Schema.models();
+      const { Workflow, SaleOrder, NewsMessage, ArticleGroup } = Schema.models();
 
       $rootScope.$on('menu-show', setBadges);
 
@@ -186,7 +187,7 @@
 
             })
             .then(() => {
-                ArticleGroup.cachedFindAll();
+              ArticleGroup.cachedFindAll();
               _.each(SaleOrder.getAll(), saleOrder => SaleOrder.compute(saleOrder));
             });
 
@@ -195,7 +196,7 @@
 
       function getWorkflow(code, codeAs) {
 
-        return Workflow.findAll({code})
+        return Workflow.findAll({ code })
           .then(workflow => {
             SaleOrder.meta[codeAs] = _.get(_.first(workflow), 'workflow');
           })
@@ -212,7 +213,7 @@
           if (event.data.name) {
             model.inject(event.data);
           } else {
-            model.find(event.data.id, {bypassCache: true});
+            model.find(event.data.id, { bypassCache: true });
           }
 
         }
@@ -221,24 +222,24 @@
 
       function setBadges() {
 
-        let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+        let filter = SalesmanAuth.makeFilter({ processing: 'draft' });
 
         if (!DomainOption.visitsDisabled()) {
           Schema.model('Visit')
-            .findAll(_.assign({date: moment().format(), finished: false}, filter), {bypassCache: true});
+            .findAll(_.assign({ date: moment().format(), finished: false }, filter), { bypassCache: true });
         }
 
         SaleOrder.groupBy(filter)
           .then(data => {
-            Menu.setItemData('sales.saleOrders', {badge: data.length});
+            Menu.setItemData('sales.saleOrders', { badge: data.length });
           });
 
         let actualFilter = NewsMessage.meta.filterActual();
 
-        NewsMessage.findAllWithRelations(actualFilter, {bypassCache: true})('UserNewsMessage')
+        NewsMessage.findAllWithRelations(actualFilter, { bypassCache: true })('UserNewsMessage')
           .then(actual => {
             let unRated = _.filter(actual, message => message.isUnrated());
-            Menu.setItemData('newsFeed', {badge: unRated.length});
+            Menu.setItemData('newsFeed', { badge: unRated.length });
           });
       }
 
