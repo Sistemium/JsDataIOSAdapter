@@ -111,7 +111,7 @@
 
     } else {
 
-      SalesmanAuth.watchCurrent($scope, onSalesman)
+      onSalesman();
 
     }
 
@@ -119,14 +119,16 @@
      Listeners
      */
 
-    function onSalesman(salesman) {
+    function onSalesman() {
 
-      if (!salesman) return;
+      const { visitSalesmanId } = $state.params;
+
+      if (!visitSalesmanId) return;
 
       vm.visit = Visit.inject({
         date: date,
         outletId: outletId,
-        salesmanId: salesman.id
+        salesmanId: visitSalesmanId,
       });
 
       vm.busy = getLocation()
@@ -304,16 +306,24 @@
                   let cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
                   let diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
 
-                  toastr.info(diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек', 'Визит завершен');
+                  const visitTime = diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек';
+
+                  toastr.info(visitTime, 'Визит завершен');
+
+                  SalesmanAuth.login(vm.visit.salesman);
+
                   resolve(visit);
 
                   quit();
 
-                }, function (err) {
+                })
+                .catch(err => {
                   reject(err);
                   toastr.error(angular.toJson(err), 'Не удалось сохранить визит');
                 });
-            }, err => {
+
+            })
+            .catch(err => {
               reject(err);
               toastr.error(angular.toJson(err), 'Не удалось определить местоположение');
             });

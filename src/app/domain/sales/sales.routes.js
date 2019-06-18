@@ -23,7 +23,7 @@
       const visitCreate = {
 
         name: 'visitCreate',
-        url: '/visitCreate?visitId',
+        url: '/visitCreate?visitId&visitSalesmanId',
 
         data: {
           disableNavs: true,
@@ -130,7 +130,7 @@
       const territory = {
 
         name: 'territory',
-        url: '/territory',
+        url: '/territory?visitSalesmanId',
 
         templateUrl: 'app/domain/sales/territory/territory.html',
         controller: 'SalesTerritoryController',

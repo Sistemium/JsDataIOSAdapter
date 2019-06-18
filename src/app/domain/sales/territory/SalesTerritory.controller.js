@@ -139,7 +139,10 @@
 
     function outletClick(outlet, params) {
       if (visitsIsRootState()) {
-        return $state.go(`${rootState}.outlet.visitCreate`, {id: outlet.id});
+        return $state.go(`${rootState}.outlet.visitCreate`, {
+          id: outlet.id,
+          visitSalesmanId: $state.params.visitSalesmanId,
+        });
       }
       $state.go(`.outlet`, _.assign({id: outlet.id}, params || {}));
     }

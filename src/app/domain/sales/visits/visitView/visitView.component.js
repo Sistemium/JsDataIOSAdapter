@@ -219,7 +219,7 @@
     }
 
     function newVisitClick() {
-      $state.go('.territory');
+      $state.go('.territory', { visitSalesmanId: vm.selectedSalesmanId });
     }
 
   }
