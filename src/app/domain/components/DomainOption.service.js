@@ -31,7 +31,7 @@
     };
 
     function salesTargets() {
-      return customerCode() === 'r50';
+      return customerCode() === 'r50' && siteInstance === 'sales';
     }
 
     function maxDiscount() {
