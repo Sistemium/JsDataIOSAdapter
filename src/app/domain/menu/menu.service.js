@@ -90,7 +90,8 @@
     }, {
       title: 'Цели по SKU',
       state: 'sales.targets',
-      needRoles: SALES_ROLES
+      needRoles: SALES_ROLES,
+      disabled: () => !DomainOption.salesTargets(),
     }];
 
 
