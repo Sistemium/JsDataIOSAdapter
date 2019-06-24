@@ -13,11 +13,11 @@
   const PHRASE_PAUSE = 1000;
 
   function ArticleListController($scope, $filter, $state, toastr, Schema,
-                                 $timeout, SoundSynth, Language, $q, ConfirmModal) {
+                                 $timeout, Picking, Language, $q, ConfirmModal) {
 
     const {
       Article,
-      PickingOrder,
+      // PickingOrder,
       PickingOrderPosition,
       WarehouseBox,
       WarehouseItem,
@@ -60,80 +60,6 @@
 
     setGroups(vm.articles);
 
-    /*
-    Speaking
-     */
-
-    function replyNotFound() {
-      SoundSynth.say('Неизвестный штрих-код');
-    }
-
-    function replyNotRequested() {
-      SoundSynth.say('Этого товара нет в требовании');
-    }
-
-    function replyAlreadyPicked(ext) {
-      SoundSynth.say(`Товар в заказе ${ext || ''}`);
-    }
-
-    function replyAlreadyPickedOrder(ownerXid) {
-      return PickingOrder.find(ownerXid, { cacheResponse: false })
-        .then(found => {
-          replyAlreadyPicked(Language.speakableCount(found.ndoc));
-        })
-        .catch(() => {
-          replyAlreadyPicked('с неизвестным номером');
-        });
-    }
-
-    function replyEnoughOfThat() {
-      SoundSynth.say('Этого больше не нужно');
-    }
-
-    function replyTakeAll(num, vol, packageRel) {
-      const isFull = packageRel === vol;
-      SoundSynth.say(`${isFull ? '' : 'неполная'} коробка ${num || ''}`);
-    }
-
-    function replyTakePalette(after) {
-      SoundSynth.say(`Палета целиком ${after || ''}`);
-    }
-
-    function replyTaken(num, ord) {
-      SoundSynth.say(`Это ${Language.speakableCountFemale(num)} ${ord || ''}`);
-    }
-
-    function replyTakeSome(pcs, num) {
-      replyTakeSomeBoxPcs({ pcs }, num);
-    }
-
-    function replyTakeSomeBoxPcs(boxPcs, num) {
-      SoundSynth.say(`Забрать ${Language.speakableBoxPcs(boxPcs)} ${num}`);
-    }
-
-    function unloadSomeBoxPcs(boxPcs) {
-      SoundSynth.say(`Нужно убрать с палеты ${Language.speakableBoxPcs(boxPcs)}`);
-    }
-
-    function replyLookAtScreen() {
-      replySuccess('Вопрос на экране');
-    }
-
-    function repeatToConfirm() {
-      SoundSynth.say('Повторите чтобы подтвердить');
-    }
-
-    function replyNotTheSameOrder() {
-      SoundSynth.say('Эта коробка из другого заказа');
-    }
-
-    function replyError(text) {
-      SoundSynth.say(text || 'Ошибка');
-    }
-
-    function replySuccess(text) {
-      SoundSynth.say(text || 'Готово');
-    }
 
     /*
     Scan handlers
@@ -176,7 +102,7 @@
 
           const found = _.first(res);
 
-          return found ? onWarehousePalette(found) : replyNotFound();
+          return found ? onWarehousePalette(found) : Picking.replyNotFound();
 
         });
     }
@@ -193,7 +119,7 @@
             return onWarehouseBoxToPack(box);
           }
 
-          return found ? onWarehouseBox(found) : replyNotFound();
+          return found ? onWarehouseBox(found) : Picking.replyNotFound();
 
         });
     }
@@ -202,7 +128,7 @@
       return WarehouseItem.findAllWithRelations(
         { barcode },
         { cacheResponse: false })(['Article'])
-        .then(res => res.length ? onWarehouseItem(res[0]) : replyNotFound());
+        .then(res => res.length ? onWarehouseItem(res[0]) : Picking.replyNotFound());
     }
 
 
@@ -213,9 +139,9 @@
     function reportPickedItemLocation(warehouseItem) {
       return warehouseItem.itemBox()
         .then(({ ownerXid }) => {
-          return replyAlreadyPickedOrder(ownerXid);
+          return Picking.replyAlreadyPickedOrder(ownerXid);
         })
-        .catch(() => replyError());
+        .catch(() => Picking.replyError());
     }
 
     function onWarehouseItem(warehouseItem) {
@@ -234,7 +160,7 @@
       const { unpickedPos } = toTake;
 
       if (!unpickedPos) {
-        return replyAlreadyPicked();
+        return Picking.replyAlreadyPicked();
       }
 
       let { items, position } = vm.scanned;
@@ -247,18 +173,18 @@
       const scannedIndex = _.findIndex(items, warehouseItem) + 1;
 
       if (scannedIndex) {
-        return replyTaken(scannedIndex, orderNumber(unpickedPos));
+        return Picking.replyTaken(scannedIndex, orderNumber(unpickedPos));
       }
 
       if (items.length < unpickedPos.unPickedVolume()) {
         items.push(warehouseItem);
         vm.scanned = { position, items };
-        replyTaken(items.length);
+        Picking.replyTaken(items.length);
       }
 
       if (items.length === unpickedPos.unPickedVolume()) {
         const msg = `${orderNumber(unpickedPos)} хватит этого теперь просканируйте коробку`;
-        replySuccess(msg);
+        Picking.replySuccess(msg);
       }
 
     }
@@ -269,11 +195,11 @@
       const { position: unpickedPos, items } = vm.scanned;
 
       if (!unpickedPos || !items) {
-        return replyError();
+        return Picking.replyError();
       }
 
       if (vm.lastBoxBarcode !== barcode) {
-        repeatToConfirm();
+        Picking.repeatToConfirm();
         vm.lastBoxBarcode = barcode;
         return;
       }
@@ -287,7 +213,7 @@
               // check if the same order as unpickedPos
               const { ownerXid } = warehouseBox;
               if (ownerXid && ownerXid !== unpickedPos.pickingOrderId) {
-                return replyNotTheSameOrder();
+                return Picking.replyNotTheSameOrder();
               }
               return warehouseBox;
             }
@@ -314,7 +240,7 @@
         .then(warehouseBox => {
 
           if (!warehouseBox) {
-            return replyError();
+            return Picking.replyError();
           }
 
           return unpickedPos.linkPickedBoxItems(warehouseBox, items)
@@ -322,12 +248,12 @@
               updatePickedByPos(unpickedPos);
               vm.scanned = {};
               const ordNum = orderNumber(unpickedPos) || 'в заказ';
-              replySuccess(`Добавлено ${ordNum} ${items.length}`);
+              Picking.replySuccess(`Добавлено ${ordNum} ${items.length}`);
             });
 
         })
         .catch(({ message }) => {
-          replyError(message);
+          Picking.replyError(message);
         });
 
       function boxHasItems(box) {
@@ -359,7 +285,7 @@
     function onWarehousePalette(palette) {
 
       if (palette.processing === 'picked') {
-        return replyAlreadyPicked();
+        return Picking.replyAlreadyPicked();
       }
 
       return palette.paletteItems()
@@ -367,9 +293,9 @@
           const articles = palette.paletteArticles(boxedItems);
 
           if (articles.length > 1) {
-            return replyError('Сборные палеты пока нельзя');
+            return Picking.replyError('Сборные палеты пока нельзя');
           } else if (!articles.length) {
-            return replyError('Палета пустая');
+            return Picking.replyError('Палета пустая');
           }
 
           return matchingBoxes(palette, boxedItems, articles[0]);
@@ -383,7 +309,7 @@
       const matchingArticles = _.filter(vm.articles, { sameId: article.sameId });
 
       if (!matchingArticles.length) {
-        return replyNotRequested();
+        return Picking.replyNotRequested();
       }
 
       const unpicked = _.find(matchingArticles, a => {
@@ -391,7 +317,7 @@
       });
 
       if (!unpicked) {
-        return replyEnoughOfThat();
+        return Picking.replyEnoughOfThat();
       }
 
       const paletteVol = _.sumBy(boxedItems, ({ items }) => items.length);
@@ -399,7 +325,7 @@
       const unpickedPos = _.find(unpicked.positions, pop => volumeToTake(pop) > 0);
 
       if (!unpickedPos) {
-        return replyEnoughOfThat();
+        return Picking.replyEnoughOfThat();
       }
 
       const toTakeVol = volumeToTake(unpickedPos);
@@ -407,9 +333,9 @@
 
       if (toTakeVol >= paletteVol) {
 
-        replyTakePalette(num);
+        Picking.replyTakePalette(num);
 
-        replyLookAtScreen();
+        Picking.replyLookAtScreen();
 
         const text = [
           `Добавить в заказ ${article.boxPcs(paletteVol, true).full}`,
@@ -419,12 +345,12 @@
           .then(() => {
 
             const busy = unpickedPos.linkPickedPaletteBoxes(palette, boxedItems, onBoxProgress)
-              .then(() => replySuccess('Готово'))
+              .then(() => Picking.replySuccess('Готово'))
               .then(() => {
                 updatePickedByPos(unpickedPos);
                 if (!unpicked.totalUnPickedVolume) {
                   return $timeout(PHRASE_PAUSE)
-                    .then(() => replyEnoughOfThat());
+                    .then(() => Picking.replyEnoughOfThat());
                 }
               });
 
@@ -445,7 +371,7 @@
       } else if (toTakeVol * 2 > paletteVol) {
         return unloadConfirm();
       } else {
-        return replyTakeSomeBoxPcs(article.boxPcs(toTakeVol), num);
+        return Picking.replyTakeSomeBoxPcs(article.boxPcs(toTakeVol), num);
       }
 
       function volumeToTake(pop) {
@@ -456,15 +382,15 @@
 
         const toTakeBoxPcs = article.boxPcs(paletteVol - toTakeVol);
 
-        unloadSomeBoxPcs(toTakeBoxPcs);
-        replyLookAtScreen();
+        Picking.unloadSomeBoxPcs(toTakeBoxPcs);
+        Picking.replyLookAtScreen();
 
         const text = `Убрать ${toTakeBoxPcs.full} с палеты ${palette.barcode}`;
 
         return ConfirmModal.show({ text })
           .then(() => {
             vm.paletteUnloading = { palette, boxes: [], toTakeBoxPcs };
-            replySuccess('Сканируйте коробки');
+            Picking.replySuccess('Сканируйте коробки');
             onWarehouseBoxUnloadingPalette();
           })
           .catch(_.noop);
@@ -479,16 +405,16 @@
 
       if (box) {
         if (box.currentPaletteId !== palette.id) {
-          return replyError('Это коробка с другой палеты');
+          return Picking.replyError('Это коробка с другой палеты');
         }
 
         const taken = _.findIndex(boxes, ({ id }) => id === box.id) + 1;
 
         if (taken) {
-          replyTaken(taken);
+          Picking.replyTaken(taken);
         } else {
           boxes.push(box);
-          replyTaken(boxes.length);
+          Picking.replyTaken(boxes.length);
         }
       }
 
@@ -518,9 +444,9 @@
           const promise = palette.unloadBoxes(vm.paletteUnloading.boxes)
             .then(() => {
               vm.paletteUnloading = false;
-              replySuccess();
+              Picking.replySuccess();
             })
-            .catch(() => replyError());
+            .catch(() => Picking.replyError());
           vm.cgBusy = {
             promise,
             message: 'Сохранение данных',
@@ -554,15 +480,15 @@
         const orderWithBox = _.find(orders, ({ id }) => id === box.ownerXid);
 
         if (!orderWithBox) {
-          return replyAlreadyPickedOrder(box.ownerXid);
+          return Picking.replyAlreadyPickedOrder(box.ownerXid);
         }
 
         const boxPositions = orderWithBox.boxPositions(box);
 
         if (boxPositions.length > 1) {
-          return replyAlreadyPicked();
+          return Picking.replyAlreadyPicked();
         } else if (!boxPositions.length) {
-          return replyError('Коробка в заказе с ошибкой');
+          return Picking.replyError('Коробка в заказе с ошибкой');
         }
 
         const position = boxPositions[0];
@@ -570,19 +496,19 @@
         const unPickedVolume = position.unPickedVolume();
 
         if (!unPickedVolume) {
-          return replyEnoughOfThat();
+          return Picking.replyEnoughOfThat();
         }
 
         const reply = article.boxPcs(unPickedVolume);
 
-        return replyError(`Еще нужно ${Language.speakableBoxPcs(reply)}`);
+        return Picking.replyError(`Еще нужно ${Language.speakableBoxPcs(reply)}`);
 
       }
 
       return box.boxItems()
         .then(items => {
           if (!items.length) {
-            replyError('Пустая коробка');
+            Picking.replyError('Пустая коробка');
             return;
           }
           return findMatchingItems(items, box);
@@ -597,7 +523,7 @@
       });
 
       if (!matching.length) {
-        return replyNotRequested();
+        return Picking.replyNotRequested();
       }
 
       const unpicked = _.find(vm.articles, a => {
@@ -607,7 +533,7 @@
       });
 
       if (!unpicked) {
-        return replyEnoughOfThat();
+        return Picking.replyEnoughOfThat();
       }
 
       const { sameId } = unpicked;
@@ -617,11 +543,11 @@
       const unpickedPos = _.find(unpicked.positions, pop => volumeToTake(pop) > 0);
 
       if (!unpickedPos) {
-        return replyEnoughOfThat();
+        return Picking.replyEnoughOfThat();
       }
 
       if (unpickedPos.target === 'strict') {
-        return replyError(`Новые марки запрещены в этом заказе`);
+        return Picking.replyError(`Новые марки запрещены в этом заказе`);
       }
 
       const toTakeVol = volumeToTake(unpickedPos);
@@ -634,20 +560,20 @@
           return { toTakeVol, unpickedPos, num };
         }
 
-        replyTakeAll(num, warehouseItems.length, _.first(warehouseItems).article.packageRel);
+        Picking.replyTakeAll(num, warehouseItems.length, _.first(warehouseItems).article.packageRel);
 
         return unpickedPos.linkPickedBoxItems(box, warehouseItems)
           .then(() => {
             updatePickedByPos(unpickedPos);
             if (!unpicked.totalUnPickedVolume) {
               return $timeout(PHRASE_PAUSE)
-                .then(() => replyEnoughOfThat());
+                .then(() => Picking.replyEnoughOfThat());
             }
           });
 
       }
 
-      return replyTakeSome(toTakeVol, num);
+      return Picking.replyTakeSome(toTakeVol, num);
 
       function volumeToTake(pop) {
         return _.min([pop.unPickedVolume(), unpickedItems.length]);
@@ -689,10 +615,10 @@
         if (found && found.id) {
           toastr.success(found.name, found.volume);
           if (found.speakable) {
-            SoundSynth.say(found.speakable);
+            Picking.say(found.speakable);
           }
         } else {
-          replyNotRequested();
+          Picking.replyNotRequested();
         }
 
         lockScanProcessor = false;
