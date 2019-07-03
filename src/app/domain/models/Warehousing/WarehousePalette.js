@@ -22,22 +22,22 @@
 
         unloadBoxes(boxes) {
 
-          // const timestamp = moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
-          // const { WarehouseBoxOperation } = Schema.models();
+          const timestamp = moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
+          const { WarehouseBoxOperation } = Schema.models();
 
           return $q.all(_.map(boxes, warehouseBox =>
-            // WarehouseBoxOperation.create({
-            //   timestamp,
-            //   source: 'unloadBoxes',
-            //   warehouseBoxId: warehouseBox.id,
-            //   paletteFromId: this.id,
-            //   paletteToId: null,
-            // }).then(() => {
-            {
-              warehouseBox.currentPaletteId = null;
-              return warehouseBox.DSCreate();
-            }
-          ));
+            WarehouseBoxOperation.create({
+              timestamp,
+              source: 'unloadBoxes',
+              warehouseBoxId: warehouseBox.id,
+              paletteFromId: this.id,
+              paletteToId: null,
+            }).then(() => {
+                // {
+                warehouseBox.currentPaletteId = null;
+                return warehouseBox.DSCreate();
+              }
+            )));
 
         },
 
