@@ -55,3 +55,11 @@
 #picking-search {
   float: left;
 }
+
+.picking {
+
+  .text-right + .text-right {
+    margin-top: $margin-bottom-xs;
+  }
+
+}

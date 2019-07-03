@@ -58,6 +58,13 @@ section#scrollable-container.scroll-y(cg-busy='vm.busy' resize resize-offset-top
     button.btn.btn-primary(ng-click='vm.startPicking()')
       | Собирать
 
+  .text-right(ng-hide='vm.progress')
+    toggle-switch(
+      ng-model='vm.selectedItems.isOnPalettes'
+      on-label='На палеты'
+      off-label='Без палет'
+    )
+
   //.pull-right(ng-show='vm.pickingSession && vm.shouldWeighing()')
     button.btn.btn-success(ng-click='vm.getWeighing()')
       | Взвесить

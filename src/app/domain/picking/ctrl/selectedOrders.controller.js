@@ -2,7 +2,8 @@
 
 (function () {
 
-  function SelectedOrdersController(Schema, $scope, $state, saAsync, WeighingService, ConfirmModal, $q) {
+  function SelectedOrdersController(Schema, $scope, $state, saAsync,
+                                    WeighingService, ConfirmModal, $q) {
 
     const picker = Schema.model('Picker').getCurrent();
 
@@ -16,11 +17,11 @@
     const PickingSession = Schema.model('PickingSession');
     const PickingSessionWeighing = Schema.model('PickingSessionWeighing');
 
-    let vm = this;
+    const vm = this;
 
-    let selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
+    const selected = $scope.$parent.vm.pickingItems || $scope.$parent.vm.selectedItems;
 
-    let allPositions = [];
+    const allPositions = [];
 
     _.each(selected, po => {
       Array.prototype.push.apply(allPositions, po.positions);
@@ -154,15 +155,15 @@
     }
 
     function getCurrentPickingSession() {
-      PickingSession.findAll({
+      return PickingSession.findAll({
         pickerId: picker.id,
         siteId: picker.siteId,
         processing: 'picking'
-      }, {bypassCache: true})
+      }, { bypassCache: true })
         .then(pss => {
           vm.pickingSession = _.first(pss);
         })
-      ;
+        ;
     }
 
     function createPickingSession(weight) {
@@ -222,11 +223,15 @@
       weighing()
         .then((weight) => {
 
+          const { isOnPalettes } = vm.selectedItems;
+
           vm.selectedItems = _.map(vm.selectedItems, po => {
             po.processing = 'picking';
             PO.save(po);
             return po;
           });
+
+          vm.selectedItems.isOnPalettes = !!isOnPalettes;
 
           console.info('weighing success', weight);
           createPickingSession(weight);
@@ -280,7 +285,7 @@
     vm.busy = saAsync.chunkSerial(4, allPositions, loadRelationsPOP, chunk => {
       progress.value += chunk.length;
     }, _.noop)
-      .then(getCurrentPickingSession());
+      .then(getCurrentPickingSession);
 
     vm.busy.then(() => {
       vm.progress = false;

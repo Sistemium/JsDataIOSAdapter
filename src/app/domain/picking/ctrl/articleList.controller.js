@@ -39,6 +39,7 @@
 
       articleIndex: _.groupBy(positions, 'articleId'),
       orders,
+      isOnPalettes: orders && orders.isOnPalettes,
       pickedIndex: {},
       barCodeInput: '',
       title: '',
@@ -318,10 +319,10 @@
 
     }
 
-    function finishPalette() {
-      vm.currentPalette = null;
-      return Picking.replySuccess('Палета готова');
-    }
+    // function finishPalette() {
+    //   vm.currentPalette = null;
+    //   return Picking.replySuccess('Палета готова');
+    // }
 
     function setCurrentPalette(palette) {
 
@@ -605,6 +606,10 @@
       const toTakeVol = volumeToTake(unpickedPos);
 
       const num = orderNumber(unpickedPos);
+
+      if (vm.isOnPalettes && !currentPaletteId()) {
+        return Picking.replyError('Сначала выберите палету');
+      }
 
       if (toTakeVol >= warehouseItems.length) {
 
