@@ -64,9 +64,9 @@
           if (boxOrPalette.ownerXid === this.pickingOrderId) {
             return;
           }
-          if (boxOrPalette.currentPaletteId) {
-            boxOrPalette.currentPaletteId = warehousePaletteId;
-          }
+          // if (boxOrPalette.currentPaletteId) {
+          boxOrPalette.currentPaletteId = warehousePaletteId;
+          // }
           boxOrPalette.processing = 'picked';
           boxOrPalette.ownerXid = this.pickingOrderId;
           return boxOrPalette.DSCreate({ cacheResponse: false });
@@ -153,8 +153,9 @@
 
       etc: {
 
-        pivotPositionsByArticle: function (articleIndex) {
-          return _.orderBy(_.map(articleIndex, function (positions, key) {
+        pivotPositionsByArticle(articleIndex, orders) {
+
+          return _.orderBy(_.map(articleIndex, (positions, key) => {
 
             const totalVolume = _.reduce(positions, (sum, pos) => {
               return sum + pos.volume;
@@ -165,12 +166,16 @@
             const picked = isPicked(positions);
             const totalUnPicked = totalUnPickedVolume(positions);
 
+            const sortedPositions = _.orderBy(positions, ({ PickingOrder }) => {
+              return orders.indexOf(PickingOrder);
+            });
+
             return {
 
               id: key,
               sameId: article.sameId,
               article,
-              positions,
+              positions: sortedPositions,
               volume: boxPcs,
               totalVolume,
               isPicked: picked,
@@ -178,22 +183,22 @@
               totalUnPickedVolume: totalUnPicked,
               ts: maxTs(positions),
 
-              orderVolume: order => {
+              orderVolume(order) {
                 const p = _.find(positions, { pickingOrderId: order.id });
                 return article.boxPcs(p && p.volume || 0);
               },
 
-              position: order => {
+              position(order) {
                 return _.find(positions, { pickingOrderId: order.id });
               },
 
-              updatePicked: function () {
+              updatePicked() {
                 this.isPicked = isPicked(positions);
                 this.ts = maxTs(positions);
                 this.totalUnPickedVolume = totalUnPickedVolume(positions);
                 this.hasPicked = hasPicked(positions);
                 return this.totalUnPickedVolume;
-              }
+              },
 
             }
 

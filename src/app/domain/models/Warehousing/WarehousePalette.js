@@ -41,15 +41,20 @@
 
         },
 
+        findPaletteBoxes(filter = {}) {
+
+          const { WarehouseBox } = Schema.models();
+          const options = { cacheResponse: false };
+
+          return WarehouseBox.findAll(_.assign({ currentPaletteId: this.id, }, filter), options);
+
+        },
+
         paletteItems() {
 
-          const { WarehouseBox, WarehouseItem } = Schema.models();
+          const { WarehouseItem } = Schema.models();
 
-          return WarehouseBox.findAll({
-            currentPaletteId: this.id,
-            processing: 'stock',
-            ownerXid: null,
-          }, { cacheResponse: false })
+          return this.findPaletteBoxes({ processing: 'stock', ownerXid: null })
             .then(boxes => {
 
               const boxIds = _.map(boxes, 'id');

@@ -47,9 +47,11 @@
 
     });
 
-    vm.articles = PickingOrderPosition.etc.pivotPositionsByArticle(vm.articleIndex);
-    vm.currentFilter = stateName.match(/picked$/) ? { hasPicked: 'true' } : { isPicked: '!true' };
-    vm.orderBy = stateName.match(/picked$/) ? '-ts' : 'article.name';
+    const isPickedState = stateName.match(/picked$/);
+
+    vm.articles = PickingOrderPosition.etc.pivotPositionsByArticle(vm.articleIndex, orders);
+    vm.currentFilter = isPickedState ? { hasPicked: 'true' } : { isPicked: '!true' };
+    vm.orderBy = isPickedState ? '-ts' : 'article.name';
 
     $scope.$on('$stateChangeSuccess', onStateChange);
 
@@ -102,7 +104,13 @@
 
           const found = _.first(res);
 
-          return found ? onWarehousePalette(found) : Picking.replyNotFound();
+          const current = found && found.id === currentPaletteId();
+
+          if (current) {
+            return setCurrentPalette(found);
+          }
+
+          return found ? onWarehousePalette(found) : onEmptyPalette(barcode);
 
         });
     }
@@ -243,7 +251,7 @@
             return Picking.replyError();
           }
 
-          return unpickedPos.linkPickedBoxItems(warehouseBox, items)
+          return unpickedPos.linkPickedBoxItems(warehouseBox, items, currentPaletteId())
             .then(() => {
               updatePickedByPos(unpickedPos);
               vm.scanned = {};
@@ -285,7 +293,13 @@
     function onWarehousePalette(palette) {
 
       if (palette.processing === 'picked') {
+
+        if (orders.length === 1 && orders[0].id === palette.ownerXid) {
+          return setCurrentPalette(palette);
+        }
+
         return Picking.replyAlreadyPicked();
+
       }
 
       return palette.paletteItems()
@@ -300,6 +314,44 @@
 
           return matchingBoxes(palette, boxedItems, articles[0]);
 
+        });
+
+    }
+
+    function finishPalette() {
+      vm.currentPalette = null;
+      return Picking.replySuccess('Палета готова');
+    }
+
+    function setCurrentPalette(palette) {
+
+      vm.currentPalette = palette;
+
+      return palette.findPaletteBoxes()
+        .then(({ length: box }) => {
+          let text = `Новая пустая палета`;
+          if (box) {
+            text = `Текущая палета ${Language.speakableBoxPcs({ box })}`;
+          }
+          Picking.replySuccess(text);
+        });
+
+    }
+
+    function onEmptyPalette(barcode) {
+
+      if (orders.length !== 1) {
+        return Picking.replyNotFound('палеты');
+      }
+
+      const pickingOrder = orders[0];
+      const text = `Добавить палету ${barcode} в заказ?`;
+
+      return ConfirmModal.show({ text })
+        .then(() => Picking.createPaletteInOrder(barcode, pickingOrder))
+        .then(palette => {
+          vm.currentPalette = palette;
+          return Picking.replySuccess('Новая пустая палета');
         });
 
     }
@@ -560,9 +612,11 @@
           return { toTakeVol, unpickedPos, num };
         }
 
-        Picking.replyTakeAll(num, warehouseItems.length, _.first(warehouseItems).article.packageRel);
+        const { packageRel } = _.first(warehouseItems).article;
 
-        return unpickedPos.linkPickedBoxItems(box, warehouseItems)
+        Picking.replyTakeAll(num, warehouseItems.length, packageRel);
+
+        return unpickedPos.linkPickedBoxItems(box, warehouseItems, currentPaletteId())
           .then(() => {
             updatePickedByPos(unpickedPos);
             if (!unpicked.totalUnPickedVolume) {
@@ -579,6 +633,10 @@
         return _.min([pop.unPickedVolume(), unpickedItems.length]);
       }
 
+    }
+
+    function currentPaletteId() {
+      return _.get(vm.currentPalette, 'id') || null;
     }
 
     function orderNumber(unpickedPos) {

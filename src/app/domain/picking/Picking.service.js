@@ -64,6 +64,18 @@
 
       },
 
+      createPaletteInOrder(barcode, pickingOrder) {
+
+        const palette = {
+          barcode,
+          ownerXid: pickingOrder.id,
+          processing: 'picked',
+        };
+
+        return WarehousePalette.create(palette);
+
+      },
+
       /*
       Speaking
        */
@@ -72,8 +84,8 @@
         SoundSynth.say(speech);
       },
 
-      replyNotFound() {
-        SoundSynth.say('Неизвестный штрих-код');
+      replyNotFound(of = '') {
+        SoundSynth.say(`Неизвестный штрих-код ${of}`);
       },
 
       replyNotRequested() {
