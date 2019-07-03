@@ -62,9 +62,29 @@
 
         return Picking.boxesByOrders(this.orders)
           .then(([boxes, palettes]) => {
+
             this.palettesByOrder = palettes;
             this.boxesByOrder = boxes;
             this.boxesByPaletteId = _.groupBy(_.flatten(boxes), 'currentPaletteId');
+
+            const boxesByPaletteId = {};
+
+            _.each(boxes, (orderBoxes, idx) => {
+              _.assign(boxesByPaletteId, _.groupBy(orderBoxes, ({ currentPaletteId }) => {
+                const { id } = vm.orders[idx];
+                return currentPaletteId || id;
+              }));
+            });
+
+            _.each(vm.orders, (order, idx) => {
+              const { id } = order;
+              if (boxesByPaletteId[id]) {
+                this.palettesByOrder[idx].push({ id, barcode: 'Без палеты' });
+              }
+            });
+
+            this.boxesByPaletteId = boxesByPaletteId;
+
           });
 
       }
