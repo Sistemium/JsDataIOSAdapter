@@ -120,6 +120,18 @@
                   hideTopBar: true
                 }
 
+              }, {
+                name: 'boxes',
+                url: '/boxes',
+
+                template: '<picked-boxes orders="vm.selectedItems"></picked-boxes>',
+                // controller: 'StateController as vm',
+
+                data: {
+                  needBarcode: true,
+                  hideTopBar: true
+                }
+
               }
             ]
           }

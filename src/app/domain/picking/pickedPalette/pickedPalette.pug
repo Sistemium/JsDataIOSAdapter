@@ -1,0 +1,13 @@
+.picked-palette
+
+  h3 {{ vm.title }}
+
+  .list-group.palette
+
+    a.list-group-item.warehouse-box(
+      href
+      ng-repeat="box in vm.boxes track by box.id"
+      ng-click="vm.boxClick(box)"
+    )
+      .title {{ box.barcode }}
+      .count {{ box.itemsCount }}

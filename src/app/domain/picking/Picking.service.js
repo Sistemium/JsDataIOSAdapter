@@ -9,12 +9,60 @@
       // Article,
       PickingOrder,
       // PickingOrderPosition,
-      // WarehouseBox,
-      // WarehouseItem,
-      // WarehousePalette,
+      WarehouseBox,
+      WarehouseItem,
+      WarehousePalette,
     } = Schema.models();
 
+    const NOCACHE = {
+      bypassCache: true,
+      cacheResponse: false,
+      // socketSource: 1,
+      // limit: 500,
+    };
+
     return {
+
+      palettesByOrder(pickingOrder) {
+        return WarehousePalette.findAll({ ownerXid: pickingOrder.id }, NOCACHE);
+      },
+
+      boxesByOrder(pickingOrder) {
+        return WarehouseBox.findAll({ ownerXid: pickingOrder.id }, NOCACHE);
+      },
+
+      boxesByOrders(ordersArray) {
+
+        const palettes = _.map(ordersArray, order => this.palettesByOrder(order));
+        const boxes = _.map(ordersArray, order => this.boxesByOrder(order));
+
+        return $q.all([
+          $q.all(boxes),
+          $q.all(palettes),
+        ]);
+
+      },
+
+      boxedItems(boxesArray) {
+
+        // const ids
+        // return WarehouseItem.groupBy({}['currentBoxId'])
+
+        const chunks = _.chunk(_.map(boxesArray, 'id'), 20);
+
+        return $q.all(_.map(chunks, currentBoxId => {
+          return WarehouseItem.groupBy({ currentBoxId }, ['currentBoxId'])
+        }))
+          .then(arrayOfGroups => _.flatten(arrayOfGroups))
+          .then(groups => {
+            const boxesById = _.keyBy(boxesArray, 'id');
+            return _.map(groups, ({ currentBoxId, "count()": itemsCount }) => {
+              const { barcode } = boxesById[currentBoxId];
+              return { id: currentBoxId, itemsCount, barcode };
+            });
+          });
+
+      },
 
       /*
       Speaking

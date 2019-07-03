@@ -1,0 +1,28 @@
+.picked-boxes(
+  cg-busy="vm.cgBusy"
+)
+
+  h3 Коробки в требованиях
+
+  .scroll-y(resize resize-offset-top='60')
+
+    .order(
+      ng-repeat="palettes in vm.palettesByOrder track by $index"
+    )
+      .title
+        label Требование
+        strong {{ vm.orders[$index].ndoc }}
+
+      .list-group.palettes
+        .list-group-item.palette(
+          ng-repeat="palette in palettes track by palette.id"
+        )
+          .title
+            a.info(href ng-click="vm.paletteClick(palette)") {{ palette.barcode }}
+            .count {{ vm.paletteBoxes(palette).length }}
+          .footer(ng-if="vm.selectedPalette.id === palette.id")
+            .warehouse-box(
+              ng-repeat="box in vm.selectedPalette.boxes track by box.id"
+            )
+              .title {{ box.barcode }}
+              .count {{ box.itemsCount }}

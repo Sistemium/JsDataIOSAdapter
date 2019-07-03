@@ -1,0 +1,54 @@
+@import "variables";
+
+picked-boxes {
+
+  .order > .title {
+
+    label {
+
+      color: $light-gray;
+      margin-right: $margin-bottom-xs-minus;
+
+      &:after {
+        margin-left: 3px;
+        content: "№";
+      }
+
+    }
+
+  }
+
+  .list-group-item.palette > .title {
+
+    display: flex;
+    justify-content: space-between;
+
+    .count {
+      font-weight: bold;
+
+      &:after {
+        content: "К.";
+        color: $light-gray;
+        margin-left: 3px;
+      }
+    }
+
+  }
+
+  .footer .warehouse-box {
+
+    margin: $margin-bottom-xs-minus 0 0 $margin-bottom-xs-minus;
+    display: flex;
+    justify-content: space-between;
+
+    .count {
+      &:after {
+        content: "б.";
+        color: $light-gray;
+        margin-left: 3px;
+      }
+    }
+
+  }
+
+}
