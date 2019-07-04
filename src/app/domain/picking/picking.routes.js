@@ -128,7 +128,7 @@
                 // controller: 'StateController as vm',
 
                 data: {
-                  needBarcode: true,
+                  needBarcode: false,
                   hideTopBar: true
                 }
 

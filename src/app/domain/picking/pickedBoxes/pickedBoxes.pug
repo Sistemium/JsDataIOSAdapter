@@ -21,7 +21,7 @@
 
           .footer(ng-if="vm.selectedPalette.id === palette.id")
 
-            .buttons
+            .buttons(ng-if="palette.ownerXid")
               a(href ng-click="vm.deletePaletteClick(palette)") Удалить
 
             .warehouse-box(

@@ -24,11 +24,13 @@
     return {
 
       palettesByOrder(pickingOrder) {
-        return WarehousePalette.findAll({ ownerXid: pickingOrder.id }, NOCACHE);
+        return WarehousePalette.findAll({ ownerXid: pickingOrder.id }, NOCACHE)
+          .then(res => _.orderBy(res, 'barcode'));
       },
 
       boxesByOrder(pickingOrder) {
-        return WarehouseBox.findAll({ ownerXid: pickingOrder.id }, NOCACHE);
+        return WarehouseBox.findAll({ ownerXid: pickingOrder.id }, NOCACHE)
+          .then(res => _.orderBy(res, 'barcode'));
       },
 
       boxesByOrders(ordersArray) {
