@@ -1,0 +1,20 @@
+@import "variables";
+
+.picking-article-list {
+
+  .flex-right {
+
+    span.gray {
+      color: $light-gray;
+    }
+
+    span.gray + span.gray {
+      &:before {
+        content: "+";
+        margin-left: 4px;
+      }
+    }
+
+  }
+
+}
