@@ -35,20 +35,26 @@ picked-boxes {
 
   }
 
-  .footer .warehouse-box {
+  .footer {
+    .warehouse-box {
 
-    margin: $margin-bottom-xs-minus 0 0 $margin-bottom-xs-minus;
-    display: flex;
-    justify-content: space-between;
+      margin: $margin-bottom-xs-minus 0 0 $margin-bottom-xs-minus;
+      display: flex;
+      justify-content: space-between;
 
-    .count {
-      &:after {
-        content: "б.";
-        color: $light-gray;
-        margin-left: 3px;
+      .count {
+        &:after {
+          content: "б.";
+          color: $light-gray;
+          margin-left: 3px;
+        }
       }
-    }
 
+    }
+    > .buttons {
+      margin-top: 3px;
+      text-align: right;
+    }
   }
 
 }

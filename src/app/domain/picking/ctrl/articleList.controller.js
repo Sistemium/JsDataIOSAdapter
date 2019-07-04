@@ -111,6 +111,8 @@
             return setCurrentPalette(found);
           }
 
+          vm.currentPalette = null;
+
           return found ? onWarehousePalette(found) : onEmptyPalette(barcode);
 
         });

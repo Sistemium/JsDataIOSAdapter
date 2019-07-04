@@ -1,8 +1,6 @@
-.picked-boxes(
-  cg-busy="vm.cgBusy"
-)
+.picked-boxes(cg-busy="vm.cgBusy")
 
-  h3 Коробки в требованиях
+  h3 Палеты в требованиях
 
   .scroll-y(resize resize-offset-top='60')
 
@@ -20,7 +18,12 @@
           .title
             a.info(href ng-click="vm.paletteClick(palette)") {{ palette.barcode }}
             .count {{ vm.paletteBoxes(palette).length }}
+
           .footer(ng-if="vm.selectedPalette.id === palette.id")
+
+            .buttons
+              a(href ng-click="vm.deletePaletteClick(palette)") Удалить
+
             .warehouse-box(
               ng-repeat="box in vm.selectedPalette.boxes track by box.id"
             )

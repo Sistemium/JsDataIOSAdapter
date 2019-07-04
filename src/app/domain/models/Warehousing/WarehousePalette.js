@@ -1,6 +1,8 @@
 (function () {
 
-  angular.module('Models').run((Schema, $q) => {
+  angular.module('Models').run((Schema, $q, saAsync) => {
+
+    const NO_CACHE = { bypassCache: true, cacheResponse: false };
 
     Schema.register({
 
@@ -88,7 +90,53 @@
             return _.uniqBy(_.map(items, 'article'), 'id');
           }), 'id');
 
-        }
+        },
+
+        unlinkPickedPaletteBoxes(onBoxProgress = _.noop) {
+
+          const { PickingOrderPositionPicked } = Schema.models();
+
+          return this.findPaletteBoxes({ processing: 'picked' })
+            .then(boxes => $q((resolve, reject) => {
+
+              const tasks = _.map(boxes, ({ id: warehouseBoxId }, idx) =>
+                done => PickingOrderPositionPicked.findAll({ warehouseBoxId }, NO_CACHE)
+                  .then(pickedPositions => {
+
+                    if (!(pickedPositions && pickedPositions.length)) {
+                      // TODO: move box to stock
+                      return;
+                    }
+
+                    return $q.all(pickedPositions.map(pos =>
+                      pos.DSDestroy()
+                        .then(() => pos.unlinkWarehouseBox())
+                    ));
+
+                  })
+                  .then(() => {
+                    done();
+                    onBoxProgress(idx + 1, boxes.length);
+                  }, done)
+              );
+
+              saAsync.series(tasks, err => {
+                if (err) {
+                  console.error(err);
+                  reject(err);
+                } else {
+                  resolve();
+                }
+              });
+
+            }))
+            .then(() => {
+              this.processing = 'stock';
+              this.ownerXid = null;
+              return this.DSCreate();
+            });
+
+        },
 
       },
 

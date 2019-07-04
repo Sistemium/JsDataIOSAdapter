@@ -15,7 +15,7 @@
 
     });
 
-  function PickedBoxesController($scope, saControllerHelper, Picking) {
+  function PickedBoxesController($scope, saControllerHelper, Picking, ConfirmModal) {
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -29,6 +29,40 @@
       $onInit() {
 
         this.setBusy(this.refresh());
+
+      },
+
+      deletePaletteClick(palette) {
+
+        const text = [
+          `Удалить из заказа`,
+          `палету ${palette.barcode}?`,
+        ].join(' ');
+
+        return ConfirmModal.show({ text })
+          .then(() => {
+
+            const busy = palette.unlinkPickedPaletteBoxes(onBoxProgress)
+              .then(() => Picking.replySuccess('Палета удалена'))
+              .catch(err => {
+                console.error(err);
+                Picking.replyError('Ошибка сохранения данных');
+              })
+              .finally(() => this.refresh());
+
+            vm.cgBusy = {
+              promise: busy,
+              message: 'Сохранение данных',
+            };
+
+            return busy;
+
+            function onBoxProgress(boxNumber, totalBoxes) {
+              vm.cgBusy.message = `Коробка ${boxNumber} из ${totalBoxes}`;
+            }
+
+          })
+          .catch(_.noop);
 
       },
 
@@ -84,6 +118,7 @@
             });
 
             this.boxesByPaletteId = boxesByPaletteId;
+            this.selectedPalette = null;
 
           });
 
