@@ -95,26 +95,26 @@
 
         linkPickedPaletteBoxes(palette, boxedItems, onBoxProgress = _.noop) {
 
-          return $q((resolve, reject) => {
+          return this.setPicked(palette)
+            .then(() => $q((resolve, reject) => {
 
-            const tasks = _.map(boxedItems, ({ warehouseBox, items }, idx) =>
-              done => this.linkPickedBoxItems(warehouseBox, items, palette.id)
-                .then(() => {
-                  done();
-                  onBoxProgress(idx + 1, boxedItems.length);
-                }, done)
-            );
+              const tasks = _.map(boxedItems, ({ warehouseBox, items }, idx) =>
+                done => this.linkPickedBoxItems(warehouseBox, items, palette.id)
+                  .then(() => {
+                    done();
+                    onBoxProgress(idx + 1, boxedItems.length);
+                  }, done)
+              );
 
-            saAsync.series(tasks, err => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve();
-              }
-            });
+              saAsync.series(tasks, err => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve();
+                }
+              });
 
-          })
-            .then(() => this.setPicked(palette));
+            }));
 
         },
 
