@@ -9,7 +9,7 @@
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout,
                                DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper) {
 
-    const {ClickHelper, saEtc, saControllerHelper, saMedia, toastr, DomainOption} = Helpers;
+    const { ClickHelper, saEtc, saControllerHelper, saMedia, toastr, DomainOption } = Helpers;
     const {
       Article, Stock, ArticleGroup, PriceType, SaleOrder,
       SaleOrderPosition,
@@ -59,7 +59,7 @@
       showFirstLevel: true,
       stockWithPicIndex: [],
       discountsBy: {},
-      discounts: {article: {}, priceGroup: {}, saleOrder: {}},
+      discounts: { article: {}, priceGroup: {}, saleOrder: {} },
       restrictionsBy: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
@@ -120,7 +120,7 @@
             setPriceType(vm.saleOrder.priceType);
           }
 
-          vm.rebindAll(SaleOrderPosition, {saleOrderId: newValue}, 'vm.saleOrderPositions', (e, newPositions) => {
+          vm.rebindAll(SaleOrderPosition, { saleOrderId: newValue }, 'vm.saleOrderPositions', (e, newPositions) => {
 
             cacheSaleOrderPositions();
 
@@ -138,7 +138,7 @@
 
         SalesmanAuth.watchCurrent($scope, salesman => {
 
-          let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+          let filter = SalesmanAuth.makeFilter({ processing: 'draft' });
 
           vm.currentSalesman = salesman;
           vm.rebindAll(SaleOrder, filter, 'draftSaleOrders');
@@ -158,7 +158,7 @@
 
             })
             .then(() => {
-              return vm.saleOrder.outlet.DSLoadRelations('Partner', {bypassCache: true});
+              return vm.saleOrder.outlet.DSLoadRelations('Partner', { bypassCache: true });
             });
 
         });
@@ -281,7 +281,7 @@
 
           let parent = saEtc.getElementById('scroll-articles-parent');
 
-          let {children} = parent.children[0];
+          let { children } = parent.children[0];
 
           _.each(children, node => {
             node.style.left = '0';
@@ -297,7 +297,7 @@
         return;
       }
 
-      let filter = SalesmanAuth.makeFilter({processing: 'draft'});
+      let filter = SalesmanAuth.makeFilter({ processing: 'draft' });
 
       vm.saleOrderBusy = SaleOrder.findAllWithRelations(filter)('Outlet');
 
@@ -342,7 +342,7 @@
 
       if (!vm.showImages) return;
 
-      ArticlePicture.findAll({}, {limit: 10000});
+      ArticlePicture.findAll({}, { limit: 10000 });
 
     }
 
@@ -401,7 +401,7 @@
           toastr.info(
             `Изменились остатки: ${count} ${SaleOrder.meta.positionsCountRu(count)}`,
             'Обновление данных',
-            {timeOut: 5000}
+            { timeOut: 5000 }
           );
         }
 
@@ -444,7 +444,7 @@
     }
 
     function setSaleOrderClick(saleOrder) {
-      $state.go('sales.catalogue.saleOrder', {saleOrderId: _.get(saleOrder, 'id')});
+      $state.go('sales.catalogue.saleOrder', { saleOrderId: _.get(saleOrder, 'id') });
     }
 
     function priceTypeClick(priceType) {
@@ -491,7 +491,7 @@
 
     function pieceVolumeClick(pieceVolumeInt) {
 
-      let volumeFilter = {pieceVolume: pieceVolumeInt, label: pieceVolumeInt + 'л'};
+      let volumeFilter = { pieceVolume: pieceVolumeInt, label: pieceVolumeInt + 'л' };
 
       if (!_.find(vm.filters, 'pieceVolume')) {
         vm.filters.push(volumeFilter);
@@ -526,20 +526,20 @@
 
       let priceTypeId = vm.currentPriceType && vm.currentPriceType.id;
 
-      if (_.isEqual(vm.discountsBy, {partnerId, contractId, priceTypeId, saleOrderId})) {
+      if (_.isEqual(vm.discountsBy, { partnerId, contractId, priceTypeId, saleOrderId })) {
         // console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
-      vm.discountsBy = {contractId, partnerId, priceTypeId, saleOrderId};
+      vm.discountsBy = { contractId, partnerId, priceTypeId, saleOrderId };
 
       const contractFilter = {
-        contractId: {'==': contractId},
+        contractId: { '==': contractId },
         // discount: {'!=': 0}
       };
 
       const partnerFilter = {
-        partnerId: {'==': partnerId},
+        partnerId: { '==': partnerId },
         // discount: {'!=': 0}
       };
 
@@ -548,10 +548,10 @@
       }
 
       $q.all([
-        ContractArticle.uncachedFindAll({where: contractFilter}, {limit: 10000}),
-        ContractPriceGroup.uncachedFindAll({where: contractFilter}, {limit: 10000}),
-        PartnerArticle.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
-        PartnerPriceGroup.uncachedFindAll({where: partnerFilter}, {limit: 10000}),
+        ContractArticle.uncachedFindAll({ where: contractFilter }, { limit: 10000 }),
+        ContractPriceGroup.uncachedFindAll({ where: contractFilter }, { limit: 10000 }),
+        PartnerArticle.uncachedFindAll({ where: partnerFilter }, { limit: 10000 }),
+        PartnerPriceGroup.uncachedFindAll({ where: partnerFilter }, { limit: 10000 }),
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
           .then(SaleOrderDiscount.meta.ensureUnique)
           .catch(() => {
@@ -560,8 +560,8 @@
       ])
         .then(allData => {
 
-          let {discounts} = vm.saleOrder;
-          let saleOrderScopeDiscount = _.find(discounts, {discountScope: 'saleOrder'});
+          let { discounts } = vm.saleOrder;
+          let saleOrderScopeDiscount = _.find(discounts, { discountScope: 'saleOrder' });
 
           let discountModel = {
             article: _.keyBy([
@@ -583,7 +583,7 @@
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
 
-            let {articleId} = pos;
+            let { articleId } = pos;
             let price = vm.prices[articleId];
 
             let posDiscount = pos.priceOrigin &&
@@ -592,7 +592,7 @@
               _.round((pos.priceOrigin - pos.priceDoc) / pos.priceOrigin * 100.0, 2) || 0;
 
             if (!price) {
-              price = vm.prices[articleId] = {price: pos.priceOrigin};
+              price = vm.prices[articleId] = { price: pos.priceOrigin };
               // console.warn(`setting prices from position ${pos.id}`);
             }
 
@@ -617,7 +617,7 @@
             ) {
 
               vm.discounts.article[articleId] = _.assign(
-                articleDiscount || SaleOrderDiscount.createInstance({discountScope: 'article'}),
+                articleDiscount || SaleOrderDiscount.createInstance({ discountScope: 'article' }),
                 {
                   discount: posDiscount,
                   discountDoc: posDiscountDoc,
@@ -644,7 +644,7 @@
 
     function setDiscountsWithModelData(article = {}, priceGroup = {}, saleOrder = {}) {
 
-      vm.discounts = {priceGroup, saleOrder, article};
+      vm.discounts = { priceGroup, saleOrder, article };
 
     }
 
@@ -658,7 +658,7 @@
 
         maxPositionsAlertShown = true;
 
-        toastr.error(`В заказе больше чем ${maxPositions} позиций`, 'Внимание!', {onHidden});
+        toastr.error(`В заказе больше чем ${maxPositions} позиций`, 'Внимание!', { onHidden });
 
       }
 
@@ -693,7 +693,7 @@
 
     function findAll() {
 
-      let options = {limit: 10000};
+      let options = { limit: 10000 };
       let volumeNotZero = {
         volume: {
           '>': 0
@@ -713,7 +713,7 @@
                 _.set(PriceType.get(priceTypeId), 'isVisible', true);
               });
 
-              vm.priceTypes = PriceType.filter({isVisible: true});
+              vm.priceTypes = PriceType.filter({ isVisible: true });
 
               if (!vm.currentPriceType) {
                 vm.currentPriceType = _.get(vm.saleOrder, 'priceType') || PriceType.meta.getDefault();
@@ -745,10 +745,10 @@
               where: volumeNotZero
             }, _.assign({ mergeUpdates: true }, options)),
 
-            Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.id}, options))
+            Price.cachedFindAll(_.assign({ priceTypeId: vm.currentPriceType.id }, options))
               .then(() => {
                 if (vm.currentPriceType.parentId) {
-                  return Price.cachedFindAll(_.assign({priceTypeId: vm.currentPriceType.parentId}, options));
+                  return Price.cachedFindAll(_.assign({ priceTypeId: vm.currentPriceType.parentId }, options));
                 }
               })
 
@@ -821,7 +821,7 @@
 
       if (!priceType.prices()) {
         DEBUG('filterStock', 'cachedFindAll Price', priceType.id);
-        return Price.cachedFindAll({priceTypeId: priceType.id, limit: 10000})
+        return Price.cachedFindAll({ priceTypeId: priceType.id, limit: 10000 })
           .then(prices => {
             vm.busyFilteringStock = false;
             return _.isEmpty(prices) ? prices : filterStock();
@@ -846,7 +846,7 @@
         _.each(vm.currentPriceType.prices(), ({ price, articleId }) => {
 
           if (price > 0) {
-            vm.prices[articleId] = {price};
+            vm.prices[articleId] = { price };
           }
 
         });
@@ -880,7 +880,7 @@
 
       function targetDiscountPercent(discountScope, target) {
 
-        let {discounts} = vm;
+        let { discounts } = vm;
         let targetField = `discount${target}`;
 
         switch (discountScope) {
@@ -922,7 +922,7 @@
 
         let path = 'saleOrder';
         let filter = {};
-        let {articleId} = this;
+        let { articleId } = this;
 
         if (discountScope === 'article') {
 
@@ -1154,13 +1154,13 @@
         articleGroupId: filter.articleGroupId,
         q: vm.search,
         ordered: vm.showOnlyOrdered || null
-      }, {notify: false});
+      }, { notify: false });
 
     }
 
     function etcArticleGroup(articleGroup) {
 
-      let {id} = articleGroup;
+      let { id } = articleGroup;
 
       return {
         articleGroup,
@@ -1191,7 +1191,7 @@
 
         let ownStock = getStockByArticlesOfGroup(null);
         let groupIds = articleGroupIds(ownStock);
-        let childGroups = _.filter(ArticleGroup.getAll(), {articleGroupId: null});
+        let childGroups = _.filter(ArticleGroup.getAll(), { articleGroupId: null });
         vm.firstLevelGroups = _.filter(childGroups, hasArticlesOrGroupsInStock(groupIds));
 
       }
@@ -1223,11 +1223,11 @@
       vm.ancestors = [];
 
       if (articleGroup || vm.showOnlyOrdered) {
-        vm.ancestors.push({displayName: 'Все товары', showAll: true});
+        vm.ancestors.push({ displayName: 'Все товары', showAll: true });
       }
 
       if (vm.showOnlyOrdered) {
-        vm.ancestors.push({displayName: 'Товары заказа', id: false});
+        vm.ancestors.push({ displayName: 'Товары заказа', id: false });
       }
 
       if (articleGroup) {
@@ -1336,7 +1336,7 @@
 
           if (res && tags.length) {
             _.each(tags, tag => {
-              res = res && _.find(article.tags, {code: tag.code});
+              res = res && _.find(article.tags, { code: tag.code });
             });
           }
 
@@ -1350,7 +1350,7 @@
 
       DEBUG('getStockByArticlesOfGroup', 'articleIds');
 
-      let {priceSlider = {options: {}}} = vm;
+      let { priceSlider = { options: {} } } = vm;
 
       let minPrice = priceSlider.min > 0 && priceSlider.min;
       let maxPrice = priceSlider.max < priceSlider.options.ceil && priceSlider.max;
@@ -1435,15 +1435,15 @@
         return;
       }
 
-      if (_.isEqual(vm.restrictionsBy, {salesmanId, outletId})) {
+      if (_.isEqual(vm.restrictionsBy, { salesmanId, outletId })) {
         return;
       }
 
-      vm.restrictionsBy = {salesmanId, outletId};
+      vm.restrictionsBy = { salesmanId, outletId };
 
       $q.all([
-        OutletRestriction.findAll({outletId}, {cacheResponse: false}),
-        SalesmanOutletRestriction.findAll({salesmanId, outletId}, {cacheResponse: false}),
+        OutletRestriction.findAll({ outletId }, { cacheResponse: false }),
+        SalesmanOutletRestriction.findAll({ salesmanId, outletId }, { cacheResponse: false }),
         Restriction.findAll(),
       ])
         .then(res => {
