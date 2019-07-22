@@ -104,6 +104,8 @@ before-tag-name='li'
         uib-tooltip='Нет в наличии'
         )
 
+        small.flagged(ng-if="::stock.commentText") {{ stock.commentText }}
+
         small.gray.nowrap(
         ng-if='stock.volume'
         )

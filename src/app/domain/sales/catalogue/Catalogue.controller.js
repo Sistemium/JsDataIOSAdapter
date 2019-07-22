@@ -376,12 +376,14 @@
 
         // FIXME: article won't appear if there's no price
 
-        _.each(event.data, ({ data: { volume, displayVolume, articleId } }) => {
+        _.each(event.data, stockItem => {
+
+          const { data: { volume, displayVolume, articleId, commentText } } = stockItem;
 
           const stock = _.find(sortedStock, { articleId });
 
           if (stock) {
-            _.assign(stock, { volume, displayVolume });
+            _.assign(stock, { volume, displayVolume, commentText });
           } else {
             notFound.push(articleId);
           }
@@ -792,7 +794,7 @@
 
         if (!stock.article) return;
 
-        const { id, volume, displayVolume, article, articleId, priceAgent } = stock;
+        const { id, volume, displayVolume, article, articleId, priceAgent, commentText } = stock;
 
         stockCache.push({
           id, volume, displayVolume, article, articleId, priceAgent,
@@ -802,7 +804,8 @@
           discountPriceDoc,
           priceOrigin,
           discountScope,
-          setDiscountScope
+          setDiscountScope,
+          commentText,
         });
 
       });
