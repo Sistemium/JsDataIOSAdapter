@@ -4,29 +4,29 @@
 
   SalesModule.component('saleOrderAlert', {
 
-      transclude: {
-        popovers: '?popovers',
-        buttons: '?buttons',
-        totals: '?totals'
-      },
+    transclude: {
+      popovers: '?popovers',
+      buttons: '?buttons',
+      totals: '?totals'
+    },
 
-      bindings: {
-        saleOrderExpanded: '=expanded',
-        saleOrder: '=',
-        discounts: '='
-      },
+    bindings: {
+      saleOrderExpanded: '=expanded',
+      saleOrder: '=',
+      discounts: '='
+    },
 
-      controller: saleOrderAlertController,
+    controller: saleOrderAlertController,
 
-      templateUrl: 'app/domain/sales/saleOrderAlert/saleOrderAlert.html',
-      controllerAs: 'vm'
+    templateUrl: 'app/domain/sales/saleOrderAlert/saleOrderAlert.html',
+    controllerAs: 'vm'
 
-    });
+  });
 
 
-  function saleOrderAlertController(Schema, toastr, $state, $timeout, DomainOption) {
+  function saleOrderAlertController(Schema, $scope, toastr, $state, $timeout, DomainOption) {
 
-    const {SaleOrder} = Schema.models();
+    const { SaleOrder } = Schema.models();
 
     const vm = this;
 
@@ -36,7 +36,22 @@
     _.assign(vm, {
       deleteSaleOrderClick,
       saleOrderMinDate: moment().toDate(),
-      saleOrderInitDate: nextWorkDay
+      saleOrderInitDate: nextWorkDay,
+
+      $onInit() {
+        $scope.$watch('vm.saleOrder.target', () => {
+          vm.useRNK = _.get(vm.saleOrder, 'target') === 'rnk';
+        });
+        $scope.$watch('vm.useRNK', () => this.onRNK());
+      },
+
+      onRNK() {
+        if (!vm.saleOrder) {
+          return;
+        }
+        vm.saleOrder.target = vm.useRNK ? 'rnk' : null;
+      },
+
     }, DomainOption.saleOrderOptions());
 
     function deleteSaleOrderClick() {

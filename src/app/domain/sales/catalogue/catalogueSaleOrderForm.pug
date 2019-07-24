@@ -77,3 +77,12 @@ close='vm.saleOrder.processingMessage = null'
     on-label='Да'
     off-label='Нет'
     )
+
+.form-group.form-group-switch
+  label.control-label.col-md-9.col-sm-8 Показать РНК?
+  .col-md-3.col-sm-4
+    toggle-switch(
+      ng-model='vm.useRNK'
+      on-label='Да'
+      off-label='Без РНК'
+    )

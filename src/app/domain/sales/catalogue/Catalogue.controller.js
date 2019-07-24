@@ -145,6 +145,12 @@
 
         });
 
+        vm.watchScope('vm.saleOrder.target', (oldVal, newVal) => {
+          if (oldVal !== newVal) {
+            reloadVisible();
+          }
+        });
+
         vm.watchScope('vm.saleOrder.outlet.id', (outletId) => {
 
           if (!outletId) return vm.articleStats = {};
@@ -795,6 +801,10 @@
         if (!stock.article) return;
 
         const { id, volume, displayVolume, article, articleId, priceAgent, commentText } = stock;
+
+        if (!vm.saleOrder.target && commentText) {
+          return;
+        }
 
         stockCache.push({
           id, volume, displayVolume, article, articleId, priceAgent,

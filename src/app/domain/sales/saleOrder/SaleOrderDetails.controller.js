@@ -19,7 +19,7 @@
       toggleEditClick: () => $state.go('sales.catalogue.saleOrder', { saleOrderId: vm.saleOrder.id }),
 
       setSaleOrderClick,
-      copySaleOrderClick
+      copySaleOrderClick,
 
     });
 
