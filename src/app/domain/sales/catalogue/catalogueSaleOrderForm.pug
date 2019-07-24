@@ -78,7 +78,7 @@ close='vm.saleOrder.processingMessage = null'
     off-label='Нет'
     )
 
-.form-group.form-group-switch
+.form-group.form-group-switch(ng-if="vm.rnkOption")
   label.control-label.col-md-9.col-sm-8 Показать РНК?
   .col-md-3.col-sm-4
     toggle-switch(

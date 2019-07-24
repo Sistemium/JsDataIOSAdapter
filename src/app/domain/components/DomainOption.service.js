@@ -28,7 +28,12 @@
       hasPriceAgent,
       stmArticleGroupId,
       salesTargets,
+      rnkOption,
     };
+
+    function rnkOption() {
+      return customerCode() === 'r50';
+    }
 
     function salesTargets() {
       return customerCode() === 'r50' && siteInstance === 'sales';

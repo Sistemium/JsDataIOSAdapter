@@ -34,6 +34,8 @@
     const nextWorkDay = moment().add(1, 'day').toDate();
 
     _.assign(vm, {
+
+      rnkOption: DomainOption.rnkOption(),
       deleteSaleOrderClick,
       saleOrderMinDate: moment().toDate(),
       saleOrderInitDate: nextWorkDay,
