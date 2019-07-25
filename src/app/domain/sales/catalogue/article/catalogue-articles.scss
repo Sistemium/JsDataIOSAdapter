@@ -315,6 +315,12 @@
     }
   }
 
+  small.flagged.comment {
+    background-color: $state-danger-bg;
+    color: $state-danger-text;
+    border-color: $state-danger-border;
+  }
+
   .article-name-second {
 
     color: $gray;
