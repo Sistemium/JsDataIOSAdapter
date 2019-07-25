@@ -802,7 +802,7 @@
 
         const { id, volume, displayVolume, article, articleId, priceAgent, commentText } = stock;
 
-        if (!vm.saleOrder.target && commentText) {
+        if (!vm.saleOrder.target && commentText && !vm.saleOrderPositionByArticle[articleId]) {
           return;
         }
 
