@@ -801,7 +801,7 @@
         if (!stock.article) return;
 
         const { id, volume, displayVolume, article, articleId, priceAgent, commentText } = stock;
-        const inOrder = _.get(vm.saleOrderPositionByArticle, 'articleId');
+        const inOrder = _.get(vm.saleOrderPositionByArticle, articleId);
 
         if (!_.get(vm.saleOrder, 'target') && commentText && !inOrder) {
           return;
