@@ -146,7 +146,7 @@
     }
 
     function visitsDisabled() {
-      return customerCode() === 'bs';
+      // return customerCode() === 'bs';
     }
 
     function hasMVZ() {
