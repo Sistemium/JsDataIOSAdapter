@@ -1,7 +1,5 @@
 @import "variables";
 
-
-
 catalogue-filter {
 
   $border-radius: 10px;
@@ -45,6 +43,21 @@ catalogue-filter {
   .catalogue-filter-body {
     overflow-y: scroll;
     padding-bottom: 20px;
+  }
+
+  .rnk-filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .ats-switch {
+      flex: 1;
+      margin-left: $margin;
+    }
+    margin-bottom: $margin-bottom-xs;
+    > label {
+      font-weight: normal;
+      margin: 0;
+    }
   }
 
   .price-filter .settings {

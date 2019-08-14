@@ -69,6 +69,7 @@
 
       saleOrdersDisabled: DomainOption.saleOrdersDisabled(),
       noFactor: !DomainOption.hasArticleFactors(),
+      rnkOnlyFilter: false,
 
       articleGroupClick: setCurrentArticleGroup,
       priceTypeClick,
@@ -206,6 +207,10 @@
         vm.firstLevelGroups = null;
         setCurrentArticleGroup(vm.currentArticleGroup);
       }
+    });
+
+    vm.watchScope('vm.rnkOnly', () => {
+      setCurrentArticleGroup(vm.currentArticleGroup);
     });
 
     vm.watchScope(
@@ -1366,11 +1371,15 @@
       let minPrice = priceSlider.min > 0 && priceSlider.min;
       let maxPrice = priceSlider.max < priceSlider.options.ceil && priceSlider.max;
 
-      let noFilters = !articleIds && !minPrice && !maxPrice;
+      let noFilters = !articleIds && !minPrice && !maxPrice && !vm.rnkOnly;
 
       let result = noFilters ? sortedStock : _.filter(sortedStock, stock => {
 
         let price = (minPrice || maxPrice) && stock.priceOrigin();
+
+        if (vm.rnkOnly && !stock.commentText) {
+          return;
+        }
 
         if (minPrice) {
           if (price < minPrice) {

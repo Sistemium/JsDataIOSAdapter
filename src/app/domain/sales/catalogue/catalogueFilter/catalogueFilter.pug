@@ -17,6 +17,14 @@ resize resize-offset-top='5'
 
       include tabs/catalogueFilterQueries
 
+      .rnk-filter(ng-if="vm.rnkOption")
+        label Только РНК?
+        toggle-switch(
+          ng-model='vm.rnkOnly'
+          on-label='Да'
+          off-label='Нет'
+        )
+
       .active-filters(
       ng-if='vm.filters.length || vm.cvm.currentArticleGroup || vm.priceSlider.hasFilter()'
       )

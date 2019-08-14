@@ -11,6 +11,8 @@
       activeTags: '=',
       activeGroup: '=',
       cvm: '=catalogueVm',
+      rnkOption: '<',
+      rnkOnly: '=',
 
       removeTagClick: '=',
       priceSlider: '=',
@@ -34,7 +36,7 @@
                                      $state, localStorageService, saEtc,
                                      saMedia) {
 
-    const {SearchQuery, Article, ArticleTagGroup, ArticleTag} = Schema.models();
+    const { SearchQuery, Article, ArticleTagGroup, ArticleTag } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -62,7 +64,7 @@
       search: $state.params.q || '',
       showFirstLevel: true,
 
-      tabsOpen: localStorageService.get(LS_KEY) || {categories: true},
+      tabsOpen: localStorageService.get(LS_KEY) || { categories: true },
       settings: localStorageService.get(LS_SETTINGS_KEY) || {},
 
       priceSlider: {
@@ -97,6 +99,16 @@
         vm.searchText = '';
         setFilters();
       }
+    });
+
+    vm.watchScope('vm.rnkOption', rnkOption => {
+      if (!rnkOption) {
+        vm.rnkOnly = false;
+      }
+    });
+
+    vm.watchScope('vm.rnkOnly', () => {
+      setFilters();
     });
 
     vm.watchScope('vm.searchFocused', onSearchFocus);
@@ -218,7 +230,7 @@
 
     function ancestorGroups() {
 
-      let {ancestors} = vm.cvm;
+      let { ancestors } = vm.cvm;
 
       if (!vm.cvm.currentArticleGroup && vm.cvm.showOnlyOrdered) {
         return [_.first(ancestors)];
@@ -273,7 +285,7 @@
           return;
         }
 
-        let existing = _.find(searchQueries, {query});
+        let existing = _.find(searchQueries, { query });
 
         if (existing) {
           if (existing.isFavourite) {
@@ -281,7 +293,7 @@
           }
           _.remove(searchQueries, existing);
         } else {
-          existing = {query};
+          existing = { query };
         }
 
         res.push(existing);
@@ -299,7 +311,7 @@
       SearchQuery.findAll()
         .catch(() => {
           SearchQuery.adapter = 'localStorage';
-          return SearchQuery.findAll({}, {bypassCache: true});
+          return SearchQuery.findAll({}, { bypassCache: true });
         });
 
       let filter = {
@@ -331,7 +343,7 @@
     function getSearchQuery(searchText) {
 
       let query = searchText;
-      let searchQuery = _.find(SearchQuery.getAll(), {query});
+      let searchQuery = _.find(SearchQuery.getAll(), { query });
 
       if (!searchQuery) {
         searchQuery = SearchQuery.createInstance({
@@ -348,7 +360,7 @@
     function toggleFavouriteClick() {
 
       let query = vm.searchText;
-      let searchQuery = _.find(SearchQuery.getAll(), {query});
+      let searchQuery = _.find(SearchQuery.getAll(), { query });
 
       if (!searchQuery) {
         searchQuery = {
@@ -368,7 +380,7 @@
 
     function removeQueryClick(searchQuery) {
 
-      let {query} = searchQuery;
+      let { query } = searchQuery;
 
       if (vm.search && vm.search.toLocaleLowerCase() === query) {
         vm.search = null;
@@ -390,15 +402,15 @@
         tag = ArticleTag.get(tag.code);
       }
 
-      let {groupId = '_', id = tag.label, group = {}, label} = tag;
+      let { groupId = '_', id = tag.label, group = {}, label } = tag;
 
-      let {allowMultiple} = group;
+      let { allowMultiple } = group;
 
       let groupData = vm.activeTags[groupId] || {};
 
       let newData = allowMultiple ? groupData : {};
 
-      if (groupData[id] || _.find(vm.filters, {label})) {
+      if (groupData[id] || _.find(vm.filters, { label })) {
         delete newData[id];
       } else {
         newData[id] = tag;
@@ -452,8 +464,12 @@
       let filters = _.flattenDeep([_.map(vm.activeTags, groupTags => _.map(groupTags)), pieceVolume]);
 
       if (shouldShowSearchAsFilter()) {
-        filters.push({label: vm.search, isSearch: true, cls: 'search'});
+        filters.push({ label: vm.search, isSearch: true, cls: 'search' });
       }
+      //
+      // if (vm.rnkOnly) {
+      //   filters.push({ type: 'rnkOnly' });
+      // }
 
       vm.filters = _.filter(filters);
 
