@@ -77,7 +77,7 @@
           return 75;
         }
         case 'r50p': {
-          return 40;
+          return 25;
         }
         default: {
           return false;
