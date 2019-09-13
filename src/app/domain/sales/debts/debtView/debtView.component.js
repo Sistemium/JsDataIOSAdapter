@@ -293,7 +293,8 @@
           item.outlet = outlet;
           return outlet.DSLoadRelations('Partner');
         })
-        .then(() => item);
+        .then(() => item)
+        .catch(() => item.outlet = null);
 
     }
 
