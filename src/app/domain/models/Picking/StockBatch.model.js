@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, $q) {
+  angular.module('Models').run(function (Schema) {
 
     const totalVolume = Schema.aggregate('volume').sum;
 
@@ -42,45 +42,7 @@
 
       },
 
-      someBy: {
-
-        barCode: code => {
-
-          const SBBC = Schema.model('StockBatchBarCode');
-          const SB = Schema.model('StockBatch');
-
-          return $q((resolve, reject) => {
-
-            if (!code) {
-              return reject('Укажите штрих-код');
-            }
-
-            SBBC.findAll({
-              code: code
-            }).then(res => {
-
-              if (!res.length) {
-                return resolve([]);
-              }
-
-              const qs = _.map(res, i => {
-                return SBBC.loadRelations(i);
-              });
-
-              $q.all(qs).then(sbbcs => {
-
-                $q.all(_.map(sbbcs, sbbc => {
-                  return SB.loadRelations(sbbc.stockBatchId, 'Article');
-                }))
-                  .then(resolve, reject);
-
-              }, reject);
-
-            });
-
-          });
-        }
-      }
+      meta: {}
 
     });
 

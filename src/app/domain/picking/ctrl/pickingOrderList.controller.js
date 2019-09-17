@@ -9,7 +9,7 @@
 
   function PickingOrderListController($scope, Schema, $state, Errors,
                                       BarCodeScanner, SoundSynth, Sockets,
-                                      saAsync, DEBUG, IOS) {
+                                      saAsync, DEBUG, IOS, Picking) {
 
     const picker = Schema.model('Picker').getCurrent();
 
@@ -334,10 +334,8 @@
         SB.inject(object);
         //toastr.info (object.id,'scanFn object.id');
         q = SB.find(object.id);
-      } else if (vm.barCodeInput) {
-        q = SB.someBy.barCode(code).then(sbs => {
-          return _.head(sbs);
-        });
+      } else if (vm.barCodeInput || codeType === BARCODE_TYPE_STOCK_BATCH) {
+        q = Picking.stockBatchByBarCode(code);
       } else {
         return SoundSynth.say(notFound);
       }

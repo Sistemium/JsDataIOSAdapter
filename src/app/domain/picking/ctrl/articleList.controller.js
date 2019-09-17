@@ -19,9 +19,9 @@
       Article,
       // PickingOrder,
       PickingOrderPosition,
-      WarehouseBox,
-      WarehouseItem,
-      WarehousePalette,
+      // WarehouseBox,
+      // WarehouseItem,
+      // WarehousePalette,
     } = Schema.models();
 
     const orders = $scope.vm.pickingItems || $scope.vm.selectedItems;
@@ -100,10 +100,8 @@
     }
 
     function onWarehousePaletteScan(barcode) {
-      return WarehousePalette.findAll({ barcode }, { cacheResponse: false })
-        .then(res => {
-
-          const found = _.first(res);
+      return Picking.warehousePaletteByBarcode(barcode)
+        .then(found => {
 
           const current = found && found.id === currentPaletteId();
 
@@ -120,10 +118,8 @@
 
     function onWarehouseBoxScan(barcode) {
 
-      return WarehouseBox.findAll({ barcode }, { cacheResponse: false })
-        .then(res => {
-
-          const found = _.first(res);
+      return Picking.warehouseBoxByBarcode(barcode)
+        .then(found => {
 
           if (_.get(vm.scanned, 'items.length')) {
             const box = found || { barcode, processing: 'picked' };
@@ -136,10 +132,8 @@
     }
 
     function onWarehouseItemScan(barcode) {
-      return WarehouseItem.findAllWithRelations(
-        { barcode },
-        { cacheResponse: false })(['Article'])
-        .then(res => res.length ? onWarehouseItem(res[0]) : Picking.replyNotFound());
+      return Picking.warehouseItemByBarcode(barcode)
+        .then(item => item ? onWarehouseItem(item) : Picking.replyNotFound());
     }
 
 
@@ -215,7 +209,7 @@
         return;
       }
 
-      return $q.when(box.id ? box : WarehouseBox.create(box))
+      return $q.when(box.id ? box : Picking.createWarehouseBox(box))
         .then(warehouseBox => {
 
           switch (warehouseBox.processing) {
@@ -231,7 +225,7 @@
 
             case 'draft':
             case 'stock': {
-              return warehouseBox.boxItems()
+              return Picking.boxItems(warehouseBox)
                 .then(boxItems => {
                   if (!boxItems.length) {
                     return warehouseBox;
@@ -560,7 +554,7 @@
 
       }
 
-      return box.boxItems()
+      return Picking.boxItems(box)
         .then(items => {
           if (!items.length) {
             Picking.replyError('Пустая коробка');

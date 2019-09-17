@@ -3,6 +3,7 @@
   angular.module('Models').run((Schema, $q, saAsync) => {
 
     const NO_CACHE = { bypassCache: true, cacheResponse: false };
+    const SOCKET_SOURCE = { cacheResponse: false, socketSource: true };
 
     Schema.register({
 
@@ -46,33 +47,39 @@
         findPaletteBoxes(filter = {}) {
 
           const { WarehouseBox } = Schema.models();
-          const options = { cacheResponse: false };
 
-          return WarehouseBox.findAll(_.assign({ currentPaletteId: this.id, }, filter), options);
+          return WarehouseBox.findAll(_.assign({ currentPaletteId: this.id, }, filter), SOCKET_SOURCE);
 
         },
 
         paletteItems() {
 
           const { WarehouseItem } = Schema.models();
+          const options = _.assign({ limit: 15000, field: 'currentBoxId' }, SOCKET_SOURCE);
 
           return this.findPaletteBoxes({ processing: 'stock', ownerXid: null })
             .then(boxes => {
 
               const boxIds = _.map(boxes, 'id');
-              const where = {
-                currentBoxId: {
-                  '==': boxIds,
-                },
-              };
+              // const where = {
+              //   currentBoxId: {
+              //     '==': boxIds,
+              //   },
+              // };
 
-              return WarehouseItem.findAll({ where }, { cacheResponse: false, limit: 15000 })
+              return WarehouseItem.findByMany(boxIds, options)
+                .then(items => {
+                  const uniqItems = _.uniqBy(items, 'articleId');
+                  const load = _.map(uniqItems, item => WarehouseItem.loadRelations(item, 'Article'));
+                  return $q.all(load).then(() => items);
+                })
                 .then(allItems => {
                   const byId = _.groupBy(allItems, 'currentBoxId');
-                  return _.map(boxes, warehouseBox => ({
+                  const boxed = _.map(boxes, warehouseBox => ({
                     warehouseBox,
                     items: byId[warehouseBox.id],
                   }));
+                  return _.filter(boxed, 'items');
                 });
 
             });

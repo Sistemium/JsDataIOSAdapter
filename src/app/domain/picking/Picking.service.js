@@ -12,6 +12,8 @@
       WarehouseBox,
       WarehouseItem,
       WarehousePalette,
+      StockBatch,
+      StockBatchBarCode,
     } = Schema.models();
 
     const NOCACHE = {
@@ -21,7 +23,49 @@
       // limit: 500,
     };
 
+    const NOCACHE_SOCKET = {
+      bypassCache: true,
+      cacheResponse: false,
+      socketSource: 1,
+      // limit: 500,
+    };
+
     return {
+
+      stockBatchByBarCode(code) {
+
+        const options = _.assign({ limit: 1 }, NOCACHE_SOCKET);
+
+        return StockBatchBarCode.findAll({ code }, options)
+          .then(_.first)
+          .then(item => item && StockBatch.find(item.stockBatchId, NOCACHE_SOCKET));
+
+      },
+
+      boxItems(box) {
+        return WarehouseItem.findAllWithRelations(
+          { currentBoxId: box.id }, NOCACHE_SOCKET)(['Article'])
+      },
+
+      createWarehouseBox(box) {
+        return WarehouseBox.create(box);
+      },
+
+      warehouseBoxByBarcode(barcode) {
+        return WarehouseBox.findAll({ barcode }, NOCACHE_SOCKET)
+          .then(_.first);
+      },
+
+      warehousePaletteByBarcode(barcode) {
+        return WarehousePalette.findAll({ barcode }, NOCACHE_SOCKET)
+          .then(_.first);
+      },
+
+      warehouseItemByBarcode(barcode) {
+        return WarehouseItem.findAllWithRelations(
+          { barcode }, NOCACHE_SOCKET)('Article')
+          .then(_.first);
+      },
 
       palettesByOrder(pickingOrder) {
         return WarehousePalette.findAll({ ownerXid: pickingOrder.id }, NOCACHE)
