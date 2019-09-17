@@ -167,12 +167,12 @@
 
     function findByMany(ids, options) {
 
-      const { chunk = 20 } = options || {};
+      const { chunk = 20, field = 'id' } = options || {};
 
       const chunks = _.chunk(_.uniq(ids), chunk);
 
       return $q.all(_.map(chunks, chunkIds =>
-        this.findAll({ id: chunkIds }, options)
+        this.findAll({ [field]: chunkIds }, options)
       ))
         .then(_.flatten);
 
