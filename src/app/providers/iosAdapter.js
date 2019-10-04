@@ -20,6 +20,7 @@
 
           let id = req && req.options && req.options.requestId;
           let request = id && requests [id];
+          const { type } = req && req.options || {};
 
           if (!request) {
             return IOS.iosCallback(name, data, req);
@@ -36,7 +37,7 @@
             }
           }
 
-          deb(name, req.entity, data);
+          deb(name, type, req.entity, data);
 
           request[name](data);
 
@@ -83,6 +84,7 @@
       counter = counter + 2;
 
       options.requestId = id;
+      options.type = type;
 
       let message = {
 
@@ -105,7 +107,7 @@
           promise: promise,
           message: message,
           resolve: resolve,
-          reject: reject
+          reject: reject,
         };
 
         ios.handler(type).postMessage(message);
