@@ -9,6 +9,7 @@
   const WAREHOUSE_ITEM_SCAN_EVENT = 'warehouseItemBarCodeScan';
   const WAREHOUSE_PALETTE_SCAN_EVENT = 'warehousePaletteBarCodeScan';
   const STOCK_BATCH_SCAN_EVENT = 'stockBatchBarCodeScan';
+  const THERE_ARE_UNSYNCED_OBJECTS = 'THERE_ARE_UNSYNCED_OBJECTS';
 
   const PHRASE_PAUSE = 1000;
 
@@ -80,6 +81,11 @@
       lockScanProcessor = true;
 
       scanRouter(options)
+        .catch(e => {
+          if (e === THERE_ARE_UNSYNCED_OBJECTS) {
+            Picking.replyError('Требуется передать данные');
+          }
+        })
         .finally(() => {
           lockScanProcessor = false;
         });
