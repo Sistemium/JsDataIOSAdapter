@@ -104,7 +104,7 @@
           return {
             commentExpeditorOption: true,
             cashOnShipmentOption: false,
-            schemaOption: true
+            schemaOption: !Auth.isAuthorized('disableRNK'),
           };
         }
 
