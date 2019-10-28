@@ -87,7 +87,8 @@
     }
 
     function showNewsCarousel() {
-      return customerCode().match(/r50?/) && Auth.isAuthorized(['salesman', 'newsMaker', 'supervisor']);
+      return customerCode().match(/r50?/)
+        && Auth.isAuthorized(['salesman', 'newsMaker', 'supervisor']);
     }
 
     function saleOrderOptions() {
