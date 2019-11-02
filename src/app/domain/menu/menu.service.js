@@ -45,6 +45,11 @@
       state: 'sales.saleOrders',
       needRoles: SALES_ROLES,
       disabled: DomainOption.saleOrdersDisabled
+    },{
+      title: 'Проверка Точек',
+      state: 'sales.outletTasks',
+      needRoles: SALES_ROLES,
+      disabled: DomainOption.outletTasksDisabled
     }, {
       title: 'Отгрузки',
       state: 'sales.shipmentList',

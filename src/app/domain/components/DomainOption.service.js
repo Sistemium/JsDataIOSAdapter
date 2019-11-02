@@ -29,6 +29,9 @@
       stmArticleGroupId,
       salesTargets,
       rnkOption,
+      outletTasksDisabled() {
+        return customerCode() !== 'r50';
+      }
     };
 
     function rnkOption() {

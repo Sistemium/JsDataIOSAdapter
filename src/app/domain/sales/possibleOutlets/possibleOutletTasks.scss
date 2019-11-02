@@ -1,0 +1,85 @@
+@import "variables";
+
+.possible-outlet-tasks {
+
+  .possible-outlet.list-group-item {
+
+    display: flex;
+
+    .texts {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .controls {
+      color: $green;
+    }
+
+  }
+
+  .buttons {
+    margin-top: $margin;
+
+    @include responsive-only(xxs) {
+      .btn, a {
+        display: block;
+        width: 100%;
+        & + * {
+          margin-top: $margin-bottom-xs;
+        }
+      }
+      display: flex;
+      flex-direction: column;
+      justify-items: stretch;
+    }
+  }
+
+  make-photo {
+    display: inline-block;
+    text-align: center;
+    a {
+      vertical-align: middle;
+      display: inline-block;
+      border: solid 1px #ccc;
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+  }
+
+  $thumb-size: 130px;
+
+  img.thumbnail {
+
+    object-fit: contain;
+    width: $thumb-size;
+    height: $thumb-size;
+
+  }
+
+  .photos {
+
+    margin-top: $margin;
+    display: flex;
+    flex-wrap: wrap;
+
+    .outlet-photo {
+      margin-right: $margin;
+    }
+
+    @include responsive-only(xxs) {
+
+      justify-content: space-between;
+
+      .outlet-photo {
+        margin-right: 0;
+      }
+
+      img.thumbnail {
+        width: $thumb-size/2;
+        height: $thumb-size/2;
+      }
+
+    }
+  }
+
+}

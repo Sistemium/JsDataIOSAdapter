@@ -1,0 +1,10 @@
+.possible-outlet-tasks
+  ui-view
+    .outlets.list-group
+      .possible-outlet.list-group-item(ng-repeat="outlet in vm.outlets track by outlet.id")
+        .texts(ng-click="vm.outletClick(outlet)")
+          strong.name {{ outlet.name }}
+          .gray
+            small {{ outlet.address }}
+        .controls(ng-if="outlet.locationId")
+          i.glyphicon.glyphicon-ok

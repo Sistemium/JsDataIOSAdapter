@@ -1,0 +1,25 @@
+.possible-outlet-visit(cg-busy="vm.cgBusy")
+
+  .name
+    strong {{ vm.outlet.name }}
+  .address.gray
+    small {{ vm.outlet.address }}
+
+  .buttons
+    button.btn(
+      ng-class="vm.outlet.locationId ? 'btn-default' : 'btn-primary'"
+      ng-click="vm.locateClick()"
+    ) {{ vm.outlet.locationId ? 'Обновить' : 'Получить'}} геометку
+
+    make-photo(
+      model-name='PossibleOutletPhoto'
+      defaults='{ possibleOutletId: vm.outletId }'
+      busy='vm.cgBusy'
+    ) Добавить фото
+
+  .photos
+    .outlet-photo(
+      ng-repeat="photo in vm.photos track by photo.id"
+    )
+      a(ng-click="vm.thumbClick(photo)")
+        img.thumbnail(ng-src="{{ photo.srcThumbnail }}")

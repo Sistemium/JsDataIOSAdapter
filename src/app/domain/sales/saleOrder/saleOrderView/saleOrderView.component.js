@@ -123,7 +123,8 @@
       }
 
       saleOrder.DSLoadRelations(['Outlet'])
-        .then(mergeViewData);
+        .then(mergeViewData)
+        .catch(_.noop);
 
     }
 
@@ -193,7 +194,7 @@
 
     function mergeViewData(withData) {
 
-      withData = _.isArray(withData) ? withData : [withData];
+      withData = _.filter(_.isArray(withData) ? withData : [withData], 'outlet');
 
       saleOrders.push(...withData);
 
@@ -259,7 +260,7 @@
             gotAllData = true;
           }
 
-          let promises = _.map(res, saleOrder => saleOrder.DSLoadRelations(['Outlet']));
+          let promises = _.map(res, saleOrder => saleOrder.DSLoadRelations(['Outlet']).catch(_.noop));
 
           return $q.all(promises)
             .then(() => {

@@ -89,7 +89,7 @@
       vm.setBusy(
         [
           Outlet.findAll(_.assign({where: bySalesman}, _.omit(filter, 'date')))
-            .then(SaleOrder.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])),
+            .then(() => findSaleOrders(filter)),
           SaleOrderPosition.findAll(saleOrderPositionsFilter),
           SaleOrder.groupBy(SalesmanAuth.makeFilter(), ['date', 'processing'])
             .then(res => eventsWithSaleOrderDays(res))
@@ -99,6 +99,15 @@
 
       vm.rebindAll(SaleOrder, filter, 'vm.data');
 
+    }
+
+    function findSaleOrders(filter) {
+      return SaleOrder.findAll(filter, { bypassCache: true })
+        .then(items => {
+          const toLoad = _.filter(items, ({ outlet, outletId }) => outletId && !!outlet);
+          const ids = _.map(toLoad, 'outletId');
+          return Outlet.findByMany(ids);
+        });
     }
 
     function itemClick(item) {
