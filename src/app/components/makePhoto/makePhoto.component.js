@@ -6,7 +6,8 @@
 
     bindings: {
       folder: '<',
-      model: '=',
+      model: '=?',
+      defaults: '<',
       modelName: '@',
       busy: '='
     },
@@ -72,10 +73,11 @@
           let href = _.get(_.find(picturesInfo, {name: 'largeImage'}), 'src');
           let thumbnailHref = _.get(_.find(picturesInfo, {name: 'thumbnail'}), 'src');
 
-          _.assign(vm.model, {picturesInfo, href, thumbnailHref});
+          const options = _.assign({ picturesInfo, href, thumbnailHref }, vm.defaults);
+          const props = _.assign(vm.model, options);
 
           if (vm.modelName) {
-            return Schema.model(vm.modelName).create(vm.model)
+            return Schema.model(vm.modelName).create(props)
               .then(savedModel => vm.model = savedModel);
           }
 
