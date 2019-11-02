@@ -26,7 +26,21 @@
         },
       },
 
-      methods: {},
+      methods: {
+        statusIcon() {
+          const hasLocation = this.locationId;
+          const hasPhotos = this.photos.length;
+          if (hasPhotos && hasLocation) {
+            return 'glyphicon-ok green';
+          }
+          if (hasLocation) {
+            return 'glyphicon-map-marker';
+          }
+          if (hasPhotos) {
+            return 'glyphicon-camera';
+          }
+        },
+      },
 
     });
 

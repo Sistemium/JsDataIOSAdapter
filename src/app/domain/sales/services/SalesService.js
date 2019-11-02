@@ -31,7 +31,7 @@
             return $q.all([
               PossibleOutletPhoto.findByMany(ids, options),
               Location.findByMany(locationIds, NO_CACHE),
-            ]).then(() => outlets);
+            ]).then(() => _.orderBy(outlets, ['name', 'address']));
 
           });
       },

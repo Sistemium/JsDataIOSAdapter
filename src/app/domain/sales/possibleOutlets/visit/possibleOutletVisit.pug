@@ -11,9 +11,9 @@
 
   .buttons
     button.btn(
-      ng-class="vm.outlet.locationId ? 'btn-default' : 'btn-primary'"
+      ng-class="vm.outlet.locationId ? 'btn-default' : 'btn-warning'"
       ng-click="vm.locateClick()"
-    ) {{ vm.outlet.locationId ? 'Обновить' : 'Получить'}} геометку
+    ) {{ vm.outlet.locationId ? 'Обновить' : 'Добавить'}} геометку
 
     make-photo(
       model-name='PossibleOutletPhoto'

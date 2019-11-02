@@ -6,5 +6,5 @@
           strong.name {{ outlet.name }}
           .gray
             small {{ outlet.address }}
-        .controls(ng-if="outlet.locationId")
-          i.glyphicon.glyphicon-ok
+        .controls(ng-if="outlet.statusIcon()")
+          i.glyphicon(ng-class="outlet.statusIcon()")
