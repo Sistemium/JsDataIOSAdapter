@@ -169,10 +169,10 @@
 
       const { chunk = 20, field = 'id' } = options || {};
 
-      const chunks = _.chunk(_.uniq(ids), chunk);
+      const chunks = _.chunk(_.uniq(_.filter(ids)), chunk);
 
       return $q.all(_.map(chunks, chunkIds =>
-        this.findAll({ [field]: chunkIds }, options)
+        this.findAll({ [field]: chunkIds }, _.assign({}, options))
       ))
         .then(_.flatten);
 
