@@ -17,10 +17,11 @@
 
   function possibleOutletVisitController(saControllerHelper, $scope, SalesService,
                                          LocationHelper, ConfirmModal, $q, PhotoHelper,
-                                         GalleryHelper) {
+                                         GalleryHelper, $timeout) {
 
     const vm = saControllerHelper.setup(this, $scope)
       .use({
+        confirmId: null,
         $onInit() {
           SalesService.bindPossibleOutlet($scope, this.outletId);
         },
@@ -32,6 +33,19 @@
           $scope.imagesAll = this.photos;
           return this.thumbnailClick(picture);
         },
+        deletePhotoClick(photo) {
+          const { confirmId } = this;
+          if (confirmId === photo.id) {
+            this.setBusy(photo.DSDestroy());
+            this.confirmId = null;
+            this.timeout && $timeout.cancel(this.timeout);
+          } else {
+            this.confirmId = photo.id;
+            this.timeout = $timeout(() => {
+              this.confirmId = null;
+            }, 5000);
+          }
+        }
       })
       .use(GalleryHelper);
 

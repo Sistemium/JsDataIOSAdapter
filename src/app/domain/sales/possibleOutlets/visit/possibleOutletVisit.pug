@@ -5,6 +5,10 @@
   .address.gray
     small {{ vm.outlet.address }}
 
+  .location(ng-if="vm.outlet.location")
+    i.glyphicon.glyphicon-map-marker
+    .accuracy точность геометки: {{ vm.outlet.location.horizontalAccuracy }}м.
+
   .buttons
     button.btn(
       ng-class="vm.outlet.locationId ? 'btn-default' : 'btn-primary'"
@@ -18,8 +22,13 @@
     ) Добавить фото
 
   .photos
+
     .outlet-photo(
       ng-repeat="photo in vm.photos track by photo.id"
     )
       a(ng-click="vm.thumbClick(photo)")
         img.thumbnail(ng-src="{{ photo.srcThumbnail }}")
+      a.delete(
+        ng-class="vm.confirmId && (vm.confirmId !== photo.id ? 'disabled' : 'confirm')"
+        href ng-click="vm.deletePhotoClick(photo)"
+      ) удалить

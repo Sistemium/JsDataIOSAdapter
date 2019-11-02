@@ -17,8 +17,22 @@
 
   }
 
+  .possible-outlet-visit {
+    .buttons, .photos, .location {
+      margin-top: $margin;
+    }
+    .location {
+      i {
+        color: $green;
+      }
+      display: flex;
+      .accuracy {
+        margin-left: $margin-bottom-xs;
+      }
+    }
+  }
+
   .buttons {
-    margin-top: $margin;
 
     @include responsive-only(xxs) {
       .btn, a {
@@ -58,17 +72,27 @@
 
   .photos {
 
-    margin-top: $margin;
     display: flex;
     flex-wrap: wrap;
+    position: relative;
 
     .outlet-photo {
       margin-right: $margin;
+      text-align: center;
+      .thumbnail {
+        margin-bottom: $margin-bottom-xs;
+      }
+      .confirm {
+        background-color: $red;
+        color: $white !important;
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
     }
 
     @include responsive-only(xxs) {
 
-      justify-content: space-between;
+      justify-content: space-around;
 
       .outlet-photo {
         margin-right: 0;

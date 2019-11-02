@@ -2,7 +2,7 @@
 
   const NO_CACHE = { bypassCache: true };
 
-  function SalesService(Schema) {
+  function SalesService(Schema, $q) {
 
     const { Outlet, Partner, Location } = Schema.models();
     const { PossibleOutlet, PossibleOutletPhoto } = Schema.models();
@@ -23,10 +23,16 @@
       findAllPossibleOutlets({ id: salesmanId }) {
         return PossibleOutlet.findAll({ salesmanId }, NO_CACHE)
           .then(outlets => {
-            const options = _.assign({ field: 'possibleOutletId'}, NO_CACHE);
+
+            const options = _.assign({ field: 'possibleOutletId' }, NO_CACHE);
             const ids = _.map(outlets, 'id');
-            return PossibleOutletPhoto.findByMany(ids, options)
-              .then(() => outlets);
+            const locationIds = _.map(outlets, 'locationId');
+
+            return $q.all([
+              PossibleOutletPhoto.findByMany(ids, options),
+              Location.findByMany(locationIds, NO_CACHE),
+            ]).then(() => outlets);
+
           });
       },
 

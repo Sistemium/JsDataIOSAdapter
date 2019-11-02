@@ -8,10 +8,14 @@
       name: 'PossibleOutlet',
 
       relations: {
-        belongsTo: {
+        hasOne: {
           Salesman: {
             localField: 'salesman',
             localKey: 'salesmanId',
+          },
+          Location: {
+            localField: 'location',
+            localKey: 'locationId',
           },
         },
         hasMany: {
