@@ -2,7 +2,7 @@
 
   angular.module('webPage').service('DomainOption', DomainOption);
 
-  function DomainOption(Auth, $window) {
+  function DomainOption(Auth, $window, Schema, IOS, $timeout) {
 
     const customerAlias = {
       dr50: 'r50',
@@ -11,6 +11,14 @@
     };
 
     const siteInstance = $window.location.hostname.replace(/\..*/, '');
+
+    const isIOS = IOS.isIos();
+
+    const service = { };
+
+    if (isIOS) {
+      $timeout(() => loadClientData(service));
+    }
 
     return {
       hasMVZ,
@@ -30,7 +38,7 @@
       salesTargets,
       rnkOption,
       outletTasksDisabled() {
-        return customerCode() !== 'r50';
+        return customerCode() !== 'r50' || isIOS && service.appVersion < 370;
       }
     };
 
@@ -155,6 +163,14 @@
 
     function hasMVZ() {
       return customerCode() === 'r50' && site() === 1;
+    }
+
+    function loadClientData(svc) {
+      const { ClientData } = Schema.models();
+      ClientData.findAll()
+        .then(([{ appVersion }]) => {
+          svc.appVersion = parseInt(appVersion);
+        });
     }
 
   }
