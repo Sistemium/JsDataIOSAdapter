@@ -23,31 +23,30 @@
 
   function makePhotoController(Upload, Schema, Auth, IOS, PhotoHelper) {
 
-    let vm = this;
+    const { Setting } = Schema.models();
 
-    _.assign(vm, {
+    const vm = _.assign(this, {
 
       $onInit,
       onSelect,
+      imsUrl: null,
 
-      makePhotoClick
+      makePhotoClick() {
+        this.busy = PhotoHelper.makePhoto(this.modelName, this.defaultProps())
+          .then(res => {
+            this.model = res;
+          });
+      },
+
+      defaultProps(props) {
+        return _.assign(this.model, props, this.defaults);
+      },
 
     });
-
-    const {Setting} = Schema.models();
-
-    let imsUrl;
 
     /*
      Functions
      */
-
-    function makePhotoClick() {
-      vm.busy = PhotoHelper.makePhoto(vm.modelName, vm.model || {})
-        .then(res => {
-          vm.model = res;
-        });
-    }
 
     function $onInit() {
 
@@ -57,7 +56,7 @@
 
       Setting.findAll({name: 'IMS.url'})
         .then(settings => {
-          imsUrl = _.get(_.first(settings), 'value');
+          vm.imsUrl = _.get(_.first(settings), 'value');
         });
 
     }
@@ -73,8 +72,7 @@
           let href = _.get(_.find(picturesInfo, {name: 'largeImage'}), 'src');
           let thumbnailHref = _.get(_.find(picturesInfo, {name: 'thumbnail'}), 'src');
 
-          const options = _.assign({ picturesInfo, href, thumbnailHref }, vm.defaults);
-          const props = _.assign(vm.model, options);
+          const props = vm.defaultProps({ href, thumbnailHref, picturesInfo });
 
           if (vm.modelName) {
             return Schema.model(vm.modelName).create(props)
@@ -92,7 +90,7 @@
       let folder = vm.folder || `${vm.modelName}/${moment().format('YYYY/MM/DD')}`;
 
       return Upload.upload({
-        url: imsUrl,
+        url: vm.imsUrl,
         data: {
           file,
           folder
