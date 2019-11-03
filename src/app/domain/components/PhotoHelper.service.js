@@ -74,9 +74,9 @@
       ConfirmModal.show(
         pictureClickConfig(pic, pic.href, pic.name, 'resized'),
         {
-        templateUrl: 'app/components/modal/PictureModal.html',
-        size: 'lg'
-      });
+          templateUrl: 'app/components/modal/PictureModal.html',
+          size: 'lg'
+        });
 
     }
 
@@ -110,16 +110,16 @@
     function getImageSrc(picture, size) {
 
       return IOS.supportsPictures() ? IOS.getPicture(picture.id, size)
-          .then(function (data) {
-            return 'data:image/jpeg;base64,' + data;
-          }) : $q(function (resolve) {
-          switch (size) {
-            case 'resized':
-              return resolve(picture.href && picture.href.replace(/(.*\/)(.*)(\..{3,4})$/, '$1smallImage$3'));
-            default:
-              return resolve(picture.thumbnailHref);
-          }
-        });
+        .then(function (data) {
+          return 'data:image/jpeg;base64,' + data;
+        }) : $q(function (resolve) {
+        switch (size) {
+          case 'resized':
+            return resolve(picture.href && picture.href.replace(/(.*\/)(.*)(\..{3,4})$/, '$1smallImage$3'));
+          default:
+            return resolve(picture.thumbnailHref);
+        }
+      });
 
     }
 
@@ -152,10 +152,10 @@
 
       _.assign(computed, {
 
-        srcThumbnail  : function() {
+        srcThumbnail: function () {
           return actingImageSrc(this, 'thumbnail');
         },
-        srcFullscreen : function() {
+        srcFullscreen: function () {
           return actingImageSrc(this, 'largeImage');
         }
 
@@ -173,7 +173,17 @@
       pictureClick,
       getImageSrc,
       actingImageSrc,
-      setupModel
+      setupModel,
+      onJSData(modelName) {
+
+        const model = Schema.model(modelName);
+        return ({ resource, data }) => {
+          if (resource !== modelName) return;
+          if (!_.get(data, 'href')) return;
+          model.inject(data);
+        };
+
+      },
     };
 
   }
