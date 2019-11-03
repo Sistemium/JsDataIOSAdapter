@@ -45,7 +45,7 @@
               this.confirmId = null;
             }, 5000);
           }
-        }
+        },
       })
       .use(GalleryHelper);
 
