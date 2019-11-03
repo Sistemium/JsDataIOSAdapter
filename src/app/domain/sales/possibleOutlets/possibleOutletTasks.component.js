@@ -29,10 +29,11 @@
 
     function onSalesman(salesmanId) {
       // vm.rebindAll()
-      SalesService.findAllPossibleOutlets(salesmanId)
+      const busy = SalesService.findAllPossibleOutlets(salesmanId)
         .then(data => {
           vm.outlets = data;
         });
+      vm.setBusy(busy);
     }
 
 

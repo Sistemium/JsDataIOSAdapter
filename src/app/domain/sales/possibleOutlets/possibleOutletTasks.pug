@@ -1,5 +1,9 @@
-.possible-outlet-tasks.scroll-y(resize resize-offset-top='10')
+.possible-outlet-tasks.scroll-y(resize resize-offset-top='10' cg-busy="vm.cgBusy")
   ui-view
+
+    .alert.alert-info(ng-if="!vm.busy && !vm.outlets.length")
+      div Вам не назначено точек для проверки
+
     .outlets.list-group
       .possible-outlet.list-group-item(ng-repeat="outlet in vm.outlets track by outlet.id")
         .texts(ng-click="vm.outletClick(outlet)")
