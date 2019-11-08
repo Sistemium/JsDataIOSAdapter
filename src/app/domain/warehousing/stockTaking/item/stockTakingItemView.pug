@@ -27,8 +27,14 @@
             i.glyphicon.glyphicon-lock
         span {{ vm.stockTakingItem.barcode || 'Без сканирования' }}
 
+  .marks.list-group(ng-if="vm.stockTakingItem.marks.length")
+    .item-mark.list-group-item(
+        ng-repeat="mark in vm.stockTakingItem.marks | orderBy:'-timestamp' track by mark.id"
+      )
+      .code 🏷 {{ ::mark.displayLabel }}
+      .timestamp {{ ::mark.timestamp | dateTime:{seconds: true, date: false} }}
 
-  .editing
+  .editing(ng-if="!vm.stockTakingItem.marks.length")
 
     .field.volume(
     ng-class="{touched: vm.volumeViewTouched}"

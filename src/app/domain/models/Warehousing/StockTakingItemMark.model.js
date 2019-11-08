@@ -15,6 +15,12 @@
         }
       },
 
+      computed: {
+        displayLabel: ['barcode', barcode => {
+          return barcode.slice(6, 18);
+        }],
+      },
+
     });
 
   });

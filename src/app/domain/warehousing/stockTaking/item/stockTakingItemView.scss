@@ -67,6 +67,17 @@
 
   }
 
+  .marks {
+    margin-top: $margin-bottom-xs;
+    .list-group-item {
+      margin-left: -10px;
+      margin-right: -10px;
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
+    }
+  }
+
   .editing .buttons {
 
     margin-top: $margin-bottom-xs * 2;
