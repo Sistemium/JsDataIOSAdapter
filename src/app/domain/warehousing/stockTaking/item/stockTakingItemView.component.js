@@ -18,7 +18,7 @@
   function StockTakingItemViewController($scope, saControllerHelper, Schema,
                                          $timeout, StockTakingData) {
 
-    const { StockTakingItem } = Schema.models();
+    const { StockTakingItem, StockTakingItemMark } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -76,6 +76,9 @@
       });
       if (id) {
         vm.rebindOne(StockTakingItem, id, 'vm.stockTakingItem', onRebind);
+        vm.rebindAll(StockTakingItemMark, {
+          stockTakingItemId: id,
+        }, 'vm.stockTakingItemMarks', onRebind);
       }
     }
 

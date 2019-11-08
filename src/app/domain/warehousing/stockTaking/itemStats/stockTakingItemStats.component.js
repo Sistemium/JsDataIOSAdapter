@@ -23,7 +23,7 @@
   function StockTakingItemStatsController($scope, saControllerHelper, $anchorScroll, $timeout,
                                           Schema) {
 
-    const { StockTakingItem, Article } = Schema.models();
+    const { StockTakingItem, Article, StockTakingItemMark } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
 
@@ -33,6 +33,7 @@
 
       $onInit() {
         vm.rebindAll(StockTakingItem, vm.filter, 'vm.stockTakingItems', setStatsData);
+        vm.rebindAll(StockTakingItemMark, vm.filter, 'vm.stockTakingItemMarks', setStatsData);
         vm.watchScope('vm.activeId', setExpanded);
         vm.watchScope('vm.search', () => onFilter())
       },

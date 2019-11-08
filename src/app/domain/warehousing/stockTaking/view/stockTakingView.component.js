@@ -179,7 +179,9 @@
             .then(() => stockTakingData)
         )
         .then(stockTakingData => {
-          $scope.$watch(() => StockTakingItem.lastModified(), () => makeStocks(stockTakingData));
+          $scope.$watch(() => {
+            return `${StockTakingItem.lastModified()}-${StockTakingItemMark.lastModified()}`;
+          }, () => makeStocks(stockTakingData));
           makeStocks(stockTakingData);
           $scope.$on('$destroy', () => stockTakingData.clearCache());
         });
@@ -240,8 +242,12 @@
     }
 
     function processExciseStamp(barcode) {
+
       DEBUG('processExciseStamp', barcode);
-      StockTakingItem.findAll({ barcode })
+
+      const { stockTakingId } = vm;
+
+      StockTakingItemMark.findAll({ stockTakingId, barcode }, { bypassCache: true })
         .then(_.first)
         .then(mark => {
 
@@ -260,10 +266,13 @@
             return sayNeedItem();
           }
 
+          sayMark();
+
           return StockTakingItemMark.create({
             barcode,
             timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
             stockTakingItemId: stockTakingItem.id,
+            stockTakingId,
           });
 
         });
@@ -362,6 +371,10 @@
 
     function sayInvalid() {
       SoundSynth.say(`Неправильный тип штрих-кода`);
+    }
+
+    function sayMark() {
+      SoundSynth.say('Марка');
     }
 
     function speakNotFound() {

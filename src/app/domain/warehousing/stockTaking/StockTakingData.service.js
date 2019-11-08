@@ -47,7 +47,7 @@
       function resultByArticle(items, articleId) {
 
         return {
-          volume: _.sumBy(items, 'volume'),
+          volume: _.sumBy(items, item => item.markOrVolume()),
           targetVolume: _.get(stockByArticle(articleId), 'volume') || 0,
         };
 
