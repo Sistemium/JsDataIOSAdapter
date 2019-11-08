@@ -35,6 +35,16 @@
               vm.isEnabled = false;
             }
 
+            vm.requiredTypes = [];
+
+            const { requiredType } = vm;
+
+            if (_.isArray(requiredType)) {
+              vm.requiredTypes = requiredType;
+            } else if (requiredType) {
+              vm.requiredTypes.push(requiredType);
+            }
+
           },
           enterPress() {
             vm.input && onScan(translateHIDScan(vm.input));
@@ -67,9 +77,9 @@
 
           const type = detectType(code);
 
-          const { requiredType, scanHandler } = vm;
+          const { requiredTypes, scanHandler } = vm;
 
-          if (requiredType && (!type || type.type !== requiredType)) {
+          if (requiredTypes.length && (!type || requiredTypes.indexOf(type.type) < 0)) {
             vm.input = '';
             $rootScope.$broadcast(BARCODE_SCAN_INVALID, { code, type });
             return toastr.error(code, 'Неверный тип штрих-кода');
