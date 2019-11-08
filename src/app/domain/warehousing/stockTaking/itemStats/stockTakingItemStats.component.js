@@ -89,7 +89,7 @@
           id: articleId,
           article: Article.get(articleId),
           items,
-          volume: _.sumBy(items, 'volume'),
+          volume: _.sumBy(items, item => item.markOrVolume()),
           packageRel: _.get(_.maxBy(items, 'packageRel'), 'packageRel'),
           targetVolume: _.get(stockTakingData.articleIndex[articleId], 'volume') || 0,
           timestamp: _.get(_.maxBy(items, 'timestamp'), 'timestamp'),

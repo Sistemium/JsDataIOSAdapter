@@ -22,6 +22,7 @@ resize resize-offset-top="10"
         span(ng-if='item.packageRel') (фасовка {{ item.packageRel }})
 
       .volume
+        strong.marks(ng-if="item.marks.length") 🏷
         strong.animate(
         sa-animate-on-change="item.volume" change-class="change-up"
-        ) {{ item.volume | boxesBottles:{boxRel: item.packageRel} }}
+        ) {{ item.markOrVolume() | boxesBottles:{boxRel: item.packageRel} }}

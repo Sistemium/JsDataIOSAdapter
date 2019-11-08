@@ -18,7 +18,19 @@
             localField: 'article',
             localKey: 'articleId',
           }
-        }
+        },
+        hasMany: {
+          StockTakingItemMark: {
+            localField: 'marks',
+            foreignKey: 'stockTakingItemId',
+          },
+        },
+      },
+
+      methods: {
+        markOrVolume() {
+          return this.marks.length || this.volume;
+        },
       },
 
     });

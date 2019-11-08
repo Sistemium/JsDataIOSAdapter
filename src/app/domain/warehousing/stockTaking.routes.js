@@ -8,7 +8,7 @@
   const LS_KEY = 'stockTaking.tab';
 
   const barcodeScanner = {
-    type: 'Article'
+    type: ['Article', 'ExciseStamp'],
   };
 
   const stockTaking = {

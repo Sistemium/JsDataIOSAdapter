@@ -85,7 +85,7 @@
         id: articleId,
         articleId,
         article,
-        foundVolume: _.sumBy(itemsData, 'volume'),
+        foundVolume: _.sumBy(itemsData, item => item.markOrVolume()),
       };
 
     }

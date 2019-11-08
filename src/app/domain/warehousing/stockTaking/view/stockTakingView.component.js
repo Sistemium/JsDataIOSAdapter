@@ -38,6 +38,7 @@
       WarehouseStock,
       StockTaking,
       StockTakingItem,
+      StockTakingItemMark,
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope);
@@ -111,6 +112,12 @@
 
       onScan({ code, type }) {
 
+        const { stockTaking } = vm;
+
+        if (!stockTaking.isValid()) {
+          return toastr.info('Выберите "Склад" прежде чем начать сканирование');
+        }
+
         switch (type) {
           case BARCODE_TYPE_ARTICLE:
             processBarcode(code);
@@ -156,6 +163,11 @@
       // });
 
       return StockTakingItem.findAll({ stockTakingId }, { bypassCache: true })
+        .then(items => {
+          const ids = _.map(items, 'id');
+          const options = { field: 'stockTakingItemId' };
+          return StockTakingItemMark.findByMany(ids, options);
+        })
         .then(() => {
           if (itemId) {
             vm.stockTakingItem = StockTakingItem.get(itemId);
@@ -227,18 +239,39 @@
 
     }
 
-    function processExciseStamp(code) {
-      DEBUG('processExciseStamp', code);
+    function processExciseStamp(barcode) {
+      DEBUG('processExciseStamp', barcode);
+      StockTakingItem.findAll({ barcode })
+        .then(_.first)
+        .then(mark => {
+
+          const { stockTakingItem } = vm;
+
+          if (mark && stockTakingItem) {
+            return sayScanned();
+          }
+
+          if (mark && !stockTakingItem) {
+            // TODO: go to the item
+            return;
+          }
+
+          if (!stockTakingItem) {
+            return sayNeedItem();
+          }
+
+          return StockTakingItemMark.create({
+            barcode,
+            timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
+            stockTakingItemId: stockTakingItem.id,
+          });
+
+        });
     }
 
     function processBarcode(code) {
 
       const { stockTakingId, stockTaking } = vm;
-
-      if (!stockTaking.isValid()) {
-        return toastr.info('Выберите "Склад" прежде чем начать сканирование');
-      }
-
 
       let created;
 
@@ -319,6 +352,14 @@
       SoundSynth.say(`Завершите редактирование, прежде чем сканировать дальше`);
     }
 
+    function sayScanned() {
+      SoundSynth.say('Этот штрих-код уже был');
+    }
+
+    function sayNeedItem() {
+      SoundSynth.say('Сначала просканируйте товарный код');
+    }
+
     function sayInvalid() {
       SoundSynth.say(`Неправильный тип штрих-кода`);
     }
@@ -386,9 +427,9 @@
 
       let model = Schema.model(resource);
 
-      DEBUG('onJSDataInject', data);
+      // DEBUG('onJSDataInject', data);
 
-      if (itemHasChanges(data.id)) {
+      if (itemHasChanges(data.id) || data.stockTakingId !== vm.stockTakingId) {
         DEBUG('onJSDataInject', 'exit');
         return;
       }
