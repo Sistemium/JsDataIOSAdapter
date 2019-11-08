@@ -46,9 +46,9 @@
 
     const tabs = ['scans', 'stats', 'stocks'];
 
-    vm.use({
+    const { BARCODE_TYPE_ARTICLE, BARCODE_TYPE_EXCISE_STAMP } = BarCodeType.meta.types;
 
-      BARCODE_TYPE: BarCodeType.meta.types.BARCODE_TYPE_ARTICLE,
+    vm.use({
 
       $onInit() {
 
@@ -56,7 +56,7 @@
 
         setActiveTabIndex();
 
-        $scope.$on(BARCODE_SCAN_EVENT, (e, { code }) => vm.onScan({ code }));
+        $scope.$on(BARCODE_SCAN_EVENT, (e, { code, type: { type } }) => vm.onScan({ code, type }));
         $scope.$on(BARCODE_SCAN_INVALID, sayInvalid);
 
         vm.watchScope('vm.activeTabIndex', idx => {
@@ -73,7 +73,9 @@
 
         if (stockTakingId) {
 
-          vm.watchScope('vm.search', () => vm.stockTakingData && makeStocks(vm.stockTakingData));
+          vm.watchScope('vm.search', () => {
+            return vm.stockTakingData && makeStocks(vm.stockTakingData);
+          });
 
           return vm.setBusy(loadData(stockTakingId, itemId));
 
@@ -107,9 +109,16 @@
         }
       },
 
-      onScan({ code }) {
+      onScan({ code, type }) {
 
-        processBarcode(code);
+        switch (type) {
+          case BARCODE_TYPE_ARTICLE:
+            processBarcode(code);
+            return;
+          case  BARCODE_TYPE_EXCISE_STAMP:
+            processExciseStamp(code);
+            return;
+        }
 
       },
 
@@ -218,6 +227,10 @@
 
     }
 
+    function processExciseStamp(code) {
+      DEBUG('processExciseStamp', code);
+    }
+
     function processBarcode(code) {
 
       const { stockTakingId, stockTaking } = vm;
@@ -319,8 +332,9 @@
       DEBUG('stockTakingView onJSDataCollection', event);
 
       switch (event.resource) {
-        // case 'StockTakingItem':
-        //   return onJSDataInject(event);
+        case 'StockTakingItem':
+          return;
+        //   return onJSDataInjectStockTakingItem(event);
         case 'WarehouseStock':
           return onStockUpdate(event);
       }
@@ -329,13 +343,21 @@
 
     const debounceStockUpdate = _.debounce(onStockUpdate, 500);
 
+    function itemHasChanges(id) {
+      const { stockTakingItem } = vm;
+      if (stockTakingItem && stockTakingItem.id === id) {
+        return stockTakingItem.DSHasChanges();
+      }
+      return false;
+    }
+
     function onJSData(event) {
 
       // console.warn(event);
 
       switch (event.resource) {
         case 'StockTakingItem':
-          return onJSDataInject(event);
+          return onJSDataInjectStockTakingItem(event);
         case 'WarehouseStock':
           return debounceStockUpdate(event);
       }
@@ -360,14 +382,19 @@
 
     }
 
-    function onJSDataInject({ resource, data }) {
+    function onJSDataInjectStockTakingItem({ resource, data }) {
+
       let model = Schema.model(resource);
 
-      if (data.name) {
-        model.inject(data);
-      } else {
-        model.find(data.id, { bypassCache: true });
+      DEBUG('onJSDataInject', data);
+
+      if (itemHasChanges(data.id)) {
+        DEBUG('onJSDataInject', 'exit');
+        return;
       }
+
+      model.find(data.id, { bypassCache: true });
+
     }
 
   }
