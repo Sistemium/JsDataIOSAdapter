@@ -8,6 +8,12 @@
     .editing {
       margin-left: $margin-bottom-xs;
     }
+    .marks.list-group {
+      margin-left: $margin-bottom-xs;
+      min-width: 190px;
+      max-height: 240px;
+      overflow-y: scroll;
+    }
   }
 
   @include responsive-only(gt-xxs) {
@@ -69,12 +75,20 @@
 
   .marks {
     margin-top: $margin-bottom-xs;
+    @include responsive-only(xs) {
+      margin: 0;
+    }
     .list-group-item {
-      margin-left: -10px;
-      margin-right: -10px;
+      //margin-left: -10px;
+      //margin-right: -10px;
+      padding-left: 0;
+      padding-right: 0;
       border-left: 0;
       border-right: 0;
       border-radius: 0;
+      .timestamp {
+        margin-left: 6px;
+      }
     }
   }
 

@@ -27,6 +27,7 @@ stock-taking-item-list, stock-taking-item-stats, warehouse-stock {
     &.active {
       background: $active-background-color;
       border-color: $gray-border-color;
+
       .volume strong {
         background: $white;
         border: solid 1px $border-gray;
@@ -37,9 +38,15 @@ stock-taking-item-list, stock-taking-item-stats, warehouse-stock {
 
     .volume strong {
       @extend %important-strong;
+
       & + * {
         margin-left: $margin-bottom-xs;
       }
+    }
+
+    .has-marks strong:before {
+      content: "🏷";
+      padding-right: 4px;
     }
 
     .title {

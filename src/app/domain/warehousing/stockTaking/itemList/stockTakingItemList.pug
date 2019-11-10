@@ -21,8 +21,7 @@ resize resize-offset-top="10"
         span {{ item.timestamp | dateTime:{seconds: true, date: false} }}
         span(ng-if='item.packageRel') (фасовка {{ item.packageRel }})
 
-      .volume
-        strong.marks(ng-if="item.marks.length") 🏷
+      .volume(ng-class="{ 'has-marks': item.marks.length }")
         strong.animate(
         sa-animate-on-change="item.volume" change-class="change-up"
         ) {{ item.markOrVolume() | boxesBottles:{boxRel: item.packageRel} }}
