@@ -30,7 +30,7 @@
   function StockTakingViewController(Schema, saControllerHelper, $scope, $q,
                                      toastr, moment, BarCodeScanner, StockTakingData,
                                      SoundSynth, Language, Sockets, DEBUG, StockTakingExport,
-                                     IOS, ConfirmModal) {
+                                     IOS, ConfirmModal, StockTakingService) {
 
     const {
       Article,
@@ -251,18 +251,21 @@
         .then(_.first)
         .then(mark => {
 
-          const { stockTakingItem } = vm;
+          const { itemId } = vm;
 
-          if (mark && stockTakingItem) {
+          if (mark && !itemId) {
+            return StockTakingService.goToItem(mark.stockTakingItemId);
+          }
+
+          if (mark && itemId === mark.stockTakingItemId) {
             return sayScanned();
           }
 
-          if (mark && !stockTakingItem) {
-            // TODO: go to the item
-            return;
+          if (mark) {
+            return sayScanned('в другой партии');
           }
 
-          if (!stockTakingItem) {
+          if (!itemId) {
             return sayNeedItem();
           }
 
@@ -271,7 +274,7 @@
           return StockTakingItemMark.create({
             barcode,
             timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
-            stockTakingItemId: stockTakingItem.id,
+            stockTakingItemId: itemId,
             stockTakingId,
           });
 
@@ -361,8 +364,8 @@
       SoundSynth.say(`Завершите редактирование, прежде чем сканировать дальше`);
     }
 
-    function sayScanned() {
-      SoundSynth.say('Этот штрих-код уже был');
+    function sayScanned(suffix) {
+      SoundSynth.say(`Этот штрих-код уже был ${suffix || ''}`);
     }
 
     function sayNeedItem() {
