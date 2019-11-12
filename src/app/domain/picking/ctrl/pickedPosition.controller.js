@@ -3,7 +3,9 @@
   angular.module('webPage')
     .controller('PickedPositionController', PickedPositionController);
 
-  function PickedPositionController($scope, $state, models) {
+  const WAREHOUSE_OLD_MARK_SCAN_EVENT = 'warehouseOldMarkScan';
+
+  function PickedPositionController($scope, $state, models, Picking) {
 
     const vm = this;
     const { PickingOrderPosition, PickingOrderPositionPicked } = models;
@@ -58,15 +60,17 @@
         },
         value: pickedPosition && pickedPosition.productionInfo || ''
       });
-    } else if (position) {
+    }
+
+    if (position) {
       states.push({
-        input: 'productionInfo',
+        input: 'code',
         label: 'Марка',
-        datatype: 'exciseStamp',
-        validate: val => {
-          return !!/^\d{3}-\d{8,9}/.test(val);
+        datatype: false,
+        value: pickedPosition && pickedPosition.code || '',
+        validate(val) {
+          return !!val;
         },
-        value: pickedPosition && pickedPosition.productionInfo || ''
       });
     }
 
@@ -77,15 +81,27 @@
       states: states,
       step: pickedPosition ? undefined : 0,
 
-      notDone: () => {
+      $onInit() {
+        $scope.$on(WAREHOUSE_OLD_MARK_SCAN_EVENT, (e, { code }) => onScan({ code }));
+      },
 
-        if (vm.step >= 0) {
-          return !states [vm.step].validate(states [vm.step].value);
+      currentStep() {
+        return states[vm.step];
+      },
+
+      notDone() {
+
+        const step = this.currentStep();
+
+        if (!step) {
+          return false;
         }
+
+        return !step.validate(step.value);
 
       },
 
-      done: () => {
+      done() {
 
         if (angular.isUndefined(vm.step)) {
           return vm.save();
@@ -103,30 +119,35 @@
 
       },
 
-      edit: step => {
+      edit(step) {
 
         vm.step = step;
 
       },
 
-      save: () => {
+      save() {
+
+        const volume = states[0].exportValue;
+        const productionInfo = states.length > 2 ? states[1].value : null;
+        const code = states.length > 2 ? states[2].code : null;
+        let q;
 
         if (!pickedPosition) {
-          PickingOrderPositionPicked.create({
+          q = PickingOrderPositionPicked.create({
             pickingOrderPositionId: position.id,
-            volume: states[0].exportValue,
-            productionInfo: states.length > 1 ? states[1].value : null,
-            articleId: position.articleId
-          }).then(() => {
-            $state.go('^');
+            volume,
+            productionInfo,
+            articleId: position.articleId,
+            code,
           });
         } else {
-          pickedPosition.volume = states[0].exportValue;
-          pickedPosition.productionInfo = states.length > 1 ? states[1].value : null;
-          PickingOrderPositionPicked.save(pickedPosition.id).then(() => {
-            $state.go('^');
-          });
+          _.assign(pickedPosition, { volume, productionInfo, code });
+          q = PickingOrderPositionPicked.save(pickedPosition.id);
         }
+
+        q.then(() => {
+          $state.go('^');
+        })
 
       },
 
@@ -139,6 +160,24 @@
       },
 
     });
+
+    function onScan({ code }) {
+
+      console.info(vm.step, code);
+
+      const step = vm.currentStep();
+
+      if (!step) {
+        return;
+      }
+
+      if (step.input === 'code') {
+        step.value = `🏷 ${code.slice(0, 10)}`;
+        step.code = code;
+        Picking.say('Марка принята');
+      }
+
+    }
 
   }
 

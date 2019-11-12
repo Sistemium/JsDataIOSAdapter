@@ -71,7 +71,7 @@
 
     function onScan(e, options) {
 
-      console.info(e, options);
+      // console.info(e, options);
 
       if (lockScanProcessor) {
         console.warn('Ignore scan with lockScanProcessor');

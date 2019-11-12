@@ -5,7 +5,9 @@
   const WAREHOUSE_BOX_SCAN_EVENT = 'warehouseBoxBarCodeScan';
   const WAREHOUSE_PALETTE_SCAN_EVENT = 'warehousePaletteBarCodeScan';
   const WAREHOUSE_ITEM_SCAN_EVENT = 'warehouseItemBarCodeScan';
+  const WAREHOUSE_OLD_MARK_SCAN_EVENT = 'warehouseOldMarkScan';
   const STOCK_BATCH_SCAN_EVENT = 'stockBatchBarCodeScan';
+  const EXCISE_STAMP_LENGTH = 68;
 
   function PickingOrderListController($scope, Schema, $state, Errors,
                                       BarCodeScanner, SoundSynth, Sockets,
@@ -321,7 +323,9 @@
         $scope.$broadcast(WAREHOUSE_BOX_SCAN_EVENT, { code });
         return;
       } else if (codeType === BARCODE_TYPE_EXCISE_STAMP) {
-        $scope.$broadcast(WAREHOUSE_ITEM_SCAN_EVENT, { code });
+        const eventName = code.length === EXCISE_STAMP_LENGTH
+          ? WAREHOUSE_OLD_MARK_SCAN_EVENT : WAREHOUSE_ITEM_SCAN_EVENT;
+        $scope.$broadcast(eventName, { code });
         return;
       } else if (codeType === BARCODE_TYPE_WAREHOUSE_PALETTE) {
         $scope.$broadcast(WAREHOUSE_PALETTE_SCAN_EVENT, { code });

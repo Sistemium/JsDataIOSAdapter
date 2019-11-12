@@ -31,6 +31,7 @@ section(ng-switch='vm.step')
     export-model='vm.states[0].exportValue'
   )
   volume-pad(
+    ng-if="vm.states[1].datatype"
     ng-switch-when='1'
     model='vm.states[1].value'
     datatype='{{vm.states[1].datatype}}'
