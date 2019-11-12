@@ -9,11 +9,33 @@
     i.glyphicon.glyphicon-map-marker
     .accuracy точность геометки: {{ vm.outlet.location.horizontalAccuracy }}м.
 
-  .buttons
+  .commentary(ng-if="vm.editing || vm.outlet.commentText")
+    label.control-label(for="comment-text") Комментарий
+    textarea.form-control#comment-text.form-control(
+      ng-disabled="!vm.editing"
+      ng-model='vm.outlet.commentText'
+      name='commentText'
+      placeholder='Дополнительные сведения о точке'
+    )
+
+  .buttons(ng-if="vm.editing")
+    button.btn.btn-primary(
+      ng-click="vm.saveClick()"
+    ) Готово
+    button.btn.btn-default(
+      ng-click="vm.cancelClick()"
+    ) Отмена
+
+  .buttons(ng-if="!vm.editing")
+
     button.btn(
       ng-class="vm.outlet.locationId ? 'btn-default' : 'btn-warning'"
       ng-click="vm.locateClick()"
     ) {{ vm.outlet.locationId ? 'Обновить' : 'Добавить'}} геометку
+
+    button.btn.btn-default(
+      ng-click="vm.commentClick()"
+    ) {{ vm.outlet.commentText ? 'Изменить' : 'Добавить'}} комментарий
 
     make-photo(
       model-name='PossibleOutletPhoto'
@@ -21,7 +43,7 @@
       busy='vm.cgBusy'
     ) Добавить фото
 
-  .photos
+  .photos(ng-if="!vm.editing")
 
     .outlet-photo(
       ng-repeat="photo in vm.photos track by photo.id"

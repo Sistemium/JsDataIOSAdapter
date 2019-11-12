@@ -20,14 +20,18 @@
   }
 
   .possible-outlet-visit {
-    .buttons, .photos, .location {
+
+    .buttons, .photos, .location, .commentary {
       margin-top: $margin;
     }
+
     .location {
       i {
         color: $green;
       }
+
       display: flex;
+
       .accuracy {
         margin-left: $margin-bottom-xs;
       }
@@ -40,7 +44,9 @@
       .btn, a {
         display: block;
         width: 100%;
+
         & + * {
+          margin-left: 0;
           margin-top: $margin-bottom-xs;
         }
       }
@@ -53,6 +59,7 @@
   make-photo {
     display: inline-block;
     text-align: center;
+
     a {
       vertical-align: middle;
       display: inline-block;
@@ -81,9 +88,11 @@
     .outlet-photo {
       margin-right: $margin;
       text-align: center;
+
       .thumbnail {
         margin-bottom: $margin-bottom-xs;
       }
+
       .confirm {
         background-color: $red;
         color: $white !important;

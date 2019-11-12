@@ -163,10 +163,9 @@
       // });
 
       return StockTakingItem.findAll({ stockTakingId }, { bypassCache: true })
-        .then(items => {
-          const ids = _.map(items, 'id');
-          const options = { field: 'stockTakingItemId' };
-          return StockTakingItemMark.findByMany(ids, options);
+        .then(() => {
+          return StockTakingItemMark.findAll({ stockTakingId }, { bypassCache: true })
+            .catch(e => DEBUG(e));
         })
         .then(() => {
           if (itemId) {

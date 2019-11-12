@@ -22,6 +22,7 @@
     const vm = saControllerHelper.setup(this, $scope)
       .use({
         confirmId: null,
+        editing: false,
         $onInit() {
           SalesService.bindPossibleOutlet($scope, this.outletId);
         },
@@ -45,6 +46,19 @@
               this.confirmId = null;
             }, 5000);
           }
+        },
+        commentClick() {
+          vm.editing = !vm.editing;
+        },
+        saveClick() {
+          vm.setBusy(vm.outlet.DSCreate())
+            .then(() => {
+              vm.editing = false;
+            });
+        },
+        cancelClick() {
+          vm.editing = false;
+          vm.outlet.DSRevert();
         },
       })
       .use(GalleryHelper);
