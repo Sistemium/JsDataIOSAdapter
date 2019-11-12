@@ -34,7 +34,7 @@ section(ui-view)
         div
           span.gray № {{ order.ndoc }}
 
-      button.btn.btn-default(
+      button.btn.btn-default.picked-position-button(
         ng-repeat='picked in order.position.pickedPositions track by picked.id'
         ui-sref='.pickedPosition({ pickedPositionId: picked.id })'
       )
