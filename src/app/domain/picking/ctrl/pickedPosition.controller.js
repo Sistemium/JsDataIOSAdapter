@@ -44,41 +44,51 @@
       }
     ];
 
-    const barCode = pickedPosition && pickedPosition.code;
+    const { warehouseBoxId, stockBatchId } = pickedPosition || {};
 
-    if (barCode) {
+    const barCode = (warehouseBoxId || stockBatchId) && pickedPosition.code;
 
-      vm.barCode = barCode;
+    if (!barCode && position) {
 
-    } else if (position && position.Article.productionInfoType) {
-      states.push({
-        input: 'productionInfo',
-        label: 'Дата розлива',
-        datatype: 'date',
-        validate: val => {
-          return !!/\d{2}\/\d{2}\/\d{2,4}/.test(val);
-        },
-        value: pickedPosition && pickedPosition.productionInfo || ''
-      });
-    }
+      if (position.Article.productionInfoType) {
+        states.push({
+          input: 'productionInfo',
+          label: 'Дата розлива',
+          datatype: 'date',
+          validate: val => {
+            return !!/\d{2}\/\d{2}\/\d{2,4}/.test(val);
+          },
+          value: pickedPosition && pickedPosition.productionInfo || ''
+        });
+      }
 
-    if (position) {
-      states.push({
+      const markStep = {
         input: 'code',
         label: 'Марка',
         datatype: false,
-        value: pickedPosition && pickedPosition.code || '',
         validate(val) {
           return !!val;
         },
-      });
+        setCode(code) {
+          this.value = `🏷 ${code.substr(-10, 10)}`;
+          this.code = code;
+        },
+      };
+
+      if (pickedPosition && pickedPosition.code) {
+        markStep.setCode(pickedPosition.code);
+      }
+
+      states.push(markStep);
+
     }
 
     angular.extend(vm, {
 
-      position: position,
-      pickedPosition: pickedPosition,
-      states: states,
+      barCode,
+      position,
+      pickedPosition,
+      states,
       step: pickedPosition ? undefined : 0,
 
       $onInit() {
@@ -172,8 +182,7 @@
       }
 
       if (step.input === 'code') {
-        step.value = `🏷 ${code.slice(0, 10)}`;
-        step.code = code;
+        step.setCode(code);
         Picking.say('Марка принята');
       }
 
