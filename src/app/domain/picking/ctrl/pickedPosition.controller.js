@@ -139,7 +139,7 @@
 
         const volume = states[0].exportValue;
         const productionInfo = states.length > 2 ? states[1].value : null;
-        const code = states.length > 2 ? states[2].code : null;
+        const code = _.last(states).code || null;
         let q;
 
         if (!pickedPosition) {
