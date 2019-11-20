@@ -7,7 +7,8 @@
     return {
       exportArrayWithConfig,
       worksheetFromArrayWithConfig,
-      exportWorksheetsAs
+      exportWorksheetsAs,
+      exportArraysWithConfigs,
     };
 
     function Workbook() {
@@ -39,12 +40,12 @@
           v: col.title,
           t: 's',
           s: {
-            font: {bold: true},
-            alignment: {horizontal: 'center'}
+            font: { bold: true },
+            alignment: { horizontal: 'center' }
           }
         };
 
-        setCell(ws, cell, {c: idx, r: 0});
+        setCell(ws, cell, { c: idx, r: 0 });
 
       });
 
@@ -78,7 +79,7 @@
           };
 
           cell.s = {
-            alignment: {vertical: 'top', wrapText: true}
+            alignment: { vertical: 'top', wrapText: true }
           };
 
           if (val instanceof Date) {
@@ -97,7 +98,7 @@
 
           _.defaultsDeep(cell.s, col.style);
 
-          setCell(ws, cell, {c: colIdx, r: rowIdx + 1});
+          setCell(ws, cell, { c: colIdx, r: rowIdx + 1 });
 
         });
 
@@ -107,7 +108,7 @@
 
       });
 
-      let range = {e: {c: config.length - 1, r: data.length}, s: {c: 0, r: 0}};
+      let range = { e: { c: config.length - 1, r: data.length }, s: { c: 0, r: 0 } };
 
       ws['!cols'] = wsCols;
       ws['!ref'] = XLSX.utils.encode_range(range);
@@ -116,9 +117,17 @@
 
     }
 
-    function exportArrayWithConfig(data, config, name) {
+    function exportArraysWithConfigs(data, configs, name = 'Таблица') {
+      const sheets = _.map(configs, (config, idx) => {
+        return {
+          name: config.name,
+          sheet: worksheetFromArrayWithConfig(data[idx], config.config),
+        }
+      });
+      return exportWorksheetsAs(sheets, name);
+    }
 
-      name = name || 'Таблица';
+    function exportArrayWithConfig(data, config, name = 'Таблица') {
 
       let ws = {
         name,
@@ -134,12 +143,12 @@
       let wb = new Workbook();
 
       _.each(sheets, ws => {
-        let {name, sheet} = ws;
+        let { name, sheet } = ws;
         wb.SheetNames.push(name);
         wb.Sheets[name] = sheet;
       });
 
-      let wbOut = XLSX.write(wb, {bookType: 'xlsx', bookSST: false, type: 'binary'});
+      let wbOut = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' });
       let fileName = `${name}.xlsx`;
 
       FileSaver.saveWorkBookAs(wbOut, fileName);

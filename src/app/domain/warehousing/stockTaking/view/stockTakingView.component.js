@@ -145,7 +145,7 @@
           stockTaking: vm.stockTaking,
           stocks: vm.stockTakingData.stocks
         });
-      }
+      },
 
     });
 

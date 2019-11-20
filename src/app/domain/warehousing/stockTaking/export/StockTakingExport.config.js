@@ -25,6 +25,20 @@
     }
   ];
 
+  const exportMarksConfig = [
+    {
+      title: 'Код',
+      property: 'article.code',
+      type: 'string',
+    }, {
+      title: 'Товар',
+      property: 'article.name',
+    }, {
+      title: 'Марка',
+      property: 'mark',
+    }
+  ];
+
   angular.module('Warehousing')
   // .constant('StockTakingExportConfig', exportConfig)
     .service('StockTakingExport', StockTakingExport);
@@ -38,7 +52,22 @@
       let { items, warehouse, date } = stockTaking;
       let name = `${warehouse.name} - ${_.replace(date, /\//g, '-')}`;
 
-      ExportExcel.exportArrayWithConfig(exportData(items, stocks), exportConfig, name);
+      const main = exportData(items, stocks);
+      const withMarks = _.filter(main, ({ marks }) => marks && marks.length);
+
+      const withMarksData = _.flatten(_.map(withMarks, ({ article, marks }) => {
+        return marks.map(mark => ({ article, mark }));
+      }));
+
+      const data = [main];
+      const configs = [{ config: exportConfig, name: 'Итоги' }];
+
+      if (withMarksData.length) {
+        data.push(withMarksData);
+        configs.push({ config: exportMarksConfig, name: 'Марки' });
+      }
+
+      ExportExcel.exportArraysWithConfigs(data, configs, name);
 
     }
 
@@ -58,7 +87,7 @@
           id: articleId,
           stock,
           volume: stock,
-          diff
+          diff,
         });
 
       });
@@ -86,6 +115,7 @@
         articleId,
         article,
         foundVolume: _.sumBy(itemsData, item => item.markOrVolume()),
+        marks: _.flatten(_.map(itemsData, item => _.map(item.marks, 'barcode'))),
       };
 
     }
