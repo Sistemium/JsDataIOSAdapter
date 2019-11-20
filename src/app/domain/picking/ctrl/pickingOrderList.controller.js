@@ -288,6 +288,7 @@
     }
 
     const paletteRe = /\d{12}[24]\d{13}/;
+    const codabarRe = /[ABCD](\d{18})[ABCD]/i;
 
     function scanType(code) {
 
@@ -310,12 +311,24 @@
 
     }
 
-    function scanFn(code, type, object) {
+    function codabarFix(code) {
+
+      const fixed = code.match(codabarRe);
+
+      if (fixed) {
+        return fixed[1];
+      }
+
+      return code;
+
+    }
+
+    function scanFn(scanedCode, type, object) {
 
       const notFound = 'Неизвестный штрих-код';
 
       Errors.clear();
-      code = code || vm.barCodeInput;
+      const code = codabarFix(scanedCode || vm.barCodeInput);
 
       const codeType = scanType(code);
 
