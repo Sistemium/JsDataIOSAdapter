@@ -58,9 +58,7 @@
 
           if (!vm.campaignGroup) return;
 
-          let filter = Campaign.meta.filterByGroup(vm.campaignGroup);
-
-          return Campaign.findAllWithRelations(filter)('CampaignPicture')
+          return Campaign.meta.findWithPictures(vm.campaignGroup)
             .then(campaigns => {
 
               // FIXME: copy-pasted in campaignFilterPopover

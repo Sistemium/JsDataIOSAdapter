@@ -4,7 +4,7 @@
 
   angular.module('Models').run(function (Schema, DomainOption) {
 
-    Schema.register({
+    const model = Schema.register({
 
       name: 'Campaign',
 
@@ -57,6 +57,20 @@
           }
 
           return {where};
+
+        },
+
+        findWithPictures(campaignGroup) {
+
+          const { CampaignPicture } = Schema.models();
+
+          return model.findAll(model.meta.filterByGroup(campaignGroup))
+            .then(campaigns => {
+              const items = _.filter(campaigns, ({ discount }) => !discount);
+              const toLoad = _.map(items, 'id');
+              return CampaignPicture.findByMany(toLoad, { field: 'campaignId' })
+                .then(() => items);
+            })
 
         },
 

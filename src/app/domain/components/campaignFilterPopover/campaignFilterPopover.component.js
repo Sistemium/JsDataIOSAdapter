@@ -40,7 +40,7 @@
           vm.campaignGroups = groups;
 
           if (vm.initItemId) {
-            vm.currentItem = _.find(groups, {id: vm.initItemId});
+            vm.currentItem = _.find(groups, { id: vm.initItemId });
             if (vm.currentItem) {
               campaignGroupsSearch(vm.currentItem);
               return;
@@ -57,7 +57,7 @@
 
     function campaignGroupsSearch(campaignGroup) {
 
-      vm.busy = Campaign.findAllWithRelations(Campaign.meta.filterByGroup(campaignGroup))(['CampaignPicture'])
+      vm.busy = Campaign.meta.findWithPictures(campaignGroup)
         .then(campaigns => {
 
           let campaignsFilteredByPhoto = _.filter(campaigns, campaign => {
