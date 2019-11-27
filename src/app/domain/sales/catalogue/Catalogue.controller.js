@@ -1399,6 +1399,11 @@
         }
       });
 
+      if (!result) {
+        // FIXME: should not be here
+        return [];
+      }
+
       result.articleGroupIds = groupIds;
 
       DEBUG('getStockByArticlesOfGroup', 'end');
