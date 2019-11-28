@@ -7,7 +7,8 @@
   const FONT_SIZE_KEY = 'catalogue.fontSize';
 
   function CatalogueController(Schema, $scope, $state, $q, Helpers, SalesmanAuth, $timeout,
-                               DEBUG, IOS, Sockets, localStorageService, OutletArticles, GalleryHelper) {
+                               DEBUG, IOS, Sockets, localStorageService, OutletArticles,
+                               GalleryHelper, Cataloguing) {
 
     const { ClickHelper, saEtc, saControllerHelper, saMedia, toastr, DomainOption } = Helpers;
     const {
@@ -90,6 +91,8 @@
       articleTagClick,
       thumbClick,
       onScrolledToBeginning,
+      disableRight,
+      stockActions,
       onlyShippedClick,
 
       onStateChange,
@@ -781,6 +784,13 @@
         })
 
         .then(() => {
+          return Cataloguing.campaignsByArticle()
+            .then(res => {
+              vm.capmaignsByArticle = res;
+            });
+        })
+
+        .then(() => {
 
           DEBUG('findAll', 'finish');
 
@@ -1271,6 +1281,16 @@
       let scrollParent = saEtc.getElementById('scroll-articles-parent');
       if (!scrollParent) return;
       scrollParent.scrollTop = 0;
+    }
+
+    function stockActions(stock) {
+      return vm.capmaignsByArticle[stock.articleId];
+    }
+
+    function disableRight(stock) {
+      return $scope.hasInputInFocus
+        || vm.restrictedArticles[stock.articleId]
+        || vm.saleOrder && !vm.saleOrder.workflowStep.editable;
     }
 
     function getStockByArticlesOfGroup(articleGroup) {

@@ -82,6 +82,10 @@ before-tag-name='li'
 
       .article-name-third
 
+        small.actions(ng-if="vm.stockActions(stock)")
+          span Акции:
+          .badge {{ vm.stockActions(stock).length }}
+
         span.bar-codes(
         ng-if='showBarCodes && stock.article.barCodesLazy().length'
         uib-tooltip-template='vm.barCodesTooltipTpl'
@@ -133,7 +137,7 @@ before-tag-name='li'
 
     .right(
     ng-if='vm.saleOrder && vm.prices[stock.articleId] && vm.saleOrder.workflowStep.editable'
-    ng-disabled='hasInputInFocus || vm.restrictedArticles[stock.articleId] || vm.saleOrder && !vm.saleOrder.workflowStep.editable'
+    ng-disabled='vm.disableRight(stock)'
     )
 
       button.btn.btn-default.plus-box(
