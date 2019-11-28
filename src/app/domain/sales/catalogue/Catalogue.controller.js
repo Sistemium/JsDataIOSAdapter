@@ -108,20 +108,25 @@
         vm.tags = ArticleTag.getAll();
 
         vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
-          vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
+          vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume')
+            || !DomainOption.hasArticleFactors();
         });
 
-        vm.watchScope('vm.saleOrder.id', newValue => {
+        vm.watchScope('vm.saleOrder.id', saleOrderId => {
 
           let afterChangeOrder = true;
 
-          DEBUG('on vm.saleOrder.id', _.get(vm.saleOrder, 'priceTypeId'), _.get(vm.saleOrder, 'priceType'));
+          const { priceTypeId, priceType } = vm.saleOrder || {};
 
-          if (vm.saleOrder && vm.saleOrder.priceTypeId !== _.get(vm, 'currentPriceType.id')) {
-            setPriceType(vm.saleOrder.priceType);
+          DEBUG('on vm.saleOrder.id', priceTypeId, priceType);
+
+          if (vm.saleOrder && priceTypeId !== _.get(vm, 'currentPriceType.id')) {
+            setPriceType(priceType);
           }
 
-          vm.rebindAll(SaleOrderPosition, { saleOrderId: newValue }, 'vm.saleOrderPositions', (e, newPositions) => {
+          const expr = 'vm.saleOrderPositions';
+
+          vm.rebindAll(SaleOrderPosition, { saleOrderId }, expr, (e, newPositions) => {
 
             cacheSaleOrderPositions();
 
@@ -242,8 +247,9 @@
     }
 
     function onContractChange() {
-      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
-      setRestrictions(_.get(vm.saleOrder, 'salesmanId'), _.get(vm.saleOrder, 'outletId'));
+      const { contractId, salesmanId, outletId } = vm.saleOrder || {};
+      setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
+      setRestrictions(salesmanId, outletId);
     }
 
     function onJSDataCollection(e) {
@@ -316,7 +322,8 @@
 
     function thumbClick(stock) {
 
-      $scope.imagesAll = $scope.imagesAll || _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
+      $scope.imagesAll = $scope.imagesAll
+        || _.uniq(_.filter(_.map(vm.stock, 'article.avatar'), 'srcThumbnail'));
 
       vm.thumbnailClick(_.get(stock, 'article.avatar'));
 
@@ -445,8 +452,13 @@
         vm.filters = [];
       }
 
+      const toLoad = _.filter(
+        vm.saleOrder.positions,
+        pos => pos.articleId && !Stock.meta.getByArticleId(pos.articleId)
+      );
+
       vm.setBusy(_.map(
-        _.filter(vm.saleOrder.positions, pos => pos.articleId && !Stock.meta.getByArticleId(pos.articleId)),
+        toLoad,
         pos => Article.find(pos.articleId)
           .then(Stock.meta.loadArticle)
       ))
@@ -628,7 +640,8 @@
             ) {
 
               vm.discounts.article[articleId] = _.assign(
-                articleDiscount || SaleOrderDiscount.createInstance({ discountScope: 'article' }),
+                articleDiscount
+                || SaleOrderDiscount.createInstance({ discountScope: 'article' }),
                 {
                   discount: posDiscount,
                   discountDoc: posDiscountDoc,
@@ -874,7 +887,9 @@
 
       DEBUG('filterStock', 'end');
 
-      setDiscounts(_.get(vm.saleOrder, 'contractId'), _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
+      const { contractId } = vm.saleOrder || {};
+
+      setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
 
       vm.busyFilteringStock = false;
 
@@ -1489,7 +1504,8 @@
                 if (restrictionIds.indexOf(restrictionId) === -1) return;
                 vm.restrictedArticles[ra.articleId] = Restriction.get(restrictionId);
               });
-              toastr.info(_.map(Restriction.getAll(restrictionIds), 'name').join(', '), 'Применены запреты');
+              toastr.info(_.map(Restriction.getAll(restrictionIds), 'name')
+                .join(', '), 'Применены запреты');
             });
 
         })
