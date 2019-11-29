@@ -91,7 +91,7 @@
           return 25;
         }
         default: {
-          return false;
+          return '';
         }
       }
 
