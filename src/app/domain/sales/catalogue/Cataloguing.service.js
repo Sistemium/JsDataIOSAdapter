@@ -9,7 +9,7 @@
 
     return {
 
-      campaignsByArticle() {
+      campaignsByArticle(params) {
 
         const today = moment().format();
 
@@ -19,7 +19,7 @@
         };
 
         return Campaign.findAll({ where })
-          .then(res => _.filter(res, ({ discount }) => discount > 0))
+          .then(res => _.filter(res, campaign => campaign.appliesTo(params)))
           .then(variantsToArticlesHash);
 
       },

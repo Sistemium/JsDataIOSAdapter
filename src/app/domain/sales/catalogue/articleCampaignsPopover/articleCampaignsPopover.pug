@@ -1,0 +1,15 @@
+.article-campaigns-popover
+
+  .variants
+    .variant(
+      ng-repeat="variant in vm.variants track by variant.id"
+      ng-click="vm.onVariantClick(variant)"
+      ng-class="{ active: vm.variantId === variant.id }"
+    )
+      .name {{ variant.name }}
+      .discount {{ variant.discount }}
+
+  .buttons
+    a.btn.btn-link(
+      ng-click='vm.popoverOpen = false'
+    ) Готово

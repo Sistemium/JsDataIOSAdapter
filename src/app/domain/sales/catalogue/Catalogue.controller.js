@@ -62,6 +62,7 @@
       discountsBy: {},
       discounts: { article: {}, priceGroup: {}, saleOrder: {} },
       restrictionsBy: {},
+      restrictedArticles: {},
       fontSize: parseInt(localStorageService.get(FONT_SIZE_KEY)) || 14,
       filters: [],
       activeGroup: {},
@@ -94,6 +95,19 @@
       disableRight,
       stockActions,
       onlyShippedClick,
+
+      onStockVariant(variant, stock) {
+        stock.campaignVariantId = variant.id;
+        const position = _.get(vm.saleOrderPositionByArticle, stock.articleId);
+        if (position) {
+          position.campaignVariantId = variant.id;
+          _.assign(position, {
+            price: stock.discountPrice(),
+            priceDoc: stock.discountPriceDoc(),
+          });
+          vm.saleOrder.updateTotalCost();
+        }
+      },
 
       onStateChange,
       articleRowHeight: articleRowHeight(),
@@ -681,6 +695,15 @@
 
       vm.saleOrderPositionByArticle = _.keyBy(vm.saleOrderPositions, 'articleId');
 
+      _.each(vm.saleOrderPositions, ({ articleId, campaignVariantId }) => {
+        if (campaignVariantId) {
+          const stock = _.find(sortedStock, { articleId });
+          if (stock) {
+            stock.campaignVariantId = campaignVariantId;
+          }
+        }
+      });
+
       if (maxPositions && vm.saleOrderPositions.length > maxPositions && !maxPositionsAlertShown) {
 
         maxPositionsAlertShown = true;
@@ -845,6 +868,13 @@
           discountScope,
           setDiscountScope,
           commentText,
+          campaignVariantId: _.get(inOrder, 'campaignVariantId'),
+          campaignDiscount() {
+            const { campaignVariantId } = this;
+            const campaign = campaignVariantId
+              && _.find(stockActions(this), { id: campaignVariantId });
+            return campaign && campaign.discount || 0;
+          }
         });
 
       });
@@ -932,9 +962,10 @@
           case 'saleOrder':
             return discounts.saleOrder[targetField];
           default:
-            return _.get(discounts.article[this.articleId] ||
-              discounts.priceGroup[this.article.priceGroupId] ||
-              discounts.saleOrder, targetField);
+            return this.campaignDiscount() ||
+              _.get(discounts.article[this.articleId] ||
+                discounts.priceGroup[this.article.priceGroupId] ||
+                discounts.saleOrder, targetField);
         }
 
       }

@@ -1,0 +1,13 @@
+.article-campaigns
+  a.trigger(
+    href
+    uib-popover-template="vm.popoverTemplateUrl"
+    popover-is-open='vm.popoverOpen'
+    popover-trigger='outsideClick'
+    popover-placement='bottom-left auto'
+    popover-append-to-body='true'
+    no-popover-class='article-campaigns-popover'
+  )
+    span(ng-if="!vm.variant") Акции: {{ vm.variants.length }}
+    span(ng-if="vm.variant") 🎁 {{ vm.variant.name }}
+    span.caret

@@ -274,6 +274,7 @@
         position = SaleOrderPosition.createInstance({
           saleOrderId: vm.saleOrder.id,
           volume: 0,
+          campaignVariantId: price.campaignVariantId,
           price: price.discountPrice(),
           priceDoc: price.discountPriceDoc(),
           priceOrigin,

@@ -82,9 +82,12 @@ before-tag-name='li'
 
       .article-name-third
 
-        small.actions(ng-if="vm.stockActions(stock)")
-          span Акции:
-          .badge {{ vm.stockActions(stock).length }}
+        article-campaigns-popover.actions(
+          ng-if="vm.stockActions(stock)"
+          variants="vm.stockActions(stock)"
+          variant-id="stock.campaignVariantId"
+          on-variant="vm.onStockVariant($variant, stock)"
+        )
 
         span.bar-codes(
         ng-if='showBarCodes && stock.article.barCodesLazy().length'

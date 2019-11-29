@@ -1,0 +1,61 @@
+@import "variables";
+
+article-campaigns, .article-campaigns {
+  display: inline-block;
+  font-size: 85%;
+}
+
+.article-campaigns-popover {
+
+  .buttons {
+    text-align: right;
+    margin-top: 6px;
+
+    .btn {
+      padding: 0;
+    }
+  }
+
+  max-height: 250px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .variants {
+    flex: 1;
+    overflow-y: scroll;
+  }
+
+  .variant {
+    display: flex;
+    border-top: solid 1px $border-gray;
+    padding: 3px 0;
+
+    &.active {
+      color: white;
+      background: $primary-color;
+    }
+
+    &:last-child {
+      border-bottom: solid 1px $border-gray;
+    }
+
+    .name {
+      flex: 1;
+      @extend .ellipsis;
+    }
+
+    .discount {
+      margin-left: $margin;
+
+      &:before {
+        content: "-";
+      }
+
+      &:after {
+        content: "%";
+      }
+    }
+
+  }
+}

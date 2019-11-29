@@ -29,14 +29,16 @@
 
       let saleOrder = vm.saleOrder || _.get(vm.position, 'saleOrder');
       let article = vm.article || _.get(vm.position, 'article');
-      let position = vm.position || _.find(_.get(saleOrder, 'positions'), {articleId: article.id});
+      let position = vm.position ||
+        _.find(_.get(saleOrder, 'positions'), {articleId: article.id});
 
       _.assign(vm, {
 
         showBottles: article.packageRel > 1,
         type: IOS.isIos() ? 'number' : 'text',
         bottleLabel: _.upperCase(article.pcsLabel),
-        noFactor: !DomainOption.hasArticleFactors() || _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume'),
+        noFactor: !DomainOption.hasArticleFactors()
+          || _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume'),
 
         incrementBoxes: () => changeVolume(article.packageRel),
         incrementBottles: () => changeVolume(1),
@@ -90,6 +92,7 @@
         position = SaleOrderPosition.createInstance({
           saleOrderId: saleOrder.id,
           articleId: article.id,
+          campaignVariantId: stock.campaignVariantId,
           price: stock.discountPrice(),
           priceDoc: stock.discountPriceDoc(),
           priceOrigin: priceOrigin,
