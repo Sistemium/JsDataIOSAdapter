@@ -97,16 +97,26 @@
       onlyShippedClick,
 
       onStockVariant(variant, stock) {
-        stock.campaignVariantId = variant.id;
+
+        const { id: campaignVariantId = null } = variant || {};
+
+        stock.campaignVariantId = campaignVariantId;
+
         const position = _.get(vm.saleOrderPositionByArticle, stock.articleId);
-        if (position) {
-          position.campaignVariantId = variant.id;
-          _.assign(position, {
-            price: stock.discountPrice(),
-            priceDoc: stock.discountPriceDoc(),
-          });
-          vm.saleOrder.updateTotalCost();
+
+        if (!position) {
+          return;
         }
+
+        position.campaignVariantId = campaignVariantId;
+
+        _.assign(position, {
+          price: stock.discountPrice(),
+          priceDoc: stock.discountPriceDoc(),
+        });
+
+        vm.saleOrder.updateTotalCost();
+
       },
 
       onStateChange,

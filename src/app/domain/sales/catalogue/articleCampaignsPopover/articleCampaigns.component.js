@@ -37,6 +37,10 @@
         this.variant = _.find(this.variants, { id });
       },
 
+      cancelClick() {
+        this.onVariantClick(null);
+      },
+
     });
 
   }

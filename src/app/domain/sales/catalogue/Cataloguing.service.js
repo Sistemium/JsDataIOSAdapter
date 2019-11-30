@@ -30,9 +30,7 @@
 
   function variantsToArticlesHash(campaigns) {
 
-    const allVariants = _.flatten(_.map(campaigns, ({ variants, id, discount }) => {
-      return _.map(variants, variant => _.assign({ campaignId: id, discount }, variant));
-    }));
+    const allVariants = _.flatten(_.map(campaigns, campaignToVariants));
 
     const byArticles = _.flatten(_.map(allVariants, variant => {
       return _.map(variant.articleIds, articleId => ({ articleId, variant }));
@@ -42,6 +40,15 @@
 
     return _.mapValues(grouped, variants => _.map(variants, 'variant'));
 
+  }
+
+  function campaignToVariants(campaign) {
+    const { variants, id, discount, name } = campaign;
+    const data = _.map(variants, (variant, idx) => {
+      const cname = (variants.length > 1) ? `${name} ${idx + 1}️⃣` : name;
+      return _.defaults({ campaignId: id, discount, name: cname }, variant)
+    });
+    return _.orderBy(data, 'name');
   }
 
 })();

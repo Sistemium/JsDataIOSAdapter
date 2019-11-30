@@ -1,4 +1,4 @@
-.article-campaigns-popover
+.article-campaigns-popover(ng-class="{'has-active': vm.variantId}")
 
   .variants
     .variant(
@@ -10,6 +10,9 @@
       .discount {{ variant.discount }}
 
   .buttons
+    a.btn.btn-link.btn-warning(
+      ng-click='vm.cancelClick()'
+    ) Отменить
     a.btn.btn-link(
       ng-click='vm.popoverOpen = false'
     ) Готово
