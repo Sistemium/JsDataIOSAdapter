@@ -6,6 +6,7 @@
     .component('articleCampaignsPopover', {
 
       bindings: {
+        articleId: '<',
         variants: '<',
         variantId: '<',
         onVariant: '&',

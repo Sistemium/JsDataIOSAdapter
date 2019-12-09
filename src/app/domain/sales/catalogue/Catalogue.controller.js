@@ -880,10 +880,10 @@
           commentText,
           campaignVariantId: _.get(inOrder, 'campaignVariantId'),
           campaignDiscount() {
-            const { campaignVariantId } = this;
+            const { campaignVariantId, articleId } = this;
             const campaign = campaignVariantId
               && _.find(stockActions(this), { id: campaignVariantId });
-            return campaign && campaign.discount || 0;
+            return campaign && campaign.variantDiscount(articleId) || 0;
           }
         });
 

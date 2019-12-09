@@ -7,7 +7,7 @@
       ng-class="{ active: vm.variantId === variant.id }"
     )
       .name {{ variant.name }}
-      .discount {{ variant.discount }}
+      .discount {{ variant.variantDiscount(vm.articleId) }}
 
   .buttons
     a.btn.btn-link.btn-warning(

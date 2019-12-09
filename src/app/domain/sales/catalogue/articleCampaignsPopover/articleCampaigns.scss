@@ -58,7 +58,7 @@ article-campaigns, .article-campaigns {
 
     .name {
       flex: 1;
-      @extend .ellipsis;
+      //@extend .ellipsis;
     }
 
     .discount {
