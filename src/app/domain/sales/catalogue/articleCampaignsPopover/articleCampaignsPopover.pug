@@ -6,7 +6,11 @@
       ng-click="vm.onVariantClick(variant)"
       ng-class="{ active: vm.variantId === variant.id }"
     )
-      .name {{ variant.name }}
+      .name
+        .first-name {{ variant.campaignName }}
+        .last-name
+          span(ng-if="variant.variantNumber") {{ variant.variantNumber }}&nbsp;
+          span {{ variant.variantName }}
       .discount {{ variant.variantDiscount(vm.articleId) }}
 
   .buttons

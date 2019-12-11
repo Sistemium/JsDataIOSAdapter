@@ -1,8 +1,14 @@
 @import "variables";
 
 article-campaigns, .article-campaigns {
+
   display: inline-block;
   font-size: 85%;
+
+  a.trigger {
+    @extend .ellipsis;
+  }
+
 }
 
 .article-campaigns-popover {
@@ -33,6 +39,8 @@ article-campaigns, .article-campaigns {
 
   max-height: 250px;
   min-height: 100px;
+  min-width: 250px;
+
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -43,12 +51,17 @@ article-campaigns, .article-campaigns {
   }
 
   .variant {
+
+    cursor: pointer;
+
     display: flex;
     border-top: solid 1px $border-gray;
     padding: 3px 0;
 
     &.active {
-      color: white;
+      &, .last-name {
+        color: white;
+      }
       background: $primary-color;
     }
 
@@ -58,7 +71,6 @@ article-campaigns, .article-campaigns {
 
     .name {
       flex: 1;
-      //@extend .ellipsis;
     }
 
     .discount {
@@ -71,6 +83,11 @@ article-campaigns, .article-campaigns {
       &:after {
         content: "%";
       }
+    }
+
+    .last-name {
+      font-size: 85%;
+      color: $gray;
     }
 
   }

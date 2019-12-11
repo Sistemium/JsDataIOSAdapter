@@ -45,8 +45,17 @@
   function campaignToVariants(campaign) {
     const { variants, id, discount, name } = campaign;
     const data = _.map(variants, (variant, idx) => {
-      const cname = (variants.length > 1) ? `${name} ${idx + 1}️⃣` : name;
-      return _.defaults({ campaignId: id, discount, name: cname, variantDiscount }, variant)
+      const variantNumber = (variants.length > 1) ? emojiNumber(idx + 1) : '';
+      const cname = (variants.length > 1) ? `${name} ${variantNumber}` : name;
+      return _.defaults({
+        campaignId: id,
+        discount,
+        name: cname,
+        campaignName: name,
+        variantName: variant.name,
+        variantNumber,
+        variantDiscount,
+      }, variant);
     });
     return _.orderBy(data, 'name');
   }
@@ -58,6 +67,10 @@
     }
     const condition = _.find(articles, ({ articleIds }) => articleIds.indexOf(articleId) > -1);
     return _.get(condition, 'discount') || 0;
+  }
+
+  function emojiNumber(number) {
+    return _.map(number.toString(), char => `${char}️⃣`).join('');
   }
 
 })();
