@@ -31,13 +31,6 @@
       },
 
       methods: {
-        appliesTo(params) {
-          const { restrictions } = this;
-          if (!restrictions) {
-            return true;
-          }
-          return !_.find(restrictionsRules(restrictions), rule => rule(params));
-        },
       },
 
       computed: {
@@ -91,23 +84,6 @@
       }
 
     });
-
-    function restrictionsRules(restrictions) {
-
-      return [
-        checkRestriction('outletId'),
-        checkRestriction('partnerId'),
-        checkRestriction('salesmanId'),
-      ];
-
-      function checkRestriction(name) {
-        const ids = restrictions[`${name}s`];
-        return params => {
-          return !ids || !ids.indexOf(params[name]);
-        }
-      }
-
-    }
 
     function teamNameFn(name) {
       return _.toUpper(getTeamName(name));

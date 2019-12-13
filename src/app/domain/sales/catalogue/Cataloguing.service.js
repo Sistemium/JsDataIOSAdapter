@@ -19,8 +19,8 @@
         };
 
         return Campaign.findAll({ where })
-          .then(res => _.filter(res, campaign => campaign.appliesTo(params)))
-          .then(variantsToArticlesHash);
+          .then(res => _.filter(res, ({ restrictions }) => appliesTo(restrictions, params)))
+          .then(res => variantsToArticlesHash(res, params));
 
       },
 
@@ -28,9 +28,9 @@
 
   }
 
-  function variantsToArticlesHash(campaigns) {
+  function variantsToArticlesHash(campaigns, params) {
 
-    const allVariants = _.flatten(_.map(campaigns, campaignToVariants));
+    const allVariants = _.filter(_.flatten(_.map(campaigns, campaignToVariants)));
 
     const byArticles = _.flatten(_.map(allVariants, variant => {
       return _.map(variant.articleIds, articleId => ({ articleId, variant }));
@@ -40,24 +40,25 @@
 
     return _.mapValues(grouped, variants => _.map(variants, 'variant'));
 
-  }
+    function campaignToVariants(campaign) {
+      const { variants, id, discount, name } = campaign;
+      const matching = _.filter(variants, ({ restrictions }) => appliesTo(restrictions, params));
+      const data = _.map(matching, (variant, idx) => {
+        const variantNumber = (variants.length > 1) ? emojiNumber(idx + 1) : '';
+        const cname = (variants.length > 1) ? `${name} ${variantNumber}` : name;
+        return _.defaults({
+          campaignId: id,
+          discount,
+          name: cname,
+          campaignName: name,
+          variantName: variant.name,
+          variantNumber,
+          variantDiscount,
+        }, variant);
+      });
+      return _.orderBy(data, 'name');
+    }
 
-  function campaignToVariants(campaign) {
-    const { variants, id, discount, name } = campaign;
-    const data = _.map(variants, (variant, idx) => {
-      const variantNumber = (variants.length > 1) ? emojiNumber(idx + 1) : '';
-      const cname = (variants.length > 1) ? `${name} ${variantNumber}` : name;
-      return _.defaults({
-        campaignId: id,
-        discount,
-        name: cname,
-        campaignName: name,
-        variantName: variant.name,
-        variantNumber,
-        variantDiscount,
-      }, variant);
-    });
-    return _.orderBy(data, 'name');
   }
 
   function variantDiscount(articleId) {
@@ -71,6 +72,31 @@
 
   function emojiNumber(number) {
     return _.map(number.toString(), char => `${char}️⃣`).join('');
+  }
+
+
+  function restrictionsRules(restrictions) {
+
+    return [
+      checkRestriction('outletId'),
+      checkRestriction('partnerId'),
+      checkRestriction('salesmanId'),
+    ];
+
+    function checkRestriction(name) {
+      const ids = restrictions[`${name}s`];
+      return params => {
+        return !ids || !ids.indexOf(params[name]);
+      }
+    }
+
+  }
+
+  function appliesTo(restrictions, params) {
+    if (!restrictions) {
+      return true;
+    }
+    return !_.find(restrictionsRules(restrictions), rule => rule(params));
   }
 
 })();
