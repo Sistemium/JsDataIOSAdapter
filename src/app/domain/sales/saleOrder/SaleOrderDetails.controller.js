@@ -2,7 +2,7 @@
 
 (function () {
 
-  function SaleOrderDetailsController(Schema, $scope, $state, $q, SaleOrderHelper,
+  function SaleOrderDetailsController(Schema, $scope, $state, SaleOrderHelper,
                                       $timeout, Helpers, saAsync) {
 
     const { saControllerHelper, ClickHelper, toastr, saEtc } = Helpers;
@@ -12,7 +12,7 @@
       .use(SaleOrderHelper)
       .use(ClickHelper);
 
-    const { SaleOrderPosition, SaleOrder, Contract, PriceType } = Schema.models();
+    const { SaleOrderPosition, SaleOrder, Contract, PriceType, Article } = Schema.models();
 
     vm.use({
 
@@ -117,9 +117,11 @@
           Contract.find(saleOrder.contractId);
           PriceType.find(saleOrder.priceTypeId);
 
-          return $q.all(_.map(saleOrder.positions, position => {
-            return SaleOrderPosition.loadRelations(position)
-          }));
+          const toLoadArticles = _.filter(saleOrder.positions, ({ article, articleId }) => {
+            return articleId && !article;
+          });
+
+          return Article.findByMany(_.map(toLoadArticles, 'articleId'));
 
         })
         .catch(e => console.error(e));
