@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('Models').run(function (Schema, DomainOption) {
+  angular.module('Models').run(function (Schema, DomainOption, $q, IOS) {
 
     const model = Schema.register({
 
@@ -30,8 +30,7 @@
 
       },
 
-      methods: {
-      },
+      methods: {},
 
       computed: {
 
@@ -44,7 +43,22 @@
 
       meta: {
 
-        filterByGroup: function (campaignGroup) {
+        findByVariantId(id) {
+          if (!id) {
+            return $q.resolve(null);
+          }
+
+          let where = { variants: { like: `%${id}%` } };
+
+          if (!IOS.isIos()) {
+            where = { 'variants.id': { '==': id } };
+          }
+
+          return model.findAll({ where })
+            .then(_.first);
+        },
+
+        filterByGroup(campaignGroup) {
 
           let where = {
             dateB: {

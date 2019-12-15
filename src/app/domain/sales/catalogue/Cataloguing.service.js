@@ -3,11 +3,29 @@
   angular.module('Sales')
     .service('Cataloguing', Cataloguing);
 
-  function Cataloguing(Schema, moment) {
+  function Cataloguing(Schema, moment, $q) {
 
     const { Campaign } = Schema.models();
 
     return {
+
+      findVariants(ids) {
+
+        return $q.all(ids.map(id => {
+          return Campaign.meta.findByVariantId(id)
+            .then(campaign => {
+              if (!campaign) {
+                return;
+              }
+              const { name: campaignName, variants, discount } = campaign;
+              const { name: variantName } = _.find(variants, { id }) || {};
+              const name = discount ? campaignName : `${campaignName} - ${variantName}`;
+              return { name, id };
+            });
+        }))
+          .then(_.filter);
+
+      },
 
       campaignsByArticle(params) {
 

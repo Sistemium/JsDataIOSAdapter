@@ -3,7 +3,7 @@
 (function () {
 
   function SaleOrderDetailsController(Schema, $scope, $state, SaleOrderHelper,
-                                      $timeout, Helpers, saAsync) {
+                                      $timeout, Helpers, saAsync, Cataloguing) {
 
     const { saControllerHelper, ClickHelper, toastr, saEtc } = Helpers;
 
@@ -16,7 +16,9 @@
 
     vm.use({
 
-      toggleEditClick: () => $state.go('sales.catalogue.saleOrder', { saleOrderId: vm.saleOrder.id }),
+      toggleEditClick() {
+        $state.go('sales.catalogue.saleOrder', { saleOrderId: vm.saleOrder.id });
+      },
 
       setSaleOrderClick,
       copySaleOrderClick,
@@ -40,7 +42,9 @@
       vm.rebindAll(SaleOrder, { date: newValue }, 'draftSaleOrders');
     });
 
-    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', saEtc.debounce(safeSave, 700, $scope));
+    const debouncedSave = saEtc.debounce(safeSave, 700, $scope);
+
+    SaleOrder.bindOne($state.params.id, $scope, 'vm.saleOrder', debouncedSave);
 
     /*
      Functions
@@ -111,17 +115,25 @@
 
       return SaleOrder.find($state.params.id)
         .then(saleOrder => saleOrder.DSLoadRelations('SaleOrderPosition', { bypassCache: true }))
-        .then(saleOrder => SaleOrder.loadRelations(saleOrder, ['Outlet', 'Contract', 'Salesman']))
+        .then(saleOrder => SaleOrder.loadRelations(saleOrder, ['Outlet', 'Salesman']))
         .then(saleOrder => {
 
           Contract.find(saleOrder.contractId);
           PriceType.find(saleOrder.priceTypeId);
 
-          const toLoadArticles = _.filter(saleOrder.positions, ({ article, articleId }) => {
+          const { positions } = saleOrder;
+
+          const toLoadArticles = _.filter(positions, ({ article, articleId }) => {
             return articleId && !article;
           });
 
-          return Article.findByMany(_.map(toLoadArticles, 'articleId'));
+          const toLoadCampaigns = _.uniq(_.filter(_.map(positions, 'campaignVariantId')));
+
+          return Article.findByMany(_.map(toLoadArticles, 'articleId'))
+            .then(() => Cataloguing.findVariants(toLoadCampaigns))
+            .then(variants => {
+              vm.variantById = _.mapValues(_.keyBy(variants, 'id'), 'name');
+            });
 
         })
         .catch(e => console.error(e));
