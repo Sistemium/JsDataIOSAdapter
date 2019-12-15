@@ -436,8 +436,9 @@
         });
 
         if (notFound.length) {
+          const countRu = SaleOrder.meta.positionsCountRu(notFound.length);
           toastr.success(
-            `Новые товары на складе: ${notFound.length} ${SaleOrder.meta.positionsCountRu(notFound.length)}`,
+            `Новые товары на складе: ${notFound.length} ${countRu}`,
             'Обновление данных',
             { timeOut: 5000 }
           );
@@ -629,7 +630,9 @@
 
           // console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
-          setDiscountsWithModelData(discountModel.article, discountModel.priceGroup, discountModel.saleOrder);
+          setDiscountsWithModelData(
+              discountModel.article, discountModel.priceGroup, discountModel.saleOrder
+          );
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
 
@@ -776,7 +779,8 @@
               vm.priceTypes = PriceType.filter({ isVisible: true });
 
               if (!vm.currentPriceType) {
-                vm.currentPriceType = _.get(vm.saleOrder, 'priceType') || PriceType.meta.getDefault();
+                vm.currentPriceType = _.get(vm.saleOrder, 'priceType')
+                    || PriceType.meta.getDefault();
               }
 
               // console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
@@ -808,7 +812,9 @@
             Price.cachedFindAll(_.assign({ priceTypeId: vm.currentPriceType.id }, options))
               .then(() => {
                 if (vm.currentPriceType.parentId) {
-                  return Price.cachedFindAll(_.assign({ priceTypeId: vm.currentPriceType.parentId }, options));
+                  return Price.cachedFindAll(_.assign({
+                    priceTypeId: vm.currentPriceType.parentId
+                  }, options));
                 }
               })
 
@@ -982,7 +988,8 @@
 
       function discountPrice(target = '') {
         let discountPercentValue = this.discountPercent(null, target) || 0;
-        return _.round(vm.prices[this.articleId].price * (1.0 - discountPercentValue / 100.0), 2);
+        const price = vm.prices[this.articleId].price * (1.0 - discountPercentValue / 100.0);
+        return _.round(price, 2);
       }
 
       function discountPriceDoc() {
