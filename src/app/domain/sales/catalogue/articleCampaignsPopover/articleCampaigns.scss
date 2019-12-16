@@ -58,6 +58,8 @@ article-campaigns, .article-campaigns {
     border-top: solid 1px $border-gray;
     padding: 3px 0;
 
+    min-height: 36px;
+
     &.active {
       .first-name:before {
         content: '✅';

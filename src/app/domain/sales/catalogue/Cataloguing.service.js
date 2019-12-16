@@ -69,7 +69,7 @@
           discount,
           name: cname,
           campaignName: name,
-          variantName: variant.name,
+          variantName: variant.name === name ? '' : variant.name,
           variantNumber,
           variantDiscount,
         }, variant);
