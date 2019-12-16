@@ -104,7 +104,7 @@
     function checkRestriction(name) {
       const ids = restrictions[`${name}s`];
       return params => {
-        return !ids || !ids.indexOf(params[name]);
+        return ids && ids.length && !(params && ids.indexOf(params[name]));
       }
     }
 
