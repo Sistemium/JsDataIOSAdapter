@@ -10,7 +10,8 @@
         price: '<',
         popoverOpen: '=',
         position: '<',
-        stock: '<'
+        stock: '<',
+        campaignVariant: '<',
       },
 
       templateUrl: 'app/domain/components/quantityEdit/quantityEditPopover.html',
@@ -50,7 +51,7 @@
         articleFactor,
 
         // $onInit,
-        $onDestroy
+        $onDestroy,
 
       });
 
@@ -89,10 +90,12 @@
           return;
         }
 
+        const { id: campaignVariantId } = vm.campaignVariant || {};
+
         position = SaleOrderPosition.createInstance({
           saleOrderId: saleOrder.id,
           articleId: article.id,
-          campaignVariantId: stock.campaignVariantId,
+          campaignVariantId: stock.campaignVariantId || campaignVariantId,
           price: stock.discountPrice(),
           priceDoc: stock.discountPriceDoc(),
           priceOrigin: priceOrigin,

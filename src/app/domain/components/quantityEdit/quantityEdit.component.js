@@ -19,9 +19,10 @@
 
   };
 
-  function quantityEditController() {
+  /** @ngInject */
+  function quantityEditController($scope) {
 
-    let vm = this;
+    const vm = this;
 
     _.assign(vm, {
 
@@ -34,7 +35,11 @@
 
         return article.boxPcs(position.volume, false).full;
 
-      }
+      },
+
+      campaignVariantFilter() {
+        return $scope.$parent.vm.campaignVariant;
+      },
 
     });
 

@@ -25,7 +25,10 @@
       minusButtonClick,
       lastPlus: {},
       outletClick,
-      saleOrderClick
+      saleOrderClick,
+      campaignVariantFilter() {
+        return $scope.$parent.vm.campaignVariant;
+      },
 
     });
 
@@ -36,8 +39,12 @@
       vm.setBusy(
         SaleOrder.find(saleOrderId, {bypassCache: true})
           .then(() => SaleOrder.loadRelations(saleOrderId, ['Outlet', 'Contract']))
-          .then(() => SaleOrder.loadRelations(saleOrderId, 'SaleOrderPosition', {bypassCache: true}))
-          .then(saleOrder => $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos))))
+          .then(() => {
+            return SaleOrder.loadRelations(saleOrderId, 'SaleOrderPosition', {bypassCache: true});
+          })
+          .then(saleOrder => {
+            return $q.all(_.map(saleOrder.positions, pos => SaleOrderPosition.loadRelations(pos)));
+          })
           .catch(error => {
             console.error(error);
             if (error.error === 404) {
@@ -88,7 +95,8 @@
     vm.onScope('bPlusButtonClick', bPlusButtonClick);
 
     vm.watchScope('vm.saleOrder.outlet.partner.allowAnyVolume', () => {
-      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume') || !DomainOption.hasArticleFactors();
+      vm.noFactor = _.get(vm.saleOrder, 'outlet.partner.allowAnyVolume')
+        || !DomainOption.hasArticleFactors();
     });
 
     vm.watchScope('vm.saleOrder.outletId', onOutletChange);
@@ -247,7 +255,8 @@
         }, 700, $scope));
 
       } else {
-        unbindToChanges = $scope.$watch(() => _.pick(vm.saleOrder, requiredColumns), onSaleOrderChange, true);
+        unbindToChanges = $scope.$watch(() =>
+          _.pick(vm.saleOrder, requiredColumns), onSaleOrderChange, true);
       }
     }
 
@@ -270,11 +279,14 @@
       }
 
       if (!position) {
+
+        const { id: campaignVariantId } = vm.campaignVariantFilter() || {};
+
         // FIXME: duplicated with code in quantityEdit
         position = SaleOrderPosition.createInstance({
           saleOrderId: vm.saleOrder.id,
           volume: 0,
-          campaignVariantId: price.campaignVariantId,
+          campaignVariantId: price.campaignVariantId || campaignVariantId,
           price: price.discountPrice(),
           priceDoc: price.discountPriceDoc(),
           priceOrigin,

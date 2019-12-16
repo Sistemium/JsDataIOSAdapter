@@ -59,10 +59,13 @@ article-campaigns, .article-campaigns {
     padding: 3px 0;
 
     &.active {
-      &, .last-name {
-        color: white;
+      .first-name:before {
+        content: '✅';
       }
-      background: $primary-color;
+      //&, .last-name {
+      //  color: white;
+      //}
+      //background: $primary-color;
     }
 
     &:last-child {

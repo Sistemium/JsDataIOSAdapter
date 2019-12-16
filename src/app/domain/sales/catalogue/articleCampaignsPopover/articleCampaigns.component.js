@@ -45,7 +45,7 @@
       },
 
       cancelClick() {
-        this.onVariantClick(null);
+        this.onPercentClick(null);
       },
 
     });
