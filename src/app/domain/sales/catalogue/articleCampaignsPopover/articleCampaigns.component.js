@@ -10,6 +10,7 @@
         variants: '<',
         variantId: '<',
         onVariant: '&',
+        onVariantPercent: '&',
       },
 
       templateUrl: `${URL}/articleCampaigns.html`,
@@ -32,6 +33,11 @@
       onVariantClick($variant) {
         this.popoverOpen = false;
         this.onVariant({ $variant });
+      },
+
+      onPercentClick($variant) {
+        this.popoverOpen = false;
+        this.onVariantPercent({ $variant });
       },
 
       onVariantId(id) {

@@ -96,7 +96,18 @@
       stockActions,
       onlyShippedClick,
 
-      onStockVariant(variant, stock) {
+      onStockVariant(variant /*, stock */) {
+        vm.campaignVariant = variant;
+        setCurrentArticleGroup();
+        // this.onStockVariantPercent(variant, stock);
+      },
+
+      clearCampaignFilter() {
+        vm.campaignVariant = null;
+        setCurrentArticleGroup();
+      },
+
+      onStockVariantPercent(variant, stock) {
 
         const { id: campaignVariantId = null } = variant || {};
 
@@ -1387,7 +1398,9 @@
 
       }
 
-      if (vm.search || vm.filters.length || vm.showOnlyShipped) {
+      const { campaignVariant } = vm;
+
+      if (vm.search || vm.filters.length || vm.showOnlyShipped || campaignVariant) {
 
         let reg = false;
         let regParts = 0;
@@ -1439,6 +1452,10 @@
             });
           }
 
+          if (res && campaignVariant) {
+            res = campaignVariant.articleIds.indexOf(article.id) >= 0;
+          }
+
           if (res) {
             groupIds[article.articleGroupId] = articleIds[article.id] = 1;
           }
@@ -1454,7 +1471,7 @@
       let minPrice = priceSlider.min > 0 && priceSlider.min;
       let maxPrice = priceSlider.max < priceSlider.options.ceil && priceSlider.max;
 
-      let noFilters = !articleIds && !minPrice && !maxPrice && !vm.rnkOnly;
+      let noFilters = !(articleIds || minPrice || maxPrice || vm.rnkOnly || campaignVariant);
 
       let result = noFilters ? sortedStock : _.filter(sortedStock, stock => {
 

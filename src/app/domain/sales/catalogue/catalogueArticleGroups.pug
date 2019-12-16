@@ -1,5 +1,10 @@
 font-size-edit(append-to='articleGroups')
 
+  .campaign-filter(ng-if="vm.campaignVariant")
+    span 🎁 {{ vm.campaignVariant.name }}
+    a.clear-search(ng-click='vm.clearCampaignFilter()' href)
+      i.glyphicon.glyphicon-remove
+
   catalogue-filter(
   search='vm.search'
   filters='vm.filters'

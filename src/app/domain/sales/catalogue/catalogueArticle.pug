@@ -88,6 +88,7 @@ before-tag-name='li'
           variants="vm.stockActions(stock)"
           variant-id="stock.campaignVariantId"
           on-variant="vm.onStockVariant($variant, stock)"
+          on-variant-percent="vm.onStockVariantPercent($variant, stock)"
         )
 
         span.bar-codes(

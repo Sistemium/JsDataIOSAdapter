@@ -3,15 +3,14 @@
   .variants
     .variant(
       ng-repeat="variant in vm.variants track by variant.id"
-      ng-click="vm.onVariantClick(variant)"
       ng-class="{ active: vm.variantId === variant.id }"
     )
-      .name
+      .name(ng-click="vm.onVariantClick(variant)")
         .first-name {{ variant.campaignName }}
         .last-name
           span(ng-if="variant.variantNumber") {{ variant.variantNumber }}&nbsp;
           span {{ variant.variantName }}
-      .discount {{ variant.variantDiscount(vm.articleId) }}
+      .discount(ng-click="vm.onPercentClick(variant)") {{ variant.variantDiscount(vm.articleId) }}
 
   .buttons
     a.btn.btn-link.btn-warning(

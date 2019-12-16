@@ -28,6 +28,19 @@
     min-width: 250px;
   }
 
+  .campaign-filter {
+    border: solid 1px $gray-border-color;
+    border-radius: $border-radius;
+    padding: 10px;
+    margin-bottom: $margin-bottom-xs;
+    .clear-search {
+      margin-left: 3px;
+      i {
+        top: 2px;
+      }
+    }
+  }
+
   .preceding-groups, .following-groups {
 
     margin-bottom: 0;
