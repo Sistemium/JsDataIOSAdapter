@@ -56,7 +56,9 @@ article-campaigns, .article-campaigns {
 
     display: flex;
     border-top: solid 1px $border-gray;
-    padding: 3px 0;
+    > * {
+      padding: 3px 0;
+    }
 
     min-height: 36px;
 
@@ -64,10 +66,6 @@ article-campaigns, .article-campaigns {
       .first-name:before {
         content: '✅';
       }
-      //&, .last-name {
-      //  color: white;
-      //}
-      //background: $primary-color;
     }
 
     &:last-child {
@@ -79,7 +77,10 @@ article-campaigns, .article-campaigns {
     }
 
     .discount {
+      text-align: right;
       margin-left: $margin;
+      width: 60px;
+      border-left: solid 1px $gray-border-color;
 
       &:before {
         content: "-";
