@@ -164,7 +164,9 @@
 
           const expr = 'vm.saleOrderPositions';
 
-          vm.rebindAll(SaleOrderPosition, { saleOrderId }, expr, (e, newPositions) => {
+          vm.rebindAll(SaleOrderPosition, { saleOrderId }, expr, onPositions);
+
+          function onPositions(e, newPositions) {
 
             cacheSaleOrderPositions();
 
@@ -173,7 +175,7 @@
               afterChangeOrder = false;
             }
 
-          });
+          }
 
         });
 
@@ -506,7 +508,8 @@
     }
 
     function setSaleOrderClick(saleOrder) {
-      $state.go('sales.catalogue.saleOrder', { saleOrderId: _.get(saleOrder, 'id') });
+      const saleOrderId = _.get(saleOrder, 'id');
+      $state.go('sales.catalogue.saleOrder', { saleOrderId });
     }
 
     function priceTypeClick(priceType) {
@@ -559,11 +562,11 @@
         vm.filters.push(volumeFilter);
       } else {
 
-        let existingVolumeFilter = _.find(vm.filters, el => /^\d?\.?\d+л$/.test(el.label));
+        let existingFilter = _.find(vm.filters, el => /^\d?\.?\d+л$/.test(el.label));
 
-        _.remove(vm.filters, existingVolumeFilter);
+        _.remove(vm.filters, existingFilter);
 
-        if (pieceVolumeInt !== _.get(existingVolumeFilter, 'pieceVolume')) {
+        if (pieceVolumeInt !== _.get(existingFilter, 'pieceVolume')) {
           vm.filters.push(volumeFilter);
         }
 
@@ -609,11 +612,13 @@
         return discount || discountDoc;
       }
 
+      const LIMIT = 10000;
+
       $q.all([
-        ContractArticle.uncachedFindAll({ where: contractFilter }, { limit: 10000 }),
-        ContractPriceGroup.uncachedFindAll({ where: contractFilter }, { limit: 10000 }),
-        PartnerArticle.uncachedFindAll({ where: partnerFilter }, { limit: 10000 }),
-        PartnerPriceGroup.uncachedFindAll({ where: partnerFilter }, { limit: 10000 }),
+        ContractArticle.uncachedFindAll({ where: contractFilter }, LIMIT),
+        ContractPriceGroup.uncachedFindAll({ where: contractFilter }, LIMIT),
+        PartnerArticle.uncachedFindAll({ where: partnerFilter }, LIMIT),
+        PartnerPriceGroup.uncachedFindAll({ where: partnerFilter }, LIMIT),
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
           .then(SaleOrderDiscount.meta.ensureUnique)
           .catch(() => {
@@ -673,10 +678,13 @@
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
 
+            const priceToBe = pos.priceOrigin * (1.0 - discount.discount / 100.0);
+            const priceDocToBe = pos.priceOrigin * (1.0 - discount.discountDoc / 100.0);
+
             if (!discount && (posDiscount || posDiscountDoc) ||
               discount && (
-                Math.abs(pos.priceOrigin * (1.0 - discount.discount / 100.0) - pos.price) > 0.01 ||
-                Math.abs(pos.priceOrigin * (1.0 - discount.discountDoc / 100.0) - pos.priceDoc) > 0.01
+                Math.abs(priceToBe - pos.price) > 0.01 ||
+                Math.abs(priceDocToBe - pos.priceDoc) > 0.01
               )
             ) {
 
@@ -1018,7 +1026,9 @@
       }
 
       function setDiscountScope(
-        discountScope, discountPercent = this.discountPercent(discountScope), target = '') {
+        discountScope,
+        discountPercent = this.discountPercent(discountScope),
+        target = '') {
 
         let path = 'saleOrder';
         let filter = {};
@@ -1062,7 +1072,8 @@
 
         }
 
-        _.set(vm.discounts, `${path}.discount${target === 'Doc' ? target : ''}`, discountPercent);
+        const discountPath = `${path}.discount${target === 'Doc' ? target : ''}`;
+        _.set(vm.discounts, discountPath, discountPercent);
 
         filter.path = path;
 
@@ -1093,7 +1104,8 @@
           }
           case 'saleOrder': {
             stockByPosition = position => _.find(sortedStock, stock => {
-              return stock.articleId === position.articleId && stock.discountScope() === 'saleOrder';
+              return stock.articleId === position.articleId
+                  && stock.discountScope() === 'saleOrder';
             });
             break;
           }
@@ -1573,7 +1585,9 @@
       ])
         .then(res => {
 
-          let restrictionIds = _.uniq(_.union(_.map(res[0], 'restrictionId'), _.map(res[1], 'restrictionId')));
+          let restrictionIds = _.uniq(_.union(
+              _.map(res[0], 'restrictionId'), _.map(res[1], 'restrictionId')
+          ));
           let where = {
             restrictionId: { '==': restrictionIds },
           };
