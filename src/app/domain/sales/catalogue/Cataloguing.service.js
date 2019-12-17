@@ -60,7 +60,7 @@
 
     function campaignToVariants(campaign) {
       const { variants, id, discount, name } = campaign;
-      const matching = _.filter(variants, ({ restrictions }) => appliesTo(restrictions, params));
+      const matching = _.filter(variants, v => appliesTo(v.restrictions, params));
       const data = _.map(matching, (variant, idx) => {
         const variantNumber = (variants.length > 1) ? emojiNumber(idx + 1) : '';
         const cname = (variants.length > 1) ? `${name} ${variantNumber}` : name;
@@ -68,8 +68,8 @@
           campaignId: id,
           discount,
           name: cname,
-          campaignName: name,
-          variantName: variant.name === name ? '' : variant.name,
+          campaignName: _.replace(name, /_/g, ' '),
+          variantName: _.replace(variant.name === name ? '' : variant.name, /_/g, ' '),
           variantNumber,
           variantDiscount,
         }, variant);
@@ -84,7 +84,7 @@
     if (discount) {
       return discount;
     }
-    const condition = _.find(articles, ({ articleIds }) => articleIds.indexOf(articleId) > -1);
+    const condition = _.find(articles, a => a.articleIds.indexOf(articleId) > -1);
     return _.get(condition, 'discount') || 0;
   }
 

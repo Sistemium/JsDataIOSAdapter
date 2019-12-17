@@ -678,8 +678,8 @@
               vm.discounts.priceGroup[pos.article.priceGroupId] ||
               saleOrderScopeDiscount;
 
-            const priceToBe = pos.priceOrigin * (1.0 - discount.discount / 100.0);
-            const priceDocToBe = pos.priceOrigin * (1.0 - discount.discountDoc / 100.0);
+            const priceToBe = discount && pos.priceOrigin * (1.0 - discount.discount / 100.0);
+            const priceDocToBe = discount && pos.priceOrigin * (1.0 - discount.discountDoc / 100.0);
 
             if (!discount && (posDiscount || posDiscountDoc) ||
               discount && (
