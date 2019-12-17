@@ -27,6 +27,7 @@ article-campaigns, .article-campaigns {
   .buttons {
     text-align: right;
     margin-top: 6px;
+    min-height: 21px;
 
     display: flex;
     justify-content: space-between;
@@ -79,7 +80,8 @@ article-campaigns, .article-campaigns {
     .discount {
       text-align: right;
       margin-left: $margin;
-      width: 60px;
+      //width: 60px;
+      min-width: 60px;
       border-left: solid 1px $gray-border-color;
 
       &:before {
