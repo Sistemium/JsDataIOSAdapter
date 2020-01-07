@@ -17,7 +17,7 @@
 
   function photoReportFormController(Schema, $scope, localStorageService, Sockets, SalesmanAuth, Helpers) {
 
-    const {saControllerHelper, ClickHelper, moment} = Helpers;
+    const { saControllerHelper, ClickHelper, moment } = Helpers;
 
     let vm = saControllerHelper.setup(this, $scope)
       .use(ClickHelper);
@@ -38,7 +38,7 @@
 
     });
 
-    const {PhotoReport, Outlet, Campaign, CampaignGroup} = Schema.models();
+    const { PhotoReport, Outlet, Campaign, CampaignGroup } = Schema.models();
 
     $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
 
@@ -77,7 +77,7 @@
 
       if (event.resource !== 'PhotoReport') return;
 
-      let {data} = event;
+      let { data } = event;
 
       if (!_.get(data, 'href')) return;
 
@@ -97,7 +97,7 @@
 
     function onSubmit() {
 
-      let {photoReport} = vm;
+      let { photoReport } = vm;
 
       if (!photoReport.id) {
         return;
@@ -150,7 +150,9 @@
             vm.campaignGroup = CampaignGroup.get(campaignGroupId);
 
             Campaign.findAll(Campaign.meta.filterByGroup(vm.campaignGroup))
-              .then(campaigns => vm.campaigns = campaigns);
+              .then(campaigns => {
+                vm.campaigns = _.filter(campaigns, ({ source }) => source !== 'new');
+              });
 
           });
 
@@ -163,7 +165,7 @@
         return initEmpty();
       }
 
-      PhotoReport.find({id: vm.id}, {bypassCache: true})
+      PhotoReport.find({ id: vm.id }, { bypassCache: true })
         .then(photoReport => vm.photoReport = photoReport)
         .then(photoReport => PhotoReport.loadRelations(photoReport))
         .catch(err => {
