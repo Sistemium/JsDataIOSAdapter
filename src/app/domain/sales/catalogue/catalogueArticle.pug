@@ -120,10 +120,10 @@ before-tag-name='li'
         )
           span ~{{ stock.displayVolume }}
 
-        small(ng-if='vm.saleOrderPositionByArticle[stock.articleId] && !stock.campaignVariantId')
+        small(ng-if='vm.saleOrderPositionByArticle[stock.articleId]')
           a.compDiscount(
           href
-          ng-if='vm.hasKS'
+          ng-if='vm.showCompDiscountOption(stock)'
           ng-click='vm.compDiscountClick(stock)'
           ng-class='{flag: vm.saleOrderPositionByArticle[stock.articleId].isCompDiscount}'
           ) КС

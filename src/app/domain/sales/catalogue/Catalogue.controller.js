@@ -130,6 +130,14 @@
 
       },
 
+      showCompDiscountOption(stock) {
+        if (!this.hasKS) {
+          return false;
+        }
+        const pos = this.saleOrderPositionByArticle[stock.articleId];
+        return pos && !pos.campaignVariantId;
+      },
+
       onStateChange,
       articleRowHeight: articleRowHeight(),
       alertCheck,
