@@ -160,13 +160,14 @@
 
       vm.busy = true;
 
-      const visitRelations = ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto'];
+      // const visitRelations = ['Location', 'VisitAnswer', 'Outlet', 'VisitPhoto'];
 
       let dateFilter = { date: dateFormatted(vm.selectedDate) };
 
       const filter = vm.customFilter || salesmanFilter(dateFilter);
 
-      let q = Visit.findAllWithRelations(filter, { bypassCache: true })(visitRelations)
+      let q = Visit.findAll(filter, { bypassCache: true })
+        .then(Visit.meta.loadVisitsRelations)
         .then(() => {
           vm.rebindAll(Visit, filter, 'vm.selectedDayVisits', loadOutletLocations);
           vm.busy = false;
