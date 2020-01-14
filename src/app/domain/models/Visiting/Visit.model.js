@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('jsd').run(function (Schema) {
+  angular.module('jsd').run(function (Schema, $q) {
 
     Schema.register({
 
@@ -18,7 +18,7 @@
           Location: [{
             localField: 'checkInLocation',
             localKey: 'checkInLocationId'
-          },{
+          }, {
             localField: 'checkOutLocation',
             localKey: 'checkOutLocationId'
           }],
@@ -51,6 +51,39 @@
         date: 'date'
       },
 
+      meta: {
+        loadVisitsRelations(visits) {
+
+          const { Location, VisitAnswer, VisitPhoto, Outlet } = Schema.models();
+
+          const outletIds = _.filter(_.map(visits, v => !v.outlet && v.outletId));
+          const checkInIds = _.filter(_.map(visits, v => {
+            return !v.checkInLocation && v.checkInLocationId;
+          }));
+
+          const checkOutIds = _.filter(_.map(visits, v => {
+            return !v.checkOutLocation && v.checkOutLocationId;
+          }));
+
+          const ids = _.filter(_.map(visits, 'id'));
+
+          if (!ids.length) {
+            return $q.resolve(visits);
+          }
+
+          const where = { visitId: { '==': ids } };
+
+          return $q.all([
+            Location.findByMany(checkInIds),
+            Location.findByMany(checkOutIds),
+            Outlet.findByMany(outletIds),
+            VisitAnswer.findAll({ where }),
+            VisitPhoto.findAll({ where }),
+          ]);
+
+        },
+      },
+
       computed: {
 
         finished
@@ -60,15 +93,15 @@
       methods: {
 
         answerByQuestion: function (q) {
-          return _.findWhere(this.answers,{ questionId:q.id });
+          return _.findWhere(this.answers, { questionId: q.id });
         },
 
-        duration: function() {
+        duration: function () {
           let start = _.get(this, 'checkInLocation.timestamp');
           let finish = _.get(this, 'checkOutLocation.timestamp');
           if (start && finish) {
-            let diff = moment(finish).diff(start,'seconds');
-            return diff > 60 ? Math.round(diff/60) + ' мин' : diff + ' сек';
+            let diff = moment(finish).diff(start, 'seconds');
+            return diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек';
           }
         }
 
