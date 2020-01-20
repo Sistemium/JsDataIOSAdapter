@@ -29,7 +29,11 @@
 
         itemStats(name) {
           const stat = stockTakingItemStats[this.id];
-          return (name && stat) ? stat[name] : stat;
+          const res = (name && stat) ? stat[name] : null;
+          if (name === 'sum(volume)' && stat) {
+            return (res || 0) + stat.marksCount;
+          }
+          return res;
         },
 
         isValid() {
@@ -46,11 +50,23 @@
 
 
     function refreshStats() {
-      const { StockTakingItem } = Schema.models();
+
+      const { StockTakingItem, StockTakingItemMark } = Schema.models();
+
       StockTakingItem.groupBy({}, ['stockTakingId'])
         .then(res => stockTakingItemStats = _.keyBy(res, 'stockTakingId'))
-        // .then(res => console.warn('StockTaking refreshStats', res))
-      ;
+        .then(() => StockTakingItemMark.groupBy({}, ['stockTakingId']))
+        .then(res => {
+          const markStats = _.keyBy(res, 'stockTakingId');
+          _.forEach(markStats, (stats, stockTakingId) => {
+            const stat = stockTakingItemStats[stockTakingId];
+            if (!stat) {
+              return;
+            }
+            stat.marksCount = stats['count()'];
+          });
+        });
+
     }
 
   });
