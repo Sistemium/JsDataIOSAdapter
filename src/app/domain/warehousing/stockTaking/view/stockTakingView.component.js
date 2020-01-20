@@ -275,7 +275,13 @@
             timestamp: moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS'),
             stockTakingItemId: itemId,
             stockTakingId,
-          });
+          })
+            .then(() => {
+              if (_.get(vm.stockTakingItem, 'volume')) {
+                vm.stockTakingItem.volume = 0;
+                return vm.stockTakingItem.DSCreate();
+              }
+            });
 
         });
     }
