@@ -164,7 +164,7 @@
 
       return StockTakingItem.findAll({ stockTakingId }, { bypassCache: true })
         .then(() => {
-          return StockTakingItemMark.findAll({ stockTakingId }, { bypassCache: true })
+          return StockTakingItemMark.findAll({ stockTakingId }, { limit: 10000, bypassCache: true })
             .catch(e => DEBUG(e));
         })
         .then(() => {
