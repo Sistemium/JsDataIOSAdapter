@@ -113,7 +113,8 @@
 
       saveDefaults();
 
-      let q = PhotoReport.findAllWithRelations(filter, {bypassCache: true})(['Outlet'])
+      let q = PhotoReport.findAll(filter, {bypassCache: true})
+        .then(loadPhotoReportsRelations)
         .then(() => {
           vm.rebindAll(PhotoReport, _.assign({where}, filter), 'vm.data');
         });
@@ -121,6 +122,13 @@
       createDraft();
 
       vm.setBusy(q);
+
+    }
+
+    function loadPhotoReportsRelations(photoReports) {
+
+      const outletIds = _.filter(_.map(photoReports, v => !v.outlet && v.outletId));
+      return Outlet.findByMany(outletIds);
 
     }
 
