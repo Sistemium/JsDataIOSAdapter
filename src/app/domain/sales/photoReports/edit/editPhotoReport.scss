@@ -2,6 +2,12 @@
 
 .edit-photo-report {
 
+  @include responsive-only(gt-xxs) {
+    &.sab-dropdown-inner {
+      max-width: 350px;
+    }
+  }
+
   > .field {
     margin-bottom: $margin-bottom-xs;
   }
