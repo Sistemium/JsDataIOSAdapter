@@ -4,7 +4,7 @@
 
   function PhotoReportListController(Schema, Helpers, $scope,
                                      SalesmanAuth, GalleryHelper, Sockets,
-                                     PhotoReporting, localStorageService) {
+                                     PhotoReporting, localStorageService, moment) {
 
     const {PhotoReport, Outlet, Campaign, CampaignGroup} = Schema.models();
     const {saControllerHelper, toastr} = Helpers;
@@ -29,6 +29,10 @@
 
         photoReportClick(photoReport) {
           PhotoReporting.showEdit(photoReport, this.campaignGroup);
+        },
+
+        hasWarning(photoReport) {
+          return !photoReport.thumbnailHref;
         }
 
       });
@@ -109,7 +113,7 @@
         filter.campaignId = campaignId;
       } else {
         where.campaignId = {
-          in: _.map(vm.campaigns, 'id')
+          in: _.map(vm.allCampaigns, 'id')
         };
       }
 
@@ -181,8 +185,7 @@
           vm.campaignGroups = _.orderBy(campaignGroups, ['dateB'], ['desc']);
 
           if (!vm.campaignGroupId) {
-            let today = moment().format();
-            vm.campaignGroupId = _.get(_.find(campaignGroups, group => group.dateB <= today && today <= group.dateE), 'id');
+            vm.campaignGroupId = _.get(defaultGroup(moment().format()),'id');
           }
 
           $scope.$watch('vm.campaignGroupId', onCampaignGroupChange);
@@ -190,6 +193,10 @@
         });
 
 
+    }
+
+    function defaultGroup(today) {
+      return _.find(vm.campaignGroups, group => group.dateB <= today && today <= group.dateE);
     }
 
     function onCampaignGroupChange(campaignGroupId) {
@@ -201,7 +208,11 @@
         return;
       }
 
-      Campaign.findAll(Campaign.meta.filterByGroup(vm.campaignGroup))
+      PhotoReporting.campaignsByGroupAll(vm.campaignGroup)
+        .then(allCampaigns => {
+          vm.allCampaigns = allCampaigns;
+          return PhotoReporting.campaignsByGroup(vm.campaignGroup);
+        })
         .then(campaigns => {
 
           vm.campaigns = campaigns;

@@ -42,10 +42,14 @@
       },
 
       campaignsByGroup(campaignGroup) {
-        return Campaign.findAll(Campaign.meta.filterByGroup(campaignGroup))
+        return this.campaignsByGroupAll(campaignGroup)
           .then(campaigns => {
             return _.filter(campaigns, ({ source }) => source !== 'new');
           });
+      },
+
+      campaignsByGroupAll(campaignGroup) {
+        return Campaign.findAll(Campaign.meta.filterByGroup(campaignGroup));
       },
 
     };

@@ -143,6 +143,12 @@
       flex: 1;
     }
 
+    .glyphicon-warning-sign {
+      color: $red;
+      font-size: 150%;
+      margin-right: $margin-bottom-xs;
+    }
+
     .campaign {
 
       position: relative;
