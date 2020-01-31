@@ -1,0 +1,32 @@
+.edit-photo-report
+
+  .info
+    .photo()
+      img(ng-src="{{ vm.photoReport.srcThumbnail }}")
+
+    .fields
+      .field.campaign-group
+        label Период
+        strong {{ vm.campaignGroup.name }}
+
+      .field.date
+        label Дата создания
+        strong {{ vm.photoReport.deviceCts }}
+
+      .field
+        label Торговая точка
+        strong {{ vm.photoReport.outlet.name }}
+
+      .field
+        label Адрес
+        strong {{ vm.photoReport.outlet.address }}
+
+  .field.campaign
+    label Акция
+    sab-dropdown(
+      ng-model="vm.photoReport.campaignId"
+      items-data-source-name="Campaign"
+      items-name-property="title"
+      items-group-property="teamName"
+      items-data="vm.campaigns"
+    )

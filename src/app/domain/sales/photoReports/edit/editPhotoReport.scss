@@ -1,0 +1,51 @@
+@import "variables";
+
+.edit-photo-report {
+
+  > .field {
+    margin-bottom: $margin-bottom-xs;
+  }
+
+  .field.campaign {
+    @include responsive-only(xxs) {
+      //flex-direction: column;
+      //align-items: flex-start;
+      label {
+        display: none;
+      }
+    }
+    display: flex;
+    align-items: center;
+
+    sab-dropdown {
+      flex: 1;
+    }
+  }
+
+  > .info {
+    display: flex;
+
+    > .fields {
+      flex: 1;
+      margin-left: $margin-bottom-xs;
+    }
+
+    margin-bottom: $margin-bottom-xs;
+
+    img {
+      max-width: 150px;
+    }
+
+    @include responsive-only(xxs) {
+      flex-direction: column;
+      > .fields {
+        margin-left: 0;
+        margin-top: $margin-bottom-xs;
+      }
+      .photo {
+        display: none;
+      }
+    }
+  }
+
+}

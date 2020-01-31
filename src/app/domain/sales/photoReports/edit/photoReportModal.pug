@@ -1,0 +1,22 @@
+.modal-header
+
+  .name Фото-отчёт
+
+  button.btn.btn-link.close-modal(
+    ng-click='vm.closeClick()'
+  )
+    i.glyphicon.glyphicon-remove
+
+.modal-body
+
+  edit-photo-report(
+    photo-report="vm.photoReport"
+    campaign-group="vm.campaignGroup"
+  )
+
+.modal-footer
+  button.btn.btn-default(ng-click="vm.closeClick()") Отмена
+  button.btn.btn-primary(
+    ng-click="vm.saveClick()"
+    ng-disabled="!vm.hasChanges()"
+  ) Сохранить

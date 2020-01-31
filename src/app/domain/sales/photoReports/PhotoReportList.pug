@@ -61,7 +61,7 @@ section.photo-report-list(ui-view)
         a.thumb(ng-click='vm.thumbClick(item)')
           img(ng-src='{{ item.srcThumbnail }}')
 
-        .outlet
+        .outlet(ng-click="vm.photoReportClick(item)")
           .name {{ item.outlet.name }}
           .address
             small.gray {{ item.outlet.address }}

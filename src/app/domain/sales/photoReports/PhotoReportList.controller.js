@@ -2,7 +2,9 @@
 
   module.controller('PhotoReportListController', PhotoReportListController);
 
-  function PhotoReportListController(Schema, Helpers, $scope, SalesmanAuth, GalleryHelper, Sockets, localStorageService) {
+  function PhotoReportListController(Schema, Helpers, $scope,
+                                     SalesmanAuth, GalleryHelper, Sockets,
+                                     PhotoReporting, localStorageService) {
 
     const {PhotoReport, Outlet, Campaign, CampaignGroup} = Schema.models();
     const {saControllerHelper, toastr} = Helpers;
@@ -23,7 +25,11 @@
         thumbClick,
         deleteClick,
 
-        $onInit
+        $onInit,
+
+        photoReportClick(photoReport) {
+          PhotoReporting.showEdit(photoReport, this.campaignGroup);
+        }
 
       });
 
