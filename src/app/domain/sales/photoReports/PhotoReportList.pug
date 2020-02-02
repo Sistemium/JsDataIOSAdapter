@@ -56,7 +56,7 @@ section.photo-report-list(ui-view)
   ng-disabled='vm.isPopoverOpen'
   )
     .photo-reports(vs-repeat='100' vs-scroll-parent='#scroll-main')
-      .photo-report(ng-repeat='item in vm.data track by item.id')
+      .photo-report(ng-repeat='item in vm.data track by item.id' ng-class="vm.itemCls(item)")
 
         a.thumb(ng-click='vm.thumbClick(item)')
           img(ng-src='{{ item.srcThumbnail }}')
@@ -66,7 +66,7 @@ section.photo-report-list(ui-view)
           .address
             small.gray {{ item.outlet.address }}
 
-        .campaign
+        .campaign(ng-click="vm.photoReportClick(item)")
           i.glyphicon.glyphicon-warning-sign(ng-if="vm.hasWarning(item)")
           span {{ item.campaign.title }} ({{ item.campaign.campaignGroup.shortName }})
 

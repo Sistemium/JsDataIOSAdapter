@@ -33,6 +33,10 @@
 
         hasWarning(photoReport) {
           return !photoReport.thumbnailHref;
+        },
+
+        itemCls(item) {
+          return vm.data.indexOf(item) % 2 ? 'even' : 'odd';
         }
 
       });

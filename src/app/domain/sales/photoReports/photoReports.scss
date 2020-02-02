@@ -134,8 +134,13 @@
 
     }
 
-    .outlet {
+    &.even {
+      background-color: $gray-background-color;
+    }
+
+    > .outlet, > .campaign {
       cursor: pointer;
+      color: $primary-color;
     }
 
     > * + * {
