@@ -43,7 +43,7 @@
     };
 
     function rnkOption() {
-      return customerCode() === 'r50';
+      return /r50p?$/.test(customerCode());
     }
 
     function salesTargets() {
