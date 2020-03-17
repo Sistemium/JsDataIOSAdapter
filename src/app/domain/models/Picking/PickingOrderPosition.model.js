@@ -28,7 +28,7 @@
       }, 0);
     }
 
-    Schema.register({
+    const PickingOrderPosition = Schema.register({
 
       name: 'PickingOrderPosition',
 
@@ -152,6 +152,19 @@
       },
 
       etc: {
+
+        findAllWithArticles(filter) {
+
+          const { Article } = Schema.models();
+
+          return PickingOrderPosition.findAll(filter)
+            .then(positions => {
+              const articleIds = _.map(positions, ({ article, articleId }) => !article && articleId);
+              return Article.findByMany(articleIds)
+                .then(() => positions);
+            });
+
+        },
 
         pivotPositionsByArticle(articleIndex, orders) {
 
