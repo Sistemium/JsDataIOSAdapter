@@ -181,7 +181,7 @@
 
       if (_.matches(stateFilterYes)(i) && !_.matches(stateFilterNo)(i)) {
         PO.inject(i);
-        return POP.findAllWithRelations({ pickingOrderId: i.id })('Article')
+        return POP.etc.findAllWithArticles({ pickingOrderId: i.id });
       } else {
         PO.eject(i.id);
         return false;
