@@ -41,6 +41,13 @@
   .action-buttons
 
     button.btn.btn-warning.return(
+      ng-click="vm.confirmBoxClick()"
+      ng-hide="vm.confirmedItems.length"
+      ng-if="vm.isFullBox()"
+      ng-disabled="vm.lastConfirmed"
+    ) {{ vm.lastConfirmed ? vm.lastConfirmed.statusText() : 'Подтвердить на складе' }}
+
+    button.btn.btn-warning.return(
       ng-click="vm.withdrawClick()"
       ng-hide="vm.confirmedItems.length"
       ng-if="vm.warehouseBox.processing==='picked' && vm.items.length"

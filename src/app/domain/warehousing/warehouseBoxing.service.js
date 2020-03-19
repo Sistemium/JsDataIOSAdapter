@@ -8,6 +8,7 @@
     const { WarehouseBox, WarehouseItem, Article } = Schema.models();
     const { PickingOrder, WarehouseItemOperation } = Schema.models();
     const { PickingOrderPosition, PickingOrderPositionPicked } = Schema.models();
+    const { WarehouseBoxConfirmed } = Schema.models();
 
     const NOCACHE = {
       bypassCache: true,
@@ -19,6 +20,10 @@
     let warehouseItem;
 
     return {
+
+      confirmBox(box) {
+        return WarehouseBoxConfirmed.create(box, NOCACHE);
+      },
 
       findBoxById(id) {
         const cached = WarehouseBox.get(id);
@@ -43,6 +48,13 @@
       findItemByBarcode(barcode) {
         return WarehouseItem.findAllWithRelations({ barcode }, NOCACHE)('Article')
           .then(_.first);
+      },
+
+      lastConfirmedBox({ barcode }) {
+        return WarehouseBoxConfirmed.findAll({ barcode }, NOCACHE)
+          .then(confirmations => {
+            return _.last(_.orderBy(confirmations, 'deviceCts'));
+          });
       },
 
       findBoxItems(currentBoxId) {

@@ -37,6 +37,37 @@
 
       },
 
+      confirmBoxClick() {
+
+        console.info('confirmBoxClick');
+
+        const { barcode, id: warehouseBoxId } = this.warehouseBox;
+        const warehouseItemIds = _.map(vm.items, 'id');
+
+        const text = [
+          `Подтвердить наличие целой коробки ${barcode}`,
+        ].join(' ');
+
+        ConfirmModal.show({ text })
+          .then(() => {
+            const confirmedBox = { barcode, warehouseItemIds, warehouseBoxId };
+            return WarehouseBoxing.confirmBox(confirmedBox)
+              .then(lastConfirmed => {
+                vm.lastConfirmed = lastConfirmed;
+              });
+          })
+          .then(() => {
+            WarehouseBoxing.replyDone();
+          })
+          .catch(_.noop);
+
+      },
+
+      isFullBox() {
+        return _.get(vm.warehouseBox, 'processing') === 'stock'
+          && _.get(vm.items, 'length');
+      },
+
       withdrawClick() {
         askAndSaveBox(this.items);
       },
@@ -167,7 +198,17 @@
 
     function getData(warehouseBoxId) {
 
+      vm.lastConfirmed = null;
+
       return WarehouseBoxing.findBoxById(warehouseBoxId)
+        .then(warehouseBox => {
+          return warehouseBox && WarehouseBoxing.lastConfirmedBox(warehouseBox)
+            .then(lastConfirmed => {
+              vm.lastConfirmed = lastConfirmed;
+              return warehouseBox;
+            });
+        })
+
         .then(warehouseBox => {
 
           vm.warehouseBox = warehouseBox;
