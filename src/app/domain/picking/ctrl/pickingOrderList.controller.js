@@ -287,50 +287,15 @@
         });
     }
 
-    const paletteRe = /\d{12}[24]\d{13}/;
-    const codabarRe = /[ABCD](\d{18})[ABCD]/i;
-
-    function scanType(code) {
-
-      const { length } = code;
-
-      if (length === 8) {
-        return BARCODE_TYPE_STOCK_BATCH;
-      } else if (length === 18) {
-        return BARCODE_TYPE_WAREHOUSE_PALETTE;
-      } else if (length === 26) {
-        if (paletteRe.test(code)) {
-          return BARCODE_TYPE_WAREHOUSE_PALETTE;
-        }
-        return BARCODE_TYPE_WAREHOUSE_BOX;
-      } else if (length === 150 || length === 68) {
-        return BARCODE_TYPE_EXCISE_STAMP;
-      }
-
-      return undefined;
-
-    }
-
-    function codabarFix(code) {
-
-      const fixed = code.match(codabarRe);
-
-      if (fixed) {
-        return fixed[1];
-      }
-
-      return code;
-
-    }
 
     function scanFn(scanedCode, type, object) {
 
       const notFound = 'Неизвестный штрих-код';
 
       Errors.clear();
-      const code = codabarFix(scanedCode || vm.barCodeInput);
 
-      const codeType = scanType(code);
+      const code = Picking.codabarFix(scanedCode || vm.barCodeInput);
+      const codeType = Picking.scanType(code);
 
       if (codeType === BARCODE_TYPE_WAREHOUSE_BOX) {
         $scope.$broadcast(WAREHOUSE_BOX_SCAN_EVENT, { code });
