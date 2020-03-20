@@ -10,7 +10,8 @@
 
       methods: {
         statusText() {
-          return `Подтверждено ${moment(this.date).format()}`;
+          const { length: pcs } = this.warehouseItemIds;
+          return `Подтверждено ${pcs}б. ${moment(this.date).format()}`;
         },
       },
 

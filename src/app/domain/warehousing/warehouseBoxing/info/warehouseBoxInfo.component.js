@@ -169,6 +169,11 @@
             if (removedItems.length) {
               return WarehouseBoxing.removeItemsFromBox(vm.warehouseBox, removedItems);
             }
+          })
+          .then(() => {
+            const { barcode, id: warehouseBoxId } = vm.warehouseBox;
+            const warehouseItemIds = _.map(boxItems, 'id');
+            return WarehouseBoxing.confirmBox({ barcode, warehouseBoxId, warehouseItemIds });
           });
 
       }
