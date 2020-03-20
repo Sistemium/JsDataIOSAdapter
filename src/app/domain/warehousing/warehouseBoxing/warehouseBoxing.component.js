@@ -67,6 +67,7 @@
       switch (currentState) {
         case 'warehouseBoxing':
           return 'root';
+        case 'palette':
         case 'create':
         case 'view':
           return currentState;
@@ -151,20 +152,26 @@
             return WarehouseBoxing.replyNotFound();
           }
 
-          if (stateName() === 'root') {
+          switch (stateName()) {
+            case 'root': {
 
-            const { currentBoxId } = warehouseItem;
+              const { currentBoxId } = warehouseItem;
 
-            if (!currentBoxId) {
-              return WarehouseBoxing.replyNoBox();
+              if (!currentBoxId) {
+                return WarehouseBoxing.replyNoBox();
+              }
+
+              return WarehouseBoxing.goBoxInfo({ id: currentBoxId })
+                .then(() => WarehouseBoxing.pushWarehouseItem(warehouseItem));
+
             }
+            case 'palette':
+              return;
 
-            return WarehouseBoxing.goBoxInfo({ id: currentBoxId })
-              .then(() => WarehouseBoxing.pushWarehouseItem(warehouseItem));
+            default:
+              return WarehouseBoxing.pushWarehouseItem(warehouseItem);
 
           }
-
-          return WarehouseBoxing.pushWarehouseItem(warehouseItem);
 
         });
 
