@@ -39,8 +39,6 @@
 
       confirmBoxClick() {
 
-        console.info('confirmBoxClick');
-
         const { barcode, id: warehouseBoxId } = this.warehouseBox;
         const warehouseItemIds = _.map(vm.items, 'id');
 
