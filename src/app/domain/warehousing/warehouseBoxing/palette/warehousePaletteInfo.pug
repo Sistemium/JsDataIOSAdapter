@@ -7,7 +7,7 @@
   .status
     .processing {{ vm.warehousePalette.statusLabel() }}
 
-  //.items
+  .items
     .articles.list-group.stock-batch-items
       .list-group-item.article(ng-repeat="a in vm.articles track by a.id")
         warehouse-article(ng-model="a.article")

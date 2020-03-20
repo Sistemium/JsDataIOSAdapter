@@ -92,14 +92,41 @@
         .then(() => vm.warehousePalette.findPaletteBoxes({}))
         .then(boxes => {
           vm.boxes = boxes;
-          // setArticles(items);
-          WarehouseBoxing.replyPaletteInfo(vm.warehousePalette, boxes);
+          return WarehouseBoxing.findPaletteItems(_.map(boxes, 'id'));
+        })
+        .then(items => {
+          setArticles(items);
+          WarehouseBoxing.replyPaletteInfo(vm.warehousePalette, vm.boxes);
         })
         // .then(setPickingOrder)
         .catch(e => {
           console.error(e);
           WarehouseBoxing.replyNotConnected();
         });
+
+    }
+
+    function setArticles(items) {
+
+      const grouped = _.groupBy(items, 'articleId');
+
+      vm.articles = _.map(grouped, (articleItems, articleId) => {
+
+        return {
+          id: articleId,
+          items: articleItems,
+          confirmedItems: [],
+          article: articleItems[0].article,
+          // confirmationStatus: confirmed ? '✅' : '⚠️',
+        };
+      });
+
+      const boxById = _.keyBy(vm.boxes, 'id');
+
+      vm.erroredItems = _.filter(items, item => {
+        const { processing } = boxById[item.currentBoxId] || {};
+        return processing === 'picked' && item.processing !== 'picked';
+      });
 
     }
 

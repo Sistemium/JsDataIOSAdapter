@@ -83,6 +83,15 @@
           });
       },
 
+      findPaletteItems(warehouseBoxIds) {
+
+        const options = _.assign({ field: 'currentBoxId' }, NOCACHE);
+
+        return WarehouseItem.findByMany(warehouseBoxIds, options)
+          .then(this.resolveItemsArticles);
+
+      },
+
       findBoxItems(currentBoxId) {
 
         const cached = WarehouseItem.filter({ currentBoxId });
@@ -93,14 +102,17 @@
         }
 
         return WarehouseItem.findAll({ currentBoxId }, NOCACHE)
-          .then(items => {
+          .then(this.resolveItemsArticles);
 
-            const byArticle = _.uniqBy(items, 'articleId');
-            const unresolved = _.filter(byArticle, ({ article }) => !article);
-            return Article.findByMany(_.map(unresolved, 'articleId'))
-              .then(() => items);
+      },
 
-          });
+      resolveItemsArticles(items) {
+
+        const byArticle = _.uniqBy(items, 'articleId');
+        const unresolved = _.filter(byArticle, ({ article }) => !article);
+        return Article.findByMany(_.map(unresolved, 'articleId'))
+          .then(() => items);
+
       },
 
       findBoxPickingOwner({ ownerXid: id }) {
