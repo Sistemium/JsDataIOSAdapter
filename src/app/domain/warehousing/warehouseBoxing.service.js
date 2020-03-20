@@ -5,10 +5,10 @@
 
   function WarehouseBoxing(Schema, $q, SoundSynth, Language, $state) {
 
-    const { WarehouseBox, WarehouseItem, Article } = Schema.models();
-    const { PickingOrder, WarehouseItemOperation } = Schema.models();
+    const { WarehouseBox, WarehouseItem, WarehousePalette } = Schema.models();
+    const { PickingOrder, WarehouseItemOperation, Article } = Schema.models();
     const { PickingOrderPosition, PickingOrderPositionPicked } = Schema.models();
-    const { WarehouseBoxConfirmed } = Schema.models();
+    const { WarehouseBoxConfirmed, WarehousePaletteConfirmed } = Schema.models();
 
     const NOCACHE = {
       bypassCache: true,
@@ -21,8 +21,16 @@
 
     return {
 
+      confirmPalette(palette) {
+        return WarehousePaletteConfirmed.create(palette, NOCACHE);
+      },
+
       confirmBox(box) {
         return WarehouseBoxConfirmed.create(box, NOCACHE);
+      },
+
+      findPaletteById(id) {
+        return WarehousePalette.find(id, NOCACHE);
       },
 
       findBoxById(id) {
@@ -32,6 +40,17 @@
           return $q.resolve(cached);
         }
         return WarehouseBox.find(id, NOCACHE);
+      },
+
+      findPaletteByBarcode(barcode) {
+        return WarehousePalette.findAll({ barcode }, NOCACHE)
+          .then(_.first)
+          .then(palette => {
+            if (palette) {
+              WarehousePalette.inject(palette);
+            }
+            return palette;
+          });
       },
 
       findBoxByBarcode(barcode) {
@@ -52,6 +71,13 @@
 
       lastConfirmedBox({ barcode }) {
         return WarehouseBoxConfirmed.findAll({ barcode }, NOCACHE)
+          .then(confirmations => {
+            return _.last(_.orderBy(confirmations, 'deviceCts'));
+          });
+      },
+
+      lastConfirmedPalette({ barcode }) {
+        return WarehousePaletteConfirmed.findAll({ barcode }, NOCACHE)
           .then(confirmations => {
             return _.last(_.orderBy(confirmations, 'deviceCts'));
           });
@@ -165,6 +191,10 @@
         return this.goState('.view', { warehouseBoxId: box.id });
       },
 
+      goPaletteInfo(palette) {
+        return this.goState('.palette', { warehousePaletteId: palette.id });
+      },
+
       goState(name, params) {
         return $state.go(`wh.warehouseBoxing${name || ''}`, params);
       },
@@ -173,6 +203,7 @@
         WarehouseBox.ejectAll();
         WarehouseItem.ejectAll();
         WarehouseItemOperation.ejectAll();
+        WarehousePalette.ejectAll();
       },
 
       pushWarehouseItem(item) {
@@ -207,6 +238,17 @@
 
       replyNotTheSameArticle() {
         SoundSynth.say('Это другой товар');
+      },
+
+      replyPaletteInfo(warehousePalette, boxes) {
+        const box = boxes.length;
+        const texts = [
+          // byArticle.length > 1 ? 'Сборная ' : '',
+          `Палета ${_.lowerCase(warehousePalette.statusLabel())} `,
+          box ? `${Language.speakableBoxPcs({ box })}` : 'пустая',
+        ];
+
+        SoundSynth.say(texts.join(''));
       },
 
       replyBoxInfo(warehouseBox, items) {

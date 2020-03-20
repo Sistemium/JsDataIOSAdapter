@@ -48,6 +48,27 @@
 
   };
 
+  const warehousePaletteView = {
+    name: 'palette',
+    url: '/palette/:warehousePaletteId',
+
+    data: {
+      title: 'Палета',
+      watch: {
+        ['vm.params.warehousePaletteId'](warehousePaletteId, { $state }) {
+          if (warehousePaletteId) {
+            $state.go('wh.warehouseBoxing.palette', { warehousePaletteId })
+          }
+        },
+      },
+    },
+
+    template: '<warehouse-palette-info warehouse-palette-id="vm.params.warehousePaletteId">' +
+      '</warehouse-palette-info>',
+    controller: 'StateController as vm',
+
+  };
+
   const warehouseBoxing = {
 
     name: 'wh.warehouseBoxing',
@@ -61,7 +82,7 @@
 
     template: '<warehouse-boxing></warehouse-boxing>',
 
-    children: [warehouseBoxView, warehouseBoxCreate]
+    children: [warehouseBoxView, warehouseBoxCreate, warehousePaletteView]
 
   };
 

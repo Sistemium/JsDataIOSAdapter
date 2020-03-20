@@ -26,6 +26,7 @@
       // BARCODE_TYPE_ARTICLE,
       BARCODE_TYPE_WAREHOUSE_BOX,
       BARCODE_TYPE_EXCISE_STAMP,
+      BARCODE_TYPE_WAREHOUSE_PALETTE,
     } = BarCodeType.meta.types;
 
     const { BARCODE_SCAN_EVENT } = BarCodeScanner;
@@ -87,6 +88,9 @@
       DEBUG('onScan', code, barcodeType);
 
       switch (barcodeType) {
+        case BARCODE_TYPE_WAREHOUSE_PALETTE:
+          scanBusy = onPaletteScan(code);
+          break;
         case BARCODE_TYPE_EXCISE_STAMP:
           scanBusy = onStampScan(code);
           break;
@@ -99,6 +103,24 @@
 
       return vm.setBusy(scanBusy.finally(() => scanBusy = false));
 
+    }
+
+    function onPaletteScan(barcode) {
+      return WarehouseBoxing.findPaletteByBarcode(barcode)
+        .then(palette => {
+
+          if (palette) {
+            return WarehouseBoxing.goPaletteInfo(palette);
+          } else {
+            // return WarehouseBoxing.goState('.create', { barcode });
+            WarehouseBoxing.replyNotFound();
+          }
+
+        })
+        .catch(e => {
+          console.error(e);
+          WarehouseBoxing.replyNotConnected();
+        });
     }
 
     function onWarehouseBoxScan(barcode) {

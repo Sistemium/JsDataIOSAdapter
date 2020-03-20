@@ -1,0 +1,26 @@
+.warehouse-palette-info(cg-busy="vm.cgBusy")
+
+  .title
+    .barcode 📦 {{ vm.warehousePalette.barcode }}
+    .boxes-count.count {{ vm.boxes.length | number }}
+
+  .status
+    .processing {{ vm.warehousePalette.statusLabel() }}
+
+  //.items
+    .articles.list-group.stock-batch-items
+      .list-group-item.article(ng-repeat="a in vm.articles track by a.id")
+        warehouse-article(ng-model="a.article")
+        .totals
+          //.confirmed(ng-if="a.confirmedItems.length") {{ a.confirmedItems.length }} из
+          .count {{ a.items.length | number:0 }}
+          //.status(ng-if="vm.confirmedItems.length") {{ a.confirmationStatus }}
+
+  .action-buttons
+
+    button.btn.btn-warning.return(
+      ng-click="vm.confirmPaletteClick()"
+      ng-hide="vm.confirmedItems.length"
+      ng-if="vm.isFullPalette()"
+      ng-disabled="vm.lastConfirmed"
+    ) {{ vm.lastConfirmed ? vm.lastConfirmed.statusText() : 'Подтвердить на складе' }}
