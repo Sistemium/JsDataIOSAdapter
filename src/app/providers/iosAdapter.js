@@ -215,16 +215,16 @@
       );
     };
 
-    IosAdapter.prototype.create = function (resource, attrs) {
-      return requestFromIOS('update', resource.endpoint, attrs, {
+    IosAdapter.prototype.create = function (resource, attrs, options) {
+      return requestFromIOS('update', resource.endpoint, attrs, _.assign({
         oneObject: true
-      });
+      }, options));
     };
 
-    IosAdapter.prototype.update = function (resource, id, attrs) {
-      return requestFromIOS('update', resource.endpoint, attrs, {
+    IosAdapter.prototype.update = function (resource, id, attrs, options) {
+      return requestFromIOS('update', resource.endpoint, attrs, _.assign({
         oneObject: true
-      });
+      }, options));
     };
 
     IosAdapter.prototype.destroy = function (resource, id, options) {
