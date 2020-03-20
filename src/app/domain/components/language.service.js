@@ -132,7 +132,18 @@
       speakableCountFemale,
       speakableCount,
       speakableBoxPcs,
-      orderRu: orderRu
+      orderRu,
+      statusLabel(processing) {
+        switch (processing) {
+          case 'picked':
+            return 'В заказе';
+          case 'stock':
+          case 'draft':
+            return 'На складе';
+          default:
+            return 'Прочее';
+        }
+      },
     }
 
   });

@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('Models').run(Schema => {
+  angular.module('Models').run((Schema, Language) => {
 
     Schema.register({
 
@@ -27,15 +27,7 @@
       methods: {
 
         statusLabel() {
-          switch (this.processing) {
-            case 'picked':
-              return 'В заказе';
-            case 'stock':
-            case 'draft':
-              return 'На складе';
-            default:
-              return 'Прочее';
-          }
+          return Language.statusLabel(this.processing);
         },
 
       },

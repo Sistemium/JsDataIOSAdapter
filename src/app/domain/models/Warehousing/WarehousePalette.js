@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('Models').run((Schema, $q, saAsync) => {
+  angular.module('Models').run((Schema, $q, saAsync, Language) => {
 
     const NO_CACHE = { bypassCache: true, cacheResponse: false };
     const SOCKET_SOURCE = { cacheResponse: false, socketSource: true };
@@ -22,6 +22,10 @@
       },
 
       methods: {
+
+        statusLabel() {
+          return Language.statusLabel(this.processing);
+        },
 
         unloadBoxes(boxes) {
 
