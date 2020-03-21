@@ -18,8 +18,11 @@
     };
 
     let warehouseItem;
+    let plainStamp;
 
     return {
+
+      OLD_STAMP_LENGTH: 68,
 
       confirmPalette(palette) {
         return WarehousePaletteConfirmed.create(palette, NOCACHE);
@@ -199,6 +202,10 @@
         $state.go('wh.warehouseBoxing');
       },
 
+      goConfirmedBoxInfo() {
+        this.goRootState();
+      },
+
       goBoxInfo(box) {
         return this.goState('.view', { warehouseBoxId: box.id });
       },
@@ -222,9 +229,19 @@
         warehouseItem = item;
       },
 
+      pushPlainStamp(barcode) {
+        plainStamp = barcode;
+      },
+
       popWarehouseItem() {
         const res = warehouseItem;
         warehouseItem = null;
+        return res;
+      },
+
+      popPlainStamp() {
+        const res = plainStamp;
+        plainStamp = null;
         return res;
       },
 

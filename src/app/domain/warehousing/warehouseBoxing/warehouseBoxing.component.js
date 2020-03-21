@@ -143,13 +143,23 @@
 
     }
 
+    function checkIfGatheringStamps(barcode) {
+      if (barcode.length > WarehouseBoxing.OLD_STAMP_LENGTH) {
+        return WarehouseBoxing.replyNotFound();
+      }
+      if (stateName() !== 'create') {
+        return WarehouseBoxing.replyError('Неизвестные марки можно только в новую коробку');
+      }
+      WarehouseBoxing.pushPlainStamp(barcode);
+    }
+
     function onStampScan(barcode) {
 
       return WarehouseBoxing.findItemByBarcode(barcode)
         .then(warehouseItem => {
 
           if (!warehouseItem) {
-            return WarehouseBoxing.replyNotFound();
+            return checkIfGatheringStamps(barcode);
           }
 
           switch (stateName()) {

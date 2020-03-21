@@ -19,6 +19,7 @@ warehouse-box-info, warehouse-box-create, warehouse-palette-info {
   .items {
     margin-top: $margin-bottom-xs;
     clear: both;
+
     .list-group {
       margin-bottom: 0;
     }
@@ -31,13 +32,21 @@ warehouse-box-info, warehouse-box-create, warehouse-palette-info {
     label {
       margin: 0 $margin-bottom-xs-minus 0 0;
       font-weight: normal;
+
       &:before {
         content: "⚠️";
         margin-right: $margin-bottom-xs-minus;
       }
+
       &:after {
         content: ":";
       }
+    }
+  }
+
+  .stamp-label {
+    strong {
+      margin-left: $margin-bottom-xs;
     }
   }
 
@@ -57,6 +66,7 @@ warehouse-box-info, warehouse-box-create, warehouse-palette-info {
 
   .box-orders {
     margin-top: $margin-bottom-xs;
+
     .actions {
       flex: 1;
       text-align: right;

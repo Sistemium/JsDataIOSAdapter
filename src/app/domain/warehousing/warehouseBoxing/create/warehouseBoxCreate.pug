@@ -4,24 +4,31 @@
     .barcode 📦 {{ vm.barcode }}
     .count {{ vm.items.length | number }}
 
-  .item-info(ng-if="vm.currentItem")
-    warehouse-item-info(warehouse-item="vm.currentItem")
+  .item-info(ng-if="vm.currentItem || vm.currentStamp")
+    warehouse-item-info(ng-if="vm.currentItem" warehouse-item="vm.currentItem")
+    .stamp-label(ng-if="vm.currentStamp")
+      label 🏷
+      strong {{ vm.stampLabel(vm.currentStamp) }}
     a(href ng-click="vm.removeItemClick()") Убрать
 
   .items.list-group
+    .list-group-item(ng-if="vm.stamps.length")
+      .stamp-label
+        label 🏷
+        strong {{ vm.stamps.length }} б.
     .list-group-item(ng-repeat="a in vm.articles track by a.id")
       warehouse-article(ng-model="a.article")
       .count {{ a.items.length }}
 
   .alert.alert-success(ng-if="!vm.items.length")
-    | Просканируйте товар, чтобы создать партию c наклейкой
+    | Просканируйте товар, чтобы создать коробку c наклейкой
     strong &nbsp;{{ vm.barcode }}
 
   .action-buttons
 
     button.btn.btn-primary(
       ng-click="vm.saveClick()"
-      ng-if="vm.items.length"
+      ng-if="vm.items.length || vm.stamps.length"
     ) Сохранить
 
     button.btn.btn-default(

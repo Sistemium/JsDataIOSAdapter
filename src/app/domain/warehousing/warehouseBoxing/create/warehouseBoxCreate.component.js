@@ -22,12 +22,15 @@
 
       articles: [],
       items: [],
+      stamps: [],
       currentItem: null,
+      currentStamp: null,
 
       $onInit() {
 
         WarehouseBoxing.replyNewBox();
         $scope.$watch(WarehouseBoxing.popWarehouseItem, item => item && onStampScan(item));
+        $scope.$watch(WarehouseBoxing.popPlainStamp, stamp => stamp && onPlainStamp(stamp));
 
       },
 
@@ -37,27 +40,68 @@
 
       saveClick() {
 
-        const busy = WarehouseBoxing.createBoxWithItems(vm.barcode, vm.items)
-          .then(warehouseBox => WarehouseBoxing.goBoxInfo(warehouseBox))
-          .catch(e => {
-            console.error(e);
-            return WarehouseBoxing.replyNotConnected();
-          });
+        const busy = vm.items.length ? saveItems() : saveStamps();
 
-        vm.setBusy(busy);
+        vm.setBusy(busy)
+          .catch(() => WarehouseBoxing.replyNotConnected());
 
       },
 
       removeItemClick() {
-        const { currentItem, items } = this;
-        _.remove(items, { id: currentItem.id });
-        this.currentItem = null;
-        setArticles(items);
+        const { currentItem, items, currentStamp } = this;
+        if (currentItem) {
+          _.remove(items, { id: currentItem.id });
+          this.currentItem = null;
+          setArticles(items);
+        }
+        if (currentStamp) {
+          _.remove(this.stamps, s => s === vm.currentStamp);
+          this.currentStamp = null;
+        }
       },
+
+      stampLabel(stamp = this.currentStamp) {
+        return stamp.substr(-10);
+      }
 
     });
 
+    function saveItems() {
+      return WarehouseBoxing.createBoxWithItems(vm.barcode, vm.items)
+        .then(warehouseBox => WarehouseBoxing.goBoxInfo(warehouseBox));
+    }
+
+    function saveStamps() {
+      const { barcode, stamps } = vm;
+      return WarehouseBoxing.confirmBox({ barcode, stamps })
+        .then(confirmed => WarehouseBoxing.goConfirmedBoxInfo(confirmed));
+    }
+
+    function onPlainStamp(stamp) {
+
+      if (vm.items.length) {
+        return WarehouseBoxing.replyError('В коробке есть известные марки');
+      }
+
+      vm.currentStamp = stamp;
+
+      const existing = vm.stamps.indexOf(stamp) + 1;
+
+      if (existing) {
+        return WarehouseBoxing.replyItemAgain(existing);
+      }
+
+      vm.stamps.push(stamp);
+
+      WarehouseBoxing.replyItemScan(vm.stamps.length);
+
+    }
+
     function onStampScan(warehouseItem) {
+
+      if (vm.stamps.length) {
+        return WarehouseBoxing.replyError('В коробке есть неизвестные марки');
+      }
 
       const existing = _.findIndex(vm.items, { id: warehouseItem.id }) + 1;
 
