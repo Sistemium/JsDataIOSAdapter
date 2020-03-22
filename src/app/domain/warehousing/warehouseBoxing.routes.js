@@ -82,7 +82,11 @@
 
     template: '<warehouse-boxing></warehouse-boxing>',
 
-    children: [warehouseBoxView, warehouseBoxCreate, warehousePaletteView]
+    children: [
+      warehouseBoxView,
+      warehouseBoxCreate,
+      warehousePaletteView,
+    ],
 
   };
 

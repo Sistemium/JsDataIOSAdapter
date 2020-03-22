@@ -25,12 +25,14 @@
       stamps: [],
       currentItem: null,
       currentStamp: null,
+      stockBatch: null,
 
       $onInit() {
 
         WarehouseBoxing.replyNewBox();
         $scope.$watch(WarehouseBoxing.popWarehouseItem, item => item && onStampScan(item));
         $scope.$watch(WarehouseBoxing.popPlainStamp, stamp => stamp && onPlainStamp(stamp));
+        $scope.$watch(WarehouseBoxing.popStockBatch, sb => sb && onStockBatch(sb));
 
       },
 
@@ -40,7 +42,9 @@
 
       saveClick() {
 
-        const busy = vm.items.length ? saveItems() : saveStamps();
+        const busy = saveItems()
+          .then(saveStamps)
+          .then(warehouseBox => WarehouseBoxing.goBoxInfo(warehouseBox));
 
         vm.setBusy(busy)
           .catch(() => WarehouseBoxing.replyNotConnected());
@@ -67,20 +71,42 @@
     });
 
     function saveItems() {
-      return WarehouseBoxing.createBoxWithItems(vm.barcode, vm.items)
-        .then(warehouseBox => WarehouseBoxing.goBoxInfo(warehouseBox));
+      return WarehouseBoxing.createBoxWithItems(vm.barcode, vm.items);
     }
 
-    function saveStamps() {
+    function saveStamps(box) {
+
+      const { id: warehouseBoxId } = box;
       const { barcode, stamps } = vm;
-      return WarehouseBoxing.confirmBox({ barcode, stamps })
-        .then(confirmed => WarehouseBoxing.goConfirmedBoxInfo(confirmed));
+      const { barcode: stockBatchBarcode, articleId } = vm.stockBatch;
+
+      return WarehouseBoxing.confirmBox({
+        stockBatchBarcode,
+        articleId,
+        barcode,
+        stamps,
+        warehouseBoxId,
+      })
+        .then(() => box);
+
+    }
+
+    function onStockBatch(stockBatch) {
+      if (vm.items.length) {
+        return WarehouseBoxing.replyError('Старая партия');
+      }
+
+      vm.stockBatch = stockBatch;
     }
 
     function onPlainStamp(stamp) {
 
       if (vm.items.length) {
-        return WarehouseBoxing.replyError('В коробке есть известные марки');
+        return WarehouseBoxing.replyError('Неизвестная марка');
+      }
+
+      if (!vm.stockBatch) {
+        return WarehouseBoxing.replyError('Сначала просканируйте наклейку партии');
       }
 
       vm.currentStamp = stamp;

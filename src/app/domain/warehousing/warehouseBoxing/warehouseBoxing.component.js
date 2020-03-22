@@ -24,6 +24,7 @@
 
     const {
       // BARCODE_TYPE_ARTICLE,
+      BARCODE_TYPE_STOCK_BATCH,
       BARCODE_TYPE_WAREHOUSE_BOX,
       BARCODE_TYPE_EXCISE_STAMP,
       BARCODE_TYPE_WAREHOUSE_PALETTE,
@@ -89,6 +90,9 @@
       DEBUG('onScan', code, barcodeType);
 
       switch (barcodeType) {
+        case BARCODE_TYPE_STOCK_BATCH:
+          scanBusy = onStockBatchScan(code);
+          break;
         case BARCODE_TYPE_WAREHOUSE_PALETTE:
           scanBusy = onPaletteScan(code);
           break;
@@ -104,6 +108,16 @@
 
       return vm.setBusy(scanBusy.finally(() => scanBusy = false));
 
+    }
+
+    function onStockBatchScan(barcode) {
+      return WarehouseBoxing.findStockBatchByBarcode(barcode)
+        .then(sb => {
+          if (!sb) {
+            return WarehouseBoxing.replyNotFound();
+          }
+          WarehouseBoxing.pushStockBatch(sb);
+        });
     }
 
     function onPaletteScan(barcode) {

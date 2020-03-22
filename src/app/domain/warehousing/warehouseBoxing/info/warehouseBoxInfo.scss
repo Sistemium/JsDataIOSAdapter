@@ -45,7 +45,7 @@ warehouse-box-info, warehouse-box-create, warehouse-palette-info {
   }
 
   .stamp-label {
-    strong {
+    strong, span {
       margin-left: $margin-bottom-xs;
     }
   }

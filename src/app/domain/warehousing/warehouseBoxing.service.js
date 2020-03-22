@@ -3,7 +3,7 @@
   angular.module('Warehousing')
     .service('WarehouseBoxing', WarehouseBoxing);
 
-  function WarehouseBoxing(Schema, $q, SoundSynth, Language, $state) {
+  function WarehouseBoxing(Schema, $q, SoundSynth, Language, $state, Picking) {
 
     const { WarehouseBox, WarehouseItem, WarehousePalette } = Schema.models();
     const { PickingOrder, WarehouseItemOperation, Article } = Schema.models();
@@ -19,6 +19,7 @@
 
     let warehouseItem;
     let plainStamp;
+    let stockBatchScanned;
 
     return {
 
@@ -43,6 +44,31 @@
           return $q.resolve(cached);
         }
         return WarehouseBox.find(id, NOCACHE);
+      },
+
+      findStockBatchByBarcode(barcode) {
+        return Picking.stockBatchByBarCode(barcode)
+          .then(sb => {
+            if (!sb) {
+              return null;
+            }
+            const { articleId } = sb;
+            if (!articleId) {
+              return this.replyNoArticle();
+            }
+            return this.findArticle(articleId)
+              .then(article => {
+                if (!article) {
+                  return this.replyNoArticle();
+                }
+                return { articleId, barcode, article };
+              });
+          });
+      },
+
+      findArticle(articleId) {
+        const a = Article.get(articleId);
+        return a ? $q.resolve(a) : Article.find(articleId);
       },
 
       findPaletteByBarcode(barcode) {
@@ -76,6 +102,17 @@
         return WarehouseBoxConfirmed.findAll({ barcode }, NOCACHE)
           .then(confirmations => {
             return _.last(_.orderBy(confirmations, 'deviceCts'));
+          })
+          .then(confirmed => {
+            if (!confirmed) {
+              return null;
+            }
+            const { articleId } = confirmed;
+            if (!articleId) {
+              return confirmed;
+            }
+            return this.findArticle(articleId)
+              .then(() => confirmed);
           });
       },
 
@@ -229,6 +266,10 @@
         warehouseItem = item;
       },
 
+      pushStockBatch(stockBatch) {
+        stockBatchScanned = stockBatch;
+      },
+
       pushPlainStamp(barcode) {
         plainStamp = barcode;
       },
@@ -242,6 +283,12 @@
       popPlainStamp() {
         const res = plainStamp;
         plainStamp = null;
+        return res;
+      },
+
+      popStockBatch() {
+        const res = stockBatchScanned;
+        stockBatchScanned = null;
         return res;
       },
 
@@ -313,6 +360,14 @@
 
       replyItemAgain(num) {
         SoundSynth.say(`Это снова ${Language.speakableCountFemale(num)}`);
+      },
+
+      replyError(text) {
+        SoundSynth.say(text || 'Ошибка');
+      },
+
+      replyNoArticle() {
+        SoundSynth.say('Не найдена номенклатура партии');
       },
 
     };

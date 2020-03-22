@@ -8,10 +8,20 @@
 
       // barcode
 
+      relations: {
+        belongsTo: {
+          Article: {
+            localField: 'article',
+            localKey: 'articleId',
+          },
+        }
+      },
+
       methods: {
         statusText() {
-          const { length: pcs } = this.warehouseItemIds;
-          return `Подтверждено ${pcs}б. ${moment(this.date).format()}`;
+          const { length: pcs } = this.warehouseItemIds || [];
+          const { length: stamps } = this.stamps || [];
+          return `Подтверждено ${pcs || stamps}б. ${moment(this.date).format()}`;
         },
       },
 

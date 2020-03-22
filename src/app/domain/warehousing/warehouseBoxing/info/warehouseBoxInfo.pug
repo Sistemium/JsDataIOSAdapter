@@ -31,6 +31,18 @@
 
   .items
     .articles.list-group.stock-batch-items
+      .list-group-item(ng-if="vm.lastConfirmed.article")
+        warehouse-article(ng-model="vm.lastConfirmed.article")
+      .list-group-item(ng-if="!vm.articles.length && vm.lastConfirmed.stamps.length")
+        .stamp-label
+          label 🏷
+          span неизвестных марок:
+          strong {{ vm.lastConfirmed.stamps.length }} шт.
+      .list-group-item(ng-if="vm.lastConfirmed.stockBatchBarcode")
+        .stamp-label
+          label 🔖
+          span партия:
+          strong {{ vm.lastConfirmed.stockBatchBarcode }}
       .list-group-item.article(ng-repeat="a in vm.articles track by a.id")
         warehouse-article(ng-model="a.article")
         .totals
