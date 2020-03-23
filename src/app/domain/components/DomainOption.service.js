@@ -130,7 +130,7 @@
 
     function customerCode() {
       let org = _.get(Auth.getAccount(), 'org');
-      if (!org) return false;
+      if (!org) return '';
       return customerAlias[org] || org;
     }
 
