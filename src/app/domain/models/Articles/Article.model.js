@@ -139,11 +139,11 @@
         }
 
       },
-
-      aflterFindAll: (options, data) => {
-        clearCaches();
-        return data;
-      }
+      //
+      // afterFindAll: (options, data) => {
+      //   clearCaches();
+      //   return data;
+      // }
 
     });
 
@@ -290,9 +290,9 @@
 
     let wordsCache = false;
 
-    function clearCaches() {
-      wordsCache = false;
-    }
+    // function clearCaches() {
+    //   wordsCache = false;
+    // }
 
     function words() {
 
