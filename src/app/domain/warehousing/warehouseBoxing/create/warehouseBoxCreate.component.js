@@ -97,6 +97,8 @@
       }
 
       vm.stockBatch = stockBatch;
+
+      WarehouseBoxing.replyDone('Партия принята');
     }
 
     function onPlainStamp(stamp) {

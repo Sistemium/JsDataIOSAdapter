@@ -222,7 +222,8 @@
             .then(items => {
               vm.items = items;
               setArticles(items);
-              WarehouseBoxing.replyBoxInfo(warehouseBox, items, _.get(vm.lastConfirmed, 'stamps'));
+              const stamps = _.get(vm.lastConfirmed, 'stamps') || [];
+              WarehouseBoxing.replyBoxInfo(warehouseBox, items, stamps);
               return warehouseBox;
             });
 

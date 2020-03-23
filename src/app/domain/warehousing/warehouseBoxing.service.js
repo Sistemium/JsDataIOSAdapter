@@ -350,8 +350,8 @@
         SoundSynth.say('Подождите');
       },
 
-      replyDone() {
-        SoundSynth.say('Готово');
+      replyDone(text) {
+        SoundSynth.say(text || 'Готово');
       },
 
       replyItemScan(num) {
