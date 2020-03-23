@@ -222,7 +222,7 @@
             .then(items => {
               vm.items = items;
               setArticles(items);
-              WarehouseBoxing.replyBoxInfo(warehouseBox, items);
+              WarehouseBoxing.replyBoxInfo(warehouseBox, items, _.get(vm.lastConfirmed, 'stamps'));
               return warehouseBox;
             });
 

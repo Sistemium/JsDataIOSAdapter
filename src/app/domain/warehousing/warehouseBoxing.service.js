@@ -327,9 +327,9 @@
         SoundSynth.say(texts.join(''));
       },
 
-      replyBoxInfo(warehouseBox, items) {
+      replyBoxInfo(warehouseBox, items, stamps) {
 
-        const pcs = items.length;
+        const pcs = items.length || stamps.length;
         const byArticle = _.uniqBy(items, 'articleId');
 
         const texts = [
