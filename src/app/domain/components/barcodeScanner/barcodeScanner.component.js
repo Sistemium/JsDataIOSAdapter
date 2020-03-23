@@ -23,7 +23,7 @@
             BarCodeType.findAll();
             BarCodeType.bindAll({}, $scope, 'vm.types');
 
-            vm.iosMode = IOS.isIos();
+            vm.iosMode = IOS.isIos() && location.protocol !== 'http:';
 
             if (vm.iosMode) {
               BarCodeScanner.bind(onScan);

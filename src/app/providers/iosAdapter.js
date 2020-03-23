@@ -86,12 +86,7 @@
       options.requestId = id;
       options.type = type;
 
-      let message = {
-
-        entity: entity,
-        options: options
-
-      };
+      let message = { entity, options };
 
       if (angular.isString(params)) {
         message.id = params;
@@ -218,13 +213,13 @@
     IosAdapter.prototype.create = function (resource, attrs, options) {
       return requestFromIOS('update', resource.endpoint, attrs, _.assign({
         oneObject: true
-      }, options));
+      }, _.pick(options, [STAPI_OPTION_SOCKET_SOURCE])));
     };
 
     IosAdapter.prototype.update = function (resource, id, attrs, options) {
       return requestFromIOS('update', resource.endpoint, attrs, _.assign({
         oneObject: true
-      }, options));
+      }, _.pick(options, [STAPI_OPTION_SOCKET_SOURCE])));
     };
 
     IosAdapter.prototype.destroy = function (resource, id, options) {
