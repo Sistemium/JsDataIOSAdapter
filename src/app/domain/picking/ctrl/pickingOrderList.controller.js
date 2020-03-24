@@ -288,7 +288,7 @@
     }
 
     function isOldMark(code) {
-      return code.length === EXCISE_STAMP_LENGTH && $state.current.name.match(/pickedPosition/);
+      return code.length === EXCISE_STAMP_LENGTH && $state.current.name.match(/article[.]pick/);
     }
 
     function scanFn(scanedCode, type, object) {
