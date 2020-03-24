@@ -30,10 +30,10 @@
         a(href ng-click="vm.boxOrderClick(order)") Исправить
 
   .items
-    .articles.list-group.stock-batch-items
+    .articles.list-group(ng-if="!vm.articles.length")
       .list-group-item(ng-if="vm.lastConfirmed.article")
         warehouse-article(ng-model="vm.lastConfirmed.article")
-      .list-group-item(ng-if="!vm.articles.length && vm.lastConfirmed.stamps.length")
+      .list-group-item(ng-if="vm.lastConfirmed.stamps.length")
         .stamp-label
           label 🏷
           span неизвестных марок:
@@ -43,6 +43,7 @@
           label 🔖
           span партия:
           strong {{ vm.lastConfirmed.stockBatchBarcode }}
+    .articles.list-group(ng-if="vm.articles.length")
       .list-group-item.article(ng-repeat="a in vm.articles track by a.id")
         warehouse-article(ng-model="a.article")
         .totals

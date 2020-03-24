@@ -287,6 +287,9 @@
         });
     }
 
+    function isOldMark(code) {
+      return code.length === EXCISE_STAMP_LENGTH && $state.current.name.match(/pickedPosition/);
+    }
 
     function scanFn(scanedCode, type, object) {
 
@@ -301,8 +304,7 @@
         $scope.$broadcast(WAREHOUSE_BOX_SCAN_EVENT, { code });
         return;
       } else if (codeType === BARCODE_TYPE_EXCISE_STAMP) {
-        const eventName = code.length === EXCISE_STAMP_LENGTH
-          ? WAREHOUSE_OLD_MARK_SCAN_EVENT : WAREHOUSE_ITEM_SCAN_EVENT;
+        const eventName = isOldMark(code) ? WAREHOUSE_OLD_MARK_SCAN_EVENT : WAREHOUSE_ITEM_SCAN_EVENT;
         $scope.$broadcast(eventName, { code });
         return;
       } else if (codeType === BARCODE_TYPE_WAREHOUSE_PALETTE) {
