@@ -5,7 +5,7 @@
   const REQUIRED_ACCURACY = 500;
 
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth,
-                                 geolib, Helpers, mapsHelper, Visiting) {
+                                 moment, geolib, Helpers, mapsHelper, Visiting) {
 
     const { ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper } = Helpers;
     const { yLatLng } = mapsHelper;
@@ -164,7 +164,7 @@
       }
 
       Visit.eject(vm.visit);
-      _.each(answersByQuestion, function (ans) {
+      _.each(answersByQuestion, ans => {
         VisitAnswer.eject(ans);
       });
 
@@ -202,7 +202,7 @@
 
       vm.map = {
         yaCenter: yLatLng(checkIn),
-        afterMapInit: function () {
+        afterMapInit() {
 
           vm.startMarker = mapsHelper.yMarkerConfig({
             id: 'checkIn',
@@ -290,15 +290,10 @@
 
               vm.visit.checkOutLocationId = checkOutLocation.id;
 
-              Visit.save(vm.visit)
+              Visiting.saveVisit(vm.visit)
                 .then(visit => {
 
-                  let cts = _.get(visit, 'checkInLocation.deviceCts') || visit.deviceCts;
-                  let diff = moment(visit.checkOutLocation.deviceCts).diff(cts, 'seconds');
-
-                  const visitTime = diff > 60 ? Math.round(diff / 60) + ' мин' : diff + ' сек';
-
-                  toastr.info(visitTime, 'Визит завершен');
+                  toastr.info(Visiting.visitTime(visit), 'Визит завершен');
 
                   SalesmanAuth.login(vm.visit.salesman);
 
@@ -320,7 +315,7 @@
 
         } else {
 
-          Visit.save(vm.visit)
+          Visiting.saveVisit(vm.visit)
             .then(resolve, reject)
             .then(quit);
 
@@ -340,20 +335,14 @@
       ConfirmModal.show({
         text: 'Действительно удалить запись об этом визите?'
       })
-        .then(function () {
-          Visit.destroy(vm.visit)
-            .then(quit);
-        });
+        .then(() => Visit.destroy(vm.visit))
+        .then(quit);
 
     }
 
     function postRefresh() {
 
-      let index = _.groupBy(vm.visit.answers, 'questionId');
-
-      answersByQuestion = _.mapValues(index, ansArray => {
-        return ansArray[0];
-      });
+      answersByQuestion = _.keyBy(vm.visit.answers, 'questionId');
 
       vm.answers = _.mapValues(answersByQuestion, ans => {
 
