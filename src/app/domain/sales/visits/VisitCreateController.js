@@ -4,15 +4,14 @@
 
   const REQUIRED_ACCURACY = 500;
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, geolib, Helpers, mapsHelper) {
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth,
+                                 geolib, Helpers, mapsHelper, Visiting) {
 
     const { ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper } = Helpers;
     const { yLatLng } = mapsHelper;
 
     const { Visit, Location } = Schema.models();
-    const VQS = Schema.model('VisitQuestionSet');
-    const VQ = Schema.model('VisitQuestion');
-    const VA = Schema.model('VisitAnswer');
+    const { VisitAnswer } = Schema.models();
 
     const creatingMode = !!_.get($state, 'current.name').match(/\.visitCreate$/);
 
@@ -86,26 +85,17 @@
 
     if (visitId) {
 
-      vm.busy = $q.all([
-        VQS.findAllWithRelations({ isEnabled: true })('VisitQuestionGroup')
-          .then(vm.importData('questionSets')),
-        VQ.findAllWithRelations()('VisitQuestionDataType')
-      ]).then(() => {
-        return Visit.find(visitId)
-          .then(vm.importData('visit'))
-          .then(function (visit) {
-            Visit.loadRelations(visit, ['Location', 'VisitPhoto'])
-              .then(() => {
-                _.each(visit.photos, importThumbnail);
-                return visit;
-              })
-              .then(initMap);
-            return visit;
-          })
-          .then(visit => VA.findAll({
-            visitId: visit.id
-          }));
-      })
+      vm.busy = Visiting.loadQuestionsData()
+        .then(vm.importData('questionSets'))
+        .then(() => {
+          return Visiting.findVisitById(visitId)
+            .then(vm.importData('visit'))
+            .then(visit => {
+              _.each(visit.photos, importThumbnail);
+              return visit;
+            })
+            .then(initMap);
+        })
         .then(postRefresh)
         .catch(err => console.error(err));
 
@@ -175,7 +165,7 @@
 
       Visit.eject(vm.visit);
       _.each(answersByQuestion, function (ans) {
-        VA.eject(ans);
+        VisitAnswer.eject(ans);
       });
 
     });
@@ -268,7 +258,7 @@
 
     function changeAnswer(qst, data) {
 
-      let ans = answersByQuestion[qst.id] || VA.inject({ visitId: vm.visit.id, questionId: qst.id });
+      let ans = answersByQuestion[qst.id] || VisitAnswer.inject({ visitId: vm.visit.id, questionId: qst.id });
 
       if (qst.dataType.code === 'boolean') {
         ans.data = data && '1' || '0';
@@ -279,7 +269,7 @@
       }
 
       answersByQuestion[qst.id] = ans;
-      VA.save(ans);
+      VisitAnswer.save(ans);
 
     }
 
