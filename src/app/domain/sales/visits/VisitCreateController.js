@@ -32,7 +32,6 @@
 
       showSalesman: SalesmanAuth.hasOptions,
 
-      takePhoto,
       thumbnailClick,
       goBack,
       changeAnswer,
@@ -90,6 +89,7 @@
             .then(vm.importData('visit'))
             .then(visit => {
               _.each(visit.photos, importThumbnail);
+              initPhoto();
               return visit;
             })
             .then(initMap);
@@ -155,6 +155,8 @@
         });
     }
 
+    vm.watchScope('vm.busySavingPicture', onBusySavingPicture);
+
     $scope.$on('$destroy', function () {
 
       if (!creatingMode || Visit.lastSaved(vm.visit)) {
@@ -172,8 +174,23 @@
      Functions
      */
 
-    function takePhoto() {
-      return PhotoHelper.takePhoto('VisitPhoto', { visitId: vm.visit.id }, vm.thumbnails);
+    function onBusySavingPicture(promise) {
+
+      if (!promise || !promise.then) {
+        return;
+      }
+
+      vm.cgBusy = { promise, message: 'Сохранение изображения' };
+
+      promise.then(picture => {
+        importThumbnail(picture);
+        initPhoto();
+      });
+
+    }
+
+    function initPhoto() {
+      vm.visitPhoto = { visitId: vm.visit.id };
     }
 
     function importThumbnail(picture) {

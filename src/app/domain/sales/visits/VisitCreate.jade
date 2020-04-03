@@ -2,8 +2,13 @@
 
   h3.buttons.pull-right.with-map
 
-    button.btn.btn-default(ng-click='vm.takePhoto()' ng-disabled='!vm.visit.checkInLocationId')
+    make-photo.btn.btn-default(
+      model='vm.visitPhoto'
+      model-name='VisitPhoto'
+      busy='vm.busySavingPicture'
+    )
       i.glyphicon.glyphicon-camera
+        //span Добавить фото
 
     button.btn.btn-default(
     ng-disabled='!vm.visit.checkInLocation'
