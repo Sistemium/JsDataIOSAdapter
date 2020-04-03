@@ -67,8 +67,6 @@
 
       buttons.push({
         label: 'Отменить',
-        // class: 'btn-default',
-        // fa: 'glyphicon glyphicon-trash',
         clickFn: 'deleteVisit'
       });
 
@@ -76,7 +74,7 @@
         label: !creatingMode ? 'Готово' : 'Завершить',
         clickFn: 'save',
         class: 'btn-success',
-        isDisabled: function () {
+        isDisabled() {
           return creatingMode && !_.get(vm, 'visit.checkInLocationId') || vm.saving;
         }
       });
@@ -101,7 +99,7 @@
 
     } else {
 
-      onSalesman();
+      checkInAndCreate();
 
     }
 
@@ -109,15 +107,15 @@
      Listeners
      */
 
-    function onSalesman() {
+    function checkInAndCreate() {
 
       const { visitSalesmanId } = $state.params;
 
       if (!visitSalesmanId) return;
 
-      vm.visit = Visit.inject({
-        date: date,
-        outletId: outletId,
+      const newVisit = Visit.createInstance({
+        date,
+        outletId,
         salesmanId: visitSalesmanId,
       });
 
@@ -127,12 +125,12 @@
           // If use went out to another state before the promise is resolved
           if ($scope['$$destroyed']) return;
 
-          vm.visit.checkInLocationId = res.id;
+          newVisit.checkInLocationId = res.id;
 
-          let outletLocation = _.get(vm.visit, 'outlet.location');
+          let outletLocation = _.get(newVisit, 'outlet.location');
 
           if (outletLocation) {
-            let distance = geolib.getDistance(outletLocation, res);
+            const distance = geolib.getDistance(outletLocation, res);
             toastr.success(
               `Расстояние до точки ${Math.round(distance)} м.`,
               'Успешное начало визита',
@@ -140,9 +138,9 @@
             );
           }
 
-          return Visit.save(vm.visit)
+          return Visiting.saveVisit(newVisit)
             .then(visit => {
-              $state.go('.', { visitId: visit.id })
+              $state.go('.', { visitId: visit.id });
             });
 
         })
@@ -275,6 +273,12 @@
 
     function save() {
 
+      const missing = Visiting.hasMissingRequirements(vm.visit, vm.configuration);
+
+      if (missing) {
+        return toastr.error(missing, 'Не выполнены задачи визита');
+      }
+
       vm.saving = true;
 
       function done() {
@@ -341,28 +345,10 @@
     }
 
     function postRefresh() {
-
       answersByQuestion = _.keyBy(vm.visit.answers, 'questionId');
-
-      vm.answers = _.mapValues(answersByQuestion, ans => {
-
-        if (!ans.data) {
-          return ans.data;
-        }
-
-        switch (_.get(ans, 'question.dataType.code')) {
-          case 'date': {
-            return moment(ans.data, 'YYYY-MM-DD').toDate();
-          }
-          case 'boolean': {
-            return ans.data === '1';
-          }
-        }
-
-        return ans.data;
-
-      });
-
+      vm.answers = Visiting.questionsMap(answersByQuestion);
+      vm.configuration = Visiting.visitConfiguration(vm.visit);
+      console.log(vm.configuration);
     }
 
 
