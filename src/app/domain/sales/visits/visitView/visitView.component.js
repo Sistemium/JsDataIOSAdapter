@@ -154,7 +154,7 @@
 
     function filterVisitsBySelectedDate() {
 
-      if (!vm.selectedDate) {
+      if (!vm.selectedDate && !vm.customFilter) {
         return;
       }
 
