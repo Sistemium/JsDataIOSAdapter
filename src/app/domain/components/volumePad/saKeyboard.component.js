@@ -1,6 +1,6 @@
 (function () {
 
-  const saKeyboard = {
+  angular.module('webPage').component('saKeyboard', {
     bindings: {
       model: '=',
       boxRel: '<',
@@ -15,7 +15,7 @@
     controllerAs: 'vm',
     controller: saKeyboardController
 
-  };
+  });
 
   /** @ngInject */
   function saKeyboardController($scope, $injector) {
@@ -117,10 +117,5 @@
     }
 
   }
-
-
-  angular.module('webPage')
-    .component('saKeyboard', saKeyboard);
-
 
 })();
