@@ -17,7 +17,7 @@
   });
 
   function VisitsController(Schema, SalesmanAuth, $scope, $state, saControllerHelper,
-                            $filter, geolib, Sockets) {
+                            $filter, geolib, moment, Sockets) {
 
     const { Visit, Outlet } = Schema.models();
     const numberFilter = $filter('number');

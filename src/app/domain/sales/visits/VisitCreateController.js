@@ -362,10 +362,28 @@
     }
 
     function postRefresh() {
+
       answersByQuestion = _.keyBy(vm.visit.answers, 'questionId');
       vm.answers = Visiting.questionsMap(answersByQuestion);
-      vm.configuration = Visiting.visitConfiguration(vm.visit);
-      console.log(vm.configuration);
+      const visitConfiguration = Visiting.visitConfiguration(vm.visit);
+      vm.configuration = visitConfiguration;
+
+      if (!Visiting.priceGatheringArticleIds(visitConfiguration)) {
+        return;
+      }
+
+      $scope.$watch(() => JSON.stringify(vm.visit.prices), () => {
+        if (!vm.visit.DSHasChanges()) {
+          return;
+        }
+        Visiting.saveVisit(vm.visit);
+      });
+
+      return Visiting.findPriceGatheringData(visitConfiguration)
+        .then(priceGathering => {
+          vm.priceGathering = priceGathering;
+        });
+
     }
 
 

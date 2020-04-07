@@ -58,7 +58,7 @@
     uib-tabset.nav-tabs-right.questionSets(active="active")
 
       uib-tab(
-      index="$index + 2"
+      index="$index + 3"
       ng-repeat="qs in vm.questionSets | orderBy:['ord','name'] track by qs.id"
       heading="{{qs.name}}"
       disable="qs.isInvalid"
@@ -103,12 +103,18 @@
                 )
 
       uib-tab(
-      index="1"
+      index="2"
       heading="Заказы"
       ng-if='vm.creatingMode'
       )
-        //button.btn.btn-primary(ng-click='vm.addSaleOrderClick()') Добавить заказ
         sale-order-view(
         custom-filter='vm.saleOrderFilter'
         disable-elements='true'
         )
+
+      uib-tab(
+        index="1"
+        heading="Полка"
+        ng-if='vm.priceGathering'
+      )
+        price-gathering(articles="vm.priceGathering.articles" prices="vm.visit.prices")

@@ -7,4 +7,10 @@
     margin-top: $margin;
   }
 
+  @include responsive-only(xxs) {
+    .buttons {
+      margin: 0;
+    }
+  }
+
 }

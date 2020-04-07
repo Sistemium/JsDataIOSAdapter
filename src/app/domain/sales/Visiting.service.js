@@ -5,7 +5,7 @@
   function Visiting(Schema, $q, moment) {
 
     const CONFIGURATION_TYPE_VISIT = { type: 'visit-task' };
-    const { Visit, Configuration } = Schema.models();
+    const { Visit, Configuration, Article } = Schema.models();
     const { VisitQuestionSet, VisitAnswer, VisitQuestion } = Schema.models();
 
     const RULES = [configRuleDate];
@@ -74,6 +74,28 @@
 
         return false;
 
+      },
+
+      priceGatheringArticleIds(configuration) {
+        const { articleIds } = _.get(configuration, 'rules.priceGathering') || {};
+        return articleIds;
+      },
+
+      findPriceGatheringData(configuration) {
+        const articleIds = this.priceGatheringArticleIds(configuration) || [];
+        return $q((resolve, reject) => {
+
+          const toLoadArticles = _.filter(articleIds, id => !Article.get(id));
+
+          Article.findByMany(toLoadArticles)
+            .then(() => {
+              resolve({
+                articleIds,
+                articles: _.orderBy(Article.getAll(articleIds), 'sortName'),
+              });
+            }, reject);
+
+        });
       },
 
     };
