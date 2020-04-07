@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('Warehousing')
+  angular.module('webPage')
     .component('warehouseArticle', {
 
       bindings: {
@@ -8,7 +8,7 @@
       },
 
       controllerAs: 'vm',
-      templateUrl: 'app/domain/warehousing/articles/view/warehouseArticle.html',
+      templateUrl: 'app/domain/components/warehouseArticle/warehouseArticle.html',
 
     });
 
