@@ -2,7 +2,7 @@
 
 (function (module) {
 
-  const priceEdit = {
+  module.component('priceEdit', {
 
     bindings: {
       stock: '<'
@@ -13,7 +13,7 @@
     controller: priceEditController,
     controllerAs: 'vm'
 
-  };
+  });
 
   /** @ngInject */
   function priceEditController(saMedia, $uibModal, $scope) {
@@ -81,7 +81,5 @@
     }
 
   }
-
-  module.component('priceEdit', priceEdit);
 
 })(angular.module('Sales'));
