@@ -1,0 +1,32 @@
+@import "variables";
+
+price-gathering {
+
+  .price-gathering {
+    > * > .list-group-item {
+      display: flex;
+
+      warehouse-article {
+        flex: 1;
+      }
+    }
+  }
+}
+
+.price-gathering.modal-info {
+  .modal-body {
+    text-align: right;
+    > .info {
+      margin-bottom: $margin-bottom-xs;
+      padding: $margin-bottom-xs;
+      display: inline-block;
+      border: solid 1px $border-gray;
+      border-radius: $border-radius;
+
+      label {
+        font-weight: normal;
+        margin-right: $margin-bottom-xs;
+      }
+    }
+  }
+}

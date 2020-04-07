@@ -1,0 +1,24 @@
+.modal-header
+
+  .name {{ vm.article.name }}
+
+  button.btn.btn-link(
+    ng-click='vm.closeClick()'
+  )
+    i.glyphicon.glyphicon-remove
+
+.modal-body
+
+  .info
+    label Цена на полке:
+    strong(ng-bind="vm.priceView || 0.0")
+  sa-keyboard(
+    datatype="price"
+    model="vm.priceView"
+    export-model="vm.price"
+    box-rel='","'
+  )
+
+.modal-footer
+  button.btn.btn-default(ng-click="vm.closeClick()") Отмена
+  button.btn.btn-primary(ng-click="vm.saveClick(vm.price)") Готово

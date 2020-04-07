@@ -1,0 +1,9 @@
+.price-gathering
+
+  .list-group
+    .list-group-item(ng-repeat="article in vm.articles track by article.id")
+      warehouse-article(ng-model="article")
+      a.price(href ng-click="vm.openModal(article)")
+        currency-value(value="vm.prices[article.id]" hide-empty="true")
+        span.red(ng-if="!vm.prices[article.id]") добавить
+
