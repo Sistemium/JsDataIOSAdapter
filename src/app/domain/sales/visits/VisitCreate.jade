@@ -55,7 +55,7 @@
   resize resize-offset-top='5' resize-property='height'
   )
 
-    uib-tabset.nav-tabs-right.questionSets(active="active")
+    uib-tabset.nav-tabs-right.questionSets(active="vm.activeTab")
 
       uib-tab(
       index="$index + 3"
@@ -117,4 +117,10 @@
         heading="Полка"
         ng-if='vm.priceGathering'
       )
-        price-gathering(articles="vm.priceGathering.articles" prices="vm.visit.prices")
+        h4 {{ vm.creatingMode ? 'Уточните' : 'Записаны' }} цены на SKU:
+        .scroll-y(resize resize-offset-top='5' resize-property='height')
+          price-gathering(
+            articles="vm.priceGathering.articles"
+            prices="vm.visit.prices"
+            readonly="!vm.creatingMode"
+          )

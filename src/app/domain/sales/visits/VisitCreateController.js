@@ -24,6 +24,8 @@
       creatingMode,
       thumbnails: {},
 
+      activeTab: 1,
+
       mapOptions: {
         avoidFractionalZoom: false,
         margin: 0,
@@ -107,54 +109,6 @@
      Listeners
      */
 
-    function checkInAndCreate() {
-
-      const { visitSalesmanId } = $state.params;
-
-      if (!visitSalesmanId) return;
-
-      const newVisit = Visit.createInstance({
-        date,
-        outletId,
-        salesmanId: visitSalesmanId,
-      });
-
-      vm.busy = getLocation()
-        .then(res => {
-
-          // If use went out to another state before the promise is resolved
-          if ($scope['$$destroyed']) return;
-
-          newVisit.checkInLocationId = res.id;
-
-          let outletLocation = _.get(newVisit, 'outlet.location');
-
-          if (outletLocation) {
-            const distance = geolib.getDistance(outletLocation, res);
-            toastr.success(
-              `Расстояние до точки ${Math.round(distance)} м.`,
-              'Успешное начало визита',
-              { timeOut: 10000 }
-            );
-          }
-
-          return Visiting.saveVisit(newVisit)
-            .then(visit => {
-              $state.go('.', { visitId: visit.id });
-            });
-
-        })
-        .catch(err => {
-
-          if ($scope['$$destroyed']) return;
-
-          console.error(err);
-          toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
-          $state.go('sales.visits');
-
-        });
-    }
-
     vm.watchScope('vm.busySavingPicture', onBusySavingPicture);
 
     $scope.$on('$destroy', function () {
@@ -173,6 +127,55 @@
     /*
      Functions
      */
+
+    function checkInAndCreate() {
+
+      vm.busy = getLocation()
+        .then(createVisitWithLocation)
+        .catch(err => {
+
+          if ($scope['$$destroyed']) return;
+
+          toastr.error(angular.toJson(err), 'Не удалось определить местоположение визита');
+          $state.go('sales.visits');
+
+        });
+    }
+
+    function createVisitWithLocation(checkInLocation) {
+
+      const { visitSalesmanId } = $state.params;
+
+      if (!visitSalesmanId) return;
+
+      const newVisit = Visit.createInstance({
+        date,
+        outletId,
+        salesmanId: visitSalesmanId,
+        checkInLocationId: checkInLocation.id,
+      });
+
+      // If use went out to another state before the promise is resolved
+      if ($scope['$$destroyed']) return;
+
+
+      let outletLocation = _.get(newVisit, 'outlet.location');
+
+      if (outletLocation) {
+        const distance = geolib.getDistance(outletLocation, checkInLocation);
+        toastr.success(
+          `Расстояние до точки ${Math.round(distance)} м.`,
+          'Успешное начало визита',
+          { timeOut: 10000 }
+        );
+      }
+
+      return Visiting.saveVisit(newVisit)
+        .then(visit => {
+          $state.go('.', { visitId: visit.id });
+        });
+
+    }
 
     function onBusySavingPicture(promise) {
 
@@ -368,9 +371,15 @@
       const visitConfiguration = Visiting.visitConfiguration(vm.visit);
       vm.configuration = visitConfiguration;
 
-      if (!Visiting.priceGatheringArticleIds(visitConfiguration)) {
+      if (!Visiting.priceGatheringArticleIds(visitConfiguration, vm.visit).length) {
+        vm.activeTab = 2;
+        if (!vm.creatingMode) {
+          vm.activeTab = 3;
+        }
         return;
       }
+
+      vm.activeTab = 1;
 
       $scope.$watch(() => JSON.stringify(vm.visit.prices), () => {
         if (!vm.visit.DSHasChanges()) {
@@ -379,7 +388,7 @@
         Visiting.saveVisit(vm.visit);
       });
 
-      return Visiting.findPriceGatheringData(visitConfiguration)
+      return Visiting.findPriceGatheringData(visitConfiguration, vm.visit)
         .then(priceGathering => {
           vm.priceGathering = priceGathering;
         });

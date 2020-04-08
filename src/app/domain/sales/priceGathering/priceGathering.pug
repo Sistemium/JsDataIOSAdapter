@@ -3,7 +3,7 @@
   .list-group
     .list-group-item(ng-repeat="article in vm.articles track by article.id")
       warehouse-article(ng-model="article")
-      a.price(href ng-click="vm.openModal(article)")
+      a.price(href ng-click="vm.openModal(article)" ng-class="{ disabled: vm.readonly }")
         currency-value(value="vm.prices[article.id]" hide-empty="true")
-        span.red(ng-if="!vm.prices[article.id]") добавить
+        span.red(ng-if="!vm.prices[article.id]") {{ vm.readonly ? 'не указано' : 'добавить'}}
 

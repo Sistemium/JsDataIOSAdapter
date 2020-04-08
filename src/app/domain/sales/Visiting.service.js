@@ -25,7 +25,8 @@
         return $q.all([
           VisitQuestionSet.findAllWithRelations({ isEnabled: true })('VisitQuestionGroup'),
           VisitQuestion.findAllWithRelations()('VisitQuestionDataType'),
-          Configuration.findAll(CONFIGURATION_TYPE_VISIT),
+          Configuration.findAll(CONFIGURATION_TYPE_VISIT)
+            .catch(_.noop),
         ]).then(([data]) => data);
       },
 
@@ -76,13 +77,16 @@
 
       },
 
-      priceGatheringArticleIds(configuration) {
-        const { articleIds } = _.get(configuration, 'rules.priceGathering') || {};
-        return articleIds;
+      priceGatheringArticleIds(configuration, { prices }) {
+        const { articleIds = [] } = _.get(configuration, 'rules.priceGathering') || {};
+        Array.prototype.push.apply(articleIds, Object.keys(prices || {}));
+        return _.uniq(articleIds);
       },
 
-      findPriceGatheringData(configuration) {
-        const articleIds = this.priceGatheringArticleIds(configuration) || [];
+      findPriceGatheringData(configuration, visit) {
+
+        const articleIds = this.priceGatheringArticleIds(configuration, visit) || [];
+
         return $q((resolve, reject) => {
 
           const toLoadArticles = _.filter(articleIds, id => !Article.get(id));

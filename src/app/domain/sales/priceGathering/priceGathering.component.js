@@ -5,6 +5,7 @@
     bindings: {
       articles: '<',
       prices: '=',
+      readonly: '<',
     },
 
     templateUrl: 'app/domain/sales/priceGathering/priceGathering.html',
