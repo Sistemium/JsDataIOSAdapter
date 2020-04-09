@@ -7,10 +7,51 @@
     margin-top: $margin;
   }
 
+  .visitPhotos {
+    margin-top: $margin-bottom-xs;
+    @media (max-width: $screen-xs) {
+      .thumbnail {
+        margin-bottom: $margin-bottom-xs;
+      }
+    }
+  }
+
+  .is-remote-switch {
+    min-width: 220px;
+  }
+
+  .visit-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .buttons {
+    text-align: right;
+  }
+
+  section.scroll-y {
+    clear: both;
+  }
+
   @include responsive-only(xxs) {
+
+    .visit-heading {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
     .buttons {
       margin: 0;
+      display: flex;
+      justify-content: space-between;
     }
+
+    .is-remote-switch {
+      width: 100%;
+      margin-bottom: $margin-bottom-xs;
+    }
+
   }
 
 }

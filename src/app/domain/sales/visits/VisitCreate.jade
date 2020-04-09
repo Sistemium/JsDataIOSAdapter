@@ -1,55 +1,60 @@
 .visit-create
 
-  h3.buttons.pull-right.with-map
+  .visit-heading
 
-    make-photo.btn.btn-default(
-      model='vm.visitPhoto'
-      model-name='VisitPhoto'
-      busy='vm.busySavingPicture'
-    )
-      i.glyphicon.glyphicon-camera
-        //span Добавить фото
+    .visit
 
-    button.btn.btn-default(
-    ng-disabled='!vm.visit.checkInLocation'
-    popover-placement="bottom-left auto"
-    popover-trigger='outsideClick'
-    uib-popover-template="'app/domain/sales/views/location.html'"
-    popover-is-open='vm.visitMapPopoverOpen'
-    type='button'
-    ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
-    )
-      i.glyphicon.glyphicon-map-marker
+      //span(ng-class='vm.creatingMode ? "text-danger" : "gray"') {{ vm.creatingMode ? 'Новый визит' : 'Визит' }}
+      toggle-switch.is-remote-switch(
+        ng-if="vm.visit.props && vm.creatingMode"
+        ng-model="vm.visit.props.isRealVisit"
+        on-label="В точке"
+        off-label="По телефону"
+      )
+      strong(ng-if="!vm.visit.props || !vm.creatingMode") {{ vm.visitType() }}
+      span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
+      small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ТП {{ vm.visit.salesman.tinyName }}
+      small
+        a(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
+          i.glyphicon.glyphicon-trash
 
-    button.btn(
-    type='button'
-    ng-class='b.class || "btn-default"'
-    ng-disabled='b.isDisabled()'
-    ng-repeat='b in vm.buttons track by b.label'
-    ng-click='vm[b.clickFn]()'
-    )
-      i(ng-if='b.fa' ng-class='b.fa')
-      span(ng-if='b.label') {{ b.label }}
+    .buttons.with-map
 
-  h4.clear-left.pull-left.visit
+      make-photo.btn.btn-default(
+        model='vm.visitPhoto'
+        model-name='VisitPhoto'
+        busy='vm.busySavingPicture'
+      )
+        i.glyphicon.glyphicon-camera
+          //span Добавить фото
 
-    span(ng-class='vm.creatingMode ? "text-danger" : "gray"') {{ vm.creatingMode ? 'Новый визит' : 'Визит' }}
-    span.gray(ng-if='!vm.creatingMode') {{ vm.visit.deviceCts | amUtc | amLocal | amCalendar }}
-    small.gray.salesman(ng-if='vm.visit.salesman && vm.showSalesman') ({{ vm.visit.salesman.tinyName }})
-    small
-      a(href ng-click='vm.deleteVisit()' ng-if='!vm.creatingMode')
-        i.glyphicon.glyphicon-trash
+      button.btn.btn-default(
+      ng-disabled='!vm.visit.checkInLocation'
+      popover-placement="bottom-left auto"
+      popover-trigger='outsideClick'
+      uib-popover-template="'app/domain/sales/views/location.html'"
+      popover-is-open='vm.visitMapPopoverOpen'
+      type='button'
+      ng-class='{green: vm.visit.checkInLocation, gray: !vm.visit.checkInLocation, "blink-color": vm.locating}'
+      )
+        i.glyphicon.glyphicon-map-marker
 
-  //.buttons.pull-right.clear-right(ng-if='vm.buttons.length')
-
-  .clear-both
+      button.btn(
+      type='button'
+      ng-class='b.class || "btn-default"'
+      ng-disabled='b.isDisabled()'
+      ng-repeat='b in vm.buttons track by b.label'
+      ng-click='vm[b.clickFn]()'
+      )
+        i(ng-if='b.fa' ng-class='b.fa')
+        span(ng-if='b.label') {{ b.label }}
 
   .fow-fluid.visitPhotos(ng-if='vm.visit.photos.length')
     .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
       a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
         img(ng-src='{{vm.thumbnails[pic.id]}}')
 
-  section.clear-both.scroll-y(
+  section.scroll-y(
   cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}'
   ng-class='{mt: !vm.visit.photos.length}'
   resize resize-offset-top='5' resize-property='height'

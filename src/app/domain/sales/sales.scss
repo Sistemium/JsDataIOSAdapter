@@ -16,14 +16,6 @@
     }
   }
 
-  .visitPhotos {
-    @media (max-width: $screen-xs) {
-      .thumbnail {
-        margin-bottom: $margin-bottom-xs;
-      }
-    }
-  }
-
   h3.outlet {
     //@extend .ellipsis;
     small {

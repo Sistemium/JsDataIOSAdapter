@@ -45,6 +45,11 @@
         return (data) => (vm[name] = data);
       },
 
+      visitType() {
+        const isReal = !_.get(this, 'visit.props') || this.visit.props.isRealVisit;
+        return isReal ? 'Визит' : 'По телефону';
+      },
+
     });
 
 
@@ -153,6 +158,7 @@
         outletId,
         salesmanId: visitSalesmanId,
         checkInLocationId: checkInLocation.id,
+        props: { isRealVisit: true },
       });
 
       // If use went out to another state before the promise is resolved
