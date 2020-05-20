@@ -302,7 +302,7 @@
       const missing = Visiting.hasMissingRequirements(vm.visit, vm.configuration);
 
       if (missing) {
-        return toastr.error(missing, 'Не выполнены задачи визита');
+        return toastr.error(missing, 'Не выполнены задачи визита', { timeOut: 9000 });
       }
 
       vm.saving = true;

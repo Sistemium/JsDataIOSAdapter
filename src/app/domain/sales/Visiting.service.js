@@ -2,13 +2,15 @@
 
   angular.module('Sales').service('Visiting', Visiting);
 
+  const getPriority = ({ rules }) => rules.priority;
+
   function Visiting(Schema, $q, moment) {
 
     const CONFIGURATION_TYPE_VISIT = { type: 'visit-task' };
     const { Visit, Configuration, Article } = Schema.models();
     const { VisitQuestionSet, VisitAnswer, VisitQuestion } = Schema.models();
 
-    const RULES = [configRuleDate];
+    const RULES = [configRuleDate, configRulePartner];
 
     return {
 
@@ -43,7 +45,8 @@
       visitConfiguration(visit) {
         const context = _.pick(visit, ['outlet', 'date']);
         const configs = Configuration.filter(CONFIGURATION_TYPE_VISIT);
-        return _.find(configs, matchesConfiguration(context));
+        const matching = _.filter(configs, matchesConfiguration(context));
+        return _.orderBy(matching, [getPriority, 'ts'], ['desc', 'desc'])[0];
       },
 
       questionsMap(answersByQuestion) {
@@ -69,8 +72,10 @@
 
       hasMissingRequirements(visit, configuration) {
 
-        if (isMissingRequiredPhoto(visit, configuration)) {
-          return 'Требуется фото-отчет';
+        const missingPhotos = isMissingRequiredPhoto(visit, configuration);
+
+        if (missingPhotos) {
+          return missingPhotos;
         }
 
         return false;
@@ -112,9 +117,21 @@
       return ({ dateB, dateE }) => context.date >= dateB && context.date <= dateE;
     }
 
+    function configRulePartner(context) {
+      return ({ rules: { partnerIds } = {} }) => {
+        return !partnerIds || partnerIds.indexOf(context.outlet.partnerId) > -1;
+      };
+    }
+
     function isMissingRequiredPhoto(visit, configuration) {
       const isRequired = _.get(configuration, 'rules.required.photo');
-      return isRequired && !_.get(visit, 'photos.length');
+      if (!isRequired) {
+        return false;
+      }
+      const { count = 1, msg = 'Требуется фото-отчет' } = isRequired;
+      if ((_.get(visit, 'photos.length') || 0) < count) {
+        return msg;
+      }
     }
 
   }
