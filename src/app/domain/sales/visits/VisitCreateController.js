@@ -4,14 +4,14 @@
 
   const REQUIRED_ACCURACY = 500;
 
-  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth,
+  function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, Sockets,
                                  moment, geolib, Helpers, mapsHelper, Visiting) {
 
     const { ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper } = Helpers;
     const { yLatLng } = mapsHelper;
 
     const { Visit, Location } = Schema.models();
-    const { VisitAnswer } = Schema.models();
+    const { VisitAnswer, VisitPhoto } = Schema.models();
 
     const creatingMode = !!_.get($state, 'current.name').match(/\.visitCreate$/);
 
@@ -95,7 +95,6 @@
           return Visiting.findVisitById(visitId)
             .then(vm.importData('visit'))
             .then(visit => {
-              _.each(visit.photos, importThumbnail);
               initPhoto();
               return visit;
             })
@@ -129,9 +128,24 @@
 
     });
 
+    $scope.$on('$destroy', Sockets.jsDataSubscribe(['VisitPhoto']));
+    $scope.$on('$destroy', Sockets.onJsData('jsData:update', onJSData));
+
     /*
      Functions
      */
+
+    function onJSData(event) {
+
+      if (event.resource !== 'VisitPhoto') return;
+
+      let {data} = event;
+
+      if (!_.get(data, 'href')) return;
+
+      VisitPhoto.inject(data);
+
+    }
 
     function checkInAndCreate() {
 
@@ -191,8 +205,7 @@
 
       vm.cgBusy = { promise, message: 'Сохранение изображения' };
 
-      promise.then(picture => {
-        importThumbnail(picture);
+      promise.then(() => {
         initPhoto();
       });
 
@@ -202,17 +215,12 @@
       vm.visitPhoto = { visitId: vm.visit.id };
     }
 
-    function importThumbnail(picture) {
-      return PhotoHelper.importThumbnail(picture, vm.thumbnails);
-    }
-
     function thumbnailClick(pic) {
 
       let resourceName = 'VisitPhoto';
-      let src = vm.thumbnails[pic.id];
       let title = vm.visit.outlet.partner.shortName + ' (' + vm.visit.outlet.address + ')';
 
-      return PhotoHelper.thumbnailClick(resourceName, pic, src, title);
+      return PhotoHelper.thumbnailClick(resourceName, pic, null, title);
 
     }
 

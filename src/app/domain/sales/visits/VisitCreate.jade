@@ -41,9 +41,9 @@
 
       button.btn(
       type='button'
+      ng-repeat='b in vm.buttons track by b.label'
       ng-class='b.class || "btn-default"'
       ng-disabled='b.isDisabled()'
-      ng-repeat='b in vm.buttons track by b.label'
       ng-click='vm[b.clickFn]()'
       )
         i(ng-if='b.fa' ng-class='b.fa')
@@ -52,7 +52,7 @@
   .fow-fluid.visitPhotos(ng-if='vm.visit.photos.length')
     .col-xs-3.col-sm-2(ng-repeat='pic in vm.visit.photos track by pic.id')
       a.thumbnail.mh-80(href ng-click='vm.thumbnailClick(pic)')
-        img(ng-src='{{vm.thumbnails[pic.id]}}')
+        img(ng-src='{{pic.srcThumbnail}}')
 
   section.scroll-y(
   cg-busy='{promise: vm.busy, message: vm.busyMessage || "Загрузка данных…"}'
