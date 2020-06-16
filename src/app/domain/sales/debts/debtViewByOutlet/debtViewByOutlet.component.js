@@ -18,9 +18,9 @@
   function debtViewByOutletController($scope, $timeout, $filter, $state,
                                       Schema, saControllerHelper,
                                       ShipmentModal
-                                      ) {
+  ) {
 
-    const {Debt, Outlet, Cashing, Responsibility} = Schema.models();
+    const { Debt, Outlet, Cashing, Responsibility } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
       .use({
@@ -75,7 +75,7 @@
 
       if (!inCheckingProgress()) {
 
-        let {documentId} = debt;
+        let { documentId } = debt;
 
         return documentId && ShipmentModal.show(documentId);
 
@@ -114,21 +114,21 @@
       }
 
       let where = _.assign({
-        outletId: {'==': outletId}
+        outletId: { '==': outletId }
       }, responsibility);
 
-      return Debt.findAll({where}, { bypassCache: true })
+      return Debt.findAll({ where }, { bypassCache: true })
         .then(data => vm.debts = _.filter(data, debt => debt.summ || debt.summDoc))
         .then(data => {
 
           data = _.groupBy(data, 'date');
           data = _.map(data, (items, date) => {
-            return {date, items}
+            return { date, items }
           });
 
-          return Cashing.findAll({outletId, isProcessed: false}, { bypassCache: true })
+          return Cashing.findAll({ outletId, isProcessed: false }, { bypassCache: true })
             .then(() => {
-              vm.rebindAll(Cashing, {outletId, uncashingId: null}, 'vm.cashings', updateCashingTotals);
+              vm.rebindAll(Cashing, { outletId, uncashingId: null }, 'vm.cashings', updateCashingTotals);
             })
             .then(() => vm.rawData = data);
 
@@ -167,7 +167,7 @@
         cashingTotal += cashing.summ;
       });
 
-      vm.undebtedCashings = _.filter(vm.cashings, {debtId: null});
+      vm.undebtedCashings = _.filter(vm.cashings, { debtId: null });
 
       vm.cashingTotalByDebt = cashingTotal ? cashingTotalByDebt : null;
       vm.cashingTotal = cashingTotal;
@@ -189,7 +189,7 @@
     }
 
     function textFromDebt(debt) {
-      return `${debt.ndoc} от ${dateFilter(debt.date)} (${numberFilter(debt.summOriginDoc||debt.summOrigin, 2)} ₽)` +
+      return `${debt.ndoc} от ${dateFilter(debt.date)} (${numberFilter(debt.summOriginDoc || debt.summOrigin, 2)} ₽)` +
         ` остаток долга: ${numberFilter(debt.summ, 2)} ₽`;
     }
 
