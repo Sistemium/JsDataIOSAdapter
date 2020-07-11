@@ -77,8 +77,13 @@
     function saveStamps(box) {
 
       const { id: warehouseBoxId } = box;
-      const { barcode, stamps } = vm;
-      const { barcode: stockBatchBarcode, articleId } = vm.stockBatch;
+      const { barcode, stamps, stockBatch } = vm;
+
+      if (!stockBatch) {
+        return box;
+      }
+
+      const { barcode: stockBatchBarcode, articleId } = stockBatch;
 
       return WarehouseBoxing.confirmBox({
         stockBatchBarcode,
