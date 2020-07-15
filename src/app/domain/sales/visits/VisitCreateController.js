@@ -121,7 +121,8 @@
         return;
       }
 
-      Visit.eject(vm.visit);
+      vm.visit && Visit.eject(vm.visit);
+
       _.each(answersByQuestion, ans => {
         VisitAnswer.eject(ans);
       });
@@ -139,7 +140,7 @@
 
       if (event.resource !== 'VisitPhoto') return;
 
-      let {data} = event;
+      let { data } = event;
 
       if (!_.get(data, 'href')) return;
 
