@@ -27,7 +27,8 @@
       Restriction,
       RestrictionArticle,
       OutletSalesmanContract,
-      ArticleTag
+      ArticleTag,
+      OutletArticle,
     } = Schema.models();
 
     const vm = saControllerHelper.setup(this, $scope)
@@ -37,6 +38,8 @@
     let sortedStock;
 
     GalleryHelper.setupController(vm, $scope);
+
+    const ownDiscountSource = DomainOption.hasOutletArticle();
 
     vm.use({
 
@@ -187,7 +190,12 @@
 
         });
 
-        $scope.$watchGroup(['vm.saleOrder.contractId', 'vm.saleOrderId'],
+        $scope.$watchGroup([
+            'vm.saleOrderId',
+            'vm.saleOrder.contractId',
+            'vm.saleOrder.outletId',
+            'vm.saleOrder.salesSchema',
+          ],
           () => $timeout(10).then(onContractChange));
 
         SalesmanAuth.watchCurrent($scope, salesman => {
@@ -295,8 +303,8 @@
     }
 
     function onContractChange() {
-      const { contractId, salesmanId, outletId } = vm.saleOrder || {};
-      setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
+      const { salesmanId, outletId } = vm.saleOrder || {};
+      setDiscounts(saleOrderDiscountsBy());
       setRestrictions(salesmanId, outletId);
     }
 
@@ -588,7 +596,9 @@
 
     // TODO: move to a separate helper
 
-    function setDiscounts(contractId, partnerId, saleOrderId) {
+    function setDiscounts(newDiscountsBy) {
+
+      const { contractId, partnerId, outletId } = newDiscountsBy;
 
       if (!contractId || !partnerId || !vm.prices) {
         vm.discountsBy = {};
@@ -597,14 +607,12 @@
         return $q.resolve();
       }
 
-      let priceTypeId = vm.currentPriceType && vm.currentPriceType.id;
-
-      if (_.isEqual(vm.discountsBy, { partnerId, contractId, priceTypeId, saleOrderId })) {
+      if (_.isEqual(vm.discountsBy, newDiscountsBy)) {
         // console.warn('setDiscounts exit 2');
         return $q.resolve();
       }
 
-      vm.discountsBy = { contractId, partnerId, priceTypeId, saleOrderId };
+      vm.discountsBy = newDiscountsBy;
 
       const contractFilter = {
         contractId: { '==': contractId },
@@ -620,33 +628,49 @@
         return discount || discountDoc;
       }
 
-      const LIMIT = 10000;
+      const LIMIT = { limit: 10000 };
 
-      $q.all([
-        ContractArticle.uncachedFindAll({ where: contractFilter }, LIMIT),
-        ContractPriceGroup.uncachedFindAll({ where: contractFilter }, LIMIT),
-        PartnerArticle.uncachedFindAll({ where: partnerFilter }, LIMIT),
-        PartnerPriceGroup.uncachedFindAll({ where: partnerFilter }, LIMIT),
+      const promises = [
         vm.saleOrder.DSLoadRelations('SaleOrderDiscount')
           .then(SaleOrderDiscount.meta.ensureUnique)
           .catch(() => {
             vm.saleOrderDiscountsDisabled = true;
           })
-      ])
+      ];
+
+      if (DomainOption.hasOutletArticle()) {
+        const outletArticleFind = OutletArticle.uncachedFindAll({ outletId })
+          .then(data => {
+            const type = newDiscountsBy.salesSchema === 2 ? 'upr' : 'buh';
+            return _.filter(data, { source: ownDiscountSource, type });
+          });
+        promises.push(outletArticleFind);
+      } else {
+        Array.prototype.push.apply(promises, [
+          ContractArticle.uncachedFindAll({ where: contractFilter }, LIMIT),
+          ContractPriceGroup.uncachedFindAll({ where: contractFilter }, LIMIT),
+          PartnerArticle.uncachedFindAll({ where: partnerFilter }, LIMIT),
+          PartnerPriceGroup.uncachedFindAll({ where: partnerFilter }, LIMIT),
+        ]);
+      }
+
+      $q.all(promises)
         .then(allData => {
+
+          const [, articleData1, groupData1, articleData2, groupData2] = allData;
 
           let { discounts } = vm.saleOrder;
           let saleOrderScopeDiscount = _.find(discounts, { discountScope: 'saleOrder' });
 
           let discountModel = {
             article: _.keyBy([
-              ..._.filter(allData[2], anyDiscountFiler),
-              ..._.filter(allData[0], anyDiscountFiler),
+              ..._.filter(articleData2, anyDiscountFiler),
+              ..._.filter(articleData1, anyDiscountFiler),
               ..._.filter(discounts, 'articleId')
             ], 'articleId'),
             priceGroup: _.keyBy([
-              ..._.filter(allData[3], anyDiscountFiler),
-              ..._.filter(allData[1], anyDiscountFiler),
+              ..._.filter(groupData2, anyDiscountFiler),
+              ..._.filter(groupData1, anyDiscountFiler),
               ..._.filter(discounts, 'priceGroupId')
             ], 'priceGroupId'),
             saleOrder: saleOrderScopeDiscount || {}
@@ -655,7 +679,7 @@
           // console.warn(`discountModel ${contractId} ${partnerId}`, discountModel);
 
           setDiscountsWithModelData(
-              discountModel.article, discountModel.priceGroup, discountModel.saleOrder
+            discountModel.article, discountModel.priceGroup, discountModel.saleOrder
           );
 
           _.each(_.get(vm, 'saleOrder.positions'), pos => {
@@ -807,7 +831,7 @@
 
               if (!vm.currentPriceType) {
                 vm.currentPriceType = _.get(vm.saleOrder, 'priceType')
-                    || PriceType.meta.getDefault();
+                  || PriceType.meta.getDefault();
               }
 
               // console.warn('currentPriceType:', _.get(vm.currentPriceType, 'name'));
@@ -870,6 +894,14 @@
             .then(reloadVisible);
 
         });
+    }
+
+    function saleOrderDiscountsBy() {
+      const res = _.pick(vm.saleOrder, ['contractId', 'outletId', 'salesSchema']);
+      res.partnerId = _.get(vm.saleOrder, 'outlet.partnerId');
+      res.saleOrderId = _.get(vm.saleOrder, 'id');
+      res.priceTypeId = vm.currentPriceType && vm.currentPriceType.id;
+      return res;
     }
 
     function filterStock() {
@@ -970,9 +1002,7 @@
 
       DEBUG('filterStock', 'end');
 
-      const { contractId } = vm.saleOrder || {};
-
-      setDiscounts(contractId, _.get(vm.saleOrder, 'outlet.partnerId'), vm.saleOrderId);
+      setDiscounts(saleOrderDiscountsBy());
 
       vm.busyFilteringStock = false;
 
@@ -1113,7 +1143,7 @@
           case 'saleOrder': {
             stockByPosition = position => _.find(sortedStock, stock => {
               return stock.articleId === position.articleId
-                  && stock.discountScope() === 'saleOrder';
+                && stock.discountScope() === 'saleOrder';
             });
             break;
           }
@@ -1594,7 +1624,7 @@
         .then(res => {
 
           let restrictionIds = _.uniq(_.union(
-              _.map(res[0], 'restrictionId'), _.map(res[1], 'restrictionId')
+            _.map(res[0], 'restrictionId'), _.map(res[1], 'restrictionId')
           ));
           let where = {
             restrictionId: { '==': restrictionIds },

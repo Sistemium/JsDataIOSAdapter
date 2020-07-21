@@ -39,6 +39,9 @@
       rnkOption,
       outletTasksDisabled() {
         return customerCode() !== 'r50' || isIOS && service.appVersion < 370;
+      },
+      hasOutletArticle() {
+        return customerCode() === 'bs' && (!isIOS || service.appVersion >= 374) && 'bs';
       }
     };
 
