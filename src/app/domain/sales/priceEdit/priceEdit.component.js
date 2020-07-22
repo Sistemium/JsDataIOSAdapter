@@ -28,7 +28,8 @@
       discountPrice,
       alertOther() {
         const { otherDiscounts } = vm;
-        return otherDiscounts && !!otherDiscounts[this.stock.articleId];
+        const has = otherDiscounts && !!otherDiscounts[this.stock.articleId];
+        return has && (has.discount > this.discountPercent());
       },
       click,
       closeClick,

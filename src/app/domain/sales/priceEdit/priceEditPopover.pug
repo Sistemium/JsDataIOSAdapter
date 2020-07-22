@@ -136,7 +136,7 @@
           span.currency %
 
     .other-discounts(ng-repeat="others in vm.otherDiscountsInfo track by others.source")
-      .title ⚠️ Скидки {{ others.source }}
+      .title Скидки {{ others.source }} {{ others.date | amDateFormat:'DD.MM.YYYY' }}
       .form-group
         label Упр:
         span.form-control {{ others.discount | number:2 }}
