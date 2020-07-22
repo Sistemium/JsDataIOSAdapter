@@ -594,6 +594,10 @@
      Functions
      */
 
+    function anyDiscountFiler({ discount, discountDoc }) {
+      return discount || discountDoc;
+    }
+
     // TODO: move to a separate helper
 
     function setDiscounts(newDiscountsBy) {
@@ -624,10 +628,6 @@
         // discount: {'!=': 0}
       };
 
-      function anyDiscountFiler({ discount, discountDoc }) {
-        return discount || discountDoc;
-      }
-
       const LIMIT = { limit: 10000 };
 
       const promises = [
@@ -640,10 +640,13 @@
 
       if (DomainOption.hasOutletArticle()) {
         const outletArticleFind = OutletArticle.uncachedFindAll({ outletId })
+          .then(data => _.filter(data, anyDiscountFiler))
           .then(data => {
             const type = newDiscountsBy.salesSchema === 2 ? 'upr' : 'buh';
+            setOtherDiscounts(data, type, ownDiscountSource);
             return _.filter(data, { source: ownDiscountSource, type });
-          });
+          })
+          .catch(_.noop);
         promises.push(outletArticleFind);
       } else {
         Array.prototype.push.apply(promises, [
@@ -745,6 +748,13 @@
         })
         .catch(e => console.error(e));
 
+    }
+
+    function setOtherDiscounts(outletArticles, type, ownDiscountSource) {
+      const others = _.filter(outletArticles, d => {
+        return d.type === type && d.source !== ownDiscountSource;
+      });
+      vm.otherDiscounts = _.keyBy(others, 'articleId');
     }
 
     function setDiscountsWithModelData(article = {}, priceGroup = {}, saleOrder = {}) {

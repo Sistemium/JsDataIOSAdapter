@@ -6,7 +6,8 @@
 
     bindings: {
       stock: '<',
-      popoverOpen: '='
+      popoverOpen: '=',
+      otherDiscounts: '<',
     },
 
     templateUrl: 'app/domain/sales/priceEdit/priceEditPopover.html',
@@ -79,6 +80,8 @@
 
       setPriceEdit();
 
+      setOthers();
+
       /*
        Listeners
        */
@@ -95,6 +98,15 @@
     /*
      Functions
      */
+
+    function setOthers() {
+      const { otherDiscounts = {} } = vm;
+      const hasOthers = otherDiscounts[vm.stock.articleId];
+      if (!hasOthers) {
+        return;
+      }
+      vm.otherDiscountsInfo = [hasOthers];
+    }
 
     function discountPercentDisplay(target = '') {
 

@@ -5,6 +5,7 @@
 
       a.list-group-item(
       href
+      ng-if='vm.priceGroup'
       ng-model='vm.discountScope'
       uib-btn-radio="'article'" uib-uncheckable='false'
       ) На товар
@@ -18,13 +19,11 @@
         .name На группу
         .gray «{{ vm.priceGroup.name }}»
 
-      a.list-group-item(
-      href
-      ng-model='vm.discountScope'
-      uib-btn-radio="'saleOrder'" uib-uncheckable='false'
-      ) На весь заказ
-
-
+      //a.list-group-item(
+      //href
+      //ng-model='vm.discountScope'
+      //uib-btn-radio="'saleOrder'" uib-uncheckable='false'
+      //) На весь заказ
 
   .buttons
 
@@ -133,9 +132,19 @@
 
       .form-group
         label Профит:
-        span.form-control#price-edit-profit {{ vm.profit() | number:2 }}
+        span.form-control {{ vm.profit() | number:2 }}
           span.currency %
 
+    .other-discounts(ng-repeat="others in vm.otherDiscountsInfo track by others.source")
+      .title ⚠️ Скидки {{ others.source }}
+      .form-group
+        label Упр:
+        span.form-control {{ others.discount | number:2 }}
+          span.currency %
+      .form-group(ng-if="others.discountDoc")
+        label Бух:
+        span.form-control {{ others.discountDoc | number:2 }}
+          span.currency %
 
   .extras
 

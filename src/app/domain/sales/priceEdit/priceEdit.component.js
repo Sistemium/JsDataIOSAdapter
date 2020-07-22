@@ -5,7 +5,8 @@
   module.component('priceEdit', {
 
     bindings: {
-      stock: '<'
+      stock: '<',
+      otherDiscounts: '<',
     },
 
     templateUrl: 'app/domain/sales/priceEdit/priceEdit.html',
@@ -25,6 +26,10 @@
       discountPercent,
       discountPercentDoc,
       discountPrice,
+      alertOther() {
+        const { otherDiscounts } = vm;
+        return otherDiscounts && !!otherDiscounts[this.stock.articleId];
+      },
       click,
       closeClick,
       popoverTrigger: popoverTrigger()

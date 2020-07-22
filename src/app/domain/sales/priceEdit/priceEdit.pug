@@ -10,6 +10,7 @@
   popover-append-to-body='true'
   popover-class='price-edit-popover'
   )
+    span.alert-other(ng-if="vm.alertOther()") ⚠️
     span.value {{ vm.discountPrice() | number:2 }}
     span.currency ₽
 
