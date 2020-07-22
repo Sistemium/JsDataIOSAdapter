@@ -33,7 +33,7 @@
 
     });
 
-    const {PriceGroup} = Schema.models();
+    const { PriceGroup } = Schema.models();
 
     const numberFilter = $filter('number');
 
@@ -43,7 +43,7 @@
 
     function $onInit() {
 
-      let {priceGroupId} = vm.stock.article;
+      let { priceGroupId } = vm.stock.article;
       let hasPriceGroup = DomainOption.usePriceGroups() && priceGroupId ||
         vm.stock.discountScope() === 'priceGroup';
 
@@ -211,7 +211,7 @@
         setDiscount(vm.stock.discountPercent(), 'Doc');
         setPrice(vm.price, 'Doc');
       } else if (oldTarget === null) {
-        let {priceDoc} = vm;
+        let { priceDoc } = vm;
         setDiscount(vm.stock.discountPercent(vm.discountScope, 'Doc'), 'Doc');
         setPrice(priceDoc, 'Doc');
       }
@@ -321,7 +321,7 @@
         priceDoc = vm.stock.discountPrice('Doc');
       }
 
-      _.assign(vm, {price, priceDoc});
+      _.assign(vm, { price, priceDoc });
 
     }
 
