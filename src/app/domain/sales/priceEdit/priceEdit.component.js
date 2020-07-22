@@ -28,8 +28,11 @@
       discountPrice,
       alertOther() {
         const { otherDiscounts } = vm;
-        const has = otherDiscounts && !!otherDiscounts[this.stock.articleId];
-        return has && (has.discount > this.discountPercent());
+        const has = otherDiscounts && otherDiscounts[this.stock.articleId];
+        if (!has) {
+          return false;
+        }
+        return has.discount > vm.stock.discountPercent();
       },
       click,
       closeClick,
