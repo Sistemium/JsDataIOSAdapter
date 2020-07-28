@@ -1,4 +1,4 @@
 .busy(ng-hide='!vm.busy') Загрузка ...
-.date {{ vm.date | amCalendar }}
+.date {{ vm.date | amDateFormat:'DD.MM.YYYY' }}
 .volume {{ vm.volume }}
 .price {{ vm.price | number:2 }} ₽
