@@ -27,20 +27,18 @@
 
     });
 
-    $timeout(500)
-      .then(toggleFullScreen);
+    if (IOS.isIos()) {
+      vm.toggleFullScreen = toggleFullScreen;
+      $timeout(500)
+        .then(toggleFullScreen);
+    }
 
     function toggleFullScreen() {
 
-      if (IOS.isIos()) {
-        IOS.handler('tabbar').postMessage({
-          action: vm.isFullScreen ? 'show' : 'hide'
-        });
-        vm.isFullScreen = !vm.isFullScreen;
-        if (!vm.toggleFullScreen) {
-          vm.toggleFullScreen = toggleFullScreen;
-        }
-      }
+      IOS.handler('tabbar').postMessage({
+        action: vm.isFullScreen ? 'show' : 'hide'
+      });
+      vm.isFullScreen = !vm.isFullScreen;
 
     }
 
