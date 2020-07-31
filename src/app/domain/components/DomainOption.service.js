@@ -144,7 +144,7 @@
     }
 
     function hasArticleFactors() {
-      return customerCode() === 'r50';
+      return customerCode().match(/r50?/);
     }
 
     function hasInactiveActions() {
