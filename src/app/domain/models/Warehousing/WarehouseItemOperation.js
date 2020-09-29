@@ -60,19 +60,35 @@
 
           const timestamp = moment().utc().format('YYYY-MM-DD HH:mm:ss.SSS');
 
-          return $q.all(_.map(warehouseItems, item => WarehouseItemOperation.create({
-            ownerXid,
-            source,
-            timestamp,
-            warehouseItemId: item.id,
-            code: warehouseBox.barcode,
-            boxToId: warehouseBox.id,
-            boxFromId: item.currentBoxId,
-          }, { cacheResponse: false }).then(() => {
-            item.processing = ownerXid ? 'picked' : 'stock';
-            item.currentBoxId = warehouseBox.id;
-            return item.DSCreate({ cacheResponse: false });
-          })));
+          return $q.all(_.map(warehouseItems, item => {
+
+            return $q.when(() => {
+
+              const { id: boxToId } = warehouseBox;
+              const { currentBoxId: boxFromId } = item;
+
+              if (boxFromId === boxToId) {
+                return null;
+              }
+
+              return WarehouseItemOperation.create({
+                ownerXid,
+                source,
+                timestamp,
+                warehouseItemId: item.id,
+                code: warehouseBox.barcode,
+                boxToId,
+                boxFromId,
+              }, { cacheResponse: false });
+
+            })
+              .then(() => {
+                item.processing = ownerXid ? 'picked' : 'stock';
+                item.currentBoxId = warehouseBox.id;
+                return item.DSCreate({ cacheResponse: false });
+              });
+
+          }));
 
         },
 
