@@ -643,7 +643,7 @@
           .then(data => _.filter(data, anyDiscountFiler))
           .then(data => {
             const type = newDiscountsBy.salesSchema === 2 ? 'upr' : 'buh';
-            setOtherDiscounts(data, type, ownDiscountSource);
+            // setOtherDiscounts(data, type, ownDiscountSource);
             return _.filter(data, { source: ownDiscountSource, type });
           })
           .catch(_.noop);
