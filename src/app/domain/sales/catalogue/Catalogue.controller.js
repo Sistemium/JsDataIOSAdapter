@@ -750,12 +750,12 @@
 
     }
 
-    function setOtherDiscounts(outletArticles, type, ownDiscountSource) {
-      const others = _.filter(outletArticles, d => {
-        return d.type === type && d.source !== ownDiscountSource;
-      });
-      vm.otherDiscounts = _.keyBy(others, 'articleId');
-    }
+    // function setOtherDiscounts(outletArticles, type, ownDiscountSource) {
+    //   const others = _.filter(outletArticles, d => {
+    //     return d.type === type && d.source !== ownDiscountSource;
+    //   });
+    //   vm.otherDiscounts = _.keyBy(others, 'articleId');
+    // }
 
     function setDiscountsWithModelData(article = {}, priceGroup = {}, saleOrder = {}) {
 
