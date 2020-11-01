@@ -22,7 +22,6 @@
 
       $onInit() {
         this.variants = variants(this.action);
-        console.log(this.variants);
       },
 
       hasFoot() {
