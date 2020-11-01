@@ -18,12 +18,12 @@
           rowspan="variant.rows.length"
         )
           .name(ng-if="variant.name") {{ variant.name }}
-          .range(ng-repeat="range in variant.ranges track by $index") {{ range.name }}
+          .range(ng-repeat="range in variant.ranges track by $index") • {{ range.name }}
           .comment(ng-if="variant.commentText") {{ variant.commentText }}
 
         td.ranges(ng-if="!variant.name && !variant.ranges.length")
           .name(ng-if="row.name") {{ row.name }}
-          .range(ng-repeat="range in row.ranges track by $index") {{ range.name }}
+          .range(ng-repeat="range in row.ranges track by $index") • {{ range.name }}
           .comment(ng-if="row.commentText") {{ row.commentText }}
 
         td.required.volume(ng-if="variant.requiredVolume && !$index" rowspan="{{ variant.rows.length }}")
@@ -36,21 +36,21 @@
         td.required.sku(ng-if="!variant.required.sku")
           span {{ row.required.sku || '-' }}
 
-        td.discount.total(ng-if="variant.discountTotal && !$index")
+        td.discount.total(ng-if="variant.discountTotal && !$index" rowspan="{{ variant.rows.length }}")
           span {{ variant.discountTotal }}
         td.discount.total(ng-if="!variant.discountTotal")
           span {{ row.discountTotal || '-' }}
 
-        td.discount.comp(ng-if="variant.discountComp && !$index" rowspan="{{ variant.discountComp }}")
+        td.discount.comp(ng-if="variant.discountComp && !$index" rowspan="{{ variant.rows.length }}")
           span {{ variant.discountComp }}
         td.discount.comp(ng-if="!variant.discountComp")
           span {{ row.discountComp || '-' }}
 
-        td.discount.comp(ng-if="variant.discountOwn && !$index" rowspan="{{ variant.discountOwn }}")
+        td.discount.comp(ng-if="variant.discountOwn && !$index" rowspan="{{ variant.rows.length }}")
           span {{ variant.discountOwn }}
         td.discount.comp(ng-if="!variant.discountOwn")
           span {{ row.discountOwn || '-' }}
 
     tfoot(ng-if="::vm.hasFoot()")
-      td(colspan="6")
+      td(colspan="7")
         .comment(ng-bind-html="vm.action.commentText")
