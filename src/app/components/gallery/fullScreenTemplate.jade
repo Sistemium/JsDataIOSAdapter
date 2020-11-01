@@ -1,0 +1,26 @@
+.ng-gallery-fullscreen.ng-gallery(
+)
+
+  a.left-right-chevron(
+  href
+  ng-click='prevClick()'
+  ng-show='hasPrev()'
+  )
+    i.glyphicon.glyphicon-chevron-left.btn-lg
+
+  full-screen-content(ng-class="cls")
+
+  a.left-right-chevron(
+  href
+  ng-click='nextClick()'
+  ng-show='hasNext()'
+  )
+    i.glyphicon.glyphicon-chevron-right.btn-lg
+
+  .window-controls
+
+    a(
+    href
+    ng-click='closeClick()'
+    )
+      i.glyphicon.glyphicon-remove.btn-lg

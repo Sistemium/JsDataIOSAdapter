@@ -208,4 +208,11 @@
     justify-content: center;
   }
 
+  full-screen-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 55px $margin $margin;
+  }
+
 }
