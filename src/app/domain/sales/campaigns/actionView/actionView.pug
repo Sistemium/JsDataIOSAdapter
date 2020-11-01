@@ -54,3 +54,6 @@
     tfoot(ng-if="::vm.hasFoot()")
       td(colspan="7")
         .comment(ng-bind-html="vm.action.commentText")
+        .need-photo(ng-if="vm.action.needPhoto")
+          i.glyphicon.glyphicon-camera
+          span Фото-отчет

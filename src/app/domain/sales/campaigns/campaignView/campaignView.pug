@@ -2,4 +2,20 @@
 
   .title {{ vm.campaign.name }}
 
+  .comment(ng-if="vm.campaign.commentText" ng-bind-html="vm.campaign.commentText")
+
+  .fields
+    .oneTime(ng-if="vm.campaign.oneTime")
+      i.glyphicon.glyphicon-ok
+      span Единовременная
+    .repeatable(ng-if="vm.campaign.repeatable")
+      i.glyphicon.glyphicon-ok
+      span Многократная
+    .need-photo(ng-if="vm.campaign.needPhoto")
+      i.glyphicon.glyphicon-camera
+      span Фото-отчет
+    .territory(ng-if="vm.campaign.territory")
+      i.glyphicon.glyphicon-map-marker
+      span {{ vm.campaign.territory }}
+
   action-view(ng-repeat="action in vm.campaign.actions" action="::action")

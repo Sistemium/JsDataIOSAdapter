@@ -1,5 +1,32 @@
+@import "variables";
+
 .campaign-view {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+  .fields {
+    display: flex;
+    align-items: center;
+    //justify-content: space-between;
+    > * {
+      margin: $margin;
+    }
+  }
+
+  i.glyphicon {
+    color: $green;
+    margin-right: $margin-bottom-xs;
+  }
+
+  .need-photo {
+    display: inline-block;
+    background: $green;
+    color: white;
+    padding: 3px 6px;
+    i {
+      color: $white;
+    }
+  }
+
 }
