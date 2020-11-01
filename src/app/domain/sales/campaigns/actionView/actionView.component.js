@@ -38,25 +38,46 @@
 
         const rows = variantRows(variant);
 
-        return _.defaults({
+        const res = _.defaults({
           num: idx + 1,
           rows,
+          discountOwn: action.discountOwn || undefined,
+          discountComp: action.discountComp || undefined,
           requiredVolume: requiredVolume(variant),
           ranges: ranges.length ? ranges : undefined,
         }, variant);
+
+        const discountTotal = (res.discountComp || 0) + (res.discountOwn || 0);
+
+        if (discountTotal) {
+          res.discountTotal = discountTotal;
+        }
+
+        return res;
 
       });
 
     }
 
     function variantRows(variant) {
+
       const { options = [], discountOwn, discountComp } = variant;
       const res = options.length ? options : [{}];
-      return res.map(row => _.assign({
-        discountOwn,
-        discountComp,
-        requiredVolume: requiredVolume(row),
-      }, row));
+      const discountTotalVariant = (discountComp || 0) + (discountOwn || 0);
+
+      return res.map(row => {
+
+        const discountTotal = (row.discountComp || 0) + (row.discountOwn || 0);
+
+        return _.assign({
+          discountTotal: discountTotal || discountTotalVariant || undefined,
+          discountOwn,
+          discountComp,
+          requiredVolume: requiredVolume(row),
+        }, row);
+
+      });
+
     }
 
     function requiredVolume({ required = {} }) {
@@ -64,7 +85,7 @@
       if (!volume && !pcs && !etc && !cost) {
         return undefined;
       }
-      return  required;
+      return required;
     }
 
   }

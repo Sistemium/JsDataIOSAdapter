@@ -40,6 +40,15 @@
       width: 40px;
     }
 
+    &.discount.total {
+      background: $light-green;
+    }
+
+  }
+
+  td.discount.total {
+    color: black;
+    font-weight: bold;
   }
 
   .comment {
