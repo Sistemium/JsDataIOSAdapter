@@ -18,6 +18,10 @@
         },
 
         hasMany: {
+          Action: {
+            localField: 'actions',
+            foreignKey: 'campaignId'
+          },
           CampaignPicture: {
             localField: 'campaignPictures',
             foreignKey: 'campaignId'
@@ -79,13 +83,14 @@
 
         findWithPictures(campaignGroup) {
 
-          const { CampaignPicture } = Schema.models();
+          const { CampaignPicture, Action } = Schema.models();
 
           return model.findAll(model.meta.filterByGroup(campaignGroup))
             .then(campaigns => {
               const items = _.filter(campaigns, ({ discount }) => !discount);
-              const toLoad = _.map(items, 'id');
-              return CampaignPicture.findByMany(toLoad, { field: 'campaignId' })
+              const campaignIds = _.map(items, 'id');
+              return CampaignPicture.findByMany(campaignIds, { field: 'campaignId' })
+                .then(() => Action.findByMany(campaignIds, { field: 'campaignId' }))
                 .then(() => items);
             })
 

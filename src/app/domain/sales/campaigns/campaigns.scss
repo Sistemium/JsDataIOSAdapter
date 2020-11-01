@@ -1,5 +1,7 @@
 @import "variables";
 
+$padding: 5px;
+
 .campaigns {
 
   $display-img-cnt: 5 !important;
@@ -11,6 +13,7 @@
 
     position: relative;
     margin-top: $margin/2;
+    min-height: 50px;
 
     .campaign {
 
@@ -40,13 +43,29 @@
 
   }
 
+  .action {
+
+    margin-top: $padding;
+
+    > .name {
+      &:before {
+        content: "-";
+        margin-right: $padding;
+      }
+    }
+
+    > .comment {
+      margin-left: $margin;
+    }
+  }
+
   .title {
 
     font-size: 120%;
     font-weight: bold;
 
     .name {
-      color: lighten($black, 15%);
+      //color: lighten($black, 15%);
     }
 
     .commentText {
@@ -119,6 +138,22 @@
 
     }
 
+  }
+
+}
+
+full-screen-content.campaign {
+
+  action-view {
+
+    margin-bottom: $margin;
+
+  }
+
+  .title {
+    font-size: 21px;
+    position: absolute;
+    top: 15px;
   }
 
 }

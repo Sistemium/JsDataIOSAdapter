@@ -1,0 +1,50 @@
+.action-view
+
+  table(border="1")
+    thead
+      th.ranges(colspan="2") {{ vm.action.name }}
+      th.required.volume Объём
+      th.required.sku SKU
+      //th.discount.total
+      th.discount.comp % комп.
+      th.discount.own % комм.
+    tbody.variant(ng-repeat="variant in vm.variants track by variant.num")
+      tr(ng-repeat="row in variant.rows track by $index")
+
+        td.idx(rowspan="{{ variant.rows.length }}" ng-if="!$index") {{ variant.num }}
+
+        td.ranges(
+          ng-if="(variant.name || variant.ranges.length) && !$index"
+          rowspan="variant.rows.length"
+        )
+          .name(ng-if="variant.name") {{ variant.name }}
+          .range(ng-repeat="range in variant.ranges track by $index") {{ range.name }}
+          .comment(ng-if="variant.commentText") {{ variant.commentText }}
+
+        td.ranges(ng-if="!variant.name && !variant.ranges.length")
+          .name(ng-if="row.name") {{ row.name }}
+          .range(ng-repeat="range in row.ranges track by $index") {{ range.name }}
+
+        td.required.volume(ng-if="variant.requiredVolume && !$index" rowspan="{{ variant.rows.length }}")
+          action-required-volume(required="variant.requiredVolume")
+        td.required.volume(ng-if="!variant.requiredVolume")
+          action-required-volume(required="row.requiredVolume")
+
+        td.required.sku(ng-if="variant.required.sku && !$index" rowspan="{{ variant.rows.length }}")
+          span {{ variant.required.sku || '-' }}
+        td.required.sku(ng-if="!variant.required.sku")
+          span {{ row.required.sku || '-' }}
+
+        td.discount.comp(ng-if="variant.discountComp && !$index" rowspan="{{ variant.discountComp }}")
+          span {{ variant.discountComp || '-' }}
+        td.discount.comp(ng-if="!variant.discountComp")
+          span {{ row.discountComp || '-' }}
+
+        td.discount.comp(ng-if="variant.discountOwn && !$index" rowspan="{{ variant.discountOwn }}")
+          span {{ variant.discountOwn || '-' }}
+        td.discount.comp(ng-if="!variant.discountOwn")
+          span {{ row.discountOwn || '-' }}
+
+    tfoot(ng-if="::vm.hasFoot()")
+      td(colspan="6")
+        .comment(ng-bind-html="vm.action.commentText")

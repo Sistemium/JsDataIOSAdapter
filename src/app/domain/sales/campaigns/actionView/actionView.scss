@@ -1,0 +1,55 @@
+@import "variables";
+
+.action-view {
+
+  display: block;
+
+  table {
+    width: 100%;
+  }
+
+  th {
+    color: $light-gray;
+    &.ranges {
+      color: $black;
+    }
+  }
+
+  td, th {
+
+    padding: 5px;
+    text-align: center;
+
+    &.idx {
+      width: 30px;
+    }
+
+    &.ranges {
+      text-align: left;
+    }
+
+    &.discount {
+      width: 50px;
+    }
+
+    &.required.volume {
+      width: 120px;
+    }
+
+    &.required.sku {
+      width: 40px;
+    }
+
+  }
+
+  .comment {
+    white-space: pre-line;
+    font-size: small;
+    color: $green;
+  }
+
+  tfoot td {
+    text-align: left;
+  }
+
+}

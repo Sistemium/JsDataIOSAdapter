@@ -2,9 +2,9 @@
 
 (function () {
 
-  function CampaignsController(saControllerHelper, $scope, $state, Helpers) {
+  function CampaignsController(saControllerHelper, $scope, $state, Helpers, FullScreenService) {
 
-    const {GalleryHelper, saMedia, saEtc} = Helpers;
+    const { GalleryHelper, saMedia, saEtc } = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
@@ -13,7 +13,12 @@
         initGroupId: $state.params.campaignGroupId,
 
         thumbClick,
-        showHiddenPic
+        showHiddenPic,
+        campaignClick(campaign) {
+          const content = '<div class="title">{{ campaign.name }}</div>' +
+            '<action-view ng-repeat="action in campaign.actions" action="::action"></action-view>';
+          FullScreenService.openFullScreen(content, { campaign }, { cls: 'campaign' });
+        },
 
       });
 
@@ -30,7 +35,7 @@
 
       if (!campaignGroupId) return;
 
-      $state.go('.', {campaignGroupId}, {notify: false});
+      $state.go('.', { campaignGroupId }, { notify: false });
 
     });
 
