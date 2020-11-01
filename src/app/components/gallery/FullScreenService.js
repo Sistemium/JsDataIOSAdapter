@@ -17,8 +17,9 @@
           .then(html => {
             const template = angular.element(html);
             $body.append(template);
-            fullScreenElement = $compile(template)(newScope(options));
-            // $body.bind('keydown', onKeyDown);
+            const scope = newScope(options);
+            fullScreenElement = $compile(template)(scope);
+            $body.bind('keydown', onKeyDown(scope));
             // return $templateRequest(contentUrl);
           })
           .then(() => {
@@ -33,6 +34,18 @@
           });
 
         // $scope.opened = true;
+
+        function onKeyDown(scope) {
+          const handler = event => {
+            const { which } = event;
+            if (which === 27) {
+              $body.unbind('keydown', handler);
+              scope.closeClick();
+            }
+          }
+
+          return handler;
+        }
 
       },
 
