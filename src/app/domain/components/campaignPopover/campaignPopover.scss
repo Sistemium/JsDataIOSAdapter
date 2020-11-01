@@ -128,8 +128,9 @@ campaign-popover {
 
       .campaign-item {
 
+        margin: $margin 0;
+
         .name {
-          @extend .ellipsis;
           margin-right: 10px;
           font-weight: bold;
         }
@@ -140,7 +141,7 @@ campaign-popover {
 
           .thumb {
 
-            margin: 6px 12px 6px 0;
+            margin: 6px 12px 0 0;
             width: 70px;
             height: 70px;
             border: solid 1px $state-info-border;

@@ -17,13 +17,11 @@
 
     .wrapper
       #scrollable-div(
-      vs-repeat='110'
-      vs-scroll-parent='#campaign-popover-scroll'
       )
 
         .campaign-item(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
 
-          .name {{ campaign.title }}
+          a.name(href ng-click="vm.campaignClick(campaign)") {{ campaign.title }}
 
           .pictures
             a.thumb(

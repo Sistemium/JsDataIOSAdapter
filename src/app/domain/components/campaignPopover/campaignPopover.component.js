@@ -13,7 +13,7 @@
 
   });
 
-  function campaignPopoverController(Schema, $scope, GalleryHelper, localStorageService) {
+  function campaignPopoverController(Schema, $scope, GalleryHelper, localStorageService, FullScreenService) {
 
     const vm = _.assign(this, {
       $onInit,
@@ -21,7 +21,11 @@
       onElemLoad,
       onTeamSelect,
       isPopoverOpen: false,
-      teamIdx: getTeamIdx()
+      teamIdx: getTeamIdx(),
+      campaignClick(campaign){
+        const content = '<campaign-view campaign="campaign"></campaign-view>';
+        FullScreenService.openFullScreen(content, { campaign }, { cls: 'campaign' });
+      },
     });
 
     GalleryHelper.setupController(vm, $scope);
@@ -64,7 +68,7 @@
               // FIXME: copy-pasted in campaignFilterPopover
 
               vm.campaigns = _.filter(campaigns, (elem) => {
-                return elem.campaignPictures.length > 0
+                return elem.campaignPictures.length > 0 || _.get(elem, 'actions.length');
               });
 
               vm.teams = _.map(_.groupBy(vm.campaigns, 'teamName'), (campaigns, name) => {

@@ -91,7 +91,7 @@
               const campaignIds = _.map(items, 'id');
               return CampaignPicture.findByMany(campaignIds, { field: 'campaignId' })
                 .then(() => Action.findByMany(campaignIds, { field: 'campaignId' }))
-                .then(() => items);
+                .then(() => _.orderBy(items, 'name'));
             })
 
         },
