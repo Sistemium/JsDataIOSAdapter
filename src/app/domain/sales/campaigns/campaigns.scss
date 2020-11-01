@@ -144,6 +144,9 @@ $padding: 5px;
 
 full-screen-content.campaign {
 
+  overflow-y: scroll;
+  width: 100%;
+
   action-view {
 
     margin-bottom: $margin;
@@ -152,8 +155,10 @@ full-screen-content.campaign {
 
   .title {
     font-size: 21px;
+    font-weight: 500;
     position: absolute;
     top: 15px;
+    left: 15px;
   }
 
 }
