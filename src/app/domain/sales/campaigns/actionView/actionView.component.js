@@ -25,7 +25,8 @@
       },
 
       hasFoot() {
-        return !!(this.action.commentText || this.action.needPhoto);
+        const { action } = this;
+        return !!(action.commentText || action.needPhoto || action.priorityId);
       },
 
     });

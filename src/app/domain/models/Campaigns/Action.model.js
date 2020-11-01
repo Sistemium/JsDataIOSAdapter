@@ -12,7 +12,11 @@
           Campaign: {
             localField: 'campaign',
             localKey: 'campaignId'
-          }
+          },
+          CampaignsPriority: {
+            localField: 'priority',
+            localKey: 'priorityId'
+          },
         },
 
         hasMany: {},

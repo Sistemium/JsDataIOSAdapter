@@ -83,7 +83,7 @@
 
         findWithPictures(campaignGroup) {
 
-          const { CampaignPicture, Action } = Schema.models();
+          const { CampaignPicture, Action, CampaignsPriority } = Schema.models();
 
           return model.findAll(model.meta.filterByGroup(campaignGroup))
             .then(campaigns => {
@@ -91,6 +91,7 @@
               const campaignIds = _.map(items, 'id');
               return CampaignPicture.findByMany(campaignIds, { field: 'campaignId' })
                 .then(() => Action.findByMany(campaignIds, { field: 'campaignId' }))
+                .then(() => CampaignsPriority.findAll())
                 .then(() => _.orderBy(items, 'name'));
             })
 

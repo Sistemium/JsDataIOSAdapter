@@ -27,7 +27,9 @@ section.campaigns#campaigns-list()
         .action(ng-repeat="action in campaign.actions | orderBy:\"name\" track by action.id")
           .name {{ ::action.name }}
           .comment(ng-if="action.commentText" ng-bind-html="::action.commentText")
-          //action-view(action="::action")
+          .priority(ng-if="action.priority")
+            i.glyphicon.glyphicon-flag
+            span {{ action.priority.name }}
 
       .pictures
 
