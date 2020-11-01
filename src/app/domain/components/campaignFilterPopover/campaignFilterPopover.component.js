@@ -2,6 +2,8 @@
 
 (function () {
 
+  const TEAM_ID_KEY = 'campaignsTeamId';
+
   angular.module('Sales').component('campaignFilterPopover', {
 
 
@@ -20,24 +22,31 @@
 
   });
 
-  function campaignFilterPopoverController(Schema) {
+  function campaignFilterPopoverController(Schema, localStorageService) {
 
     const vm = _.assign(this, {
       $onInit,
+      $onDestroy() {
+        localStorageService.set(TEAM_ID_KEY, this.currentTeam);
+      },
       itemClick,
       teamClick
     });
 
-    const {CampaignGroup, Campaign} = Schema.models();
+    const { CampaignGroup, Campaign } = Schema.models();
 
     function $onInit() {
 
-      let today = moment().format();
+      const today = moment().format();
 
       CampaignGroup.findAll(CampaignGroup.meta.filterActual())
         .then(groups => {
 
           vm.campaignGroups = groups;
+
+          const currentTeamId = localStorageService.get(TEAM_ID_KEY);
+
+          vm.currentTeam = currentTeamId || '';
 
           if (vm.initItemId) {
             vm.currentItem = _.find(groups, { id: vm.initItemId });
@@ -60,9 +69,10 @@
       vm.busy = Campaign.meta.findWithPictures(campaignGroup)
         .then(campaigns => {
 
-          let campaignsFilteredByPhoto = _.filter(campaigns, campaign => {
+          const campaignsFilteredByPhoto = _.filter(campaigns, campaign => {
             campaign.showAllPhotos = false;
-            return (campaign.photoCount = _.get(campaign, 'campaignPictures.length'));
+            campaign.photoCount = _.get(campaign, 'campaignPictures.length');
+            return campaign.photoCount + _.get(campaign, 'actions.length');
           });
 
           vm.teams = _.map(_.groupBy(campaignsFilteredByPhoto, 'teamName'), (campaigns, name) => {
@@ -81,7 +91,7 @@
       campaignGroupsSearch(item);
       vm.isGroupPopoverOpen = false;
       vm.currentItem = item;
-      vm.currentTeam = '';
+      // vm.currentTeam = '';
     }
 
     function teamClick(team) {
