@@ -53,3 +53,10 @@
   }
 
 }
+
+.action-required-volume {
+  em {
+    display: inline-block;
+    color: $green;
+  }
+}

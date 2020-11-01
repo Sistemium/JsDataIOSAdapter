@@ -61,8 +61,8 @@
     }
 
     function requiredVolume({ required = {} }) {
-      const { volume, pcs } = required;
-      if (!volume && !pcs) {
+      const { pcs, volume, etc, cost } = required;
+      if (!volume && !pcs && !etc && !cost) {
         return undefined;
       }
       return  required;
