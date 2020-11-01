@@ -15,8 +15,7 @@
         thumbClick,
         showHiddenPic,
         campaignClick(campaign) {
-          const content = '<div class="title">{{ campaign.name }}</div>' +
-            '<action-view ng-repeat="action in campaign.actions" action="::action"></action-view>';
+          const content = '<campaign-view campaign="campaign"></campaign-view>';
           FullScreenService.openFullScreen(content, { campaign }, { cls: 'campaign' });
         },
 

@@ -1,0 +1,5 @@
+.campaign-view
+
+  .title {{ vm.campaign.name }}
+
+  action-view(ng-repeat="action in vm.campaign.actions" action="::action")
