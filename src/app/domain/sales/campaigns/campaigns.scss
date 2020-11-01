@@ -159,6 +159,12 @@ full-screen-content.campaign {
     position: absolute;
     top: 15px;
     left: 15px;
+    right: 50px;
+    @extend .ellipsis;
+
+    @include responsive-only(xxs) {
+      font-size: 15px;
+    }
   }
 
 }

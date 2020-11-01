@@ -66,6 +66,17 @@
     text-align: left;
   }
 
+  @include responsive-only(xxs) {
+    td, th {
+      &.discount.own, &.discount.comp {
+        display: none;
+      }
+      &.required.volume {
+        width: 90px;
+      }
+    }
+  }
+
 }
 
 .action-required-volume {
