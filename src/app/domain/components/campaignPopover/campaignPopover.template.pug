@@ -16,17 +16,8 @@
     p(ng-if='vm.ready && !vm.teams.length') Нет акций
 
     .wrapper
-      #scrollable-div(
-      )
+      #scrollable-div()
 
         .campaign-item(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
 
           a.name(href ng-click="vm.campaignClick(campaign)") {{ campaign.title }}
-
-          .pictures
-            a.thumb(
-            href
-            ng-click='vm.thumbClick(picture)'
-            ng-repeat='picture in ::campaign.campaignPictures | orderBy: "name" | limitTo: 4 track by picture.id'
-            )
-              img(ng-src='{{picture.srcThumbnail}}')

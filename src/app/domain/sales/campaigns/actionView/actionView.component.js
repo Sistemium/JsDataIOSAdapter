@@ -7,6 +7,7 @@
 
       bindings: {
         action: '<',
+        showPictures: '<',
       },
 
       templateUrl: `${URL}/actionView.html`,
@@ -29,7 +30,7 @@
         return action.commentText
           || action.needPhoto
           || action.priorityId
-          || _.get(action.layout, 'pictures');
+          || (this.showPictures && _.get(action.layout, 'pictures.length'));
       },
 
     });

@@ -57,10 +57,12 @@
     font-weight: bold;
   }
 
-  .comment {
-    white-space: pre-line;
-    font-size: small;
-    color: $green;
+  tbody {
+    .comment {
+      white-space: pre-line;
+      font-size: small;
+      color: $green;
+    }
   }
 
   tfoot td {
@@ -88,7 +90,7 @@
   }
 }
 
-.action-view, .action, .campaign-view {
+.action-view, .action, .campaign-view .fields {
 
   i.glyphicon {
     color: $green;

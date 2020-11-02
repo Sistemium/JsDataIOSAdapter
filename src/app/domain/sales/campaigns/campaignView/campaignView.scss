@@ -7,21 +7,62 @@
   justify-content: flex-start;
 
   .fields {
+
     display: flex;
     align-items: center;
-    //justify-content: space-between;
+
     > * {
       margin: $margin;
     }
+
   }
 
-  .need-photo {
+  .need-photo span {
+
     display: inline-block;
     background: $green;
     color: white;
     padding: 3px 6px;
-    i {
-      color: $white;
+
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 30px;
+  }
+
+  .campaign-picture {
+    img {
+      max-width: 100%;
+      //object-fit: contain;
+    }
+  }
+
+}
+
+full-screen-content.campaign {
+
+  overflow-y: scroll;
+  width: 100%;
+
+  action-view {
+
+    margin-bottom: $margin;
+
+  }
+
+  .title {
+    font-size: 21px;
+    font-weight: 500;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 50px;
+    @extend .ellipsis;
+
+    @include responsive-only(xxs) {
+      font-size: 15px;
     }
   }
 

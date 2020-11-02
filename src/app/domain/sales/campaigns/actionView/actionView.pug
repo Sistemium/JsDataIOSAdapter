@@ -51,7 +51,7 @@
         td.discount.comp(ng-if="!variant.discountOwn")
           span {{ row.discountOwn || '-' }}
 
-    tfoot(ng-if="::vm.hasFoot()")
+    tfoot(ng-if="vm.hasFoot()")
       td(colspan="7")
         .comment(ng-bind-html="vm.action.commentText")
         .need-photo(ng-if="vm.action.needPhoto")
@@ -60,4 +60,4 @@
         .priority(ng-if="vm.action.priority")
           i.glyphicon.glyphicon-flag
           span {{ vm.action.priority.name }}
-        action-pictures(action="vm.action" ng-if="vm.action.layout.pictures.length")
+        action-pictures(action="vm.action" ng-if="vm.showPictures && vm.action.layout.pictures.length")

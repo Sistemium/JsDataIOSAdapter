@@ -1,6 +1,13 @@
 .campaign-view
 
-  .title {{ vm.campaign.name }}
+  .title
+    .text {{ vm.campaign.name }}
+    .buttons
+      button.btn.pictures(
+        ng-click="vm.togglePicturesClick()"
+        class="{{ vm.showPictures ? 'btn-primary' : 'btn-default' }}"
+      )
+        i.glyphicon.glyphicon-picture
 
   // TODO: dates
 
@@ -20,4 +27,11 @@
       i.glyphicon.glyphicon-map-marker
       span {{ vm.campaign.territory }}
 
-  action-view(ng-repeat="action in vm.campaign.actions" action="::action")
+  action-view(
+    ng-repeat="action in vm.campaign.actions"
+    action="::action"
+    show-pictures="vm.showPictures"
+  )
+
+  .campaign-picture(ng-repeat="picture in vm.campaign.campaignPictures track by picture.id")
+    img(ng-src="{{picture.srcFullscreen}}")
