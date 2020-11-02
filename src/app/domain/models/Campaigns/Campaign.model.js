@@ -90,8 +90,8 @@
               const items = _.filter(campaigns, ({ discount }) => !discount);
               const campaignIds = _.map(items, 'id');
               return CampaignPicture.findByMany(campaignIds, { field: 'campaignId' })
-                .then(() => Action.findByMany(campaignIds, { field: 'campaignId' }))
-                .then(() => CampaignsPriority.findAll())
+                .then(() => Action.findByMany(campaignIds, { field: 'campaignId' }).catch(_.noop))
+                .then(() => CampaignsPriority.findAll().catch(_.noop))
                 .then(() => _.orderBy(items, 'name'));
             })
 
