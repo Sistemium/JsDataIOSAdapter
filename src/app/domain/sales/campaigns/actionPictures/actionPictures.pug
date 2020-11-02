@@ -1,0 +1,5 @@
+.action-pictures(ng-style="{{vm.style}}")
+  action-picture(
+    ng-repeat="picture in vm.layout.pictures track by picture.id"
+    picture="picture"
+  )

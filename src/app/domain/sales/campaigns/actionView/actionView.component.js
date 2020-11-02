@@ -26,7 +26,10 @@
 
       hasFoot() {
         const { action } = this;
-        return !!(action.commentText || action.needPhoto || action.priorityId);
+        return action.commentText
+          || action.needPhoto
+          || action.priorityId
+          || _.get(action.layout, 'pictures');
       },
 
     });

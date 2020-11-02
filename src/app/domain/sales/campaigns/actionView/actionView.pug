@@ -60,3 +60,4 @@
         .priority(ng-if="vm.action.priority")
           i.glyphicon.glyphicon-flag
           span {{ vm.action.priority.name }}
+        action-pictures(action="vm.action" ng-if="vm.action.layout.pictures.length")
