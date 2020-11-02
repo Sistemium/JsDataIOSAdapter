@@ -1,6 +1,7 @@
 (function () {
 
   const URL = 'app/domain/sales/campaigns/actionPicture';
+  const THUMBNAIL_HEIGHT = 200;
 
   angular.module('webPage')
     .component('actionPicture', {
@@ -19,8 +20,8 @@
   function actionPictureController() {
     _.assign(this, {
       $onInit() {
-        const height = Math.floor(200 * this.picture.height / 100);
-        this.height = `${height}px`;
+        const height = THUMBNAIL_HEIGHT * this.picture.height / 100;
+        this.height = `${Math.floor(height)}px`;
       },
     });
   }

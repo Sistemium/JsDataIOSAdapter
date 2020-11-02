@@ -21,12 +21,16 @@
     _.assign(this, {
 
       $onInit() {
+
         const { layout = {} } = this.action;
         const justify = layout.align;
+
         _.assign(this, {
           style: { 'justify-content': justify },
           layout,
+          pictures: _.filter(layout.pictures, 'thumbnailSrc'),
         });
+
       },
 
     });
