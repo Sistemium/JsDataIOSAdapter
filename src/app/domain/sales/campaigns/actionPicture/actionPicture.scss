@@ -5,13 +5,17 @@ action-picture {
   display: flex;
   align-items: flex-end;
   min-width: 0;
+  justify-content: center;
 
   img {
     max-width: 100%;
     height: auto;
   }
 
-  .label {
-    min-height: 20px;
+  .lbl {
+    text-align: center;
+    height: 20px;
+    font-weight: bold;
   }
+
 }

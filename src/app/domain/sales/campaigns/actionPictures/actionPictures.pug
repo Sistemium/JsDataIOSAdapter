@@ -1,4 +1,4 @@
-.action-pictures(ng-style="{{vm.style}}")
+.action-pictures(ng-style="{{vm.style}}" ng-class="{ 'no-labels': !vm.hasLabels }")
   action-picture(
     ng-repeat="picture in vm.pictures track by picture.id"
     picture="picture"

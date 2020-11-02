@@ -24,11 +24,13 @@
 
         const { layout = {} } = this.action;
         const justify = layout.align;
+        const pictures = _.filter(layout.pictures, 'thumbnailSrc');
 
         _.assign(this, {
           style: { 'justify-content': justify },
           layout,
-          pictures: _.filter(layout.pictures, 'thumbnailSrc'),
+          pictures,
+          hasLabels: _.filter(pictures, 'label').length,
         });
 
       },

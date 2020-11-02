@@ -6,11 +6,15 @@ action-pictures {
     display: flex;
     flex: 1;
     min-width: 0;
+    &.no-labels {
+      .action-picture .lbl {
+        display: none;
+      }
+    }
   }
 
   action-picture {
     margin: $margin-bottom-xs;
-    //flex-shrink: 1;
   }
 
 }
