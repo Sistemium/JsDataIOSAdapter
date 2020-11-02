@@ -70,7 +70,10 @@
             },
             dateE: {
               '>=': campaignGroup.dateB
-            }
+            },
+            source: {
+              '==': 'old',
+            },
           };
 
           if (DomainOption.hasInactiveActions()) {
@@ -85,12 +88,12 @@
 
           const { CampaignPicture, Action, CampaignsPriority } = Schema.models();
 
-          return model.findAll(model.meta.filterByGroup(campaignGroup))
+          return model.findAll(model.meta.filterByGroup(campaignGroup), { bypassCache: true })
             .then(campaigns => {
               const items = _.filter(campaigns, ({ discount }) => !discount);
               const campaignIds = _.map(items, 'id');
               return CampaignPicture.findByMany(campaignIds, { field: 'campaignId' })
-                .then(() => Action.findByMany(campaignIds, { field: 'campaignId' }).catch(_.noop))
+                .then(() => Action.findByMany(campaignIds, { bypassCache: true, field: 'campaignId' }).catch(_.noop))
                 .then(() => CampaignsPriority.findAll().catch(_.noop))
                 .then(() => _.orderBy(items, 'name'));
             })
