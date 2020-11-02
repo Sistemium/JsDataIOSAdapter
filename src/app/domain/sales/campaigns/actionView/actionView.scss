@@ -67,6 +67,21 @@
 
   tfoot td {
     text-align: left;
+    > * {
+      margin: 5px;
+    }
+  }
+
+  .other {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    action-pictures {
+      //flex: 3;
+    }
+    .comment {
+      //flex: 2;
+    }
   }
 
   @include responsive-only(xxs) {
