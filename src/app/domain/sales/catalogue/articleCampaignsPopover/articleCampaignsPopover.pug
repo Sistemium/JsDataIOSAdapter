@@ -6,11 +6,13 @@
       ng-class="{ active: vm.variantId === variant.id }"
     )
       .name(ng-click="vm.onVariantClick(variant)")
-        .first-name {{ variant.campaignName }}
+        .first-name {{ ::variant.campaignName }}
         .last-name
-          span(ng-if="variant.variantNumber") {{ variant.variantNumber }}&nbsp;
+          span(ng-if="variant.variantNumber") {{ ::variant.variantNumber }}&nbsp;
           span {{ variant.variantName }}
-      .discount(ng-click="vm.onPercentClick(variant)") {{ variant.variantDiscount(vm.articleId) }}
+      .discount(ng-click="vm.onPercentClick(variant)")
+        .percent {{ ::variant.variantDiscount(vm.articleId) }}
+        .price {{ ::vm.discountPrice(variant) | number:2 }}
 
   .buttons
     a.btn.btn-link.btn-warning(

@@ -84,13 +84,18 @@ article-campaigns, .article-campaigns {
       min-width: 60px;
       border-left: solid 1px $gray-border-color;
 
-      &:before {
+      .percent:before {
         content: "-";
       }
 
-      &:after {
+      .percent:after {
         content: "%";
       }
+
+      .price:after {
+        content: " ₽";
+      }
+
     }
 
     .last-name {

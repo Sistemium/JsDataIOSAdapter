@@ -84,8 +84,9 @@ before-tag-name='li'
 
         article-campaigns-popover.actions(
           ng-if="vm.stockActions(stock)"
-          article-id="stock.articleId"
-          variants="vm.stockActions(stock)"
+          article-id="::stock.articleId"
+          price-origin="::stock.priceOrigin()"
+          variants="::vm.stockActions(stock)"
           variant-id="stock.campaignVariantId"
           on-variant="vm.onStockVariant($variant, stock)"
           on-variant-percent="vm.onStockVariantPercent($variant, stock)"

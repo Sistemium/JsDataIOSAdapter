@@ -11,6 +11,7 @@
         variantId: '<',
         onVariant: '&',
         onVariantPercent: '&',
+        priceOrigin: '<',
       },
 
       templateUrl: `${URL}/articleCampaigns.html`,
@@ -46,6 +47,11 @@
 
       cancelClick() {
         this.onPercentClick(null);
+      },
+
+      discountPrice(variant) {
+        const { priceOrigin = 0 } = this;
+        return (1.0 - variant.variantDiscount(this.articleId) / 100.0) * priceOrigin;
       },
 
     });
