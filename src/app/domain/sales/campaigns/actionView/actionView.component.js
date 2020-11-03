@@ -22,7 +22,7 @@
     _.assign(this, {
 
       $onInit() {
-        const { layout = {} } = this.action;
+        const layout = this.action.layout || {};
         _.assign(this, {
           variants: variants(this.action),
           layout,

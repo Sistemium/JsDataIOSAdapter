@@ -89,6 +89,12 @@
       margin: $margin-bottom-xs;
       max-width: 300px;
     }
+
+    &.center {
+      .comment {
+        max-width: none;
+      }
+    }
   }
 
   @include responsive-only(xxs) {
