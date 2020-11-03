@@ -665,8 +665,13 @@
       lockScanProcessor = true;
 
       Article.find(options.stockBatch.articleId)
-        .then(() => {
-          $timeout(processorFn, 10);
+        .then(article => {
+          if (Picking.isArticleAllowedStockBatch(article)) {
+            $timeout(processorFn, 10);
+          } else {
+            Picking.replyNotAllowedStockBatch();
+            lockScanProcessor = false;
+          }
         })
         .catch(() => {
           lockScanProcessor = false;

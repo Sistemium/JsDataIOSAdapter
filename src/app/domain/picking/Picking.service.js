@@ -17,6 +17,8 @@
       BarCodeType,
     } = Schema.models();
 
+    const GNI_CODES_ALLOW_STOCK_BATCH = [261, 262, 263, 500, 510, 520, 260];
+
     const NOCACHE = {
       bypassCache: true,
       cacheResponse: false,
@@ -43,6 +45,10 @@
     const codabarRe = /[ABCD](\d{18})[ABCD]/i;
 
     return {
+
+      isArticleAllowedStockBatch({ gniCode }) {
+        return GNI_CODES_ALLOW_STOCK_BATCH.includes(gniCode);
+      },
 
       codabarFix(code) {
 
@@ -173,6 +179,10 @@
 
       say(speech) {
         SoundSynth.say(speech);
+      },
+
+      replyNotAllowedStockBatch() {
+        SoundSynth.say('Этот товар можно собирать только по маркам');
       },
 
       replyNotFound(of = '') {

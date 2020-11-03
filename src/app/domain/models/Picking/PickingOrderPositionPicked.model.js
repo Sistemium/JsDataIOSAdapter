@@ -7,6 +7,7 @@
     const {
       WarehouseItemOperation,
       WarehouseBox,
+      WarehouseItem,
     } = Schema.models();
 
     const PickingOrderPositionPicked = Schema.register({
@@ -62,7 +63,6 @@
 
           return WarehouseItemOperation.findAll({ ownerXid: this.id }, noCache)
             .then(operations => $q.all(_.map(operations, o => o.cancelOperation())))
-
             .then(() => PickingOrderPositionPicked.findAll({ warehouseBoxId }, noCache))
             .then(res => {
 
@@ -70,7 +70,10 @@
                 return;
               }
 
-              return WarehouseBox.find(warehouseBoxId, noCache)
+              return WarehouseItem.findAll({ currentBoxId: warehouseBoxId }, noCache)
+                .then(sameBoxItems => $q.all(_.map(sameBoxItems,
+                  item => _.assign(item, { processing: 'stock' }).DSCreate())))
+                .then(() => WarehouseBox.find(warehouseBoxId, noCache))
                 .then(warehouseBox => {
 
                   warehouseBox.processing = 'stock';
