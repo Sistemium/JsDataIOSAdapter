@@ -59,14 +59,18 @@
 
   tbody {
     .comment {
-      white-space: pre-line;
       font-size: small;
       color: $green;
     }
   }
 
+  .comment {
+    white-space: pre-line;
+  }
+
   tfoot td {
     text-align: left;
+
     > * {
       margin: 5px;
     }
@@ -76,11 +80,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
     action-pictures {
       //flex: 3;
     }
+
     .comment {
-      //flex: 2;
+      margin: $margin-bottom-xs;
     }
   }
 

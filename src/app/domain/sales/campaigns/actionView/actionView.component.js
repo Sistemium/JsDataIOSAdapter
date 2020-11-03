@@ -22,7 +22,12 @@
     _.assign(this, {
 
       $onInit() {
-        this.variants = variants(this.action);
+        const { layout } = this.action;
+        _.assign(this, {
+          variants: variants(this.action),
+          layout,
+          layoutStyle: layoutStyle(layout, directionStyle(layout)),
+        });
       },
 
       hasFoot() {
@@ -35,6 +40,25 @@
 
     });
 
+    function directionStyle({ align }) {
+      switch (align) {
+        case 'center':
+          return 'column-reverse';
+        case 'flex-start':
+          return 'row-reverse';
+        default:
+          return 'row';
+      }
+    }
+
+    function layoutStyle(layout, directionStyle) {
+      const { align = 'center' } = layout;
+      return {
+        'justify-content': align === 'center' ? 'center' : 'flex-end',
+        'flex-direction': directionStyle,
+      };
+    }
+
     function variants(action) {
 
       const { ranges = [], options } = action;
@@ -46,11 +70,12 @@
         const res = _.defaults({
           num: idx + 1,
           rows,
-          discountOwn: action.discountOwn || undefined,
-          discountComp: action.discountComp || undefined,
           requiredVolume: requiredVolume(variant),
           ranges: ranges.length ? ranges : undefined,
-        }, variant);
+        }, variant, {
+          discountOwn: action.discountOwn || undefined,
+          discountComp: action.discountComp || undefined,
+        });
 
         const discountTotal = (res.discountComp || 0) + (res.discountOwn || 0);
 

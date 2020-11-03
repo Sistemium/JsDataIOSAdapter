@@ -49,13 +49,13 @@ $padding: 5px;
 
     > .name {
       &:before {
-        content: "-";
+        content: "•";
         margin-right: $padding;
       }
     }
 
-    > .comment {
-      margin-left: $margin;
+    > .comment, > .priority {
+      margin: 4px 0 0 $margin;
     }
   }
 
