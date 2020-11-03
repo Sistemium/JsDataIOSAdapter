@@ -2,7 +2,9 @@
 resize resize-offset-top='30'
 )
 
-  .campaign-group(ng-repeat='team in vm.teams track by $index')
+  .campaign-group(ng-repeat='team in vm.teams track by team.name')
     a.name(
     href ng-click='vm.teamClick(team)'
-    ) {{ team.name }}
+    )
+      i(ng-class="team.icon" ng-if="team.icon")
+      span(ng-if="team.name") {{ team.name }}

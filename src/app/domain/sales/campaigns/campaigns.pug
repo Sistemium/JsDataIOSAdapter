@@ -8,9 +8,9 @@ section.campaigns#campaigns-list()
   busy='vm.busy'
   )
 
-  .scroll-y(resize resize-offset-top='5' cg-busy='vm.busy')
+  .scroll-y(resize resize-offset-top='5' cg-busy='vm.busy' ng-class="vm.currentTeam.cls")
 
-    .campaign(ng-repeat='campaign in vm.campaigns | filter:{teamName: vm.currentTeam } | orderBy:"name" track by campaign.id')
+    .campaign(ng-repeat="campaign in vm.currentTeam.campaigns")
 
       .title
 
@@ -24,7 +24,7 @@ section.campaigns#campaigns-list()
           i.glyphicon.glyphicon-question-sign
 
       .actions
-        .action(ng-repeat="action in campaign.actions | orderBy:\"name\" track by action.id")
+        .action(ng-repeat="action in campaign.actions track by action.id")
           .name {{ ::action.name }}
           .comment(ng-if="action.commentText" ng-bind-html="::action.commentText")
           .priority(ng-if="action.priority")

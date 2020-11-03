@@ -27,7 +27,7 @@
     const vm = _.assign(this, {
       $onInit,
       $onDestroy() {
-        localStorageService.set(TEAM_ID_KEY, this.currentTeam);
+        localStorageService.set(TEAM_ID_KEY, this.currentTeam && this.currentTeam.name);
       },
       itemClick,
       teamClick
@@ -43,21 +43,17 @@
         .then(groups => {
 
           vm.campaignGroups = groups;
+          vm.currentItem = vm.initItemId
+            && _.find(groups, { id: vm.initItemId })
+            || _.find(vm.campaignGroups, group => group.dateB <= today && today <= group.dateE);
 
-          const currentTeamId = localStorageService.get(TEAM_ID_KEY);
+          campaignGroupsSearch(vm.currentItem)
+            .then(() => {
+              const currentTeamId = localStorageService.get(TEAM_ID_KEY);
 
-          vm.currentTeam = currentTeamId || '';
+              vm.currentTeam = _.find(vm.teams, { name: currentTeamId });
 
-          if (vm.initItemId) {
-            vm.currentItem = _.find(groups, { id: vm.initItemId });
-            if (vm.currentItem) {
-              campaignGroupsSearch(vm.currentItem);
-              return;
-            }
-          }
-
-          vm.currentItem = _.find(vm.campaignGroups, group => group.dateB <= today && today <= group.dateE);
-          campaignGroupsSearch(vm.currentItem);
+            });
 
         });
 
@@ -66,7 +62,7 @@
 
     function campaignGroupsSearch(campaignGroup) {
 
-      vm.busy = Campaign.meta.findWithPictures(campaignGroup)
+      const res = Campaign.meta.findWithPictures(campaignGroup)
         .then(campaigns => {
 
           const campaignsFilteredByPhoto = _.filter(campaigns, campaign => {
@@ -75,15 +71,14 @@
             return campaign.photoCount + _.get(campaign, 'actions.length');
           });
 
-          vm.teams = _.map(_.groupBy(campaignsFilteredByPhoto, 'teamName'), (campaigns, name) => {
-            return {
-              name
-            };
-          });
-
+          vm.teams = Campaign.meta.teamsWithPriorities(campaigns, campaignGroup);
           vm.campaigns = campaignsFilteredByPhoto;
 
         });
+
+      vm.busy = res;
+
+      return res;
 
     }
 
@@ -96,7 +91,7 @@
 
     function teamClick(team) {
       vm.isTeamNamePopoverOpen = false;
-      vm.currentTeam = team.name
+      vm.currentTeam = team;
     }
 
   }

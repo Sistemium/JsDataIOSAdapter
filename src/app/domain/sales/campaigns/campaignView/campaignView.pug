@@ -25,6 +25,7 @@
       i.glyphicon.glyphicon-map-marker
       span {{ ::vm.campaign.territory }}
     .period(ng-if="::vm.showPeriod")
+      i.glyphicon.glyphicon-calendar
       span с {{ ::vm.campaign.dateB | amDateFormat:'DD.MM.YYYY' }} по {{ ::vm.campaign.dateE | amDateFormat:'DD.MM.YYYY' }}
 
   action-view(

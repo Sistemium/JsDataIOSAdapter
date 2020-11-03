@@ -100,6 +100,37 @@
 
         },
 
+        teamsWithPriorities(campaigns, { dateB, dateE }) {
+
+          const teams = _.map(_.groupBy(campaigns, 'teamName'), (campaigns, name) => {
+            return {
+              name,
+              campaigns: _.orderBy(campaigns, 'name'),
+            };
+          });
+
+          // const priorityCampaigns = _.filter(vm.campaigns, 'priorityId');
+          const priorityMap = _.map(campaigns, ({ actions }) => _.filter(actions, 'priorityId'));
+          const priorityActions = _.filter(_.flatten(priorityMap));
+
+          const mz = {
+            // TODO: un-hardcode name
+            name: 'Маркетинговые задачи',
+            title: 'Маркетинговые задачи',
+            dateB,
+            dateE,
+            actions: _.orderBy(priorityActions, ({ priority }) => priority.ord),
+          };
+
+          return [{
+            cls: 'priorities',
+            name: 'Задачи',
+            campaigns: [mz],
+            icon: 'glyphicon glyphicon-flag'
+          }, ...teams];
+
+        },
+
         label: {
           accusative: 'акцию'
         }

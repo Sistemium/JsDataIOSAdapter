@@ -87,6 +87,7 @@
 
     .comment {
       margin: $margin-bottom-xs;
+      max-width: 300px;
     }
   }
 
@@ -100,6 +101,11 @@
         width: 90px;
       }
     }
+
+    tfoot .other {
+      display: block;
+    }
+
   }
 
 }

@@ -22,7 +22,7 @@
       onTeamSelect,
       isPopoverOpen: false,
       teamIdx: getTeamIdx(),
-      campaignClick(campaign){
+      campaignClick(campaign) {
         const content = '<campaign-view campaign="campaign"></campaign-view>';
         FullScreenService.openFullScreen(content, { campaign }, { cls: 'campaign' });
       },
@@ -30,7 +30,7 @@
 
     GalleryHelper.setupController(vm, $scope);
 
-    const {Campaign, CampaignGroup} = Schema.models();
+    const { Campaign, CampaignGroup } = Schema.models();
 
     $scope.$watch('vm.isPopoverOpen', (nv, ov) => {
 
@@ -71,12 +71,7 @@
                 return elem.campaignPictures.length > 0 || _.get(elem, 'actions.length');
               });
 
-              vm.teams = _.map(_.groupBy(vm.campaigns, 'teamName'), (campaigns, name) => {
-                return {
-                  name,
-                  campaigns
-                };
-              });
+              vm.teams = Campaign.meta.teamsWithPriorities(vm.campaigns, vm.campaignGroup);
 
             });
 

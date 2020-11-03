@@ -2,15 +2,17 @@
 
   uib-tabset.tabset(active='vm.teamIdx' type='pills')
     uib-tab(
-    index='$index + 1'
-    ng-repeat='team in vm.teams'
-    heading='{{team.name}}'
-    select='vm.onTeamSelect(team, $index)'
+      index='$index + 1'
+      ng-repeat='team in vm.teams'
+      select='vm.onTeamSelect(team, $index)'
     )
+      uib-tab-heading
+        i(ng-class="team.icon" ng-if="team.icon")
+        span(ng-if="!team.icon") {{ team.name }}
 
   #campaign-popover-scroll.scroll-y(
-  resize
-  resize-offset-top='40'
+    resize
+    resize-offset-top='40'
   )
 
     p(ng-if='vm.ready && !vm.teams.length') Нет акций

@@ -49,6 +49,12 @@ campaign-popover {
     padding: 0;
     top: 47px !important;
 
+    .uib-tab.nav-item {
+      i + span {
+        margin-left: 6px;
+      }
+    }
+
     .popover-content {
       padding: 0;
     }
