@@ -26,6 +26,19 @@
 
   }
 
+  .period {
+    //margin-left: $margin-right;
+    display: inline-block;
+    background: $light-gray;
+    padding: 6px;
+    color: white;
+
+    i {
+      //color: $orange;
+      //margin-right: $padding;
+    }
+  }
+
   .title {
     display: flex;
     justify-content: space-between;

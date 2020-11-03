@@ -1,7 +1,7 @@
 .campaign-view
 
   .title
-    .text {{ vm.campaign.name }}
+    .text {{ ::vm.campaign.name }}
     .buttons
       button.btn.pictures(
         ng-click="vm.togglePicturesClick()"
@@ -9,23 +9,23 @@
       )
         i.glyphicon.glyphicon-picture
 
-  // TODO: dates
-
-  .comment(ng-if="vm.campaign.commentText" ng-bind-html="vm.campaign.commentText")
+  .comment(ng-if="::vm.campaign.commentText" ng-bind-html="::vm.campaign.commentText")
 
   .fields
-    .oneTime(ng-if="vm.campaign.oneTime")
+    .oneTime(ng-if="::vm.campaign.oneTime")
       i.glyphicon.glyphicon-ok
       span Единовременная
-    .repeatable(ng-if="vm.campaign.repeatable")
+    .repeatable(ng-if="::vm.campaign.repeatable")
       i.glyphicon.glyphicon-ok
       span Многократная
-    .need-photo(ng-if="vm.campaign.needPhoto")
+    .need-photo(ng-if="::vm.campaign.needPhoto")
       i.glyphicon.glyphicon-camera
       span Фото-отчет
-    .territory(ng-if="vm.campaign.territory")
+    .territory(ng-if="::vm.campaign.territory")
       i.glyphicon.glyphicon-map-marker
-      span {{ vm.campaign.territory }}
+      span {{ ::vm.campaign.territory }}
+    .period(ng-if="::vm.showPeriod")
+      span с {{ ::vm.campaign.dateB | amDateFormat:'DD.MM.YYYY' }} по {{ ::vm.campaign.dateE | amDateFormat:'DD.MM.YYYY' }}
 
   action-view(
     ng-repeat="action in vm.campaign.actions"
