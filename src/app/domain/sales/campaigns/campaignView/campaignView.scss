@@ -58,25 +58,12 @@ full-screen-content.campaign {
 
   overflow-y: scroll;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
 
   action-view {
 
     margin-bottom: $margin;
 
-  }
-
-  .title {
-    font-size: 21px;
-    font-weight: 500;
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    right: 50px;
-    @extend .ellipsis;
-
-    @include responsive-only(xxs) {
-      font-size: 15px;
-    }
   }
 
 }

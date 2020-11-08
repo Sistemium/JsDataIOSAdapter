@@ -1,8 +1,8 @@
-'use strict';
-
 (function () {
 
-  function CampaignsController(saControllerHelper, $scope, $state, Helpers, FullScreenService) {
+  const CAMPAIGN_SHOW_PICTURES_KEY = 'showCampaignPictures';
+
+  function CampaignsController(saControllerHelper, $scope, $state, Helpers, localStorageService, FullScreenService) {
 
     const { GalleryHelper, saMedia, saEtc } = Helpers;
 
@@ -10,13 +10,33 @@
       .use(GalleryHelper)
       .use({
 
+        $onInit() {
+          this.showPictures = localStorageService.get(CAMPAIGN_SHOW_PICTURES_KEY);
+        },
+
         initGroupId: $state.params.campaignGroupId,
 
         thumbClick,
         showHiddenPic,
         campaignClick(campaign) {
-          const content = '<campaign-view campaign="campaign"></campaign-view>';
-          FullScreenService.openFullScreen(content, { campaign }, { cls: 'campaign' });
+          const content = '<campaign-view campaign="campaign" show-pictures="true"></campaign-view>';
+          const options = {
+            cls: 'campaign',
+            title: campaign.title,
+            // buttons: [{
+            //   icon: 'glyphicon glyphicon-picture',
+            //   cls: 'btn-primary',
+            //   onClick() {
+            //     vm.showPictures = !vm.showPictures;
+            //     localStorageService.set(CAMPAIGN_SHOW_PICTURES_KEY, vm.showPictures);
+            //   },
+            // }],
+          };
+          const params = {
+            campaign,
+            // showPictures: this.showPictures,
+          };
+          FullScreenService.openFullScreen(content, params, options);
         },
 
       });

@@ -1,26 +1,35 @@
-.ng-gallery-fullscreen.ng-gallery(
-)
+.fullscreen-service()
 
-  a.left-right-chevron(
-  href
-  ng-click='prevClick()'
-  ng-show='hasPrev()'
-  )
-    i.glyphicon.glyphicon-chevron-left.btn-lg
+  .header
+    .title {{ title }}
+    .window-controls
+
+      .buttons
+        button.btn(
+          ng-repeat="btn in buttons track by btn.icon"
+          ng-click="btn.onClick(btn)"
+          ng-class="btn.cls"
+        )
+          i(ng-class="btn.icon")
+
+      a(
+        href
+        ng-click='closeClick()'
+      )
+        i.glyphicon.glyphicon-remove.btn-lg
+
+  //a.left-right-chevron(
+  //href
+  //ng-click='prevClick()'
+  //ng-show='hasPrev()'
+  //)
+  //  i.glyphicon.glyphicon-chevron-left.btn-lg
 
   full-screen-content(ng-class="cls")
 
-  a.left-right-chevron(
-  href
-  ng-click='nextClick()'
-  ng-show='hasNext()'
-  )
-    i.glyphicon.glyphicon-chevron-right.btn-lg
-
-  .window-controls
-
-    a(
-    href
-    ng-click='closeClick()'
-    )
-      i.glyphicon.glyphicon-remove.btn-lg
+  //a.left-right-chevron(
+  //href
+  //ng-click='nextClick()'
+  //ng-show='hasNext()'
+  //)
+  //  i.glyphicon.glyphicon-chevron-right.btn-lg

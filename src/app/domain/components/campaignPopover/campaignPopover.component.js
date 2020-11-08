@@ -23,8 +23,12 @@
       isPopoverOpen: false,
       teamIdx: getTeamIdx(),
       campaignClick(campaign) {
-        const content = '<campaign-view campaign="campaign"></campaign-view>';
-        FullScreenService.openFullScreen(content, { campaign }, { cls: 'campaign' });
+        const content = '<campaign-view campaign="campaign" show-pictures="true"></campaign-view>';
+        const options = {
+          cls: 'campaign',
+          title: campaign.title,
+        };
+        FullScreenService.openFullScreen(content, { campaign }, options);
       },
     });
 

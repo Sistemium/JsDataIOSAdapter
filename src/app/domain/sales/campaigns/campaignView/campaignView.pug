@@ -1,13 +1,7 @@
 .campaign-view
 
-  .title
-    .text {{ ::vm.campaign.name }}
-    .buttons
-      button.btn.pictures(
-        ng-click="vm.togglePicturesClick()"
-        class="{{ vm.showPictures ? 'btn-primary' : 'btn-default' }}"
-      )
-        i.glyphicon.glyphicon-picture
+  //.title
+  //  .text {{ ::vm.campaign.name }}
 
   .comment(ng-if="::vm.campaign.commentText" ng-bind-html="::vm.campaign.commentText")
 

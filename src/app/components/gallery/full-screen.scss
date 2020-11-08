@@ -1,0 +1,51 @@
+@import "variables";
+
+.fullscreen-service {
+
+  display: flex;
+  flex-direction: column;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: white;
+  z-index: 9000;
+
+  full-screen-content {
+    display: block;
+    padding: 0 $margin;
+  }
+
+  .header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 55px;
+
+    .title {
+      padding: 6px;
+      font-size: 21px;
+      font-weight: 500;
+      //@extend .ellipsis;
+      @include responsive-only(xxs) {
+        font-size: 15px;
+      }
+    }
+
+  }
+
+  .window-controls {
+    display: flex;
+    align-items: center;
+    margin: 1px;
+    a {
+      display: block;
+      padding: 5px;
+    }
+  }
+
+}

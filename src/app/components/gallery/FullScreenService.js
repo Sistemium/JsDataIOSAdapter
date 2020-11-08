@@ -51,20 +51,26 @@
 
     };
 
-    function newScope({ cls }) {
+    function newScope({ cls, buttons, title }) {
 
       const scope = $rootScope.$new(true);
 
       return _.assign(scope, {
+
         cls,
+        buttons,
+        title,
+
         hasNext() {
         },
         hasPrev() {
         },
+
         closeClick() {
           fullScreenElement.remove();
           scope.$destroy();
         },
+
       })
 
     }
