@@ -1,5 +1,20 @@
 @import "variables";
 
+
+.campaign .territory {
+
+  display: inline-block;
+  background: $red;
+  padding: 3px 6px;
+  border-radius: $border-radius;
+
+  &, i.glyphicon {
+    color: white;
+  }
+
+}
+
+
 .campaign-view {
 
   display: flex;
@@ -49,6 +64,16 @@
     img {
       max-width: 100%;
       //object-fit: contain;
+    }
+  }
+
+  .fields {
+    @include responsive-only(lt-sm) {
+      flex-direction: column;
+      align-items: flex-start;
+      > * {
+        margin: 3px 0;
+      }
     }
   }
 

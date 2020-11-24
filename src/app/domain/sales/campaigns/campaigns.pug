@@ -23,6 +23,10 @@ section.campaigns#campaigns-list()
         )
           i.glyphicon.glyphicon-question-sign
 
+      .territory(ng-if="campaign.territory")
+        i.glyphicon.glyphicon-flag
+        span {{ campaign.territory }}
+
       .actions(ng-if="!campaign.groups")
         .action(ng-repeat="action in campaign.actions track by action.id")
           .name {{ ::action.name }}
