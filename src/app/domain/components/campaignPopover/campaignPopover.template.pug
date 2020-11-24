@@ -23,3 +23,6 @@
         .campaign-item(ng-repeat='campaign in vm.selectedTeam.campaigns track by campaign.id')
 
           a.name(href ng-click="vm.campaignClick(campaign)") {{ campaign.title }}
+
+          .group(ng-repeat="group in campaign.groups track by group.id")
+            a.name(href ng-click="vm.campaignClick(group)") {{ group.title }}

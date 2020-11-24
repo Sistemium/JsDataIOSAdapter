@@ -23,13 +23,18 @@ section.campaigns#campaigns-list()
         )
           i.glyphicon.glyphicon-question-sign
 
-      .actions
+      .actions(ng-if="!campaign.groups")
         .action(ng-repeat="action in campaign.actions track by action.id")
           .name {{ ::action.name }}
           .comment(ng-if="action.commentText" ng-bind-html="::action.commentText")
           .priority(ng-if="action.priority")
             i.glyphicon.glyphicon-flag
             span {{ action.priority.name }}
+
+      .group(ng-repeat="group in campaign.groups track by group.id")
+        a.name(href ng-click="vm.campaignClick(group)") {{ ::group.name }}
+        .action(ng-repeat="action in group.actions track by action.id")
+          .name {{ ::action.name }}
 
       .pictures
 

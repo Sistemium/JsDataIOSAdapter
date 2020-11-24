@@ -30,6 +30,15 @@ $padding: 5px;
         margin-top: $margin;
       }
 
+      > .group {
+        //padding-left: $margin-bottom-xs;
+        > .name {
+          font-weight: bold;
+          display: inline-block;
+          margin: $margin-bottom-xs 0;
+        }
+      }
+
     }
 
     .no-data {

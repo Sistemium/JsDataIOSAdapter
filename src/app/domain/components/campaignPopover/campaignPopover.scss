@@ -141,6 +141,15 @@ campaign-popover {
           font-weight: bold;
         }
 
+        .group {
+          margin-top: 6px;
+          margin-left: 6px;
+          .name:before {
+            content: "-";
+            margin-right: 3px;
+          }
+        }
+
         .pictures {
 
           text-align: right;

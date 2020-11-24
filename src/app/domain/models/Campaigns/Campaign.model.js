@@ -102,6 +102,7 @@
 
         teamsWithPriorities(campaigns, { dateB, dateE }) {
 
+          const { CampaignsPriority } = Schema.models();
           const teams = _.map(_.groupBy(campaigns, 'teamName'), (campaigns, name) => {
             return {
               name,
@@ -113,6 +114,20 @@
           const priorityMap = _.map(campaigns, ({ actions }) => _.filter(actions, 'priorityId'));
           const priorityActions = _.filter(_.flatten(priorityMap));
 
+          const actionGroups = _.groupBy(priorityActions, 'priorityId');
+          const groupedActions = _.map(actionGroups, (actions, priorityId) => {
+            const priority = CampaignsPriority.get(priorityId) || {};
+            return {
+              id: priorityId,
+              name: priority.name,
+              title: priority.name,
+              dateB,
+              dateE,
+              ord: priority.ord,
+              actions,
+            };
+          });
+
           const mz = {
             // TODO: un-hardcode name
             name: 'Маркетинговые задачи',
@@ -120,6 +135,7 @@
             dateB,
             dateE,
             actions: _.orderBy(priorityActions, ({ priority }) => priority.ord),
+            groups: _.orderBy(groupedActions, 'ord'),
           };
 
           return [{
