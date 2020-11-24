@@ -27,12 +27,15 @@
           variants: variants(this.action),
           layout,
           layoutStyle: layoutStyle(layout, directionStyle(layout)),
+          footerCommentText: layout.commentText || this.action.commentText,
+          showFooter: this.hasFoot(),
         });
       },
 
       hasFoot() {
         const { action } = this;
         return action.commentText
+          || _.get(action.layout, 'commentText')
           || action.needPhoto
           || action.priorityId
           || (this.showPictures && _.get(action.layout, 'pictures.length'));

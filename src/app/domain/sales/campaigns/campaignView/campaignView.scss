@@ -59,6 +59,8 @@ full-screen-content.campaign {
   overflow-y: scroll;
   width: 100%;
   -webkit-overflow-scrolling: touch;
+  margin: 0 auto;
+  max-width: 1024px;
 
   action-view {
 
