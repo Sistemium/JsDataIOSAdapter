@@ -1407,8 +1407,7 @@
     }
 
     function disableRight(stock) {
-      return $scope.hasInputInFocus
-        || vm.restrictedArticles[stock.articleId]
+      return vm.restrictedArticles[stock.articleId]
         || vm.saleOrder && !vm.saleOrder.workflowStep.editable;
     }
 
