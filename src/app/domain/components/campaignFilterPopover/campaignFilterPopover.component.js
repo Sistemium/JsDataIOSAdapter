@@ -30,7 +30,8 @@
         localStorageService.set(TEAM_ID_KEY, this.currentTeam && this.currentTeam.name);
       },
       itemClick,
-      teamClick
+      currentTeamId: localStorageService.get(TEAM_ID_KEY),
+      teamClick,
     });
 
     const { CampaignGroup, Campaign } = Schema.models();
@@ -47,13 +48,7 @@
             && _.find(groups, { id: vm.initItemId })
             || _.find(vm.campaignGroups, group => group.dateB <= today && today <= group.dateE);
 
-          campaignGroupsSearch(vm.currentItem)
-            .then(() => {
-              const currentTeamId = localStorageService.get(TEAM_ID_KEY);
-
-              vm.currentTeam = _.find(vm.teams, { name: currentTeamId });
-
-            });
+          return campaignGroupsSearch(vm.currentItem);
 
         });
 
@@ -71,8 +66,12 @@
             return campaign.photoCount + _.get(campaign, 'actions.length');
           });
 
-          vm.teams = Campaign.meta.teamsWithPriorities(campaigns, campaignGroup);
+          vm.teams = Campaign.meta.teamsWithPriorities(campaignsFilteredByPhoto, campaignGroup);
           vm.campaigns = campaignsFilteredByPhoto;
+          vm.currentTeam = _.find(vm.teams, { name: vm.currentTeamId });
+          if (!vm.currentTeam) {
+            vm.currentTeamId = null;
+          }
 
         });
 
