@@ -71,6 +71,7 @@
           vm.currentTeam = _.find(vm.teams, { name: vm.currentTeamId });
           if (!vm.currentTeam) {
             vm.currentTeamId = null;
+            vm.isTeamNamePopoverOpen = true;
           }
 
         });
@@ -85,12 +86,12 @@
       campaignGroupsSearch(item);
       vm.isGroupPopoverOpen = false;
       vm.currentItem = item;
-      // vm.currentTeam = '';
     }
 
     function teamClick(team) {
       vm.isTeamNamePopoverOpen = false;
       vm.currentTeam = team;
+      vm.currentTeamId = team && team.name;
     }
 
   }
