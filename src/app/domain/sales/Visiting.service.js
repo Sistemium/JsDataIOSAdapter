@@ -74,11 +74,11 @@
 
         const missingPhotos = isMissingRequiredPhoto(visit, configuration);
 
-        if (missingPhotos) {
-          return missingPhotos;
+        if (!missingPhotos) {
+          return false;
         }
 
-        return false;
+        return $q.when(missingPhotos);
 
       },
 
@@ -128,10 +128,24 @@
       if (!isRequired) {
         return false;
       }
+      const { dateB, dateE } = configuration;
       const { count = 1, msg = 'Требуется фото-отчет' } = isRequired;
-      if ((_.get(visit, 'photos.length') || 0) < count) {
-        return msg;
+      const doneCount = _.get(visit, 'photos.length') || 0;
+      if (doneCount >= count) {
+        return false;
       }
+      const where = {
+        date: {
+          '>=': dateB,
+          '<=': dateE,
+        },
+        outletId: visit.outletId,
+      };
+      return Visit.findAllWithRelations({ where }, { bypassCache: true })('VisitPhoto')
+        .then(visits => {
+          const pastCount = _.sumBy(visits, ({ photos }) => _.get(photos, 'length') || 0);
+          return (pastCount < count) && msg;
+        });
     }
 
   }

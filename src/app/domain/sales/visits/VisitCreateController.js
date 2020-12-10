@@ -310,17 +310,26 @@
 
       const missing = Visiting.hasMissingRequirements(vm.visit, vm.configuration);
 
-      if (missing) {
-        return toastr.error(missing, 'Не выполнены задачи визита', { timeOut: 9000 });
-      }
-
       vm.saving = true;
 
       function done() {
         vm.saving = false;
       }
 
-      vm.busy = $q((resolve, reject) => {
+      vm.busy = $q.when(missing)
+        .then(msg => {
+          if (msg) {
+            return toastr.error(msg, 'Не выполнены требования');
+          }
+          return savePromise();
+        })
+        .then(done, done);
+
+    }
+
+    function savePromise() {
+
+      return $q((resolve, reject) => {
 
         if (creatingMode) {
 
@@ -360,8 +369,7 @@
 
         }
 
-      })
-        .then(done, done);
+      });
 
     }
 
