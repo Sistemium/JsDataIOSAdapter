@@ -139,9 +139,10 @@
           '>=': dateB,
           '<=': dateE,
         },
-        outletId: visit.outletId,
+        outletId: { '==': visit.outletId },
       };
       return Visit.findAllWithRelations({ where }, { bypassCache: true })('VisitPhoto')
+        // .then(visits => _.filter(visits, ({ date }) => date <= dateE))
         .then(visits => {
           const pastCount = _.sumBy(visits, ({ photos }) => _.get(photos, 'length') || 0);
           return (pastCount < count) && msg;
