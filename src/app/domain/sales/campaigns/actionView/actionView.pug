@@ -11,11 +11,10 @@
     tbody.variant(ng-repeat="variant in vm.variants track by variant.num")
       tr(ng-repeat="row in variant.rows track by $index")
 
-        td.idx(rowspan="{{ variant.rows.length }}" ng-if="!$index") {{ variant.num }}
+        td.idx(rowspan="{{ variant.rowspan }}" ng-if="!$index") {{ variant.num }}
 
         td.ranges(
           ng-if="(variant.name || variant.ranges.length) && !$index"
-          rowspan="variant.rows.length"
         )
           .name(ng-if="variant.name") {{ variant.name }}
           .range(ng-repeat="range in variant.ranges track by $index") • {{ range.name }}
@@ -50,7 +49,9 @@
           span {{ variant.discountOwn }}
         td.discount.comp(ng-if="!variant.discountOwn")
           span {{ row.discountOwn || '-' }}
-
+      tr.variant-comment(ng-if="variant.commentText && !variant.name && !variant.ranges.length")
+        td(colspan="6")
+          .comment(ng-bind-html="variant.commentText")
     tfoot(ng-if="vm.hasFoot")
       td(colspan="7")
         .need-photo(ng-if="vm.action.needPhoto")

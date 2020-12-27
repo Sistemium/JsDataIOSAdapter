@@ -73,6 +73,7 @@
         const res = _.defaults({
           num: idx + 1,
           rows,
+          rowspan: rows.length + (variant.commentText ? 1 : 0),
           requiredVolume: requiredVolume(variant),
           ranges: ranges.length ? ranges : undefined,
         }, variant, {

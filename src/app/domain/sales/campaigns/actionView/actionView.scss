@@ -80,6 +80,12 @@
     }
   }
 
+  .variant-comment td {
+    text-align: left;
+    background: $gray-background-color;
+    font-weight: bold;
+  }
+
   .other {
     display: flex;
     align-items: center;
