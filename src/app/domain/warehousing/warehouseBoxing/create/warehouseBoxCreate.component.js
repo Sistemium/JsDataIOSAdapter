@@ -84,12 +84,14 @@
       }
 
       const { barcode: stockBatchBarcode, articleId } = stockBatch;
+      const warehouseItemIds = _.map(vm.items, 'id');
 
       return WarehouseBoxing.confirmBox({
         stockBatchBarcode,
         articleId,
         barcode,
         stamps,
+        warehouseItemIds,
         warehouseBoxId,
       })
         .then(() => box);

@@ -67,7 +67,7 @@
               const { id: boxToId } = warehouseBox;
               const { currentBoxId: boxFromId } = item;
 
-              if (boxFromId === boxToId) {
+              if (boxFromId === boxToId && source === 'PickingOrderPositionPicked') {
                 return null;
               }
 

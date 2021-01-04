@@ -187,7 +187,7 @@
           return warehouseItem.DSCreate();
         });
 
-        return $q.all(moveItems)
+        return $q.all(moveItems);
 
       },
 
