@@ -4,7 +4,7 @@
 
   function CampaignsController(saControllerHelper, $scope, $state, Helpers, localStorageService, FullScreenService) {
 
-    const { GalleryHelper, saMedia, saEtc } = Helpers;
+    const { GalleryHelper, saMedia, saEtc, DomainOption } = Helpers;
 
     const vm = saControllerHelper.setup(this, $scope)
       .use(GalleryHelper)
@@ -12,6 +12,7 @@
 
         $onInit() {
           this.showPictures = localStorageService.get(CAMPAIGN_SHOW_PICTURES_KEY);
+          this.hasCampaignTeams = DomainOption.hasCampaignTeams();
         },
 
         initGroupId: $state.params.campaignGroupId,

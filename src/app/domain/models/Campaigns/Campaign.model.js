@@ -38,7 +38,7 @@
 
       computed: {
 
-        teamName: ['name', teamNameFn],
+        teamName: ['name', 'priorityId', teamNameFn],
         title: ['name', titleFn]
 
       },
@@ -138,12 +138,20 @@
             groups: _.orderBy(groupedActions, 'ord'),
           };
 
-          return [{
-            cls: 'priorities',
-            name: 'Задачи',
-            campaigns: [mz],
-            icon: 'glyphicon glyphicon-flag'
-          }, ...teams];
+          const res = [];
+
+          if (DomainOption.hasMZ()) {
+            res.push({
+              cls: 'priorities',
+              name: 'Задачи',
+              campaigns: [mz],
+              icon: 'glyphicon glyphicon-flag'
+            });
+          }
+
+          Array.prototype.push.apply(res, teams);
+
+          return res;
 
         },
 
@@ -155,21 +163,20 @@
 
     });
 
-    function teamNameFn(name) {
-      return _.toUpper(getTeamName(name));
+    function teamNameFn(name, priorityId) {
+      return _.toUpper(getTeamName(name, priorityId));
     }
 
     function titleFn(name) {
 
-      let title = _.last(name.match(/[^ ]+ (.*)/)) || name;
+      const title = DomainOption.hasCampaignTeams() && _.last(name.match(/[^ ]+ (.*)/)) || name;
 
       return _.upperFirst(title);
 
     }
 
-    function getTeamName(name) {
-      let res = _.first(name.match(/^[^ ]+/)) || 'Прочее';
-      return _.replace(res, /[^A-я]/g, '') || 'Прочее';
+    function getTeamName(name, priorityId) {
+      return (DomainOption.hasCampaignTeams() || priorityId) && _.first(name.match(/^[^ ]+/)) || 'Основные';
     }
 
 

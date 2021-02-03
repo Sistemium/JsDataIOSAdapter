@@ -42,7 +42,13 @@
       },
       hasOutletArticle() {
         return customerCode() === 'bs' && (!isIOS || service.appVersion >= 374) && 'bs';
-      }
+      },
+      hasCampaignTeams() {
+        return customerCode() === 'r50';
+      },
+      hasMZ() {
+        return customerCode() !== 'r50p';
+      },
     };
 
     function rnkOption() {

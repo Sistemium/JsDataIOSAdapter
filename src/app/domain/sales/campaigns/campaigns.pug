@@ -14,7 +14,10 @@ section.campaigns#campaigns-list()
 
       .title
 
-        a.name(href ng-click="vm.campaignClick(campaign)") {{campaign.teamName}} {{campaign.title}}
+        a.name(href ng-click="vm.campaignClick(campaign)")
+          span(ng-if="vm.hasCampaignTeams") {{campaign.teamName}}
+          |
+          span {{campaign.title}}
 
         sup.commentText(
         ng-if='campaign.commentText'
