@@ -48,9 +48,9 @@
         case 'center':
           return 'column-reverse';
         case 'flex-start':
-          return 'row-reverse';
-        default:
           return 'row';
+        default:
+          return 'row-reverse';
       }
     }
 

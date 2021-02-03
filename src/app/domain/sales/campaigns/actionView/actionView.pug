@@ -61,5 +61,5 @@
           i.glyphicon.glyphicon-flag
           span {{ vm.action.priority.name }}
         .other(ng-style="vm.layoutStyle" ng-class="vm.layout.align")
-          .comment(ng-bind-html="vm.footerCommentText")
           action-pictures(action="vm.action" ng-if="vm.showPictures && vm.action.layout.pictures.length")
+          .comment(ng-bind-html="vm.footerCommentText")
