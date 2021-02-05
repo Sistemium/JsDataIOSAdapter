@@ -35,23 +35,28 @@
         td.required.sku(ng-if="!variant.required.sku")
           span {{ row.required.sku || '-' }}
 
-        td.discount.total(ng-if="variant.discountTotal && !$index" rowspan="{{ variant.rows.length }}")
+        td.discount.total(ng-if="vm.hasDiscounts && variant.discountTotal && !$index" rowspan="{{ variant.rows.length }}")
           span {{ variant.discountTotal }}
-        td.discount.total(ng-if="!variant.discountTotal")
+        td.discount.total(ng-if="vm.hasDiscounts && !variant.discountTotal")
           span {{ row.discountTotal || '-' }}
 
-        td.discount.comp(ng-if="variant.discountComp && !$index" rowspan="{{ variant.rows.length }}")
+        td.discount.comp(ng-if="vm.hasDiscounts && variant.discountComp && !$index" rowspan="{{ variant.rows.length }}")
           span {{ variant.discountComp }}
-        td.discount.comp(ng-if="!variant.discountComp")
+        td.discount.comp(ng-if="vm.hasDiscounts && !variant.discountComp")
           span {{ row.discountComp || '-' }}
 
-        td.discount.comp(ng-if="variant.discountOwn && !$index" rowspan="{{ variant.rows.length }}")
+        td.discount.comp(ng-if="vm.hasDiscounts && variant.discountOwn && !$index" rowspan="{{ variant.rows.length }}")
           span {{ variant.discountOwn }}
-        td.discount.comp(ng-if="!variant.discountOwn")
+        td.discount.comp(ng-if="vm.hasDiscounts && !variant.discountOwn")
           span {{ row.discountOwn || '-' }}
+
+        td.discount.bonus(ng-if="!vm.hasDiscounts" colspan="3")
+          span Бонус {{ row.discountCash }} ₽
+
       tr.variant-comment(ng-if="variant.commentText && !variant.name && !variant.ranges.length")
         td(colspan="6")
           .comment(ng-bind-html="variant.commentText")
+
     tfoot(ng-if="vm.hasFoot")
       td(colspan="7")
         .need-photo(ng-if="vm.action.needPhoto")

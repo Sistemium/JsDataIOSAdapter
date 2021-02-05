@@ -23,12 +23,14 @@
 
       $onInit() {
         const layout = this.action.layout || {};
+        const variants = actionVariants(this.action);
         _.assign(this, {
-          variants: variants(this.action),
+          variants,
           layout,
           layoutStyle: layoutStyle(layout, directionStyle(layout)),
           footerCommentText: layout.commentText || this.action.commentText,
           showFooter: this.hasFoot(),
+          hasDiscounts: hasDiscounts(variants),
         });
       },
 
@@ -62,7 +64,7 @@
       };
     }
 
-    function variants(action) {
+    function actionVariants(action) {
 
       const { ranges = [], options } = action;
 
@@ -79,6 +81,7 @@
         }, variant, {
           discountOwn: action.discountOwn || undefined,
           discountComp: action.discountComp || undefined,
+          discountCash: action.discountCash || undefined,
         });
 
         const discountTotal = (res.discountComp || 0) + (res.discountOwn || 0);
@@ -95,7 +98,7 @@
 
     function variantRows(variant) {
 
-      const { options = [], discountOwn, discountComp } = variant;
+      const { options = [], discountOwn, discountComp, discountCash } = variant;
       const res = options.length ? options : [{}];
       const discountTotalVariant = (discountComp || 0) + (discountOwn || 0);
 
@@ -107,6 +110,7 @@
           discountTotal: discountTotal || discountTotalVariant || undefined,
           discountOwn,
           discountComp,
+          discountCash,
           requiredVolume: requiredVolume(row),
         }, row);
 
@@ -120,6 +124,10 @@
         return undefined;
       }
       return required;
+    }
+
+    function hasDiscounts(variants) {
+      return !!_.find(variants, 'discountTotal');
     }
 
   }
