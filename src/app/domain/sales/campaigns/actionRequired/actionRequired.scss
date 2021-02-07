@@ -1,0 +1,7 @@
+@import "variables";
+
+.action-required {
+  > * > * + *:not(.no-margin) {
+    margin-left: 6px;
+  }
+}

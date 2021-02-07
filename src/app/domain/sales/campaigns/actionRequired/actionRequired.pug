@@ -1,0 +1,23 @@
+.action-required
+  .pcs(ng-if="vm.required.pcs")
+    span.from(ng-if="!vm.required.isMultiple") от
+    span {{ vm.required.pcs }}
+    span.no-margin(ng-if="vm.required.pscTo") -{{ vm.required.pscTo }}
+    span бут.
+  .volume(ng-if="vm.required.volume")
+    span.from(ng-if="!vm.required.isMultiple || vm.required.volumeTo") от
+    span {{ vm.required.volume }}
+    span(ng-if="vm.required.volumeTo") до {{ vm.required.volumeTo }}
+    span л.
+  .cost(ng-if="vm.required.cost")
+    span.from(ng-if="!vm.required.isMultiple") от
+    span {{ vm.required.cost }}
+    span(ng-if="vm.required.costTo") до {{ vm.required.costTo }}
+    span ₽
+  .etc(ng-if="vm.required.etc") {{ vm.required.etc }}
+  .sku(ng-if="vm.required.sku")
+    span.from(ng-if="!vm.required.skuTo && vm.required.showFrom") от
+    span {{ vm.required.sku }}
+    span.no-margin(ng-if="vm.required.skuTo > vm.required.sku") -{{ vm.required.skuTo }}
+    span SKU
+  .isMultiple(ng-if="vm.required.isMultiple") (кратно)
