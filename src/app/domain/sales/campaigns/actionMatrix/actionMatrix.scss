@@ -1,0 +1,20 @@
+@import "variables";
+
+action-matrix {
+
+  .action-matrix {
+
+    text-align: center;
+
+    table {
+
+      margin: 0 auto;
+      width: auto;
+
+      tr th {
+        background: $gray-background-color;
+      }
+
+    }
+  }
+}
