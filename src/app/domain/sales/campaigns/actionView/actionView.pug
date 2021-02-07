@@ -51,13 +51,18 @@
           span {{ row.discountOwn || '-' }}
 
         td.discount.bonus(ng-if="!vm.hasDiscounts" colspan="3")
-          span Бонус {{ row.discountCash }} ₽
+          span(ng-if="row.discountCash") Бонус {{ row.discountCash }} ₽
+          span(ng-if="row.discountOther") {{ row.discountOther }}
+
+      tr(ng-if="variant.discountMatrix")
+        td(colspan="7")
+          action-matrix(discount-matrix="variant.discountMatrix")
 
       tr.variant-comment(ng-if="variant.commentText && !variant.name && !variant.ranges.length")
         td(colspan="6")
           .comment(ng-bind-html="variant.commentText")
 
-    tfoot(ng-if="vm.hasFoot")
+    tfoot(ng-if="vm.showFooter")
       td(colspan="7")
         .need-photo(ng-if="vm.action.needPhoto")
           i.glyphicon.glyphicon-camera

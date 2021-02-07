@@ -1,6 +1,7 @@
 (function () {
 
   const URL = 'app/domain/sales/campaigns/actionView';
+  const { minBy, maxBy, min, filter } = _;
 
   angular.module('Sales')
     .component('actionView', {
@@ -98,7 +99,8 @@
 
     function variantRows(variant) {
 
-      const { options = [], discountOwn, discountComp, discountCash } = variant;
+      const { options = [], discountOwn, discountComp, discountCash, discountMatrix } = variant;
+
       const res = options.length ? options : [{}];
       const discountTotalVariant = (discountComp || 0) + (discountOwn || 0);
 
@@ -106,20 +108,30 @@
 
         const discountTotal = (row.discountComp || 0) + (row.discountOwn || 0);
 
-        return _.assign({
+        const res = _.assign({
           discountTotal: discountTotal || discountTotalVariant || undefined,
           discountOwn,
           discountComp,
           discountCash,
-          requiredVolume: requiredVolume(row),
+          requiredVolume: requiredVolume(row, discountMatrix),
         }, row);
+
+        if (discountMatrix) {
+          res.required = { sku: matrixSkuMin({ discountMatrix }) };
+          res.discountOther = discountMatrixDiscountRange(discountMatrix);
+        }
+
+        return res;
 
       });
 
     }
 
-    function requiredVolume({ required = {} }) {
+    function requiredVolume({ required = {} }, discountMatrix) {
       const { pcs, volume, etc, cost } = required;
+      if (discountMatrix) {
+        return discountMatrixMinVolumes(discountMatrix);
+      }
       if (!volume && !pcs && !etc && !cost) {
         return undefined;
       }
@@ -128,6 +140,36 @@
 
     function hasDiscounts(variants) {
       return !!_.find(variants, 'discountTotal');
+    }
+
+
+    function matrixSkuMin({ discountMatrix }) {
+      if (!discountMatrix) {
+        return null;
+      }
+      const { axisY, axisX } = discountMatrix;
+      const { sku: minY } = minBy(axisY, 'sku') || {};
+      const { sku: minX } = minBy(axisX, 'sku') || {};
+      const res = min(filter([minX, minY]));
+      return res && `от ${res}`;
+    }
+
+    function discountMatrixMinVolumes(discountMatrix, field = 'pcs') {
+      const { axisY, axisX } = discountMatrix;
+      const { [field]: minY } = minBy(axisY, field) || {};
+      const { [field]: minX } = minBy(axisX, field) || {};
+      const res = min(filter([minX, minY]));
+      return { [field]: res };
+    }
+
+    function discountMatrixDiscountRange(discountMatrix) {
+      const { values } = discountMatrix;
+      const { discountOwn: discountOwnMin } = minBy(values, 'discountOwn') || {};
+      const { discountOwn: discountOwnMax } = maxBy(values, 'discountOwn') || {};
+      if (!discountOwnMin && !discountOwnMax) {
+        return null;
+      }
+      return `от ${discountOwnMin} до ${discountOwnMax}`;
     }
 
   }
