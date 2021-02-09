@@ -31,7 +31,6 @@
           layoutStyle: layoutStyle(layout, directionStyle(layout)),
           footerCommentText: layout.commentText || this.action.commentText,
           showFooter: this.hasFoot(),
-          hasDiscounts: hasDiscounts(variants),
         });
       },
 
@@ -91,6 +90,12 @@
           res.discountTotal = discountTotal;
         }
 
+        if (variant.name && rows.length > 1) {
+          res.title = variant.name;
+        }
+
+        res.hasDiscounts = hasDiscounts(res);
+
         return res;
 
       });
@@ -138,10 +143,9 @@
       return required;
     }
 
-    function hasDiscounts(variants) {
-      return !!_.find(variants, 'discountTotal');
+    function hasDiscounts(variant) {
+      return !!(_.find(variant.rows, 'discountTotal') || variant.discountTotal);
     }
-
 
     function matrixSkuMin({ discountMatrix }) {
       if (!discountMatrix) {
