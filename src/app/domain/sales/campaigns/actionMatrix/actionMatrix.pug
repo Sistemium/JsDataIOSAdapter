@@ -9,4 +9,4 @@
         th
           action-required(required="row")
         td(ng-repeat="value in row.values track by $index")
-          span {{ value | number }}%
+          span(ng-if="value") {{ value | number }}%
