@@ -5,7 +5,7 @@
   angular.module('webPage').service('Menu', function (InitService, Auth, DomainOption) {
 
     const SALES_ROLES = ['salesman', 'supervisor'];
-    const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions'], SALES_ROLES);
+    const MARKETING_ROLES = _.union(['sales', 'coordinator', 'newsMaker', 'actions', 'stg'], SALES_ROLES);
     const PICKING_ROLES = ['picker'];
     const STOCK_TAKING_ROLES = ['stockTaking'];
     const ADMIN_ROLES = ['admin', 'tester'];
