@@ -3,11 +3,12 @@
   module.controller('PhotoReportListController', PhotoReportListController);
 
   function PhotoReportListController(Schema, Helpers, $scope,
+                                     SalesService,
                                      SalesmanAuth, GalleryHelper, Sockets,
                                      PhotoReporting, localStorageService, moment) {
 
-    const {PhotoReport, Outlet, Campaign, CampaignGroup} = Schema.models();
-    const {saControllerHelper, toastr} = Helpers;
+    const { PhotoReport, Outlet, Campaign, CampaignGroup } = Schema.models();
+    const { saControllerHelper, toastr } = Helpers;
 
     const LOCAL_STORAGE_KEY = 'photoReportForm.defaults';
     const DEFAULT_FIELDS = ['campaignId', 'outletId', 'campaignGroupId'];
@@ -73,7 +74,7 @@
 
       if (event.resource !== 'PhotoReport') return;
 
-      let {data} = event;
+      let { data } = event;
 
       if (!_.get(data, 'href')) return;
 
@@ -83,7 +84,7 @@
 
     function onBusySavingPhoto(promise) {
       if (promise && promise.then) {
-        vm.cgBusy = {promise, message: 'Сохранение фото'};
+        vm.cgBusy = { promise, message: 'Сохранение фото' };
         promise.then(createDraft);
       }
     }
@@ -107,9 +108,9 @@
 
     function loadPhotoReports() {
 
-      let filter = {orderBy: [['deviceCts', 'DESC']]};
+      let filter = { orderBy: [['deviceCts', 'DESC']] };
 
-      let {campaignId, outletId} = vm;
+      let { campaignId, outletId } = vm;
 
       let where = {};
 
@@ -127,10 +128,10 @@
 
       saveDefaults();
 
-      let q = PhotoReport.findAll(filter, {bypassCache: true})
+      let q = PhotoReport.findAll(filter, { bypassCache: true })
         .then(loadPhotoReportsRelations)
         .then(() => {
-          vm.rebindAll(PhotoReport, _.assign({where}, filter), 'vm.data');
+          vm.rebindAll(PhotoReport, _.assign({ where }, filter), 'vm.data');
         });
 
       createDraft();
@@ -148,10 +149,10 @@
 
     function createDraft() {
 
-      let {campaignId, outletId} = vm;
+      let { campaignId, outletId } = vm;
 
       if (campaignId && outletId) {
-        vm.photoReport = PhotoReport.createInstance({campaignId, outletId})
+        vm.photoReport = PhotoReport.createInstance({ campaignId, outletId })
       } else {
         vm.photoReport = null;
       }
@@ -183,24 +184,11 @@
 
     function loadCampaignGroup() {
 
-      return CampaignGroup.findAll(CampaignGroup.meta.filterActual())
-        .then(campaignGroups => {
-
-          vm.campaignGroups = _.orderBy(campaignGroups, ['dateB'], ['desc']);
-
-          if (!vm.campaignGroupId) {
-            vm.campaignGroupId = _.get(defaultGroup(moment().format()),'id');
-          }
-
+      return SalesService.loadCampaignGroups(vm)
+        .then(() => {
           $scope.$watch('vm.campaignGroupId', onCampaignGroupChange);
-
         });
 
-
-    }
-
-    function defaultGroup(today) {
-      return _.find(vm.campaignGroups, group => group.dateB <= today && today <= group.dateE);
     }
 
     function onCampaignGroupChange(campaignGroupId) {
@@ -221,7 +209,7 @@
 
           vm.campaigns = campaigns;
 
-          if (vm.campaignId && !_.find(campaigns, {id: vm.campaignId})) {
+          if (vm.campaignId && !_.find(campaigns, { id: vm.campaignId })) {
             vm.campaignId = null;
           }
 

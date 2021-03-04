@@ -2,21 +2,62 @@
 
   const NO_CACHE = { bypassCache: true };
 
-  function SalesService(Schema, $q) {
+  function SalesService(Schema, $q, moment) {
 
-    const { Outlet, Partner, Location } = Schema.models();
-    const { PossibleOutlet, PossibleOutletPhoto } = Schema.models();
+    const { Outlet, Partner, Location, OutletStats } = Schema.models();
+    const { PossibleOutlet, PossibleOutletPhoto, CampaignGroup } = Schema.models();
 
     return {
+
+      loadCampaignGroups(vm) {
+
+        function defaultGroup(campaignGroups, today) {
+          return _.find(campaignGroups, group => group.dateB <= today && today <= group.dateE);
+        }
+
+        return CampaignGroup.findAll(CampaignGroup.meta.filterActual())
+          .then(campaignGroups => {
+
+            vm.campaignGroups = _.orderBy(campaignGroups, ['dateB'], ['desc']);
+
+            if (!vm.campaignGroupId) {
+              vm.campaignGroupId = _.get(defaultGroup(vm.campaignGroups, moment().format()), 'id');
+            }
+
+          });
+
+      },
+
+      findOutletStats(salesman, dateB, dateE) {
+
+        const { id: salesmanId } = salesman || {};
+
+        if (!salesmanId) {
+          return $q.resolve([]);
+        }
+
+        const filter = {
+          salesmanId,
+          dateB,
+          dateE,
+        };
+
+        return this.findAllSalesmanOutlets(salesmanId)
+          .then(() => OutletStats.findAll(filter, { bypassCache: true }))
+          .then(res => _.orderBy(res, ({ outlet }) => outlet.name));
+
+      },
 
       findAllSalesmanOutlets(salesmanId) {
 
         let filter = Outlet.meta.salesmanFilter({ salesmanId });
 
         return Outlet.findAll(filter)
-          .then(outlets =>
-            Partner.findByMany(_.map(outlets, 'partnerId'), { chunk: 20 })
-              .then(() => outlets));
+          .then(outlets => {
+            const toLoad = _.filter(outlets, ({ partner }) => !partner);
+            return Partner.findByMany(_.map(toLoad, 'partnerId'), { chunk: 20 })
+              .then(() => outlets);
+          });
 
       },
 

@@ -1,0 +1,66 @@
+@import "variables";
+
+.perfect-shop-report {
+
+  $padding: 3px;
+
+  .filters {
+    display: flex;
+    margin-bottom: $margin-bottom-xs;
+    @include responsive-only(xxs) {
+      display: block;
+    }
+  }
+
+  .alert {
+    margin: $margin-bottom-xs 0;
+  }
+
+  .outlet {
+    padding: 6px 0;
+    flex: 1;
+
+    .name {
+      font-weight: 500;
+    }
+
+    .address {
+      color: $gray;
+    }
+  }
+
+  .stat {
+
+    &.header {
+      font-weight: bold;
+      border-top: solid 1px $border-gray;
+    }
+
+    display: flex;
+    //align-items: center;
+
+    border-bottom: solid 1px $border-gray;
+
+    .outlet {
+      .name {
+        color: $primary-color;
+        cursor: pointer;
+      }
+    }
+
+    .level, .assortments-progress, .blocks-progress {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-left: solid 1px $border-gray;
+      padding: $padding;
+      min-width: 60px;
+    }
+
+  }
+
+  .stats {
+    min-height: 50px;
+  }
+
+}

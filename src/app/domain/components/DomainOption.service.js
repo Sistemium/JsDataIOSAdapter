@@ -36,6 +36,9 @@
       hasPriceAgent,
       stmArticleGroupId,
       salesTargets,
+      perfectShopEnabled() {
+        return customerCode() === 'bs' && (!isIOS || service.appVersion >= 378) && 'bs';
+      },
       rnkOption,
       outletTasksDisabled() {
         return customerCode() !== 'r50' || isIOS && service.appVersion < 370;
@@ -56,7 +59,8 @@
     }
 
     function salesTargets() {
-      return customerCode() === 'r50' && siteInstance === 'sales';
+      // return customerCode() === 'r50' && siteInstance === 'sales';
+      return false;
     }
 
     function maxDiscount() {
@@ -154,7 +158,7 @@
     }
 
     function hasInactiveActions() {
-      return customerCode() === 'bs';
+      return true;
     }
 
     function hasSaleOrderKS() {

@@ -1,0 +1,42 @@
+.perfect-shop-report(ui-view)
+
+  .filters
+
+    sab-dropdown(
+      ng-if="vm.campaignGroupId"
+      ng-model="vm.campaignGroupId"
+      items-data-source-name="CampaignGroup"
+      items-data="vm.campaignGroups"
+      order-dir="desc"
+    )
+
+  .stat.header
+    .outlet Торговая Точка
+    .level Уровень
+    .blocks-progress Блоки
+    .assortments-progress Асс-т
+
+  .stats.scroll-y(
+    cg-busy="vm.busy"
+    resize
+    resize-offset-top='40'
+    resize-offset-top-xs='32'
+  )
+
+    .alert.alert-info(ng-hide="vm.busy" ng-if="!vm.data.length") Нет данных в указанном периоде
+
+    .stat(ng-repeat="stat in vm.data track by stat.id")
+
+      .outlet(ng-click="vm.outletClick(stat)")
+        .name {{ stat.outlet.name }}
+        .address
+          small {{ stat.outlet.address }}
+
+      .level
+        span {{ stat.stats.perfectShop.level || '-' }}
+
+      .blocks-progress
+        span {{ stat.stats.perfectShop.blocksProgress }}
+
+      .assortments-progress
+        span {{ stat.stats.perfectShop.assortmentsProgress }}

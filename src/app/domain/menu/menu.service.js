@@ -97,6 +97,11 @@
       state: 'sales.targets',
       needRoles: SALES_ROLES,
       disabled: () => !DomainOption.salesTargets(),
+    }, {
+      title: 'Perfect Shop',
+      state: 'sales.perfectShopReport',
+      needRoles: SALES_ROLES,
+      disabled: () => !DomainOption.perfectShopEnabled(),
     }];
 
 

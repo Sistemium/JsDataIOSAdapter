@@ -27,7 +27,7 @@
         label: {
           accusative: 'период'
         },
-        filterActual
+        filterActual,
       }
 
     });

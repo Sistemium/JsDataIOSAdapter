@@ -1,0 +1,31 @@
+@import "variables";
+
+.outlet-perfect-shop {
+
+  table {
+    //border-color: $gray-border-color;
+    width: 100%;
+    margin: $margin-bottom-xs auto;
+  }
+
+  .level, .next-level {
+    //text-align: right;
+  }
+
+  .goal, .value {
+    text-align: right;
+    &.done {
+      background: $light-green;
+    }
+  }
+
+  th, .rule {
+    text-align: center;
+    color: $light-gray;
+  }
+
+  th, td {
+    padding: 3px;
+  }
+
+}
