@@ -5,7 +5,7 @@
   function PhotoReportListController(Schema, Helpers, $scope,
                                      SalesService,
                                      SalesmanAuth, GalleryHelper, Sockets,
-                                     PhotoReporting, localStorageService, moment) {
+                                     PhotoReporting, localStorageService) {
 
     const { PhotoReport, Outlet, Campaign, CampaignGroup } = Schema.models();
     const { saControllerHelper, toastr } = Helpers;
