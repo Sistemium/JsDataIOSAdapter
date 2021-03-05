@@ -1,0 +1,14 @@
+.modal-header
+
+  .name PerfectShop
+
+  button.btn.btn-link(
+  ng-click='vm.closeClick()'
+  )
+    i.glyphicon.glyphicon-remove
+
+.modal-body
+
+  outlet-perfect-shop(ng-if="vm.statId" stat-id="vm.statId")
+
+//.modal-footer

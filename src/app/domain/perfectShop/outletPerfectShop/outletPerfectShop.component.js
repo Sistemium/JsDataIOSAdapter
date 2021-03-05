@@ -7,6 +7,7 @@
 
       bindings: {
         statId: '<',
+        outletId: '<',
       },
 
       templateUrl: `${URL}/outletPerfectShop.html`,
@@ -16,7 +17,7 @@
     });
 
   /** @ngInject */
-  function outletPerfectShopController($scope, saControllerHelper, Schema) {
+  function outletPerfectShopController($scope, saControllerHelper, Schema, PerfectShopService) {
 
     const { OutletStats } = Schema.models();
 
@@ -24,7 +25,16 @@
       .use({
 
         $onInit() {
-          this.rebindOne(OutletStats, this.statId, 'vm.stat', onStat);
+          if (this.statId) {
+            this.rebindOne(OutletStats, this.statId, 'vm.stat', onStat);
+          }
+          if (this.outletId) {
+            PerfectShopService.findCurrentStat(this.outletId)
+              .then(stat => {
+                this.stat = stat;
+                onStat();
+              });
+          }
         },
 
         ruleName(rule) {

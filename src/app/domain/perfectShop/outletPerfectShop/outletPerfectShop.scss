@@ -8,15 +8,49 @@
     margin: $margin-bottom-xs auto;
   }
 
+  tr.block {
+    .name {
+      font-weight: bold;
+      @include responsive-only(gt-xxs) {
+        font-size: large;
+      }
+      &:after {
+        content: ":";
+      }
+    }
+    .value {
+      margin-left: $margin-bottom-xs;
+      font-weight: bold;
+      color: $dark-gray;
+    }
+  }
+
+  tr.assortment {
+    td.name {
+      @include responsive-only(gt-xxs) {
+        padding-left: 10px;
+      }
+    }
+  }
+
   .level, .next-level {
-    //text-align: right;
+    label {
+      font-weight: normal;
+      color: $dark-gray;
+      margin: 0 $margin-bottom-xs;
+      &:after {
+        content: ":";
+      }
+    }
+    text-align: right;
   }
 
   .goal, .value {
     text-align: right;
-    &.done {
-      background: $light-green;
-    }
+  }
+
+  .done {
+    background: $light-green;
   }
 
   th, .rule {

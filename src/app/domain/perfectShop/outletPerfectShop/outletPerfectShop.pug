@@ -1,30 +1,40 @@
-.outlet-perfect-shop
+.outlet-perfect-shop.scroll-y(
+  resize
+  resize-offset-top='20'
+  resize-offset-top-xs='10'
+)
 
   .outlet
     .name {{ vm.outlet.name }}
     .address
       small {{ vm.outlet.address }}
 
-  .level Достигнут уровень: {{ vm.level || '-' }}
-  .next-level Следующий уровень: {{ vm.nextLevel || '-' }}
+  .level(ng-if="vm.level") Достигнут уровень: {{ vm.level || '-' }}
+  .next-level
+    label Следующий уровень
+    strong {{ vm.nextLevel || '-' }}
 
   table.blocks(border="1")
     thead
-      th Блок
-      th Цель отгрузки ₽
-      th Факт ₽
+      //th Блок
+      //th Отгружено ₽
+      //th Факт ₽
       th Ассортимент
       th Условие
       th Цель
       th Факт
     tbody.block(ng-repeat="block in vm.blocks track by block.name")
-      tr(ng-repeat="assortment in block.assortments track by $index")
-        td.name(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.name }}
-        td.goal(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.goal | number:2 }}
-        td.value(
-          rowspan="{{block.rowspan}}" ng-if="!$index"
-          ng-class="{ done: block.result }"
-        ) {{ block.value | number:2 }}
+      tr.block
+        td(colspan="4")
+          span.name {{ block.name }}
+          span.value(ng-class="{ done: block.result }") {{ block.value | number:2 }} из {{ block.goal | number:2 }}
+      tr.assortment(ng-repeat="assortment in block.assortments track by $index")
+        //td.name(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.name }}
+        //td.goal(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.goal | number:2 }}
+        //td.value(
+        //  rowspan="{{block.rowspan}}" ng-if="!$index"
+        //  ng-class="{ done: block.result }"
+        //) {{ block.value | number:2 }} из {{ block.goal | number:2 }}
         td.name(
           ng-if="!$index || assortment.name !== block.assortments[$index - 1].name"
           rowspan="{{ assortment.rowspan }}"
