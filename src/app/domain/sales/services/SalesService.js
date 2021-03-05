@@ -48,6 +48,7 @@
 
       },
 
+
       findAllSalesmanOutlets(salesmanId) {
 
         let filter = Outlet.meta.salesmanFilter({ salesmanId });

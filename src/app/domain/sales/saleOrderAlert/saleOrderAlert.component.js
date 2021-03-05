@@ -39,6 +39,7 @@
       deleteSaleOrderClick,
       saleOrderMinDate: moment().toDate(),
       saleOrderInitDate: nextWorkDay,
+      perfectShopEnabled: DomainOption.perfectShopEnabled(),
 
       $onInit() {
         $scope.$watch('vm.saleOrder.target', () => {
