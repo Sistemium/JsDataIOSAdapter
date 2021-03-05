@@ -5,6 +5,7 @@
   const REQUIRED_ACCURACY = 500;
 
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, Sockets,
+                                 DomainOption,
                                  moment, geolib, Helpers, mapsHelper, Visiting) {
 
     const { ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper } = Helpers;
@@ -23,6 +24,8 @@
       buttons,
       creatingMode,
       thumbnails: {},
+
+      perfectShop: DomainOption.perfectShopEnabled(),
 
       activeTab: 1,
 

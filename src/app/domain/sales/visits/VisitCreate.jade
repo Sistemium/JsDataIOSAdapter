@@ -62,12 +62,12 @@
 
     uib-tabset.nav-tabs-right.questionSets(active="vm.activeTab")
 
-      uib-tab(
-      index="$index + 3"
-      ng-repeat="qs in vm.questionSets | orderBy:['ord','name'] track by qs.id"
-      heading="{{qs.name}}"
-      disable="qs.isInvalid"
-      )
+      //uib-tab(
+      //index="$index + 3"
+      //ng-repeat="qs in vm.questionSets | orderBy:['ord','name'] track by qs.id"
+      //heading="{{qs.name}}"
+      //disable="qs.isInvalid"
+      //)
         .questionGroup(ng-repeat='grp in qs.questionGroups | orderBy:"name" track by grp.id' ng-if='vm.answers')
           h3
             .lead {{ grp.name }}
@@ -106,6 +106,12 @@
                 ng-model="vm.answers[qst.id]"
                 ng-change='vm.changeAnswer(qst,vm.answers[qst.id])'
                 )
+      uib-tab(
+        index="3"
+        heading="PerfectShop"
+        ng-if="vm.perfectShop"
+      )
+        outlet-perfect-shop(outlet-id="vm.saleOrderFilter.outletId")
 
       uib-tab(
       index="2"

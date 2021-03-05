@@ -7,6 +7,13 @@
     margin-top: $margin;
   }
 
+  .outlet-perfect-shop {
+    padding-top: $margin-bottom-xs;
+    .outlet {
+      display: none;
+    }
+  }
+
   .visitPhotos {
     margin-top: $margin-bottom-xs;
     @media (max-width: $screen-xs) {
