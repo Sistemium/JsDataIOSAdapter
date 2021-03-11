@@ -8,6 +8,18 @@
     margin: $margin-bottom-xs auto;
   }
 
+  @include responsive-only(xxs) {
+    .wide {
+      display: none;
+    }
+  }
+
+  @include responsive-only(gt-xxs) {
+    .narrow {
+      display: none;
+    }
+  }
+
   tr.block {
     .name {
       font-weight: bold;

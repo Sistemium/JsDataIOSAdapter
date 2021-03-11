@@ -16,25 +16,25 @@
 
   table.blocks(border="1")
     thead
-      //th Блок
-      //th Отгружено ₽
-      //th Факт ₽
+      th.wide Блок
+      th.wide Задача ₽
+      th.wide Факт ₽
       th Ассортимент
       th Условие
       th Цель
       th Факт
     tbody.block(ng-repeat="block in vm.blocks track by block.name")
-      tr.block
+      tr.block.narrow
         td(colspan="4")
           span.name {{ block.name }}
           span.value(ng-class="{ done: block.result }") {{ block.value | number:2 }} из {{ block.goal | number:2 }}
       tr.assortment(ng-repeat="assortment in block.assortments track by $index")
-        //td.name(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.name }}
-        //td.goal(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.goal | number:2 }}
-        //td.value(
-        //  rowspan="{{block.rowspan}}" ng-if="!$index"
-        //  ng-class="{ done: block.result }"
-        //) {{ block.value | number:2 }} из {{ block.goal | number:2 }}
+        td.name.wide(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.name }}
+        td.goal.wide(rowspan="{{block.rowspan}}" ng-if="!$index") {{ block.goal | number:2 }}
+        td.value.wide(
+          rowspan="{{block.rowspan}}" ng-if="!$index"
+          ng-class="{ done: block.result }"
+        ) {{ block.value | number:2 }}
         td.name(
           ng-if="!$index || assortment.name !== block.assortments[$index - 1].name"
           rowspan="{{ assortment.rowspan }}"
