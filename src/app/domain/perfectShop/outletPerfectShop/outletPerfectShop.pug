@@ -13,7 +13,7 @@
 
   .next-level
     label Следующий уровень
-    strong(uib-dropdown is-open='vm.levelDropdownOpen' ng-disabled='!vm.levels.length')
+    strong(uib-dropdown is-open='vm.levelDropdownOpen' ng-disabled='!(vm.levels.length>1)')
       a(href uib-dropdown-toggle)
         span {{vm.nextLevel || 'Выберите уровень'}}
         span.caret

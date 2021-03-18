@@ -66,7 +66,7 @@
       }
 
       const { ps } = vm;
-      const { blocks, assortments } = ps.stats[nextLevel] || ps;
+      const { blocks, assortments } = _.get(ps.stats, nextLevel) || ps;
 
       const assortmentMap = assortmentByBlock(assortments);
 
@@ -94,13 +94,14 @@
       }
 
       const { level } = ps;
+      const nextLevel = vm.stat.getNextPSLevel();
 
       _.assign(vm, {
         ps,
         outlet,
         level,
-        nextLevel: vm.stat.getNextPSLevel(),
-        levels: Object.keys(ps.stats),
+        nextLevel,
+        levels: Object.keys(ps.stats || { [nextLevel]: {} }),
       });
 
       vm.watchScope('vm.nextLevel', onLevel);
