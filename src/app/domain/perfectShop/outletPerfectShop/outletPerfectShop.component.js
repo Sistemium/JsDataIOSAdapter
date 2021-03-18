@@ -24,6 +24,11 @@
     const vm = saControllerHelper.setup(this, $scope)
       .use({
 
+        setLevel(nextLevel) {
+          vm.nextLevel = nextLevel;
+          vm.stat.setNextPSLevel(nextLevel);
+        },
+
         $onInit() {
           if (this.statId) {
             this.rebindOne(OutletStats, this.statId, 'vm.stat', onStat);
@@ -54,15 +59,18 @@
 
       });
 
-    function onStat() {
+    function onLevel(nextLevel) {
 
-      const { stats, outlet } = vm.stat || {};
-      const { blocks, assortments, level, nextLevel } = _.get(stats, 'perfectShop') || {};
+      if (!nextLevel) {
+        return;
+      }
+
+      const { ps } = vm;
+      const { blocks, assortments } = ps.stats[nextLevel] || ps;
 
       const assortmentMap = assortmentByBlock(assortments);
 
       _.assign(vm, {
-        outlet,
         blocks: _.map(blocks, block => {
           const blockAssortment = assortmentMap[block.name];
           return _.assign({
@@ -72,9 +80,30 @@
             rowspan: blockAssortment.length,
           }, block);
         }),
-        level,
-        nextLevel,
       });
+
+    }
+
+    function onStat() {
+
+      const { stats, outlet } = vm.stat || {};
+      const ps = _.get(stats, 'perfectShop');
+
+      if (!ps) {
+        return;
+      }
+
+      const { level } = ps;
+
+      _.assign(vm, {
+        ps,
+        outlet,
+        level,
+        nextLevel: vm.stat.getNextPSLevel(),
+        levels: Object.keys(ps.stats),
+      });
+
+      vm.watchScope('vm.nextLevel', onLevel);
 
     }
 

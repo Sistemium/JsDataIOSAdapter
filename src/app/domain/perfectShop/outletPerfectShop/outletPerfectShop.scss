@@ -49,12 +49,17 @@
     label {
       font-weight: normal;
       color: $dark-gray;
-      margin: 0 $margin-bottom-xs;
+      margin: 0 $margin-bottom-xs 0 0;
       &:after {
         content: ":";
       }
     }
-    text-align: right;
+  }
+
+  .level {
+    @include responsive-only(gt-xxs) {
+      float: right;
+    }
   }
 
   .goal, .value {

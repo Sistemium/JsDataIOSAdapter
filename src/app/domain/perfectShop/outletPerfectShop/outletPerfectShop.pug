@@ -9,10 +9,17 @@
     .address
       small {{ vm.outlet.address }}
 
-  .level(ng-if="vm.level") Достигнут уровень: {{ vm.level || '-' }}
+  .level(ang-if="vm.level") Достигнут уровень: {{ vm.level || '-' }}
+
   .next-level
     label Следующий уровень
-    strong {{ vm.nextLevel || '-' }}
+    strong(uib-dropdown is-open='vm.levelDropdownOpen' ng-disabled='!vm.levels.length')
+      a(href uib-dropdown-toggle)
+        span {{vm.nextLevel || 'Выберите уровень'}}
+        span.caret
+      ul.dropdown-menu(uib-dropdown-menu role='menu')
+        li(ng-repeat='level in vm.levels track by level')
+          a(href ng-click='vm.setLevel(level)') {{ level }}
 
   table.blocks(border="1")
     thead
