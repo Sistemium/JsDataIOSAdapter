@@ -24,7 +24,7 @@
   });
 
 
-  function saleOrderAlertController(Schema, $scope, toastr, $state, $timeout, DomainOption) {
+  function saleOrderAlertController(Schema, $scope, toastr, $state, $timeout, DomainOption, PerfectShopService) {
 
     const { SaleOrder } = Schema.models();
 
@@ -39,13 +39,16 @@
       deleteSaleOrderClick,
       saleOrderMinDate: moment().toDate(),
       saleOrderInitDate: nextWorkDay,
-      perfectShopEnabled: DomainOption.perfectShopEnabled(),
 
       $onInit() {
         $scope.$watch('vm.saleOrder.target', () => {
           vm.useRNK = _.get(vm.saleOrder, 'target') === 'rnk';
         });
         $scope.$watch('vm.useRNK', () => this.onRNK());
+        $scope.$watch('vm.saleOrder.salesman.responsibility', () => {
+          vm.perfectShopEnabled = DomainOption.perfectShopEnabled()
+            && PerfectShopService.isResponsible(_.get(vm.saleOrder, 'salesman'));
+        });
       },
 
       onRNK() {

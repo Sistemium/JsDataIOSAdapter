@@ -2,11 +2,15 @@
 
   const NO_CACHE = { bypassCache: true };
 
-  function PerfectShopService($uibModal, $q, SalesmanAuth, Schema) {
+  function PerfectShopService($uibModal, $q, SalesmanAuth, Schema, DomainOption) {
 
     const { OutletStats } = Schema.models();
 
     return {
+
+      isResponsible(salesman) {
+        return salesman && DomainOption.perfectShopResponsibility().includes(salesman.responsibility);
+      },
 
       outletModal(outletId) {
 

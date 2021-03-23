@@ -36,6 +36,9 @@
       hasPriceAgent,
       stmArticleGroupId,
       salesTargets,
+      perfectShopResponsibility() {
+        return [null, 'op'];
+      },
       perfectShopEnabled() {
         return /^(bs|r50)$/.test(customerCode()) && (!isIOS || service.appVersion >= 378);
       },

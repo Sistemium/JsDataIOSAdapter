@@ -2,7 +2,7 @@
 
   const NO_CACHE = { bypassCache: true };
 
-  function SalesService(Schema, $q, moment) {
+  function SalesService(Schema, $q, moment, DomainOption) {
 
     const { Outlet, Partner, Location, OutletStats } = Schema.models();
     const { PossibleOutlet, PossibleOutletPhoto, CampaignGroup } = Schema.models();
@@ -30,9 +30,9 @@
 
       findOutletStats(salesman, dateB, dateE) {
 
-        const { id: salesmanId } = salesman || {};
+        const { id: salesmanId, responsibility } = salesman || {};
 
-        if (!salesmanId) {
+        if (!salesmanId || !DomainOption.perfectShopResponsibility().includes(responsibility)) {
           return $q.resolve([]);
         }
 
