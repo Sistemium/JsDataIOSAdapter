@@ -30,6 +30,10 @@
       th Условие
       th Цель
       th Факт
+    tbody.empty(ng-if="!vm.blocks.length")
+      tr
+        td(colspan="7")
+          .alert.alert-info Нет данных
     tbody.block(ng-repeat="block in vm.blocks track by block.name")
       tr.block.narrow
         td(colspan="4")

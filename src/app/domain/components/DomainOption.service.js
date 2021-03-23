@@ -37,7 +37,7 @@
       stmArticleGroupId,
       salesTargets,
       perfectShopEnabled() {
-        return customerCode() === 'bs' && (!isIOS || service.appVersion >= 378) && 'bs';
+        return /^(bs|r50)$/.test(customerCode()) && (!isIOS || service.appVersion >= 378);
       },
       rnkOption,
       outletTasksDisabled() {
