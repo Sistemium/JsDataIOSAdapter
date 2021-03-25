@@ -5,7 +5,7 @@
   const REQUIRED_ACCURACY = 500;
 
   function VisitCreateController(Schema, $scope, $state, $q, SalesmanAuth, Sockets,
-                                 DomainOption,
+                                 PerfectShopService,
                                  moment, geolib, Helpers, mapsHelper, Visiting) {
 
     const { ConfirmModal, toastr, PhotoHelper, LocationHelper, saControllerHelper } = Helpers;
@@ -25,7 +25,7 @@
       creatingMode,
       thumbnails: {},
 
-      perfectShop: DomainOption.perfectShopEnabled(),
+      perfectShop: false,
 
       activeTab: 1,
 
@@ -392,12 +392,16 @@
 
     function postRefresh() {
 
-      answersByQuestion = _.keyBy(vm.visit.answers, 'questionId');
+      const { visit } = vm;
+
+      answersByQuestion = _.keyBy(visit.answers, 'questionId');
       vm.answers = Visiting.questionsMap(answersByQuestion);
-      const visitConfiguration = Visiting.visitConfiguration(vm.visit);
+      const visitConfiguration = Visiting.visitConfiguration(visit);
       vm.configuration = visitConfiguration;
 
-      if (!Visiting.priceGatheringArticleIds(visitConfiguration, vm.visit).length) {
+      vm.perfectShop = PerfectShopService.isResponsible(visit.salesman);
+
+      if (!Visiting.priceGatheringArticleIds(visitConfiguration, visit).length) {
         vm.activeTab = 2;
         if (!vm.creatingMode) {
           vm.activeTab = 3;
@@ -407,14 +411,14 @@
 
       vm.activeTab = 1;
 
-      $scope.$watch(() => JSON.stringify(vm.visit.prices), () => {
-        if (!vm.visit.DSHasChanges()) {
+      $scope.$watch(() => JSON.stringify(visit.prices), () => {
+        if (!visit.DSHasChanges()) {
           return;
         }
-        Visiting.saveVisit(vm.visit);
+        Visiting.saveVisit(visit);
       });
 
-      return Visiting.findPriceGatheringData(visitConfiguration, vm.visit)
+      return Visiting.findPriceGatheringData(visitConfiguration, visit)
         .then(priceGathering => {
           vm.priceGathering = priceGathering;
         });
