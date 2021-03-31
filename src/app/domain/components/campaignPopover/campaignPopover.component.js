@@ -57,7 +57,7 @@
 
     function loadData() {
 
-      let today = moment().format();
+      let today = moment().add(1, 'days').format();
 
       return CampaignGroup.findAll()
         .then(groups => {

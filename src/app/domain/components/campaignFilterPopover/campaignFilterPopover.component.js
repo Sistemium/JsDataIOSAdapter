@@ -38,7 +38,7 @@
 
     function $onInit() {
 
-      const today = moment().format();
+      const today = moment().add(1, 'days').format();
 
       CampaignGroup.findAll(CampaignGroup.meta.filterActual())
         .then(groups => {
