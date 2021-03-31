@@ -6,7 +6,10 @@
       .totals(ng-transclude='totals')
     .menu
 
-      outlet-perfect-shop-info(outlet-id="vm.saleOrder.outlet.id" ng-if="vm.perfectShopEnabled")
+      outlet-perfect-shop-info(
+        outlet-id="vm.saleOrder.outlet.id"
+        ng-if="vm.perfectShopEnabled && !vm.saleOrderExpanded"
+      )
       sale-order-discount-info(sale-order='vm.saleOrder' ng-if='!vm.saleOrderExpanded' discounts='vm.discounts')
 
       a.expander(href ng-click='vm.saleOrderExpanded = !vm.saleOrderExpanded')
