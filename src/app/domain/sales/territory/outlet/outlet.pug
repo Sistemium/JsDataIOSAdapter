@@ -95,6 +95,10 @@
           label Лицензия
           span {{ vm.outlet.licenseInfo }}
 
+        .address-full(ng-if="vm.outlet.addressFull")
+          label Полный адрес
+          span {{ vm.outlet.addressFull }}
+
         .egais-code(ng-if='vm.outlet.egaisCode')
           label ЕГАИС ИД
           span {{ vm.outlet.egaisCode }}

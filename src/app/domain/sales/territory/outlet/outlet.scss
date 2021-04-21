@@ -82,6 +82,7 @@
       }
 
     }
+
     .outlet-avatar {
 
       display: flex;
@@ -142,10 +143,6 @@
 
         padding: 3px 0;
 
-        @include responsive-only(lt-sm) {
-          border-bottom: 1px solid $gray-border-color;
-        }
-
         @include responsive-only(gt-xs) {
           margin: 20px 0;
         }
@@ -154,15 +151,8 @@
 
           display: flex;
           justify-content: space-between;
-          padding: 2px 0;
-
-          &:last-of-type {
-
-            label {
-              margin: 0;
-            }
-
-          }
+          padding: 4px 0;
+          border-bottom: 1px solid $gray-border-color;
 
           label {
 
@@ -174,24 +164,17 @@
             padding-right: 20px;
             white-space: nowrap;
 
+            min-width: 120px;
+
           }
 
           strong {
             color: $state-danger-text;
           }
 
-          strong, span {
-            @extend .ellipsis;
+          span {
+            text-align: right;
           }
-
-          @include responsive-only(lt-sm) {
-            padding: 0;
-          }
-
-        }
-
-        > div:first-of-type {
-          border-bottom: 1px solid $gray-border-color;
 
           @include responsive-only(lt-sm) {
             border-bottom: none;
@@ -212,6 +195,7 @@
 
             li {
               text-align: justify;
+
               &:first-letter {
                 text-transform: capitalize;
               }
