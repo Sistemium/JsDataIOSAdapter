@@ -261,6 +261,10 @@
 
     function firstNameFn(name) {
 
+      if (!name) {
+        return '';
+      }
+
       let m = name.match(/("[^"]+")[^"]*$/);
 
       let res = _.last(m);
