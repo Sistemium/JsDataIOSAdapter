@@ -59,7 +59,7 @@
       isWideScreen: isWideScreen(),
       saleOrderPositionByArticle: {},
       hideBoxes: localStorageService.get('hideBoxes') || false,
-      showImages: localStorageService.get('showImages') || false,
+      showImages: localStorageService.get('showImages') || true,
       showFirstLevel: true,
       stockWithPicIndex: [],
       discountsBy: {},
