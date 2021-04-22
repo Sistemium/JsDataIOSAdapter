@@ -2,7 +2,7 @@
 
   const NO_CACHE = { bypassCache: true };
 
-  function PerfectShopService($uibModal, $q, SalesmanAuth, Schema, DomainOption) {
+  function PerfectShopService($uibModal, $q, SalesmanAuth, Schema, DomainOption, moment) {
 
     const { OutletStats } = Schema.models();
 
@@ -12,7 +12,7 @@
         return salesman && DomainOption.perfectShopResponsibility().includes(salesman.responsibility);
       },
 
-      outletModal(outletId) {
+      outletModal(outletId, date) {
 
         const modal = $uibModal.open({
 
@@ -32,7 +32,7 @@
               },
             });
 
-            findCurrentStat(outletId)
+            findCurrentStat(outletId, date)
               .then(stat => {
                 this.statId = _.get(stat, 'id') || null;
               })
@@ -50,7 +50,7 @@
 
     };
 
-    function findCurrentStat(outletId) {
+    function findCurrentStat(outletId, date) {
 
       const { id: salesmanId } = SalesmanAuth.getCurrentUser() || {};
 
@@ -61,9 +61,8 @@
       const filter = {
         salesmanId,
         outletId,
-        // TODO: get current month auto
-        dateB: '2021-03-01',
-        dateE: '2021-03-31',
+        dateB: moment().startOf('month').format('YYYY-MM-DD'),
+        dateE: moment().endOf('month').format('YYYY-MM-DD'),
       };
 
       return OutletStats.findAll(filter, NO_CACHE)

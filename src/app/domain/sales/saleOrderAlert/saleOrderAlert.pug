@@ -8,6 +8,7 @@
 
       outlet-perfect-shop-info(
         outlet-id="vm.saleOrder.outlet.id"
+        date="vm.saleOrder.date"
         ng-if="vm.perfectShopEnabled && !vm.saleOrderExpanded"
       )
       sale-order-discount-info(sale-order='vm.saleOrder' ng-if='!vm.saleOrderExpanded' discounts='vm.discounts')

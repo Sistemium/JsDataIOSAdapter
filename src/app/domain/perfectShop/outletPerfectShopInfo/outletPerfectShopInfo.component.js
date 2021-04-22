@@ -5,6 +5,7 @@
     bindings: {
       outletId: '<',
       salesman: '<',
+      date: '<',
     },
 
     templateUrl: 'app/domain/perfectShop/outletPerfectShopInfo/outletPerfectShopInfo.html',
@@ -19,7 +20,7 @@
     _.assign(this, {
 
       click() {
-        PerfectShopService.outletModal(this.outletId);
+        PerfectShopService.outletModal(this.outletId, this.date);
       },
 
       popoverTrigger: popoverTrigger()
