@@ -61,8 +61,8 @@
       const filter = {
         salesmanId,
         outletId,
-        dateB: moment().startOf('month').format('YYYY-MM-DD'),
-        dateE: moment().endOf('month').format('YYYY-MM-DD'),
+        dateB: moment(date).startOf('month').format('YYYY-MM-DD'),
+        dateE: moment(date).endOf('month').format('YYYY-MM-DD'),
       };
 
       return OutletStats.findAll(filter, NO_CACHE)
