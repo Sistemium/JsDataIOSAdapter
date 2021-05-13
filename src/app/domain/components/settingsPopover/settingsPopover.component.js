@@ -70,10 +70,11 @@
 
     function buttonClick(button) {
 
-      let {code} = button;
-
-      localStorageService.set(code, vm[code] = !vm[code]);
-      $rootScope[code] = vm[code];
+      const { code } = button;
+      const val = !vm[code];
+      vm[code] = val;
+      localStorageService.set(code, val);
+      $rootScope[code] = val;
 
     }
 
