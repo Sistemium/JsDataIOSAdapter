@@ -71,18 +71,17 @@
       return options.map((variant, idx) => {
 
         const rows = variantRows(variant);
+        const variantRanges = ranges.length ? ranges : undefined;
 
         const res = _.defaults({
           num: idx + 1,
           rows,
-          rowspan: rows.length + (variant.commentText ? 1 : 0),
           requiredVolume: requiredVolume(variant),
-          ranges: ranges.length ? ranges : undefined,
-        }, variant, {
-          discountOwn: action.discountOwn || undefined,
-          discountComp: action.discountComp || undefined,
-          discountCash: action.discountCash || undefined,
-        });
+          ranges: variantRanges,
+          discountOwn: variant.discountOwn || action.discountOwn || undefined,
+          discountComp: variant.discountComp || action.discountComp || undefined,
+          discountCash: variant.discountCash || action.discountCash || undefined,
+        }, variant);
 
         const discountTotal = (res.discountComp || 0) + (res.discountOwn || 0);
 
@@ -93,6 +92,9 @@
         if (variant.name && rows.length > 1) {
           res.title = variant.name;
         }
+
+        const hasCommentRow = variant.commentText && !variant.name && !_.get(res.ranges, 'length');
+        res.rowspan = rows.length + (hasCommentRow ? 1 : 0) ;
 
         res.hasDiscounts = hasDiscounts(res);
 
