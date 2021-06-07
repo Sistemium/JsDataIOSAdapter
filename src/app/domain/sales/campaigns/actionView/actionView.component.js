@@ -83,6 +83,11 @@
           discountCash: variant.discountCash || action.discountCash || undefined,
         }, variant);
 
+        if (_.find(res.rows, 'discountTotal')) {
+          delete res.discountOwn;
+          delete res.discountComp;
+        }
+
         const discountTotal = (res.discountComp || 0) + (res.discountOwn || 0);
 
         if (discountTotal) {
