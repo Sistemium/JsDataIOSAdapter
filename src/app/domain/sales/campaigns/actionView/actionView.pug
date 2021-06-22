@@ -77,6 +77,9 @@
         .priority(ng-if="vm.action.priority")
           i.glyphicon.glyphicon-flag
           span {{ vm.action.priority.name }}
+        .territory(ng-if="::vm.action.territory")
+          i.glyphicon.glyphicon-map-marker
+          span {{ ::vm.action.territory }}
         .other(ng-style="vm.layoutStyle" ng-class="vm.layout.align")
           action-pictures(action="vm.action" ng-if="vm.showPictures && vm.action.layout.pictures.length")
           .comment(ng-bind-html="vm.footerCommentText")

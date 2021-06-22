@@ -37,6 +37,7 @@
       hasFoot() {
         const { action } = this;
         return action.commentText
+          || action.territory
           || _.get(action.layout, 'commentText')
           || action.needPhoto
           || action.priorityId
