@@ -22,6 +22,8 @@
       i.glyphicon.glyphicon-calendar
       span с {{ ::vm.campaign.dateB | amDateFormat:'DD.MM.YYYY' }} по {{ ::vm.campaign.dateE | amDateFormat:'DD.MM.YYYY' }}
 
+  comments-view(comments="vm.campaign.comments")
+
   action-view(
     ng-repeat="action in vm.campaign.actions"
     action="::action"

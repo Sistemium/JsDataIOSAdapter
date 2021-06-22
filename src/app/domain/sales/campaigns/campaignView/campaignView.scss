@@ -32,6 +32,10 @@
 
   }
 
+  .comments-view {
+    margin-bottom: $margin-bottom-xs;
+  }
+
   .need-photo span {
 
     display: inline-block;
@@ -68,6 +72,12 @@
   }
 
   .fields {
+    > * {
+      white-space: nowrap;
+    }
+    .territory > span {
+      white-space: normal;
+    }
     @include responsive-only(lt-sm) {
       flex-direction: column;
       align-items: flex-start;
