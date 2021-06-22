@@ -1,0 +1,4 @@
+.comments-view(ng-if="vm.comments.length")
+  .comment(ng-repeat="comment in vm.comments track by $index")
+    i.glyphicon.glyphicon-info-sign
+    .styled-comment(ng-bind-html="comment.text")
